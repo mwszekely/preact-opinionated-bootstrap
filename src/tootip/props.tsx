@@ -1,4 +1,5 @@
 import { useCallback, useEffect } from "preact/hooks";
+// @ts-ignore
 import { Tooltip } from "bootstrap"
 import { removeUndefinedFromObject } from "../remove-undefined";
 import { useRefElement } from "preact-async-input";
