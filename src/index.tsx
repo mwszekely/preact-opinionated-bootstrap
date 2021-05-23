@@ -5,10 +5,12 @@ import { Button, AnchorButton } from "./button";
 import { ButtonGroup } from "./button-group";
 import { DropdownButton, DropdownMenuItem } from "./dropdown/component";
 import { Checkbox } from "./forms/checkbox/component";
-import { Input, InputColor, InputDate, InputDateTime, InputMonth, InputNumber, InputRange, InputText } from "./forms/form-controls/component";
+import { Switch } from "./forms/switch/component";
+import { Radio, RadioGroup } from "./forms/radio/component";
+import { Input, InputColor, InputDate, InputDateTime, InputMonth, InputNumber, InputRange, InputText, InputCheckbox, InputRadioGroup } from "./forms/form-controls/component";
 import { ProvideLabel } from "./forms/label";
 import { Figure } from "./figure/component"
-import { InputGroup } from "./input-group/component";
+import { InputGroup, InputGroupText } from "./input-group/component";
 import { Image } from "./image/component";
 import { ListGroupItem, ListGroup } from "./list-group/component"
 import { Page, Pagination } from "./pagination/component";
@@ -17,6 +19,7 @@ import { Table, TableBody, TableCell, TableFoot, TableHead, TableHeaderCell, Tab
 import { TabsUncontrolled, TabsControlled, Tab, TabLabel, TabPanel } from "./tabs/component";
 import { Tooltip } from "./tootip/component";
 import { useStableCallback } from "./use-stable-callback";
+import { CheckboxButton, RadioButton, RadioButtonGroup } from "./forms/toggle-button/component";
 
 export {
     Button,
@@ -25,10 +28,15 @@ export {
     DropdownMenuItem,
     DropdownButton,
     Checkbox,
-    InputGroup,
+    Switch,
+    Radio,
+    RadioGroup,
+    CheckboxButton,
+    RadioButton,RadioButtonGroup,
+    InputGroup, InputGroupText,
     Input,
     InputColor,
-    InputDateTime, InputDate, InputMonth, InputNumber, InputRange, InputText, ProvideLabel,
+    InputDateTime, InputDate, InputMonth, InputNumber, InputRange, InputText, ProvideLabel, InputCheckbox, InputRadioGroup,
     Figure, Image,
     ListGroupItem, ListGroup,
     Page, Pagination,
