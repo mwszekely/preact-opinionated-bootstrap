@@ -155,7 +155,7 @@ export function TabLabel(props: Omit<h.JSX.HTMLAttributes<HTMLLIElement>, "id">)
         return registerTabLabel(index, tabBaseId, ({ active }: { active: boolean }) =>
         (
             <li id={tabLabelId} {...attributes} onClick={onClick} className={clsx("tab-label", active && "active", className)}>
-                <a className={clsx("nav-link", active && "active", disabled && "disabled")} aria-disabled={disabled? "true" : undefined} aria-current={active? "page" : undefined} role="tab" href="#">{children}</a>
+                <button className={clsx("nav-link", active && "active", disabled && "disabled")} aria-disabled={disabled? "true" : undefined} aria-current={active? "page" : undefined} type="button" role="tab">{children}</button>
             </li>
         ));
     }, [propsRef, index, tabBaseId, tabLabelId, tabPanelId]);

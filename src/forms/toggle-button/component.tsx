@@ -1,5 +1,5 @@
 
-import { Fragment, h, Ref, VNode } from "preact";
+import { ComponentChildren, Fragment, h, Ref, VNode } from "preact";
 import { forwardElementRef, InputRadio, InputCheckbox, InputCheckboxProps, InputRadioGroupProps, InputRadioProps } from "preact-async-input";
 import { clsx } from "../../bootstrap-classes";
 import { ButtonPropsMin, buttonSizeProps, buttonVariantProps } from "../../button/props";
@@ -12,15 +12,15 @@ export interface RadioButtonPropsMin {}
 export interface RadioButtonGroupPropsMin {}
 
 export interface CheckboxButtonProps extends CheckboxButtonPropsMin, InputCheckboxProps, Pick<ButtonPropsMin, "variant" | "size"> {
-    children: VNode<any>;
+    children: ComponentChildren;
 }
 
 export interface RadioButtonGroupProps extends RadioButtonGroupPropsMin, InputRadioGroupProps {
-    children: VNode<any>;
+    children: ComponentChildren;
 }
 
 export interface RadioButtonProps extends RadioButtonPropsMin, InputRadioProps, Pick<ButtonPropsMin, "variant" | "size"> {
-    children: VNode<any>;
+    children: ComponentChildren;
 }
 
 export const CheckboxButton = forwardElementRef(function CheckboxButton(p: CheckboxButtonProps, r: Ref<HTMLInputElement>) {
