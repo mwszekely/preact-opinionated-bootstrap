@@ -6,6 +6,7 @@ import { ProvideDefaultButtonFill, ProvideDefaultButtonSize } from './button/def
 import { DropdownButton, DropdownMenuItem } from './dropdown/component';
 
 
+// @ts-ignore
 import { Dropdown, Button as BSButton, Alert, Carousel, Collapse, Modal, Offcanvas, Popover, ScrollSpy, Toast, Tooltip as BSTooltip, } from "bootstrap";
 import { ButtonGroup } from './button-group/component';
 import { Tooltip } from './tootip/component';

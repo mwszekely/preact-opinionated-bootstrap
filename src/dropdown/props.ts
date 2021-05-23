@@ -2,6 +2,7 @@ import clsx from "clsx";
 import { h, Ref } from "preact";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "preact/hooks";
 import { SimpleProps, SimplePropsWithExtras } from "../props-shared";
+// @ts-ignore
 import { Dropdown as BSDropdown } from "bootstrap"
 import { removeUndefinedFromObject } from "../remove-undefined";
 
