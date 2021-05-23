@@ -52,8 +52,10 @@
     "date-fns": "^2.21.2",
     "date-fns-tz": "^1.1.4",
     "material-components-web": "^11.0.0",
-    "preact": "^10.5.13",
     "preact-async-input": "github:mwszekely/preact-async-input",
     "preact-transition": "github:mwszekely/preact-transition"
+  },
+  "peerDependencies": {
+    "preact": "^10.5.13"
   }
 }
