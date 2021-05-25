@@ -1,10 +1,10 @@
 import clsx from "clsx";
-import { h, VNode, Ref, ComponentChildren } from "preact";
+import { ComponentChildren, h, Ref } from "preact";
 import { forwardElementRef, ProvideId, useProvidedId } from "preact-async-input";
 import { VeryCommonHTMLAttributes } from "preact-async-input/src/prop-types";
 import { useContext } from "preact/hooks";
 import { InputGroupText, IsInInputGroupContext } from "../../input-group/component";
-import { FloatingLabelContainerProps, useFloatingLabelContainerProps, useFormLabelProps, FormLabelProps } from "../form-controls/props";
+import { FloatingLabelContainerProps, FormLabelProps, useFloatingLabelContainerProps, useFormLabelProps } from "../form-controls/props";
 
 export interface LabelComponentProps<E extends HTMLElement = HTMLLabelElement> extends Pick<h.JSX.HTMLAttributes<E>, VeryCommonHTMLAttributes | "htmlFor" | "for" | "children"> {}
 
@@ -92,7 +92,6 @@ export const Label = forwardElementRef(function Label(p: LabelProps, ref: Ref<HT
     let { children, isHidden, className, htmlFor, ...props } = useFormLabelProps({ ...p, ref: ref });
     const isInInputGroup = useContext(IsInInputGroupContext);
     htmlFor = useProvidedId("no-backup", htmlFor);
-
 
     if (isInInputGroup && !isHidden)
         return <InputGroupText><label {...props} htmlFor={htmlFor}>{children}</label></InputGroupText>;
