@@ -24,11 +24,13 @@ export interface RadioButtonProps extends RadioButtonPropsMin, InputRadioProps, 
 }
 
 export const CheckboxButton = forwardElementRef(function CheckboxButton(p: CheckboxButtonProps, r: Ref<HTMLInputElement>) {
-    const { className, children, checked, onInput, ref, ...props } = buttonVariantProps(buttonSizeProps({...p, ref: r}));
+    const { className, children, checked, id, onInput, ref, ...props } = {...p, ref: r};
+
+    const labelProps = buttonVariantProps(buttonSizeProps({ htmlFor: id, position: "after", label: children, className: undefined } as const));
 
     return (
-        <ProvideLabel position="after" label={children} >
-            <InputCheckbox {...props} checked={checked} onInput={onInput} className={clsx(className, "btn-check")} ref={ref}  />
+        <ProvideLabel {...labelProps} >
+            <InputCheckbox {...props} id={id} checked={checked} onInput={onInput} className={clsx(className, "btn-check")} ref={ref}  />
         </ProvideLabel>
     )
 });
@@ -40,11 +42,13 @@ export function RadioButtonGroup(p: RadioButtonGroupProps) {
 }
 
 export const RadioButton = forwardElementRef(function RadioButton(p: RadioButtonProps, r: Ref<HTMLInputElement>) {
-    const { className, children, ref, ...props } = buttonVariantProps(buttonSizeProps({...p, ref: r}));
+    const { className, children, id, ref, ...props } = {...p, ref: r};
+
+    const labelProps = buttonVariantProps(buttonSizeProps({ htmlFor: id, position: "after", label: children, className: undefined } as const));
 
     return (
-        <ProvideLabel position="after" label={children} >
-            <InputRadio {...props} ref={ref} className={clsx(className, "btn-check")} />
+        <ProvideLabel {...labelProps} >
+            <InputRadio {...props} id={id} ref={ref} className={clsx(className, "btn-check")} />
         </ProvideLabel>
     )
 });
