@@ -120,11 +120,14 @@ export function TabPanel(props: Omit<h.JSX.HTMLAttributes<HTMLDivElement>, "id" 
     });
 
     useEffect(() => {
-        const { className, children, ...attributes } = propsRef.current
-        return registerTabPanel(index, tabBaseId, ({ active, selectedIndex }: { active: boolean, selectedIndex: number }) => {
+
+        const Component = ({ active, selectedIndex }: { active: boolean, selectedIndex: number }) => {
+            const { className, children, ...attributes } = propsRef.current;
             let direction = Math.sign((index - selectedIndex));
-            return <Transition open={active} {...fadeProps(slideProps({ x: (index - selectedIndex) * (0.125 / 2) }))}>{children}</Transition>
-        });
+            return <Transition {...attributes} open={active} {...fadeProps(slideProps({ x: (index - selectedIndex) * (0.125 / 2) }))}>{children}</Transition>
+        };
+
+        return registerTabPanel(index, tabBaseId, Component);
     }, [registerTabPanel, index, tabBaseId, tabLabelId, tabPanelId]);
     return <></>;
 }
