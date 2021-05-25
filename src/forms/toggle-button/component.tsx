@@ -27,8 +27,8 @@ export const CheckboxButton = forwardElementRef(function CheckboxButton(p: Check
     const { className, children, checked, onInput, ref, ...props } = buttonVariantProps(buttonSizeProps({...p, ref: r}));
 
     return (
-        <ProvideLabel position="after" label={children} className={clsx(className, "btn-check")} >
-            <InputCheckbox {...props} checked={checked} onInput={onInput} ref={ref}  />
+        <ProvideLabel position="after" label={children} >
+            <InputCheckbox {...props} checked={checked} onInput={onInput} className={clsx(className, "btn-check")} ref={ref}  />
         </ProvideLabel>
     )
 });
@@ -43,8 +43,8 @@ export const RadioButton = forwardElementRef(function RadioButton(p: RadioButton
     const { className, children, ref, ...props } = buttonVariantProps(buttonSizeProps({...p, ref: r}));
 
     return (
-        <ProvideLabel position="after" label={children} className={clsx(className, "btn-check")} >
-            <InputRadio {...props} ref={ref}  />
+        <ProvideLabel position="after" label={children} >
+            <InputRadio {...props} ref={ref} className={clsx(className, "btn-check")} />
         </ProvideLabel>
     )
 });
