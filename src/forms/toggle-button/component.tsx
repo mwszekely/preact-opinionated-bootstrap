@@ -36,7 +36,7 @@ export const CheckboxButton = forwardElementRef(function CheckboxButton(p: Check
 
     return (
         <ProvideLabel {...labelProps} >
-            <InputCheckbox {...props} id={id} checked={checked} onInput={onInput} className={clsx(className, "btn-check")} ref={ref} />
+            <InputCheckbox {...props} id={id} checked={checked} onInput={onInput} className={clsx(className, "btn-check visually-hidden-focusable")} ref={ref} />
         </ProvideLabel>
     )
 });
@@ -60,7 +60,7 @@ export const RadioButton = forwardElementRef(function RadioButton(p: RadioButton
     return (
         <InToggleButton.Provider value={true}>
             <ProvideLabel {...labelProps} >
-                <InputRadio {...props} value={value} id={id} ref={ref} className={clsx(className, "btn-check")} />
+                <InputRadio {...props} value={value} id={id} ref={ref} className={clsx(className, "btn-check visually-hidden-focusable")} />
             </ProvideLabel>
         </InToggleButton.Provider>
     )
