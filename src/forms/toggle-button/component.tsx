@@ -30,14 +30,16 @@ export interface RadioButtonProps extends RadioButtonPropsMin, InputRadioProps, 
 export const CheckboxButton = forwardElementRef(function CheckboxButton(p: CheckboxButtonProps, r: Ref<HTMLInputElement>) {
     let { className, children, variant, checked, id, onInput, ref, ...props } = { ...p, ref: r };
 
-    variant = (checked? variant : `outline-${variant}`) as ButtonColor;
+    variant = (checked ? variant : `outline-${variant}`) as ButtonColor;
 
     const labelProps = buttonVariantProps(buttonSizeProps({ htmlFor: id, position: "after", label: children, variant, className: undefined } as const));
 
     return (
-        <ProvideLabel {...labelProps} >
-            <InputCheckbox {...props} id={id} checked={checked} onInput={onInput} className={clsx(className, "btn-check visually-hidden-focusable")} ref={ref} />
-        </ProvideLabel>
+        <InToggleButton.Provider value={true}>
+            <ProvideLabel {...labelProps} >
+                <InputCheckbox {...props} id={id} checked={checked} onInput={onInput} className={clsx(className, "btn-check visually-hidden-focusable")} ref={ref} />
+            </ProvideLabel>
+        </InToggleButton.Provider >
     )
 });
 
@@ -53,7 +55,7 @@ export const RadioButton = forwardElementRef(function RadioButton(p: RadioButton
     let { className, children, variant, value, id, ref, ...props } = { ...p, ref: r };
     const selectedValue = useRadioSelectedValue();
 
-    variant = (value == selectedValue? variant : `outline-${variant}`) as ButtonColor;
+    variant = (value == selectedValue ? variant : `outline-${variant}`) as ButtonColor;
 
     const labelProps = buttonVariantProps(buttonSizeProps({ htmlFor: id, position: "after", label: children, variant, className: undefined } as const));
 

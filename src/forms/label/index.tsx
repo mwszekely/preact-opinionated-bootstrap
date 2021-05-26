@@ -5,6 +5,7 @@ import { VeryCommonHTMLAttributes } from "preact-async-input/src/prop-types";
 import { useContext } from "preact/hooks";
 import { InputGroupText, IsInInputGroupContext } from "../../input-group/component";
 import { FloatingLabelContainerProps, FormLabelProps, useFloatingLabelContainerProps, useFormLabelProps } from "../form-controls/props";
+import { InToggleButton } from "../toggle-button/context";
 
 export interface LabelComponentProps<E extends HTMLElement = HTMLLabelElement> extends Pick<h.JSX.HTMLAttributes<E>, VeryCommonHTMLAttributes | "htmlFor" | "for" | "children"> {}
 
@@ -91,9 +92,10 @@ interface LabelProps extends Pick<h.JSX.HTMLAttributes<HTMLLabelElement>, "ref" 
 export const Label = forwardElementRef(function Label(p: LabelProps, ref: Ref<HTMLLabelElement>) {
     let { children, isHidden, className, htmlFor, ...props } = useFormLabelProps({ ...p, ref: ref });
     const isInInputGroup = useContext(IsInInputGroupContext);
+    const isToggleButton = useContext(InToggleButton);
     htmlFor = useProvidedId("no-backup", htmlFor);
 
-    if (isInInputGroup && !isHidden)
+    if (isInInputGroup && !isToggleButton && !isHidden)
         return <InputGroupText><label {...props} htmlFor={htmlFor}>{children}</label></InputGroupText>;
     else
         return <label {...props} className={clsx(isHidden && "visually-hidden", className)} htmlFor={htmlFor}>{children}</label>;
