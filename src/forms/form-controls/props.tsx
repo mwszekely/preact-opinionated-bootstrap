@@ -36,6 +36,7 @@ export function useFormControlProps<P extends FormControlProps>(p: P) {
     const { className, readOnly, readOnlyVariant, size, ...rest } = (p);
     return {
         ...rest,
+        readOnly,
         className: clsx("form-control", size && `form-control-${size}`, readOnlyVariant === "plaintext" && readOnly && "form-control-plaintext", className)
     }
 }
