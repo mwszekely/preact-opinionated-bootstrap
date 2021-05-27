@@ -11,7 +11,7 @@ interface FormControlPropsBase {
     readOnlyVariant?: "plaintext" | "default";
 }
 
-export type FormControlProps = FormControlPropsBase & Pick<h.JSX.HTMLAttributes<HTMLLabelElement>, "className">// & SimpleProps<HTMLInputElement>;
+export type FormControlProps = FormControlPropsBase & Pick<h.JSX.HTMLAttributes<HTMLLabelElement>, "className" | "readOnly">// & SimpleProps<HTMLInputElement>;
 
 export type FormLabelProps = Pick<h.JSX.HTMLAttributes<HTMLLabelElement>, "className">;
 export type FloatingLabelContainerProps = Pick<h.JSX.HTMLAttributes<HTMLDivElement>, "className">;
@@ -33,10 +33,10 @@ export function useFloatingLabelContainerProps<P extends FloatingLabelContainerP
 }
 
 export function useFormControlProps<P extends FormControlProps>(p: P) {
-    const { className, readOnlyVariant, size, ...rest } = (p);
+    const { className, readOnly, readOnlyVariant, size, ...rest } = (p);
     return {
         ...rest,
-        className: clsx("form-control", size && `form-control-${size}`, readOnlyVariant === "plaintext" && "form-control-plaintext", className)
+        className: clsx("form-control", size && `form-control-${size}`, readOnlyVariant === "plaintext" && readOnly && "form-control-plaintext", className)
     }
 }
 
