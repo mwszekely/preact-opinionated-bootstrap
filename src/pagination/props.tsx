@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { h } from "preact";
+import { useMergedProps } from "../merge-props";
 import { SimpleHTMLAnchorProps, SimpleProps } from "../props-shared";
 
 
@@ -21,30 +22,24 @@ export interface PaginationListProps extends PaginationListPropsBase, SimpleProp
 
 }
 
-export interface PageProps extends PagePropsBase, SimpleProps<HTMLLIElement> {}
+export interface PageProps extends PagePropsBase, SimpleProps<HTMLLIElement> { }
 
 export interface PageLinkProps extends PageLinkPropsBase, SimpleHTMLAnchorProps { href: string }
 
-export function usePaginationListProps<P extends PaginationListProps>({ className, size, ...props }: P) {
-    return {
-        ...props,
-        className: clsx("pagination", size == "lg" && `pagination-lg`, size == "sm" && "pagination-sm", className)
-    }
+export function usePaginationListProps<P extends PaginationListProps>({ size, ...props }: P) {
+    return useMergedProps({ className: clsx("pagination", size == "lg" && `pagination-lg`, size == "sm" && "pagination-sm") }, props);
 }
 
-export function usePageProps<P extends PageProps>({ className, active, disabled, ...props }: P) {
-    return {
-        className: clsx("page-item", active && "active", disabled && "disabled", className),
-        ...(active? { "aria-active": "page" } as any : {}),
-        ...props
-    }
+export function usePageProps<P extends PageProps>({ active, disabled, ...props }: P) {
+    return useMergedProps({ className: clsx("page-item", active && "active", disabled && "disabled"),
+        ...(active ? { "aria-active": "page" } as any : {})
+    }, props);
 }
 
-export function usePageLinkPros<P extends PageLinkProps>({ className, tabIndex, disabled, ...props }: P) {
-    return {
-        className: clsx("page-link", className),
-        tabIndex: disabled? -1 : tabIndex,
-        ...(disabled? { "aria-disabled": "true" } as any : {}),
-        ...props
-    }
+export function usePageLinkPros<P extends PageLinkProps>({ tabIndex, disabled, ...props }: P) {
+    return useMergedProps({
+        className: clsx("page-link"),
+        tabIndex: disabled ? -1 : tabIndex,
+        ...(disabled ? { "aria-disabled": "true" } as any : {})
+    }, props)
 }

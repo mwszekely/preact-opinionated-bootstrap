@@ -2,9 +2,12 @@ import clsx from "clsx";
 import { h, Ref } from "preact";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "preact/hooks";
 import { SimpleProps, SimplePropsWithExtras } from "../props-shared";
-// @ts-ignore
-import { Dropdown as BSDropdown } from "bootstrap"
 import { removeUndefinedFromObject } from "../remove-undefined";
+import { createPopper, Instance } from "@popperjs/core"
+import { useOnClickOnLocation, useOnEscapeKey } from "../dialog/utility";
+import { usePopper } from "./popper";
+import { useMergedProps } from "../merge-props";
+import { useArrowKeyNavigatableProps } from "./utility"
 
 
 /*export interface DropdownSourcePropsMin<E extends HTMLElement> {
@@ -28,7 +31,12 @@ export interface DropdownMenuPropsMin extends Pick<h.JSX.HTMLAttributes<HTMLElem
 
 export interface DropdownItemPropsMin extends Pick<h.JSX.HTMLAttributes<HTMLElement>, "className"> {
     active?: boolean;
-    header?: boolean;
+    id: string;
+    index: number;
+    tabIndex?: number;
+}
+
+export interface DropdownHeaderPropsMin extends Pick<h.JSX.HTMLAttributes<HTMLElement>, "className"> {
 }
 
 export interface DropdownSourcePropsMin<E extends Element> extends Pick<h.JSX.HTMLAttributes<E>, "className"> {
@@ -37,18 +45,20 @@ export interface DropdownSourcePropsMin<E extends Element> extends Pick<h.JSX.HT
     display?: "dynamic" | "static";
     offsetX?: number;
     offsetY?: number;
-    autoClose?: true | "inner" | "outer" | false;
+    //autoClose?: true | "inside" | "outside" | false;
+    onClose(reason: "escape" | "inner" | "outer"): void;
+    direction?: "down" | "up" | "start" | "end";
+    style?: Partial<h.JSX.CSSProperties>;
     ref: Ref<E>;
 }
 
 
-export function dropdownContainerProps({ direction, className, ...props }: DropdownContainerPropsMin) {
-    return { ...props, className: clsx(`drop${direction ?? "down"}`, className) };
+export function useDropdownContainerProps<P extends DropdownContainerPropsMin>({ direction, ...props }: P) {
+    return useMergedProps({ className: `drop${direction ?? "down"}` }, props);
 }
 
-export function dropdownMenuProps({ className, align, alignMd, alignSm, alignLg, alignXl, alignXs, alignXxl, dark, ...props }: DropdownMenuPropsMin) {
-    return {
-        ...props,
+export function dropdownMenuProps<P extends DropdownMenuPropsMin>({ align, alignMd, alignSm, alignLg, alignXl, alignXs, alignXxl, dark, ...props }: P) {
+    return useMergedProps({
         className: clsx(
             `dropdown-menu`,
             align == "end" && "dropdown-menu-end",
@@ -58,24 +68,80 @@ export function dropdownMenuProps({ className, align, alignMd, alignSm, alignLg,
             alignLg && `dropdown-menu-lg-${alignLg}`,
             alignXl && `dropdown-menu-xl-${alignXl}`,
             alignXxl && `dropdown-menu-xxl-${alignXxl}`,
-            dark && "dropdown-menu-dark", className)
-    };
+            dark && "dropdown-menu-dark")
+    }, props);
 }
-export function dropdownItemProps({ className, header, active, ...props }: DropdownItemPropsMin) {
-    return { ...props, className: clsx(header? `dropdown-header` : `dropdown-item`, active && "active", className) };
+export function useDropdownItemProps<P extends DropdownItemPropsMin>({ active, tabIndex, ...props }: P) {
+    return useArrowKeyNavigatableProps(useMergedProps({ className: clsx(`dropdown-item`, active && "active", tabIndex) }, props));
+}
+
+export function useDropdownHeaderProps<P extends DropdownItemPropsMin>(props: P) {
+    return (useMergedProps({ className: clsx(`dropdown-header`) }, props));
 }
 
 
-export function useDropdownSourceProps<E extends HTMLElement>(sourceElement: E | null, { boundary, reference, display, offsetX, offsetY, autoClose, className, ...props }: DropdownSourcePropsMin<E>) {
 
-    const [bsDropdown, setBsDropdown] = useState<BSDropdown | null>(null);
-    console.log(`Dropdown: ${(!!bsDropdown).toString()}`);
 
-    useEffect(() => {
+/*
+export function useDropdownSourceProps<P extends DropdownSourcePropsMin<any>>(sourceElement: (P extends DropdownSourcePropsMin<infer E>? E : HTMLElement) | null, { style, direction, boundary, reference, display, offsetX, offsetY, onClose, className, ...props }: P) {
+
+    //const [bsDropdown, setBsDropdown] = useState<BSDropdown | null>(null);
+
+    //console.log(`Dropdown: ${(!!bsDropdown).toString()}`);
+    //const [popper, setPopper] = useState<Instance | null>(null);
+
+    const menuContainer = (sourceElement as HTMLElement)?.nextElementSibling as HTMLElement;
+
+    useOnEscapeKey(sourceElement, (location, e) => { if (location == "inner") onClose("escape") });
+    useOnEscapeKey(menuContainer, (location, e) => { if (location == "inner") onClose("escape") });
+    useOnClickOnLocation(menuContainer, (location, e) => { onClose(location); });
+
+    const usePopperResult = usePopper(sourceElement ?? undefined, menuContainer, {
+        placement: _getPlacement(direction ?? "down"),
+        modifiers: [{
+            name: 'preventOverflow',
+            options: { boundary: boundary ?? "clippingParents" }
+        },{
+            name: 'eventListeners',
+            options: { scroll: true, resize: true }
+        },
+        {
+            name: 'offset',
+            options: {
+                offset: [offsetX, offsetY]
+            }
+        }]
+    });
+
+    const { attributes: { popper: popperAttributes }, styles: { popper: popperStyles } } = usePopperResult;
+
+   /* useEffect(() => {
         console.log("In effect");
         if (sourceElement) {
             console.log("Creating dropdown");
-            let dropdown = new BSDropdown(sourceElement, removeUndefinedFromObject({
+            debugger;
+            //const parentContainer = sourceElement.parentElement as HTMLElement;
+            const menuElement = sourceElement.nextElementSibling as HTMLElement;
+
+            const p = createPopper(sourceElement!, menuElement, {
+                placement: _getPlacement(direction ?? "down"),
+                modifiers: [{
+                    name: 'preventOverflow',
+                    options: { boundary }
+                },
+                {
+                    name: 'offset',
+                    options: {
+                        offset: [offsetX, offsetY]
+                    }
+                }]
+            });
+
+            setPopper(p);
+
+            //p.setOptions({})
+            return () => { setPopper(null); p.destroy(); }
+            /*let dropdown = new BSDropdown(sourceElement, removeUndefinedFromObject({
                 boundary,
                 reference: reference as any,
                 display,
@@ -94,15 +160,43 @@ export function useDropdownSourceProps<E extends HTMLElement>(sourceElement: E |
 
 
                 setBsDropdown(null);
-            };
+            };*\/
         }
 
-    }, [sourceElement, boundary, reference, display, offsetX, offsetY, autoClose]);
+    }, [sourceElement, boundary, reference, display, offsetX, offsetY]);*/
 
-    return {
+/*useEffect(() => {
+    if (sourceElement && popper) {
+        popper.setOptions({
+            modifiers: [{
+                name: 'offset',
+                options: {
+                    offset: [offsetX ?? 0, offsetY ?? 0]
+                }
+            }]
+        });
+    }
+}, [popper, sourceElement, offsetX, offsetY]);
+
+useEffect(() => {
+    if (popper) {
+        popper.setOptions({
+            placement: _getPlacement(direction ?? "down")
+        });
+    }
+}, [popper, direction]);*\/
+
+return {
+    //...popperAttributes,
+    sourceProps: {
+
         ...props,
-        ...{ "data-bs-toggle": "dropdown" },
-        ...{ "data-bs-not-initialized": bsDropdown? "false" : "true" },
+        style: {...popperStyles, ...style },
+        //...{ "data-bs-toggle": "dropdown" },
         className: clsx("dropdown-toggle", className)
-    };
-}
+    },
+    menuProps: {
+        style: popperStyles
+    }
+};
+}*/

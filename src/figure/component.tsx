@@ -2,7 +2,7 @@ import { ComponentChildren, h } from "preact";
 import { FigureCaptionProps, FigureProps, useFigureCaptionProps, useFigureProps } from "./props";
 
 export interface FigureComponentProps extends FigureProps {
-    caption?: ComponentChildren;
+    caption: ComponentChildren;
     align?: FigureCaptionProps["align"];
 }
 

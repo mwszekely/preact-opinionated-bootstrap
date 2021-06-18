@@ -1,0 +1,29 @@
+@use '@material/elevation';
+@use '@material/ripple';
+
+.btn {
+  /*@include ripple.surface;
+  @include ripple.radius-bounded;
+  @include ripple.states;*/
+
+  position: relative;
+}
+/*
+.btn.raised {
+    --current-box-shadow: #{elevation.elevation-box-shadow(2)};
+
+  &:hover,
+  &:focus {
+    --current-box-shadow: #{elevation.elevation-box-shadow(4)};
+  }
+
+  &:active {
+    --current-box-shadow: #{elevation.elevation-box-shadow(2)};
+  }
+
+  &:disabled {
+    --current-box-shadow: #{elevation.elevation-box-shadow(0)};
+  }
+
+  transition: elevation.transition-value();
+}*/

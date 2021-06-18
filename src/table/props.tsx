@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { useMergedProps } from "../merge-props";
 import { SimpleHTMLTableBodyProps, SimpleHTMLTableCellProps, SimpleHTMLTableFootProps, SimpleHTMLTableHeaderCellProps, SimpleHTMLTableHeadProps, SimpleHTMLTableProps, SimpleHTMLTableRowProps } from "../props-shared";
 import { TableBorderColor, TableVariant, TableRowVariant, TableCellVariant } from "./types";
 
@@ -45,10 +46,8 @@ export interface TableRowProps extends TableRowPropsBase, SimpleHTMLTableRowProp
 export interface TableCellProps extends TableCellPropsBase, SimpleHTMLTableCellProps { }
 export interface TableHeaderCellProps extends TableHeaderCellPropsBase, SimpleHTMLTableHeaderCellProps { }
 
-export function useTableProps<P extends TableProps>(props: P) {
-    const { className, small, striped, hoverable, border, borderColor, variant, ...rest } = props;
-    return {
-        ...rest,
+export function useTableProps<P extends TableProps>({ small, striped, hoverable, border, borderColor, variant, ...props }: P) {
+    return useMergedProps({
         className: clsx(
             "table",
             small && "table-sm",
@@ -59,40 +58,34 @@ export function useTableProps<P extends TableProps>(props: P) {
             variant && `table-${variant}`,
             borderColor && `border-${borderColor}`,
 
-            className)
-    }
+        )
+    }, props);
 }
 
-export function useTableRowProps<P extends TableRowProps>(props: P) {
-    const { className, variant, ...rest } = props;
-    return { ...rest, className: clsx(variant && `table-${variant}`, className) }
+export function useTableRowProps<P extends TableRowProps>({ className, variant, ...props }: P) {
+    return useMergedProps({ ...props, className: clsx(variant && `table-${variant}`) }, props);
 }
 
-export function useTableCellProps<P extends TableCellProps>(props: P) {
-    const { className, variant, ...rest } = props;
-    return { ...rest, className: clsx(variant && `table-${variant}`, className) }
+export function useTableCellProps<P extends TableCellProps>({ className, variant, ...props }: P) {
+    return useMergedProps({ ...props, className: clsx(variant && `table-${variant}`) }, props);
 }
 
-export function useTableHeaderCellProps<P extends TableHeaderCellProps>(props: P) {
-    const { className, variant, ...rest } = props;
-    return { ...rest, className: clsx(variant && `table-${variant}`, className) }
+export function useTableHeaderCellProps<P extends TableHeaderCellProps>({ className, variant, ...props }: P) {
+    return useMergedProps({ ...props, className: clsx(variant && `table-${variant}`) }, props);
 }
 
 
 
 
 
-export function useTableHeadProps<P extends TableHeadProps>(props: P) {
-    const { className, variant, ...rest } = props;
-    return { ...rest, className: clsx(variant && `table-${variant}`, className) }
+export function useTableHeadProps<P extends TableHeadProps>({ className, variant, ...props }: P) {
+    return useMergedProps({ ...props, className: clsx(variant && `table-${variant}`) }, props);
 }
 
-export function useTableBodyProps<P extends TableBodyProps>(props: P) {
-    const { className, variant, ...rest } = props;
-    return { ...rest, className: clsx(variant && `table-${variant}`, className) }
+export function useTableBodyProps<P extends TableBodyProps>({ className, variant, ...props }: P) {
+    return useMergedProps({ ...props, className: clsx(variant && `table-${variant}`) }, props);
 }
 
-export function useTableFootProps<P extends TableFootProps>(props: P) {
-    const { className, variant, ...rest } = props;
-    return { ...rest, className: clsx(variant && `table-${variant}`, className) }
+export function useTableFootProps<P extends TableFootProps>({ className, variant, ...props }: P) {
+    return useMergedProps({ ...props, className: clsx(variant && `table-${variant}`) }, props);
 }

@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { useMergedProps } from "../merge-props";
 import { SimpleHTMLFigureProps, SimpleHTMLFigureCaptionProps, SimpleHTMLImageProps } from "../props-shared";
 //import { FigureBorderColor, FigureVariant, FigureRowVariant, FigureCellVariant } from "./types";
 
@@ -16,25 +17,13 @@ export interface FigureImageProps extends FigureImagePropsBase, SimpleHTMLImageP
 export interface FigureCaptionProps extends FigureCaptionPropsBase, SimpleHTMLFigureCaptionProps { }
 
 export function useFigureProps<P extends FigureProps>(props: P) {
-    const { className, ...rest } = props;
-    return {
-        ...rest,
-        className: clsx("figure", className)
-    }
+    return useMergedProps({ className: clsx("figure") }, props);
 }
 
 export function useFigureImageProps<P extends FigureImageProps>(props: P) {
-    const { className, ...rest } = props;
-    return {
-        ...rest,
-        className: clsx("figure-img", className)
-    }
+    return useMergedProps({ className: clsx("figure-img") }, props);
 }
 
-export function useFigureCaptionProps<P extends FigureCaptionProps>(props: P) {
-    const { className, align, ...rest } = props;
-    return {
-        ...rest,
-        className: clsx("figure", align === "end" && "text-end", align == "center" && "text-center", className)
-    }
+export function useFigureCaptionProps<P extends FigureCaptionProps>({ align, ...props }: P) {
+    return useMergedProps({ className: clsx("figure", align === "end" && "text-end", align == "center" && "text-center"), style: undefined }, props);
 }

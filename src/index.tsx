@@ -14,12 +14,15 @@ import { InputGroup, InputGroupText } from "./input-group/component";
 import { Image } from "./image/component";
 import { ListGroupItem, ListGroup } from "./list-group/component"
 import { Page, Pagination } from "./pagination/component";
-import { NewtonsCradleSpinner } from "./progress/spinner";
 import { Table, TableBody, TableCell, TableFoot, TableHead, TableHeaderCell, TableRow } from "./table";
 import { TabsUncontrolled, TabsControlled, Tab, TabLabel, TabPanel } from "./tabs/component";
-import { Tooltip } from "./tootip/component";
+import { Tooltip } from "./tooltip/component";
 import { useStableCallback } from "./use-stable-callback";
 import { CheckboxButton, RadioButton, RadioButtonGroup } from "./forms/toggle-button/component";
+import { Dialog, DialogBody, DialogHeader, DialogFooter, useShowDialog } from "./dialog";
+import { LinearProgress, Spinner } from "./progress";
+import { Card, CardBody, CardFooter, CardHeader, CardImageProps, CardSubtitle, CardText, CardTitle } from "./card";
+import { Badge } from "./badge"
 
 export {
     Button,
@@ -32,15 +35,18 @@ export {
     Radio,
     RadioGroup,
     CheckboxButton,
-    RadioButton,RadioButtonGroup,
+    RadioButton, RadioButtonGroup,
     InputGroup, InputGroupText,
+    LinearProgress, Spinner,
+    Badge,
     Input,
     InputColor,
     InputDateTime, InputDate, InputMonth, InputNumber, InputRange, InputText, ProvideLabel, InputCheckbox, InputRadioGroup,
     Figure, Image,
     ListGroupItem, ListGroup,
     Page, Pagination,
-    NewtonsCradleSpinner,
+    Card, CardBody, CardFooter, CardHeader, CardImageProps, CardSubtitle, CardText, CardTitle,
+    Dialog, DialogBody, DialogHeader, DialogFooter, useShowDialog,
     Table, TableBody, TableCell, TableFoot, TableHead, TableRow, TableHeaderCell,
     TabsUncontrolled, TabsControlled, Tab, TabLabel, TabPanel, Tooltip,
     useStableCallback

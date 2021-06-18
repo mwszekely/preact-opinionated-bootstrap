@@ -1,0 +1,14 @@
+.input-group-text {
+  user-select: none;
+}
+
+// Personal preference, can be overridden.
+.input-group,
+.button-group {
+  white-space: nowrap;
+}
+
+
+.form-floating > .form-control:focus::placeholder {
+  opacity: 1;
+}

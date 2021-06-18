@@ -10,30 +10,17 @@ const aliasToPreact = () => alias({
     ]
 });
 
-const aliasMixui = () => alias({
-    entries: [
-        { find: "mixui", replacement: "../node_modules/mixui" }
-    ]
-})
-
 const anyUrl = () => url({
     include: ['**/*.svg', '**/dist/assets/index.css', '**/*.png', '**/*.jp(e)?g', '**/*.gif', '**/*.webp'],
     limit: Number.MAX_SAFE_INTEGER
 })
 
 export default {
-    input: "src/index.js",
+    input: "src/test.js",
     output: {
         file: "dist/assets/bundle.js",
         format: "iife",
-        name: "bundle",
-        /*globals: {
-            'preact': 'preact',
-            'preact/compat': 'preact',
-            'react': 'preact',
-            'react-dom': 'preact',
-        }*/
+        name: "bundle"
     },
-    plugins: [aliasToPreact(), aliasMixui(), commonjs(), anyUrl(), resolve()],
-    //external: ['preact', 'preact/compat', 'react', 'react-dom']
+    plugins: [aliasToPreact(), commonjs(), anyUrl(), resolve()]
 }

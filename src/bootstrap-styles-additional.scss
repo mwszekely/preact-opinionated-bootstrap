@@ -1,0 +1,305 @@
+@use "sass:color";
+@use "@material/elevation";
+
+// box-shadow: elevation-box-shadow(6);
+
+
+
+// Make this more general
+.popover-header {
+  border-bottom: $popover-border-width solid color.adjust($body-color, $alpha: -0.8);
+}
+
+/*
+
+Some additional styles to button-like elements to make them look more button-like when pressed
+
+*/
+
+
+
+*::-webkit-scrollbar {
+  background: $gray-800;
+}
+* {
+  scrollbar-color: $gray-600 $gray-800;
+}
+*::-webkit-scrollbar-track {
+  background: $gray-800;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: $gray-600;
+  border-radius: 10px;
+  //border: 3px solid $gray-800;
+}
+
+// Make the buttons' text move up and down as the shadows imply
+.btn {
+  // Checked buttons don't always have their text offset,
+  // just when they're actively being pressed.
+  /*.btn-check:checked + &,.btn-check:active + &,*/
+  &:active,
+  &.active {
+    padding-bottom: $btn-padding-y / 2;
+    padding-top: $btn-padding-y + $btn-padding-y / 2;
+  }
+}
+.btn-lg {
+  /*.btn-check:checked + &,.btn-check:active + &,*/
+  &:active,
+  &.active {
+    padding-bottom: $btn-padding-y-lg / 2;
+    padding-top: $btn-padding-y-lg + $btn-padding-y-lg / 2;
+  }
+}
+.btn-sm {
+  /*.btn-check:checked + &,.btn-check:active + &,*/
+  &:active,
+  &.active {
+    padding-bottom: $btn-padding-y-sm / 2;
+    padding-top: $btn-padding-y-sm + $btn-padding-y-sm / 2;
+  }
+}
+
+/*.list-group-item,
+.list-group-item-action {
+  color: $body-color;
+}*/
+.list-group-item-action {
+    user-select: none;
+}
+.list-group-item-action,
+.list-group-item[tabindex="0"] {
+  outline: none;
+  transition: #{$inset-press-transition};
+  &:active:not(:focus),
+  &.active:not(:focus) {
+    box-shadow: $btn-active-box-shadow;
+  }
+  &:active:focus,
+  &.active:focus {
+    padding-bottom: $list-group-item-padding-y / 2;
+    padding-top: $list-group-item-padding-y + $list-group-item-padding-y / 2;
+  }
+}
+
+.nav-tabs {
+  .nav-link {
+    transition: #{$inset-press-transition};
+    &:focus {
+        outline: none;
+    }
+    &:not(:active):focus {
+      box-shadow: #{$input-btn-focus-box-shadow};
+    }
+    &:active {
+      padding-top: $nav-link-padding-y * 2 / 3;
+      padding-bottom: $nav-link-padding-y + $nav-link-padding-y / 3;
+      color: $nav-tabs-link-active-color;
+      background-color: $nav-tabs-link-active-bg;
+      border-color: $nav-tabs-link-active-border-color;
+      //color: $nav-tabs-link-active-color;
+      //background-color: $nav-tabs-link-active-bg;
+      //border-color: $nav-tabs-link-active-border-color;
+
+      // box-shadow: #{$input-btn-focus-box-shadow},      #{elevation.elevation-box-shadow(6)};
+    }
+  }
+}
+
+.nav-pills {
+  & .nav-link {
+    transition: #{$inset-press-transition};
+    &:focus {
+      box-shadow: #{$input-btn-focus-box-shadow};
+    }
+    &:active {
+      padding-top: $nav-link-padding-y * 3 / 4;
+      padding-bottom: $nav-link-padding-y + $nav-link-padding-y / 4;
+
+      color: $nav-pills-link-active-color;
+      @include gradient-bg($nav-pills-link-active-bg);
+
+      box-shadow: #{$input-btn-focus-box-shadow},
+        #{elevation.elevation-box-shadow(6)};
+    }
+  }
+}
+
+// Apply a text shadow above checkbox buttons that are checked but not :active.
+// (Except don't because it doesn't look good, but maybe it could eventually?)
+/*
+    .btn {   .btn-check:checked + &:not(:active) {text-shadow: 0px 5px 10px black;}}
+    .btn-lg {.btn-check:checked + &:not(:active) {text-shadow: 0px 5px 10px black;}}
+    .btn-sm {.btn-check:checked + &:not(:active) {text-shadow: 0px 5px 10px black;}}
+    */
+
+// Undo the above if the user prefers less motion
+@media (prefers-reduced-motion) {
+  .btn {
+    .btn-check:checked + &,
+    .btn-check:active + &,
+    &:active,
+    &.active {
+      padding-bottom: $btn-padding-y;
+      padding-top: $btn-padding-y;
+      &.list-group-item {
+        padding-bottom: $btn-padding-y;
+        padding-top: $btn-padding-y;
+      }
+    }
+  }
+  .btn-lg {
+    .btn-check:checked + &,
+    .btn-check:active + &,
+    &:active,
+    &.active {
+      padding-bottom: $btn-padding-y-lg;
+      padding-top: $btn-padding-y-lg;
+    }
+  }
+  .btn-sm {
+    .btn-check:checked + &,
+    .btn-check:active + &,
+    &:active,
+    &.active {
+      padding-bottom: $btn-padding-y-sm;
+      padding-top: $btn-padding-y-sm;
+    }
+  }
+  .actionable.list-group-item {
+    &:active,
+    &.active {
+      padding-bottom: $list-group-item-padding-y;
+      padding-top: $list-group-item-padding-y;
+    }
+  }
+  .nav-link {
+    &:active,
+    &.active {
+      padding-bottom: $nav-link-padding-y;
+      padding-top: $nav-link-padding-y;
+    }
+  }
+}
+
+// Make outline button styles a bit less flashy
+@each $color, $value in $theme-colors {
+  .btn-outline-#{$color} {
+    @include button-outline-variant(
+      $value,
+      $color-hover: $value,
+      $active-background: color.change($value, $alpha: 0.125),
+      $active-border: color.change($value, $alpha: 0.25),
+      $active-color: $value
+    );
+
+    &:focus {
+      border-color: color.change($value, $alpha: 0.4);
+      background-color: color.change($value, $alpha: 0.25);
+    }
+  }
+}
+
+// Add hover rings around checkboxes when they or their label are hovered over
+// and also increase the hit area of checkboxes
+input.form-check-input {
+  position: relative;
+  cursor: pointer;
+
+  & + label {
+    cursor: pointer;
+    user-select: none;
+  }
+
+  // Create a larger hit area for this checkbox (etc.)
+  &::before {
+    content: "";
+    --input-click-target-size: 28px;
+    position: absolute;
+    left: calc(-1 * (var(--input-click-target-size) - 1em));
+    right: calc(-1 * (var(--input-click-target-size) - 1em));
+    top: calc(-1 * (var(--input-click-target-size) - 1em));
+    bottom: calc(-1 * (var(--input-click-target-size) - 1em));
+    border-radius: 100%;
+
+    // This is z-index: 1 to cover the margin area between the checkbox and the label,
+    // otherwise there would be a blank no-hit area in-between.
+    // This is a pretty okay workaround
+    z-index: 1;
+  }
+
+  &:hover {
+    box-shadow: $input-btn-focus-box-shadow;
+    &::before {
+      // box-shadow: $input-btn-focus-box-shadow;
+    }
+  }
+}
+
+// Add some extra styles to checkboxes and radios
+// to make them press inwards a bit when clicking, similar to buttons
+:not(.form-switch) {
+  & > {
+    .form-check-input {
+      &[type="checkbox"]:active,
+      &[type="radio"]:active {
+        background-color: $form-check-input-checked-bg-color;
+        border-color: $form-check-input-checked-border-color;
+        //box-shadow: $input-btn-focus-box-shadow;
+        background-size: 75%;
+      }
+
+      &[type="checkbox"]:active {
+        @if $enable-gradients {
+          background-image: escape-svg($form-check-input-checked-bg-image),
+            var(--#{$variable-prefix}gradient);
+        } @else {
+          background-image: escape-svg($form-check-input-checked-bg-image);
+        }
+      }
+
+      &[type="checkbox"]:indeterminate {
+        background-color: $form-check-input-indeterminate-bg-color;
+        border-color: $form-check-input-indeterminate-border-color;
+
+        @if $enable-gradients {
+          background-image: escape-svg($form-check-input-indeterminate-bg-image),
+            var(--#{$variable-prefix}gradient);
+        } @else {
+          background-image: escape-svg(
+            $form-check-input-indeterminate-bg-image
+          );
+        }
+      }
+
+      &[type="radio"]:active {
+        @if $enable-gradients {
+          background-image: escape-svg($form-check-radio-checked-bg-image),
+            var(--#{$variable-prefix}gradient);
+        } @else {
+          background-image: escape-svg($form-check-radio-checked-bg-image);
+        }
+      }
+    }
+  }
+}
+
+// Similar to the above, but for switches
+.form-switch {
+  & > {
+    .form-check-input {
+      &[type="checkbox"]:active {
+        background-color: $form-check-input-checked-bg-color;
+        border-color: $form-check-input-checked-border-color;
+      }
+
+      &[type="checkbox"]:checked:active {
+        background-position: 75% center;
+      }
+      &[type="checkbox"]:not(:checked):active {
+        background-position: 25% center;
+      }
+    }
+  }
+}

@@ -1,0 +1,123 @@
+.modal {
+  // Always show dialogs by default, since we use <Transition> components to handle them instead.
+  display: block;
+
+  // Add an additional width style to modal dialogs
+  & > .modal-dialog.modal-max {
+    max-width: 95vw;
+  }
+
+  background: rgba(0, 0, 0, 0.25);
+}
+
+// Browsers that don't support backdrop-blur make the backdrop more opaque to compensate
+@supports not (backdrop-filter: blur(4px)) {
+  .modal {
+    background: rgba(0, 0, 0, 0.4);
+  }
+}
+
+// Quickly make a transition that fades the backdrop filter blur in/out
+.backdrop-filter-transition {
+  &.transition-enter-init,
+  &.transition-exit-transition,
+  &.transition-exit-finalize {
+    backdrop-filter: blur(0px);
+  }
+  &.transition-exit-init,
+  &.transition-enter-transition,
+  &.transition-enter-finalize {
+    backdrop-filter: var(--transition-backdrop-filter-blur, blur(4px));
+  }
+}
+
+// Version of the fade transition class that doesn't conflict with Bootstrap
+// (needed for modals, even though the transitions file isn't included...)
+.fade2 {
+  &.transition-enter-init,
+  &.transition-exit-transition,
+  &.transition-exit-finalize {
+    opacity: 0;
+  }
+  &.transition-exit-init,
+  &.transition-enter-transition,
+  &.transition-enter-finalize {
+    opacity: 1;
+  }
+}
+
+.dialog-shake {
+  animation: dialog-shake 0.58s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  transform: scale(1) rotate(0deg);
+}
+
+$dialog-shake-1: (0.01 / 2);
+$dialog-shake-2: (0.0125 / 2);
+$dialog-shake-3: (0.0175 / 2);
+
+@keyframes dialog-shake {
+  16.7%,
+  83.3% {
+    //transform: scale(1 - $dialog-shake-1);
+    transform: translateX($dialog-shake-1 * 500px);
+  }
+
+  33.3%,
+  66.7% {
+    //transform: scale(1 + $dialog-shake-2);
+    transform: translateX($dialog-shake-2 * -500px);
+  }
+
+  50% {
+    //transform: scale(1 - $dialog-shake-3);
+    transform: translateX($dialog-shake-3 * 500px);
+  }
+}
+
+.document-scroll-hidden {
+  overflow: hidden;
+  padding-inline-end: var(--scrollbar-width, 0px);
+}
+
+html:not(.document-scroll-hidden) .modal-content {
+  inset-inline-start: calc(var(--scrollbar-width, 0px) / 2);
+}
+
+.scroll-container {
+  left: var(--scroll-left);
+  top: var(--scroll-top);
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  overflow: hidden;
+  z-index: 1;
+  user-select: none;
+  pointer-events: none;
+}
+
+$scroll-fade-height: 2em;
+.scroll-fade {
+  left: 0;
+  right: 0;
+  height: $scroll-fade-height;
+  position: absolute;
+  &.scroll-fade-top {
+    top: calc(min(var(--scroll-top), #{$scroll-fade-height}) - #{$scroll-fade-height});
+    background: linear-gradient(
+      0deg,
+      transparent 0px,
+      transparent 5px,
+      $modal-header-border-color calc(5px + #{$scroll-fade-height}),
+    );
+  }
+
+  &.scroll-fade-bottom {
+    bottom: calc(min(var(--scroll-bottom), #{$scroll-fade-height}) - #{$scroll-fade-height});
+    background: linear-gradient(
+      180deg,
+      transparent 0px,
+      transparent 5px,
+      $modal-footer-border-color calc(5px + #{$scroll-fade-height}),
+    );
+  }
+}

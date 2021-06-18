@@ -13,6 +13,15 @@ export interface InputGroupTextComponentProps extends InputGroupTextProps {
 
 export const IsInInputGroupContext = createContext(false);
 
+/**
+ * A container for a set of inputs/labels.
+ * Supports:
+ * * Checkbox
+ * * RadioGroup & Radio
+ * * All text-based Input components and ProvideLabel
+ * * CheckboxButton
+ * * RadioButtonGroup & RadioButton
+ */
 export const InputGroup = forwardElementRef(function InputGroup(p: InputGroupComponentProps, ref: Ref<HTMLDivElement>) {
 
     const { children, className, wrap, ...props } = useInputGroupProps(p);

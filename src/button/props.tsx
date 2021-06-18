@@ -1,69 +1,61 @@
 
 import { h } from "preact";
 import { clsx } from "../bootstrap-classes";
+import { useMergedProps } from "../merge-props";
 import { ButtonSize, ButtonVariant } from "./types";
 
 
 
-interface ButtonPressedPropsMin extends Pick<h.JSX.HTMLAttributes<HTMLButtonElement>, "className"> {
+interface ButtonPressedPropsMin {
     pressed?: boolean;
 }
 
-interface ButtonVariantPropsMin extends Pick<h.JSX.HTMLAttributes<HTMLButtonElement>, "className"> {
+interface ButtonVariantPropsMin {
     variant?: ButtonVariant;
 }
 
-interface ButtonSizePropsMin extends Pick<h.JSX.HTMLAttributes<HTMLButtonElement>, "className"> {
+interface ButtonSizePropsMin {
     size?: ButtonSize;
 }
 
-export interface ButtonPropsMin extends ButtonPressedPropsMin, ButtonVariantPropsMin, ButtonSizePropsMin, Pick<h.JSX.HTMLAttributes<HTMLButtonElement>, "type" | "disabled" | "tabIndex" | "role"> { 
+export interface ButtonPropsMin extends ButtonPressedPropsMin, ButtonVariantPropsMin, ButtonSizePropsMin, Pick<h.JSX.HTMLAttributes<HTMLButtonElement>, "type" | "disabled" | "tabIndex" | "role" | "style"> {
     "aria-disabled"?: "true" | undefined;
 }
 
 
-export function buttonPressedProps<P extends ButtonPressedPropsMin>(originalProps: P) {
-    const { pressed, className, ...props } = originalProps;
+function buttonPressedProps({ pressed }: ButtonPressedPropsMin) {
     return {
-        ...props,
         ...(pressed ? { "aria-pressed": "true" } : {}),
-        className: clsx(
-            pressed && "active",
-            className
-        )
+        className: clsx(pressed && "active")
     };
 }
 
-export function buttonVariantProps<P extends ButtonVariantPropsMin>(originalProps: P) {
-    const { variant, className, ...props } = originalProps;
-    return {
-        ...props,
-        className: clsx(
-            "btn",
-            `btn-${variant}`,
-            className
-        )
-    };
+function buttonVariantProps({ variant }: ButtonVariantPropsMin) {
+    return { className: clsx("btn raised", `btn-${variant}`) };
 }
 
-export function buttonSizeProps<P extends ButtonSizePropsMin>(originalProps: P) {
-    const { size, className, ...props } = originalProps;
-    return {
-        ...props,
-        className: clsx(
-            size == "lg" && "btn-lg",
-            size == "sm" && "btn-sm",
-            className
-        )
-    };
+function buttonSizeProps({ size }: ButtonSizePropsMin) {
+    return { className: clsx(size == "lg" && "btn-lg", size == "sm" && "btn-sm") };
 }
 
-function sharedButtonProps<P extends ButtonPropsMin>(originalProps: P) {
-    return buttonPressedProps(buttonSizeProps(buttonVariantProps(originalProps)));
+export function useButtonPressedProps<P extends ButtonPressedPropsMin>({ pressed, ...props }: P) {
+    return useMergedProps(buttonPressedProps({ pressed }), props);
 }
 
-export function buttonButtonProps<P extends ButtonPropsMin>(originalProps: P) {
-    const { type, ...props } = sharedButtonProps(originalProps);
+export function useButtonVariantProps<P extends ButtonVariantPropsMin>({ variant, ...props }: P) {
+    return useMergedProps(buttonVariantProps({ variant }), props);
+}
+
+export function useButtonSizeProps<P extends ButtonSizePropsMin>({ size, ...props }: P) {
+    return useMergedProps(buttonSizeProps({ size }), props);
+}
+
+function useSharedButtonProps<P extends ButtonPropsMin>(originalProps: P) {
+    return useButtonPressedProps(useButtonSizeProps(useButtonVariantProps(originalProps)));
+}
+
+export function useButtonButtonProps<P extends ButtonPropsMin>(originalProps: P) {
+    const { type, ...props } = useSharedButtonProps(originalProps);
 
     return {
         type: type ?? "button",
@@ -72,15 +64,15 @@ export function buttonButtonProps<P extends ButtonPropsMin>(originalProps: P) {
 }
 
 
-export function anchorButtonProps<P extends ButtonPropsMin>(originalProps: P) {
-    const { disabled, tabIndex, role, "aria-disabled": ariaDisabled, ...props } = sharedButtonProps(originalProps);
+export function useAnchorButtonProps<P extends ButtonPropsMin>(originalProps: P) {
+    const props = useSharedButtonProps(originalProps);
 
-    return {
-        tabIndex: disabled ? -1 : tabIndex,
-        role: role ?? "button",
+    return useMergedProps(props, {
+        tabIndex: props.disabled ? -1 : props.tabIndex,
+        role: props.role ?? "button",
 
-        ...({ "aria-disabled": disabled ? "true" : ariaDisabled }),
+        ...({ "aria-disabled": props.disabled ? "true" : props["aria-disabled"] }),
         ...(props)
-    }
+    })
 }
 

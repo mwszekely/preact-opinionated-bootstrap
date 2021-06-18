@@ -1,0 +1,94 @@
+@import url("https://fonts.googleapis.com/css2?family=Jost&family=Merriweather+Sans&family=Sora&display=swap");
+
+$inset-press-transition: box-shadow 0.15s cubic-bezier(0, 1, 0.33, 1),
+  padding 0.15s cubic-bezier(0, 1, 0.33, 1),
+  text-shadow 0.15s cubic-bezier(0, 1, 0.33, 1) !default;
+
+// 2. Include any default variable overrides here
+$progress-bar-transition: width, clip-path 0.6s ease !default;
+$btn-box-shadow: inset 0 0 0 rgb(0 0 0 / 40%), var(--btn-box-shadow, 0 0 black); //elevation.elevation-box-shadow(4);
+$btn-active-box-shadow: inset 0 3px 5px rgb(0 0 0 / 40%), 0 0 transparent;
+
+//$btn-active-box-shadow: var(--current-box-shadow);
+
+//@import "./light-theme";
+
+// 3. Include remainder of required Bootstrap stylesheets
+@import "../node_modules/bootstrap/scss/functions"; // (just in case)
+@import "../node_modules/bootstrap/scss/variables";
+@import "../node_modules/bootstrap/scss/mixins";
+@import "../node_modules/bootstrap/scss/utilities";
+
+$utilities: map-merge(
+  $utilities,
+  (
+    "grid-template-columns": (
+      property: grid-template-columns,
+      class: grid-columns,
+      responsive: true,
+      values: (
+        1: auto,
+        2: var(--grid-template-columns-start, 1fr)
+          var(--grid-template-columns-end, 1fr),
+        3: var(--grid-template-columns-start, 1fr) repeat(1, 1fr)
+          var(--grid-template-columns-end, 1fr),
+        4: var(--grid-template-columns-start, 1fr) repeat(2, 1fr)
+          var(--grid-template-columns-end, 1fr),
+        5: var(--grid-template-columns-start, 1fr) repeat(3, 1fr)
+          var(--grid-template-columns-end, 1fr),
+        6: var(--grid-template-columns-start, 1fr) repeat(4, 1fr)
+          var(--grid-template-columns-end, 1fr),
+        7: var(--grid-template-columns-start, 1fr) repeat(5, 1fr)
+          var(--grid-template-columns-end, 1fr),
+        8: var(--grid-template-columns-start, 1fr) repeat(6, 1fr)
+          var(--grid-template-columns-end, 1fr),
+        9: var(--grid-template-columns-start, 1fr) repeat(7, 1fr)
+          var(--grid-template-columns-end, 1fr),
+        10: var(--grid-template-columns-start, 1fr) repeat(8, 1fr)
+          var(--grid-template-columns-end, 1fr),
+        11: var(--grid-template-columns-start, 1fr) repeat(9, 1fr)
+          var(--grid-template-columns-end, 1fr),
+        12: var(--grid-template-columns-start, 1fr) repeat(10, 1fr)
+          var(--grid-template-columns-end, 1fr),
+      ),
+    ),
+  )
+);
+
+.grid-template-columns-start-max-content {
+  --grid-template-columns-start: max-content;
+}
+.grid-template-columns-start-min-content {
+  --grid-template-columns-start: min-content;
+}
+.grid-template-columns-start-auto {
+  --grid-template-columns-start: auto;
+}
+.grid-template-columns-start-1fr {
+  --grid-template-columns-start: 1fr;
+}
+
+.grid-template-columns-end-max-content {
+  --grid-template-columns-end: max-content;
+}
+.grid-template-columns-end-min-content {
+  --grid-template-columns-end: min-content;
+}
+.grid-template-columns-end-auto {
+  --grid-template-columns-end: auto;
+}
+.grid-template-columns-end-1fr {
+  --grid-template-columns-end: 1fr;
+}
+
+.modal-dialog > .modal-content {
+  & .modal-body {
+    overflow: auto;
+    max-height: calc(100vh - 15em);
+    position: relative;
+  }
+}
+
+$btn-transition: #{$btn-transition}, #{$inset-press-transition};
+$font-family-sans-serif: "Jost", #{$font-family-sans-serif};
+//$btn-active-box-shadow: $btn-active-box-shadow, $input-btn-focus-box-shadow;

@@ -1,0 +1,9 @@
+// Always show dropdown menus--we use <Transition>s to handle this.
+.dropdown-menu {
+  display: block;
+}
+
+// Stop changes to the transform property from Popper from being affected
+.fade-transition-only {
+    transition-property: opacity;
+}

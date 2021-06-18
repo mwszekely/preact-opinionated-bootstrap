@@ -1,6 +1,8 @@
 import clsx from "clsx";
 import { h } from "preact";
 import { useContext } from "preact/hooks";
+import { useMergedProps } from "../../merge-props";
+import { AsyncInputErrorToastSentinel } from "../../toast/error";
 import { IsInFormCheckbox } from "../checkbox/context";
 import { InToggleButton } from "../toggle-button/context";
 
@@ -13,39 +15,28 @@ interface FormControlPropsBase {
 
 export type FormControlProps = FormControlPropsBase & Pick<h.JSX.HTMLAttributes<HTMLLabelElement>, "className" | "readOnly">// & SimpleProps<HTMLInputElement>;
 
-export type FormLabelProps = Pick<h.JSX.HTMLAttributes<HTMLLabelElement>, "className">;
 export type FloatingLabelContainerProps = Pick<h.JSX.HTMLAttributes<HTMLDivElement>, "className">;
 
-export function useFormLabelProps<P extends FormLabelProps>({ className, ...props }: P) {
-    const isCheckboxLabel = useContext(IsInFormCheckbox);
-    const isInToggleButton = useContext(InToggleButton);
-    return {
-        ...props,
-        className: clsx(isInToggleButton? "" : isCheckboxLabel? "form-check-label" : "form-label", className)
-    }
-}
-
 export function useFloatingLabelContainerProps<P extends FloatingLabelContainerProps>({ className, ...props }: P) {
-    return {
-        ...props,
-        className: clsx("form-floating", className)
-    }
+    return useMergedProps({
+        className: clsx("form-floating"),
+        style: undefined
+    }, props);
 }
 
 export function useFormControlProps<P extends FormControlProps>(p: P) {
-    const { className, readOnly, readOnlyVariant, size, ...rest } = (p);
-    return {
-        ...rest,
+    const { readOnly, readOnlyVariant, size, ...props } = p;
+    return useMergedProps({
         readOnly,
-        className: clsx("form-control", size && `form-control-${size}`, readOnlyVariant === "plaintext" && readOnly && "form-control-plaintext", className)
-    }
+        childrenPre: <AsyncInputErrorToastSentinel />,
+        className: clsx("form-control", size && `form-control-${size}`, readOnlyVariant === "plaintext" && readOnly && "form-control-plaintext")
+    }, props);
 }
 
 export function useFormRangeProps<P extends FormControlProps>(p: P) {
-    const { className, readOnlyVariant, size, ...rest } = (p);
-    return {
-        ...rest,
-        className: clsx("form-range", className)
-    }
+    const { readOnlyVariant, size, ...props } = p;
+    return useMergedProps({
+        className: clsx("form-range")
+    }, props)
 }
 

@@ -30,6 +30,8 @@ export interface SimpleHTMLButtonProps extends SimplePropsWithExtras<HTMLButtonE
 export interface SimpleHTMLDivProps extends SimplePropsWithExtras<HTMLDivElement, never> {  }
 export interface SimpleHTMLSpanProps extends SimplePropsWithExtras<HTMLSpanElement, never> {  }
 
+export interface SimpleHTMLDialogProps extends SimplePropsWithExtras<HTMLDialogElement, "open"> {  }
+
 /*export interface SimpleHTMLInputButtonProps extends SimplePropsWithExtras<HTMLInputElement, "value" | "type"> { type: HTMLButtonType; }
 
 export interface SimpleHTMLInputCheckboxProps extends SimplePropsWithExtras<HTMLInputElement, "type" | "checked"> { type: "checkbox"; }

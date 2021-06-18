@@ -1,5 +1,6 @@
 
 import clsx from "clsx";
+import { useMergedProps } from "../merge-props";
 import { SimpleHTMLImageProps } from "../props-shared";
 //import { ImageBorderColor, ImageVariant, ImageRowVariant, ImageCellVariant } from "./types";
 
@@ -8,16 +9,13 @@ interface ImagePropsBase {
     
 }
 
-
 export interface ImageProps extends ImagePropsBase, SimpleHTMLImageProps { 
     src: string; 
     alt: string;
 }
 
-export function useImageProps<P extends ImageProps>(props: P) {
-    const { className, thumbnail, ...rest } = props;
-    return {
-        ...rest,
-        className: clsx("img-fluid", thumbnail && "img-thumbnail", className)
-    }
+export function useImageProps<P extends ImageProps>({ thumbnail, ...props }: P) {
+    return useMergedProps({
+        className: clsx("img-fluid", thumbnail && "img-thumbnail")
+    }, props);
 }
