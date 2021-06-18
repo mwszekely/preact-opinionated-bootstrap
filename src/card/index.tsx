@@ -71,5 +71,3 @@ export const CardSubtitle = forwardElementRef(function CardSubtitle<E extends ke
     const { className, tag, ...p } = props;
     return h(tag ?? "h6", { ...p, className: clsx("card-subtitle", "mb-2", "text-muted", className), ref: ref } as any);
 });
-
-<CardTitle tag="h5" ref={useRef<HTMLHeadingElement>(null)} onFocus={ (e: h.JSX.TargetedFocusEvent<ElementFromTag<"h1">>) => {}} />
