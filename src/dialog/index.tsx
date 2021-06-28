@@ -1,6 +1,6 @@
 import { ComponentChildren, createContext, h, Ref } from "preact";
 import { forwardElementRef, ProvideId, useProvidedId, useRefElement } from "preact-async-input";
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "preact/hooks";
+import { useCallback, useContext, useEffect, useLayoutEffect, useRef, useState } from "preact/hooks";
 import { SimpleHTMLDialogProps, SimpleHTMLDivProps } from "../props-shared";
 //import dialogPolyfill from 'dialog-polyfill'
 import { BodyPortal } from "../portal";
@@ -120,6 +120,7 @@ export function useDialogHeaderProps<P extends DialogHeaderPropsMin>({ className
 export function useDialogBodyProps<P extends DialogBodyPropsMin>({ className, ...props }: P) { return useMergedProps({ className: clsx("modal-body", className) }, props); }
 export function useDialogFooterProps<P extends DialogFooterPropsMin>({ className, ...props }: P) { return useMergedProps({ className: clsx("modal-footer", className) }, props); }
 
+const DialogOpenContext = createContext(false);
 export const Dialog = forwardElementRef(function Dialog(p: DialogProps, ref: Ref<HTMLDivElement>) {
     const { children, open, ...props } = useDialogProps({ ...p, ref });
     const headerId = useRandomId(); //useProvidedId("backup", undefined);
@@ -130,6 +131,7 @@ export const Dialog = forwardElementRef(function Dialog(p: DialogProps, ref: Ref
         <BodyPortal>
             <Transition open={open} className="modal fade2 backdrop-filter-transition">
                 <div>
+                <DialogOpenContext.Provider value={open}>
                     <Transition measure {...zoomProps({ ...props, open, originX: 0.5, originY: 0.5, minX: 0.8, minY: 0.8 })}>
                         <div role="dialog" aria-labelledby={headerId} aria-modal={open ? "true" : undefined}>
                             <div className="modal-content">
@@ -139,6 +141,7 @@ export const Dialog = forwardElementRef(function Dialog(p: DialogProps, ref: Ref
                             </div>
                         </div>
                     </Transition>
+                </DialogOpenContext.Provider>
                 </div>
             </Transition>
         </BodyPortal>
@@ -152,8 +155,10 @@ export const DialogHeader = forwardElementRef(function DialogHeader({ closeButto
 });
 
 export const DialogBody = forwardElementRef(function DialogHeader({ children, ...props }: DialogHeaderProps, ref: Ref<HTMLDivElement>) {
+    const isOpen = useContext(DialogOpenContext);
+
     const { element, useRefElementProps } = useRefElement<HTMLDivElement>()
-    const { height, scrollHeight, width, scrollWidth, scrollTop, scrollLeft, overflowX, overflowY } = useElementSize(element);
+    const { height, scrollHeight, width, scrollWidth, scrollTop, scrollLeft, overflowX, overflowY } = useElementSize(isOpen? element : null);
 
     let cssVariables: h.JSX.CSSProperties = {};
     if (height != null && scrollHeight != null && scrollTop != null && scrollLeft != null && scrollWidth != null && width != null && scrollLeft != null) {

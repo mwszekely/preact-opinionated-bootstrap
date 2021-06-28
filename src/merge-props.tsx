@@ -18,6 +18,9 @@ function mergeClasses({ class: lhsClass, className: lhsClassName }: { class?: st
 }
 
 function mergeStyles(lhs: h.JSX.HTMLAttributes<any>["style"] | null | undefined, rhs: h.JSX.HTMLAttributes<any>["style"] | null | undefined): h.JSX.HTMLAttributes<any>["style"] {
+    if (!lhs && !rhs)
+        return undefined;
+        
     if (typeof lhs != typeof rhs) {
         if (lhs && !rhs)
             return lhs;

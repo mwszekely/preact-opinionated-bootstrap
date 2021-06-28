@@ -124,23 +124,35 @@ export const ToastBody = forwardElementRef(function ToastBody(p: ToastBodyProps,
 });
 
 
-export const PushToastContext = createContext<null | ((toastElement: JSX.Element) => void)>(null);
+
+export const PushToastContext = createContext<null | ((toastElement: JSX.Element) => number)>(null);
+export const UpdateToastContext = createContext<null | ((id: number, toastElement: JSX.Element) => void)>(null);
 export function ToastManager({ children, max }: { children: ComponentChildren, max: number }) {
 
     const [currentToastIndex, setCurrentToastIndex] = useState(0);
     const [toastCount, setToastCount] = useState(0);
     const [waitingForClose, setWaitingForClose] = useState(false);
 
+    const [toastRenderKey, setToastRenderKey] = useState(0);
+
     const allToasts = useRef<JSX.Element[]>([]);
     const pushToast = useCallback((toastElement: JSX.Element) => {
+        let ret = allToasts.current.length;
         allToasts.current.push(toastElement);
         setToastCount(c => ++c);
+        return ret;
+    }, [allToasts]);
+
+    const updateToast = useCallback((id: number, toastElement: JSX.Element) => {
+        allToasts.current[id] = toastElement;
+        setToastRenderKey(k => ++k);
     }, [allToasts]);
 
     //const showToast = useCallback((toast: JSX.Element) => { }, []);
 
     const onCurrentToastClose = useCallback(() => {
         setCurrentToastIndex(i => ++i);
+        setToastRenderKey(k => ++k);
         setWaitingForClose(true);
     }, [])
 
@@ -152,13 +164,13 @@ export function ToastManager({ children, max }: { children: ComponentChildren, m
 
     return (
         <>
-            <PushToastContext.Provider value={pushToast}>{children}</PushToastContext.Provider>
+            <PushToastContext.Provider value={pushToast}><UpdateToastContext.Provider value={updateToast}>{children}</UpdateToastContext.Provider></PushToastContext.Provider>
             <BodyPortal>
                 <div className={clsx("flex-column-reverse toasts-container")}>
                     {allToasts.current.map((toast, i) =>
-                        ((i + +waitingForClose) >= currentToastIndex + max)? null :
+                        ((i + +waitingForClose) >= currentToastIndex + max) ? null :
                             <Transition onTransitionUpdate={onTransitionUpdate} animateOnMount {...fadeProps(slideProps({ x: 0.7, open: i >= currentToastIndex }))} >
-                                <div>{cloneElement(toast, { key: i, timeout: i > currentToastIndex ? Infinity : toast.props.timeout, onClose: i == currentToastIndex ? onCurrentToastClose : undefined })}</div>
+                                <div key={i >= currentToastIndex? toastRenderKey : -1}>{cloneElement(toast, { key: i, timeout: i > currentToastIndex ? Infinity : toast.props.timeout, onClose: i == currentToastIndex ? onCurrentToastClose : undefined })}</div>
                             </Transition>)}
                 </div>
             </BodyPortal>
@@ -196,7 +208,7 @@ function ToastCloseProgress({ active, timeout }: { active: boolean, timeout: num
 
 
 
-export function usePushToast(): (toastElement: h.JSX.Element) => void;
+export function usePushToast(): (toastElement: h.JSX.Element) => number;
 export function usePushToast(toastElement: h.JSX.Element): void;
 export function usePushToast(toastElement?: h.JSX.Element) {
     const pushToast = useContext(PushToastContext);
@@ -204,4 +216,11 @@ export function usePushToast(toastElement?: h.JSX.Element) {
         return pushToast?.(toastElement);
     }
     return pushToast;
+}
+
+export function useUpdateToast() {
+    const updateToast = useContext(UpdateToastContext);
+    return useCallback((id: number, toastElement: h.JSX.Element) => {
+        updateToast?.(id, toastElement)
+    }, [updateToast])
 }

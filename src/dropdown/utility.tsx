@@ -97,7 +97,7 @@ export function useArrowKeyNavigation() {
         }
         else {
             const id = allChildrenInfoRef.current[index].id;
-            allChildrenInfoRef.current.splice(index, 1);
+            //allChildrenInfoRef.current.splice(index, 1);
             childrenInfoById2Ref.current.delete(id);
         }
         setHasAnyChildren(allChildrenInfoRef.current.length != 0);
