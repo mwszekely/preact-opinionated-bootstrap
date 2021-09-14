@@ -1,0 +1,49 @@
+@use "../variables" as *;
+@use "sass:color";
+@use "sass:map";
+@use "sass:string";
+@forward "../variables";
+
+.list-group {
+  font-family: $font-family-sans-serif;
+}
+
+.list-group-item-action {
+  user-select: none;
+}
+.list-group-item-action,
+.list-group-item[tabindex="0"] {
+  outline: none;
+  transition: $inset-press-transition;
+  &:active:not(:focus),
+  &.active:not(:focus) {
+    box-shadow: $btn-active-box-shadow;
+  }
+  &:active:focus,
+  &.active:focus {
+    box-shadow: $input-focus-box-shadow, $btn-active-box-shadow;
+    padding-bottom: $list-group-item-padding-y * 0.5;
+    padding-top: $list-group-item-padding-y + $list-group-item-padding-y * 0.5;
+  }
+  &:not(:active):not(.active):focus {
+    box-shadow: $input-focus-box-shadow;
+  }
+}
+
+// Undo the above if the user prefers less motion
+@media (prefers-reduced-motion) {
+  .actionable.list-group-item {
+    &:active,
+    &.active {
+      padding-bottom: $list-group-item-padding-y;
+      padding-top: $list-group-item-padding-y;
+    }
+  }
+  .nav-link {
+    &:active,
+    &.active {
+      padding-bottom: $nav-link-padding-y;
+      padding-top: $nav-link-padding-y;
+    }
+  }
+}

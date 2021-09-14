@@ -1,2 +1,0 @@
-
-export { ButtonGroup } from "./component"

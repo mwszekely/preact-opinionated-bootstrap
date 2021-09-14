@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+
+    <link href="./index.css" rel="stylesheet">
+
+    <style>
+        html, body, #root {
+            height: 100%;
+            width: 100%;
+            max-width: 30em;
+            touch-action: manipulation;
+        }
+        .demo {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5em;
+            width: 100%;
+        }
+
+        .flex {
+            display: flex;
+            gap: 0.5em;
+        }
+
+        .droppable {
+            background-color: gray;
+            border-radius: 8px;
+            border: 4px dashed black;
+            min-width: 30em;
+            min-height: 10em;
+        }
+
+        .droppable>* {
+            pointer-events: none;
+        }
+
+        .demo > hr {
+            width: 100%;
+        }
+    </style>
+
+    <script>
+        window.onerror = function (e) {
+            debugger;
+            for (let p of arguments) {
+            alert(p);
+            }
+        }
+        </script>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script src="./bundle.js"></script>
+</body>
+
+</html>

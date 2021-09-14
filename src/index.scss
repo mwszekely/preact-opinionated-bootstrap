@@ -1,45 +1,29 @@
-@use "sass:color";
+@use "./variables.scss" as *;
+@use "./button" as *;
+@use "./list" as *;
+@use "./input-group" as *;
+@use "./accordion" as *;
+@use "./tabs" as *;
+@use "./dialog" as *;
+@use "./menu" as *;
+@use "./offcanvas" as *;
+@use "./tooltip" as *;
+@use "./toast" as *;
+@use "./progress/" as *;
 
-$enable-shadows: true;
+@use "../node_modules/preact-transition/src/index.scss";
 
-// 1. Include functions first (so you can manipulate colors, SVGs, calc, etc)
-@import "../node_modules/bootstrap/scss/functions";
-@import "./dark-theme";
-@import "./bootstrap-config.scss";
-@import "./bootstrap-styles.scss";
-@import "./bootstrap-styles-additional.scss";
+@forward "./variables.scss";
+@forward "./button";
+@forward "./list";
+@forward "./input-group";
+@forward "./accordion";
+@forward "./tabs";
+@forward "./dialog";
+@forward "./menu";
+@forward "./offcanvas";
+@forward "./tooltip";
+@forward "./toast";
+@forward "./progress/";
 
-// 5. Add additional custom code here
-
-@import "../node_modules/preact-transition/src/index.scss";
-
-@import "./progress";
-@import "./button";
-@import "./tabs";
-@import "./dropdown";
-@import "./input-group";
-@import "./offcanvas";
-@import "./dialog";
-@import "./toast";
-@import "./tooltip";
-@import "./forms/toggle-button/index.scss";
-
-
-
-// Forces an element to be square, no matter what width/height it is either set to or just implicitly has
-.square-box {
-  position: relative;
-  overflow: hidden;
-}
-.square-box:before {
-  content: "";
-  display: block;
-  padding-top: 100%;
-}
-.square-content {
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-}
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css");

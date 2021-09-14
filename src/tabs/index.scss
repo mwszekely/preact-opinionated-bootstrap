@@ -1,8 +1,107 @@
-/*
-.nav-tabs button.nav-link {
-    width: 100%;
+@use "../variables.scss" as *;
+@forward "../variables";
+@use "sass:color";
+@use "sass:map";
+@use "sass:string";
+@use "sass:list";
+
+/*.nav-link {
+    &:not(.active):not(:active) {
+        clip-path: inset(0px 0px -100% 0px);
+        box-shadow: 0 4px 5px rgb(0 0 0 / 40%), 0 0 transparent;
+    }
 }*/
 
-.tab-label {
-    white-space: nowrap;
+.nav-tabs {
+  // Make sure the tabs appear on top of the panels
+  // to hide the inset box shadow of the panel for this tab.
+  position: relative;
+  z-index: 1;
+}
+
+.tabs-container {
+  display: flex;
+  & > .nav {
+    display: flex;
+  }
+  &.tabs-orientation-inline {
+    flex-direction: column;
+    & > .nav {
+      flex-direction: row;
+    }
+
+    & .nav-link {
+      &:active:not(:focus),
+      &.active:not(:focus) {
+        box-shadow: inset 0 4px 5px #030303, 0px 10px 4px 1px $body-bg;
+      }
+      &:active:focus,
+      &.active:focus {
+        box-shadow: inset 0 4px 5px #030303, 0px 10px 4px 1px $body-bg;
+        padding-bottom: $list-group-item-padding-y * 0.5;
+        padding-top: $list-group-item-padding-y + $list-group-item-padding-y *
+          0.5;
+      }
+      &:not(:active):not(.active):focus {
+        box-shadow: $input-focus-box-shadow;
+      }
+    }
+  }
+
+  // Add support for vertical tabs by adjusting borders and such.
+  // TODO: RTL support
+  &.tabs-orientation-block {
+    flex-direction: row;
+    & > .nav {
+      flex-direction: column;
+      &.nav-tabs {
+        justify-content: center;
+        
+        & .nav-link {
+          border-top-right-radius: 0rem;
+          border-top-left-radius: 0.25rem;
+          border-bottom-left-radius: 0.25rem;
+          &.active {
+            border-color: $gray-300 $nav-tabs-link-active-bg $gray-300 $gray-300;
+          }
+
+          &:hover,
+          &:focus {
+            border-color: $gray-200 $nav-tabs-border-color $gray-200 $gray-200;
+          }
+        }
+      }
+    }
+
+    & .nav-link {
+      white-space: nowrap;
+      &:active:not(:focus),
+      &.active:not(:focus) {
+        box-shadow: inset 4px 0 5px #030303, 10px 0px 4px 1px $body-bg;
+      }
+      &:active:focus,
+      &.active:focus {
+        box-shadow: inset 4px 0 5px #030303, 10px 0px 4px 1px $body-bg;
+      }
+      &:not(:active):not(.active):focus {
+        box-shadow: $input-focus-box-shadow;
+      }
+    }
+  }
+}
+
+.nav-link {
+  //@extend: inset(0px 0px -100% 0px);
+  outline: none;
+  transition: $inset-press-transition;
+  &:active:focus,
+  &.active:focus {
+    padding-bottom: $list-group-item-padding-y * 0.5;
+    padding-top: $list-group-item-padding-y + $list-group-item-padding-y * 0.5;
+  }
+}
+
+.tab-content {
+  box-shadow: inset 0 4px 5px #030303;
+  padding: 0.5em;
 }

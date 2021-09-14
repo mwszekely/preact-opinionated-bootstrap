@@ -1,37 +1,7 @@
-// Stop changes to the transform property from Popper from being affected
-.fade-transition-only {
-  transition-property: opacity;
+.tooltip {
+    position: relative;
 }
 
-// Tighten up the padding, since we keep tooltips visible when hovered over
-.bs-tooltip-auto {
-  &[data-popper-placement^="top"] {
-    //padding-bottom: $tooltip-arrow-height;
-    padding-top: 0;
-  }
-  &[data-popper-placement^="bottom"] {
-    //padding-top: $tooltip-arrow-height;
-    padding-bottom: 0;
-  }
-  &[data-popper-placement^="right"] {
-    //padding-left: $tooltip-arrow-width;
-    padding-right: 0;
-  }
-  &[data-popper-placement^="left"] {
-    //padding-right: $tooltip-arrow-width;
-    padding-left: 0;
-  }
-}
-
-// TODO: Padding doesn't work here like it does with tooltips
-// How does Bootstrap get the arrow to not overlap?
-.bs-popover-auto {
-  &[data-popper-placement^="top"],
-  &[data-popper-placement^="bottom"] {
-    margin: $popover-arrow-height 0;
-  }
-  &[data-popper-placement^="right"],
-  &[data-popper-placement^="left"] {
-    margin: 0 $popover-arrow-width;
-  }
+.tooltip-wrapper {
+    position: absolute;
 }

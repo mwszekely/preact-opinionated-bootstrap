@@ -1,1 +1,1 @@
-export { Badge } from "./component"
+export { Badge, BadgeProps, BadgeColorVariant } from "./badge";

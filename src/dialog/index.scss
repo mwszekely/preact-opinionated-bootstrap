@@ -1,18 +1,36 @@
-.modal {
-  // Always show dialogs by default, since we use <Transition> components to handle them instead.
-  display: block;
+@use "../variables.scss" as *;
+@forward "../variables";
+@use "sass:math";
 
-  // Add an additional width style to modal dialogs
-  & > .modal-dialog.modal-max {
-    max-width: 95vw;
-  }
+// A lot of styles are applied by the outermost .modal class by itself, which we skip using.
+// So re-apply some of the stuff we lost.
+.modal-dialog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: $zindex-modal;
+}
 
+.modal-backdrop {
+  width: auto;
+  height: auto;
+  right: 0;
+  bottom: 0;
+}
+
+// Add an additional width style to modal dialogs
+.modal-dialog.modal-max {
+  max-width: 95vw;
+}
+
+.modal-backdrop {
   background: rgba(0, 0, 0, 0.25);
 }
 
 // Browsers that don't support backdrop-blur make the backdrop more opaque to compensate
 @supports not (backdrop-filter: blur(4px)) {
-  .modal {
+  .modal-backdrop {
     background: rgba(0, 0, 0, 0.4);
   }
 }
@@ -31,29 +49,14 @@
   }
 }
 
-// Version of the fade transition class that doesn't conflict with Bootstrap
-// (needed for modals, even though the transitions file isn't included...)
-.fade2 {
-  &.transition-enter-init,
-  &.transition-exit-transition,
-  &.transition-exit-finalize {
-    opacity: 0;
-  }
-  &.transition-exit-init,
-  &.transition-enter-transition,
-  &.transition-enter-finalize {
-    opacity: 1;
-  }
-}
-
 .dialog-shake {
   animation: dialog-shake 0.58s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
   transform: scale(1) rotate(0deg);
 }
 
-$dialog-shake-1: (0.01 / 2);
-$dialog-shake-2: (0.0125 / 2);
-$dialog-shake-3: (0.0175 / 2);
+$dialog-shake-1: math.div(0.01, 2);
+$dialog-shake-2: math.div(0.0125, 2);
+$dialog-shake-3: math.div(0.0175, 2);
 
 @keyframes dialog-shake {
   16.7%,
@@ -76,7 +79,7 @@ $dialog-shake-3: (0.0175 / 2);
 
 .document-scroll-hidden {
   overflow: hidden;
-  padding-inline-end: var(--scrollbar-width, 0px);
+  margin-inline-end: var(--scrollbar-width, 0px);
 }
 
 html:not(.document-scroll-hidden) .modal-content {
@@ -107,7 +110,7 @@ $scroll-fade-height: 2em;
       0deg,
       transparent 0px,
       transparent 5px,
-      $modal-header-border-color calc(5px + #{$scroll-fade-height}),
+      $modal-header-border-color calc(5px + #{$scroll-fade-height})
     );
   }
 
@@ -117,7 +120,7 @@ $scroll-fade-height: 2em;
       180deg,
       transparent 0px,
       transparent 5px,
-      $modal-footer-border-color calc(5px + #{$scroll-fade-height}),
+      $modal-footer-border-color calc(5px + #{$scroll-fade-height})
     );
   }
 }

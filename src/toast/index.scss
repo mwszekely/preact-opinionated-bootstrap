@@ -1,50 +1,17 @@
-.toast-close-button {
-  padding: 0;
-  background: transparent #{$btn-close-bg};
-  border: 0;
-  border-radius: 0.25rem;
-}
-
-.toast {
-  position: relative;
-}
-.toast-progress {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 5px;
-  pointer-events: none;
-}
-
-.toast-close-button {
-  width: 1.2em;
-  height: 1.2em;
-}
-
 .toasts-container {
-  display: flex;
-  position: fixed;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: flex-end;
+    padding: 1em;
+    gap: 1em;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    pointer-events: none;
 
-  @extend .gap-3;
-
-  flex-direction: column-reverse;
-  align-items: flex-end;
-
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-
-  margin: 1.5rem;
-
-  z-index: 5000;
-
-  pointer-events: none;
-  & .toast {
-    pointer-events: auto;
-  }
-  & > .transition-exit-finalize {
-    display: none;
-  }
+    &>.toast {
+        pointer-events: all;
+    }
 }

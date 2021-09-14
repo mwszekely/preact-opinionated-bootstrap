@@ -1,2 +1,1 @@
-
-export { Table, TableBody, TableCell, TableFoot, TableHead, TableHeaderCell, TableRow } from "./component"
+export { Table, TableHead, TableBody, TableRow, TableCell, TableHeaderCell } from "./table";

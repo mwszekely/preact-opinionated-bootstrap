@@ -1,0 +1,594 @@
+@use "sass:color";
+@use "sass:math";
+@use "./bootstrap/functions" as *;
+
+$max-dark: -0.9 !default;
+
+$blue: #2b35ca;
+$indigo: #4500E4;
+$purple: #4c2ea9;
+$pink: #AC0063;
+$red: #C02333;
+$orange: #fd7e14;
+$yellow: #ffb300;
+$green: #10673e;
+$teal: #00a15f;
+$cyan: #009cbb;
+
+$white: color.adjust(#fff, $lightness: 0% * $max-dark);
+$gray-100: color.adjust(#fff, $lightness: 10% * $max-dark);
+$gray-200: color.adjust(#fff, $lightness: 20% * $max-dark);
+$gray-300: color.adjust(#fff, $lightness: 30% * $max-dark);
+$gray-400: color.adjust(#fff, $lightness: 40% * $max-dark);
+$gray-500: color.adjust(#fff, $lightness: 50% * $max-dark);
+$gray-600: color.adjust(#fff, $lightness: 60% * $max-dark);
+$gray-700: color.adjust(#fff, $lightness: 70% * $max-dark);
+$gray-800: color.adjust(#fff, $lightness: 80% * $max-dark);
+$gray-900: color.adjust(#fff, $lightness: 90% * $max-dark);
+$black: color.adjust(#fff, $lightness: 100% * $max-dark);
+
+$primary: $blue;
+$secondary: $gray-600;
+$success: $green;
+$info: $cyan;
+$warning: $yellow;
+$danger: $red;
+$light: $gray-100;
+$dark: $gray-900;
+
+
+$link-color: $info;
+$link-shade-percentage: 20%;
+
+
+// Acceptable values for WCAG 2.0 are 3, 4.5 and 7.
+// See https://www.w3.org/TR/WCAG20/#visual-audio-contrast-contrast
+$min-contrast-ratio: 4.5;
+
+// Customize the light and dark text colors for use in our color contrast function.
+$color-contrast-dark: $black;
+$color-contrast-light: $white;
+
+$body-bg: $black;
+$body-color: $gray-100;
+$body-text-align: null;
+$table-color: $body-color;
+
+$table-striped-bg-factor: 0.1;
+
+
+$table-active-bg-factor: 0.1;
+$table-hover-bg-factor: 0.075;
+
+
+$border-color: $gray-700;
+
+$text-muted: $gray-400;
+
+$table-bg-scale: -80%;
+
+
+$component-active-bg: $primary;
+
+
+$input-btn-focus-color-opacity: 0.4;
+
+$btn-close-color: $white;
+
+$input-bg: $black;
+
+$input-color: $body-color;
+
+$input-focus-border-color: shade-color($component-active-bg, 50%);
+
+
+$component-active-color: tint-color($primary, 80%);
+
+$form-check-input-checked-bg-color: $component-active-bg;
+$form-check-input-indeterminate-bg-color: $component-active-bg;
+
+$form-switch-color: rgba(255, 255, 255, 0.25);
+$form-switch-focus-color: $input-focus-border-color;
+$form-switch-checked-color:$component-active-color;
+
+$input-border-color: $gray-600;
+
+$input-disabled-border-color: null;
+
+$input-group-addon-bg: $gray-800;
+$form-file-button-bg: $input-group-addon-bg;
+
+$form-feedback-valid-color: $success;
+$form-feedback-invalid-color: $success;
+$form-feedback-icon-valid-color: $form-feedback-valid-color;
+$form-feedback-icon-invalid-color: $form-feedback-valid-color;
+
+$link-hover-color: shift-color($link-color, $link-shade-percentage);
+
+
+$nav-tabs-border-color: $gray-700;
+$nav-tabs-link-active-bg: $body-bg;
+$navbar-light-active-color: rgba($white, 0.9);
+$navbar-dark-active-color: $black;
+$dropdown-border-color: rgba($white, 0.15);
+$dropdown-divider-bg: $dropdown-border-color;
+$dropdown-dark-color: $gray-700;
+$dropdown-link-active-color: $component-active-color;
+$dropdown-dark-link-active-color: $dropdown-link-active-color;
+$dropdown-link-active-bg: $component-active-bg;
+$pagination-active-bg: $component-active-bg;
+$pagination-active-border-color: $pagination-active-bg;
+
+
+$accordion-color: $body-color;
+$accordion-bg: $body-bg;
+$accordion-button-color: $accordion-color;
+$accordion-button-active-color: tint-color($primary, 70%);
+$tooltip-bg: $white;
+$popover-bg: $black;
+$headings-color: null;
+$popover-border-color: rgba($white, 0.2);
+$modal-header-border-color: $border-color;
+$list-group-active-bg: $component-active-bg;
+$list-group-bg: $black;
+$list-group-action-color: $gray-300;
+$modal-content-border-color: rgba($white, 0.2);
+$modal-content-bg: $black;
+$modal-content-color: null;
+
+$accordion-icon-color: $accordion-color;
+$accordion-icon-active-color: $accordion-button-active-color;
+
+@use "./bootstrap/bootstrap" with (
+    $enable-shadows: true,
+    $btn-transition: #{
+      box-shadow        0.10s cubic-bezier(0, 1, 0.33, 1), 
+      padding           0.10s cubic-bezier(0, 1, 0.33, 1), 
+      text-shadow       0.10s cubic-bezier(0, 1, 0.33, 1), 
+      color             0.15s ease-in-out, 
+      background-color  0.15s ease-in-out, 
+      border-color      0.15s ease-in-out
+    },
+    $btn-close-padding-y: 0,
+    $btn-close-padding-x: 0,
+    $font-family-sans-serif: #{"Jost", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"},
+    $progress-bar-transition: #{width, clip-path 0.6s ease},
+    $btn-box-shadow: #{inset 0 0 0 rgb(0 0 0 / 40%), var(--btn-box-shadow, 0 0 black)},
+    $btn-active-box-shadow: #{inset 0 3px 5px rgb(0 0 0 / 40%), 0 0 transparent},
+
+    $white: $white,
+    $gray-100: $gray-100,
+    $gray-200: $gray-200,
+    $gray-300: $gray-300,
+    $gray-400: $gray-400,
+    $gray-500: $gray-500,
+    $gray-600: $gray-600,
+    $gray-700: $gray-700,
+    $gray-800: $gray-800,
+    $gray-900: $gray-900,
+    $black: $black,
+  
+    
+
+$blue: $blue,
+$indigo: $indigo,
+$purple: $purple,
+$pink: $pink,
+$red: $red,
+$orange: $orange,
+$yellow: $yellow,
+$green: $green,
+$teal: $teal,
+$cyan: $cyan,
+
+$blue-100: blue-100,
+$blue-200: blue-200,
+$blue-300: blue-300,
+$blue-400: blue-400,
+$blue-500: blue-500,
+$blue-600: blue-600,
+$blue-700: blue-700,
+$blue-800: blue-800,
+$blue-900: blue-900,
+
+
+$primary: $primary,
+$secondary: $secondary,
+$success: $success,
+$info: $info,
+$warning: $warning,
+$danger: $danger,
+$light: $light,
+$dark: $dark,
+
+
+
+
+
+
+
+// Acceptable values for WCAG 2.0 are 3, 4.5 and 7.
+// See https://www.w3.org/TR/WCAG20/#visual-audio-contrast-contrast
+$min-contrast-ratio: $min-contrast-ratio,
+
+// Customize the light and dark text colors for use in our color contrast function.
+$color-contrast-dark: $color-contrast-dark,
+$color-contrast-light: $color-contrast-light,
+
+$body-bg: $body-bg,
+$body-color: $body-color,
+$body-text-align: body-text-align,
+
+// Links
+//
+// Style anchor elements.
+
+$link-color: $link-color,
+$link-shade-percentage: $link-shade-percentage,
+$link-hover-color: $link-hover-color,
+$border-color: $border-color,
+
+$box-shadow: 0 0.5rem 1rem rgba($white, 0.15),
+$box-shadow-sm: 0 0.125rem 0.25rem rgba($white, 0.075),
+$box-shadow-lg: 0 1rem 3rem rgba($white, 0.175),
+$box-shadow-inset: inset 0 1px 2px rgba($white, 0.075),
+
+$component-active-color: $component-active-color,
+$component-active-bg: $component-active-bg,
+
+$headings-color: $headings-color,
+
+$text-muted: $text-muted,
+$blockquote-footer-color: $gray-400,
+
+$mark-bg: #fcf8e3,
+
+// Tables
+//
+// Customizes the `.table` component with basic values, each used across all table variations.
+
+$table-color: $table-color,
+$table-striped-color: $table-color,
+$table-striped-bg-factor: $table-striped-bg-factor,
+$table-striped-bg: rgba($white, $table-striped-bg-factor),
+
+$table-active-color: $table-color,
+$table-active-bg-factor:$table-active-bg-factor,
+$table-active-bg: rgba($white, $table-active-bg-factor),
+
+$table-hover-color: $table-color,
+$table-hover-bg-factor: $table-hover-bg-factor,
+$table-hover-bg: rgba($white, $table-hover-bg-factor),
+
+$table-border-factor: 0.1,
+$table-border-color: $border-color,
+
+$table-caption-color: $text-muted,
+
+$table-bg-scale: $table-bg-scale,
+// scss-docs-end table-variables
+
+// scss-docs-start table-loop
+$table-variants: (
+  "primary": color.adjust($primary, $alpha: math.div($table-bg-scale, 100%)),
+  "secondary": color.adjust($secondary, $alpha: math.div($table-bg-scale, 100%)),
+  "success": color.adjust($success, $alpha: math.div($table-bg-scale, 100%)),
+  "info": color.adjust($info, $alpha: math.div($table-bg-scale, 100%)),
+  "warning": color.adjust($warning, $alpha: math.div($table-bg-scale, 100%)),
+  "danger": color.adjust($danger, $alpha: math.div($table-bg-scale, 100%)),
+  "light": $light,
+  "dark": $dark,
+),
+
+// Buttons + Forms
+//
+// Shared variables that are reassigned to `$input-` and `$btn-` specific variables.
+
+$input-btn-focus-color-opacity: $input-btn-focus-color-opacity,
+$input-btn-focus-color: rgba(
+  tint-color($component-active-bg, 40%),
+  $input-btn-focus-color-opacity
+),
+
+// Buttons
+//
+// For each of Bootstrap's buttons, define text, background, and border color.
+
+$btn-link-disabled-color: $gray-400,
+
+$btn-close-color:            $btn-close-color,
+$btn-close-bg:               url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='#{$btn-close-color}'><path d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z'/></svg>"),
+
+
+$form-text-color: $text-muted,
+
+$input-bg: $input-bg,
+$input-disabled-bg: $gray-800,
+$input-disabled-border-color: $input-disabled-border-color,
+
+$input-color: $input-color,
+$input-border-color: $input-border-color,
+
+$input-focus-bg: $input-bg,
+$input-focus-border-color: $input-focus-border-color,
+$input-focus-color: $input-color,
+
+$input-placeholder-color: $gray-600,
+$input-plaintext-color: $body-color,
+
+$form-check-input-bg: $input-bg,
+$form-check-input-border: 1px solid rgba($white, 0.25),
+$form-check-input-focus-border: $input-focus-border-color,
+
+$form-check-input-checked-color: $component-active-color,
+$form-check-input-checked-bg-color: $form-check-input-checked-bg-color,
+$form-check-input-checked-border-color: $form-check-input-checked-bg-color,
+
+$form-check-input-indeterminate-color: $component-active-color,
+$form-check-input-indeterminate-bg-color: $form-check-input-indeterminate-bg-color,
+$form-check-input-indeterminate-border-color: $form-check-input-indeterminate-bg-color,
+
+$form-switch-color: $form-switch-color,
+$form-switch-focus-color: $form-switch-focus-color,
+$form-switch-checked-color: $form-switch-checked-color,
+$form-switch-bg-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'><circle r='3' fill='#{$form-switch-color}'/></svg>"),
+$form-switch-focus-bg-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'><circle r='3' fill='#{$form-switch-focus-color}'/></svg>"),
+$form-switch-checked-bg-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'><circle r='3' fill='#{$form-switch-checked-color}'/></svg>"),
+
+$input-group-addon-color: $input-color,
+$input-group-addon-bg: $input-group-addon-bg,
+$input-group-addon-border-color: $input-border-color,
+$form-select-color: $input-color,
+$form-select-bg: $input-bg,
+$form-select-disabled-bg: $gray-800,
+$form-select-disabled-border-color: $input-disabled-border-color,
+$form-select-indicator-color: $gray-200,
+
+$form-select-border-color: $input-border-color,
+
+$form-select-focus-border-color: $input-focus-border-color,
+$form-range-track-bg: $gray-700,
+
+$form-range-thumb-bg: $component-active-bg,
+$form-range-thumb-active-bg: tint-color($component-active-bg, 70%),
+$form-range-thumb-disabled-bg: $gray-500,
+
+$form-file-button-color: $input-color,
+$form-file-button-bg: $form-file-button-bg,
+$form-file-button-hover-bg: shade-color($form-file-button-bg, 5%),
+
+// Form validation
+
+$form-feedback-valid-color: $form-feedback-valid-color,
+$form-feedback-invalid-color: $form-feedback-invalid-color,
+
+$form-feedback-icon-valid-color: $form-feedback-icon-valid-color,
+$form-feedback-icon-invalid-color: $form-feedback-invalid-color,
+
+// Z-index master list
+//
+// Warning: Avoid customizing these values. They're used for a bird's eye view
+// of components dependent on the z-axis and are designed to all work together.
+
+$nav-link-color: $link-color,
+$nav-link-hover-color: $link-hover-color,
+$nav-link-disabled-color: $gray-400,
+
+$nav-tabs-border-color: $nav-tabs-border-color,
+$nav-tabs-link-hover-border-color: $gray-800 $gray-800 $nav-tabs-border-color,
+$nav-tabs-link-active-color: $gray-300,
+$nav-tabs-link-active-bg: $nav-tabs-link-active-bg,
+$nav-tabs-link-active-border-color: $gray-700 $gray-700 $nav-tabs-link-active-bg,
+
+$nav-pills-link-active-color: $component-active-color,
+$nav-pills-link-active-bg: $component-active-bg,
+
+// Navbar
+
+$navbar-dark-color: rgba($black, 0.55),
+$navbar-dark-hover-color: rgba($black, 0.75),
+$navbar-dark-active-color: $navbar-dark-active-color,
+$navbar-dark-disabled-color: rgba($black, 0.25),
+$navbar-dark-toggler-border-color: rgba($black, 0.1),
+
+$navbar-light-color: rgba($white, 0.55),
+$navbar-light-hover-color: rgba($white, 0.7),
+$navbar-light-active-color: $navbar-light-active-color,
+$navbar-light-disabled-color: rgba($white, 0.3),
+$navbar-light-toggler-border-color: rgba($white, 0.1),
+
+$navbar-light-brand-color: $navbar-light-active-color,
+$navbar-light-brand-hover-color: $navbar-light-active-color,
+$navbar-dark-brand-color: $navbar-dark-active-color,
+$navbar-dark-brand-hover-color: $navbar-dark-active-color,
+
+// Dropdowns
+//
+// Dropdown menu container and contents.
+$dropdown-bg: $black,
+$dropdown-border-color: $dropdown-border-color,
+$dropdown-divider-bg: $dropdown-divider-bg,
+
+$dropdown-link-color: $gray-100,
+$dropdown-link-hover-color: shade-color($gray-100, 10%),
+$dropdown-link-hover-bg: $gray-800,
+
+$dropdown-link-active-color: $dropdown-link-active-color,
+$dropdown-link-active-bg: $dropdown-link-active-bg,
+
+$dropdown-link-disabled-color: $gray-500,
+
+$dropdown-header-color: $gray-400,
+
+$dropdown-dark-color: $dropdown-dark-color,
+$dropdown-dark-bg: $gray-200,
+$dropdown-dark-border-color: $dropdown-border-color,
+$dropdown-dark-divider-bg: $dropdown-divider-bg,
+$dropdown-dark-link-color: $dropdown-dark-color,
+$dropdown-dark-link-hover-color: $white,
+$dropdown-dark-link-hover-bg: rgba($black, 0.15),
+$dropdown-dark-link-active-color: $dropdown-dark-link-active-color,
+$dropdown-dark-link-active-bg: $dropdown-link-active-bg,
+$dropdown-dark-link-disabled-color: $gray-500,
+$dropdown-dark-header-color: $gray-500,
+
+// Pagination
+
+$pagination-color: $link-color,
+$pagination-bg: $black,
+$pagination-border-color: $gray-700,
+
+$pagination-focus-color: $link-hover-color,
+$pagination-focus-bg: $gray-800,
+
+$pagination-hover-color: $link-hover-color,
+$pagination-hover-bg: $gray-800,
+$pagination-hover-border-color: $gray-700,
+
+$pagination-active-color: $component-active-color,
+$pagination-active-bg: $pagination-active-bg,
+$pagination-active-border-color: $pagination-active-border-color,
+
+$pagination-disabled-color: $gray-400,
+$pagination-disabled-bg: $white,
+$pagination-disabled-border-color: $gray-700,
+
+// Cards
+
+$card-border-color: rgba($white, 0.125),
+$card-cap-bg: rgba($white, 0.03),
+$card-cap-color: null,
+$card-color: null,
+$card-bg: $black,
+
+// Accordion
+$accordion-color: $accordion-color,
+$accordion-bg: $accordion-bg,
+$accordion-border-color: rgba($white, 0.125),
+
+$accordion-button-color: $accordion-button-color,
+$accordion-button-bg: $accordion-bg,
+
+$accordion-button-active-bg: shade-color($component-active-bg, 80%),
+$accordion-button-active-color: $accordion-button-active-color,
+
+$accordion-button-focus-border-color: $input-focus-border-color,
+
+$accordion-icon-color: $accordion-icon-color,
+$accordion-icon-active-color: $accordion-icon-active-color,
+
+$accordion-button-icon:         url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='#{$accordion-icon-color}'><path fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/></svg>"),
+$accordion-button-active-icon:  url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='#{$accordion-icon-active-color}'><path fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/></svg>"),
+
+// Tooltips
+
+$tooltip-color: $black,
+$tooltip-bg: $tooltip-bg,
+$tooltip-arrow-color: $tooltip-bg,
+
+// Popovers
+
+$popover-bg: $popover-bg,
+$popover-border-color: $popover-border-color,
+
+$popover-header-bg: shade-color($popover-bg, 6%),
+$popover-header-color: $headings-color,
+
+$popover-body-color: $body-color,
+
+$popover-arrow-color: $popover-bg,
+
+$popover-arrow-outer-color: fade-in($popover-border-color, 0.05),
+
+// Toasts
+
+$toast-color: null,
+$toast-background-color: rgba($black, 0.85),
+$toast-border-color: rgba(0, 0, 0, 0.1),
+
+$toast-header-color: $gray-400,
+$toast-header-background-color: rgba($black, 0.85),
+$toast-header-border-color: rgba(0, 0, 0, 0.05),
+
+// Badges
+
+$badge-color: $black,
+
+// Modals
+
+$modal-content-color: $modal-content-color,
+$modal-content-bg: $modal-content-bg,
+$modal-content-border-color: $modal-content-border-color,
+
+$modal-backdrop-bg: $white,
+$modal-header-border-color: $modal-header-border-color,
+$modal-footer-border-color: $modal-header-border-color,
+
+// Progress bars
+
+$progress-bg: $gray-800,
+$progress-bar-color: $black,
+$progress-bar-bg: $primary,
+
+// List group
+
+$list-group-color: $gray-100,
+$list-group-bg: $list-group-bg,
+$list-group-border-color: rgba($white, 0.125),
+
+$list-group-hover-bg: $gray-900,
+$list-group-active-color: $component-active-color,
+$list-group-active-bg: $list-group-active-bg,
+$list-group-active-border-color: $list-group-active-bg,
+
+$list-group-disabled-color: $gray-400,
+$list-group-disabled-bg: $list-group-bg,
+
+$list-group-action-color: $list-group-action-color,
+$list-group-action-hover-color: $list-group-action-color,
+
+$list-group-action-active-color: $body-color,
+$list-group-action-active-bg: $gray-800,
+
+// Image thumbnails
+$thumbnail-border-color: $gray-700,
+
+// Figures
+$figure-caption-color: $gray-400,
+
+// Breadcrumbs
+
+$breadcrumb-bg: null,
+$breadcrumb-divider-color: $gray-400,
+$breadcrumb-active-color: $gray-400,
+
+// Carousel
+
+$carousel-control-color: $black,
+
+$carousel-indicator-active-bg: $black,
+$carousel-caption-color: $black,
+
+$carousel-dark-indicator-active-bg: $white,
+$carousel-dark-caption-color: $white,
+$carousel-dark-control-icon-filter: invert(1) grayscale(100),
+
+// Spinners
+
+// Offcanvas
+
+$offcanvas-border-color: $modal-content-border-color,
+$offcanvas-bg-color: $modal-content-bg,
+$offcanvas-color: $modal-content-color,
+
+// Code
+
+$code-color: $purple,
+
+$kbd-color: $black,
+$kbd-bg: $gray-100,
+
+$pre-color: null,
+
+
+);

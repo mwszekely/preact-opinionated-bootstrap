@@ -1,35 +1,18 @@
-// Always show offcanvas components--we use <Transition>s to handle this.
+@use "../variables.scss" as *;
+@forward "../variables";
+
+.offcanvas-backdrop {
+    background-color: scale-color($color: $body-bg, $alpha: -60%);
+}
+
 .offcanvas {
-  visibility: visible;
+    visibility: visible;
+    &.transition-slide {
+        z-index: $zindex-offcanvas;
+    }
 }
 
-// Fix slide transitions setting this to the wrong Bootstrap value
-.offcanvas.slide.transition-enter {
-  z-index: $zindex-offcanvas;
+.offcanvas-start, .offcanvas-end, .offcanvas-top, .offcanvas-bottom {
+    transform: none;
 }
 
-.modal-offcanvas-backdrop {
-  @extend .modal-backdrop;
-  background: rgba(0, 0, 0, 0.25);
-}
-
-@supports not (backdrop-filter: blur(4px)) {
-  .modal-offcanvas-backdrop {
-    background: rgba(0, 0, 0, 0.4);
-  }
-}
-
-
-.offcanvas-close-button {
-  padding: 0;
-  background: transparent
-    url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z'/%3e%3c/svg%3e")
-    center/1em auto no-repeat;
-  border: 0;
-  border-radius: 0.25rem;
-}
-
-.offcanvas-close-button {
-  width: 2em;
-  height: 2em;
-}

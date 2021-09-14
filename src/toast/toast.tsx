@@ -1,226 +1,104 @@
-import { cloneElement, ComponentChildren, createContext, Fragment, h, JSX, Ref } from "preact";
-import { forwardElementRef } from "preact-async-input";
-import { Fade, fadeProps, slideProps } from "preact-transition/src";
-import { Transition, TransitionDirection, TransitionPhase } from "preact-transition/src/use-transition";
-import { useCallback, useContext, useEffect, useRef, useState } from "preact/hooks";
-import { clsx } from "../bootstrap-classes";
-import { Button } from "../button";
-import { useMergedProps } from "../merge-props";
+import { Button } from "../button/button";
 import { BodyPortal } from "../portal";
-import { LinearProgress } from "../progress";
-import { SimpleHTMLDivProps } from "../props-shared";
-import { useHasFocus, useHasMouseover } from "./utility";
+import { ComponentChildren, createContext, Fragment, h, cloneElement } from "preact";
+import { ManagedChildInfo, useChildManager, useMergedProps, useRandomId, useRefElement, UseRefElementPropsReturnType, useState, useTimeout } from "preact-prop-helpers";
+import { MergedProps } from "preact-prop-helpers/use-merged-props";
+import { generateRandomId } from "preact-prop-helpers/use-random-id";
+import { useCallback, useContext, useEffect, useLayoutEffect, useRef } from "preact/hooks";
+import { GlobalAttributes } from "props";
+import { useChildFlag } from "preact-prop-helpers/use-child-manager";
+import { SlideFade } from "preact-transition";
+import { findFirstFocusable } from "preact-prop-helpers/use-focus-trap";
+import { UseToast, UseToastParameters, useToasts } from "preact-aria-widgets"
 
-export interface ToastHeaderPropsMin {
-    className?: string;
-}
+export type PushToast = (toast: h.JSX.Element) => void;
+const PushToastContext = createContext<PushToast>(null!);
+const DefaultToastTimeout = createContext(5000);
+export function ToastsProvider({ children, defaultTimeout }: { children: ComponentChildren, defaultTimeout?: number }) {
 
-export interface ToastBodyPropsMin {
-    className?: string;
-}
-
-export interface ToastPropsMin extends Pick<h.JSX.HTMLAttributes<HTMLDivElement>, "onMouseEnter" | "onMouseLeave"> {
-    className?: string;
-    timeout: number;
-    onClose?(): void;
-    role?: string;
-    ref?: Ref<HTMLDivElement>;
-}
-
-export interface ToastProps extends ToastPropsMin, SimpleHTMLDivProps { }
-
-export interface ToastHeaderProps extends ToastHeaderPropsMin, SimpleHTMLDivProps { }
-export interface ToastBodyProps extends ToastBodyPropsMin, SimpleHTMLDivProps { }
-
-const OnCloseContext = createContext<() => void>(null!);
-
-function useToastIsActive() {
-
-    const { hasFocus, useHasFocusProps } = useHasFocus();
-    const { hasMouseover, useHasMouseoverProps } = useHasMouseover();
-
-    const cancelHide = (hasMouseover || hasFocus);
-
-
-    return {
-        active: cancelHide,
-        useToastIsActiveProps: function <PropType extends { ref: Ref<any> } & Pick<ToastPropsMin, "onMouseEnter" | "onMouseLeave">>(props: PropType) {
-            return useHasFocusProps(useHasMouseoverProps(props))
-        }
-
-    }
-}
-
-export function useToastProps<P extends ToastPropsMin>(cancelHide: boolean, { timeout, role, onClose, ...props }: P) {
-
-    timeout ??= 5000;
-
-    const onCloseRef = useRef<typeof onClose>(onClose);
-    useEffect(() => { onCloseRef.current = onClose; }, [onClose]);
-
-    useEffect(() => {
-        if (!cancelHide) {
-            const handle = setTimeout(() => {
-                onCloseRef.current?.();
-            }, timeout);
-
-            return () => clearTimeout(handle);
-        }
-    }, [timeout, cancelHide])
-
-    return useMergedProps({
-        role: role ?? "alert",
-        "aria-live": "assertive",
-        "aria-atomic": "true",
-        "data-cancel-hide": cancelHide.toString(),
-        className: clsx("toast showing")
-    }, props)
-
-
-}
-
-export function toastHeaderProps<P extends ToastHeaderPropsMin>(props: P) {
-    return useMergedProps({
-        className: clsx("toast-header", "justify-content-between")
-    }, props);
-}
-
-export function toastBodyProps<P extends ToastBodyPropsMin>(props: P) {
-    return useMergedProps({
-        className: clsx("toast-body")
-    }, props)
-}
-
-export const Toast = forwardElementRef(function Toast(p: ToastProps, r: Ref<HTMLDivElement>) {
-    const { active, useToastIsActiveProps } = useToastIsActive();
-
-    const { ...props } = useToastProps(active, useToastIsActiveProps({ ...p, ref: r, children: <>{p.children}{isFinite(p.timeout) && <ToastCloseProgress timeout={active ? Infinity : p.timeout} active={active} />}</> }));
-
-    return (
-        <OnCloseContext.Provider value={p.onClose!}>
-            <div {...props} />
-        </OnCloseContext.Provider>
-    )
-});
-
-export const ToastHeader = forwardElementRef(function ToastHeader(p: ToastHeaderProps, r: Ref<HTMLDivElement>) {
-    const { children, ...props } = toastHeaderProps({ ...p, ref: r });
-    const onClose = useContext(OnCloseContext);
-    return (
-        <div {...props}>
-            {children}
-            {onClose && <Button variant="outline-secondary" className="toast-close-button" onClick={onClose} aria-label="Close" />}
-        </div>
-    )
-});
-
-export const ToastBody = forwardElementRef(function ToastBody(p: ToastBodyProps, r: Ref<HTMLDivElement>) {
-    const { children, ...props } = toastBodyProps({ ...p, ref: r })
-    return (
-        <div {...props}>
-            {children}
-        </div>
-    )
-});
-
-
-
-export const PushToastContext = createContext<null | ((toastElement: JSX.Element) => number)>(null);
-export const UpdateToastContext = createContext<null | ((id: number, toastElement: JSX.Element) => void)>(null);
-export function ToastManager({ children, max }: { children: ComponentChildren, max: number }) {
-
-    const [currentToastIndex, setCurrentToastIndex] = useState(0);
-    const [toastCount, setToastCount] = useState(0);
-    const [waitingForClose, setWaitingForClose] = useState(false);
-
-    const [toastRenderKey, setToastRenderKey] = useState(0);
-
-    const allToasts = useRef<JSX.Element[]>([]);
-    const pushToast = useCallback((toastElement: JSX.Element) => {
-        let ret = allToasts.current.length;
-        allToasts.current.push(toastElement);
-        setToastCount(c => ++c);
-        return ret;
-    }, [allToasts]);
-
-    const updateToast = useCallback((id: number, toastElement: JSX.Element) => {
-        allToasts.current[id] = toastElement;
-        setToastRenderKey(k => ++k);
-    }, [allToasts]);
-
-    //const showToast = useCallback((toast: JSX.Element) => { }, []);
-
-    const onCurrentToastClose = useCallback(() => {
-        setCurrentToastIndex(i => ++i);
-        setToastRenderKey(k => ++k);
-        setWaitingForClose(true);
-    }, [])
-
-    const onTransitionUpdate = useCallback((direction: TransitionDirection, phase: TransitionPhase) => {
-        if (direction === "exit" && phase == "finalize")
-            setWaitingForClose(false);
-    }, [])
-
+    const [pushToast, setPushToast] = useState<PushToast | null>(null);
 
     return (
         <>
-            <PushToastContext.Provider value={pushToast}><UpdateToastContext.Provider value={updateToast}>{children}</UpdateToastContext.Provider></PushToastContext.Provider>
-            <BodyPortal>
-                <div className={clsx("flex-column-reverse toasts-container")}>
-                    {allToasts.current.map((toast, i) =>
-                        ((i + +waitingForClose) >= currentToastIndex + max) ? null :
-                            <Transition onTransitionUpdate={onTransitionUpdate} animateOnMount {...fadeProps(slideProps({ x: 0.7, open: i >= currentToastIndex }))} >
-                                <div key={i >= currentToastIndex? toastRenderKey : -1}>{cloneElement(toast, { key: i, timeout: i > currentToastIndex ? Infinity : toast.props.timeout, onClose: i == currentToastIndex ? onCurrentToastClose : undefined })}</div>
-                            </Transition>)}
-                </div>
-            </BodyPortal>
+            <DefaultToastTimeout.Provider value={defaultTimeout ?? 5000}>
+                <ToastsProviderHelper setPushToast={setPushToast} />
+                {pushToast && <PushToastContext.Provider value={pushToast}>
+                    {children}
+                </PushToastContext.Provider>}
+            </DefaultToastTimeout.Provider>
         </>
     )
 }
 
-function ToastCloseProgress({ active, timeout }: { active: boolean, timeout: number }) {
-
-    const [currentTime, setCurrentTime] = useState(+new Date());
-
-    const [startTime, setStartTime] = useState(+new Date());
-    const startTimeRef = useRef<typeof startTime>(startTime);
-    useEffect(() => { startTimeRef.current = startTime; }, [startTime])
-
-    useEffect(() => { setCurrentTime(+new Date()); setStartTime(+new Date()); }, [active]);
-
-    useEffect(() => {
-        const fn = () => {
-            handle = requestAnimationFrame(fn);
-            setCurrentTime(+new Date());
-        };
-        let handle = requestAnimationFrame(fn);
-        return () => cancelAnimationFrame(handle);
-    }, [])
-
-    const min = startTime;
-    const max = min + timeout;
-    let value = currentTime;
-    value = Math.min(max, value);
-    value = Math.max(min, value);
-
-    return <LinearProgress style={{ opacity: Math.pow((value - min) / (max - min), 3) }} variant="solid" color="primary" className="toast-progress" min={min} max={max} value={value} />
-}
-
-
-
-export function usePushToast(): (toastElement: h.JSX.Element) => number;
-export function usePushToast(toastElement: h.JSX.Element): void;
-export function usePushToast(toastElement?: h.JSX.Element) {
+export function usePushToast() {
     const pushToast = useContext(PushToastContext);
-    if (toastElement) {
-        return pushToast?.(toastElement);
-    }
     return pushToast;
 }
 
-export function useUpdateToast() {
-    const updateToast = useContext(UpdateToastContext);
-    return useCallback((id: number, toastElement: h.JSX.Element) => {
-        updateToast?.(id, toastElement)
-    }, [updateToast])
+// Extracted to a separate component to avoid rerendering all non-toast children
+function ToastsProviderHelper({ setPushToast }: { setPushToast: (pushToast: PushToast) => void }) {
+
+    const [children, setChildren] = useState<h.JSX.Element[]>([]);
+    const pushToast = useCallback((toast: h.JSX.Element) => { const randomKey = generateRandomId(); setChildren(prev => ([...prev, cloneElement(toast, { key: randomKey })])) }, []);
+    useLayoutEffect(() => { setPushToast(_ => pushToast); }, [pushToast]);
+
+    return (
+        <BodyPortal>
+            <ToastsContainerChildrenContext.Provider value={children}>
+                <ToastsContainer />
+            </ToastsContainerChildrenContext.Provider>
+        </BodyPortal>
+    )
 }
+
+export interface ToastProps extends Omit<UseToastParameters, "timeout"> { children: ComponentChildren; timeout?: number; }
+interface ToastsContainerProps extends GlobalAttributes<HTMLDivElement> { }
+
+const ToastsContainerChildrenContext = createContext<h.JSX.Element[]>([]);
+const UseToastContext = createContext<UseToast>(null!);
+function ToastsContainer(props: ToastsContainerProps) {
+    const children = useContext(ToastsContainerChildrenContext);
+    const { useToast, useToastContainerProps } = useToasts<HTMLDivElement>(props);
+
+    return (
+        <UseToastContext.Provider value={useToast}>
+            <div {...useToastContainerProps(props)}>
+                {children}
+            </div>
+        </UseToastContext.Provider>
+    )
+}
+
+const ToastDismissContext = createContext<() => void>(null!);
+export function Toast({ timeout, politeness, children }: ToastProps) {
+    const useToast = useContext(UseToastContext);
+    const defaultTimeout = useContext(DefaultToastTimeout);
+    const { useToastProps, dismiss, status } = useToast<HTMLDivElement>({ timeout: timeout ?? defaultTimeout, politeness });
+
+    return (
+        <ToastDismissContext.Provider value={dismiss}>
+            <SlideFade open={status != "dismissed"} slideTargetInline={1} animateOnMount={true} exitVisibility="removed">
+                <div {...useToastProps({ class: "toast show", role: "alert", "aria-atomic": "true" })} >
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            {children}
+                        </div>
+                        <Button class="btn-close me-2 m-auto" aria-label="Close" onClick={dismiss} />
+                    </div>
+                </div>
+            </SlideFade>
+        </ToastDismissContext.Provider>
+    )
+}
+
+/*
+export function ToastHeader({ children }: { children: ComponentChildren }) {
+    return (
+        <div class="toast-header">
+            <div class="me-auto">
+                {children}
+            </div>
+            <Button class="btn-close" aria-label="Close" />
+        </div>
+    )
+}*/

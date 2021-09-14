@@ -1,43 +1,50 @@
+import clsx from "clsx";
 import { createContext, Fragment, h, RenderableProps } from "preact";
+import { useMergedProps } from "preact-prop-helpers/use-merged-props";
+import { memo } from "preact/compat";
 import { useContext } from "preact/hooks"
-import { ButtonComponentVariant } from "./component";
-import { ButtonColor, ButtonVariant } from "./types";
+import { ButtonColorVariant, ButtonFillVariant, ButtonSize, ButtonPropsBase } from "./types";
 
 
-export const DefaultFillStyleContext = createContext<"fill" | "outline">("fill");
-export const DefaultColorStyleContext = createContext<ButtonColor>("primary");
-export const DefaultSizeContext = createContext<"sm" | "md" | "lg">("md");
+const DefaultFillStyleContext = createContext<ButtonFillVariant>("fill");
+const DefaultColorStyleContext = createContext<ButtonColorVariant>("primary");
+const DefaultSizeContext = createContext<ButtonSize>("md");
+const DefaultDisabledContext = createContext(false);
 
-export function ProvideDefaultButtonFill({ value, children }: RenderableProps<{ value: "fill" | "outline" }>) { return <DefaultFillStyleContext.Provider value={value}>{children}</DefaultFillStyleContext.Provider>; }
-export function ProvideDefaultButtonColor({ value, children }: RenderableProps<{ value: ButtonColor }>) { return <DefaultColorStyleContext.Provider value={value}>{children}</DefaultColorStyleContext.Provider>; }
-export function ProvideDefaultButtonSize({ value, children }: RenderableProps<{ value: "sm" | "md" | "lg" }>) { return <DefaultSizeContext.Provider value={value}>{children}</DefaultSizeContext.Provider>; }
+export const ProvideDefaultButtonFill = memo(function ProvideDefaultButtonFill({ value, children }: RenderableProps<{ value: ButtonFillVariant }>) { return <DefaultFillStyleContext.Provider value={value}>{children}</DefaultFillStyleContext.Provider>; });
+export const ProvideDefaultButtonColor = memo(function ProvideDefaultButtonColor({ value, children }: RenderableProps<{ value: ButtonColorVariant }>) { return <DefaultColorStyleContext.Provider value={value}>{children}</DefaultColorStyleContext.Provider>; });
+export const ProvideDefaultButtonSize = memo(function ProvideDefaultButtonSize({ value, children }: RenderableProps<{ value: ButtonSize }>) { return <DefaultSizeContext.Provider value={value}>{children}</DefaultSizeContext.Provider>; });
+export const ProvideDefaultButtonDisabled = memo(function ProvideDefaultButtonDisabled({ value, children }: RenderableProps<{ value: boolean }>) { return <DefaultDisabledContext.Provider value={value}>{children}</DefaultDisabledContext.Provider>; });
+
+export function useButtonFillVariant(providedValue?: ButtonFillVariant) {
+    const defaultFill = useContext(DefaultFillStyleContext);
+    return providedValue ?? defaultFill;
+}
+
+export function useButtonColorVariant(providedValue?: ButtonColorVariant) {
+    const defaultColor = useContext(DefaultColorStyleContext);
+    return providedValue ?? defaultColor;
+}
+
+export function useButtonSize(providedValue?: ButtonSize) {
+    const defaultSize = useContext(DefaultSizeContext);
+    return providedValue ?? defaultSize;
+}
+
+export function useButtonDisabled(providedValue?: boolean) {
+    const defaultDisabled = useContext(DefaultDisabledContext);
+    return providedValue ?? defaultDisabled;
+}
 
 
 
-export function useNormalizedVariant(variant: ButtonComponentVariant | undefined): ButtonVariant {
-    let defaultColor = useContext(DefaultColorStyleContext);
-    let defaultFill = useContext(DefaultFillStyleContext);
-    if (variant == undefined) {
-        variant = defaultFill == "outline" ? `${defaultFill}-${defaultColor}` as const : defaultColor;
-    }
+export function useButtonStyles<E extends Element>(p: Pick<ButtonPropsBase<E>, "colorVariant" | "size" | "disabled" | "fillVariant">) {
+    let { colorVariant, size, fillVariant, disabled } = p;
+    colorVariant = useButtonColorVariant(colorVariant);
+    size = useButtonSize(size);
+    fillVariant = useButtonFillVariant(fillVariant);
+    disabled = useButtonDisabled(disabled);
 
-    if (variant!.startsWith("outline-")) {
-        // Do nothing, the variant specifies both options and it's just a valid class.
-    }
-    else if (variant!.startsWith("fill-")) {
-        // The "fill-" variants aren't "actual" styles, they're the default in Bootstrap, 
-        // so don't actually use them literally as class names
-        variant = variant.substr(5) as any;
-    }
-    else {
-        // Get the default fill variant
-        variant = `${defaultFill}-${variant as ButtonColor}` as ButtonVariant;
-    }
-    // The "fill-" variants aren't "actual" styles, they're the default in Bootstrap, 
-    // so don't actually use them as class names
-    if (variant && variant.startsWith("fill-")) {
-        variant = variant.substr(5) as any;
-    }
-
-    return variant as ButtonVariant;
+    const useButtonStylesProps = <P extends h.JSX.HTMLAttributes<E>>(props: P) => useMergedProps<E>()({ "aria-disabled": disabled? "true" : undefined, className: clsx(disabled && "disabled", "btn", `btn-${fillVariant == "outline" ? `outline-` : ``}${colorVariant}`, `btn-${size}`, disabled && "disabled") }, props);
+    return { colorVariant, size, fillVariant, disabled, useButtonStylesProps };
 }

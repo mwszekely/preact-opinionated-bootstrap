@@ -1,0 +1,16 @@
+@use "../src/theme-dark.scss";
+@use "../src/index.scss" as *;
+@forward "../src/index.scss";
+@import url("https://fonts.googleapis.com/css2?family=Jost&family=Merriweather+Sans&family=Sora&display=swap");
+
+body {
+  font-family: $font-family-sans-serif;
+}
+
+@debug($body-bg);
+
+body {
+  background-color: $body-bg;
+  color: $body-color;
+  text-align: $body-text-align;
+}

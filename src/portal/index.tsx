@@ -1,23 +1,16 @@
 import { VNode } from "preact";
-import { createPortal, useEffect, useRef, useState } from "preact/compat";
+import { generateRandomId } from "preact-prop-helpers/use-random-id";
+import { createPortal } from "preact/compat";
+import { useEffect, useRef, useState } from "preact/hooks"
 
-function RandomId(p = "render-portal-") {
-    return p + (
-        Math.floor(Math.random() * 2 ** 32).toString(16) +
-        Math.floor(Math.random() * 2 ** 32).toString(16) +
-        Math.floor(Math.random() * 2 ** 32).toString(16) +
-        Math.floor(Math.random() * 2 ** 32).toString(16)
-    )
-}
-
-const baseId = RandomId("render-portal-container-")
+const baseId = generateRandomId("render-portal-container-")
 
 export function BodyPortal({ children }: { children: VNode<{}> }) {
     const id = useRef<string | null>(null);
     const [portalElement, setPortalElement] = useState<HTMLDivElement | null>(null);
     useEffect(() => {
         if (id.current == null) {
-            id.current = RandomId();
+            id.current = generateRandomId();
         }
 
         let container = document.getElementById(baseId);

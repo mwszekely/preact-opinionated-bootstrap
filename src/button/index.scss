@@ -1,29 +1,96 @@
-@use '@material/elevation';
-@use '@material/ripple';
+@use "../variables.scss" as *;
+@use "sass:color";
+@use "sass:map";
+@use "sass:string";
 
+@forward "../variables.scss";
+
+// Make the buttons' text move up and down as the shadows imply
 .btn {
-  /*@include ripple.surface;
-  @include ripple.radius-bounded;
-  @include ripple.states;*/
+  touch-action: manipulation;
 
-  position: relative;
+  & > .circular-progress-container {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+  }
+
+  // Checked buttons don't always have their text offset,
+  // just when they're actively being pressed.
+  /*.btn-check:checked + &,.btn-check:active + &,*/
+  &:active,
+  &.active {
+    padding-bottom: $btn-padding-y * 0.5;
+    padding-top: $btn-padding-y + $btn-padding-y * 0.5;
+  }
 }
-/*
-.btn.raised {
-    --current-box-shadow: #{elevation.elevation-box-shadow(2)};
-
-  &:hover,
-  &:focus {
-    --current-box-shadow: #{elevation.elevation-box-shadow(4)};
+.btn-lg {
+  /*.btn-check:checked + &,.btn-check:active + &,*/
+  &:active,
+  &.active {
+    padding-bottom: $btn-padding-y-lg * 0.5;
+    padding-top: $btn-padding-y-lg + $btn-padding-y-lg * 0.5;
   }
-
-  &:active {
-    --current-box-shadow: #{elevation.elevation-box-shadow(2)};
+}
+.btn-sm {
+  /*.btn-check:checked + &,.btn-check:active + &,*/
+  &:active,
+  &.active {
+    padding-bottom: $btn-padding-y-sm * 0.5;
+    padding-top: $btn-padding-y-sm + $btn-padding-y-sm * 0.5;
   }
+}
 
-  &:disabled {
-    --current-box-shadow: #{elevation.elevation-box-shadow(0)};
+// Make outline button styles a bit less flashy
+@each $color, $value in $theme-colors {
+  .btn-outline-#{$color} {
+    @include button-outline-variant(
+      $value,
+      $color-hover: $value,
+      $active-background: color.change($value, $alpha: 0.125),
+      $active-border: color.change($value, $alpha: 0.25),
+      $active-color: $value
+    );
+
+    &:focus {
+      border-color: color.change($value, $alpha: 0.4);
+      background-color: color.change($value, $alpha: 0.25);
+    }
   }
+}
 
-  transition: elevation.transition-value();
-}*/
+@media (prefers-reduced-motion) {
+  .btn {
+    .btn-check:checked + &,
+    .btn-check:active + &,
+    &:active,
+    &.active {
+      padding-bottom: $btn-padding-y;
+      padding-top: $btn-padding-y;
+      &.list-group-item {
+        padding-bottom: $btn-padding-y;
+        padding-top: $btn-padding-y;
+      }
+    }
+  }
+  .btn-lg {
+    .btn-check:checked + &,
+    .btn-check:active + &,
+    &:active,
+    &.active {
+      padding-bottom: $btn-padding-y-lg;
+      padding-top: $btn-padding-y-lg;
+    }
+  }
+  .btn-sm {
+    .btn-check:checked + &,
+    .btn-check:active + &,
+    &:active,
+    &.active {
+      padding-bottom: $btn-padding-y-sm;
+      padding-top: $btn-padding-y-sm;
+    }
+  }
+}

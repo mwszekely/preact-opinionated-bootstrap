@@ -1,1 +1,1 @@
-export { Toast, ToastBody, ToastHeader, usePushToast, ToastManager, useUpdateToast } from "./toast"
+export { Toast, ToastsProvider, usePushToast } from "./toast"
