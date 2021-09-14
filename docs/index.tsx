@@ -1,4 +1,5 @@
-
+import "preact/debug";
+import "preact/devtools";
 import { createContext, Fragment, h, render } from "preact";
 import { useAriaCheckbox } from "preact-aria-widgets/use-checkbox";
 import { useAriaListboxSingle, UseListboxSingleItem, UseListboxSingleItemInfo } from "preact-aria-widgets/use-listbox-single";
@@ -23,7 +24,6 @@ import { Checkbox } from "../input-group/input-check"
 import { RadioGroup, Radio } from "../input-group/input-radio";
 import { Tooltip } from "../tooltip";
 import { ToastsProvider, Toast, usePushToast } from "../toast";
-import "preact/debug";
 
 
 
