@@ -75,7 +75,7 @@ type UseCheckboxGroupCheckboxProps = <P extends h.JSX.HTMLAttributes<HTMLInputEl
 const CheckboxGroupParentCheckboxPropsContext = createContext<any>(null!);
 const CheckboxGroupChildContext = createContext<UseCheckboxGroupChild<HTMLInputElement>>(null!);
 export function CheckboxGroup({ children }: { children: ComponentChildren }) {
-    const { percentChecked, selfIsChecked, onCheckboxGroupInput, useCheckboxGroupCheckboxProps, useCheckboxGroupChild } = useCheckboxGroup<HTMLInputElement, HTMLDivElement>({});
+    const { percentChecked, selfIsChecked, onCheckboxGroupInput, useCheckboxGroupCheckboxProps, useCheckboxGroupChild } = useCheckboxGroup<HTMLInputElement>({});
 
     return (
         <>

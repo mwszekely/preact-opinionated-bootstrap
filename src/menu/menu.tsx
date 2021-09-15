@@ -55,7 +55,7 @@ export function Menu<E extends Element, T extends <E extends HTMLElement>(...arg
     const menuChildren = (
         <>
             <div {...usePopperArrowProps({})} />
-            <button className={"visually-hidden"} onFocus={!firstSentinelIsActive ? () => focusMenu() : () => onClose()} onClick={onClose}>Close menu</button>
+            <button className={"visually-hidden"} onFocus={!firstSentinelIsActive ? () => focusMenu?.() : () => onClose()} onClick={onClose}>Close menu</button>
             {children}
             {/*
                 Add a sentinel to the end that catches attempts to tab out of the menu

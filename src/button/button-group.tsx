@@ -28,7 +28,7 @@ export const UseButtonGroupChild = createContext<UseListNavigationChild<HTMLButt
 export const ButtonGroup = forwardElementRef(function ButtonGroup(p: ButtonGroupProps, ref: Ref<HTMLDivElement>) {
 
     const { lastFocusedInner, useHasFocusProps } = useHasFocus<HTMLDivElement>();
-    const { indicesByElement, managedChildren, useListNavigationChild, navigateToIndex, childCount } = useListNavigation<HTMLDivElement, HTMLButtonElement>({ focusOnChange: lastFocusedInner });
+    const { indicesByElement, managedChildren, useListNavigationChild, navigateToIndex, childCount } = useListNavigation<HTMLButtonElement>({ focusOnChange: lastFocusedInner });
 
     // Styling props
     let { colorVariant, fillVariant, size, disabled, selectedIndex, ...p3 } = p;
