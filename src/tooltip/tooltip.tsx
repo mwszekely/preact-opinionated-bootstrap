@@ -49,7 +49,7 @@ export function Tooltip<T extends <E extends HTMLElement>(...args: any[]) => h.J
     // TODO: It's required for this to be exitVisibility="hidden" for transforms to work?
     // Probably an issue in the Transition element itself because it's not browser-specific but it's a little weird
     return <>
-        {cloneElement(cloneable, useTooltipTriggerProps(useElementSizeProps(usePopperSourceProps({}))))}
+        {cloneElement(cloneable, useMergedProps<any>()({ ref: cloneable.ref! },  useTooltipTriggerProps(useElementSizeProps(usePopperSourceProps(cloneable.props)))))}
         <BodyPortal>
             <div {...usePopperPopupProps({ class: "tooltip-wrapper" })} >
                 <Transition {...rest as any} open={isOpen} onTransitionUpdate={onInteraction} exitVisibility="hidden">

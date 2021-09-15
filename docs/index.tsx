@@ -133,9 +133,11 @@ const DemoDialog = memo(() => {
 
     return (
         <div class="demo">
+            <Tooltip tooltip="Open dialog" position="block-start" Transition={ZoomFade} zoomOriginDynamic={0} zoomMin={0.85} >
                 <InputGroup>
                     <Checkbox checked={open} onInput={setOpen} label="Open dialog" />
                 </InputGroup>
+            </Tooltip>
             <Dialog Transition={ClipFade} clipOriginBlock={0} open={open} onClose={onClose} descriptive={false} title="Dialog Title" footer={<button onClick={onClose}>Close</button>}>
                 <p tabIndex={-1}>Dialog body content</p>
                 <p>{RandomWords.join(" ")}</p>
