@@ -7,7 +7,8 @@ import { UseCheckboxGroupChild, UseCheckboxGroupParameters } from "preact-aria-w
 import { useAsyncHandler, useMergedProps } from "preact-prop-helpers";
 import { MergedProps } from "preact-prop-helpers/use-merged-props";
 import { useCallback, useContext } from "preact/hooks";
-import { GlobalAttributes } from "props";
+import { ProgressCircular } from "../progress/linear";
+import { GlobalAttributes } from "../props";
 import { InInputGroupContext } from "./props";
 
 export interface CheckboxProps extends GlobalAttributes<HTMLDivElement> {
@@ -34,7 +35,7 @@ export function Checkbox({ checked, disabled, onInput: onInputAsync, label, labe
     type I = { (event: CheckboxChangeEvent<h.JSX.TargetedEvent<HTMLInputElement, Event>>): void; (event: CheckboxChangeEvent<h.JSX.TargetedEvent<HTMLLabelElement, Event>>): void; };
 
 
-    const { getSyncHandler, pending } = useAsyncHandler()({ capture });
+    const { getSyncHandler, pending, hasError, settleCount } = useAsyncHandler()({ capture });
     const onInput = getSyncHandler(onInputAsync) as unknown as I;
     const { useCheckboxInputElement, useCheckboxLabelElement } = useAriaCheckbox<HTMLInputElement, HTMLLabelElement>({ checked: (checked as string) === "indeterminate" ? "mixed" : checked, disabled: disabled ?? false, onInput, labelPosition: "separate" });
 
@@ -48,7 +49,12 @@ export function Checkbox({ checked, disabled, onInput: onInputAsync, label, labe
         console.error(`Hidden labels require a string-based label for the aria-label attribute.`);
     }
 
-    const inputElement = <OptionallyInputGroup><input {...useCheckboxInputElementProps({ type: "checkbox", className: clsx("form-check-input", inInputGroup && "mt-0"), "aria-label": labelPosition === "hidden" ? stringLabel : undefined })} /></OptionallyInputGroup>;
+    const asyncState = (hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null)
+    const inputElement = <OptionallyInputGroup>
+        <ProgressCircular childrenPosition="after" colorFill="foreground-only" mode={asyncState} color="info">
+            <input {...useCheckboxInputElementProps({ type: "checkbox", className: clsx("form-check-input", inInputGroup && "mt-0"), "aria-label": labelPosition === "hidden" ? stringLabel : undefined })} />
+        </ProgressCircular>
+    </OptionallyInputGroup>;
     const labelElement = <>{label != null && <OptionallyInputGroup><label {...useCheckboxLabelElementProps({ className: "form-check-label", "aria-hidden": "true" })}>{label}</label></OptionallyInputGroup>}</>;
 
     const ret = (

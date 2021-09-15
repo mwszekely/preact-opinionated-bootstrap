@@ -88,7 +88,6 @@ export function Radio<V extends string>({ disabled, label, index, value, labelPo
 
     const { useRadioInputProps } = useRadioInput({ tag: "input" });
     const { useRadioLabelProps } = useRadioLabel({ tag: "label" });
-    const showSpinner = useSpinnerDelay(asyncState === "pending");
     
 
     const inInputGroup = useContext(InInputGroupContext);
