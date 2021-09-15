@@ -19,7 +19,7 @@ import { DemoUseInterval } from "./demos/use-interval";
 import { DemoUseRovingTabIndex } from "./demos/use-roving-tab-index";
 import { DemoUseTimeout } from "./demos/use-timeout";
 import { Menu, MenuItem } from "../menu";
-import { Offcanvas } from "../offcanvas"
+import { Drawer } from "../drawer"
 import { Checkbox } from "../input-group/input-check"
 import { RadioGroup, Radio } from "../input-group/input-radio";
 import { Tooltip } from "../tooltip";
@@ -151,20 +151,20 @@ const DemoDialog = memo(() => {
     )
 });
 
-const DemoOffcanvas = memo(() => {
+const DemoDrawer = memo(() => {
     const onClose = (() => setOpen(false));
     let [open, setOpen] = useState(false);
     //open = true;
     return (
         <div class="demo">
-            <Checkbox checked={open} onInput={setOpen} label="Open offcanvas" />
+            <Checkbox checked={open} onInput={setOpen} label="Open drawer" />
             {/*<label><input type="checkbox" checked={open} onInput={e => { e.preventDefault(); setOpen(e.currentTarget.checked) }} /></label>*/}
-            <Offcanvas Transition={Slide} slideTargetInline={-1} open={open} onClose={onClose} descriptive={false} title="Dialog Title" >
+            <Drawer Transition={Slide} slideTargetInline={-1} open={open} onClose={onClose} descriptive={false} title="Dialog Title" >
                 <p tabIndex={-1}>Dialog body content</p>
                 <p>{RandomWords.join(" ")}</p>
                 <p>{RandomWords.join(" ")}</p>
                 <p>{RandomWords.join(" ")}</p>
-            </Offcanvas>
+            </Drawer>
 
         </div>
     )
@@ -356,7 +356,7 @@ const Component = () => {
         <ToastsProvider>
             <DemoAccordion />
             <DemoDialog />
-            <DemoOffcanvas />
+            <DemoDrawer />
             <DemoInput />
             <DemoButtons />
             <DemoList />

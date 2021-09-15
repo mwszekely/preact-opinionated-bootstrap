@@ -1,2 +1,0 @@
-
-export { Offcanvas } from "./offcanvas"

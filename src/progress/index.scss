@@ -57,7 +57,8 @@
   height: 1em;
   display: grid;
   border-radius: 100%;
-  animation: 6s steps(12, jump-start) infinite spinner;
+  animation: 6s steps(12, start) infinite spinner;
+  //animation: 6s steps(12, jump-start) infinite spinner;
   //animation: calc(360 / var(--angle) * var(--duration)) steps(calc(360 / var(--angle)), jump-start) infinite spinner;
 }
 
