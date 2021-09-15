@@ -7,6 +7,8 @@ index.css.map
 package-lock.json
 !rollup.config.js
 !docs/bundle.js
+!docs/index.css
+!docs/index.css.map
 demo/main.js
 demo/main.js.map
 demo/index.css
