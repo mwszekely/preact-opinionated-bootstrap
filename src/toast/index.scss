@@ -1,4 +1,8 @@
+// Higher than modal, lower than tooltip.
+$zindex-toast: 1060 !default;
+
 .toasts-container {
+    z-index: $zindex-toast;
     display: flex;
     flex-direction: column-reverse;
     align-items: flex-end;
@@ -11,7 +15,11 @@
     bottom: 0;
     pointer-events: none;
 
-    &>.toast {
+    & > .toast {
         pointer-events: all;
     }
+}
+
+html.document-scroll-hidden .toasts-container {
+    inset-inline-end: var(--scrollbar-width, 0px);
 }

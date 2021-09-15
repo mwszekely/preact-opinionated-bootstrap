@@ -7,7 +7,7 @@
 
 .offcanvas {
     visibility: visible;
-    &.transition-slide {
+    &.transition-slide, &.transition-slide.transition-enter {
         z-index: $zindex-offcanvas;
     }
 }

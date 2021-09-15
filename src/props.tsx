@@ -72,17 +72,19 @@ const SpinnerDelayContext = createContext(1000);
 export function ProvideSpinnerDelay({ children, timeout }: { children: ComponentChildren; timeout: number }) {
     return <SpinnerDelayContext.Provider value={timeout}>{children}</SpinnerDelayContext.Provider>
 }
-export function useSpinnerDelay(pending: boolean) {
+export function useSpinnerDelay(pending: boolean, timeout?: number) {
     const [showSpinner, setShowSpinner] = useState(false);
 
     useEffect(() => {
         if (!pending) {
             setShowSpinner(false)
         }
-    }, [pending])
+    }, [pending]);
+
+    const defaultDelay = useContext(SpinnerDelayContext)
 
     useTimeout({
-        timeout: useContext(SpinnerDelayContext),
+        timeout: timeout ?? defaultDelay ?? 1000,
         callback: () => {
             setShowSpinner(pending);
         },

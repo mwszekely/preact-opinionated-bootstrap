@@ -77,9 +77,10 @@ $dialog-shake-3: math.div(0.0175, 2);
   }
 }
 
-.document-scroll-hidden {
+html.document-scroll-hidden {
   overflow: hidden;
   margin-inline-end: var(--scrollbar-width, 0px);
+  position: relative;
 }
 
 html:not(.document-scroll-hidden) .modal-content {

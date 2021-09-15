@@ -40,6 +40,11 @@ export interface CircularProgressProps extends GlobalAttributes<HTMLDivElement> 
      */
     mode: null | "pending" | "succeeded" | "failed";
     colorFill?: "background" | "foreground" | "foreground-only";
+
+    /**
+     * How long to wait until showing the spinner.  Default is 1000ms, or whatever has been provided via `ProvideSpinnerDelay`.
+     */
+    spinnerTimeout?: number;
 }
 
 export function useAriaProgressBar<ProgressElement extends Element>({ tag, max, value, valueText }: UseAriaProgressBarParameters<ProgressElement>) {
@@ -143,14 +148,14 @@ function Cross() {
     )
 }
 
-export const ProgressCircular = forwardElementRef(function ({ mode, colorFill, childrenPosition, children, color, ...p }: CircularProgressProps, ref: Ref<HTMLDivElement>) {
+export const ProgressCircular = forwardElementRef(function ({ spinnerTimeout, mode, colorFill, childrenPosition, children, color, ...p }: CircularProgressProps, ref: Ref<HTMLDivElement>) {
     const provideParentWithHook = useContext(ProgressAsChildContext);
     const { useProgressProps, useReferencedElement } = useAriaProgressBar<HTMLDivElement>({ value: null, valueText: undefined, max: undefined, tag: "div" });
 
     //useLayoutEffect(() => { provideParentWithHook?.(useReferencedElement) }, [useReferencedElement, provideParentWithHook])
 
     const { useReferencedProps } = useReferencedElement<any>();
-    const showSpinner = useSpinnerDelay(mode === "pending");
+    const showSpinner = useSpinnerDelay(mode === "pending", spinnerTimeout);
     //const [spinnerShowCount, setSpinnerShowCount] = useState(0);
     //useEffect(() => { setSpinnerShowCount(s => ++s) }, [showSpinner]);
 

@@ -16,11 +16,13 @@ export function Input({ type, value, onInput: onInputAsync, ...props }: InputPro
 
     const { capture, uncapture } = useInputCaptures(type);
 
-    const { getSyncHandler, currentCapture, pending, hasError, settleCount, ...asyncInfo } = useAsyncHandler<HTMLInputElement>()({ capture });
+    const { getSyncHandler, currentCapture, pending, hasError, settleCount, flushDebouncedPromise, ...asyncInfo } = useAsyncHandler<HTMLInputElement>()({ capture, debounce: 1500 });
     const onInput = getSyncHandler(onInputAsync as any);
 
+    const onBlur = flushDebouncedPromise;
+
     return (
-        <ProgressCircular mode={hasError? "failed" : pending? "pending" : settleCount? "succeeded" : null } /*className="input-group-text"*/ childrenPosition="after" color="info"><input {...useMergedProps<HTMLInputElement>()(props, { class: clsx(`form-control`, pending && "with-end-icon"), type, value: currentCapture ?? uncapture(value), onInput })} /></ProgressCircular>
+        <ProgressCircular spinnerTimeout={10} mode={hasError? "failed" : pending? "pending" : settleCount? "succeeded" : null } /*className="input-group-text"*/ childrenPosition="after" color="info"><input {...useMergedProps<HTMLInputElement>()(props, { onBlur, class: clsx(`form-control`, pending && "with-end-icon"), type, value: currentCapture ?? uncapture(value), onInput })} /></ProgressCircular>
     )
 }
 
