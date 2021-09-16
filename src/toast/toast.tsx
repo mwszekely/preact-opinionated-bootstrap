@@ -1,7 +1,7 @@
 import { Button } from "../button/button";
 import { BodyPortal } from "../portal";
 import { ComponentChildren, createContext, Fragment, h, cloneElement } from "preact";
-import { ManagedChildInfo, useChildManager, useMergedProps, useRandomId, useRefElement, UseRefElementPropsReturnType, useState, useTimeout } from "preact-prop-helpers";
+import { ManagedChildInfo, useChildManager, useMergedProps, useRandomId, useRefElement, UseRefElementPropsReturnType, useStableCallback, useState, useTimeout } from "preact-prop-helpers";
 import { MergedProps } from "preact-prop-helpers/use-merged-props";
 import { generateRandomId } from "preact-prop-helpers/use-random-id";
 import { useCallback, useContext, useEffect, useLayoutEffect, useRef } from "preact/hooks";
@@ -18,11 +18,16 @@ export function ToastsProvider({ children, defaultTimeout }: { children: Compone
 
     const [pushToast, setPushToast] = useState<PushToast | null>(null);
 
+    const pushToastStable = useStableCallback<NonNullable<typeof pushToast>>((toast) => {
+        console.log(pushToast);
+        pushToast?.(toast);
+    })
+
     return (
         <>
             <DefaultToastTimeout.Provider value={defaultTimeout ?? 5000}>
                 <ToastsProviderHelper setPushToast={setPushToast} />
-                {pushToast && <PushToastContext.Provider value={pushToast}>
+                    {pushToast && <PushToastContext.Provider value={pushToastStable}>
                     {children}
                 </PushToastContext.Provider>}
             </DefaultToastTimeout.Provider>
