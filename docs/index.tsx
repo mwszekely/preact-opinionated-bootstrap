@@ -1,5 +1,4 @@
-import "preact/debug";
-import "preact/devtools";
+
 import { createContext, Fragment, h, render } from "preact";
 import { useAriaCheckbox } from "preact-aria-widgets/use-checkbox";
 import { useAriaListboxSingle, UseListboxSingleItem, UseListboxSingleItemInfo } from "preact-aria-widgets/use-listbox-single";
@@ -24,6 +23,8 @@ import { Checkbox } from "../input-group/input-check"
 import { RadioGroup, Radio } from "../input-group/input-radio";
 import { Tooltip } from "../tooltip";
 import { ToastsProvider, Toast, usePushToast } from "../toast";
+import { Input, InputGroup } from "../input-group";
+import { DemoButtons } from "./demos/buttons"
 
 
 
@@ -237,7 +238,7 @@ const DemoTooltip = memo(() => {
 async function sleep(ms: number) {
     await new Promise<void>(resolve => setTimeout(resolve, ms));
 }
-
+/*
 const DemoButtons = memo(() => {
     const [buttonsFill, setButtonsFill] = useState<"fill" | "outline">("outline");
     const [buttonsSize, setButtonsSize] = useState<"sm" | "md" | "lg">("md");
@@ -277,7 +278,7 @@ const DemoButtons = memo(() => {
             </ProvideDefaultButtonFill>
         </div>
     )
-});
+});*/
 
 const DemoAccordion = memo(() => {
     const [expandedIndex, setExpandedIndex] = useState(-1);
@@ -319,7 +320,6 @@ const DemoList = memo(() => {
     )
 });
 
-import { Input, LabelledInput, InputGroup } from "../input-group"
 
 const DemoInput = memo(() => {
     const [text, setText] = useState("");
@@ -339,7 +339,7 @@ const DemoInput = memo(() => {
         <div class="demo">
 
             <InputGroup>
-                <LabelledInput type="text" label="Test input" onInput={onInput1} value={text} />
+                <Input type="text" onInput={onInput1} value={text}>Test input</Input>
             </InputGroup>
             <RadioGroup selectedValue={radioValue} name="demo-radio" onInput={onInput2}>
                 <InputGroup><Radio index={0} value="ARadio" /></InputGroup>
@@ -354,19 +354,19 @@ const DemoInput = memo(() => {
 const Component = () => {
     return <div class="flex" style={{ flexWrap: "wrap" }}>
         <ToastsProvider>
+            <DemoButtons />
             <DemoAccordion />
             <DemoDialog />
             <DemoDrawer />
             <DemoInput />
-            <DemoButtons />
             <DemoList />
             <DemoTabs />
             <DemoMenu />
             <DemoFocus />
             <DemoUseTimeout />
             <DemoUseInterval />
-            {/*<DemoUseFocusTrap />
-            <DemoUseFocusTrap />*/}
+            <DemoUseFocusTrap />
+            <DemoUseFocusTrap />
             <input />
         </ToastsProvider>
     </div>
