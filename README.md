@@ -1,18 +1,43 @@
-# Preact Aria Widgets
+# Preact Onionated Bootstrap
+\*Opoinionated
 
-Preact props that implement ARIA-compliant widgets in the style of `preact-prop-helpers` (i.e. hooks that return hooks).  **No CSS is provided** &ndash; this library is intended for wiring up event handlers, `aria` attributes, labels, and so on, but each hook gives you the information you need to create appropriate e.g. `class` values to style your own components.
+Preact widgets like buttons, menus, form fields, etc. that are ARIA-compliant with friendly keyboard navigation and that automatically accept asynchronous event handlers, styled by default with modified Boostrap styling, though not using any of its jQuery plugins.
 
-Documentation, testing, production-readiness are all TODO.
 
-Current components:
+* Accordion
+* Button
+* Card
+* Dialog
+* Drawer (Offcanvas)
+* Inputs 
+    * Text
+    * Number
+    * Checkbox
+    * Checkbox group
+    * Radio group
+    * Switch
+* Single-select Listbox
+* Menu (dropdown)
+* Spinner (as an internal component used by Inputs during long async handlers)
+* Tabs
+* Toast (snackbar)
+* Tooltip
 
-1. Accordion
-2. Button
-3. Checkbox
-4. Dialog (modal)
-5. Listbox (single & multi)
-6. Menu & menu button
-7. Tabs & tab panels
-8. Tooltip
+The following components are currently style-only and do not provide additional interaction or ARIA labelling:
+* Badge
+* Card
+* Figure
+* Table
 
-Other components (e.g. tree views) are TODO
+```tsx
+const sleep = () => new Promise(resolve => setTimeout(resolve, 5000));
+<Button onClick={sleep}>Click me</Button>
+
+const [checked, setChecked] = useState(false);
+const onInput = async (checked, e) => { await sleep(); setChecked(checked); }
+<Checkbox onInput={onInput}>Async checkbox</Checkbox>
+```
+
+
+No documentation, lots of TODOs!
+
