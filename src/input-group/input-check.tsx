@@ -15,7 +15,6 @@ export interface CheckboxProps extends GlobalAttributes<HTMLDivElement> {
     checked: boolean | "mixed";
     disabled?: boolean;
     onInput?(checked: boolean, event: h.JSX.TargetedEvent<HTMLInputElement>): void | Promise<void>;
-    label?: ComponentChildren;
     labelPosition?: "start" | "end" | "hidden";
 }
 
@@ -29,7 +28,7 @@ function capture(e: h.JSX.TargetedEvent<HTMLInputElement>): boolean {
  * Probably need separate `inputRef` & `labelRef` properties for that, 
  * but given there's also no easy way to forward props to just them a solution like that feels incomplete.
  */
-export function Checkbox({ checked, disabled, onInput: onInputAsync, label, labelPosition, ...rest }: CheckboxProps, ref: Ref<HTMLDivElement>) {
+export function Checkbox({ checked, disabled, onInput: onInputAsync, labelPosition, children: label, ...rest }: CheckboxProps, ref: Ref<HTMLDivElement>) {
     labelPosition ??= "end";
 
     type I = { (event: CheckboxChangeEvent<h.JSX.TargetedEvent<HTMLInputElement, Event>>): void; (event: CheckboxChangeEvent<h.JSX.TargetedEvent<HTMLLabelElement, Event>>): void; };

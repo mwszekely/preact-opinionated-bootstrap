@@ -135,7 +135,7 @@ const DemoDialog = memo(() => {
         <div class="demo">
             <Tooltip tooltip="Open dialog" position="block-start" Transition={ZoomFade} zoomOriginDynamic={0} zoomMin={0.85} >
                 <InputGroup>
-                    <Checkbox checked={open} onInput={setOpen} label="Open dialog" />
+                    <Checkbox checked={open} onInput={setOpen}>Open dialog</Checkbox>
                 </InputGroup>
             </Tooltip>
             <Dialog Transition={ClipFade} clipOriginBlock={0} open={open} onClose={onClose} descriptive={false} title="Dialog Title" footer={<button onClick={onClose}>Close</button>}>
@@ -157,7 +157,7 @@ const DemoDrawer = memo(() => {
     //open = true;
     return (
         <div class="demo">
-            <Checkbox checked={open} onInput={setOpen} label="Open drawer" />
+            <Checkbox checked={open} onInput={setOpen}>Open Drawer</Checkbox>
             {/*<label><input type="checkbox" checked={open} onInput={e => { e.preventDefault(); setOpen(e.currentTarget.checked) }} /></label>*/}
             <Drawer Transition={Slide} slideTargetInline={-1} open={open} onClose={onClose} descriptive={false} title="Dialog Title" >
                 <p tabIndex={-1}>Dialog body content</p>
