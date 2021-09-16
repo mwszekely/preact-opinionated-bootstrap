@@ -9,12 +9,8 @@ package-lock.json
 !docs/bundle.js
 !docs/index.css
 !docs/index.css.map
-demo/main.js
-demo/main.js.map
-demo/index.css
-demo/index.css.map
-demo/index.d.ts
-demo/index.d.ts.map
+docs/index-unprefixed.css
+docs/index-unprefixed.css.map
 
 # Logs
 logs

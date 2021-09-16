@@ -4,33 +4,37 @@
     "description": "A small set of hooks and other functions related to modifying Preact props.",
     "main": "index.tsx",
     "scripts": {
-        "build": "npx npm-run-all --npm-path npm -pc build:*",
+        "build": "npx npm-run-all --npm-path npm -sc build:*",
         "watch": "npx npm-run-all --npm-path npm -pc watch:*",
-        "watch:js": "rollup --config rollup.config.js --watch",
-        "watch:sass": "sass --watch --load-path=node_modules ./index.scss:./index.css",
+        "watch:js": "rollup --config rollup.config.js --watch --no-watch.clearScreen",
+        "watch:css": "postcss index-unprefixed.css -w --use autoprefixer -o index.css",
+        "watch:sass": "sass --watch --load-path=node_modules ./index.scss:./index-unprefixed.css",
         "build:js": "rollup --config rollup.config.js",
-        "build:sass": "sass --load-path=node_modules ./index.scss:./index.css",
+        "build:css": "postcss index-unprefixed.css --use autoprefixer -o index.css",
+        "build:sass": "sass --load-path=node_modules ./index.scss:./index-unprefixed.css",
         "test": "echo \"Error: no test specified\" && exit 1",
         "install": "npm run build"
     },
     "author": "",
     "license": "ISC",
     "devDependencies": {
+        "@babel/plugin-proposal-nullish-coalescing-operator": "^7.14.5",
+        "@babel/preset-env": "^7.15.6",
         "@rollup/plugin-babel": "^5.3.0",
         "@rollup/plugin-commonjs": "^17.1.0",
         "@rollup/plugin-node-resolve": "^11.2.1",
         "@rollup/plugin-typescript": "^8.2.3",
+        "autoprefixer": "^10.3.4",
         "clsx": "^1.1.1",
-        "commander": "^6.2.1",
-        "concurrently": "^5.3.0",
-        "microbundle": "^0.13.3",
+        "postcss": "^8.3.6",
+        "postcss-cli": "^8.3.1",
         "preact": "^10.5.14",
         "serve": "^12.0.1",
-        "typescript": "^4.4.1-rc"
+        "typescript": "^4.4.2"
     },
     "browserslist": [
         "defaults",
-        "iOS >= 12"
+        "iOS >= 10"
     ],
     "dependencies": {
         "browserslist": "^4.16.8"
