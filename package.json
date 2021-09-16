@@ -37,13 +37,9 @@
   "dependencies": {
     "@material/mwc-ripple": "^0.22.1",
     "@popperjs/core": "^2.9.3",
-    "blocking-elements": "^0.1.1",
     "bootstrap": "^5.1.0",
     "bootstrap-icons": "^1.5.0",
     "clsx": "^1.1.1",
-    "i": "^0.3.6",
-    "install": "^0.13.0",
-    "npm": "^7.23.0",
     "preact-aria-widgets": "github:mwszekely/preact-aria-widgets",
     "preact-prop-helpers": "github:mwszekely/preact-prop-helpers",
     "preact-transition": "github:mwszekely/preact-transition",
