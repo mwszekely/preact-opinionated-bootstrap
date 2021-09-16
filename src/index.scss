@@ -6,7 +6,7 @@
 @use "./tabs" as *;
 @use "./dialog" as *;
 @use "./menu" as *;
-@use "./offcanvas" as *;
+@use "./drawer" as *;
 @use "./tooltip" as *;
 @use "./toast" as *;
 @use "./progress/" as *;
@@ -21,7 +21,7 @@
 @forward "./tabs";
 @forward "./dialog";
 @forward "./menu";
-@forward "./offcanvas";
+@forward "./drawer";
 @forward "./tooltip";
 @forward "./toast";
 @forward "./progress/";
