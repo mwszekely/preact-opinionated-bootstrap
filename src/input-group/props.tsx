@@ -1,15 +1,18 @@
-import { createContext, h } from "preact";
+import { ComponentChildren, createContext, h } from "preact";
 import { useCallback } from "preact/hooks";
 
 
-export interface BaseInputProps<T> {
+interface BaseUnlabelledInputProps<T> {
     value: T;
+    disabled?: boolean;
     onInput: (value: T, event: InputEvent) => (Promise<void> | void);
 }
 
-export interface InputTextProps extends BaseInputProps<string> { type: "text"; }
-export interface InputNumberProps extends BaseInputProps<number> { type: "number"; }
-export type InputProps = InputTextProps | InputNumberProps;
+export interface UnlabelledInputTextProps extends BaseUnlabelledInputProps<string> { type: "text"; }
+export interface UnlabelledInputNumberProps extends BaseUnlabelledInputProps<number> { type: "number"; }
+export type UnlabelledInputProps = UnlabelledInputTextProps | UnlabelledInputNumberProps;
+
+export type InputProps = UnlabelledInputProps & { children: ComponentChildren, labelPosition?: "start" | "end" | "floating" | "hidden" }
 
 export const InInputGroupContext = createContext(false);
 

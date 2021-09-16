@@ -28,16 +28,16 @@ export function Drawer<T extends <E extends HTMLElement>(...args: any[]) => h.JS
         <BodyPortal>
             <div>
                 <Fade open={open}>
-                    <div {...useDrawerBackdropProps({ class: "drawer-backdrop backdrop-filter-transition" })} />
+                    <div {...useDrawerBackdropProps({ class: "offcanvas-backdrop backdrop-filter-transition" })} />
                 </Fade>
                 <Transition {...{ open, ...rest } as any}>
-                    <div {...useDrawerProps({ class: "drawer drawer-start", tabindex: -1 })}>
-                        <div class="drawer-header">
-                            <h5 {...useDrawerTitleProps({ class: "drawer-title" })}>Drawer</h5>
+                    <div {...useDrawerProps({ class: "offcanvas offcanvas-start", tabindex: -1 })}>
+                        <div class="offcanvas-header">
+                            <h5 {...useDrawerTitleProps({ class: "offcanvas-title" })}>Drawer</h5>
                             <Button tag="button" class="btn-close text-reset" aria-label="Close" onClick={() => onClose("escape")}></Button>
                         </div>
-                        <div {...useDrawerBodyProps({ class: "drawer-body" })}>
-                            Content for the drawer goes here.You can place just about any Bootstrap component or custom elements here.
+                        <div {...useDrawerBodyProps({ class: "offcanvas-body" })}>
+                            {children}
                         </div>
                     </div>
                 </Transition>
