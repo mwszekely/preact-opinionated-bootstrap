@@ -8,6 +8,7 @@
 // Make the buttons' text move up and down as the shadows imply
 .btn {
   touch-action: manipulation;
+  position: relative;
 
   & > .circular-progress-container {
     position: absolute;
