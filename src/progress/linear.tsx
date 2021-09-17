@@ -30,6 +30,8 @@ export interface CircularProgressProps extends GlobalAttributes<HTMLDivElement> 
     children?: VNode<any>;
     childrenPosition?: "child" | "before" | "after";
 
+    loadingLabel?: string;
+
     /**
      * Controls how the indicator is displayed.
      * 
@@ -148,7 +150,7 @@ function Cross() {
     )
 }
 
-export const ProgressCircular = forwardElementRef(function ({ spinnerTimeout, mode, colorFill, childrenPosition, children, color, ...p }: CircularProgressProps, ref: Ref<HTMLDivElement>) {
+export const ProgressCircular = forwardElementRef(function ({ loadingLabel, spinnerTimeout, mode, colorFill, childrenPosition, children, color, ...p }: CircularProgressProps, ref: Ref<HTMLDivElement>) {
     const provideParentWithHook = useContext(ProgressAsChildContext);
     const { useProgressProps, useReferencedElement } = useAriaProgressBar<HTMLDivElement>({ value: null, valueText: undefined, max: undefined, tag: "div" });
 
@@ -169,8 +171,10 @@ export const ProgressCircular = forwardElementRef(function ({ spinnerTimeout, mo
     });
 
 
+    const progressProps = useProgressProps({});
     const progressElement = (
-        <div {...useMergedProps<HTMLDivElement>()(useProgressProps({ ref, className: clsx("circular-progress-container") }), p)}>
+        <div {...useMergedProps<HTMLDivElement>()({ ref, className: clsx("circular-progress-container") }, useMergedProps<HTMLDivElement>()(mode === "pending"? progressProps : {}, p))}>
+            {mode === "pending" && <div role="alert" class="visually-hidden">{loadingLabel}</div>}
             <Swappable>
                 <div className="circular-progress-swappable">
                     <Fade open={mode === "pending" && showSpinner}>

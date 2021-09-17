@@ -8,20 +8,19 @@ import { useCallback, useContext } from "preact/hooks";
 import { useSpinnerDelay } from "../props";
 import { ProgressCircular } from "../progress";
 import { InInputGroupContext } from "./props";
+import clsx from "clsx";
 
-interface RadioGroupProps<V extends string> extends Omit<UseAriaRadioGroupParameters<V>, "onInput"> {
-    //name: string;
-    //selectedValue: V;
+interface RadioGroupProps<V extends string | number> extends Omit<UseAriaRadioGroupParameters<V>, "onInput"> {
     children?: ComponentChildren;
     label?: ComponentChildren;
     labelPosition?: "start" | "end" | "hidden";
     onInput(value: V, event: h.JSX.TargetedEvent<HTMLInputElement | HTMLLabelElement>): (void | Promise<void>);
 }
 
-interface RadioProps<V extends string, I extends Element, L extends Element> extends Omit<UseAriaRadioParameters<V, I, L, RadioInfo>, "labelPosition" | "text" | "disabled" | "setAsyncState"> {
+interface RadioProps<V extends string | number, I extends Element, L extends Element> extends Omit<UseAriaRadioParameters<V, I, L, RadioInfo>, "labelPosition" | "text" | "disabled" | "setAsyncState"> {
     index: number;
     value: V;
-    label?: ComponentChildren;
+    children?: ComponentChildren;
     labelPosition?: "start" | "end" | "hidden";
     disabled?: boolean;
 }
@@ -30,12 +29,12 @@ interface RadioInfo extends UseAriaRadioInfo {
     setAsyncState(state: null | "pending" | "succeeded" | "failed"): void;
 }
 
-const RadioGroupContext = createContext<UseRadio<string, HTMLInputElement, HTMLLabelElement, RadioInfo>>(null!);
-export function RadioGroup<V extends string>({ children, name, selectedValue, label, labelPosition, onInput: onInputAsync }: RadioGroupProps<V>) {
+const RadioGroupContext = createContext<UseRadio<string | number, HTMLInputElement, HTMLLabelElement, RadioInfo>>(null!);
+export function RadioGroup<V extends string | number>({ children, name, selectedValue, label, labelPosition, onInput: onInputAsync }: RadioGroupProps<V>) {
     const { getSyncHandler, pending, hasError, settleCount, currentCapture } = useAsyncHandler<HTMLInputElement | HTMLLabelElement>()({ capture: (e) => (e as RadioChangeEvent<any>)[EventDetail].selectedValue as V });
     const onInput = getSyncHandler(onInputAsync);
 
-    const { useRadio, useRadioGroupProps, managedChildren, getIndex } = useAriaRadioGroup<V, HTMLDivElement, HTMLInputElement, HTMLLabelElement, RadioInfo>({ name, selectedValue: currentCapture ?? selectedValue, onInput: onInput as any });
+    const { useRadio, useRadioGroupProps, managedChildren, getIndex } = useAriaRadioGroup<V, HTMLDivElement, HTMLInputElement, HTMLLabelElement, RadioInfo>({ name, selectedValue: pending? currentCapture! : selectedValue, onInput: onInput as any });
 
     let stringLabel: string | undefined = undefined;
     if (labelPosition === "hidden") {
@@ -68,7 +67,7 @@ export function RadioGroup<V extends string>({ children, name, selectedValue, la
     )
 
     return (
-        <RadioGroupContext.Provider value={useRadio as UseRadio<string, HTMLInputElement, HTMLLabelElement, RadioInfo>}>
+        <RadioGroupContext.Provider value={useRadio as UseRadio<string | number, HTMLInputElement, HTMLLabelElement, RadioInfo>}>
             {labelPosition == "start" && labelJsx}
             {groupJsx}
             {labelPosition == "end" && labelJsx}
@@ -78,11 +77,12 @@ export function RadioGroup<V extends string>({ children, name, selectedValue, la
 
 }
 
-export function Radio<V extends string>({ disabled, label, index, value, labelPosition }: RadioProps<V, HTMLInputElement, HTMLLabelElement>) {
-    const useAriaRadio = useContext(RadioGroupContext);
+export function Radio<V extends string | number>({ disabled, children: label, index, value, labelPosition }: RadioProps<V, HTMLInputElement, HTMLLabelElement>) {
+    const useAriaRadio = useContext(RadioGroupContext) as UseRadio<V, HTMLInputElement, HTMLLabelElement, RadioInfo>;
     labelPosition ??= "end";
     const text = null;
     const [asyncState, setAsyncState] = useState<null | "pending" | "succeeded" | "failed">(null);
+    disabled ||= (asyncState === "pending");
 
     const { useRadioInput, useRadioLabel } = useAriaRadio({ disabled: disabled ?? false, labelPosition: "separate", index, text, value, setAsyncState });
 
@@ -101,10 +101,10 @@ export function Radio<V extends string>({ disabled, label, index, value, labelPo
 
     const inputElement = <OptionallyInputGroup>
         <ProgressCircular childrenPosition="after" colorFill="foreground-only" mode={asyncState} color="info">
-            <input {...useRadioInputProps({ type: "radio", className: "form-check-input", "aria-label": labelPosition === "hidden" ? stringLabel : undefined })} />
+            <input {...useRadioInputProps({ type: "radio", className: clsx(disabled && "disabled", "form-check-input"), "aria-label": labelPosition === "hidden" ? stringLabel : undefined })} />
         </ProgressCircular>
     </OptionallyInputGroup>;
-    const labelElement = <>{label != null && <OptionallyInputGroup><label {...useRadioLabelProps({ className: "form-check-label", "aria-hidden": "true" })}>{label}</label></OptionallyInputGroup>}</>;
+    const labelElement = <>{label != null && <OptionallyInputGroup><label {...useRadioLabelProps({ className: clsx(disabled && "disabled", "form-check-label"), "aria-hidden": "true" })}>{label}</label></OptionallyInputGroup>}</>;
 
     const ret = (
         <>

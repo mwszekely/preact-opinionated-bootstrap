@@ -9,7 +9,7 @@ interface BaseUnlabelledInputProps<T> {
 }
 
 export interface UnlabelledInputTextProps extends BaseUnlabelledInputProps<string> { type: "text"; }
-export interface UnlabelledInputNumberProps extends BaseUnlabelledInputProps<number> { type: "number"; }
+export interface UnlabelledInputNumberProps extends BaseUnlabelledInputProps<number> { type: "number"; min?: number; max?: number; step?: number; }
 export type UnlabelledInputProps = UnlabelledInputTextProps | UnlabelledInputNumberProps;
 
 export type InputProps = UnlabelledInputProps & { children: ComponentChildren, labelPosition?: "start" | "end" | "floating" | "hidden" }

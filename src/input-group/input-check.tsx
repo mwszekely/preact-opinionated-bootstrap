@@ -31,15 +31,13 @@ function capture(e: h.JSX.TargetedEvent<HTMLInputElement>): boolean {
 export function Checkbox({ checked, disabled, onInput: onInputAsync, labelPosition, children: label, ...rest }: CheckboxProps, ref: Ref<HTMLDivElement>) {
     labelPosition ??= "end";
 
-    if (checked === "mixed")
-        debugger;
-
     type I = { (event: CheckboxChangeEvent<h.JSX.TargetedEvent<HTMLInputElement, Event>>): void; (event: CheckboxChangeEvent<h.JSX.TargetedEvent<HTMLLabelElement, Event>>): void; };
 
-
     const { getSyncHandler, pending, hasError, settleCount, hasCapture, currentCapture, currentType } = useAsyncHandler()({ capture });
+    disabled ||= pending;
+
     const onInput = getSyncHandler(onInputAsync) as unknown as I;
-    const { useCheckboxInputElement, useCheckboxLabelElement } = useAriaCheckbox<HTMLInputElement, HTMLLabelElement>({ checked: currentCapture ?? ((checked as string) === "indeterminate" ? "mixed" : checked), disabled: disabled ?? false, onInput, labelPosition: "separate" });
+    const { useCheckboxInputElement, useCheckboxLabelElement } = useAriaCheckbox<HTMLInputElement, HTMLLabelElement>({ checked: pending? currentCapture! : ((checked as string) === "indeterminate" ? "mixed" : checked), disabled: disabled ?? false, onInput, labelPosition: "separate" });
 
     const { useCheckboxInputElementProps } = useCheckboxInputElement({ tag: "input" });
     const { useCheckboxLabelElementProps } = useCheckboxLabelElement({ tag: "label" });
@@ -53,13 +51,13 @@ export function Checkbox({ checked, disabled, onInput: onInputAsync, labelPositi
 
     const asyncState = (hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null);
 
-    const p = useCheckboxInputElementProps({ type: "checkbox", className: clsx("form-check-input", inInputGroup && "mt-0"), "aria-label": labelPosition === "hidden" ? stringLabel : undefined });
+    const p = useCheckboxInputElementProps({ type: "checkbox", className: clsx("form-check-input", disabled && "disabled", inInputGroup && "mt-0"), "aria-label": labelPosition === "hidden" ? stringLabel : undefined });
     const inputElement = <OptionallyInputGroup>
-        <ProgressCircular childrenPosition="after" colorFill="foreground-only" mode={currentType === "sync"? null : asyncState} color="info">
+        <ProgressCircular childrenPosition="after" colorFill="foreground-only" mode={currentType === "async"? asyncState : null} color="info">
             <input {...p} />
         </ProgressCircular>
     </OptionallyInputGroup>;
-    const labelElement = <>{label != null && <OptionallyInputGroup><label {...useCheckboxLabelElementProps({ className: "form-check-label", "aria-hidden": "true" })}>{label}</label></OptionallyInputGroup>}</>;
+    const labelElement = <>{label != null && <OptionallyInputGroup><label {...useCheckboxLabelElementProps({ className: clsx(disabled && "disabled", "form-check-label"), "aria-hidden": "true" })}>{label}</label></OptionallyInputGroup>}</>;
 
     const ret = (
         <>

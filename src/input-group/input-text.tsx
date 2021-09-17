@@ -6,6 +6,7 @@ import { useSpinnerDelay } from "../props";
 import { ProgressCircular } from "../progress";
 import { InInputGroupContext, useInputCaptures, UnlabelledInputTextProps, UnlabelledInputNumberProps, UnlabelledInputProps, InputProps } from "./props";
 import clsx from "clsx";
+import { useHasFocus } from "preact-prop-helpers";
 
 
 function UnlabelledInput(props: UnlabelledInputTextProps): h.JSX.Element;
@@ -14,15 +15,22 @@ function UnlabelledInput(props: UnlabelledInputProps): h.JSX.Element;
 function UnlabelledInput({ type, disabled, value, onInput: onInputAsync, ...props }: UnlabelledInputProps): h.JSX.Element {
 
     const { capture, uncapture } = useInputCaptures(type);
+    const { focusedInner, useHasFocusProps } = useHasFocus<HTMLInputElement>();
 
     const { getSyncHandler, currentCapture, pending, hasError, settleCount, flushDebouncedPromise, ...asyncInfo } = useAsyncHandler<HTMLInputElement>()({ capture, debounce: 1500 });
-    const onInput = getSyncHandler(disabled? null : onInputAsync as any);
+    const onInput = getSyncHandler(disabled ? null : onInputAsync as any);
 
     const onBlur = flushDebouncedPromise;
 
     return (
         <ProgressCircular spinnerTimeout={10} mode={hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null} /*className="input-group-text"*/ childrenPosition="after" color="info">
-            <input {...useMergedProps<HTMLInputElement>()(props, { "aria-disabled": disabled? "true" : undefined, onBlur, class: clsx(`form-control`, disabled && "disabled", pending && "with-end-icon"), type, value: currentCapture ?? uncapture(value), onInput })} />
+            <input {...useHasFocusProps(useMergedProps<HTMLInputElement>()(props, {
+                "aria-disabled": disabled ? "true" : undefined,
+                onBlur,
+                class: clsx(`form-control`, disabled && "disabled", pending && "with-end-icon"),
+                type,
+                value: (pending || focusedInner) ? currentCapture : uncapture(value), onInput
+            }))} />
         </ProgressCircular>
     )
 }

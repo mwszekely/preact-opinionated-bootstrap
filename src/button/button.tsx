@@ -48,7 +48,7 @@ interface ButtonPropsB extends ButtonPropsBase<HTMLButtonElement>, Omit<UseAsync
 }
 
 interface ButtonPropsA extends ButtonPropsBase<HTMLAnchorElement> {
-    tag: "a";
+    tag?: "a";
     href: string;
     rel?: LiteralUnion<LinkTypes>;
     referrerPolicy?: string;
@@ -67,7 +67,7 @@ function ButtonR(p: ButtonPropsA, ref?: Ref<HTMLAnchorElement>): h.JSX.Element;
 function ButtonR(p: ButtonProps, ref?: Ref<HTMLButtonElement> | Ref<HTMLAnchorElement>): h.JSX.Element;
 function ButtonR(p: ButtonProps, ref?: Ref<HTMLButtonElement> | Ref<HTMLAnchorElement>): h.JSX.Element {
 
-    if (p.tag?.toLowerCase() === "a")
+    if (p.tag?.toLowerCase() === "a" || !!(p as ButtonPropsA).href)
         return <AnchorButton ref={ref as Ref<HTMLAnchorElement>} {...(p as ButtonPropsA)} />
     else
         return <ButtonButton ref={ref as Ref<HTMLButtonElement>} {...(p as ButtonPropsB)} />;
@@ -77,7 +77,6 @@ function ButtonR(p: ButtonProps, ref?: Ref<HTMLButtonElement> | Ref<HTMLAnchorEl
 const AnchorButton = forwardElementRef(function AnchorButton(p: Omit<ButtonPropsA, "tag">, ref?: Ref<HTMLAnchorElement>) {
 
     let { colorVariant, size, fillVariant, disabled, ...props } = p;
-    const { useAriaButtonProps } = useAriaButton<HTMLAnchorElement>({ tag: "a" });
     const buttonStyleInfo = useButtonStyles<HTMLAnchorElement>({ colorVariant, size, fillVariant, disabled });
     disabled = buttonStyleInfo.disabled;
     colorVariant = buttonStyleInfo.colorVariant;
@@ -85,7 +84,7 @@ const AnchorButton = forwardElementRef(function AnchorButton(p: Omit<ButtonProps
     fillVariant = buttonStyleInfo.fillVariant;
     const useButtonStylesProps = buttonStyleInfo.useButtonStylesProps;
 
-    return <a {...useAriaButtonProps(useButtonStylesProps({ ...props, ref }))} />
+    return <a {...(useButtonStylesProps({ ...props, ref }))} />
 });
 
 const ButtonButton = forwardElementRef(function ButtonButton(p: Omit<ButtonPropsB, "tag">, ref?: Ref<HTMLButtonElement>) {

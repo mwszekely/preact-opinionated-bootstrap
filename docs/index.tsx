@@ -25,6 +25,8 @@ import { Tooltip } from "../tooltip";
 import { ToastsProvider, Toast, usePushToast } from "../toast";
 import { Input, InputGroup } from "../input-group";
 import { DemoButtons } from "./demos/buttons"
+import { DemoChecks } from "./demos/checks";
+import { DemoInputs } from "./demos/inputs";
 
 
 
@@ -355,6 +357,8 @@ const Component = () => {
     return <div class="flex" style={{ flexWrap: "wrap" }}>
         <ToastsProvider>
             <DemoButtons />
+            <DemoChecks />
+            <DemoInputs />
             <DemoAccordion />
             <DemoDialog />
             <DemoDrawer />
@@ -362,11 +366,11 @@ const Component = () => {
             <DemoList />
             <DemoTabs />
             <DemoMenu />
-            <DemoFocus />
+            {/*<DemoFocus />
             <DemoUseTimeout />
             <DemoUseInterval />
             <DemoUseFocusTrap />
-            <DemoUseFocusTrap />
+            <DemoUseFocusTrap />*/}
             <input />
         </ToastsProvider>
     </div>

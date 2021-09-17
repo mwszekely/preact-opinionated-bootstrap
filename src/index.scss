@@ -1,5 +1,6 @@
 @use "./variables.scss" as *;
 @use "./button" as *;
+@use "./card/" as *;
 @use "./list" as *;
 @use "./input-group" as *;
 @use "./accordion" as *;
@@ -15,6 +16,7 @@
 
 @forward "./variables.scss";
 @forward "./button";
+@forward "./card/";
 @forward "./list";
 @forward "./input-group";
 @forward "./accordion";

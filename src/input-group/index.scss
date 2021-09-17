@@ -1,3 +1,10 @@
+@use "../variables.scss" as *;
+@use "sass:color";
+@use "sass:map";
+@use "sass:string";
+
+@forward "../variables.scss";
+
 .input-group-text.form-switch {
   & > .form-check-input {
     margin-inline-start: 0;
@@ -31,4 +38,35 @@
   bottom: 0;
   align-items: center;
   z-index: 5;
+}
+
+.form-check-input.disabled,
+.form-check-input:disabled,
+.form-check-label.disabled {
+  opacity: $form-check-label-disabled-opacity;
+}
+
+.form-check-input:not(.disabled),
+.form-check-input:not(:disabled),
+.form-check-label:not(.disabled) {
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+:not(.input-group) > .form-control + .circular-progress-container {
+  align-items: flex-end;
+  inset-block-end: 0.6em;
+}
+
+.form-check {
+  position: relative;
+
+  &.form-switch > .form-check-input:checked + .circular-progress-container {
+    inset-inline-start: 0.9em;
+  }
+
+  & > .circular-progress-container {
+    justify-content: flex-start;
+    inset-inline-start: -0.1em;
+  }
 }
