@@ -1,7 +1,8 @@
 import clsx from "clsx";
 import { cloneElement, ComponentChildren, createContext, createElement, Fragment, h, Ref, VNode } from "preact";
 import { useGenericLabel } from "preact-aria-widgets/use-label";
-import { ManagedChildInfo, useMergedProps, useRandomId, useState, useTimeout } from "preact-prop-helpers";
+import { ManagedChildInfo, useMergedProps, usePersistentState, useRandomId, useState, useTimeout } from "preact-prop-helpers";
+import { getFromLocalStorage, storeToLocalStorage } from "preact-prop-helpers/use-persistent-state"
 import { UsedManagedChild } from "preact-prop-helpers/use-child-manager";
 import { UseReferencedIdPropsReturnType } from "preact-prop-helpers/use-random-id";
 import { useCallback, useContext, useEffect, useLayoutEffect, useRef } from "preact/hooks";
@@ -48,6 +49,27 @@ export interface CircularProgressProps extends GlobalAttributes<HTMLDivElement> 
      */
     spinnerTimeout?: number;
 }
+
+// It's possible to do this as useEffect, but doing so screws up the animation in Chrome sometimes
+// resumably because the number of elements changes. 
+// (and in really weird ways -- changing the animation speed in the console fixes it until you put it back at 100% speed???).
+// Assuming that's the case, it's easier to just take care of the element count on page load.
+let gimmickCount = 8;
+(() => {
+    let lastSet = (getFromLocalStorage<Persistence>()("circular-progress-gimmick-last-set", str => new Date(str)) ?? new Date(1970, 0, 1));
+
+    const daysSinceLastGimmickSet = Math.floor((+(new Date()) - +lastSet) / 1000 / 60 / 60 / 24);
+    if (daysSinceLastGimmickSet > 0) {
+        let newCount = 4 + Math.round(Math.random() * 3 + Math.random() * 2);
+        gimmickCount = newCount;
+        storeToLocalStorage<Persistence>()("circular-progress-gimmick-last-set", new Date(), d => d.toISOString());
+        storeToLocalStorage<Persistence>()("circular-progress-gimmick-count", gimmickCount, JSON.stringify);
+    }
+    else {
+        gimmickCount = (getFromLocalStorage<Persistence>()("circular-progress-gimmick-count", JSON.parse) ?? 8)
+    }
+
+})();
 
 export function useAriaProgressBar<ProgressElement extends Element>({ tag, max, value, valueText }: UseAriaProgressBarParameters<ProgressElement>) {
 
@@ -150,8 +172,19 @@ function Cross() {
     )
 }
 
+function safeParseInt(str: string) {
+    let ret = parseInt(str)
+    if (!isFinite(ret) || isNaN(ret))
+        return 0;
+    return ret;
+}
+
+interface Persistence {
+    "circular-progress-gimmick-last-set": Date;
+    "circular-progress-gimmick-count": number;
+}
+
 export const ProgressCircular = forwardElementRef(function ({ loadingLabel, spinnerTimeout, mode, colorFill, childrenPosition, children, color, ...p }: CircularProgressProps, ref: Ref<HTMLDivElement>) {
-    const provideParentWithHook = useContext(ProgressAsChildContext);
     const { useProgressProps, useReferencedElement } = useAriaProgressBar<HTMLDivElement>({ value: null, valueText: undefined, max: undefined, tag: "div" });
 
     //useLayoutEffect(() => { provideParentWithHook?.(useReferencedElement) }, [useReferencedElement, provideParentWithHook])
@@ -173,20 +206,16 @@ export const ProgressCircular = forwardElementRef(function ({ loadingLabel, spin
 
     const progressProps = useProgressProps({});
     const progressElement = (
-        <div {...useMergedProps<HTMLDivElement>()({ ref, className: clsx("circular-progress-container") }, useMergedProps<HTMLDivElement>()(mode === "pending"? progressProps : {}, p))}>
+        <div {...useMergedProps<HTMLDivElement>()({ ref, className: clsx("circular-progress-container") }, useMergedProps<HTMLDivElement>()(mode === "pending" ? progressProps : {}, p))}>
             {mode === "pending" && <div role="alert" class="visually-hidden">{loadingLabel}</div>}
             <Swappable>
                 <div className="circular-progress-swappable">
                     <Fade open={mode === "pending" && showSpinner}>
-                        <div className={clsx("circular-progress", `circular-progress-${color ?? "primary"}`, colorFill == "foreground" && "inverse-fill", colorFill === "foreground-only" && "no-fill")}>
-                            <div><div /></div>
-                            <div><div /></div>
-                            <div><div /></div>
-                            <div><div /></div>
-                            <div><div /></div>
-                            <div><div /></div>
-                            <div><div /></div>
-                            <div><div /></div>
+                        <div style={{ "--count": gimmickCount } as any} className={clsx("circular-progress", `circular-progress-${color ?? "primary"}`, colorFill == "foreground" && "inverse-fill", colorFill === "foreground-only" && "no-fill")}>
+                            {Array.from(function* () {
+                                for (let i = 0; i < gimmickCount; ++i)
+                                    yield <div><div /></div>;
+                            }())}
                         </div>
                     </Fade>
                     <Fade open={!shownStatusLongEnough && mode === "succeeded"}><div><Check /></div></Fade>

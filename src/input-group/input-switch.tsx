@@ -41,7 +41,7 @@ export function Switch({ checked, disabled, onInput: onInputAsync, children: lab
     disabled ||= pending;
 
     const onInput = getSyncHandler(onInputAsync);
-    const { useCheckboxInputElement: useSwitchInputElement, useCheckboxLabelElement: useSwitchLabelElement } = useAriaCheckbox<HTMLInputElement, HTMLLabelElement>({ checked: pending? currentCapture : checked, disabled: disabled ?? false, onInput, labelPosition: "separate" });
+    const { useCheckboxInputElement: useSwitchInputElement, useCheckboxLabelElement: useSwitchLabelElement } = useAriaCheckbox<HTMLInputElement, HTMLLabelElement>({ checked: pending ? currentCapture : checked, disabled: disabled ?? false, onInput, labelPosition: "separate" });
 
     const { useCheckboxInputElementProps: useSwitchInputElementProps } = useSwitchInputElement({ tag: "input" });
     const { useCheckboxLabelElementProps: useSwitchLabelElementProps } = useSwitchLabelElement({ tag: "label" });
@@ -53,14 +53,14 @@ export function Switch({ checked, disabled, onInput: onInputAsync, children: lab
         console.error(`Hidden labels require a string-based label for the aria-label attribute.`);
     }
 
-    const inputElement = <OptionallyInputGroup>
-        <ProgressCircular childrenPosition="after" colorFill="foreground-only" mode={currentType === "async"? asyncState : null} color="info">
+    const inputElement = <OptionallyInputGroup isInput={true}>
+        <ProgressCircular childrenPosition="after" colorFill="foreground-only" mode={currentType === "async" ? asyncState : null} color="info">
 
-            <input {...useSwitchInputElementProps({ type: "checkbox", className: clsx("form-check-input", disabled && "disabled"), "aria-label": labelPosition === "hidden" ? stringLabel : undefined })} />
+            <input {...useSwitchInputElementProps({ type: "checkbox", className: clsx(pending && "pending", "form-check-input", disabled && "disabled"), "aria-label": labelPosition === "hidden" ? stringLabel : undefined })} />
         </ProgressCircular>
     </OptionallyInputGroup>;
 
-    const labelElement = <>{label != null && <OptionallyInputGroup><label {...useSwitchLabelElementProps({ className: clsx("form-check-label", disabled && "disabled"), "aria-hidden": "true" })}>{label}</label></OptionallyInputGroup>}</>;
+    const labelElement = <>{label != null && <OptionallyInputGroup isInput={false}><label {...useSwitchLabelElementProps({ className: clsx(pending && "pending", "form-check-label", disabled && "disabled"), "aria-hidden": "true" })}>{label}</label></OptionallyInputGroup>}</>;
 
     const ret = (
         <>
@@ -78,12 +78,12 @@ export function Switch({ checked, disabled, onInput: onInputAsync, children: lab
 }
 
 // Note: Slightly different from the others
-function OptionallyInputGroup({ children }: { children: ComponentChild; }) {
+function OptionallyInputGroup({ children, isInput }: { isInput: boolean, children: ComponentChild; }) {
     const inInputGroup = useContext(InInputGroupContext);
 
     if (!inInputGroup)
         return <>{children}</>;
-    return <div class="input-group-text form-switch">{children}</div>;
+    return <div class={clsx("input-group-text", isInput && "form-switch")}>{children}</div>;
 }
 
 

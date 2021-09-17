@@ -17,11 +17,13 @@ code {
   background-color: $black;
   color: $white;
   border-radius: 0.25em;
+  color: #f4fff5;
+  background-color: #051b00;
   border: 0.1em solid rgb(5, 60, 0);
   white-space: pre;
   display: inline-block;
   overflow: auto;
-  top: 0.6em;
   position: relative;
   max-width: 100%;
+  vertical-align: top;
 }

@@ -11,6 +11,13 @@
   touch-action: manipulation;
   position: relative;
 
+  &:not(.disabled):not(:disabled):not(.pending) {
+    cursor: pointer;
+  }
+  &.pending:not(.disabled):not(:disabled) {
+    cursor: progress;
+  }
+
   & > .circular-progress-container {
     position: absolute;
     left: 0;
@@ -49,12 +56,23 @@
 @each $color, $value in $theme-colors {
   .btn-outline-#{$color} {
     @include button-outline-variant(
-      $value,
+      $color: $value,
       $color-hover: $value,
       $active-background: color.change($value, $alpha: 0.125),
       $active-border: color.change($value, $alpha: 0.25),
       $active-color: $value
     );
+
+    $contrast-ratio: contrast-ratio($body-bg, $value);
+    @if $contrast-ratio <= $min-contrast-ratio {
+      color: #{color-contrast($body-bg)};
+      &:not(:hover) {
+        text-shadow: 1px 0px 4px $value, 0px 1px 4px $value, -3px 0px 4px $value, 0px -3px 4px $value;
+      }
+      &:hover {
+        color: #{color-contrast($body-bg)};
+      }
+    }
 
     &:focus {
       border-color: color.change($value, $alpha: 0.4);

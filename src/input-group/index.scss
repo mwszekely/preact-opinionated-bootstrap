@@ -6,9 +6,17 @@
 @forward "../variables.scss";
 
 .input-group-text.form-switch {
+  // Shrink the usual padding to make switches fill the same space as a checkbox or radio
+  padding-left: 0.25em;
+  padding-right: 0.25em;
+
   & > .form-check-input {
     margin-inline-start: 0;
   }
+}
+
+.form-check:not(.input-group-text).form-switch {
+  padding-left: $form-check-padding-start;
 }
 
 .input-group-text {
@@ -40,17 +48,31 @@
   z-index: 5;
 }
 
-.form-check-input.disabled,
-.form-check-input:disabled,
-.form-check-label.disabled {
-  opacity: $form-check-label-disabled-opacity;
+.form-check-label,
+.form-check-input {
+  touch-action: manipulation;
+
+  // TODO: Would prefer to just cancel any selection events so that manual selection could still occur, but preventDefault on click/dblclick doesn't work.
+  user-select: none;
 }
 
-.form-check-input:not(.disabled),
-.form-check-input:not(:disabled),
+.form-check-input.disabled.form-check-input:disabled,
+.form-check-label.disabled {
+  opacity: $form-check-label-disabled-opacity;
+
+  &:not(.pending) {
+    cursor: default;
+  }
+}
+
+.form-check-input.pending,
+.form-check-label.pending {
+  cursor: progress;
+}
+
+.form-check-input:not(.disabled).form-check-input:not(:disabled),
 .form-check-label:not(.disabled) {
   cursor: pointer;
-  touch-action: manipulation;
 }
 
 :not(.input-group) > .form-control + .circular-progress-container {
@@ -61,8 +83,8 @@
 .form-check {
   position: relative;
 
-  &.form-switch > .form-check-input:checked + .circular-progress-container {
-    inset-inline-start: 0.9em;
+  &.form-switch > .form-check-input:not(:checked) + .circular-progress-container {
+    inset-inline-start: -1.1em;
   }
 
   & > .circular-progress-container {

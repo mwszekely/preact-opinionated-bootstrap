@@ -51,13 +51,13 @@ export function Checkbox({ checked, disabled, onInput: onInputAsync, labelPositi
 
     const asyncState = (hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null);
 
-    const p = useCheckboxInputElementProps({ type: "checkbox", className: clsx("form-check-input", disabled && "disabled", inInputGroup && "mt-0"), "aria-label": labelPosition === "hidden" ? stringLabel : undefined });
+    const p = useCheckboxInputElementProps({ type: "checkbox", className: clsx("form-check-input", pending && "pending", disabled && "disabled", inInputGroup && "mt-0"), "aria-label": labelPosition === "hidden" ? stringLabel : undefined });
     const inputElement = <OptionallyInputGroup>
         <ProgressCircular childrenPosition="after" colorFill="foreground-only" mode={currentType === "async"? asyncState : null} color="info">
             <input {...p} />
         </ProgressCircular>
     </OptionallyInputGroup>;
-    const labelElement = <>{label != null && <OptionallyInputGroup><label {...useCheckboxLabelElementProps({ className: clsx(disabled && "disabled", "form-check-label"), "aria-hidden": "true" })}>{label}</label></OptionallyInputGroup>}</>;
+    const labelElement = <>{label != null && <OptionallyInputGroup><label {...useCheckboxLabelElementProps({ className: clsx(pending && "pending", disabled && "disabled", "form-check-label"), "aria-hidden": "true" })}>{label}</label></OptionallyInputGroup>}</>;
 
     const ret = (
         <>

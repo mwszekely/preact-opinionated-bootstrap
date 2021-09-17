@@ -46,6 +46,12 @@
   justify-content: center;
   align-items: center;
   display: flex;
+
+  
+  & .bi {
+    position: relative;
+    top: -0.05em;
+  }
 }
 
 .circular-progress {
@@ -80,33 +86,21 @@
 .circular-progress>div:nth-child(1)>div {
   animation: var(--duration) cubic-bezier(.23,.49,.78,.54) infinite spinner-lead;
 }
-.circular-progress>div:nth-child(2)>div {
-  transform: rotate(calc(var(--angle) * 1deg)) translate(0.5em, 0em);
-}
-.circular-progress>div:nth-child(3)>div {
-  transform: rotate(calc(var(--angle) * 2deg)) translate(0.5em, 0em);
-}
-.circular-progress>div:nth-child(4)>div {
-  transform: rotate(calc(var(--angle) * 3deg)) translate(0.5em, 0em);
-}
-.circular-progress>div:nth-child(5)>div {
-  transform: rotate(calc(var(--angle) * 4deg)) translate(0.5em, 0em);
-}
-.circular-progress>div:nth-child(6)>div {
-  transform: rotate(calc(var(--angle) * 5deg)) translate(0.5em, 0em);
-}
-.circular-progress>div:nth-child(7)>div {
-  transform: rotate(calc(var(--angle) * 6deg)) translate(0.5em, 0em);
-}
-.circular-progress>div:nth-child(8)>div {
-  transform: rotate(calc(var(--angle) * 7deg)) translate(0.5em, 0em);
-}
-.circular-progress>div:nth-child(9)>div {
-  transform: rotate(calc(var(--angle) * 8deg)) translate(0.5em, 0em);
-}
-.circular-progress>div:nth-child(10)>div {
-  transform: rotate(calc(var(--angle) * 9deg)) translate(0.5em, 0em);
-}
+.circular-progress>div:nth-child(2)>div {  transform: rotate(calc(var(--angle) * 1deg)) translate(0.5em, 0em);}
+.circular-progress>div:nth-child(3)>div {  transform: rotate(calc(var(--angle) * 2deg)) translate(0.5em, 0em);}
+.circular-progress>div:nth-child(4)>div {  transform: rotate(calc(var(--angle) * 3deg)) translate(0.5em, 0em);}
+.circular-progress>div:nth-child(5)>div {  transform: rotate(calc(var(--angle) * 4deg)) translate(0.5em, 0em);}
+.circular-progress>div:nth-child(6)>div {  transform: rotate(calc(var(--angle) * 5deg)) translate(0.5em, 0em);}
+.circular-progress>div:nth-child(7)>div {  transform: rotate(calc(var(--angle) * 6deg)) translate(0.5em, 0em);}
+.circular-progress>div:nth-child(8)>div {  transform: rotate(calc(var(--angle) * 7deg)) translate(0.5em, 0em);}
+.circular-progress>div:nth-child(9)>div {  transform: rotate(calc(var(--angle) * 8deg)) translate(0.5em, 0em);}
+.circular-progress>div:nth-child(10)>div {  transform: rotate(calc(var(--angle) * 9deg)) translate(0.5em, 0em);}
+.circular-progress>div:nth-child(11)>div {  transform: rotate(calc(var(--angle) * 10deg)) translate(0.5em, 0em);}
+.circular-progress>div:nth-child(12)>div {  transform: rotate(calc(var(--angle) * 11deg)) translate(0.5em, 0em);}
+.circular-progress>div:nth-child(13)>div {  transform: rotate(calc(var(--angle) * 12deg)) translate(0.5em, 0em);}
+.circular-progress>div:nth-child(14)>div {  transform: rotate(calc(var(--angle) * 13deg)) translate(0.5em, 0em);}
+.circular-progress>div:nth-child(15)>div {  transform: rotate(calc(var(--angle) * 14deg)) translate(0.5em, 0em);}
+.circular-progress>div:nth-child(16)>div {  transform: rotate(calc(var(--angle) * 15deg)) translate(0.5em, 0em);}
 
 @keyframes spinner {
   0% { transform: rotate(0deg); }
