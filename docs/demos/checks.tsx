@@ -9,6 +9,7 @@ import { ButtonColorVariant } from "../../button/types";
 import { GlobalAttributes, TagSensitiveProps } from "../../props";
 import { useCallback } from "preact/hooks";
 import type { CheckboxProps } from "../../input-group/input-check";
+import { InputGrid } from "../../input-group/input-group";
 
 type LabelPosition = NonNullable<CheckboxProps["labelPosition"]>;
 
@@ -53,10 +54,10 @@ export function DemoChecks() {
                         <li><code>Radio</code></li>
                         <li><code>Checkbox Group</code></li>
                     </ul>
-                    <code>Checkbox</code> and <code>Switch</code> work as you'd expect. <code>RadioGroup</code> is 
+                    <code>Checkbox</code> and <code>Switch</code> work as you'd expect. <code>RadioGroup</code> is
                     a parent around a set of <code>Radio</code> components that communicate with each other.
-                    The children <code>Radio</code> components can be any descendant of the parent <code>RadioGroup</code> &ndash; 
-                    the DOM structure <em>does not</em> matter beyond requiring they be somewhere descendant. <code>CheckboxGroup</code> works 
+                    The children <code>Radio</code> components can be any descendant of the parent <code>RadioGroup</code> &ndash;
+                    the DOM structure <em>does not</em> matter beyond requiring they be somewhere descendant. <code>CheckboxGroup</code> works
                     similarly to <code>RadioGroup</code> in that way.
                 </CardElement>
                 <CardElement>
@@ -67,9 +68,11 @@ export function DemoChecks() {
                 <CardElement>
                     The <code>onInput</code> event handler for all types of inputs can be sync or async.
 
-                    <InputGroup><Checkbox onInput={setUsesAsync} checked={usesAsync} labelPosition="start">Async event handler</Checkbox></InputGroup>
-                    <InputGroup><Checkbox onInput={setAsyncFails} checked={asyncFails} labelPosition="start" disabled={!usesAsync}>Async handler rejects</Checkbox></InputGroup>
-                    <InputGroup><Input disabled={!usesAsync} type="number" onInput={setAsyncTimeout} value={asyncTimeout}>Async timeout</Input></InputGroup>
+                    <InputGrid>
+                        <InputGroup><Checkbox onInput={setUsesAsync} checked={usesAsync} labelPosition="start">Async event handler</Checkbox></InputGroup>
+                        <InputGroup><Checkbox onInput={setAsyncFails} checked={asyncFails} labelPosition="start" disabled={!usesAsync}>Async handler rejects</Checkbox></InputGroup>
+                        <InputGroup><Input disabled={!usesAsync} type="number" onInput={setAsyncTimeout} value={asyncTimeout}>Async timeout</Input></InputGroup>
+                    </InputGrid>
                 </CardElement>
                 <CardElement>
                     <Checkbox checked={demoChecked} onInput={usesAsync ? asyncCheckboxInput : setDemoChecked}>Checkbox</Checkbox>
@@ -125,19 +128,19 @@ export function DemoChecks() {
                     The inputs and their labels will style themselves or automatically wrap themselves in <code>&lt;InputGroupText&gt;</code> as appropriate.
                 </CardElement>
                 <CardElement>
-                    <InputGroup>
-                        <Checkbox checked={demoChecked} onInput={usesAsync ? asyncCheckboxInput : setDemoChecked}>Checkbox</Checkbox>
-                    </InputGroup>
-                    <InputGroup>
-                        <Switch checked={demoChecked} onInput={usesAsync ? asyncCheckboxInput : setDemoChecked}>Switch</Switch>
-                    </InputGroup>
-                    <RadioGroup<number> name="radio-demo-5" selectedValue={demoRadio} onInput={usesAsync ? asyncRadioInput : setDemoRadio}>
+                    <InputGrid>
                         <InputGroup>
-                            <Radio index={0} value={0} labelPosition="start">Radio #1</Radio>
-                            <Radio index={1} value={1} labelPosition="hidden">Radio #2</Radio>
-                            <Radio index={2} value={2} labelPosition="end">Radio #3</Radio>
+                            <Checkbox checked={demoChecked} onInput={usesAsync ? asyncCheckboxInput : setDemoChecked}>Checkbox</Checkbox>
                         </InputGroup>
-                    </RadioGroup>
+                        <InputGroup>
+                            <Switch checked={demoChecked} onInput={usesAsync ? asyncCheckboxInput : setDemoChecked}>Switch</Switch>
+                        </InputGroup>
+                        <RadioGroup<number> name="radio-demo-5" selectedValue={demoRadio} onInput={usesAsync ? asyncRadioInput : setDemoRadio}>
+                            <InputGroup><Radio index={0} value={0}>Radio #1</Radio></InputGroup>
+                            <InputGroup><Radio index={1} value={1} >Radio #2</Radio></InputGroup>
+                            <InputGroup><Radio index={2} value={2} >Radio #3</Radio></InputGroup>
+                        </RadioGroup>
+                    </InputGrid>
                 </CardElement>
                 <CardElement type="paragraph">
                     <code>{`<InputGroup>
@@ -171,15 +174,15 @@ export function DemoChecks() {
                     </RadioGroup>
                 </CardElement>
                 <CardElement>
-                    <InputGroup><Checkbox labelPosition={labelPosition} checked={demoChecked} onInput={usesAsync ? asyncCheckboxInput : setDemoChecked}>Checkbox</Checkbox></InputGroup>
-                    <InputGroup><Switch labelPosition={labelPosition} checked={demoChecked} onInput={usesAsync ? asyncCheckboxInput : setDemoChecked}>Switch</Switch></InputGroup>
-                </CardElement>
-                <CardElement >
-                    <RadioGroup<number> name="radio-demo-7" selectedValue={demoRadio} onInput={usesAsync ? asyncRadioInput : setDemoRadio}>
-                        <InputGroup><Radio labelPosition={labelPosition} index={0} value={0}>Radio #1</Radio></InputGroup>
-                        <InputGroup><Radio labelPosition={labelPosition} index={1} value={1}>Radio #2</Radio></InputGroup>
-                        <InputGroup><Radio labelPosition={labelPosition} index={2} value={2}>Radio #3</Radio></InputGroup>
-                    </RadioGroup>
+                    <InputGrid>
+                        <InputGroup><Checkbox labelPosition={labelPosition} checked={demoChecked} onInput={usesAsync ? asyncCheckboxInput : setDemoChecked}>Checkbox</Checkbox></InputGroup>
+                        <InputGroup><Switch labelPosition={labelPosition} checked={demoChecked} onInput={usesAsync ? asyncCheckboxInput : setDemoChecked}>Switch</Switch></InputGroup>
+                        <RadioGroup<number> name="radio-demo-7" selectedValue={demoRadio} onInput={usesAsync ? asyncRadioInput : setDemoRadio}>
+                            <InputGroup><Radio labelPosition={labelPosition} index={0} value={0}>Radio #1</Radio></InputGroup>
+                            <InputGroup><Radio labelPosition={labelPosition} index={1} value={1}>Radio #2</Radio></InputGroup>
+                            <InputGroup><Radio labelPosition={labelPosition} index={2} value={2}>Radio #3</Radio></InputGroup>
+                        </RadioGroup>
+                    </InputGrid>
                 </CardElement>
 
             </Card>

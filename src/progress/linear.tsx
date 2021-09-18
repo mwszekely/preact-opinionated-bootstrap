@@ -60,7 +60,7 @@ let gimmickCount = 8;
 
     const daysSinceLastGimmickSet = Math.floor((+(new Date()) - +lastSet) / 1000 / 60 / 60 / 24);
     if (daysSinceLastGimmickSet > 0) {
-        let newCount = 4 + Math.round(Math.random() * 3 + Math.random() * 2);
+        let newCount = 4 + Math.round(Math.random() * 2 + Math.random() * 2);
         gimmickCount = newCount;
         storeToLocalStorage<Persistence>()("circular-progress-gimmick-last-set", new Date(), d => d.toISOString());
         storeToLocalStorage<Persistence>()("circular-progress-gimmick-count", gimmickCount, JSON.stringify);
@@ -162,13 +162,13 @@ const R = ((new Date()).getDate() % 2);
 
 function Check() {
     return (
-        <i class="bi bi-check text-success" />
+        <i class="bi bi-check" />
     )
 }
 
 function Cross() {
     return (
-        <i class="bi bi-x text-warning" />
+        <i class="bi bi-x" />
     )
 }
 
@@ -207,19 +207,19 @@ export const ProgressCircular = forwardElementRef(function ({ loadingLabel, spin
     const progressProps = useProgressProps({});
     const progressElement = (
         <div {...useMergedProps<HTMLDivElement>()({ ref, className: clsx("circular-progress-container") }, useMergedProps<HTMLDivElement>()(mode === "pending" ? progressProps : {}, p))}>
-            {mode === "pending" && <div role="alert" class="visually-hidden">{loadingLabel}</div>}
+            {mode === "pending" && !!loadingLabel && <div role="alert" aria-live="assertive" class="visually-hidden">{loadingLabel}</div>}
             <Swappable>
                 <div className="circular-progress-swappable">
                     <Fade open={mode === "pending" && showSpinner}>
-                        <div style={{ "--count": gimmickCount } as any} className={clsx("circular-progress", `circular-progress-${color ?? "primary"}`, colorFill == "foreground" && "inverse-fill", colorFill === "foreground-only" && "no-fill")}>
+                        <div style={{ "--count": gimmickCount } as any} className={clsx("circular-progress", color? `circular-progress-${color}` : undefined, colorFill == "foreground" && "inverse-fill", colorFill === "foreground-only" && "no-fill")}>
                             {Array.from(function* () {
                                 for (let i = 0; i < gimmickCount; ++i)
                                     yield <div><div /></div>;
                             }())}
                         </div>
                     </Fade>
-                    <Fade open={!shownStatusLongEnough && mode === "succeeded"}><div><Check /></div></Fade>
-                    <Fade open={!shownStatusLongEnough && mode === "failed"}><div><Cross /></div></Fade>
+                    <Fade open={!shownStatusLongEnough && mode === "succeeded"}><div class="circular-progress-succeeded"><Check /></div></Fade>
+                    <Fade open={!shownStatusLongEnough && mode === "failed"}><div class="circular-progress-failed"><Cross /></div></Fade>
                 </div>
             </Swappable>
         </div>);

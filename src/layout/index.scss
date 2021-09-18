@@ -1,0 +1,12 @@
+
+.responsive-grid {
+    display: grid;
+    gap: 0.5em;
+    grid-template-columns: repeat( auto-fill, minmax(min(90vw, var(--grid-min-width)), 1fr) );
+}
+
+.static-grid {
+    display: grid;
+    gap: 0.5em;
+    grid-template-columns: var(--static-grid-columns, repeat(var(--grid-column-unit, 1fr), var(--grid-column-count)))
+}

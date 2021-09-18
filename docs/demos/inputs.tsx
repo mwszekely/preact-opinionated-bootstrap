@@ -8,6 +8,7 @@ import { Checkbox, Input, InputGroup, Radio, RadioGroup, Switch } from "../../in
 import { ButtonColorVariant } from "../../button/types";
 import { GlobalAttributes, TagSensitiveProps } from "../../props";
 import { useCallback } from "preact/hooks";
+import { InputGrid } from "../../input-group/input-group";
 
 export function DemoInputs() {
     const [asyncFails, setAsyncFails] = useState(false);
@@ -44,17 +45,19 @@ export function DemoInputs() {
                 <CardElement>
                     The <code>onInput</code> event handler for all types of inputs can be sync or async.
 
-                    <InputGroup><Checkbox onInput={setUsesAsync} checked={usesAsync} labelPosition="start">Async event handler</Checkbox></InputGroup>
-                    <InputGroup><Checkbox onInput={setAsyncFails} checked={asyncFails} labelPosition="start" disabled={!usesAsync}>Async handler rejects</Checkbox></InputGroup>
-                    <InputGroup><Input disabled={!usesAsync} type="number" onInput={setAsyncTimeout} value={asyncTimeout}>Async timeout</Input></InputGroup>
+                    <InputGrid>
+                        <InputGroup><Checkbox onInput={setUsesAsync} checked={usesAsync} labelPosition="start">Async event handler</Checkbox></InputGroup>
+                        <InputGroup><Checkbox onInput={setAsyncFails} checked={asyncFails} labelPosition="start" disabled={!usesAsync}>Async handler rejects</Checkbox></InputGroup>
+                        <InputGroup><Input disabled={!usesAsync} type="number" onInput={setAsyncTimeout} value={asyncTimeout}>Async timeout</Input></InputGroup>
+                    </InputGrid>
                 </CardElement>
                 <CardElement>
                     <div class="position-relative"><Input type="text" value={text} onInput={onTextInput}>Text-based input</Input></div>
-                    <div class="position-relative"><Input type="number" value={number} onInput={onNumberInput} min={0}>Number-based input</Input></div>
+                    <div class="position-relative"><Input type="number" value={number} onInput={onNumberInput} min={-5}>Number-based input</Input></div>
                 </CardElement>
                 <CardElement type="paragraph">
                     <code>{`<Input type="text" value={text} onInput={onTextInput}>Text-based input</Input>
-<Input type="number" value={number} onInput={onNumberInput} min={0}>Number-based input</Input>`}</code>
+<Input type="number" value={number} onInput={onNumberInput} min={-5}>Number-based input</Input>`}</code>
                 </CardElement>
 
 
@@ -62,8 +65,11 @@ export function DemoInputs() {
                     When placed in an <code>&lt;InputGroup&gt;</code>, the styling will be significantly different:
                 </CardElement>
                 <CardElement>
-                    <InputGroup><Input type="text" value={text} onInput={onTextInput}>Text-based input</Input></InputGroup>
-                    <InputGroup><Input type="number" value={number} onInput={onNumberInput} min={0}>Number-based input</Input></InputGroup>
+
+                    <InputGrid>
+                        <InputGroup><Input type="text" value={text} onInput={onTextInput}>Text-based input</Input></InputGroup>
+                        <InputGroup><Input type="number" value={number} onInput={onNumberInput} min={-5}>Number-based input</Input></InputGroup>
+                    </InputGrid>
                 </CardElement>
                 <CardElement type="paragraph">
                     <code>{`<InputGroup>

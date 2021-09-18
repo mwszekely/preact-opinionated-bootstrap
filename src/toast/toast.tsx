@@ -5,7 +5,7 @@ import { ManagedChildInfo, useChildManager, useMergedProps, useRandomId, useRefE
 import { MergedProps } from "preact-prop-helpers/use-merged-props";
 import { generateRandomId } from "preact-prop-helpers/use-random-id";
 import { useCallback, useContext, useEffect, useLayoutEffect, useRef } from "preact/hooks";
-import { GlobalAttributes } from "props";
+import { GlobalAttributes } from "../props";
 import { useChildFlag } from "preact-prop-helpers/use-child-manager";
 import { SlideFade } from "preact-transition";
 import { findFirstFocusable } from "preact-prop-helpers/use-focus-trap";
@@ -19,7 +19,6 @@ export function ToastsProvider({ children, defaultTimeout }: { children: Compone
     const [pushToast, setPushToast] = useState<PushToast | null>(null);
 
     const pushToastStable = useStableCallback<NonNullable<typeof pushToast>>((toast) => {
-        console.log(pushToast);
         pushToast?.(toast);
     })
 

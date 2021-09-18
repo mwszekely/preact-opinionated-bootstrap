@@ -1,10 +1,10 @@
-import { ComponentChild, ComponentChildren, Fragment, h, Ref, RenderableProps } from "preact";
+import { ComponentChild, ComponentChildren, createElement, Fragment, h, Ref, RenderableProps } from "preact";
 import { useAriaCheckbox } from "preact-aria-widgets";
 import { EventDetail } from "preact-aria-widgets/props";
 import { CheckboxChangeEvent } from "preact-aria-widgets/use-checkbox";
 import { useAsyncHandler, useMergedProps } from "preact-prop-helpers";
 import { useContext } from "preact/hooks";
-import { InInputGroupContext } from "./props";
+import { InInputGridContext, InInputGroupContext } from "./props";
 import clsx from "clsx";
 import { createContext } from "preact";
 import { useCheckboxGroup } from "preact-aria-widgets";
@@ -16,6 +16,7 @@ import { MergedProps } from "preact-prop-helpers/use-merged-props";
 import { useCallback, } from "preact/hooks";
 import { ProgressCircular } from "../progress/linear";
 import { GlobalAttributes } from "../props";
+import { InputGroupText, InputGroupTextProps } from "./input-group";
 
 
 
@@ -53,14 +54,13 @@ export function Switch({ checked, disabled, onInput: onInputAsync, children: lab
         console.error(`Hidden labels require a string-based label for the aria-label attribute.`);
     }
 
-    const inputElement = <OptionallyInputGroup isInput={true}>
+    const inputElement = <OptionallyInputGroup tag={inInputGroup ? "label" : null} disabled={disabled} tabIndex={-1} isInput={true}>
         <ProgressCircular childrenPosition="after" colorFill="foreground-only" mode={currentType === "async" ? asyncState : null} color="info">
-
             <input {...useSwitchInputElementProps({ type: "checkbox", className: clsx(pending && "pending", "form-check-input", disabled && "disabled"), "aria-label": labelPosition === "hidden" ? stringLabel : undefined })} />
         </ProgressCircular>
     </OptionallyInputGroup>;
 
-    const labelElement = <>{label != null && <OptionallyInputGroup isInput={false}><label {...useSwitchLabelElementProps({ className: clsx(pending && "pending", "form-check-label", disabled && "disabled"), "aria-hidden": "true" })}>{label}</label></OptionallyInputGroup>}</>;
+    const labelElement = <>{label != null && <OptionallyInputGroup tag="label" isInput={false} {...useSwitchLabelElementProps({ className: clsx(pending && "pending", "form-check-label", disabled && "disabled"), "aria-hidden": "true" })}>{label}</OptionallyInputGroup>}</>;
 
     const ret = (
         <>
@@ -78,12 +78,22 @@ export function Switch({ checked, disabled, onInput: onInputAsync, children: lab
 }
 
 // Note: Slightly different from the others
-function OptionallyInputGroup({ children, isInput }: { isInput: boolean, children: ComponentChild; }) {
+// (^^^^ I'm really glad I left that there)
+function OptionallyInputGroup<E extends Element>({ tag, isInput, children, ...props }: Omit<InputGroupTextProps<E>, "tag"> & { isInput: boolean, tag: InputGroupTextProps<E>["tag"] | null }) {
     const inInputGroup = useContext(InInputGroupContext);
+    const inInputGrid = useContext(InInputGridContext);
 
     if (!inInputGroup)
-        return <>{children}</>;
-    return <div class={clsx("input-group-text", isInput && "form-switch")}>{children}</div>;
+        return createElement(tag ?? Fragment as any, props, children);
+
+    if (inInputGrid && isInput)
+        children = <div className={clsx(isInput && inInputGrid && "form-switch", "input-group-text")}>{children}</div>
+
+    return (
+        <InputGroupText tag={tag ?? "div" as any} {...useMergedProps<any>()({ className: clsx("input-group-text", isInput && !inInputGrid && "form-switch", isInput && inInputGrid && "faux-input-group-text") }, props)}>
+            {children}
+        </InputGroupText>
+    );
 }
 
 

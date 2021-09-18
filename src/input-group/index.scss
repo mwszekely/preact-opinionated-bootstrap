@@ -56,8 +56,13 @@
   user-select: none;
 }
 
-.form-check-input.disabled.form-check-input:disabled,
-.form-check-label.disabled {
+// "Polyfill" disabled controls
+.form-check-input.disabled,
+.form-check-input:disabled,
+.form-check-label.disabled,
+.input-group-text.disabled,
+.form-control.disabled,
+.form-control:disabled {
   opacity: $form-check-label-disabled-opacity;
 
   &:not(.pending) {
@@ -71,7 +76,10 @@
 }
 
 .form-check-input:not(.disabled).form-check-input:not(:disabled),
-.form-check-label:not(.disabled) {
+.form-check-label:not(.disabled),
+label.form-check-label:not(.disabled),
+label.input-group-text:not(.disabled) {
+  touch-action: manipulation;
   cursor: pointer;
 }
 
@@ -83,12 +91,91 @@
 .form-check {
   position: relative;
 
-  &.form-switch > .form-check-input:not(:checked) + .circular-progress-container {
-    inset-inline-start: -1.1em;
+  &.form-switch
+    > .form-check-input:not(:checked)
+    + .circular-progress-container {
+    //inset-inline-start: -1.05em;
   }
 
   & > .circular-progress-container {
     justify-content: flex-start;
-    inset-inline-start: -0.1em;
   }
+}
+.input-grid {
+  display: grid;
+  grid-template-columns: max-content auto;
+  grid-auto-rows: auto;
+  row-gap: 0.5em;
+  & > [role="radiogroup"] {
+    display: contents;
+  }
+
+  /*
+This is a bunch of hackery to allow spinners, which must be placed
+absolutely relative to the input, to be placed there *despite*
+input not allowing children, and the Bootstrap DOM generally not being
+designed to allow a "wrapper" that we can position: relative.
+*/
+  & .input-group {
+    & > *:nth-child(2n + 0) {
+      justify-self: flex-start;
+    }
+    & > *:nth-child(2n + 1) {
+      justify-self: flex-end;
+    }
+
+    display: contents;
+    > input.form-control {
+      width: unset;
+    }
+
+    & .form-control.faux-form-control {
+      justify-self: stretch;
+      width: 100%;
+      max-width: calc(#{2 * $input-padding-x} + 15px + var(--form-control-width, 50ch));
+    }
+
+    & .form-control.faux-form-control,
+    & .input-group-text.faux-input-group-text {
+      position: relative;
+      padding: 0;
+      width: unset;
+
+      & > .form-control,
+      & > .input-group-text {
+        border: none;
+      }
+
+      & > .circular-progress-container {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        inset-inline-end: 0.5em;
+      }
+    }
+  }
+}
+
+.faux-form-control {
+  position: relative;
+}
+
+input.form-control[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+  margin: 0;
+}
+
+input.form-control[type="number"]::-webkit-inner-spin-button,
+input.form-control[type="number"]::-webkit-outer-spin-button,
+input.form-control[type="number"]::-moz-inner-spin-button,
+input.form-control[type="number"]::-moz-outer-spin-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  margin: 0;
 }

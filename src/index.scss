@@ -11,6 +11,7 @@
 @use "./tooltip" as *;
 @use "./toast" as *;
 @use "./progress/" as *;
+@use "./layout/" as *;
 
 @use "../node_modules/preact-transition/src/index.scss";
 
@@ -27,5 +28,25 @@
 @forward "./tooltip";
 @forward "./toast";
 @forward "./progress/";
+@forward "./layout/";
 
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css");
+
+*::-webkit-scrollbar {
+  width: 11px;
+  height: 11px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--scrollbar-background-color, $body-bg);
+}
+*::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb-color, $body-color);
+  border-radius: 6px;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb-color, $body-color)
+    var(--scrollbar-color, $body-color);
+}

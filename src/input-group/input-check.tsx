@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { ComponentChild, ComponentChildren, createContext, Fragment, h, Ref, RenderableProps } from "preact";
+import { ComponentChild, ComponentChildren, createContext, createElement, Fragment, h, Ref, RenderableProps } from "preact";
 import { useAriaCheckbox, useCheckboxGroup } from "preact-aria-widgets";
 import { EventDetail } from "preact-aria-widgets/props";
 import { CheckboxChangeEvent } from "preact-aria-widgets/use-checkbox";
@@ -9,7 +9,8 @@ import { MergedProps } from "preact-prop-helpers/use-merged-props";
 import { useCallback, useContext } from "preact/hooks";
 import { ProgressCircular } from "../progress/linear";
 import { GlobalAttributes } from "../props";
-import { InInputGroupContext } from "./props";
+import { InputGroupText, InputGroupTextProps } from "./input-group";
+import { InInputGridContext, InInputGroupContext } from "./props";
 
 export interface CheckboxProps extends GlobalAttributes<HTMLDivElement> {
     checked: boolean | "mixed";
@@ -37,7 +38,7 @@ export function Checkbox({ checked, disabled, onInput: onInputAsync, labelPositi
     disabled ||= pending;
 
     const onInput = getSyncHandler(onInputAsync) as unknown as I;
-    const { useCheckboxInputElement, useCheckboxLabelElement } = useAriaCheckbox<HTMLInputElement, HTMLLabelElement>({ checked: pending? currentCapture! : ((checked as string) === "indeterminate" ? "mixed" : checked), disabled: disabled ?? false, onInput, labelPosition: "separate" });
+    const { useCheckboxInputElement, useCheckboxLabelElement } = useAriaCheckbox<HTMLInputElement, HTMLLabelElement>({ checked: pending ? currentCapture! : ((checked as string) === "indeterminate" ? "mixed" : checked), disabled: disabled ?? false, onInput, labelPosition: "separate" });
 
     const { useCheckboxInputElementProps } = useCheckboxInputElement({ tag: "input" });
     const { useCheckboxLabelElementProps } = useCheckboxLabelElement({ tag: "label" });
@@ -52,12 +53,14 @@ export function Checkbox({ checked, disabled, onInput: onInputAsync, labelPositi
     const asyncState = (hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null);
 
     const p = useCheckboxInputElementProps({ type: "checkbox", className: clsx("form-check-input", pending && "pending", disabled && "disabled", inInputGroup && "mt-0"), "aria-label": labelPosition === "hidden" ? stringLabel : undefined });
-    const inputElement = <OptionallyInputGroup>
-        <ProgressCircular childrenPosition="after" colorFill="foreground-only" mode={currentType === "async"? asyncState : null} color="info">
-            <input {...p} />
-        </ProgressCircular>
-    </OptionallyInputGroup>;
-    const labelElement = <>{label != null && <OptionallyInputGroup><label {...useCheckboxLabelElementProps({ className: clsx(pending && "pending", disabled && "disabled", "form-check-label"), "aria-hidden": "true" })}>{label}</label></OptionallyInputGroup>}</>;
+    const inputElement =
+        <OptionallyInputGroup isInput tag={inInputGroup ? "label" : null} tabIndex={-1} disabled={disabled}>
+            <ProgressCircular childrenPosition="after" colorFill="foreground-only" mode={currentType === "async" ? asyncState : null} color="info">
+                <input {...p} />
+            </ProgressCircular>
+        </OptionallyInputGroup>
+
+    const labelElement = <>{label != null && <OptionallyInputGroup isInput={false} tag="label" {...useCheckboxLabelElementProps({ className: clsx(pending && "pending", disabled && "disabled", "form-check-label"), "aria-hidden": "true" })}>{label}</OptionallyInputGroup>}</>;
 
     const ret = (
         <>
@@ -71,11 +74,6 @@ export function Checkbox({ checked, disabled, onInput: onInputAsync, labelPositi
         return <div {...useMergedProps<HTMLDivElement>()(rest, { ref, class: "form-check" })}>{ret}</div>
     return ret;
 
-}
-
-function Loud({ checked }: { checked: boolean }) {
-    console.log("LOUD");
-    return <div {...{ "data-checked": checked } as any} />
 }
 
 type UseCheckboxGroupCheckboxProps = <P extends h.JSX.HTMLAttributes<HTMLInputElement>>(props: P) => MergedProps<HTMLInputElement, { "aria-controls": string; }, P>;
@@ -96,12 +94,20 @@ export function CheckboxGroup({ children }: { children: ComponentChildren }) {
     )
 }
 
-function OptionallyInputGroup({ children }: { children: ComponentChild; }) {
+export function OptionallyInputGroup<E extends Element>({ tag, children, isInput, ...props }: Omit<InputGroupTextProps<E>, "tag"> & { isInput: boolean, tag: InputGroupTextProps<E>["tag"] | null }) {
     const inInputGroup = useContext(InInputGroupContext);
+    const inInputGrid = !!useContext(InInputGridContext);
 
     if (!inInputGroup)
-        return <>{children}</>;
-    return <div class="input-group-text">{children}</div>;
+        return createElement(tag ?? Fragment as any, props, children);
+
+    // If we're in an InputGrid's InputGroup, then create a 
+    // new child that's, CSS-wise, the "true" input.
+    // The other one is used for its border styles and relative positioning.
+    if (inInputGrid && isInput)
+        children = <div className="input-group-text">{children}</div>
+
+    return <InputGroupText tag={tag ?? "div" as any} {...useMergedProps<E>()({ className: clsx(isInput && inInputGrid && "faux-input-group-text") }, props)}>{children}</InputGroupText>;
 }
 
 

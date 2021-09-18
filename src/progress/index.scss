@@ -4,12 +4,11 @@
 @use "sass:string";
 @forward "../variables";
 
-
 @each $color, $value in $theme-colors {
   .circular-progress-#{$color}:not(.inverse-fill) {
     --ball-color: #{$value};
   }
-  .circular-progress-#{$color}:not(.inverse-fill):not(.no-fill) {    
+  .circular-progress-#{$color}:not(.inverse-fill):not(.no-fill) {
     background: #{$body-bg};
   }
 
@@ -19,16 +18,31 @@
   }
 }
 
-.circular-progress+*, .circular-progress+*+* {
-  background: $body-bg;
-  border: 0.1em solid $body-bg;
-  box-sizing: content-box;
-  border-radius: 100%;
-  height: 1em;
-  width: 1em;
+.circular-progress-container {
+  & .circular-progress-succeeded,
+  & .circular-progress-failed {
+    border-radius: 100%;
+    height: 1em;
+    width: 1em;
 
-  &>i::before {
-    vertical-align: 0;
+    & > i::before {
+      vertical-align: 0;
+    }
+  }
+
+  & .circular-progress-succeeded {
+    background: $success;
+    color: color-contrast($success);
+
+    // TODO: The check is confusing on checkboxes specifically
+    // and since it's the default it feels sort of redundant always appearing.
+    // Probably better to have no indicator for success for now.
+    opacity: 0 !important;
+  }
+
+  & .circular-progress-failed {
+    background: $warning;
+    color: color-contrast($warning);
   }
 }
 
@@ -47,7 +61,6 @@
   align-items: center;
   display: flex;
 
-  
   & .bi {
     position: relative;
     top: -0.05em;
@@ -68,7 +81,7 @@
   //animation: calc(360 / var(--angle) * var(--duration)) steps(calc(360 / var(--angle)), jump-start) infinite spinner;
 }
 
-.circular-progress>div {
+.circular-progress > div {
   grid-area: 1 / 1 / 1 / 1;
   width: 100%;
   height: 100%;
@@ -76,39 +89,82 @@
   justify-content: center;
   align-items: center;
 }
-.circular-progress>div>div {
+.circular-progress > div > div {
   width: var(--size);
   height: var(--size);
-  background-color: var( --ball-color, black);
+  background-color: var(--ball-color, currentColor);
   border-radius: 100%;
 }
 
-.circular-progress>div:nth-child(1)>div {
-  animation: var(--duration) cubic-bezier(.23,.49,.78,.54) infinite spinner-lead;
+.circular-progress > div:nth-child(1) > div {
+  animation: var(--duration) cubic-bezier(0.23, 0.49, 0.78, 0.54) infinite
+    spinner-lead;
 }
-.circular-progress>div:nth-child(2)>div {  transform: rotate(calc(var(--angle) * 1deg)) translate(0.5em, 0em);}
-.circular-progress>div:nth-child(3)>div {  transform: rotate(calc(var(--angle) * 2deg)) translate(0.5em, 0em);}
-.circular-progress>div:nth-child(4)>div {  transform: rotate(calc(var(--angle) * 3deg)) translate(0.5em, 0em);}
-.circular-progress>div:nth-child(5)>div {  transform: rotate(calc(var(--angle) * 4deg)) translate(0.5em, 0em);}
-.circular-progress>div:nth-child(6)>div {  transform: rotate(calc(var(--angle) * 5deg)) translate(0.5em, 0em);}
-.circular-progress>div:nth-child(7)>div {  transform: rotate(calc(var(--angle) * 6deg)) translate(0.5em, 0em);}
-.circular-progress>div:nth-child(8)>div {  transform: rotate(calc(var(--angle) * 7deg)) translate(0.5em, 0em);}
-.circular-progress>div:nth-child(9)>div {  transform: rotate(calc(var(--angle) * 8deg)) translate(0.5em, 0em);}
-.circular-progress>div:nth-child(10)>div {  transform: rotate(calc(var(--angle) * 9deg)) translate(0.5em, 0em);}
-.circular-progress>div:nth-child(11)>div {  transform: rotate(calc(var(--angle) * 10deg)) translate(0.5em, 0em);}
-.circular-progress>div:nth-child(12)>div {  transform: rotate(calc(var(--angle) * 11deg)) translate(0.5em, 0em);}
-.circular-progress>div:nth-child(13)>div {  transform: rotate(calc(var(--angle) * 12deg)) translate(0.5em, 0em);}
-.circular-progress>div:nth-child(14)>div {  transform: rotate(calc(var(--angle) * 13deg)) translate(0.5em, 0em);}
-.circular-progress>div:nth-child(15)>div {  transform: rotate(calc(var(--angle) * 14deg)) translate(0.5em, 0em);}
-.circular-progress>div:nth-child(16)>div {  transform: rotate(calc(var(--angle) * 15deg)) translate(0.5em, 0em);}
+.circular-progress > div:nth-child(2) > div {
+  transform: rotate(calc(var(--angle) * 1deg)) translate(0.5em, 0em);
+}
+.circular-progress > div:nth-child(3) > div {
+  transform: rotate(calc(var(--angle) * 2deg)) translate(0.5em, 0em);
+}
+.circular-progress > div:nth-child(4) > div {
+  transform: rotate(calc(var(--angle) * 3deg)) translate(0.5em, 0em);
+}
+.circular-progress > div:nth-child(5) > div {
+  transform: rotate(calc(var(--angle) * 4deg)) translate(0.5em, 0em);
+}
+.circular-progress > div:nth-child(6) > div {
+  transform: rotate(calc(var(--angle) * 5deg)) translate(0.5em, 0em);
+}
+.circular-progress > div:nth-child(7) > div {
+  transform: rotate(calc(var(--angle) * 6deg)) translate(0.5em, 0em);
+}
+.circular-progress > div:nth-child(8) > div {
+  transform: rotate(calc(var(--angle) * 7deg)) translate(0.5em, 0em);
+}
+.circular-progress > div:nth-child(9) > div {
+  transform: rotate(calc(var(--angle) * 8deg)) translate(0.5em, 0em);
+}
+.circular-progress > div:nth-child(10) > div {
+  transform: rotate(calc(var(--angle) * 9deg)) translate(0.5em, 0em);
+}
+.circular-progress > div:nth-child(11) > div {
+  transform: rotate(calc(var(--angle) * 10deg)) translate(0.5em, 0em);
+}
+.circular-progress > div:nth-child(12) > div {
+  transform: rotate(calc(var(--angle) * 11deg)) translate(0.5em, 0em);
+}
+.circular-progress > div:nth-child(13) > div {
+  transform: rotate(calc(var(--angle) * 12deg)) translate(0.5em, 0em);
+}
+.circular-progress > div:nth-child(14) > div {
+  transform: rotate(calc(var(--angle) * 13deg)) translate(0.5em, 0em);
+}
+.circular-progress > div:nth-child(15) > div {
+  transform: rotate(calc(var(--angle) * 14deg)) translate(0.5em, 0em);
+}
+.circular-progress > div:nth-child(16) > div {
+  transform: rotate(calc(var(--angle) * 15deg)) translate(0.5em, 0em);
+}
 
 @keyframes spinner {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes spinner-lead {
-  0% { transform: rotate(0deg) translate(0.5em, 0em); }
-  95% { transform: rotate(calc(-360deg + (var(--angle) * 1deg) * var(--count))) translate(0.5em, 0em); }
-  100% { transform: rotate(calc(-360deg + (var(--angle) * 1deg) * var(--count))) translate(0.5em, 0em); }
+  0% {
+    transform: rotate(0deg) translate(0.5em, 0em);
+  }
+  95% {
+    transform: rotate(calc(-360deg + (var(--angle) * 1deg) * var(--count)))
+      translate(0.5em, 0em);
+  }
+  100% {
+    transform: rotate(calc(-360deg + (var(--angle) * 1deg) * var(--count)))
+      translate(0.5em, 0em);
+  }
 }

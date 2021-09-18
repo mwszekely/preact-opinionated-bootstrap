@@ -1,32 +1,27 @@
 
-import { createContext, Fragment, h, render } from "preact";
-import { useAriaCheckbox } from "preact-aria-widgets/use-checkbox";
-import { useAriaListboxSingle, UseListboxSingleItem, UseListboxSingleItemInfo } from "preact-aria-widgets/use-listbox-single";
-import { useAriaMenu, UseMenuItem } from "preact-aria-widgets/use-menu";
+import { Fragment, h, render } from "preact";
 import { useAriaTooltip } from "preact-aria-widgets/use-tooltip";
 import { useAnimationFrame, useDraggable, useDroppable, useElementSize, useFocusTrap, useHasFocus, useMergedProps, useState } from "preact-prop-helpers";
-import { ClipFade, Collapse, CollapseFade, Slide, SlideFade, ZoomFade } from "preact-transition";
+import { ClipFade, Slide, ZoomFade } from "preact-transition";
 import { memo } from "preact/compat";
-import { useCallback, useContext, useRef } from "preact/hooks";
+import { useCallback, useRef } from "preact/hooks";
 import { Accordion, AccordionSection } from "../accordion";
-import { Button, ButtonGroup, ProvideDefaultButtonFill, ProvideDefaultButtonSize } from "../button";
-import { ButtonGroupChild } from "../button/button-group";
+import { Button } from "../button";
 import { Dialog } from "../dialog";
-import { ListItemSingle, ListSingle } from "../list";
-import { Tab, TabPanel, Tabs } from "../tabs";
-import { DemoUseInterval } from "./demos/use-interval";
-import { DemoUseRovingTabIndex } from "./demos/use-roving-tab-index";
-import { DemoUseTimeout } from "./demos/use-timeout";
-import { Menu, MenuItem } from "../menu";
-import { Drawer } from "../drawer"
-import { Checkbox } from "../input-group/input-check"
-import { RadioGroup, Radio } from "../input-group/input-radio";
-import { Tooltip } from "../tooltip";
-import { ToastsProvider, Toast, usePushToast } from "../toast";
+import { Drawer } from "../drawer";
 import { Input, InputGroup } from "../input-group";
-import { DemoButtons } from "./demos/buttons"
+import { Checkbox } from "../input-group/input-check";
+import { Radio, RadioGroup } from "../input-group/input-radio";
+import { GridResponsive } from "../layout";
+import { ListItemSingle, ListSingle } from "../list";
+import { Menu, MenuItem } from "../menu";
+import { Tab, TabPanel, Tabs } from "../tabs";
+import { ToastsProvider } from "../toast";
+import { Tooltip } from "../tooltip";
+import { DemoButtons } from "./demos/buttons";
 import { DemoChecks } from "./demos/checks";
 import { DemoInputs } from "./demos/inputs";
+import { DemoLayout } from "./demos/layout";
 
 
 
@@ -341,7 +336,7 @@ const DemoInput = memo(() => {
         <div class="demo">
 
             <InputGroup>
-                <Input type="text" onInput={onInput1} value={text}>Test input</Input>
+                <Input type="text" onInput={onInput1} value={text} width="100%">Test input</Input>
             </InputGroup>
             <RadioGroup selectedValue={radioValue} name="demo-radio" onInput={onInput2}>
                 <InputGroup><Radio index={0} value="ARadio" /></InputGroup>
@@ -354,11 +349,12 @@ const DemoInput = memo(() => {
 
 
 const Component = () => {
-    return <div class="flex" style={{ flexWrap: "wrap" }}>
+    return <GridResponsive minWidth="35em">
         <ToastsProvider>
             <DemoButtons />
             <DemoChecks />
             <DemoInputs />
+            <DemoLayout />
             <DemoAccordion />
             <DemoDialog />
             <DemoDrawer />
@@ -373,7 +369,7 @@ const Component = () => {
             <DemoUseFocusTrap />*/}
             <input />
         </ToastsProvider>
-    </div>
+        </GridResponsive>
 }
 
 requestAnimationFrame(() => {

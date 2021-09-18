@@ -9,6 +9,7 @@ import { useSpinnerDelay } from "../props";
 import { ProgressCircular } from "../progress";
 import { InInputGroupContext } from "./props";
 import clsx from "clsx";
+import { OptionallyInputGroup } from "./input-check";
 
 interface RadioGroupProps<V extends string | number> extends Omit<UseAriaRadioGroupParameters<V>, "onInput"> {
     children?: ComponentChildren;
@@ -114,12 +115,12 @@ export function Radio<V extends string | number>({ disabled, children: label, in
         console.error(`Hidden labels require a string-based label for the aria-label attribute.`);
     }
 
-    const inputElement = <OptionallyInputGroup>
+    const inputElement = <OptionallyInputGroup isInput tag={inInputGroup? "label" : null} disabled={disabled} tabIndex={-1}>
         <ProgressCircular childrenPosition="after" colorFill="foreground-only" mode={currentHandlerType == "async"? asyncState : null} color="info">
             <input {...useRadioInputProps({ type: "radio", className: clsx(asyncState === "pending" && "pending", disabled && "disabled", "form-check-input"), "aria-label": labelPosition === "hidden" ? stringLabel : undefined })} />
         </ProgressCircular>
     </OptionallyInputGroup>;
-    const labelElement = <>{label != null && <OptionallyInputGroup><label {...useRadioLabelProps({ className: clsx(asyncState === "pending" && "pending", disabled && "disabled", "form-check-label"), "aria-hidden": "true" })}>{label}</label></OptionallyInputGroup>}</>;
+    const labelElement = <>{label != null && <OptionallyInputGroup isInput={false} tag={"label"} {...useRadioLabelProps({ className: clsx(asyncState === "pending" && "pending", disabled && "disabled", "form-check-label"), "aria-hidden": "true" })}>{label}</OptionallyInputGroup>}</>;
 
     const ret = (
         <>
@@ -133,13 +134,5 @@ export function Radio<V extends string | number>({ disabled, children: label, in
         return <div class="form-check">{ret}</div>
     return ret;
 
-}
-
-function OptionallyInputGroup({ children }: { children: ComponentChild; }) {
-    const inInputGroup = useContext(InInputGroupContext);
-
-    if (!inInputGroup)
-        return <>{children}</>;
-    return <div class="input-group-text">{children}</div>;
 }
 

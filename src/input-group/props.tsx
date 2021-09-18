@@ -12,9 +12,14 @@ export interface UnlabelledInputTextProps extends BaseUnlabelledInputProps<strin
 export interface UnlabelledInputNumberProps extends BaseUnlabelledInputProps<number> { type: "number"; min?: number; max?: number; step?: number; }
 export type UnlabelledInputProps = UnlabelledInputTextProps | UnlabelledInputNumberProps;
 
-export type InputProps = UnlabelledInputProps & { children: ComponentChildren, labelPosition?: "start" | "end" | "floating" | "hidden" }
+export type InputProps = UnlabelledInputProps & { 
+    children: ComponentChildren, 
+    labelPosition?: "start" | "end" | "floating" | "hidden";
+    width?: `${number}ch` | `100%`; 
+}
 
 export const InInputGroupContext = createContext(false);
+export const InInputGridContext = createContext(0);
 
 export function useInputCaptures(type: InputProps["type"]) {
 

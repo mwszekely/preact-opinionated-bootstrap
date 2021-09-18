@@ -3,7 +3,7 @@ import { cloneElement, ComponentChild, h, VNode, Fragment, ComponentChildren } f
 import { useAriaTooltip, UseTooltip } from "preact-aria-widgets/use-tooltip";
 import { useElementSize } from "preact-prop-helpers/use-element-size";
 import { fixProps, usePopperApi, useShouldUpdatePopper } from "../menu/popper-api"
-import { FlippableTransitionComponent } from "props";
+import { FlippableTransitionComponent } from "../props";
 import { useMergedProps } from "preact-prop-helpers/use-merged-props";
 
 type UseTooltipProps = Parameters<typeof useAriaTooltip>[0];
