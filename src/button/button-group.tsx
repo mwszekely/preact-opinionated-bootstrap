@@ -30,7 +30,7 @@ export const ButtonGroup = forwardElementRef(function ButtonGroup(p: ButtonGroup
     const { indicesByElement, managedChildren, useListNavigationChild, navigateToIndex, childCount } = useListNavigation<HTMLButtonElement>({ focusOnChange: lastFocusedInner });
 
     // Styling props
-    let { colorVariant, fillVariant, size, disabled, selectedIndex, wrap, ...p3 } = p;
+    let { colorVariant, fillVariant, size, disabled, selectedIndex, wrap, children, ...p3 } = p;
 
     useEffect(() => {
         if (selectedIndex != null)
@@ -42,11 +42,12 @@ export const ButtonGroup = forwardElementRef(function ButtonGroup(p: ButtonGroup
     size = useButtonSize(size);
     fillVariant = useButtonFillVariant(fillVariant);
     disabled = useButtonDisabled(disabled);
-    const newDomProps: h.JSX.HTMLAttributes<any> = { ref, role: "group", disabled, className: clsx("btn-group", wrap && "wrap") };
+    const outerDomProps: h.JSX.HTMLAttributes<any> =  useHasFocusProps(useMergedProps<any>()({ ref, role: "grid", class: "btn-group-aria-gridrow" }, p3));
+    const innerDomProps: h.JSX.HTMLAttributes<any> = { role: "gridrow", disabled, className: clsx("btn-group", wrap && "wrap") };
 
     // Remaining props, forwarded onto the DOM
-    const domProps = useHasFocusProps(useMergedProps<any>()(newDomProps, p3));
-    (domProps as any)["data-child-count"] = `${childCount}`;
+    //const domProps =newDomProps, p3));
+    (outerDomProps as any)["data-child-count"] = `${childCount}`;
 
     return (
         <UseButtonGroupChild.Provider value={useListNavigationChild}>
@@ -54,7 +55,9 @@ export const ButtonGroup = forwardElementRef(function ButtonGroup(p: ButtonGroup
                 <ProvideDefaultButtonFill value={fillVariant}>
                     <ProvideDefaultButtonSize value={size}>
                         <ProvideDefaultButtonDisabled value={disabled}>
-                            <div {...domProps} />
+                            <div {...outerDomProps}>
+                                <div {...innerDomProps}>{children}</div>
+                            </div>
                         </ProvideDefaultButtonDisabled>
                     </ProvideDefaultButtonSize>
                 </ProvideDefaultButtonFill>
@@ -78,7 +81,7 @@ export const ButtonGroupChild = forwardElementRef(function ButtonGroupChild1({ i
 
     // TODO: It's kinda fragile here how the sync onClick of listNavigation 
     // and the async onClick of button are mixing.
-    const p = useListNavigationChildProps({ ref, ...buttonProps as any });
+    const p = useListNavigationChildProps({ ref, role: "gridcell", ...buttonProps as any });
     return <Button {...p as any} />
 });
 
