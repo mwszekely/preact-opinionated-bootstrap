@@ -82,12 +82,12 @@ export function Toast({ timeout, politeness, children }: ToastProps) {
     return (
         <ToastDismissContext.Provider value={dismiss}>
             <SlideFade open={status != "dismissed"} slideTargetInline={1} animateOnMount={true} exitVisibility="removed">
-                <div {...useToastProps({ class: "toast show", role: "alert", "aria-atomic": "true" })} >
+                <div {...useToastProps({ class: "toast show" })} >
                     <div class="d-flex">
                         <div class="toast-body">
                             {children}
                         </div>
-                        <Button class="btn-close me-2 m-auto" aria-label="Close" onClick={dismiss} />
+                        <Button class="btn-close me-2 m-auto" aria-label="Dismiss alert" onClick={dismiss} />
                     </div>
                 </div>
             </SlideFade>
