@@ -278,10 +278,10 @@ export function useShouldUpdatePopper(open: boolean, elementSize: ElementSize | 
         onInteraction = null;
 
     useGlobalHandler(document, "keydown", onInteraction, { passive: true, capture: true });
-    useGlobalHandler(window, "scroll", onInteraction, { passive: true, capture: true });
-    useGlobalHandler(window, "pointermove", onInteraction, { passive: true, capture: true });
     useGlobalHandler(window, "click", onInteraction, { passive: true, capture: true });
-    useGlobalHandler(window, "resize", onInteraction, { passive: true, capture: true });
+    useGlobalHandler(window, "scroll", open? onInteraction : null, { passive: true, capture: true });
+    useGlobalHandler(window, "pointermove", open? onInteraction : null, { passive: true, capture: true });
+    useGlobalHandler(window, "resize", open? onInteraction : null, { passive: true, capture: true });
     useEffect(() => { onInteraction?.(); }, Object.values(elementSize ?? {}));
 
     return { shouldUpdate: !!updatingForABit, onInteraction };
