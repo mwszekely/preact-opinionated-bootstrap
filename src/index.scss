@@ -12,6 +12,7 @@
 @use "./toast" as *;
 @use "./progress/" as *;
 @use "./layout/" as *;
+@use "./table/" as *;
 
 @use "../node_modules/preact-transition/src/index.scss";
 
@@ -29,6 +30,7 @@
 @forward "./toast";
 @forward "./progress/";
 @forward "./layout/";
+@forward "./table/";
 
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css");
 

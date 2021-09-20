@@ -1,0 +1,21 @@
+.table th {
+  cursor: pointer;
+
+  & > div {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+  }
+
+  &:hover {
+    & .no-hover-only {
+      opacity: 0;
+    }
+  }
+
+  &:not(:hover) {
+    & .hover-only {
+      opacity: 0;
+    }
+  }
+}
