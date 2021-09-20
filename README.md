@@ -1,7 +1,7 @@
 # Preact Onionated Bootstrap
 \*Opoinionated
 
-Preact widgets like buttons, menus, form fields, etc. Priorities on ARIA compliance (including friendly keyboard navigation), looking pleasant, and having an simple API that removes the most common boilerplate (e.g. allowing inputs such as checkboxes to take an async `onInput` handler and adapt accordingly).
+Preact widgets like buttons, menus, form fields, etc. Priorities on ARIA compliance (including user-friendly keyboard & AT navigation), looking pleasant, and having an simple (one might say opinionated) API that removes the most common boilerplate (e.g. allowing inputs such as checkboxes to take an async `onInput` handler and adapt accordingly).
 
 * Accordion
 * Button
@@ -19,6 +19,7 @@ Preact widgets like buttons, menus, form fields, etc. Priorities on ARIA complia
 * Menu (dropdown)
 * Spinner (as an internal component used by Inputs during long async handlers)
 * Tabs
+* Table (WIP)
 * Toast (snackbar)
 * Tooltip
 
@@ -26,7 +27,6 @@ The following components are currently style-only and do not provide additional 
 * Badge
 * Card
 * Figure
-* Table
 
 ```tsx
 

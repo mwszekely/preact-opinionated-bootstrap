@@ -160,6 +160,7 @@ export const Table = forwardElementRef(function Table({ children, small, striped
     return (
         <table {...useMergedProps<HTMLTableElement>()({
             ref,
+            role: "group",
             className: clsx(
                 "table",
                 small && "table-sm",
@@ -200,6 +201,7 @@ export const TableHead = forwardElementRef(function TableHead({ children, varian
             <CellIsInHeaderContext.Provider value={true}>
                 <thead {...useHasFocusProps(useMergedProps<HTMLTableSectionElement>()({
                     ref,
+                    role: "rowgroup",
                     "data-current-row": rowIndex,
                     "data-current-column": cellIndex,
                     "data-row-count": rowCount,
@@ -281,6 +283,7 @@ export const TableBody = forwardElementRef(function TableBody({ children, varian
     return (
         <tbody {...useHasFocusProps(useMergedProps<HTMLTableSectionElement>()({
             ref,
+            role: "rowgroup",
             "data-current-row": rowIndex,
             "data-current-column": cellIndex,
             "data-row-count": rowCount,
@@ -330,6 +333,7 @@ export const TableRow = forwardElementRef(function TableRow({ children, index: l
     const rowProps = {
         children, ...(useMergedProps<HTMLTableRowElement>()({
             ref,
+            role: "row",
             "data-literal-index": literalIndex,
             "data-display-index": displayIndex,
             "data-tabbable": `${isTabbableRow}`,
@@ -367,6 +371,7 @@ export const TableCell = forwardElementRef(function TableCell({ value: literalVa
     const displayRowIndex = useContext(DisplayRowIndexContext);
     const cellProps = useMergedProps<HTMLTableCellElement>()({
         ref,
+        role: "gridcell",
         "data-literal-value": literalValue,
         "data-display-value": displayValue,
         "data-display-row": displayRowIndex,
@@ -432,6 +437,7 @@ export const TableHeaderCell = forwardElementRef(function TableHeaderCell({ inde
     const cellProps = useButtonLikeEventHandlers<HTMLTableCellElement>("th", onSortClick, undefined)(
         useRefElementProps(useMergedProps<HTMLTableCellElement>()({
             ref,
+            role: "columnheader",
             scope: (isInTHead ? "col" : "row"),
             className: clsx(variant && `table-${variant}`)
         }, props)));
