@@ -82,10 +82,12 @@ export function useAriaProgressBar<ProgressElement extends Element>({ tag, max, 
             {
                 max,
                 value: (value ?? undefined),
+                "aria-valuemin": "0",
                 "aria-valuenow": value == null ? undefined : `${value}`,
             } as h.JSX.HTMLAttributes<HTMLProgressElement> as any as h.JSX.HTMLAttributes<ProgressElement>
             :
             {
+                "aria-valuemin": "0",
                 "aria-valuemax": max == null ? undefined : `${max}`,
                 "aria-valuetext": valueText == null ? undefined : `${valueText}`,
                 "aria-valuenow": value == null ? undefined : `${value}`,
@@ -185,7 +187,8 @@ interface Persistence {
 }
 
 export const ProgressCircular = forwardElementRef(function ({ loadingLabel, spinnerTimeout, mode, colorFill, childrenPosition, children, color, ...p }: CircularProgressProps, ref: Ref<HTMLDivElement>) {
-    const { useProgressProps, useReferencedElement } = useAriaProgressBar<HTMLDivElement>({ value: null, valueText: undefined, max: undefined, tag: "div" });
+    loadingLabel ??= "Operation pending";
+    const { useProgressProps, useReferencedElement } = useAriaProgressBar<HTMLDivElement>({ value: null, valueText: loadingLabel, max: 1, tag: "div" });
 
     //useLayoutEffect(() => { provideParentWithHook?.(useReferencedElement) }, [useReferencedElement, provideParentWithHook])
 
@@ -204,9 +207,9 @@ export const ProgressCircular = forwardElementRef(function ({ loadingLabel, spin
     });
 
 
-    const progressProps = useProgressProps({});
+    const progressProps = useProgressProps({ "aria-hidden": `${mode != "pending"}` });
     const progressElement = (
-        <div {...useMergedProps<HTMLDivElement>()({ ref, className: clsx("circular-progress-container") }, useMergedProps<HTMLDivElement>()(mode === "pending" ? progressProps : {}, p))}>
+        <div {...useMergedProps<HTMLDivElement>()({ ref, className: clsx("circular-progress-container") }, useMergedProps<HTMLDivElement>()(progressProps, p))}>
             {mode === "pending" && !!loadingLabel && <div role="alert" aria-live="assertive" class="visually-hidden">{loadingLabel}</div>}
             <Swappable>
                 <div className="circular-progress-swappable">
