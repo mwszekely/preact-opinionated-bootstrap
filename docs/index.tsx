@@ -4,7 +4,7 @@ import { useAriaTooltip } from "preact-aria-widgets/use-tooltip";
 import { useAnimationFrame, useDraggable, useDroppable, useElementSize, useFocusTrap, useHasFocus, useMergedProps, useState } from "preact-prop-helpers";
 import { ClipFade, Slide, ZoomFade } from "preact-transition";
 import { memo } from "preact/compat";
-import { useCallback, useMemo, useRef } from "preact/hooks";
+import { useCallback, useRef } from "preact/hooks";
 import { Accordion, AccordionSection } from "../accordion";
 import { Button } from "../button";
 import { Dialog } from "../dialog";
@@ -22,6 +22,7 @@ import { DemoButtons } from "./demos/buttons";
 import { DemoChecks } from "./demos/checks";
 import { DemoInputs } from "./demos/inputs";
 import { DemoLayout } from "./demos/layout";
+import { DemoTable } from "./demos/tables";
 
 
 
@@ -347,45 +348,13 @@ const DemoInput = memo(() => {
     )
 });
 
-import { Table, TableBody, TableHead, TableRow, TableCell, TableHeaderCell } from "../table"
-import { TableCellChildProps } from "../table/table";
-import { forwardElementRef } from "../props";
 
-const C = ({ index: i }: { index: number }) => {
-    return (
-        <>
-            <TableCell index={0} value={i} />
-            <TableCell index={1} value={"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[useMemo(() => Math.floor(Math.random() * 26), [])]} />
-            <TableCell index={2} value={"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[i]} />
-            <TableCell index={3} value={"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[i]}>{forwardElementRef(({ displayValue, ...props }: TableCellChildProps<HTMLButtonElement>, ref: any) => { return <Button ref={ref} {...(props as any)}>{displayValue}</Button> })}</TableCell>
-        </>
-    )
-}
 
 const Component = () => {
     return <GridResponsive minWidth="35em">
         <ToastsProvider>
-            <div class="demo">
-                <Table>
-                    <TableHead>
-                        <TableRow index={0}>
-                            <TableHeaderCell index={0} value="Number" />
-                            <TableHeaderCell index={1} value="Random text" />
-                            <TableHeaderCell index={2} value="Ordered text" />
-                            <TableHeaderCell index={3} value="Button" />
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {Array.from((function* () {
-                            for (let i = 0; i < 10; ++i) {
-                                yield <TableRow key={i} index={i}>
-                                    <C index={i} />
-                                </TableRow>
-                            }
-                        })())}
-                    </TableBody>
-                </Table>
-            </div>
+
+            <DemoTable />
             <DemoButtons />
             <DemoChecks />
             <DemoInputs />

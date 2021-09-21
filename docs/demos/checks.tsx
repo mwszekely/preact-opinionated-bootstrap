@@ -137,8 +137,8 @@ export function DemoChecks() {
                         </InputGroup>
                         <RadioGroup<number> name="radio-demo-5" selectedValue={demoRadio} onInput={usesAsync ? asyncRadioInput : setDemoRadio}>
                             <InputGroup><Radio index={0} value={0}>Radio #1</Radio></InputGroup>
-                            <InputGroup><Radio index={1} value={1} >Radio #2</Radio></InputGroup>
-                            <InputGroup><Radio index={2} value={2} >Radio #3</Radio></InputGroup>
+                            <InputGroup><Radio index={1} value={1}>Radio #2</Radio></InputGroup>
+                            <InputGroup><Radio index={2} value={2}>Radio #3</Radio></InputGroup>
                         </RadioGroup>
                     </InputGrid>
                 </CardElement>

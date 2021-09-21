@@ -41,7 +41,10 @@ export function DemoInputs() {
             <Card>
                 <CardElement type="title" tag="h2">Text boxes</CardElement>
                 <CardElement><div class="position-relative"><Input type="text" value={text} onInput={onTextInput}>I'm a text box</Input></div></CardElement>
-
+                <CardElement>
+                    <code>&lt;Input&gt;</code> components allow for inputting text, numbers, etc. and asyncronously saving it somewhere else as it's being typed.
+                    </CardElement>
+                <CardElement type="subtitle" tag="h3">Async inputs</CardElement>
                 <CardElement>
                     The <code>onInput</code> event handler for all types of inputs can be sync or async.
 
@@ -72,19 +75,10 @@ export function DemoInputs() {
                     </InputGrid>
                 </CardElement>
                 <CardElement type="paragraph">
-                    <code>{`<InputGroup>
-    <Checkbox checked={checked} onInput={setChecked}>Checkbox</Checkbox>
-</InputGroup>
-<InputGroup>
-    <Switch checked={checked} onInput={onInput}>Switch</Switch>
-</InputGroup>
-<RadioGroup name="radio-demo-2" selectedValue={value} onInput={setValue}>
-    <InputGroup>
-        <Radio index={0} value="value1" labelPosition="start">Radio #1</Radio>
-        <Radio index={1} value="value2" labelPosition="hidden">Radio #2</Radio>
-        <Radio index={2} value="value3" labelPosition="end">Radio #3</Radio>
-    </InputGroup>
-</RadioGroup>`}</code>
+                    <code>{`<InputGrid>
+    <InputGroup><Input type="text" value={text} onInput={onTextInput}>Text-based input</Input></InputGroup>
+    <InputGroup><Input type="number" value={number} onInput={onNumberInput} min={-5}>Number-based input</Input></InputGroup>
+</InputGrid>`}</code>
                 </CardElement>
             </Card>
         </div>

@@ -8,11 +8,11 @@ import { useAsyncHandler, useMergedProps } from "preact-prop-helpers";
 import { MergedProps } from "preact-prop-helpers/use-merged-props";
 import { useCallback, useContext } from "preact/hooks";
 import { ProgressCircular } from "../progress/linear";
-import { GlobalAttributes } from "../props";
+import { forwardElementRef, GlobalAttributes } from "../props";
 import { InputGroupText, InputGroupTextProps } from "./input-group";
 import { InInputGridContext, InInputGroupContext } from "./props";
 
-export interface CheckboxProps extends GlobalAttributes<HTMLDivElement> {
+export interface CheckboxProps extends GlobalAttributes<HTMLInputElement> {
     checked: boolean | "mixed";
     disabled?: boolean;
     onInput?(checked: boolean, event: h.JSX.TargetedEvent<HTMLInputElement>): void | Promise<void>;
@@ -29,7 +29,7 @@ function capture(e: h.JSX.TargetedEvent<HTMLInputElement>): boolean {
  * Probably need separate `inputRef` & `labelRef` properties for that, 
  * but given there's also no easy way to forward props to just them a solution like that feels incomplete.
  */
-export function Checkbox({ checked, disabled, onInput: onInputAsync, labelPosition, children: label, ...rest }: CheckboxProps, ref: Ref<HTMLDivElement>) {
+export const Checkbox = forwardElementRef( function Checkbox({ checked, disabled, onInput: onInputAsync, labelPosition, children: label, ...props }: CheckboxProps, ref: Ref<HTMLInputElement>) {
     labelPosition ??= "end";
 
     type I = { (event: CheckboxChangeEvent<h.JSX.TargetedEvent<HTMLInputElement, Event>>): void; (event: CheckboxChangeEvent<h.JSX.TargetedEvent<HTMLLabelElement, Event>>): void; };
@@ -52,7 +52,7 @@ export function Checkbox({ checked, disabled, onInput: onInputAsync, labelPositi
 
     const asyncState = (hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null);
 
-    const p = useCheckboxInputElementProps({ type: "checkbox", className: clsx("form-check-input", pending && "pending", disabled && "disabled", inInputGroup && "mt-0"), "aria-label": labelPosition === "hidden" ? stringLabel : undefined });
+    const p = useMergedProps<HTMLInputElement>()(props, useCheckboxInputElementProps({ ref, type: "checkbox", className: clsx("form-check-input", pending && "pending", disabled && "disabled", inInputGroup && "mt-0"), "aria-label": labelPosition === "hidden" ? stringLabel : undefined }));
     const inputElement =
         <OptionallyInputGroup isInput tag={inInputGroup ? "label" : null} tabIndex={-1} disabled={disabled}>
             <ProgressCircular childrenPosition="after" colorFill="foreground-only" mode={currentType === "async" ? asyncState : null} color="info">
@@ -71,15 +71,15 @@ export function Checkbox({ checked, disabled, onInput: onInputAsync, labelPositi
     );
 
     if (!inInputGroup)
-        return <div {...useMergedProps<HTMLDivElement>()(rest, { ref, class: "form-check" })}>{ret}</div>
+        return <div {...useMergedProps<HTMLDivElement>()({}, { class: "form-check" })}>{ret}</div>
     return ret;
 
-}
+})
 
 type UseCheckboxGroupCheckboxProps = <P extends h.JSX.HTMLAttributes<HTMLInputElement>>(props: P) => MergedProps<HTMLInputElement, { "aria-controls": string; }, P>;
 const CheckboxGroupParentCheckboxPropsContext = createContext<any>(null!);
 const CheckboxGroupChildContext = createContext<UseCheckboxGroupChild<HTMLInputElement>>(null!);
-export function CheckboxGroup({ children }: { children: ComponentChildren }) {
+export function  CheckboxGroup({ children }: { children: ComponentChildren }) {
     const { percentChecked, selfIsChecked, onCheckboxGroupInput, useCheckboxGroupCheckboxProps, useCheckboxGroupChild } = useCheckboxGroup<HTMLInputElement>({});
 
     return (
@@ -92,7 +92,7 @@ export function CheckboxGroup({ children }: { children: ComponentChildren }) {
 
         </>
     )
-}
+};
 
 export function OptionallyInputGroup<E extends Element>({ tag, children, isInput, ...props }: Omit<InputGroupTextProps<E>, "tag"> & { isInput: boolean, tag: InputGroupTextProps<E>["tag"] | null }) {
     const inInputGroup = useContext(InInputGroupContext);
