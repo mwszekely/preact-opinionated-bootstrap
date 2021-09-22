@@ -61,7 +61,7 @@ export function RadioGroup<V extends string | number>({ children, name, selected
 
     const selectedIndex = getIndex(currentCapture ?? selectedValue);
     //const capturedIndex = getIndex(currentCapture!);
-    useChildFlag(selectedIndex, managedChildren.length, (index, isSelected) => managedChildren[index].setAsyncState(isSelected? (hasError? "failed" : pending? "pending" :  "succeeded") : null ));
+    useChildFlag(selectedIndex, managedChildren.length, (index, isSelected) => managedChildren[index]?.setAsyncState(isSelected? (hasError? "failed" : pending? "pending" :  "succeeded") : null ));
 
     
    // useChildFlag(pending ? capturedIndex : null, managedChildren.length, useCallback((index, isCaptured) => managedChildren[index].setPending(isCaptured? "in" : false), []));

@@ -50,8 +50,6 @@ export const AccordionSection = forwardElementRef(function AccordionSection<T ex
 
     headerLevel ??= 2;
 
-    console.log(`${index}: ${expanded?.toString()}`)
-
     const headerButtonProps = useAriaAccordionSectionHeaderProps({ type: "button", class: clsx("accordion-button", !expanded ? " collapsed" : "") });
     const headerProps = ({ class: "accordion-header", children: <button {...headerButtonProps}>{header}</button> });
     const headerJsx = headerLevel >= 1 && headerLevel <= 6 ? h(`h${headerLevel}`, headerProps as any) : h("div", useMergedProps<HTMLDivElement>()(headerProps, { role: "heading", "aria-level": `${headerLevel}` }) as any);

@@ -60,7 +60,8 @@ export function Switch({ checked, disabled, onInput: onInputAsync, children: lab
         </ProgressCircular>
     </OptionallyInputGroup>;
 
-    const labelElement = <>{label != null && <OptionallyInputGroup tag="label" isInput={false} {...useSwitchLabelElementProps({ className: clsx(pending && "pending", "form-check-label", disabled && "disabled"), "aria-hidden": "true" })}>{label}</OptionallyInputGroup>}</>;
+    const p2 = { ...useSwitchLabelElementProps({ className: clsx(pending && "pending", "form-check-label", disabled && "disabled"), "aria-hidden": "true" }) };
+    const labelElement = <>{label != null && <OptionallyInputGroup tag="label" isInput={false} {...p2}>{label}</OptionallyInputGroup>}</>;
 
     const ret = (
         <>

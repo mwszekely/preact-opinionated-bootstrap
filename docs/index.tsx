@@ -1,4 +1,4 @@
-
+import "preact/debug";
 import { Fragment, h, render } from "preact";
 import { useAriaTooltip } from "preact-aria-widgets/use-tooltip";
 import { useAnimationFrame, useDraggable, useDroppable, useElementSize, useFocusTrap, useHasFocus, useMergedProps, useState } from "preact-prop-helpers";
@@ -370,8 +370,8 @@ const Component = () => {
             <DemoUseTimeout />
             <DemoUseInterval />
             <DemoUseFocusTrap />
-            <DemoUseFocusTrap />*/}
-            <input />
+            <DemoUseFocusTrap />
+            <input />*/}
         </ToastsProvider>
     </GridResponsive>
 }

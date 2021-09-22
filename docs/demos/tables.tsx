@@ -1,54 +1,86 @@
 import { h } from "preact";
-import { useForceUpdate } from "preact-prop-helpers";
+import { useForceUpdate, useInterval } from "preact-prop-helpers";
 import { useState } from "preact-prop-helpers/use-state";
-import { useCallback } from "preact/hooks";
+import { useCallback, useContext } from "preact/hooks";
 import { Card, CardElement } from "../../card/card";
 import { Checkbox, Input } from "../../input-group";
 import { forwardElementRef } from "../../props";
 import { Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow } from "../../table";
-import { TableCellChildProps, TableCellProps } from "../../table/table";
+import { TableCellChildProps, TableCellProps, useTableRowIndex } from "../../table/table";
 
 var RandomWords = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.".split(" ");
 
-
+const formatter = new Intl.DateTimeFormat("en-US", { year: "numeric", month: "short", day: "numeric" })
 function RandomRow({ index }: { index: number }) {
-    const d = new Date(new Date().getFullYear(), 0, index);
+    const n = (index + 0) ** 2;
+    const d = new Date(new Date().getFullYear(), 0, n * 7);
 
     return (<TableRow index={index}>
         <TableCell index={0} value={RandomWords[index]} />
-        <TableCell index={1} value={index ** 2} />
-        <TableCell index={2} value={d}>{d.toLocaleString()}</TableCell>
+        <TableCell index={1} value={n} />
+        <TableCell index={2} value={d}>{formatter.format(d)}</TableCell>
         <CheckboxTableCell index={3} />
     </TableRow>)
 }
+
+
 
 let checkedRows = new Set<number>();
 function CheckboxTableCell({ index }: { index: number }) {
     const forceUpdate = useForceUpdate();
 
-    const TableCellChild = useCallback(
-        forwardElementRef(({ overriddenValue, overriddenRowIndex, ...props }: TableCellChildProps<HTMLButtonElement>, ref: any) => {
-            const onInput = (c: boolean) => {
-                if (c)
-                    checkedRows.add(overriddenRowIndex)
-                else
-                    checkedRows.delete(overriddenRowIndex)
+    // This represents our "true" row, which might not be
+    // what we're currently showing, if the table is sorted.
+    const rowIndexLiteral = useTableRowIndex("literal");
 
-                // Just poking at a Set that's not hooked up to any lifecycle functions
-                // won't update the visuals at all.
-                // Forcibly update ourselves, which will, upon re-rendering, notify out
-                // "partner" row (the one that's actually showing our data) of
-                // the change.
-                forceUpdate();
-            }
-            return <Checkbox ref={ref} {...props} checked={checkedRows.has(overriddenRowIndex)} onInput={onInput} labelPosition="hidden">Demo table checkbox</Checkbox>;
-        }), []);
+    // This value is "refreshed" by calling forceUpdate() 
+    // instead of via props or state for demonstration.
+    const checked = checkedRows.has(rowIndexLiteral);
 
-    return <TableCell index={index} value={checkedRows.has(index)}>{TableCellChild}</TableCell>
+    return <TableCell index={index} value={checked} {...{ forceUpdate } as never}>{
+
+        // This is a component, we're just not calling it immediately.
+        // We're passing it to the TableCell for it to create.
+        // You could have it separately as function CheckboxTableCellChild() {}
+        // but it's only going to be used here anyway.
+        //
+        // useCallback because the identity of a function is used 
+        // to determine if two components are the same when diffed together.
+        useCallback(
+
+            // forwardRef because the table needs to give the ref that the
+            // TableCell normally would use for focus management and give
+            // it to this component instead.
+            forwardElementRef(({ overriddenValue, overriddenRowIndex, forceUpdate, ...props }: TableCellChildProps<HTMLButtonElement> & { forceUpdate?(): void; }, ref: any) => {
+
+                // The checkbox sets a global variable and then
+                // calls forceUpdate.
+                const onInput = (c: boolean) => {
+
+                    // Basically, use forceUpdate to pretend this is a setState call
+                    // that would actually cause this component to update and re-render.
+                    // (Just for the sake of demonstration for where the data's stored)
+                    // Causing it to re-render will cause it to let its "partner" sibling
+                    // know of any changes to what it should be displaying.
+                    if (c)
+                        checkedRows.add(overriddenRowIndex)
+                    else
+                        checkedRows.delete(overriddenRowIndex)
+                    forceUpdate!();
+                }
+
+                // Pass along the ref, all unused props, and then any normal props.
+                // Note that while not explicitly documented to, most components
+                // will forward on unused props to the most reasonable target,
+                // which for form-like components is going to be the input element.
+                return <Checkbox ref={ref} {...props} checked={!!overriddenValue} onInput={onInput} labelPosition="hidden">Demo table checkbox</Checkbox>;
+            }), [])
+    }</TableCell>
 };
 
 export function DemoTable() {
     const [rowCount, setRowCount] = useState(5);
+
     return (
         <div class="demo">
             <Card>
@@ -122,14 +154,14 @@ export function DemoTable() {
 
                 <CardElement>
                     To display contents that are more complicated than a data literal, like the recursively-complicated structure built by JSX, you'll need a wrapper component. Please note that
-                    the details of this component are very specific, and all of the following must be met:
+                    the details of this component are very specific, so feel free to copy and paste the example below. If you run into issues:
 
                     <ul>
-                        <li>The child component is a ref-forwarding component.  Use <code>forwardElementRef</code> (or just the built-in <code>forwardRef</code>) to do this.</li>
-                        <li>The child component passes its ref (probably the one from <code>forwardRef</code>) to its child component. It's fine to merge it with other refs, but it needs to get there eventually.</li>
-                        <li>The child component additionally passes all unused props it receives onto its child component. Most components provided by this library do this, even if they're not explicitly typed to indicate this.</li>
-                        <li>The child component is stable (as in, it's not an anonymous function defined on each render).  If the child component is just a plain ol' global function like most, this isn't an issue.  If it's defined inside a component, make sure it's wrapped in <code>useCallback</code> to keep it stable.</li>
+                        <li>The child component must pass its ref and all unused props to <strong>its</strong> child component.</li>
+                        <li>The child component must be a ref-forwarding component.  Use <code>forwardElementRef</code> (or just the built-in <code>forwardRef</code>) to do this.</li>
+                        <li>The child component must be stable (as in, it's not an anonymous function defined on each render).  If the child component is just a plain ol' global function like most, this isn't an issue.  If it's defined inside a component, make sure it's wrapped in <code>useCallback</code> to keep it stable.</li>
                         <li>If the child component uses both <code>forwardRef</code> and <code>useCallback</code> (from the previous rule), then <code>useCallback</code> must be on the outside. This isn't specific to table cells or anything, but it's easy to miss.</li>
+                        <li>Beyond that, interactions that affect the source row will propogate to the "entangled" row that's actually showing the source row's data.</li>
                     </ul>
 
 
@@ -137,37 +169,57 @@ export function DemoTable() {
 
 
                 <CardElement>
-                    <code>{`// The TableCell's child must forward its ref and all props to the child component
-// so that it can handle everything the TableCell would normally handle, like focus management
-function CheckboxTableCell({ index }: { index: number }) {
+                    <code>{`function CheckboxTableCell({ index }: { index: number }) {
     const forceUpdate = useForceUpdate();
 
-    const TableCellChild = useCallback(
-        forwardElementRef(({ overriddenValue, overriddenRowIndex, ...props }: TableCellChildProps<HTMLButtonElement>, ref: any) => {
-            const onInput = (c: boolean) => {
-                if (c)
-                    checkedRows.add(overriddenRowIndex)
-                else
-                    checkedRows.delete(overriddenRowIndex)
+    // This represents our "true" row, which might not be
+    // what we're currently showing, if the table is sorted.
+    const rowIndexLiteral = useTableRowIndex("literal");
 
-                // Just poking at a Set that's not hooked up to any lifecycle functions
-                // won't update the visuals at all.
-                // Forcibly update ourselves, which will, upon re-rendering, notify out
-                // "partner" row (the one that's actually showing our data) of
-                // the change.
-                forceUpdate();
-            }
-            return <Checkbox 
-                ref={ref}   // Don't forget to pass in the ref that was forwarded!!
-                {...props}  // If you get type errors, force it with {...props as never} 
-                checked={checkedRows.has(overriddenRowIndex)} 
-                onInput={onInput} 
-                labelPosition="hidden">Demo table checkbox</Checkbox>;
-        }), []);
+    // This value is "refreshed" by calling forceUpdate() 
+    // instead of via props or state for demonstration.
+    const checked = checkedRows.has(rowIndexLiteral);
 
-    return <TableCell index={index} value={checkedRows.has(index)}>{TableCellChild}</TableCell>
-};
+    return <TableCell index={index} value={checked} {...{ forceUpdate } as never}>{
 
+        // This is a component, we're just not calling it immediately.
+        // We're passing it to the TableCell for it to create.
+        // You could have it separately as function CheckboxTableCellChild() {}
+        // but it's only going to be used here anyway.
+        //
+        // useCallback because the identity of a function is used 
+        // to determine if two components are the same when diffed together.
+        useCallback(
+
+            // forwardRef because the table needs to give the ref that the
+            // TableCell normally would use for focus management and give
+            // it to this component instead.
+            forwardElementRef(({ overriddenValue, overriddenRowIndex, forceUpdate, ...props }: TableCellChildProps<HTMLButtonElement> & { forceUpdate?(): void; }, ref: any) => {
+
+                // The checkbox sets a global variable and then
+                // calls forceUpdate.
+                const onInput = (c: boolean) => {
+
+                    // Basically, use forceUpdate to pretend this is a setState call
+                    // that would actually cause this component to update and re-render.
+                    // (Just for the sake of demonstration for where the data's stored)
+                    // Causing it to re-render will cause it to let its "partner" sibling
+                    // know of any changes to what it should be displaying.
+                    if (c)
+                        checkedRows.add(overriddenRowIndex)
+                    else
+                        checkedRows.delete(overriddenRowIndex)
+                    forceUpdate!();
+                }
+
+                // Pass along the ref, all unused props, and then any normal props.
+                // Note that while not explicitly documented to, most components
+                // will forward on unused props to the most reasonable target,
+                // which for form-like components is going to be the input element.
+                return <Checkbox ref={ref} {...props} checked={!!overriddenValue} onInput={onInput} labelPosition="hidden">Demo table checkbox</Checkbox>;
+            }), [])
+    }</TableCell>
+}
 
 // Presumably you'll have better state management than a global variable.
 // A context would work nicely.

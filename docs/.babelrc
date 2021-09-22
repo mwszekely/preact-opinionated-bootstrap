@@ -4,7 +4,7 @@
             "@babel/preset-env",
         {
                 "targets": {
-                    "browsers": "iOS 10"
+                    "browsers": "iOS 13"
                 }
             }
         ]

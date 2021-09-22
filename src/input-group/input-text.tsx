@@ -17,7 +17,7 @@ function UnlabelledInput({ type, disabled, value, onInput: onInputAsync, ...prop
     const { capture, uncapture } = useInputCaptures(type);
     const { focusedInner, useHasFocusProps } = useHasFocus<HTMLInputElement>();
 
-    const { getSyncHandler, currentCapture, pending, hasError, settleCount, flushDebouncedPromise, currentType, ...asyncInfo } = useAsyncHandler<HTMLInputElement>()({ capture, debounce: 1500 });
+    const { getSyncHandler, currentCapture, pending, hasError, settleCount, flushDebouncedPromise, currentType, ...asyncInfo } = useAsyncHandler<HTMLInputElement>()({ capture, debounce: type === "text"? 1500 : undefined });
     const onInput = getSyncHandler(disabled ? null : onInputAsync as any);
 
     const asyncState = (hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null);

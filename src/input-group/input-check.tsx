@@ -29,7 +29,7 @@ function capture(e: h.JSX.TargetedEvent<HTMLInputElement>): boolean {
  * Probably need separate `inputRef` & `labelRef` properties for that, 
  * but given there's also no easy way to forward props to just them a solution like that feels incomplete.
  */
-export const Checkbox = forwardElementRef( function Checkbox({ checked, disabled, onInput: onInputAsync, labelPosition, children: label, ...props }: CheckboxProps, ref: Ref<HTMLInputElement>) {
+export const Checkbox = forwardElementRef(function Checkbox({ checked, disabled, onInput: onInputAsync, labelPosition, children: label, ...props }: CheckboxProps, ref: Ref<HTMLInputElement>) {
     labelPosition ??= "end";
 
     type I = { (event: CheckboxChangeEvent<h.JSX.TargetedEvent<HTMLInputElement, Event>>): void; (event: CheckboxChangeEvent<h.JSX.TargetedEvent<HTMLLabelElement, Event>>): void; };
@@ -60,7 +60,8 @@ export const Checkbox = forwardElementRef( function Checkbox({ checked, disabled
             </ProgressCircular>
         </OptionallyInputGroup>
 
-    const labelElement = <>{label != null && <OptionallyInputGroup isInput={false} tag="label" {...useCheckboxLabelElementProps({ className: clsx(pending && "pending", disabled && "disabled", "form-check-label"), "aria-hidden": "true" })}>{label}</OptionallyInputGroup>}</>;
+    const p2 = { ...useCheckboxLabelElementProps({ className: clsx(pending && "pending", disabled && "disabled", "form-check-label"), "aria-hidden": "true" }) };
+    const labelElement = <>{label != null && <OptionallyInputGroup isInput={false} tag="label" {...p2}>{label}</OptionallyInputGroup>}</>;
 
     const ret = (
         <>
@@ -79,7 +80,7 @@ export const Checkbox = forwardElementRef( function Checkbox({ checked, disabled
 type UseCheckboxGroupCheckboxProps = <P extends h.JSX.HTMLAttributes<HTMLInputElement>>(props: P) => MergedProps<HTMLInputElement, { "aria-controls": string; }, P>;
 const CheckboxGroupParentCheckboxPropsContext = createContext<any>(null!);
 const CheckboxGroupChildContext = createContext<UseCheckboxGroupChild<HTMLInputElement>>(null!);
-export function  CheckboxGroup({ children }: { children: ComponentChildren }) {
+export function CheckboxGroup({ children }: { children: ComponentChildren }) {
     const { percentChecked, selfIsChecked, onCheckboxGroupInput, useCheckboxGroupCheckboxProps, useCheckboxGroupChild } = useCheckboxGroup<HTMLInputElement>({});
 
     return (

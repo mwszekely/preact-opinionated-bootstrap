@@ -21,6 +21,7 @@ export function DemoChecks() {
 
     const [demoChecked, setDemoChecked] = useState(false);
     const [demoRadio, setDemoRadio] = useState(0);
+    const [radioCount, setRadioCount] = useState(3);
 
     const [disabled, setDisabled] = useState(false);
 
@@ -72,6 +73,7 @@ export function DemoChecks() {
                         <InputGroup><Checkbox onInput={setUsesAsync} checked={usesAsync} labelPosition="start">Async event handler</Checkbox></InputGroup>
                         <InputGroup><Checkbox onInput={setAsyncFails} checked={asyncFails} labelPosition="start" disabled={!usesAsync}>Async handler rejects</Checkbox></InputGroup>
                         <InputGroup><Input disabled={!usesAsync} type="number" onInput={setAsyncTimeout} value={asyncTimeout}>Async timeout</Input></InputGroup>
+                        <InputGroup><Input type="number" onInput={setRadioCount} value={radioCount}># of radio buttons</Input></InputGroup>
                     </InputGrid>
                 </CardElement>
                 <CardElement>
@@ -80,9 +82,11 @@ export function DemoChecks() {
                 </CardElement>
                 <CardElement >
                     <RadioGroup<number> name="radio-demo-1" selectedValue={demoRadio} onInput={usesAsync ? asyncRadioInput : setDemoRadio}>
-                        <Radio index={0} value={0}>Radio #1</Radio>
-                        <Radio index={1} value={1}>Radio #2</Radio>
-                        <Radio index={2} value={2}>Radio #3</Radio>
+                        {Array.from(function*(){
+                            for (let i = 0; i < radioCount; ++i) {
+                                yield <Radio index={i} value={i} key={i}>Radio #{i + 1}</Radio>
+                            }
+                        }())}
                     </RadioGroup>
                 </CardElement>
                 <CardElement type="paragraph">

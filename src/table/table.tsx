@@ -139,8 +139,8 @@ interface TableBodyCellInfo<T extends number | string | Date | null | undefined 
     provideWithSiblingsSetOverriddenValue(setSetOverriddenValue: StateUpdater<(value: any) => void>): void;
 }
 
-export interface TableHeadRowInfo extends UseGridNavigationRowInfo {}
-export interface TableHeadCellInfo extends UseGridNavigationCellInfo {}
+export interface TableHeadRowInfo extends UseGridNavigationRowInfo { }
+export interface TableHeadCellInfo extends UseGridNavigationCellInfo { }
 
 const CurrentSortedColumnContext = createContext<null | number>(null);
 const SetCurrentSortedColumnContext = createContext<StateUpdater<null | number>>(null!);
@@ -225,11 +225,14 @@ export const TableHead = forwardElementRef(function TableHead({ children, varian
 });
 
 function compare3(lhs: string | number, rhs: string | number) {
+
+    // Coerce strings to numbers if they seem to stay the same when serialized
     if (`${+lhs}` === lhs)
         lhs = +lhs;
     if (`${+rhs}` === rhs)
         rhs = +rhs;
 
+    // At this point, if either argument is a string, turn the other one into one too
     if (typeof lhs === "string")
         rhs = `${rhs}`;
     if (typeof rhs === "string")
@@ -241,6 +244,7 @@ function compare3(lhs: string | number, rhs: string | number) {
         return lhs.localeCompare(rhs as string);
     if (typeof lhs === "number")
         return +lhs - +rhs;
+
     return 0;
 }
 function compare2(lhs: string | number | boolean | Date, rhs: string | number | boolean | Date) {
@@ -257,8 +261,7 @@ function compare1(lhs: string | number | boolean | Date | null | undefined, rhs:
     }
     else if (lhs == null || rhs == null) {
         // One of the two is null -- easy case
-        return lhs != null ? -1 : 1
-
+        return lhs != null ? 1 : -1
     }
     return compare2(lhs, rhs);
 }
@@ -277,13 +280,25 @@ export const TableBody = forwardElementRef(function TableBody({ children, varian
             return result;
         });
 
+        // Go through each DOM row in the table
         for (let literalIndex = 0; literalIndex < sortedRows.length; ++literalIndex) {
+            // Get the row that should be shown instead of this one
             const overriddenIndex = sortedRows[literalIndex].index;
 
+            // Get the cells that should be shown instead of these cells
             const overriddenCells = sortedRows[overriddenIndex].getManagedCells();
+
+            // Also, for reference, we'll need some data from the current DOM-based row
             const literalCells = sortedRows[literalIndex].getManagedCells();
+
+            // Let the DOM-based row know that it's showing a different row
             managedRows[literalIndex].setOverriddenRowIndex(overriddenIndex);
+
             for (let cellIndex = 0; cellIndex < overriddenCells.length; ++cellIndex) {
+                // For each cell that should be shown instead of these cells,
+                // set their "provide your partner cell with the data to show"
+                // function to this DOM-row-based cell's analogue of that function,
+                // which will also cause them to re-render, causing us to re-render.
                 overriddenCells[cellIndex].provideWithSiblingsSetOverriddenValue(() => literalCells[cellIndex].setOverriddenValue)
             }
         }
@@ -332,7 +347,7 @@ export const TableFoot = forwardElementRef(function TableFoot({ children, varian
 
 export const TableRow = forwardElementRef(function TableRow({ children, index: literalRowIndex, variant, ...props }: TableRowProps, ref: Ref<HTMLTableRowElement>) {
     const isInTHead = useContext(CellIsInHeaderContext);
-    const useGridNavigationRow = useContext(isInTHead? (UseHeadGridNavigationRowContext as typeof UseBodyGridNavigationRowContext) : UseBodyGridNavigationRowContext)!;
+    const useGridNavigationRow = useContext(isInTHead ? (UseHeadGridNavigationRowContext as typeof UseBodyGridNavigationRowContext) : UseBodyGridNavigationRowContext)!;
     const [overriddenRowIndex, setOverriddenRowIndex] = useState(literalRowIndex);
 
     const { cellCount, useGridNavigationRowProps, useGridNavigationCell, tabbableCell, isTabbableRow, managedCells } = useGridNavigationRow({
@@ -360,57 +375,62 @@ export const TableRow = forwardElementRef(function TableRow({ children, index: l
         {children}
     </tr>
 
-    const Provider = !isInTHead? UseBodyGridNavigationCellContext.Provider : UseHeadGridNavigationCellContext.Provider as typeof UseBodyGridNavigationCellContext["Provider"];
+    const Provider = !isInTHead ? UseBodyGridNavigationCellContext.Provider : UseHeadGridNavigationCellContext.Provider as typeof UseBodyGridNavigationCellContext["Provider"];
 
     return (
         <Provider value={useGridNavigationCell}>
             <OverriddenRowIndexContext.Provider value={overriddenRowIndex}>
-                {rowJsx}
+                <LiteralRowIndexContext.Provider value={literalRowIndex}>
+                    {rowJsx}
+                </LiteralRowIndexContext.Provider>
             </OverriddenRowIndexContext.Provider>
         </Provider>
     )
 })
 
 const OverriddenRowIndexContext = createContext<number>(null!);
+const LiteralRowIndexContext = createContext<number>(null!);
 
-export const TableCell = forwardElementRef(function TableCell({ value: literalValue,  children, index, variant, focus, active, ...props }: TableCellProps, ref: Ref<HTMLTableCellElement>) {
+export const TableCell = forwardElementRef(function TableCell({ value: literalValue, children, index, variant, focus, active, ...props }: TableCellProps, ref: Ref<HTMLTableCellElement>) {
     focus ??= "cell";
     const useGridNavigationCell = useContext(UseBodyGridNavigationCellContext)!;
     const isDisplayChildren = (typeof children == "string" || typeof children == "number" || typeof children == "boolean");
-    const displayValue = isDisplayChildren? children : literalValue;
+    const displayValue = isDisplayChildren ? children : literalValue;
 
-    const [overriddenValue, setOverriddenValue] = useState(literalValue);
-    const [setSiblingOverriddenValue, provideWithSiblingsSetOverriddenValue] = useState<null | ((value: any) => void)>(null);
+
+    const [overriddenValue, setOverriddenValue] = useState(displayValue);
+    const [setSiblingOverriddenValue, provideWithSiblingsSetOverriddenValue] = useState<((value: any) => void)>(() => setOverriddenValue);
 
     const { tabbable, useGridNavigationCellProps } = useGridNavigationCell({ index, text: null, overriddenValue, literalValue, displayValue, provideWithSiblingsSetOverriddenValue, setOverriddenValue });
 
+    const literalRowIndex = useContext(LiteralRowIndexContext);
     const overriddenRowIndex = useContext(OverriddenRowIndexContext);
-    const cellProps = useMergedProps<HTMLTableCellElement>()({
+    const cellProps = {
         ref,
         role: "gridcell",
         "data-literal-value": `${literalValue}`,
         "data-display-value": `${displayValue}`,
         "data-overridden-value": `${overriddenValue}`,
-        "data-overridden-row": `${overriddenRowIndex}`,
+        "data-overridden-by-row": `${overriddenRowIndex}`,
         className: clsx(variant && `table-${variant}`)
-    },
-        props);
+    };
 
     useEffect(() => {
         setSiblingOverriddenValue?.(displayValue);
-    }, [setSiblingOverriddenValue, displayValue]);
-
+    }, [setSiblingOverriddenValue, literalRowIndex, overriddenRowIndex, displayValue]);
 
     if (children && !isDisplayChildren) {
+        const p1 = useMergedProps<any>()(useGridNavigationCellProps({ overriddenRowIndex, overriddenValue, className: "test" }), props);
         return (
             <td {...cellProps}>
-                {createElement(children! as any, useGridNavigationCellProps( { overriddenRowIndex, overriddenValue, className: "test" }))}
+                {createElement(children! as any, p1)}
             </td>
         )
     }
     else {
+        const p2 = useMergedProps<any>()(useGridNavigationCellProps(cellProps), props);
         return (
-            <td {...useGridNavigationCellProps(cellProps)}>
+            <td {...p2}>
                 {stringify(overriddenValue)}
             </td>
         )
@@ -451,7 +471,7 @@ export const TableHeaderCell = forwardElementRef(function TableHeaderCell({ inde
     }, [onSort, index]);
 
 
-    const cellProps = useButtonLikeEventHandlers<HTMLTableCellElement>("th", unsortable? null : onSortClick, undefined)(
+    const cellProps = useButtonLikeEventHandlers<HTMLTableCellElement>("th", unsortable ? null : onSortClick, undefined)(
         useRefElementProps(useMergedProps<HTMLTableCellElement>()({
             ref,
             role: "columnheader",
@@ -479,7 +499,19 @@ export const TableHeaderCell = forwardElementRef(function TableHeaderCell({ inde
         return <th {...useGridNavigationCellProps(cellProps)}><div>{children}{sortIcon}</div></th>
     }
 
-})
+});
+
+/**
+ * For a component within a row, returns that row's index.
+ * 
+ * When the table is sorted, the returned index is the overridden row,
+ * not the literal row that's passed in as the `index` prop.
+ * 
+ * @returns 
+ */
+export function useTableRowIndex(type: "literal" | "displaying") {
+    return useContext(type === "displaying" ? OverriddenRowIndexContext : LiteralRowIndexContext)
+}
 
 
 function stringify(value: number | string | Date | null | undefined | boolean) {
