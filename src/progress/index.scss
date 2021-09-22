@@ -77,11 +77,12 @@
   display: grid;
   border-radius: 100%;
   animation: 6s steps(12, start) infinite spinner;
+  contain: layout size;
   //animation: 6s steps(12, jump-start) infinite spinner;
   //animation: calc(360 / var(--angle) * var(--duration)) steps(calc(360 / var(--angle)), jump-start) infinite spinner;
 }
 
-.circular-progress > div {
+.circular-progress > .circular-progress-ball-origin {
   grid-area: 1 / 1 / 1 / 1;
   width: 100%;
   height: 100%;
@@ -89,60 +90,61 @@
   justify-content: center;
   align-items: center;
 }
-.circular-progress > div > div {
+.circular-progress > .circular-progress-ball-origin > .circular-progress-ball {
   width: var(--size);
   height: var(--size);
   background-color: var(--ball-color, currentColor);
   border-radius: 100%;
+  will-change: transform;
 }
 
-.circular-progress > div:nth-child(1) > div {
+.circular-progress > .circular-progress-ball-origin-0 > .circular-progress-ball {
   animation: var(--duration) cubic-bezier(0.23, 0.49, 0.78, 0.54) infinite
     spinner-lead;
 }
-.circular-progress > div:nth-child(2) > div {
+.circular-progress > .circular-progress-ball-origin-1 > .circular-progress-ball {
   transform: rotate(calc(var(--angle) * 1deg)) translate(0.5em, 0em);
 }
-.circular-progress > div:nth-child(3) > div {
+.circular-progress > .circular-progress-ball-origin-2 > .circular-progress-ball {
   transform: rotate(calc(var(--angle) * 2deg)) translate(0.5em, 0em);
 }
-.circular-progress > div:nth-child(4) > div {
+.circular-progress > .circular-progress-ball-origin-3 > .circular-progress-ball {
   transform: rotate(calc(var(--angle) * 3deg)) translate(0.5em, 0em);
 }
-.circular-progress > div:nth-child(5) > div {
+.circular-progress > .circular-progress-ball-origin-4 > .circular-progress-ball {
   transform: rotate(calc(var(--angle) * 4deg)) translate(0.5em, 0em);
 }
-.circular-progress > div:nth-child(6) > div {
+.circular-progress > .circular-progress-ball-origin-5 > .circular-progress-ball {
   transform: rotate(calc(var(--angle) * 5deg)) translate(0.5em, 0em);
 }
-.circular-progress > div:nth-child(7) > div {
+.circular-progress > .circular-progress-ball-origin-6 > .circular-progress-ball {
   transform: rotate(calc(var(--angle) * 6deg)) translate(0.5em, 0em);
 }
-.circular-progress > div:nth-child(8) > div {
+.circular-progress > .circular-progress-ball-origin-7 > .circular-progress-ball {
   transform: rotate(calc(var(--angle) * 7deg)) translate(0.5em, 0em);
 }
-.circular-progress > div:nth-child(9) > div {
+.circular-progress > .circular-progress-ball-origin-8 > .circular-progress-ball {
   transform: rotate(calc(var(--angle) * 8deg)) translate(0.5em, 0em);
 }
-.circular-progress > div:nth-child(10) > div {
+.circular-progress > .circular-progress-ball-origin-9 > .circular-progress-ball {
   transform: rotate(calc(var(--angle) * 9deg)) translate(0.5em, 0em);
 }
-.circular-progress > div:nth-child(11) > div {
+.circular-progress > .circular-progress-ball-origin-10 > .circular-progress-ball {
   transform: rotate(calc(var(--angle) * 10deg)) translate(0.5em, 0em);
 }
-.circular-progress > div:nth-child(12) > div {
+.circular-progress > .circular-progress-ball-origin-11 > .circular-progress-ball {
   transform: rotate(calc(var(--angle) * 11deg)) translate(0.5em, 0em);
 }
-.circular-progress > div:nth-child(13) > div {
+.circular-progress > .circular-progress-ball-origin-12 > .circular-progress-ball {
   transform: rotate(calc(var(--angle) * 12deg)) translate(0.5em, 0em);
 }
-.circular-progress > div:nth-child(14) > div {
+.circular-progress > .circular-progress-ball-origin-13 > .circular-progress-ball {
   transform: rotate(calc(var(--angle) * 13deg)) translate(0.5em, 0em);
 }
-.circular-progress > div:nth-child(15) > div {
+.circular-progress > .circular-progress-ball-origin-14 > .circular-progress-ball {
   transform: rotate(calc(var(--angle) * 14deg)) translate(0.5em, 0em);
 }
-.circular-progress > div:nth-child(16) > div {
+.circular-progress > .circular-progress-ball-origin-15 > .circular-progress-ball {
   transform: rotate(calc(var(--angle) * 15deg)) translate(0.5em, 0em);
 }
 

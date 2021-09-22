@@ -213,11 +213,11 @@ export const ProgressCircular = forwardElementRef(function ({ loadingLabel, spin
             {mode === "pending" && !!loadingLabel && <div role="alert" aria-live="assertive" class="visually-hidden">{loadingLabel}</div>}
             <Swappable>
                 <div className="circular-progress-swappable">
-                    <Fade open={mode === "pending" && showSpinner}>
+                    <Fade open={mode === "pending" && showSpinner} exitVisibility="removed">
                         <div style={{ "--count": gimmickCount } as any} className={clsx("circular-progress", color? `circular-progress-${color}` : undefined, colorFill == "foreground" && "inverse-fill", colorFill === "foreground-only" && "no-fill")}>
                             {Array.from(function* () {
                                 for (let i = 0; i < gimmickCount; ++i)
-                                    yield <div><div /></div>;
+                                    yield <div class={clsx("circular-progress-ball-origin", `circular-progress-ball-origin-${i}`)}><div class="circular-progress-ball" /></div>;
                             }())}
                         </div>
                     </Fade>
