@@ -28,16 +28,6 @@
 
       return __assign.apply(this, arguments);
     };
-    function __rest(s, e) {
-      var t = {};
-
-      for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
-
-      if (s != null && typeof Object.getOwnPropertySymbols === "function") for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-        if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i])) t[p[i]] = s[p[i]];
-      }
-      return t;
-    }
     function __awaiter(thisArg, _arguments, P, generator) {
       function adopt(value) {
         return value instanceof P ? value : new P(function (resolve) {
@@ -1152,6 +1142,11 @@
       this.__v && (this.__e = !0, n && this.__h.push(n), m$1(this));
     }, _$1.prototype.render = d$1, t$1 = [], o$1 = "function" == typeof Promise ? Promise.prototype.then.bind(Promise.resolve()) : setTimeout, g$2.__r = 0, f$1 = 0;
 
+    "undefined" != typeof window && window.__PREACT_DEVTOOLS__ && window.__PREACT_DEVTOOLS__.attachPreact("10.5.14", l$1, {
+      Fragment: d$1,
+      Component: _$1
+    });
+
     var t,
         u,
         r,
@@ -1939,7 +1934,16 @@
       }, [direction]);
       h(() => {
         textOrientationRef.current = textOrientation;
-      }, [textOrientation]);
+      }, [textOrientation]); // TODO: There's no way to refresh which writing mode we have once mounted.
+      // If the writing mode changes, the whole component needs to 
+      // mount/unmount because (more-or-less in order of importance)
+      //   A. There's no way to watch for CSS style changes
+      //   B. Calling getComputedStyle after every render for every element gets expensive fast and
+      //   C. Is not necessary for 99% of use cases that will never switch writing-mode within a single component
+      //      (Those that do will need to mount and unmount the component that uses it)
+      //
+      // Maybe there could be a context object that can be used to remotely update all components that use this hook?
+
       h(() => {
         if (element) {
           const computedStyles = window.getComputedStyle(element);
@@ -1950,7 +1954,7 @@
           setDirection(d || "rtl");
           setTextOrientation(t || "mixed");
         }
-      });
+      }, [element]);
       const getLogicalDirection = A$1(() => {
         var _direction;
 
@@ -2668,17 +2672,17 @@
               But roughly isn't good enough if there are multiple matches.
               To convert our sorted index to the unsorted index we need, we have to find the first
               element that matches us *and* (if any such exist) is *after* our current selection.
-               In other words, the only way typeahead moves backwards relative to our current
+                In other words, the only way typeahead moves backwards relative to our current
               position is if the only other option is behind us.
-               It's not specified in WAI-ARIA what to do in that case.  I suppose wrap back to the start?
+                It's not specified in WAI-ARIA what to do in that case.  I suppose wrap back to the start?
               Though there's also a case for just going upwards to the nearest to prevent jumpiness.
               But if you're already doing typeahead on an unsorted list, like, jumpiness can't be avoided.
               I dunno. Going back to the start is the simplist though.
-               Basically what this does: Starting from where we found ourselves after our binary search,
+                Basically what this does: Starting from where we found ourselves after our binary search,
               scan backwards and forwards through all adjacent entries that also compare equally so that
               we can find the one whose `unsortedIndex` is the lowest amongst all other equal strings
               (and also the lowest `unsortedIndex` yadda yadda except that it comes after us).
-               TODO: The binary search starts this off with a solid O(log n), but one-character
+                TODO: The binary search starts this off with a solid O(log n), but one-character
               searches are, thanks to pigeonhole principal, eventually guaranteed to become
               O(n*log n). This is annoying but probably not easily solvable? There could be an
               exception for one-character strings, but that's just kicking the can down
@@ -2985,6 +2989,15 @@
           }
 
           setPrevChildCount(length);
+        }
+
+        const prevActivatedIndex = getPrevActivatedIndex();
+
+        if (prevActivatedIndex != null && length > 0 && prevActivatedIndex >= length) {
+          // The number of children shrank below whatever the currently selected component was.
+          // Change the index to the last one still mounted.
+          setFlag(length - 1, true); // (No need to unset any of them since they already unmounted themselves)
+          // (Also no way to unset them anyway for the same reason)
         }
       }, [setFlag, activatedIndex, length]);
       useLayoutEffect(() => {
@@ -3499,9 +3512,6 @@
       const getFocusCellOnRowChange = useStableGetter(foc);
       const [currentRow, setCurrentRow, getCurrentRow] = useState(0);
       const [lastKnownCellIndex, setLastKnownCellIndex, getLastKnownCellIndex] = useState(0);
-      useEffect(([prev]) => {
-        console.log(`currentRow: ${prev} -> ${currentRow}`);
-      }, [currentRow]);
       const {
         childCount,
         managedChildren,
@@ -5352,11 +5362,6 @@
       return firstFocusable;
     }
 
-    function useForceUpdate() {
-      const [, set] = l(0);
-      return s(() => set(i => ++i)).current;
-    }
-
     function useAriaTooltip({
       mouseoverDelay
     }) {
@@ -6497,7 +6502,7 @@
      * @see `Transitionable`
      */
 
-    forwardElementRef$1(function Flip({
+    const Flip = forwardElementRef$1(function Flip({
       classBase,
       flipAngleInline,
       flipAngleBlock,
@@ -8617,14 +8622,19 @@
       }, loadingLabel), v$1(Swappable, null, v$1("div", {
         className: "circular-progress-swappable"
       }, v$1(Fade, {
-        open: mode === "pending" && showSpinner
+        open: mode === "pending" && showSpinner,
+        exitVisibility: "removed"
       }, v$1("div", {
         style: {
           "--count": gimmickCount
         },
         className: clsx("circular-progress", color ? `circular-progress-${color}` : undefined, colorFill == "foreground" && "inverse-fill", colorFill === "foreground-only" && "no-fill")
       }, Array.from(function* () {
-        for (let i = 0; i < gimmickCount; ++i) yield v$1("div", null, v$1("div", null));
+        for (let i = 0; i < gimmickCount; ++i) yield v$1("div", {
+          class: clsx("circular-progress-ball-origin", `circular-progress-ball-origin-${i}`)
+        }, v$1("div", {
+          class: "circular-progress-ball"
+        }));
       }()))), v$1(Fade, {
         open: !shownStatusLongEnough && mode === "succeeded"
       }, v$1("div", {
@@ -12859,7 +12869,7 @@
         var onClickAsync = function () { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, sleep$3(asyncTimeout)];
+                    case 0: return [4 /*yield*/, sleep$4(asyncTimeout)];
                     case 1:
                         _a.sent();
                         if (asyncFails)
@@ -12874,7 +12884,7 @@
         var onToggleInputAsync = function (b) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, sleep$3(asyncTimeout)];
+                    case 0: return [4 /*yield*/, sleep$4(asyncTimeout)];
                     case 1:
                         _a.sent();
                         if (asyncFails)
@@ -13014,7 +13024,7 @@
                             v$1(CardElement, { type: "paragraph" },
                                 v$1("code", null, "<ButtonGroup wrap>\n    <ButtonGroupChild index={0}>First button</ButtonGroupChild>\n    <ButtonGroupChild index={1}>Second button</ButtonGroupChild>\n    <ButtonGroupChild index={2}>Third button</ButtonGroupChild>\n    <ButtonGroupChild index={3}>Fourth button</ButtonGroupChild>\n    <ButtonGroupChild index={4}>Fifth button</ButtonGroupChild>\n    <ButtonGroupChild index={5}>Sixth button</ButtonGroupChild>\n    <ButtonGroupChild index={6}>Seventh button</ButtonGroupChild>\n    <ButtonGroupChild index={7}>Eighth button</ButtonGroupChild>\n</ButtonGroup>"))))))));
     }
-    function sleep$3(arg0) {
+    function sleep$4(arg0) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 return [2 /*return*/, new Promise(function (resolve) { return setTimeout(resolve, arg0); })];
@@ -13035,7 +13045,7 @@
         var asyncCheckboxInput = A$1(function (checked) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, sleep$2(asyncTimeout)];
+                    case 0: return [4 /*yield*/, sleep$3(asyncTimeout)];
                     case 1:
                         _a.sent();
                         if (asyncFails)
@@ -13048,7 +13058,7 @@
         var asyncRadioInput = A$1(function (value) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, sleep$2(asyncTimeout)];
+                    case 0: return [4 /*yield*/, sleep$3(asyncTimeout)];
                     case 1:
                         _a.sent();
                         if (asyncFails)
@@ -13210,7 +13220,7 @@
                             v$1(InputGroup, null,
                                 v$1(Radio, { labelPosition: labelPosition, index: 2, value: 2 }, "Radio #3"))))))));
     }
-    function sleep$2(arg0) {
+    function sleep$3(arg0) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 return [2 /*return*/, new Promise(function (resolve) { return setTimeout(resolve, arg0); })];
@@ -13228,7 +13238,7 @@
         var asyncTextInput = A$1(function (text) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, sleep$1(asyncTimeout)];
+                    case 0: return [4 /*yield*/, sleep$2(asyncTimeout)];
                     case 1:
                         _a.sent();
                         if (asyncFails)
@@ -13241,7 +13251,7 @@
         var asyncNumberInput = A$1(function (value) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, sleep$1(asyncTimeout)];
+                    case 0: return [4 /*yield*/, sleep$2(asyncTimeout)];
                     case 1:
                         _a.sent();
                         if (asyncFails)
@@ -13294,7 +13304,7 @@
                 v$1(CardElement, { type: "paragraph" },
                     v$1("code", null, "<InputGrid>\n    <InputGroup><Input type=\"text\" value={text} onInput={onTextInput}>Text-based input</Input></InputGroup>\n    <InputGroup><Input type=\"number\" value={number} onInput={onNumberInput} min={-5}>Number-based input</Input></InputGroup>\n</InputGrid>")))));
     }
-    function sleep$1(arg0) {
+    function sleep$2(arg0) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 return [2 /*return*/, new Promise(function (resolve) { return setTimeout(resolve, arg0); })];
@@ -13479,7 +13489,9 @@
         managedRows
       } = useGridNavigation({
         focusOnChange: focusedInner
-      }); // This hooks up to internalSortHandler, used by the table head.
+      }); //const forceUpdate = useForceUpdate();
+
+      const [i, setI] = useState(0); // This hooks up to internalSortHandler, used by the table head.
 
       const sort = A$1((column, direction) => {
         let sortedRows = managedRows.slice().sort((lhsRow, rhsRow) => {
@@ -13492,20 +13504,14 @@
           // Get the row that should be shown instead of this one
           const overriddenIndex = sortedRows[literalIndex].index; // Get the cells that should be shown instead of these cells
 
-          const overriddenCells = sortedRows[overriddenIndex].getManagedCells(); // Also, for reference, we'll need some data from the current DOM-based row
+          sortedRows[overriddenIndex].getManagedCells(); // Also, for reference, we'll need some data from the current DOM-based row
 
-          const literalCells = sortedRows[literalIndex].getManagedCells(); // Let the DOM-based row know that it's showing a different row
+          sortedRows[literalIndex].getManagedCells(); // Let the DOM-based row know that it's showing a different row
 
-          managedRows[literalIndex].setOverriddenRowIndex(overriddenIndex);
-
-          for (let cellIndex = 0; cellIndex < overriddenCells.length; ++cellIndex) {
-            // For each cell that should be shown instead of these cells,
-            // set their "provide your partner cell with the data to show"
-            // function to this DOM-row-based cell's analogue of that function,
-            // which will also cause them to re-render, causing us to re-render.
-            overriddenCells[cellIndex].provideWithSiblingsSetOverriddenValue(() => literalCells[cellIndex].setOverriddenValue);
-          }
+          managedRows[literalIndex].setRowIndexAsSorted(overriddenIndex); //managedRows[literalIndex].overriddenRowIndex = overriddenIndex;
         }
+
+        setI(i => ++i);
       }, []);
       const setInternalSortHandler = F(SetInternalSortHandlerContext);
       y(() => {
@@ -13523,7 +13529,38 @@
         value: useGridNavigationRow
       }, v$1(SortContext.Provider, {
         value: sort
-      }, children)));
+      }, v$1(TableBodyChildren, {
+        children: children,
+        managedRows: managedRows,
+        ...{
+          i
+        }
+      }))));
+    });
+    const TableBodyChildren = g(({
+      children,
+      managedRows
+    }) => {
+      function ensortenChild(literalIndex) {
+        var _managedRows$literalI, _managedRows$literalI2;
+
+        const sortedIndex = (_managedRows$literalI = (_managedRows$literalI2 = managedRows[literalIndex]) === null || _managedRows$literalI2 === void 0 ? void 0 : _managedRows$literalI2.getRowIndexAsSorted()) !== null && _managedRows$literalI !== void 0 ? _managedRows$literalI : literalIndex;
+        const C = children[literalIndex].type;
+        const {
+          index,
+          ...props
+        } = children[literalIndex].props;
+        let ret = v$1(C, {
+          key: sortedIndex,
+          index: sortedIndex,
+          ...props
+        });
+        return ret;
+      }
+
+      return v$1(d$1, null, children.map((tableRow, i) => {
+        return ensortenChild(i);
+      }));
     });
     forwardElementRef(function TableFoot({
       children,
@@ -13553,15 +13590,15 @@
         }, props))
       }, children));
     });
-    const TableRow = forwardElementRef(function TableRow({
+    const TableRow = g(forwardElementRef(function TableRow({
       children,
-      index: literalRowIndex,
+      index: indexAsUnsorted,
       variant,
       ...props
     }, ref) {
       const isInTHead = F(CellIsInHeaderContext);
       const useGridNavigationRow = F(isInTHead ? UseHeadGridNavigationRowContext : UseBodyGridNavigationRowContext);
-      const [overriddenRowIndex, setOverriddenRowIndex] = useState(literalRowIndex);
+      const [rowIndexAsSorted, setRowIndexAsSorted, getRowIndexAsSorted] = useState(indexAsUnsorted);
       const {
         cellCount,
         useGridNavigationRowProps,
@@ -13570,8 +13607,9 @@
         isTabbableRow,
         managedCells
       } = useGridNavigationRow({
-        index: literalRowIndex,
-        setOverriddenRowIndex,
+        index: indexAsUnsorted,
+        getRowIndexAsSorted,
+        setRowIndexAsSorted,
         getManagedCells: useStableCallback(() => managedCells)
       });
       const rowProps = {
@@ -13579,8 +13617,8 @@
         ...useMergedProps()({
           ref,
           role: "row",
-          "data-literal-index": literalRowIndex,
-          "data-overridden-index": overriddenRowIndex,
+          "data-index-as-unsorted": indexAsUnsorted,
+          "data-overridden-index": rowIndexAsSorted,
           "data-tabbable": `${isTabbableRow}`,
           "data-tabbable-cell": `${tabbableCell}`,
           className: clsx(variant && `table-${variant}`),
@@ -13593,16 +13631,13 @@
       const Provider = !isInTHead ? UseBodyGridNavigationCellContext.Provider : UseHeadGridNavigationCellContext.Provider;
       return v$1(Provider, {
         value: useGridNavigationCell
-      }, v$1(OverriddenRowIndexContext.Provider, {
-        value: overriddenRowIndex
-      }, v$1(LiteralRowIndexContext.Provider, {
-        value: literalRowIndex
-      }, rowJsx)));
-    });
-    const OverriddenRowIndexContext = D$1(null);
-    const LiteralRowIndexContext = D$1(null);
-    const TableCell = forwardElementRef(function TableCell({
-      value: literalValue,
+      }, v$1(RowIndexAsUnsortedContext.Provider, {
+        value: indexAsUnsorted
+      }, rowJsx));
+    }));
+    const RowIndexAsUnsortedContext = D$1(null);
+    const TableCell = g(forwardElementRef(function TableCell({
+      value: valueAsUnsorted,
       children,
       index,
       variant,
@@ -13612,53 +13647,38 @@
     }, ref) {
       var _focus;
 
+      console.log("TD" + index);
       (_focus = focus) !== null && _focus !== void 0 ? _focus : focus = "cell";
       const useGridNavigationCell = F(UseBodyGridNavigationCellContext);
-      const isDisplayChildren = typeof children == "string" || typeof children == "number" || typeof children == "boolean";
-      const displayValue = isDisplayChildren ? children : literalValue;
-      const [overriddenValue, setOverriddenValue] = useState(displayValue);
-      const [setSiblingOverriddenValue, provideWithSiblingsSetOverriddenValue] = useState(() => setOverriddenValue);
+      const childrenReceiveFocus = children && typeof children != "string" && typeof children != "number" && typeof children != "boolean" && !Array.isArray(children) && children.type !== d$1; //const isFocusbleChildren = 
+
+      const displayValue = children !== null && children !== void 0 ? children : valueAsUnsorted;
       const {
         tabbable,
         useGridNavigationCellProps
       } = useGridNavigationCell({
         index,
         text: null,
-        overriddenValue,
-        literalValue,
-        displayValue,
-        provideWithSiblingsSetOverriddenValue,
-        setOverriddenValue
+        literalValue: valueAsUnsorted
       });
-      const literalRowIndex = F(LiteralRowIndexContext);
-      const overriddenRowIndex = F(OverriddenRowIndexContext);
       const cellProps = {
         ref,
         role: "gridcell",
-        "data-literal-value": `${literalValue}`,
-        "data-display-value": `${displayValue}`,
-        "data-overridden-value": `${overriddenValue}`,
-        "data-overridden-by-row": `${overriddenRowIndex}`,
+        "data-value-as-unsorted": `${valueAsUnsorted}`,
+        "data-dvalue-as-unsorted": `${displayValue}`,
         className: clsx(variant && `table-${variant}`)
       };
-      y(() => {
-        setSiblingOverriddenValue === null || setSiblingOverriddenValue === void 0 ? void 0 : setSiblingOverriddenValue(displayValue);
-      }, [setSiblingOverriddenValue, literalRowIndex, overriddenRowIndex, displayValue]);
 
-      if (children && !isDisplayChildren) {
-        const p1 = useMergedProps()(useGridNavigationCellProps({
-          overriddenRowIndex,
-          overriddenValue,
-          className: "test"
-        }), props);
+      if (childrenReceiveFocus) {
+        const p1 = useMergedProps()(useGridNavigationCellProps({}), props);
         return v$1("td", { ...cellProps
-        }, v$1(children, p1));
+        }, B(children, p1));
       } else {
         const p2 = useMergedProps()(useGridNavigationCellProps(cellProps), props);
         return v$1("td", { ...p2
-        }, stringify(overriddenValue));
+        }, stringify(displayValue));
       }
-    });
+    }));
     const TableHeaderCell = forwardElementRef(function TableHeaderCell({
       index,
       focus,
@@ -13704,120 +13724,93 @@
         onSort === null || onSort === void 0 ? void 0 : onSort(index, nextSortDirection);
         setCurrentSortedColumn(prev => index);
       }, [onSort, index]);
-      const cellProps = useButtonLikeEventHandlers("th", unsortable ? null : onSortClick, undefined)(useRefElementProps(useMergedProps()({
+      const {
+        hovering,
+        useIsHoveringProps
+      } = useIsHovering();
+      const cellProps = useIsHoveringProps(useButtonLikeEventHandlers("th", unsortable ? null : onSortClick, undefined)(useRefElementProps(useMergedProps()({
         ref,
         role: "columnheader",
         scope: isInTHead ? "col" : "row",
         className: clsx(variant && `table-${variant}`, unsortable && "unsortable")
-      }, props)));
-      const sortIcon = v$1(Swappable, null, v$1("div", {
-        class: clsx("table-sort-icon-container", `sort-direction-${sortDirection !== null && sortDirection !== void 0 ? sortDirection : "null"}`)
-      }, v$1(Fade, {
-        open: sortDirection == null
-      }, v$1("i", {
-        class: "bi bi-sort-down-alt hover-only"
-      })), v$1(Fade, {
+      }, props))));
+      const sortIcon = v$1(Swappable, null, v$1("div", { ...{
+          class: clsx("table-sort-icon-container")
+        }
+      }, v$1(Flip, {
+        flipAngleInline: 180,
         open: sortDirection == "descending"
-      }, v$1("i", {
-        class: "bi bi-sort-up no-hover-only"
-      })), v$1(Fade, {
-        open: sortDirection == "descending"
-      }, v$1("i", {
-        class: "bi bi-sort-down-alt hover-only"
-      })), v$1(Fade, {
-        open: sortDirection == "ascending"
-      }, v$1("i", {
-        class: "bi bi-sort-down-alt no-hover-only"
-      })), v$1(Fade, {
-        open: sortDirection == "ascending"
-      }, v$1("i", {
-        class: "bi bi-sort-up hover-only"
+      }, v$1("div", {
+        class: "bi bi-sort-up"
+      })), v$1(Flip, {
+        flipAngleInline: 180,
+        open: hovering && sortDirection == null || sortDirection == "ascending"
+      }, v$1("div", {
+        class: "bi bi-sort-down-alt"
       }))));
 
       if (focus === "child") {
         return v$1("th", { ...cellProps
-        }, v$1("div", null, B(children, useGridNavigationCellProps({}), children.props.children), sortIcon));
+        }, v$1("div", {
+          class: "th-spacing"
+        }, B(children, useGridNavigationCellProps({}), children.props.children), sortIcon));
       } else {
         return v$1("th", { ...useGridNavigationCellProps(cellProps)
-        }, v$1("div", null, children, sortIcon));
+        }, v$1("div", {
+          class: "th-spacing"
+        }, children, sortIcon));
       }
     });
-    /**
-     * For a component within a row, returns that row's index.
-     *
-     * When the table is sorted, the returned index is the overridden row,
-     * not the literal row that's passed in as the `index` prop.
-     *
-     * @returns
-     */
 
-    function useTableRowIndex(type) {
-      return F(type === "displaying" ? OverriddenRowIndexContext : LiteralRowIndexContext);
+    function useIsHovering() {
+      const [hovering, setHovering] = useState(false);
+      const onMouseEnter = A$1(() => {
+        setHovering(true);
+      }, []);
+      const onMouseLeave = A$1(() => {
+        setHovering(false);
+      }, []);
+      useGlobalHandler(window, "blur", onMouseLeave);
+      return {
+        hovering,
+        useIsHoveringProps: props => useMergedProps()({
+          onMouseEnter,
+          onMouseLeave
+        }, props)
+      };
     }
 
     function stringify(value) {
-      if (value == null) return null; // TODO: This could be a lot better
-
-      if (value instanceof Date) return value.toLocaleString();
-      return `${value}`;
+      if (value == null) return null;
+      if (value instanceof Date || ["boolean", "string", "number"].includes(typeof value)) return `${value}`;
+      return value;
     }
 
     var RandomWords$1 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.".split(" ");
     var formatter = new Intl.DateTimeFormat("en-US", { year: "numeric", month: "short", day: "numeric" });
     function RandomRow(_a) {
+        var _this = this;
         var index = _a.index;
         var n = Math.pow((index + 0), 2);
-        var d = new Date(new Date().getFullYear(), 0, n * 7);
+        var d = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + n * 7);
+        var _b = useState(false), checked = _b[0], setChecked = _b[1];
+        var onInput = A$1(function (checked) { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, sleep$1(2000)];
+                    case 1:
+                        _a.sent();
+                        setChecked(checked);
+                        return [2 /*return*/];
+                }
+            });
+        }); }, [index]);
         return (v$1(TableRow, { index: index },
             v$1(TableCell, { index: 0, value: RandomWords$1[index] }),
             v$1(TableCell, { index: 1, value: n }),
             v$1(TableCell, { index: 2, value: d }, formatter.format(d)),
-            v$1(CheckboxTableCell, { index: 3 })));
-    }
-    var checkedRows = new Set();
-    function CheckboxTableCell(_a) {
-        var index = _a.index;
-        var forceUpdate = useForceUpdate();
-        // This represents our "true" row, which might not be
-        // what we're currently showing, if the table is sorted.
-        var rowIndexLiteral = useTableRowIndex("literal");
-        // This value is "refreshed" by calling forceUpdate() 
-        // instead of via props or state for demonstration.
-        var checked = checkedRows.has(rowIndexLiteral);
-        return v$1(TableCell, __assign({ index: index, value: checked }, { forceUpdate: forceUpdate }), 
-        // This is a component, we're just not calling it immediately.
-        // We're passing it to the TableCell for it to create.
-        // You could have it separately as function CheckboxTableCellChild() {}
-        // but it's only going to be used here anyway.
-        //
-        // useCallback because the identity of a function is used 
-        // to determine if two components are the same when diffed together.
-        A$1(
-        // forwardRef because the table needs to give the ref that the
-        // TableCell normally would use for focus management and give
-        // it to this component instead.
-        forwardElementRef(function (_a, ref) {
-            var overriddenValue = _a.overriddenValue, overriddenRowIndex = _a.overriddenRowIndex, forceUpdate = _a.forceUpdate, props = __rest(_a, ["overriddenValue", "overriddenRowIndex", "forceUpdate"]);
-            // The checkbox sets a global variable and then
-            // calls forceUpdate.
-            var onInput = function (c) {
-                // Basically, use forceUpdate to pretend this is a setState call
-                // that would actually cause this component to update and re-render.
-                // (Just for the sake of demonstration for where the data's stored)
-                // Causing it to re-render will cause it to let its "partner" sibling
-                // know of any changes to what it should be displaying.
-                if (c)
-                    checkedRows.add(overriddenRowIndex);
-                else
-                    checkedRows.delete(overriddenRowIndex);
-                forceUpdate();
-            };
-            // Pass along the ref, all unused props, and then any normal props.
-            // Note that while not explicitly documented to, most components
-            // will forward on unused props to the most reasonable target,
-            // which for form-like components is going to be the input element.
-            return v$1(Checkbox, __assign({ ref: ref }, props, { checked: !!overriddenValue, onInput: onInput, labelPosition: "hidden" }), "Demo table checkbox");
-        }), []));
+            v$1(TableCell, { index: 3, value: checked },
+                v$1(Checkbox, { checked: checked, onInput: onInput, labelPosition: "hidden" }, "Demo table checkbox"))));
     }
     function DemoTable() {
         var _a = useState(5), rowCount = _a[0], setRowCount = _a[1];
@@ -13827,20 +13820,30 @@
                 v$1(CardElement, null,
                     "Tables allow for automatic display, navigation, and sorting of data.  All data is provided by the children and you don't need to provide a data structure to the parent ",
                     v$1("code", null, "Table"),
-                    " element."),
+                    " element, and by default all columns are sortable."),
                 v$1(CardElement, null,
-                    "By default, all table columns are sortable based on the ",
+                    "All ",
+                    v$1("code", null, "TableCell"),
+                    "s must be given a ",
                     v$1("code", null, "value"),
-                    " prop you provide each cell. If you would like to explicitly mark a column as unsortable, give that column's header cell the ",
-                    v$1("code", null, "unsortable"),
-                    " prop."),
+                    " prop that represents its data.  This can be anything from a string to a number to a Date, and it controls how, when that column is sorted, it is compared against its siblings."),
                 v$1(CardElement, null,
                     "A ",
                     v$1("code", null, "<TableCell>"),
                     " will, by default, just display its ",
                     v$1("code", null, "value"),
-                    ".  This will work fine for strings, booleans, and a lot of numbers, but if you need to format your value, you can pass the string you'd like to actually display in the cell as the cell's child."),
-                v$1(CardElement, null, "Cells can display more than just strings or string representations of things, such as buttons, formatted text, or any other JSX. How to do so is explained below the example."),
+                    ". If you need to show something different, format the value, etc. just pass the value you'd like to show instead as a child.  Children will take priority over ",
+                    v$1("code", null, "value"),
+                    " in terms of what to display, but sorting will be entirely unaffected by this, relying solely on the ",
+                    v$1("code", null, "value"),
+                    " prop."),
+                v$1(CardElement, null,
+                    "However, please note that if you pass a child component to a ",
+                    v$1("code", null, "TableCell"),
+                    ", it will be put in charge of that cell's navigation and focus management, ",
+                    v$1("strong", null, "so it needs to be a component that accepts and forwards onwards all incoming props and refs"),
+                    ".",
+                    v$1("code", null, "// The table cell itself will receive focus:\n<TableCell>Text</TableCell>\n<TableCell>0</TableCell>\n<TableCell><>Text</></TableCell> // (Fragments are handled specially and are okay as an immediate child.)\n\n// The table cell will delegate focus to its contents instead:\n<TableCell><div>Text</div></TableCell>\n<TableCell><Input /></TableCell>\n\n// BAD! The cell will try to focus the child but it'll never receive the message!\n<TableCell>{() => \"text\"}</TableCell>\n\n// Fine, the cell can properly delegate all duties to the child DIV.\n<TableCell>{forwardRef((p, ref) => <div ref={ref} {...p}>\"text\"</p>)}</TableCell>")),
                 v$1(CardElement, null,
                     v$1(Input, { type: "number", value: rowCount, onInput: setRowCount }, "Row count")),
                 v$1(CardElement, null,
@@ -13860,7 +13863,7 @@
                                         _a.label = 1;
                                     case 1:
                                         if (!(i < rowCount)) return [3 /*break*/, 4];
-                                        return [4 /*yield*/, v$1(RandomRow, { index: i })];
+                                        return [4 /*yield*/, v$1(RandomRow, { key: i, index: i })];
                                     case 2:
                                         _a.sent();
                                         _a.label = 3;
@@ -13872,7 +13875,7 @@
                             });
                         }())))),
                 v$1(CardElement, null,
-                    v$1("code", null, "<Table>\n    <TableHead>\n        <TableRow index={0}>\n            <TableHeaderCell index={0}>String</TableHeaderCell>\n            <TableHeaderCell index={1}>Number</TableHeaderCell>\n            <TableHeaderCell index={2}>Date</TableHeaderCell>\n            <TableHeaderCell index={3}>Checkbox</TableHeaderCell>\n        </TableRow>\n    </TableHead>\n    <TableBody>\n\n        <TableRow index={0}>\n            <TableCell index={0} value={RandomWords[index]} />\n            <TableCell index={1} value={index ** 2} />\n            <TableCell index={2} value={d}>{d.toLocaleString()}</TableCell>\n            <CheckboxTableCell index={3} /> {/* Custom component -- see below */}\n        </TableRow>\n\n        <TableRow index={1} />\n        <TableRow index={2} />\n        <TableRow index={3} />\n        <TableRow index={4} />\n\n    </TableBody>\n</Table>")),
+                    v$1("code", null, "<Table>\n    <TableHead>\n        <TableRow index={0}>\n            <TableHeaderCell index={0}>String</TableHeaderCell>\n            <TableHeaderCell index={1}>Number</TableHeaderCell>\n            <TableHeaderCell index={2}>Date</TableHeaderCell>\n            <TableHeaderCell index={3}>Checkbox</TableHeaderCell>\n        </TableRow>\n    </TableHead>\n    <TableBody>\n\n        <TableRow index={0}>\n            <TableCell index={0} value={RandomWords[index]} />\n            <TableCell index={1} value={n} />\n            <TableCell index={2} value={d}>{d.toLocaleString()}</TableCell>\n            <TableCell index={3} value={checked}>\n                <Checkbox checked={checked} onInput={onInput} labelPosition=\"hidden\">Demo table checkbox</Checkbox>\n            </TableCell>\n        </TableRow>\n\n        <TableRow index={1} />\n        <TableRow index={2} />\n        <TableRow index={3} />\n        <TableRow index={4} />\n\n    </TableBody>\n</Table>")),
                 v$1(CardElement, null,
                     "To display contents that are more complicated than a data literal, like the recursively-complicated structure built by JSX, you'll need a wrapper component. Please note that the details of this component are very specific, so feel free to copy and paste the example below. If you run into issues:",
                     v$1("ul", null,
@@ -13901,6 +13904,13 @@
                         v$1("li", null, "Beyond that, interactions that affect the source row will propogate to the \"entangled\" row that's actually showing the source row's data."))),
                 v$1(CardElement, null,
                     v$1("code", null, "function CheckboxTableCell({ index }: { index: number }) {\n    const forceUpdate = useForceUpdate();\n\n    // This represents our \"true\" row, which might not be\n    // what we're currently showing, if the table is sorted.\n    const rowIndexLiteral = useTableRowIndex(\"literal\");\n\n    // This value is \"refreshed\" by calling forceUpdate() \n    // instead of via props or state for demonstration.\n    const checked = checkedRows.has(rowIndexLiteral);\n\n    return <TableCell index={index} value={checked} {...{ forceUpdate } as never}>{\n\n        // This is a component, we're just not calling it immediately.\n        // We're passing it to the TableCell for it to create.\n        // You could have it separately as function CheckboxTableCellChild() {}\n        // but it's only going to be used here anyway.\n        //\n        // useCallback because the identity of a function is used \n        // to determine if two components are the same when diffed together.\n        useCallback(\n\n            // forwardRef because the table needs to give the ref that the\n            // TableCell normally would use for focus management and give\n            // it to this component instead.\n            forwardElementRef(({ overriddenValue, overriddenRowIndex, forceUpdate, ...props }: TableCellChildProps<HTMLButtonElement> & { forceUpdate?(): void; }, ref: any) => {\n\n                // The checkbox sets a global variable and then\n                // calls forceUpdate.\n                const onInput = (c: boolean) => {\n\n                    // Basically, use forceUpdate to pretend this is a setState call\n                    // that would actually cause this component to update and re-render.\n                    // (Just for the sake of demonstration for where the data's stored)\n                    // Causing it to re-render will cause it to let its \"partner\" sibling\n                    // know of any changes to what it should be displaying.\n                    if (c)\n                        checkedRows.add(overriddenRowIndex)\n                    else\n                        checkedRows.delete(overriddenRowIndex)\n                    forceUpdate!();\n                }\n\n                // Pass along the ref, all unused props, and then any normal props.\n                // Note that while not explicitly documented to, most components\n                // will forward on unused props to the most reasonable target,\n                // which for form-like components is going to be the input element.\n                return <Checkbox ref={ref} {...props} checked={!!overriddenValue} onInput={onInput} labelPosition=\"hidden\">Demo table checkbox</Checkbox>;\n            }), [])\n    }</TableCell>\n}\n\n// Presumably you'll have better state management than a global variable.\n// A context would work nicely.\nlet checkedRows = new Set<number>();")))));
+    }
+    function sleep$1(arg0) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, new Promise(function (resolve) { return setTimeout(resolve, arg0); })];
+            });
+        });
     }
 
     var RandomWords = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.".split(" ");

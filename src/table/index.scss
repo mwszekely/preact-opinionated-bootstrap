@@ -1,11 +1,6 @@
 .table th {
   cursor: pointer;
 
-  & > div {
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-  }
 
   &:hover {
     & .no-hover-only {
@@ -18,4 +13,13 @@
       opacity: 0;
     }
   }
+}
+
+.table-sort-icon-container {
+  --transition-duration: 333.3ms;
+}
+table.table th>.th-spacing {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
 }

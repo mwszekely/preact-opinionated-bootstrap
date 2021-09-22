@@ -1,9 +1,9 @@
 import clsx from "clsx";
-import { cloneElement, ComponentChildren, createContext, createElement, FunctionComponent, h, Ref, VNode } from "preact";
+import { cloneElement, ComponentChildren, createContext, createElement, Fragment, FunctionComponent, h, Ref, VNode } from "preact";
 import { useButtonLikeEventHandlers } from "preact-aria-widgets/use-button";
-import { useGridNavigation, UseGridNavigationCell, UseGridNavigationCellInfo, UseGridNavigationCellParameters, UseGridNavigationRow, UseGridNavigationRowInfo, UseGridNavigationRowParameters, useHasFocus, useRefElement, useStableCallback, useState } from "preact-prop-helpers";
+import { useForceUpdate, useGlobalHandler, useGridNavigation, UseGridNavigationCell, UseGridNavigationCellInfo, UseGridNavigationCellParameters, UseGridNavigationRow, UseGridNavigationRowInfo, UseGridNavigationRowParameters, useHasFocus, useRefElement, useStableCallback, useState } from "preact-prop-helpers";
 import { useMergedProps } from "preact-prop-helpers/use-merged-props";
-import { Fade, Swappable } from "preact-transition";
+import { Fade, Flip, Swappable, ZoomFade } from "preact-transition";
 import { memo } from "preact/compat";
 import { StateUpdater, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef } from "preact/hooks";
 import { forwardElementRef, GlobalAttributes } from "../props";
@@ -34,7 +34,7 @@ export interface TableProps extends GlobalAttributes<HTMLTableElement> {
 }
 
 export interface TableHeadProps extends GlobalAttributes<HTMLTableSectionElement> { variant?: TableVariant; }
-export interface TableBodyProps extends GlobalAttributes<HTMLTableSectionElement> { variant?: TableVariant; }
+export interface TableBodyProps extends Omit<GlobalAttributes<HTMLTableSectionElement>, "children"> { children: VNode<any>[]; variant?: TableVariant; }
 export interface TableFootProps extends GlobalAttributes<HTMLTableSectionElement> { variant?: TableVariant; }
 
 export interface TableCellChildProps<E extends Element> extends h.JSX.HTMLAttributes<E> {
@@ -49,35 +49,39 @@ export interface TableCellChildProps<E extends Element> extends h.JSX.HTMLAttrib
      * use the valud directly.  Use whichever is more
      * appropriate for your use case.
      */
-    overriddenRowIndex: number;
-
-    /**
-     * Alternative to `overriddenRowIndex` that a table cell child may use
-     * to display the correct data when the table is sorted. 
-     */
-    overriddenValue: T;
+    rowIndexAsSorted: number;
 }
 
 type T = number | string | Date | null | undefined | boolean;
 
-export interface TableRowProps extends Omit<UseGridNavigationRowParameters<TableBodyRowInfo>, "text" | "setOverriddenRowIndex" | "getManagedCells" | "setSetRelatedSiblingChildren" | "onChildrenUpdate" | "setOverriddenChildren"> { variant?: TableCellVariant; children?: ComponentChildren }
-export interface TableCellProps extends Omit<UseGridNavigationCellParameters<TableBodyCellInfo>, "provideWithSiblingsSetOverriddenValue" | "setOverriddenValue" | "text" | "literalValue" | "displayValue" | "overriddenValue"> { value: T; children?: string | FunctionComponent<TableCellChildProps<any>>, focus?: "cell" | "child", variant?: TableCellVariant; active?: boolean; }
-export interface TableHeaderCellProps extends Omit<UseGridNavigationCellParameters<TableBodyCellInfo>, "provideWithSiblingsSetOverriddenValue" | "setOverriddenValue" | "text" | "literalValue" | "displayValue" | "overriddenValue"> { unsortable?: boolean; children: ComponentChildren; focus?: "cell" | "child"; variant?: TableCellVariant; active?: boolean; }
+export interface TableRowProps extends Omit<UseGridNavigationRowParameters<TableBodyRowInfo>, "text" | "getManagedCells" | "getRowIndexAsSorted" | "setRowIndexAsSorted"> { variant?: TableCellVariant; children?: ComponentChildren }
+export interface TableCellProps extends Omit<UseGridNavigationCellParameters<TableBodyCellInfo>, "text" | "literalValue" | "displayValue"> { value: T; children?: VNode<any> | string | number | boolean | null, focus?: "cell" | "child", variant?: TableCellVariant; active?: boolean; }
+export interface TableHeaderCellProps extends Omit<UseGridNavigationCellParameters<TableBodyCellInfo>, "text" | "literalValue" | "displayValue"> { unsortable?: boolean; children: ComponentChildren; focus?: "cell" | "child"; variant?: TableCellVariant; active?: boolean; }
 
 interface TableBodyRowInfo extends UseGridNavigationRowInfo {
     getManagedCells: () => TableBodyCellInfo[];
 
     /**
-     * To handle sorting, each row has its literal row, and its overridden row.
+     * To handle sorting, each row component keeps track of what row it represents data-wise
+     * ("rowIndexAsUnsorted") and what row it's currently displaying in ("rowIndexAsSorted").
+     * The "as unsorted" row index never changes for a component, while the "as sorted" row index does.
      * 
-     * The literal row is just what actual index into the table we are. What index in the DOM we are.
+     * When a table is unsorted, those two always match.  If a 2-row table is sorted in 
+     * reverse order, then the topmost row will have rowIndexAsUnsorted be 1, and its
+     * rowIndexAsSorted will be 0.  In terms of components, that row's component changed
+     * its "as sorted" row index.  In terms of the DOM, that TR element's "as sorted"
+     * won't change, but it will be rendering a component with a different "as unsorted".
      * 
-     * The overridden row is which row's children is *actually* being displayed there.
+     * Just make sure you're keeping in mind the distinction between
+     * * The `TableRow` component, which moves around to different DOM nodes and whose "as unsorted" remains constant but whose "as sorted" jumps around
+     * * The TR element in the DOM, which stays still but has different components "attached" to it. These components
+     * will all come bearing the same "as sorted" row index matching this TR, but a different "as unsorted".
      * 
-     * Each row communicates with each other and swaps children around as sorting takes place.
      * @param index 
      */
-    setOverriddenRowIndex(index: number): void;
+    setRowIndexAsSorted(index: number): void;
+
+    getRowIndexAsSorted(): number;
 }
 
 interface TableBodyCellInfo<T extends number | string | Date | null | undefined | boolean = number | string | Date | null | undefined | boolean> extends UseGridNavigationCellInfo {
@@ -85,58 +89,8 @@ interface TableBodyCellInfo<T extends number | string | Date | null | undefined 
     /**
      * This is the value that, originally passed to the cell,
      * represents what value this cell would show if we weren't sorted.
-     * 
-     * This value
      */
     literalValue: T;
-
-    /**
-     * This is the value that is actually displayed in the cell, at least before sorting.
-     * 
-     * It's usually the same as the `literalValue`, but can be specified explicitly, which is useful for, e.g., formatting dates.
-     */
-    displayValue: T;
-
-    /**
-     * The value that, because the table is sorted (at least now, for the sake of argument),
-     * should be shown in this cell instead of the literalValue or displayValue.
-     */
-    overriddenValue: T;
-
-    /**
-     * Used to remotely "update" a cell's value
-     * when the table is sorted. (Of course the cell
-     * keeps the same props so the literalValue doesn't
-     * change, but it re-renders with a new overriddenValue)
-     * 
-     * @param value 
-     */
-    setOverriddenValue(value: T): void;
-
-    /**
-     * In conjunction with the above, used so that siblings
-     * can affect this cell's value to display whenever
-     * the table is sorted.
-     * 
-     * Whenever the cell re-renders, any changes to the
-     * literalValue (or displayValue) will be sent to that
-     * function, which will be spookily entangled with the 
-     * correct cell that it's handling sorts with.  In short,
-     * calling this hook forces that cell to re-render and
-     * possibly tell its partner to also re-render. An update
-     * to the value props do the same.
-     * 
-     * Be warned that, as a setState function that itself
-     * takes a function, you'll want to make sure you use
-     * the 
-     * 
-     * `(prev) => returnValue`
-     * 
-     * form *explicitly*.
-     * 
-     * @param setSetOverriddenValue
-     */
-    provideWithSiblingsSetOverriddenValue(setSetOverriddenValue: StateUpdater<(value: any) => void>): void;
 }
 
 export interface TableHeadRowInfo extends UseGridNavigationRowInfo { }
@@ -271,6 +225,9 @@ export const TableBody = forwardElementRef(function TableBody({ children, varian
     const { focusedInner, useHasFocusProps } = useHasFocus<HTMLTableSectionElement>({})
     const { cellIndex, rowIndex, rowCount, useGridNavigationRow, managedRows } = useGridNavigation<HTMLTableRowElement, HTMLTableCellElement, TableBodyRowInfo, TableBodyCellInfo>({ focusOnChange: focusedInner });
 
+    //const forceUpdate = useForceUpdate();
+    const [i, setI] = useState(0);
+
     // This hooks up to internalSortHandler, used by the table head.
     const sort = useCallback((column: number, direction: "ascending" | "descending"): Promise<void> | void => {
         let sortedRows = managedRows.slice().sort((lhsRow, rhsRow) => {
@@ -292,20 +249,15 @@ export const TableBody = forwardElementRef(function TableBody({ children, varian
             const literalCells = sortedRows[literalIndex].getManagedCells();
 
             // Let the DOM-based row know that it's showing a different row
-            managedRows[literalIndex].setOverriddenRowIndex(overriddenIndex);
-
-            for (let cellIndex = 0; cellIndex < overriddenCells.length; ++cellIndex) {
-                // For each cell that should be shown instead of these cells,
-                // set their "provide your partner cell with the data to show"
-                // function to this DOM-row-based cell's analogue of that function,
-                // which will also cause them to re-render, causing us to re-render.
-                overriddenCells[cellIndex].provideWithSiblingsSetOverriddenValue(() => literalCells[cellIndex].setOverriddenValue)
-            }
+            managedRows[literalIndex].setRowIndexAsSorted(overriddenIndex);
+            //managedRows[literalIndex].overriddenRowIndex = overriddenIndex;
         }
+        setI(i => ++i)
     }, []);
 
     const setInternalSortHandler = useContext(SetInternalSortHandlerContext);
     useEffect(() => { setInternalSortHandler(() => sort) }, [setInternalSortHandler, sort]);
+
 
     return (
         <tbody {...useHasFocusProps(useMergedProps<HTMLTableSectionElement>()({
@@ -318,13 +270,27 @@ export const TableBody = forwardElementRef(function TableBody({ children, varian
         }, props))}>
             <UseBodyGridNavigationRowContext.Provider value={useGridNavigationRow}>
                 <SortContext.Provider value={sort}>
-
-                    {children}
-
+                    <TableBodyChildren children={children} managedRows={managedRows} {...{ i } as any} />
                 </SortContext.Provider>
             </UseBodyGridNavigationRowContext.Provider >
         </tbody>
     )
+})
+
+const TableBodyChildren = memo<{ managedRows: TableBodyRowInfo[], children: VNode<{ index: number }>[] }>(({ children, managedRows }) => {
+
+    function ensortenChild(literalIndex: number) {
+        const sortedIndex = managedRows[literalIndex]?.getRowIndexAsSorted() ?? literalIndex;
+        const C = children[literalIndex].type as FunctionComponent<{ index: number }>;
+        const { index, ...props } = children[literalIndex].props;
+        let ret = <C key={sortedIndex} index={sortedIndex} {...props} />
+        return ret;
+    }
+
+
+    return <>{children.map((tableRow, i) => {
+        return ensortenChild(i);
+    })}</>
 })
 
 export const TableFoot = forwardElementRef(function TableFoot({ children, variant, ...props }: TableFootProps, ref: Ref<HTMLTableSectionElement>) {
@@ -345,13 +311,13 @@ export const TableFoot = forwardElementRef(function TableFoot({ children, varian
 })
 
 
-export const TableRow = forwardElementRef(function TableRow({ children, index: literalRowIndex, variant, ...props }: TableRowProps, ref: Ref<HTMLTableRowElement>) {
+export const TableRow = memo(forwardElementRef(function TableRow({ children, index: indexAsUnsorted, variant, ...props }: TableRowProps, ref: Ref<HTMLTableRowElement>) {
     const isInTHead = useContext(CellIsInHeaderContext);
     const useGridNavigationRow = useContext(isInTHead ? (UseHeadGridNavigationRowContext as typeof UseBodyGridNavigationRowContext) : UseBodyGridNavigationRowContext)!;
-    const [overriddenRowIndex, setOverriddenRowIndex] = useState(literalRowIndex);
+    const [rowIndexAsSorted, setRowIndexAsSorted, getRowIndexAsSorted] = useState(indexAsUnsorted);
 
     const { cellCount, useGridNavigationRowProps, useGridNavigationCell, tabbableCell, isTabbableRow, managedCells } = useGridNavigationRow({
-        index: literalRowIndex, setOverriddenRowIndex, getManagedCells: useStableCallback(() => managedCells)
+        index: indexAsUnsorted, getRowIndexAsSorted, setRowIndexAsSorted, getManagedCells: useStableCallback(() => managedCells)
     });
 
 
@@ -361,8 +327,8 @@ export const TableRow = forwardElementRef(function TableRow({ children, index: l
         children, ...(useMergedProps<HTMLTableRowElement>()({
             ref,
             role: "row",
-            "data-literal-index": literalRowIndex,
-            "data-overridden-index": overriddenRowIndex,
+            "data-index-as-unsorted": indexAsUnsorted,
+            "data-overridden-index": rowIndexAsSorted,
             "data-tabbable": `${isTabbableRow}`,
             "data-tabbable-cell": `${tabbableCell}`,
             className: clsx(variant && `table-${variant}`),
@@ -379,51 +345,47 @@ export const TableRow = forwardElementRef(function TableRow({ children, index: l
 
     return (
         <Provider value={useGridNavigationCell}>
-            <OverriddenRowIndexContext.Provider value={overriddenRowIndex}>
-                <LiteralRowIndexContext.Provider value={literalRowIndex}>
-                    {rowJsx}
-                </LiteralRowIndexContext.Provider>
-            </OverriddenRowIndexContext.Provider>
+            <RowIndexAsUnsortedContext.Provider value={indexAsUnsorted}>
+                {rowJsx}
+            </RowIndexAsUnsortedContext.Provider>
         </Provider>
     )
-})
+}))
 
-const OverriddenRowIndexContext = createContext<number>(null!);
-const LiteralRowIndexContext = createContext<number>(null!);
+const RowIndexAsUnsortedContext = createContext<number>(null!);
 
-export const TableCell = forwardElementRef(function TableCell({ value: literalValue, children, index, variant, focus, active, ...props }: TableCellProps, ref: Ref<HTMLTableCellElement>) {
+export const TableCell = memo(forwardElementRef(function TableCell({ value: valueAsUnsorted, children, index, variant, focus, active, ...props }: TableCellProps, ref: Ref<HTMLTableCellElement>) {
+    console.log("TD" + index)
     focus ??= "cell";
     const useGridNavigationCell = useContext(UseBodyGridNavigationCellContext)!;
-    const isDisplayChildren = (typeof children == "string" || typeof children == "number" || typeof children == "boolean");
-    const displayValue = isDisplayChildren ? children : literalValue;
+    const childrenReceiveFocus = (
+        children &&
+        typeof children != "string" &&
+        typeof children != "number" &&
+        typeof children != "boolean" &&
+        !Array.isArray(children) &&
+        (children as VNode).type !== Fragment
+    );
 
+    //const isFocusbleChildren = 
+    const displayValue = (children ?? valueAsUnsorted);
 
-    const [overriddenValue, setOverriddenValue] = useState(displayValue);
-    const [setSiblingOverriddenValue, provideWithSiblingsSetOverriddenValue] = useState<((value: any) => void)>(() => setOverriddenValue);
+    const { tabbable, useGridNavigationCellProps } = useGridNavigationCell({ index, text: null, literalValue: valueAsUnsorted });
 
-    const { tabbable, useGridNavigationCellProps } = useGridNavigationCell({ index, text: null, overriddenValue, literalValue, displayValue, provideWithSiblingsSetOverriddenValue, setOverriddenValue });
-
-    const literalRowIndex = useContext(LiteralRowIndexContext);
-    const overriddenRowIndex = useContext(OverriddenRowIndexContext);
     const cellProps = {
         ref,
         role: "gridcell",
-        "data-literal-value": `${literalValue}`,
-        "data-display-value": `${displayValue}`,
-        "data-overridden-value": `${overriddenValue}`,
-        "data-overridden-by-row": `${overriddenRowIndex}`,
+        "data-value-as-unsorted": `${valueAsUnsorted}`,
+        "data-dvalue-as-unsorted": `${displayValue}`,
         className: clsx(variant && `table-${variant}`)
     };
 
-    useEffect(() => {
-        setSiblingOverriddenValue?.(displayValue);
-    }, [setSiblingOverriddenValue, literalRowIndex, overriddenRowIndex, displayValue]);
 
-    if (children && !isDisplayChildren) {
-        const p1 = useMergedProps<any>()(useGridNavigationCellProps({ overriddenRowIndex, overriddenValue, className: "test" }), props);
+    if (childrenReceiveFocus) {
+        const p1 = useMergedProps<any>()(useGridNavigationCellProps({}), props);
         return (
             <td {...cellProps}>
-                {createElement(children! as any, p1)}
+                {cloneElement(children! as any, p1)}
             </td>
         )
     }
@@ -431,11 +393,11 @@ export const TableCell = forwardElementRef(function TableCell({ value: literalVa
         const p2 = useMergedProps<any>()(useGridNavigationCellProps(cellProps), props);
         return (
             <td {...p2}>
-                {stringify(overriddenValue)}
+                {stringify(displayValue)}
             </td>
         )
     }
-});
+}));
 
 export const TableHeaderCell = forwardElementRef(function TableHeaderCell({ index, focus, children, variant, active, unsortable, ...props }: TableHeaderCellProps, ref: Ref<HTMLTableCellElement>) {
     focus ??= "cell";
@@ -471,35 +433,43 @@ export const TableHeaderCell = forwardElementRef(function TableHeaderCell({ inde
     }, [onSort, index]);
 
 
-    const cellProps = useButtonLikeEventHandlers<HTMLTableCellElement>("th", unsortable ? null : onSortClick, undefined)(
+    const { hovering, useIsHoveringProps } = useIsHovering<HTMLTableCellElement>();
+    const cellProps = useIsHoveringProps(useButtonLikeEventHandlers<HTMLTableCellElement>("th", unsortable ? null : onSortClick, undefined)(
         useRefElementProps(useMergedProps<HTMLTableCellElement>()({
             ref,
             role: "columnheader",
             scope: (isInTHead ? "col" : "row"),
             className: clsx(variant && `table-${variant}`, unsortable && "unsortable")
-        }, props)));
+        }, props))));
 
 
     const sortIcon = (
         <Swappable>
-            <div class={clsx("table-sort-icon-container", `sort-direction-${sortDirection ?? "null"}`)}>
-                <Fade open={sortDirection == null}><i class="bi bi-sort-down-alt hover-only"></i></Fade>
-                <Fade open={sortDirection == "descending"}><i class="bi bi-sort-up no-hover-only"></i></Fade>
-                <Fade open={sortDirection == "descending"}><i class="bi bi-sort-down-alt hover-only"></i></Fade>
-                <Fade open={sortDirection == "ascending"}><i class="bi bi-sort-down-alt no-hover-only"></i></Fade>
-                <Fade open={sortDirection == "ascending"}><i class="bi bi-sort-up hover-only"></i></Fade>
+            <div {...{ class: clsx("table-sort-icon-container") }}>
+                <Flip flipAngleInline={180} open={sortDirection == "descending"}><div class="bi bi-sort-up" /></Flip>
+                <Flip flipAngleInline={180} open={(hovering && sortDirection == null) || (sortDirection == "ascending")}><div class="bi bi-sort-down-alt" /></Flip>
             </div>
         </Swappable>
     );
 
     if (focus === "child") {
-        return <th {...cellProps}><div>{cloneElement(children as VNode<any>, useGridNavigationCellProps({}), (children as VNode<any>).props.children)}{sortIcon}</div></th>;
+        return <th {...cellProps}><div class="th-spacing">{cloneElement(children as VNode<any>, useGridNavigationCellProps({}), (children as VNode<any>).props.children)}{sortIcon}</div></th>;
     }
     else {
-        return <th {...useGridNavigationCellProps(cellProps)}><div>{children}{sortIcon}</div></th>
+        return <th {...useGridNavigationCellProps(cellProps)}><div class="th-spacing">{children}{sortIcon}</div></th>
     }
 
 });
+
+function useIsHovering<E extends Element>() {
+    const [hovering, setHovering] = useState(false);
+    const onMouseEnter = useCallback(() => { setHovering(true); }, [])
+    const onMouseLeave = useCallback(() => { setHovering(false); }, []);
+    useGlobalHandler(window, "blur", onMouseLeave);
+
+
+    return { hovering, useIsHoveringProps: <P extends h.JSX.HTMLAttributes<E>>(props: P) => useMergedProps<E>()({ onMouseEnter, onMouseLeave }, props) }
+}
 
 /**
  * For a component within a row, returns that row's index.
@@ -509,18 +479,17 @@ export const TableHeaderCell = forwardElementRef(function TableHeaderCell({ inde
  * 
  * @returns 
  */
-export function useTableRowIndex(type: "literal" | "displaying") {
-    return useContext(type === "displaying" ? OverriddenRowIndexContext : LiteralRowIndexContext)
+export function useTableRowIndex() {
+    return useContext(RowIndexAsUnsortedContext)
 }
 
 
-function stringify(value: number | string | Date | null | undefined | boolean) {
+function stringify(value: number | string | boolean | Date | null | undefined | VNode) {
     if (value == null)
         return null;
 
-    // TODO: This could be a lot better
-    if (value instanceof Date)
-        return value.toLocaleString()
+    if (value instanceof Date || ["boolean", "string", "number"].includes(typeof value))
+        return `${value}`
 
-    return `${value}`;
+    return value;
 }

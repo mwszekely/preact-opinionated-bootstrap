@@ -13,70 +13,27 @@ var RandomWords = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed 
 const formatter = new Intl.DateTimeFormat("en-US", { year: "numeric", month: "short", day: "numeric" })
 function RandomRow({ index }: { index: number }) {
     const n = (index + 0) ** 2;
-    const d = new Date(new Date().getFullYear(), 0, n * 7);
+    const d = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + n * 7);
+    const [checked, setChecked] = useState(false);
+
+
+    const onInput = useCallback(async (checked: boolean) => {
+        await sleep(2000);
+        setChecked(checked);
+    }, [index])
+
 
     return (<TableRow index={index}>
         <TableCell index={0} value={RandomWords[index]} />
         <TableCell index={1} value={n} />
         <TableCell index={2} value={d}>{formatter.format(d)}</TableCell>
-        <CheckboxTableCell index={3} />
+        <TableCell index={3} value={checked}>
+            <Checkbox checked={checked} onInput={onInput} labelPosition="hidden">Demo table checkbox</Checkbox>
+        </TableCell>
     </TableRow>)
 }
 
 
-
-let checkedRows = new Set<number>();
-function CheckboxTableCell({ index }: { index: number }) {
-    const forceUpdate = useForceUpdate();
-
-    // This represents our "true" row, which might not be
-    // what we're currently showing, if the table is sorted.
-    const rowIndexLiteral = useTableRowIndex("literal");
-
-    // This value is "refreshed" by calling forceUpdate() 
-    // instead of via props or state for demonstration.
-    const checked = checkedRows.has(rowIndexLiteral);
-
-    return <TableCell index={index} value={checked} {...{ forceUpdate } as never}>{
-
-        // This is a component, we're just not calling it immediately.
-        // We're passing it to the TableCell for it to create.
-        // You could have it separately as function CheckboxTableCellChild() {}
-        // but it's only going to be used here anyway.
-        //
-        // useCallback because the identity of a function is used 
-        // to determine if two components are the same when diffed together.
-        useCallback(
-
-            // forwardRef because the table needs to give the ref that the
-            // TableCell normally would use for focus management and give
-            // it to this component instead.
-            forwardElementRef(({ overriddenValue, overriddenRowIndex, forceUpdate, ...props }: TableCellChildProps<HTMLButtonElement> & { forceUpdate?(): void; }, ref: any) => {
-
-                // The checkbox sets a global variable and then
-                // calls forceUpdate.
-                const onInput = (c: boolean) => {
-
-                    // Basically, use forceUpdate to pretend this is a setState call
-                    // that would actually cause this component to update and re-render.
-                    // (Just for the sake of demonstration for where the data's stored)
-                    // Causing it to re-render will cause it to let its "partner" sibling
-                    // know of any changes to what it should be displaying.
-                    if (c)
-                        checkedRows.add(overriddenRowIndex)
-                    else
-                        checkedRows.delete(overriddenRowIndex)
-                    forceUpdate!();
-                }
-
-                // Pass along the ref, all unused props, and then any normal props.
-                // Note that while not explicitly documented to, most components
-                // will forward on unused props to the most reasonable target,
-                // which for form-like components is going to be the input element.
-                return <Checkbox ref={ref} {...props} checked={!!overriddenValue} onInput={onInput} labelPosition="hidden">Demo table checkbox</Checkbox>;
-            }), [])
-    }</TableCell>
-};
 
 export function DemoTable() {
     const [rowCount, setRowCount] = useState(5);
@@ -85,18 +42,33 @@ export function DemoTable() {
         <div class="demo">
             <Card>
                 <CardElement type="title" tag="h2">Table</CardElement>
-                <CardElement>Tables allow for automatic display, navigation, and sorting of data.  All data is provided by the children and you don't need to provide a data structure to the parent <code>Table</code> element.</CardElement>
+                <CardElement>Tables allow for automatic display, navigation, and sorting of data.  All data is provided by the children and you don't need to provide a data structure to the parent <code>Table</code> element, and by default all columns are sortable.</CardElement>
 
                 <CardElement>
-                    By default, all table columns are sortable based on the <code>value</code> prop you provide each cell. If you would like to explicitly mark a column as unsortable, give that column's header cell the <code>unsortable</code> prop.
+                    All <code>TableCell</code>s must be given a <code>value</code> prop that represents its data.  This can be anything from a string to a number to a Date, and it controls how, when that column is sorted, it is compared against its siblings.
                 </CardElement>
 
                 <CardElement>
-                    A <code>&lt;TableCell&gt;</code> will, by default, just display its <code>value</code>.  This will work fine for strings, booleans, and a lot of numbers, but if you need
-                    to format your value, you can pass the string you'd like to actually display in the cell as the cell's child.
+                    A <code>&lt;TableCell&gt;</code> will, by default, just display its <code>value</code>.
+                    If you need to show something different, format the value, etc. just pass the value you'd like to show instead as a child.  Children will take priority over <code>value</code> in terms of what to display, but sorting will be entirely unaffected by this, relying solely on the <code>value</code> prop.
                 </CardElement>
+
                 <CardElement>
-                    Cells can display more than just strings or string representations of things, such as buttons, formatted text, or any other JSX. How to do so is explained below the example.
+                    However, please note that if you pass a child component to a <code>TableCell</code>, it will be put in charge of that cell's navigation and focus management, <strong>so it needs to be a component that accepts and forwards onwards all incoming props and refs</strong>. 
+                    <code>{`// The table cell itself will receive focus:
+<TableCell>Text</TableCell>
+<TableCell>0</TableCell>
+<TableCell><>Text</></TableCell> // (Fragments are handled specially and are okay as an immediate child.)
+
+// The table cell will delegate focus to its contents instead:
+<TableCell><div>Text</div></TableCell>
+<TableCell><Input /></TableCell>
+
+// BAD! The cell will try to focus the child but it'll never receive the message!
+<TableCell>{() => "text"}</TableCell>
+
+// Fine, the cell can properly delegate all duties to the child DIV.
+<TableCell>{forwardRef((p, ref) => <div ref={ref} {...p}>"text"</p>)}</TableCell>`}</code>
                 </CardElement>
 
                 <CardElement>
@@ -117,7 +89,7 @@ export function DemoTable() {
                         <TableBody>
                             {Array.from(function* () {
                                 for (let i = 0; i < rowCount; ++i) {
-                                    yield <RandomRow index={i} />
+                                    yield <RandomRow key={i} index={i} />
                                 }
                             }())}
                         </TableBody>
@@ -137,9 +109,11 @@ export function DemoTable() {
 
         <TableRow index={0}>
             <TableCell index={0} value={RandomWords[index]} />
-            <TableCell index={1} value={index ** 2} />
+            <TableCell index={1} value={n} />
             <TableCell index={2} value={d}>{d.toLocaleString()}</TableCell>
-            <CheckboxTableCell index={3} /> {/* Custom component -- see below */}
+            <TableCell index={3} value={checked}>
+                <Checkbox checked={checked} onInput={onInput} labelPosition="hidden">Demo table checkbox</Checkbox>
+            </TableCell>
         </TableRow>
 
         <TableRow index={1} />

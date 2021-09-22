@@ -16,7 +16,7 @@ export default {
     plugins: [
         typescript({ sourceMap: false }),
         commonjs(),
-        resolve({ dedupe: ['preact', "preact/compat", "preact/hooks"] }),
+        resolve({ dedupe: ['preact', "preact/compat", "preact/hooks", "preact/debug", "preact/devtools"] }),
         babel({
             configFile: path.resolve(__dirname, ".babelrc"),
             babelHelpers: "bundled",
