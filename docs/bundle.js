@@ -6354,7 +6354,7 @@
      * @see `Transitionable` `Zoom`
      */
 
-    forwardElementRef$1(function SlideFade({
+    const SlideFade = forwardElementRef$1(function SlideFade({
       classBase,
       fadeMin,
       fadeMax,
@@ -8946,7 +8946,7 @@
     });
     const Button = forwardElementRef(ButtonR);
 
-    forwardElementRef(function ButtonGroup(p, ref) {
+    const ButtonGroup = forwardElementRef(function ButtonGroup(p, ref) {
       const {
         lastFocusedInner,
         useHasFocusProps
@@ -9006,7 +9006,7 @@
       }, v$1("div", { ...innerDomProps
       }, children)))))));
     });
-    forwardElementRef(function ButtonGroupChild1({
+    const ButtonGroupChild = forwardElementRef(function ButtonGroupChild1({
       index,
       ...buttonProps
     }, ref) {
@@ -9214,7 +9214,7 @@
       };
     }
 
-    forwardElementRef(function InputGrid({
+    const InputGrid = forwardElementRef(function InputGrid({
       tag,
       children,
       ...props
@@ -9450,7 +9450,7 @@
         className: clsx("form-check-input", pending && "pending", disabled && "disabled", inInputGroup && "mt-0"),
         "aria-label": labelPosition === "hidden" ? stringLabel : undefined
       }));
-      const inputElement = v$1(OptionallyInputGroup, {
+      const inputElement = v$1(OptionallyInputGroup$1, {
         isInput: true,
         tag: inInputGroup ? "label" : null,
         tabIndex: -1,
@@ -9467,7 +9467,7 @@
           "aria-hidden": "true"
         })
       };
-      const labelElement = v$1(d$1, null, label != null && v$1(OptionallyInputGroup, {
+      const labelElement = v$1(d$1, null, label != null && v$1(OptionallyInputGroup$1, {
         isInput: false,
         tag: "label",
         ...p2
@@ -9481,7 +9481,7 @@
     });
     D$1(null);
     D$1(null);
-    function OptionallyInputGroup({
+    function OptionallyInputGroup$1({
       tag,
       children,
       isInput,
@@ -9500,6 +9500,118 @@
         tag: tag !== null && tag !== void 0 ? tag : "div",
         ...useMergedProps()({
           className: clsx(isInput && inInputGrid && "faux-input-group-text")
+        }, props)
+      }, children);
+    }
+
+    /**
+     * @see Checkbox
+     * @param ref
+     * @returns
+     */
+
+    function Switch({
+      checked,
+      disabled,
+      onInput: onInputAsync,
+      children: label,
+      labelPosition,
+      ...rest
+    }, ref) {
+      var _labelPosition, _disabled;
+
+      (_labelPosition = labelPosition) !== null && _labelPosition !== void 0 ? _labelPosition : labelPosition = "end";
+      const {
+        getSyncHandler,
+        pending,
+        currentType,
+        hasError,
+        settleCount,
+        currentCapture
+      } = useAsyncHandler()({
+        capture: e => e[EventDetail].checked
+      });
+      const asyncState = hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null;
+      disabled || (disabled = pending);
+      const onInput = getSyncHandler(onInputAsync);
+      const {
+        useCheckboxInputElement: useSwitchInputElement,
+        useCheckboxLabelElement: useSwitchLabelElement
+      } = useAriaCheckbox({
+        checked: pending ? currentCapture : checked,
+        disabled: (_disabled = disabled) !== null && _disabled !== void 0 ? _disabled : false,
+        onInput,
+        labelPosition: "separate"
+      });
+      const {
+        useCheckboxInputElementProps: useSwitchInputElementProps
+      } = useSwitchInputElement({
+        tag: "input"
+      });
+      const {
+        useCheckboxLabelElementProps: useSwitchLabelElementProps
+      } = useSwitchLabelElement({
+        tag: "label"
+      });
+      const inInputGroup = F(InInputGroupContext);
+      let stringLabel = `${label}`;
+
+      if (label != null && labelPosition === "hidden" && !["string", "number", "boolean"].includes(typeof label)) {
+        console.error(`Hidden labels require a string-based label for the aria-label attribute.`);
+      }
+
+      const inputElement = v$1(OptionallyInputGroup, {
+        tag: inInputGroup ? "label" : null,
+        disabled: disabled,
+        tabIndex: -1,
+        isInput: true
+      }, v$1(ProgressCircular, {
+        childrenPosition: "after",
+        colorFill: "foreground-only",
+        mode: currentType === "async" ? asyncState : null,
+        color: "info"
+      }, v$1("input", { ...useSwitchInputElementProps({
+          type: "checkbox",
+          className: clsx(pending && "pending", "form-check-input", disabled && "disabled"),
+          "aria-label": labelPosition === "hidden" ? stringLabel : undefined
+        })
+      })));
+      const p2 = { ...useSwitchLabelElementProps({
+          className: clsx(pending && "pending", "form-check-label", disabled && "disabled"),
+          "aria-hidden": "true"
+        })
+      };
+      const labelElement = v$1(d$1, null, label != null && v$1(OptionallyInputGroup, {
+        tag: "label",
+        isInput: false,
+        ...p2
+      }, label));
+      const ret = v$1(d$1, null, labelPosition == "start" && labelElement, inputElement, labelPosition == "end" && labelElement);
+      if (!inInputGroup) return v$1("div", { ...useMergedProps()(rest, {
+          ref,
+          class: "form-check form-switch"
+        })
+      }, ret);
+      return ret;
+    } // Note: Slightly different from the others
+    // (^^^^ I'm really glad I left that there)
+
+    function OptionallyInputGroup({
+      tag,
+      isInput,
+      children,
+      ...props
+    }) {
+      const inInputGroup = F(InInputGroupContext);
+      const inInputGrid = F(InInputGridContext);
+      if (!inInputGroup) return v$1(tag !== null && tag !== void 0 ? tag : d$1, props, children);
+      if (inInputGrid && isInput) children = v$1("div", {
+        className: clsx(isInput && inInputGrid && "form-switch", "input-group-text")
+      }, children);
+      return v$1(InputGroupText, {
+        tag: tag !== null && tag !== void 0 ? tag : "div",
+        ...useMergedProps()({
+          className: clsx("input-group-text", isInput && !inInputGrid && "form-switch", isInput && inInputGrid && "faux-input-group-text")
         }, props)
       }, children);
     }
@@ -9633,7 +9745,7 @@
         console.error(`Hidden labels require a string-based label for the aria-label attribute.`);
       }
 
-      const inputElement = v$1(OptionallyInputGroup, {
+      const inputElement = v$1(OptionallyInputGroup$1, {
         isInput: true,
         tag: inInputGroup ? "label" : null,
         disabled: disabled,
@@ -9649,7 +9761,7 @@
           "aria-label": labelPosition === "hidden" ? stringLabel : undefined
         })
       })));
-      const labelElement = v$1(d$1, null, label != null && v$1(OptionallyInputGroup, {
+      const labelElement = v$1(d$1, null, label != null && v$1(OptionallyInputGroup$1, {
         isInput: false,
         tag: "label",
         ...useRadioLabelProps({
@@ -12474,6 +12586,10 @@
         value: pushToastStable
       }, children)));
     }
+    function usePushToast() {
+      const pushToast = F(PushToastContext);
+      return pushToast;
+    } // Extracted to a separate component to avoid rerendering all non-toast children
 
     function ToastsProviderHelper({
       setPushToast
@@ -12508,7 +12624,42 @@
       }, children));
     }
 
-    D$1(null);
+    const ToastDismissContext = D$1(null);
+    function Toast({
+      timeout,
+      politeness,
+      children
+    }) {
+      const useToast = F(UseToastContext);
+      const defaultTimeout = F(DefaultToastTimeout);
+      const {
+        useToastProps,
+        dismiss,
+        status
+      } = useToast({
+        timeout: timeout !== null && timeout !== void 0 ? timeout : defaultTimeout,
+        politeness
+      });
+      return v$1(ToastDismissContext.Provider, {
+        value: dismiss
+      }, v$1(SlideFade, {
+        open: status != "dismissed",
+        slideTargetInline: 1,
+        animateOnMount: true,
+        exitVisibility: "removed"
+      }, v$1("div", { ...useToastProps({
+          class: "toast show"
+        })
+      }, v$1("div", {
+        class: "d-flex"
+      }, v$1("div", {
+        class: "toast-body"
+      }, children), v$1(Button, {
+        class: "btn-close me-2 m-auto",
+        "aria-label": "Dismiss alert",
+        onClick: dismiss
+      })))));
+    }
     /*
     export function ToastHeader({ children }: { children: ComponentChildren }) {
         return (
@@ -12767,6 +12918,516 @@
       children: "",
       class: ""
     });
+
+    function DemoButtons() {
+        var _this = this;
+        var _a = useState("outline"), buttonsFill = _a[0], setButtonsFill = _a[1];
+        var _b = useState("md"), buttonsSize = _b[0];
+        var _c = useState("primary"), buttonsColor = _c[0], setButtonsColor = _c[1];
+        var _d = useState(false), toggleOn = _d[0], setToggleOn = _d[1];
+        var _e = useState(3000), asyncTimeout = _e[0], setAsyncTimeout = _e[1];
+        var _f = useState(true), usesAsync = _f[0], setUsesAsync = _f[1];
+        var _g = useState(false), asyncFails = _g[0], setAsyncFails = _g[1];
+        var _h = useState(true), usesLinkButton = _h[0], setUsesLinkButton = _h[1];
+        var pushToast = usePushToast();
+        var onClickSync = function () { return pushToast(v$1(Toast, null, "Button was clicked")); };
+        var onClickAsync = function () { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, sleep$4(asyncTimeout)];
+                    case 1:
+                        _a.sent();
+                        if (asyncFails)
+                            throw new Error("Button operation failed.");
+                        else
+                            onClickSync();
+                        return [2 /*return*/];
+                }
+            });
+        }); };
+        var onClick = usesAsync ? onClickAsync : onClickSync;
+        var onToggleInputAsync = function (b) { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, sleep$4(asyncTimeout)];
+                    case 1:
+                        _a.sent();
+                        if (asyncFails)
+                            throw new Error("Button operation failed.");
+                        else
+                            setToggleOn(b);
+                        return [2 /*return*/];
+                }
+            });
+        }); };
+        var onToggleInput = usesAsync ? onToggleInputAsync : setToggleOn;
+        return (v$1(ProvideDefaultButtonFill, { value: buttonsFill },
+            v$1(ProvideDefaultButtonSize, { value: buttonsSize },
+                v$1(ProvideDefaultButtonColor, { value: buttonsColor },
+                    v$1("div", { class: "demo" },
+                        v$1(Card, null,
+                            v$1(CardElement, { type: "title", tag: "h2" }, "Buttons"),
+                            v$1(CardElement, null,
+                                v$1(Button, { onClick: onClick }, "I'm a button")),
+                            v$1(CardElement, null,
+                                "A ",
+                                v$1("code", null, "Button"),
+                                " is a ",
+                                v$1("code", null, "Button"),
+                                " is a ",
+                                v$1("code", null, "Button"),
+                                " \u2013 you can click, tap, or Space-key it to activate it and do something.  If the given action is asynchronous, then the button will disable itself and display a spinner during the operation."),
+                            v$1(CardElement, { type: "subtitle", tag: "h3" }, "Async inputs"),
+                            v$1(CardElement, null,
+                                "The ",
+                                v$1("code", null, "onClick"),
+                                " event handler for buttons can be sync or async, and they will react appropriately if the operation takes long enough.",
+                                v$1(InputGrid, null,
+                                    v$1(InputGroup, null,
+                                        v$1(Checkbox, { onInput: setUsesAsync, checked: usesAsync, labelPosition: "start" }, "Use async handler")),
+                                    v$1(InputGroup, null,
+                                        v$1(Checkbox, { onInput: setAsyncFails, checked: asyncFails, labelPosition: "start", disabled: !usesAsync }, "Async handler rejects")),
+                                    v$1(InputGroup, null,
+                                        v$1(Input, { width: "8ch", disabled: !usesAsync, type: "number", onInput: setAsyncTimeout, value: asyncTimeout }, "Async timeout")))),
+                            v$1(CardElement, null,
+                                v$1(Button, { onClick: onClick }, "Click me")),
+                            v$1(CardElement, { type: "paragraph" },
+                                v$1("code", null, "const onClick = " + (usesAsync ? "async " : "") + "() => { " + (usesAsync ? "await sleep(" + asyncTimeout + "); " : "") + "pushToast(<Toast ... />); }\n<Button onClick={onClick}>Click me</Button>")),
+                            v$1("hr", null),
+                            v$1(CardElement, { type: "subtitle", tag: "h3" }, "Color & fill"),
+                            v$1(CardElement, { type: "paragraph" },
+                                "Buttons can be styled in different colors and fill styles. You can provide a global default with ",
+                                v$1("code", null, "Context"),
+                                " objects, like ",
+                                v$1("code", null, "<ProvideDefaultButtonFill>"),
+                                "."),
+                            v$1(CardElement, null,
+                                "All outline styles have extra CSS applied to make them have correct contrast ratios on the default body background, partially because toggle buttons don't allow their ",
+                                v$1("code", null, "fill"),
+                                " to be controlled."),
+                            v$1(CardElement, null,
+                                v$1(ButtonGroup, null,
+                                    v$1(ButtonGroupChild, { index: 0, onInput: function () { return setButtonsFill("fill"); }, pressed: buttonsFill === "fill", colorVariant: "primary" }, "Fill"),
+                                    v$1(ButtonGroupChild, { index: 1, onInput: function () { return setButtonsFill("outline"); }, pressed: buttonsFill === "outline", colorVariant: "primary" }, "Outline"))),
+                            v$1(CardElement, null,
+                                v$1(ButtonGroup, { wrap: true },
+                                    v$1(ButtonGroupChild, { index: 0, colorVariant: "primary", pressed: buttonsColor == "primary", onInput: function () { return setButtonsColor("primary"); } }, "Primary"),
+                                    v$1(ButtonGroupChild, { index: 1, colorVariant: "secondary", pressed: buttonsColor == "secondary", onInput: function () { return setButtonsColor("secondary"); } }, "Secondary"),
+                                    v$1(ButtonGroupChild, { index: 2, colorVariant: "success", pressed: buttonsColor == "success", onInput: function () { return setButtonsColor("success"); } }, "Success"),
+                                    v$1(ButtonGroupChild, { index: 3, colorVariant: "warning", pressed: buttonsColor == "warning", onInput: function () { return setButtonsColor("warning"); } }, "Warning"),
+                                    v$1(ButtonGroupChild, { index: 4, colorVariant: "danger", pressed: buttonsColor == "danger", onInput: function () { return setButtonsColor("danger"); } }, "Danger"),
+                                    v$1(ButtonGroupChild, { index: 5, colorVariant: "info", pressed: buttonsColor == "info", onInput: function () { return setButtonsColor("info"); } }, "Info"),
+                                    v$1(ButtonGroupChild, { index: 6, colorVariant: "light", pressed: buttonsColor == "light", onInput: function () { return setButtonsColor("light"); } }, "Light"),
+                                    v$1(ButtonGroupChild, { index: 7, colorVariant: "dark", pressed: buttonsColor == "dark", onInput: function () { return setButtonsColor("dark"); } }, "Dark"))),
+                            v$1(CardElement, null,
+                                v$1(Button, { onClick: onClick },
+                                    buttonsFill === "fill" ? "Filled" : "Outlined",
+                                    " ",
+                                    buttonsColor,
+                                    " button")),
+                            v$1(CardElement, null,
+                                v$1("code", null, "<Button fillVariant=\"" + buttonsFill + "\" colorVariant=\"" + buttonsColor + "\">Variant button</Button>")),
+                            v$1("hr", null),
+                            v$1(CardElement, { type: "subtitle", tag: "h3" }, "Link buttons"),
+                            v$1(CardElement, null,
+                                "A link can be styled as a button while retaining native link functionality (middle clicks, etc.). These buttons have no ",
+                                v$1("code", null, "onClick"),
+                                " handler, instead taking ",
+                                v$1("code", null, "href"),
+                                " and the other ",
+                                v$1("code", null, "<a>"),
+                                " props."),
+                            v$1(CardElement, null,
+                                "A ",
+                                v$1("code", null, "<Button>"),
+                                " will use an anchor link internally if you provide it with an ",
+                                v$1("code", null, "href"),
+                                " prop, or optionally setting the ",
+                                v$1("code", null, "tag"),
+                                " prop to ",
+                                v$1("code", null, "a"),
+                                ".",
+                                v$1(InputGroup, null,
+                                    v$1(Checkbox, { onInput: setUsesLinkButton, checked: usesLinkButton, labelPosition: "start" }, "Use link button"))),
+                            v$1(CardElement, null, usesLinkButton ? v$1(Button, { target: "_blank", href: "https://www.example.com" },
+                                "example.com ",
+                                v$1("i", { class: "bi bi-box-arrow-up-right" })) : v$1(Button, { onClick: onClick }, "Regular button")),
+                            v$1(CardElement, { type: "paragraph" },
+                                v$1("code", null, usesLinkButton ? "<Button href=\"https://www.example.com\">Link button</Button>" : "<Button onClick={onClick}>Regular button</Button>")),
+                            v$1("hr", null),
+                            v$1(CardElement, { type: "subtitle", tag: "h3" }, "Toggle buttons"),
+                            v$1(CardElement, null,
+                                "If given a ",
+                                v$1("code", null, "pressed"),
+                                " prop, a button will become a toggle button, with an off/on state.  It will style itself as outlined when unpressed, and filled when pressed, so they are best used in groups."),
+                            v$1(CardElement, null,
+                                v$1(Button, { pressed: toggleOn, onInput: onToggleInput }, "Toggle button")),
+                            v$1(CardElement, { type: "paragraph" },
+                                v$1("code", null, "<Button pressed={pressed} onInput={onInput}>Toggle button</Button>")),
+                            v$1("hr", null),
+                            v$1(CardElement, { type: "subtitle", tag: "h3" }, "Button Groups"),
+                            v$1(CardElement, null,
+                                "A ",
+                                v$1("code", null, "<ButtonGroup>"),
+                                " can be used to group a set of ",
+                                v$1("code", null, "<ButtonGroupChild>"),
+                                " (which is the exact same as a ",
+                                v$1("code", null, "<Button>"),
+                                ", but with an ",
+                                v$1("code", null, "index"),
+                                " prop). This gives them keyboard navigation abilities."),
+                            v$1(CardElement, null,
+                                v$1(ButtonGroup, { wrap: true },
+                                    v$1(ButtonGroupChild, { index: 0, fillVariant: buttonsFill, colorVariant: buttonsColor, onClick: onClick }, "First button"),
+                                    v$1(ButtonGroupChild, { index: 1, fillVariant: buttonsFill, colorVariant: buttonsColor, onClick: onClick }, "Second button"),
+                                    v$1(ButtonGroupChild, { index: 2, fillVariant: buttonsFill, colorVariant: buttonsColor, onClick: onClick }, "Third button"),
+                                    v$1(ButtonGroupChild, { index: 3, fillVariant: buttonsFill, colorVariant: buttonsColor, onClick: onClick }, "Fourth button"),
+                                    v$1(ButtonGroupChild, { index: 4, fillVariant: buttonsFill, colorVariant: buttonsColor, onClick: onClick }, "Fifth button"),
+                                    v$1(ButtonGroupChild, { index: 5, fillVariant: buttonsFill, colorVariant: buttonsColor, onClick: onClick }, "Sixth button"),
+                                    v$1(ButtonGroupChild, { index: 6, fillVariant: buttonsFill, colorVariant: buttonsColor, onClick: onClick }, "Seventh button"),
+                                    v$1(ButtonGroupChild, { index: 7, fillVariant: buttonsFill, colorVariant: buttonsColor, onClick: onClick }, "Eighth button"))),
+                            v$1(CardElement, { type: "paragraph" },
+                                v$1("code", null, "<ButtonGroup wrap>\n    <ButtonGroupChild index={0}>First button</ButtonGroupChild>\n    <ButtonGroupChild index={1}>Second button</ButtonGroupChild>\n    <ButtonGroupChild index={2}>Third button</ButtonGroupChild>\n    <ButtonGroupChild index={3}>Fourth button</ButtonGroupChild>\n    <ButtonGroupChild index={4}>Fifth button</ButtonGroupChild>\n    <ButtonGroupChild index={5}>Sixth button</ButtonGroupChild>\n    <ButtonGroupChild index={6}>Seventh button</ButtonGroupChild>\n    <ButtonGroupChild index={7}>Eighth button</ButtonGroupChild>\n</ButtonGroup>"))))))));
+    }
+    function sleep$4(arg0) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, new Promise(function (resolve) { return setTimeout(resolve, arg0); })];
+            });
+        });
+    }
+
+    function DemoChecks() {
+        var _this = this;
+        var _a = useState(false), asyncFails = _a[0], setAsyncFails = _a[1];
+        var _b = useState(3000), asyncTimeout = _b[0], setAsyncTimeout = _b[1];
+        var _c = useState(true), usesAsync = _c[0], setUsesAsync = _c[1];
+        var _d = useState(false), demoChecked = _d[0], setDemoChecked = _d[1];
+        var _e = useState(0), demoRadio = _e[0], setDemoRadio = _e[1];
+        var _f = useState(3), radioCount = _f[0], setRadioCount = _f[1];
+        var _g = useState(false), disabled = _g[0], setDisabled = _g[1];
+        var _h = useState("end"), labelPosition = _h[0], setLabelPosition = _h[1];
+        var asyncCheckboxInput = A$1(function (checked) { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, sleep$3(asyncTimeout)];
+                    case 1:
+                        _a.sent();
+                        if (asyncFails)
+                            throw new Error("Attempt to change checkbox & radio failed");
+                        setDemoChecked(checked);
+                        return [2 /*return*/];
+                }
+            });
+        }); }, [asyncTimeout, asyncFails]);
+        var asyncRadioInput = A$1(function (value) { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, sleep$3(asyncTimeout)];
+                    case 1:
+                        _a.sent();
+                        if (asyncFails)
+                            throw new Error("Attempt to change radio failed");
+                        setDemoRadio(value);
+                        return [2 /*return*/];
+                }
+            });
+        }); }, [asyncTimeout, asyncFails]);
+        return (v$1("div", { class: "demo" },
+            v$1(Card, null,
+                v$1(CardElement, { type: "title", tag: "h2" }, "Checkboxes, switches, & radios"),
+                v$1(CardElement, null,
+                    v$1(Checkbox, { checked: demoChecked, onInput: usesAsync ? asyncCheckboxInput : setDemoChecked }, "I'm a checkbox")),
+                v$1(CardElement, null,
+                    "Several components related to on/off togglable form-like selection controls are provided:",
+                    v$1("ul", null,
+                        v$1("li", null,
+                            v$1("code", null, "Checkbox")),
+                        v$1("li", null,
+                            v$1("code", null, "Switch")),
+                        v$1("li", null,
+                            v$1("code", null, "Radio")),
+                        v$1("li", null,
+                            v$1("code", null, "Checkbox Group"))),
+                    v$1("code", null, "Checkbox"),
+                    " and ",
+                    v$1("code", null, "Switch"),
+                    " work as you'd expect. ",
+                    v$1("code", null, "RadioGroup"),
+                    " is a parent around a set of ",
+                    v$1("code", null, "Radio"),
+                    " components that communicate with each other. The children ",
+                    v$1("code", null, "Radio"),
+                    " components can be any descendant of the parent ",
+                    v$1("code", null, "RadioGroup"),
+                    " \u2013 the DOM structure ",
+                    v$1("em", null, "does not"),
+                    " matter beyond requiring they be somewhere descendant. ",
+                    v$1("code", null, "CheckboxGroup"),
+                    " works similarly to ",
+                    v$1("code", null, "RadioGroup"),
+                    " in that way."),
+                v$1(CardElement, null,
+                    "See Also: Single Select lists for an alternative to ",
+                    v$1("code", null, "RadioGroup"),
+                    ", and Multi Select lists for an alternative to ",
+                    v$1("code", null, "CheckboxGroup"),
+                    "."),
+                v$1(CardElement, { type: "subtitle", tag: "h3" }, "Async inputs"),
+                v$1(CardElement, null,
+                    "The ",
+                    v$1("code", null, "onInput"),
+                    " event handler for all types of inputs can be sync or async.",
+                    v$1(InputGrid, null,
+                        v$1(InputGroup, null,
+                            v$1(Checkbox, { onInput: setUsesAsync, checked: usesAsync, labelPosition: "start" }, "Async event handler")),
+                        v$1(InputGroup, null,
+                            v$1(Checkbox, { onInput: setAsyncFails, checked: asyncFails, labelPosition: "start", disabled: !usesAsync }, "Async handler rejects")),
+                        v$1(InputGroup, null,
+                            v$1(Input, { disabled: !usesAsync, type: "number", onInput: setAsyncTimeout, value: asyncTimeout }, "Async timeout")),
+                        v$1(InputGroup, null,
+                            v$1(Input, { type: "number", onInput: setRadioCount, value: radioCount }, "# of radio buttons")))),
+                v$1(CardElement, null,
+                    v$1(Checkbox, { checked: demoChecked, onInput: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Checkbox"),
+                    v$1(Switch, { checked: demoChecked, onInput: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Switch")),
+                v$1(CardElement, null,
+                    v$1(RadioGroup, { name: "radio-demo-1", selectedValue: demoRadio, onInput: usesAsync ? asyncRadioInput : setDemoRadio }, Array.from(function () {
+                        var i;
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0:
+                                    i = 0;
+                                    _a.label = 1;
+                                case 1:
+                                    if (!(i < radioCount)) return [3 /*break*/, 4];
+                                    return [4 /*yield*/, v$1(Radio, { index: i, value: i, key: i },
+                                            "Radio #",
+                                            i + 1)];
+                                case 2:
+                                    _a.sent();
+                                    _a.label = 3;
+                                case 3:
+                                    ++i;
+                                    return [3 /*break*/, 1];
+                                case 4: return [2 /*return*/];
+                            }
+                        });
+                    }()))),
+                v$1(CardElement, { type: "paragraph" },
+                    v$1("code", null, "<Checkbox checked={checked} onInput={setChecked}>Checkbox</Checkbox>\n<Switch checked={checked} onInput={onInput}>Switch</Switch>\n<RadioGroup name=\"radio-demo-1\" selectedValue={value} onInput={setValue}>\n<Radio index={0} value=\"value1\">Radio #1</Radio>\n<Radio index={1} value=\"value2\">Radio #2</Radio>\n<Radio index={2} value=\"value3\">Radio #3</Radio>\n</RadioGroup>")),
+                v$1("hr", null),
+                v$1(CardElement, { type: "subtitle", tag: "h3" }, "Disabling"),
+                v$1(CardElement, null,
+                    "When disabled, all inputs remain focusable so that they can still be announced by screen readers, have tooltips via mouseover, etc.",
+                    v$1(InputGroup, null,
+                        v$1(Checkbox, { onInput: setDisabled, checked: disabled, labelPosition: "start" }, "Inputs disabled"))),
+                v$1(CardElement, null,
+                    v$1(Checkbox, { disabled: disabled, checked: demoChecked, onInput: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Checkbox "),
+                    v$1(Switch, { disabled: disabled, checked: demoChecked, onInput: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Switch")),
+                v$1(CardElement, null,
+                    v$1(RadioGroup, { name: "radio-demo-2", selectedValue: demoRadio, onInput: usesAsync ? asyncRadioInput : setDemoRadio },
+                        v$1(Radio, { disabled: disabled, index: 0, value: 0 }, "Radio #1"),
+                        v$1(Radio, { disabled: disabled, index: 1, value: 1 }, "Radio #2"),
+                        v$1(Radio, { disabled: disabled, index: 2, value: 2 }, "Radio #3"))),
+                v$1("hr", null),
+                v$1(CardElement, { type: "subtitle", tag: "h3" },
+                    v$1("code", null, "InputGroup"),
+                    " styling"),
+                v$1(CardElement, { type: "paragraph" },
+                    "An ",
+                    v$1("code", null, "<InputGroup>"),
+                    " can be used to significantly change the styling of input components. The inputs and their labels will style themselves or automatically wrap themselves in ",
+                    v$1("code", null, "<InputGroupText>"),
+                    " as appropriate."),
+                v$1(CardElement, null,
+                    v$1(InputGrid, null,
+                        v$1(InputGroup, null,
+                            v$1(Checkbox, { checked: demoChecked, onInput: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Checkbox")),
+                        v$1(InputGroup, null,
+                            v$1(Switch, { checked: demoChecked, onInput: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Switch")),
+                        v$1(RadioGroup, { name: "radio-demo-5", selectedValue: demoRadio, onInput: usesAsync ? asyncRadioInput : setDemoRadio },
+                            v$1(InputGroup, null,
+                                v$1(Radio, { index: 0, value: 0 }, "Radio #1")),
+                            v$1(InputGroup, null,
+                                v$1(Radio, { index: 1, value: 1 }, "Radio #2")),
+                            v$1(InputGroup, null,
+                                v$1(Radio, { index: 2, value: 2 }, "Radio #3"))))),
+                v$1(CardElement, { type: "paragraph" },
+                    v$1("code", null, "<InputGroup>\n    <Checkbox checked={checked} onInput={setChecked}>Checkbox</Checkbox>\n</InputGroup>\n<InputGroup>\n    <Switch checked={checked} onInput={onInput}>Switch</Switch>\n</InputGroup>\n<RadioGroup name=\"radio-demo-5\" selectedValue={value} onInput={setValue}>\n    <InputGroup>\n        <Radio index={0} value=\"value1\" labelPosition=\"start\">Radio #1</Radio>\n        <Radio index={1} value=\"value2\" labelPosition=\"hidden\">Radio #2</Radio>\n        <Radio index={2} value=\"value3\" labelPosition=\"end\">Radio #3</Radio>\n    </InputGroup>\n</RadioGroup>")),
+                v$1("hr", null),
+                v$1(CardElement, { type: "subtitle", tag: "h3" }, "Labels"),
+                v$1(CardElement, null,
+                    "By default, the label is positioned after the checkbox, radio, or switch.  You can change this with ",
+                    v$1("code", null, "labelPosition"),
+                    "."),
+                v$1(CardElement, null,
+                    "Note that the ",
+                    v$1("code", null, "start"),
+                    " label position only has any visual effect while in an ",
+                    v$1("code", null, "InputGroup"),
+                    ", as Bootstrap places \"naked\" checkboxes and such in the margin area before the label no matter what order they come in the DOM."),
+                v$1(CardElement, null,
+                    v$1(RadioGroup, { name: "radio-demo-6", selectedValue: labelPosition, onInput: setLabelPosition, labelPosition: labelPosition },
+                        v$1(Radio, { labelPosition: labelPosition, index: 0, value: "start" }, "Before"),
+                        v$1(Radio, { labelPosition: labelPosition, index: 1, value: "end" }, "After"),
+                        v$1(Radio, { labelPosition: labelPosition, index: 2, value: "hidden" }, "Hidden (still announced verbally)"))),
+                v$1(CardElement, null,
+                    v$1(InputGrid, null,
+                        v$1(InputGroup, null,
+                            v$1(Checkbox, { labelPosition: labelPosition, checked: demoChecked, onInput: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Checkbox")),
+                        v$1(InputGroup, null,
+                            v$1(Switch, { labelPosition: labelPosition, checked: demoChecked, onInput: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Switch")),
+                        v$1(RadioGroup, { name: "radio-demo-7", selectedValue: demoRadio, onInput: usesAsync ? asyncRadioInput : setDemoRadio },
+                            v$1(InputGroup, null,
+                                v$1(Radio, { labelPosition: labelPosition, index: 0, value: 0 }, "Radio #1")),
+                            v$1(InputGroup, null,
+                                v$1(Radio, { labelPosition: labelPosition, index: 1, value: 1 }, "Radio #2")),
+                            v$1(InputGroup, null,
+                                v$1(Radio, { labelPosition: labelPosition, index: 2, value: 2 }, "Radio #3"))))))));
+    }
+    function sleep$3(arg0) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, new Promise(function (resolve) { return setTimeout(resolve, arg0); })];
+            });
+        });
+    }
+
+    function DemoInputs() {
+        var _this = this;
+        var _a = useState(false), asyncFails = _a[0], setAsyncFails = _a[1];
+        var _b = useState(3000), asyncTimeout = _b[0], setAsyncTimeout = _b[1];
+        var _c = useState(true), usesAsync = _c[0], setUsesAsync = _c[1];
+        var _d = useState(""), text = _d[0], setText = _d[1];
+        var _e = useState(0), number = _e[0], setNumber = _e[1];
+        var asyncTextInput = A$1(function (text) { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, sleep$2(asyncTimeout)];
+                    case 1:
+                        _a.sent();
+                        if (asyncFails)
+                            throw new Error("Attempt to change text failed");
+                        setText(text);
+                        return [2 /*return*/];
+                }
+            });
+        }); }, [asyncTimeout, asyncFails]);
+        var asyncNumberInput = A$1(function (value) { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, sleep$2(asyncTimeout)];
+                    case 1:
+                        _a.sent();
+                        if (asyncFails)
+                            throw new Error("Attempt to change number failed");
+                        setNumber(value);
+                        return [2 /*return*/];
+                }
+            });
+        }); }, [asyncTimeout, asyncFails]);
+        var onTextInput = usesAsync ? asyncTextInput : setText;
+        var onNumberInput = usesAsync ? asyncNumberInput : setNumber;
+        return (v$1("div", { class: "demo" },
+            v$1(Card, null,
+                v$1(CardElement, { type: "title", tag: "h2" }, "Text boxes"),
+                v$1(CardElement, null,
+                    v$1("div", { class: "position-relative" },
+                        v$1(Input, { type: "text", value: text, onInput: onTextInput }, "I'm a text box"))),
+                v$1(CardElement, null,
+                    v$1("code", null, "<Input>"),
+                    " components allow for inputting text, numbers, etc. and asyncronously saving it somewhere else as it's being typed."),
+                v$1(CardElement, { type: "subtitle", tag: "h3" }, "Async inputs"),
+                v$1(CardElement, null,
+                    "The ",
+                    v$1("code", null, "onInput"),
+                    " event handler for all types of inputs can be sync or async.",
+                    v$1(InputGrid, null,
+                        v$1(InputGroup, null,
+                            v$1(Checkbox, { onInput: setUsesAsync, checked: usesAsync, labelPosition: "start" }, "Async event handler")),
+                        v$1(InputGroup, null,
+                            v$1(Checkbox, { onInput: setAsyncFails, checked: asyncFails, labelPosition: "start", disabled: !usesAsync }, "Async handler rejects")),
+                        v$1(InputGroup, null,
+                            v$1(Input, { disabled: !usesAsync, type: "number", onInput: setAsyncTimeout, value: asyncTimeout }, "Async timeout")))),
+                v$1(CardElement, null,
+                    v$1("div", { class: "position-relative" },
+                        v$1(Input, { type: "text", value: text, onInput: onTextInput }, "Text-based input")),
+                    v$1("div", { class: "position-relative" },
+                        v$1(Input, { type: "number", value: number, onInput: onNumberInput, min: -5 }, "Number-based input"))),
+                v$1(CardElement, { type: "paragraph" },
+                    v$1("code", null, "<Input type=\"text\" value={text} onInput={onTextInput}>Text-based input</Input>\n<Input type=\"number\" value={number} onInput={onNumberInput} min={-5}>Number-based input</Input>")),
+                v$1(CardElement, { type: "paragraph" },
+                    "When placed in an ",
+                    v$1("code", null, "<InputGroup>"),
+                    ", the styling will be significantly different:"),
+                v$1(CardElement, null,
+                    v$1(InputGrid, null,
+                        v$1(InputGroup, null,
+                            v$1(Input, { type: "text", value: text, onInput: onTextInput }, "Text-based input")),
+                        v$1(InputGroup, null,
+                            v$1(Input, { type: "number", value: number, onInput: onNumberInput, min: -5 }, "Number-based input")))),
+                v$1(CardElement, { type: "paragraph" },
+                    v$1("code", null, "<InputGrid>\n    <InputGroup><Input type=\"text\" value={text} onInput={onTextInput}>Text-based input</Input></InputGroup>\n    <InputGroup><Input type=\"number\" value={number} onInput={onNumberInput} min={-5}>Number-based input</Input></InputGroup>\n</InputGrid>")))));
+    }
+    function sleep$2(arg0) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, new Promise(function (resolve) { return setTimeout(resolve, arg0); })];
+            });
+        });
+    }
+
+    function DemoLayout() {
+        return (v$1("div", { class: "demo" },
+            v$1(Card, null,
+                v$1(CardElement, { type: "title", tag: "h2" }, "Layout"),
+                v$1(CardElement, null, "Inputs offer various ways that they can b"),
+                v$1(CardElement, { type: "subtitle", tag: "h3" },
+                    v$1("code", null, "<InputGroup>")),
+                v$1(CardElement, null,
+                    "All input types, from checkboxes to number inputs, can be placed within an ",
+                    v$1("code", null, "<InputGrid>"),
+                    " to give an alternate styling to the default \"free floating\" style."),
+                v$1(CardElement, null,
+                    "In addition, to help with alignment, a set of ",
+                    v$1("code", null, "InputGroup"),
+                    "s can also be placed within an ",
+                    v$1("code", null, "InputGrid"),
+                    " to manage simple cases."),
+                v$1(CardElement, null,
+                    "With an ",
+                    v$1("code", null, "<InputGrid>"),
+                    ":",
+                    v$1(InputGrid, null,
+                        v$1(InputGroup, null,
+                            v$1(Checkbox, { disabled: true, checked: true, labelPosition: "start" }, "Checkbox")),
+                        v$1(InputGroup, null,
+                            v$1(Checkbox, { disabled: true, checked: true, labelPosition: "start" }, "Another checkbox")),
+                        v$1(InputGroup, null,
+                            v$1(Input, { disabled: true, onInput: function () { }, type: "number", value: 0 }, "Numeric input")))),
+                v$1(CardElement, null,
+                    "Without an ",
+                    v$1("code", null, "<InputGrid>"),
+                    ":",
+                    v$1(InputGroup, null,
+                        v$1(Checkbox, { disabled: true, checked: true, labelPosition: "start" }, "Checkbox")),
+                    v$1(InputGroup, null,
+                        v$1(Checkbox, { disabled: true, checked: true, labelPosition: "start" }, "Another checkbox")),
+                    v$1(InputGroup, null,
+                        v$1(Input, { disabled: true, onInput: function () { }, type: "number", value: 0 }, "Numeric input"))),
+                v$1(CardElement, { type: "subtitle", tag: "h3" }, "Simple grids"),
+                v$1(CardElement, null,
+                    "Two different grid components are provided for two separate use cases:",
+                    v$1("ul", null,
+                        v$1("li", null,
+                            "<",
+                            v$1("code", null, "GridResponsive"),
+                            ">, which takes a minimum column size and fits as many columns as possible given that constraint"),
+                        v$1("li", null,
+                            "<",
+                            v$1("code", null, "GridStatic"),
+                            ">, which takes a minimum column count and fits that many columns in no matter the resulting size and/or jankiness"))))));
+    }
 
     const CurrentSortedColumnContext = D$1(null);
     const SetCurrentSortedColumnContext = D$1(null); // This is the hook that rows use for navigation
@@ -13354,7 +14015,7 @@
                 "Active: ",
                 v$1("input", { type: "checkbox", checked: active, onInput: function (e) { e.preventDefault(); setActive(e.currentTarget.checked); } }))));
     });
-    g(function () {
+    var DemoDialog = g(function () {
         var onClose = (function () { return setOpen(false); });
         var _a = useState(false), open = _a[0], setOpen = _a[1];
         return (v$1("div", { class: "demo" },
@@ -13369,7 +14030,7 @@
                 v$1("p", null, RandomWords.join(" ")),
                 v$1("p", null, RandomWords.join(" ")))));
     });
-    g(function () {
+    var DemoDrawer = g(function () {
         var onClose = (function () { return setOpen(false); });
         var _a = useState(false), open = _a[0], setOpen = _a[1];
         //open = true;
@@ -13381,7 +14042,7 @@
                 v$1("p", null, RandomWords.join(" ")),
                 v$1("p", null, RandomWords.join(" ")))));
     });
-    g(function () {
+    var DemoMenu = g(function () {
         return (v$1("div", { class: "demo" },
             v$1(Menu, { Transition: ZoomFade, zoomOriginDynamic: 0, zoomMin: 0.85, tag: "ul", anchor: v$1(Button, null, "Open menu") },
                 v$1(MenuItem, { index: 0 }, "AItem #1"),
@@ -13405,7 +14066,7 @@
                         "Inner focused: ",
                         focusedInner.toString())))));
     });
-    g(function () {
+    var DemoTabs = g(function () {
         var _a = useState(0), selectedIndex = _a[0], setSelectedIndex = _a[1];
         var _b = useState("activate"), selectionMode = _b[0];
         return (v$1("div", { class: "demo" },
@@ -13485,7 +14146,7 @@
             </div>
         )
     });*/
-    g(function () {
+    var DemoAccordion = g(function () {
         var _a = useState(-1), expandedIndex = _a[0], setExpandedIndex = _a[1];
         return (v$1("div", { class: "demo" },
             v$1("div", null,
@@ -13509,7 +14170,7 @@
                             v$1("code", null, "AccordionSection"),
                             "."))))));
     });
-    g(function () {
+    var DemoList = g(function () {
         var _a = useState(0), index = _a[0], setIndex = _a[1];
         return (v$1("div", { class: "demo" },
             "Selected: ",
@@ -13525,7 +14186,7 @@
                 v$1(ListItemSingle, { index: 7 }, "Dark"),
                 v$1(ListItemSingle, { index: 8 }, "Link"))));
     });
-    g(function () {
+    var DemoInput = g(function () {
         var _a = useState(""), text = _a[0], setText = _a[1];
         var _b = useState(""), radioValue = _b[0], setRadioValue = _b[1];
         var onInput1 = A$1(function (value) { return __awaiter(void 0, void 0, void 0, function () {
@@ -13564,7 +14225,18 @@
     var Component = function () {
         return v$1(GridResponsive, { minWidth: "35em" },
             v$1(ToastsProvider, null,
-                v$1(DemoTable, null)));
+                v$1(DemoTable, null),
+                v$1(DemoButtons, null),
+                v$1(DemoChecks, null),
+                v$1(DemoInputs, null),
+                v$1(DemoLayout, null),
+                v$1(DemoAccordion, null),
+                v$1(DemoDialog, null),
+                v$1(DemoDrawer, null),
+                v$1(DemoInput, null),
+                v$1(DemoList, null),
+                v$1(DemoTabs, null),
+                v$1(DemoMenu, null)));
     };
     requestAnimationFrame(function () {
         S$1(v$1(Component, null), document.getElementById("root"));
