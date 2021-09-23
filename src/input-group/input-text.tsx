@@ -40,9 +40,6 @@ function UnlabelledInput({ type, disabled, value, onInput: onInputAsync, ...prop
 export function Input({ children, width, labelPosition, ...props }: InputProps) {
     labelPosition ??= "start";
 
-    if (props.value > 255)
-        debugger;
-
     const { inputId, labelId, useInputLabelInput, useInputLabelLabel } = useInputLabel({ inputPrefix: "input-", labelPrefix: "input-label-" });
     const { useInputLabelInputProps } = useInputLabelInput();
     const { useInputLabelLabelProps } = useInputLabelLabel<HTMLLabelElement>({ tag: "label" });
