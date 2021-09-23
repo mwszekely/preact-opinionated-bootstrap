@@ -3629,7 +3629,23 @@
 
         useEffect(() => {
           if (isTabbableRow) {
-            setCellIndex(getLastKnownCellIndex());
+            let cellIndex = getLastKnownCellIndex();
+
+            while (cellIndex >= 0 && managedCells[cellIndex] == null) {
+              --cellIndex;
+            }
+
+            if (cellIndex < 0) {
+              cellIndex = getLastKnownCellIndex();
+
+              while (cellIndex < managedCells.length && managedCells[cellIndex] == null) {
+                ++cellIndex;
+              }
+
+              if (cellIndex == managedCells.length) cellIndex = getLastKnownCellIndex();
+            }
+
+            setCellIndex(cellIndex);
           } else {
             setCellIndex(null);
           }
@@ -9189,14 +9205,32 @@
 
     const InInputGroupContext = D$1(false);
     const InInputGridContext = D$1(0);
-    function useInputCaptures(type) {
+
+    function max$1(value, max) {
+      if (max == null) return value;
+      if (value > max) return max;
+      return value;
+    }
+
+    function min$1(value, min) {
+      if (min == null) return value;
+      if (value < min) return min;
+      return value;
+    }
+    /*
+    export function useInputCaptures<T>(type: "text", min2: string, max2: string):
+    export function useInputCaptures<T>(type: "text" | "number", min2: number, max2: number)
+    export function useInputCaptures<T>(type: "text" | "number", min2: T, max2: T)*/
+
+
+    function useInputCaptures(type, min2, max2) {
       const capture = A$1(event => {
         switch (type) {
           case "text":
-            return event.currentTarget.value;
+            return max$1(min$1(event.currentTarget.value, min2), max2);
 
           case "number":
-            return event.currentTarget.valueAsNumber;
+            return max$1(min$1(event.currentTarget.valueAsNumber, min2), max2);
         }
       }, [type]);
       const uncapture = A$1(value => {
@@ -9286,7 +9320,7 @@
       const {
         capture,
         uncapture
-      } = useInputCaptures(type);
+      } = useInputCaptures(type, props.min, props.max);
       const {
         focusedInner,
         useHasFocusProps
@@ -9333,6 +9367,7 @@
       var _labelPosition;
 
       (_labelPosition = labelPosition) !== null && _labelPosition !== void 0 ? _labelPosition : labelPosition = "start";
+      if (props.value > 255) debugger;
       const {
         inputId,
         labelId,
@@ -13574,7 +13609,9 @@
 
       const sort = A$1((column, direction) => {
         let sortedRows = managedRows.slice().sort((lhsRow, rhsRow) => {
-          let result = compare1(lhsRow.getManagedCells()[column].literalValue, rhsRow.getManagedCells()[column].literalValue);
+          var _lhsRow$getManagedCel, _lhsRow$getManagedCel2, _rhsRow$getManagedCel, _rhsRow$getManagedCel2;
+
+          let result = compare1((_lhsRow$getManagedCel = lhsRow.getManagedCells()) === null || _lhsRow$getManagedCel === void 0 ? void 0 : (_lhsRow$getManagedCel2 = _lhsRow$getManagedCel[column]) === null || _lhsRow$getManagedCel2 === void 0 ? void 0 : _lhsRow$getManagedCel2.literalValue, (_rhsRow$getManagedCel = rhsRow.getManagedCells()) === null || _rhsRow$getManagedCel === void 0 ? void 0 : (_rhsRow$getManagedCel2 = _rhsRow$getManagedCel[column]) === null || _rhsRow$getManagedCel2 === void 0 ? void 0 : _rhsRow$getManagedCel2.literalValue);
           if (direction[0] == "d") return -result;
           return result;
         }); // Go through each DOM row in the table
@@ -13715,6 +13752,7 @@
     const RowIndexAsUnsortedContext = D$1(null);
     const TableCell = g(forwardElementRef(function TableCell({
       value: valueAsUnsorted,
+      colSpan,
       children,
       index,
       variant,
@@ -13739,6 +13777,7 @@
       });
       const cellProps = {
         ref,
+        colSpan,
         role: "gridcell",
         "data-value-as-unsorted": `${valueAsUnsorted}`,
         "data-dvalue-as-unsorted": `${displayValue}`,
@@ -13867,6 +13906,7 @@
     function RandomRow(_a) {
         var _this = this;
         var index = _a.index;
+        var w = RandomWords$1[index];
         var n = Math.pow((index + 0), 2);
         var d = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + n * 7);
         var _b = useState(false), checked = _b[0], setChecked = _b[1];
@@ -13882,8 +13922,8 @@
             });
         }); }, [index]);
         return (v$1(TableRow, { index: index },
-            v$1(TableCell, { index: 0, value: RandomWords$1[index] }),
-            v$1(TableCell, { index: 1, value: n }),
+            v$1(TableCell, { index: 0, value: n, colSpan: !w ? 2 : undefined }),
+            w && v$1(TableCell, { index: 1, value: w }),
             v$1(TableCell, { index: 2, value: d }, formatter.format(d)),
             v$1(TableCell, { index: 3, value: checked },
                 v$1(Checkbox, { checked: checked, onInput: onInput, labelPosition: "hidden" }, "Demo table checkbox"))));
@@ -13921,13 +13961,13 @@
                     ". (Fragments as an immediate child are an exception and are fine to use)",
                     v$1("code", null, "// The table cell itself will receive focus:\n<TableCell>Text</TableCell>\n<TableCell>0</TableCell>\n<TableCell><>Text</></TableCell>\n\n// The table cell will delegate focus to its contents instead:\n<TableCell><div>Text</div></TableCell>\n<TableCell><Input type=\"...\" {...} /></TableCell>\n\n// \u274C The cell will try to focus the child but it'll never receive the message!\n<TableCell>{(props) => \"text\"}</TableCell>\n\n// \u2705 The cell can properly delegate all duties to the child DIV.\n<TableCell>{forwardRef((p, ref) => <div ref={ref} {...p}>\"text\"</p>)}</TableCell>")),
                 v$1(CardElement, null,
-                    v$1(Input, { type: "number", value: rowCount, onInput: setRowCount }, "Row count")),
+                    v$1(Input, { type: "number", value: rowCount, min: 0, max: 255, onInput: setRowCount }, "Row count")),
                 v$1(CardElement, null,
                     v$1(Table, null,
                         v$1(TableHead, null,
                             v$1(TableRow, { index: 0 },
-                                v$1(TableHeaderCell, { index: 0 }, "String"),
-                                v$1(TableHeaderCell, { index: 1 }, "Number"),
+                                v$1(TableHeaderCell, { index: 0 }, "Number"),
+                                v$1(TableHeaderCell, { index: 1 }, "String"),
                                 v$1(TableHeaderCell, { index: 2 }, "Date"),
                                 v$1(TableHeaderCell, { index: 3 }, "Checkbox"))),
                         v$1(TableBody, null, Array.from(function () {
@@ -13951,7 +13991,7 @@
                             });
                         }())))),
                 v$1(CardElement, null,
-                    v$1("code", null, "<Table>\n    <TableHead>\n        <TableRow index={0}>\n            <TableHeaderCell index={0}>String</TableHeaderCell>\n            <TableHeaderCell index={1}>Number</TableHeaderCell>\n            <TableHeaderCell index={2}>Date</TableHeaderCell>\n            <TableHeaderCell index={3}>Checkbox</TableHeaderCell>\n        </TableRow>\n    </TableHead>\n    <TableBody>\n\n        <TableRow index={0}>\n            <TableCell index={0} value={RandomWords[index]} />\n            <TableCell index={1} value={n} />\n            <TableCell index={2} value={d}>{d.toLocaleString()}</TableCell>\n            <TableCell index={3} value={checked}>\n                <Checkbox checked={checked} onInput={onInput} labelPosition=\"hidden\">Demo table checkbox</Checkbox>\n            </TableCell>\n        </TableRow>\n\n        <TableRow index={1} />\n        <TableRow index={2} />\n        <TableRow index={3} />\n        <TableRow index={4} />\n\n    </TableBody>\n</Table>")))));
+                    v$1("code", null, "<Table>\n    <TableHead>\n        <TableRow index={0}>\n            <TableHeaderCell index={1}>Number</TableHeaderCell>\n            <TableHeaderCell index={0}>String</TableHeaderCell>\n            <TableHeaderCell index={2}>Date</TableHeaderCell>\n            <TableHeaderCell index={3}>Checkbox</TableHeaderCell>\n        </TableRow>\n    </TableHead>\n    <TableBody>\n\n        <TableRow index={0}>\n            <TableCell index={0} value={RandomWords[index]} />\n            <TableCell index={1} value={n} />\n            <TableCell index={2} value={d}>{d.toLocaleString()}</TableCell>\n            <TableCell index={3} value={checked}>\n                <Checkbox checked={checked} onInput={onInput} labelPosition=\"hidden\">Demo table checkbox</Checkbox>\n            </TableCell>\n        </TableRow>\n\n        <TableRow index={1} />\n        <TableRow index={2} />\n        <TableRow index={3} />\n        <TableRow index={4} />\n\n    </TableBody>\n</Table>")))));
     }
     function sleep$1(arg0) {
         return __awaiter(this, void 0, void 0, function () {

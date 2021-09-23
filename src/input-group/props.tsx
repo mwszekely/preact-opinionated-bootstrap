@@ -21,20 +21,39 @@ export type InputProps = UnlabelledInputProps & {
 export const InInputGroupContext = createContext(false);
 export const InInputGridContext = createContext(0);
 
-export function useInputCaptures(type: InputProps["type"]) {
 
-    const capture = useCallback((event: h.JSX.TargetedEvent<HTMLInputElement>) => {
+function max<T extends number | string | Date>(value: T, max?: T) {
+    if (max == null)
+        return value;
+    if (value > max)
+        return max;
+    return value;
+}
+function min<T extends number | string | Date>(value: T, min?: T) {
+    if (min == null)
+        return value;
+    if (value < min)
+        return min;
+    return value;
+}
+
+/*
+export function useInputCaptures<T>(type: "text", min2: string, max2: string):
+export function useInputCaptures<T>(type: "text" | "number", min2: number, max2: number)
+export function useInputCaptures<T>(type: "text" | "number", min2: T, max2: T)*/
+export function useInputCaptures<T>(type: "text" | "number", min2?: T, max2?: T) {
+
+    const capture = useCallback((event: h.JSX.TargetedEvent<HTMLInputElement>): T  => {
         switch (type) {
             case "text":
-                return event.currentTarget.value;
+                return max(min(event.currentTarget.value, min2 as any), max2 as any) as T;
 
             case "number":
-                return event.currentTarget.valueAsNumber;
-
+                return max(min(event.currentTarget.valueAsNumber, min2 as any), max2 as any) as T;
         }
     }, [type]);
 
-    const uncapture = useCallback((value: InputProps["value"]) => {
+    const uncapture = useCallback((value: InputProps["value"]): string => {
         switch (type) {
             case "text":
                 return value as string;
