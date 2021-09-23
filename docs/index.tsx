@@ -356,7 +356,7 @@ const Component = () => {
         <ToastsProvider>
 
             <DemoTable />
-            <DemoButtons />
+            {/*<DemoButtons />
             <DemoChecks />
             <DemoInputs />
             <DemoLayout />
@@ -367,7 +367,7 @@ const Component = () => {
             <DemoList />
             <DemoTabs />
             <DemoMenu />
-            {/*<DemoFocus />
+            <DemoFocus />
             <DemoUseTimeout />
             <DemoUseInterval />
             <DemoUseFocusTrap />

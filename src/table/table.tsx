@@ -54,9 +54,9 @@ export interface TableCellChildProps<E extends Element> extends h.JSX.HTMLAttrib
 
 type T = number | string | Date | null | undefined | boolean;
 
-export interface TableRowProps extends Omit<UseGridNavigationRowParameters<TableBodyRowInfo>, "text" | "getManagedCells" | "getRowIndexAsSorted" | "setRowIndexAsSorted"> { variant?: TableCellVariant; children?: ComponentChildren }
-export interface TableCellProps extends Omit<UseGridNavigationCellParameters<TableBodyCellInfo>, "text" | "literalValue" | "displayValue"> { value: T; children?: VNode<any> | string | number | boolean | null, focus?: "cell" | "child", variant?: TableCellVariant; active?: boolean; }
-export interface TableHeaderCellProps extends Omit<UseGridNavigationCellParameters<TableBodyCellInfo>, "text" | "literalValue" | "displayValue"> { unsortable?: boolean; children: ComponentChildren; focus?: "cell" | "child"; variant?: TableCellVariant; active?: boolean; }
+export interface TableRowProps extends Omit<UseGridNavigationRowParameters<TableBodyRowInfo>, "text" | "getManagedCells" | "getRowIndexAsSorted" | "setRowIndexAsSorted" | "navIndex"> { variant?: TableCellVariant; children?: ComponentChildren }
+export interface TableCellProps extends Omit<UseGridNavigationCellParameters<TableBodyCellInfo>, "text" | "literalValue" | "displayValue" | "navIndex"> { value: T; children?: VNode<any> | string | number | boolean | null, focus?: "cell" | "child", variant?: TableCellVariant; active?: boolean; }
+export interface TableHeaderCellProps extends Omit<UseGridNavigationCellParameters<TableBodyCellInfo>, "text" | "literalValue" | "displayValue" | "navIndex"> { unsortable?: boolean; children: ComponentChildren; focus?: "cell" | "child"; variant?: TableCellVariant; active?: boolean; }
 
 interface TableBodyRowInfo extends UseGridNavigationRowInfo {
     getManagedCells: () => TableBodyCellInfo[];
@@ -221,9 +221,19 @@ function compare1(lhs: string | number | boolean | Date | null | undefined, rhs:
 }
 
 const SortContext = createContext<(column: number, direction: "ascending" | "descending") => void>(null!);
+
+
 export const TableBody = forwardElementRef(function TableBody({ children, variant, ...props }: TableBodyProps, ref: Ref<HTMLTableSectionElement>) {
+    const mangleMap = useRef(new Map<number, number>());
+    const demangleMap = useRef(new Map<number, number>());
+    const indexMangler = useCallback((n: number) => (mangleMap.current.get(n) ?? n), []);
+    const indexDemangler = useCallback((n: number) => (demangleMap.current.get(n) ?? n), []);
     const { focusedInner, useHasFocusProps } = useHasFocus<HTMLTableSectionElement>({})
-    const { cellIndex, rowIndex, rowCount, useGridNavigationRow, managedRows } = useGridNavigation<HTMLTableRowElement, HTMLTableCellElement, TableBodyRowInfo, TableBodyCellInfo>({ focusOnChange: focusedInner });
+    const { cellIndex, rowIndex, rowCount, useGridNavigationRow, managedRows } = useGridNavigation<HTMLTableRowElement, HTMLTableCellElement, TableBodyRowInfo, TableBodyCellInfo>({
+        focusOnChange: focusedInner,
+        indexMangler,
+        indexDemangler
+    });
 
     //const forceUpdate = useForceUpdate();
     const [i, setI] = useState(0);
@@ -242,14 +252,10 @@ export const TableBody = forwardElementRef(function TableBody({ children, varian
             // Get the row that should be shown instead of this one
             const overriddenIndex = sortedRows[literalIndex].index;
 
-            // Get the cells that should be shown instead of these cells
-            const overriddenCells = sortedRows[overriddenIndex].getManagedCells();
-
-            // Also, for reference, we'll need some data from the current DOM-based row
-            const literalCells = sortedRows[literalIndex].getManagedCells();
-
             // Let the DOM-based row know that it's showing a different row
             managedRows[literalIndex].setRowIndexAsSorted(overriddenIndex);
+            mangleMap.current.set(literalIndex, overriddenIndex);
+            demangleMap.current.set(overriddenIndex, literalIndex);
             //managedRows[literalIndex].overriddenRowIndex = overriddenIndex;
         }
         setI(i => ++i)
@@ -317,7 +323,10 @@ export const TableRow = memo(forwardElementRef(function TableRow({ children, ind
     const [rowIndexAsSorted, setRowIndexAsSorted, getRowIndexAsSorted] = useState(indexAsUnsorted);
 
     const { cellCount, useGridNavigationRowProps, useGridNavigationCell, tabbableCell, isTabbableRow, managedCells } = useGridNavigationRow({
-        index: indexAsUnsorted, getRowIndexAsSorted, setRowIndexAsSorted, getManagedCells: useStableCallback(() => managedCells)
+        index: indexAsUnsorted,
+        getRowIndexAsSorted,
+        setRowIndexAsSorted,
+        getManagedCells: useStableCallback(() => managedCells)
     });
 
 
@@ -355,7 +364,6 @@ export const TableRow = memo(forwardElementRef(function TableRow({ children, ind
 const RowIndexAsUnsortedContext = createContext<number>(null!);
 
 export const TableCell = memo(forwardElementRef(function TableCell({ value: valueAsUnsorted, children, index, variant, focus, active, ...props }: TableCellProps, ref: Ref<HTMLTableCellElement>) {
-    console.log("TD" + index)
     focus ??= "cell";
     const useGridNavigationCell = useContext(UseBodyGridNavigationCellContext)!;
     const childrenReceiveFocus = (
