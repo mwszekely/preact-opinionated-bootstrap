@@ -12,6 +12,7 @@ var RandomWords = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed 
 
 const formatter = new Intl.DateTimeFormat("en-US", { year: "numeric", month: "short", day: "numeric" })
 function RandomRow({ index }: { index: number }) {
+    const w = RandomWords[index];
     const n = (index + 0) ** 2;
     const d = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + n * 7);
     const [checked, setChecked] = useState(false);
@@ -24,8 +25,8 @@ function RandomRow({ index }: { index: number }) {
 
 
     return (<TableRow index={index}>
-        <TableCell index={0} value={RandomWords[index]} />
-        <TableCell index={1} value={n} />
+        <TableCell index={0} value={n} colSpan={!w? 2 : undefined} />
+        {w && <TableCell index={1} value={w} />}
         <TableCell index={2} value={d}>{formatter.format(d)}</TableCell>
         <TableCell index={3} value={checked}>
             <Checkbox checked={checked} onInput={onInput} labelPosition="hidden">Demo table checkbox</Checkbox>
@@ -72,15 +73,15 @@ export function DemoTable() {
                 </CardElement>
 
                 <CardElement>
-                    <Input type="number" value={rowCount} onInput={setRowCount}>Row count</Input>
+                    <Input type="number" value={rowCount} min={0} max={255} onInput={setRowCount}>Row count</Input>
                 </CardElement>
 
                 <CardElement>
                     <Table>
                         <TableHead>
                             <TableRow index={0}>
-                                <TableHeaderCell index={0}>String</TableHeaderCell>
-                                <TableHeaderCell index={1}>Number</TableHeaderCell>
+                                <TableHeaderCell index={0}>Number</TableHeaderCell>
+                                <TableHeaderCell index={1}>String</TableHeaderCell>
                                 <TableHeaderCell index={2}>Date</TableHeaderCell>
                                 <TableHeaderCell index={3}>Checkbox</TableHeaderCell>
                             </TableRow>
@@ -99,8 +100,8 @@ export function DemoTable() {
                     <code>{`<Table>
     <TableHead>
         <TableRow index={0}>
-            <TableHeaderCell index={0}>String</TableHeaderCell>
             <TableHeaderCell index={1}>Number</TableHeaderCell>
+            <TableHeaderCell index={0}>String</TableHeaderCell>
             <TableHeaderCell index={2}>Date</TableHeaderCell>
             <TableHeaderCell index={3}>Checkbox</TableHeaderCell>
         </TableRow>

@@ -55,7 +55,7 @@ export interface TableCellChildProps<E extends Element> extends h.JSX.HTMLAttrib
 type T = number | string | Date | null | undefined | boolean;
 
 export interface TableRowProps extends Omit<UseGridNavigationRowParameters<TableBodyRowInfo>, "text" | "getManagedCells" | "getRowIndexAsSorted" | "setRowIndexAsSorted" | "navIndex"> { variant?: TableCellVariant; children?: ComponentChildren }
-export interface TableCellProps extends Omit<UseGridNavigationCellParameters<TableBodyCellInfo>, "text" | "literalValue" | "displayValue" | "navIndex"> { value: T; children?: VNode<any> | string | number | boolean | null, focus?: "cell" | "child", variant?: TableCellVariant; active?: boolean; }
+export interface TableCellProps extends Omit<UseGridNavigationCellParameters<TableBodyCellInfo>, "text" | "literalValue" | "displayValue" | "navIndex"> { colSpan?: number; value: T; children?: VNode<any> | string | number | boolean | null, focus?: "cell" | "child", variant?: TableCellVariant; active?: boolean; }
 export interface TableHeaderCellProps extends Omit<UseGridNavigationCellParameters<TableBodyCellInfo>, "text" | "literalValue" | "displayValue" | "navIndex"> { unsortable?: boolean; children: ComponentChildren; focus?: "cell" | "child"; variant?: TableCellVariant; active?: boolean; }
 
 interface TableBodyRowInfo extends UseGridNavigationRowInfo {
@@ -241,7 +241,7 @@ export const TableBody = forwardElementRef(function TableBody({ children, varian
     // This hooks up to internalSortHandler, used by the table head.
     const sort = useCallback((column: number, direction: "ascending" | "descending"): Promise<void> | void => {
         let sortedRows = managedRows.slice().sort((lhsRow, rhsRow) => {
-            let result = compare1(lhsRow.getManagedCells()[column].literalValue, rhsRow.getManagedCells()[column].literalValue);
+            let result = compare1(lhsRow.getManagedCells()?.[column]?.literalValue, rhsRow.getManagedCells()?.[column]?.literalValue);
             if (direction[0] == "d")
                 return -result;
             return result;
@@ -363,7 +363,7 @@ export const TableRow = memo(forwardElementRef(function TableRow({ children, ind
 
 const RowIndexAsUnsortedContext = createContext<number>(null!);
 
-export const TableCell = memo(forwardElementRef(function TableCell({ value: valueAsUnsorted, children, index, variant, focus, active, ...props }: TableCellProps, ref: Ref<HTMLTableCellElement>) {
+export const TableCell = memo(forwardElementRef(function TableCell({ value: valueAsUnsorted, colSpan, children, index, variant, focus, active, ...props }: TableCellProps, ref: Ref<HTMLTableCellElement>) {
     focus ??= "cell";
     const useGridNavigationCell = useContext(UseBodyGridNavigationCellContext)!;
     const childrenReceiveFocus = (
@@ -382,6 +382,7 @@ export const TableCell = memo(forwardElementRef(function TableCell({ value: valu
 
     const cellProps = {
         ref,
+        colSpan,
         role: "gridcell",
         "data-value-as-unsorted": `${valueAsUnsorted}`,
         "data-dvalue-as-unsorted": `${displayValue}`,
