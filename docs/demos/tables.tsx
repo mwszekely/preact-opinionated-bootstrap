@@ -54,20 +54,20 @@ export function DemoTable() {
                 </CardElement>
 
                 <CardElement>
-                    However, please note that if you pass a child component to a <code>TableCell</code>, it will be put in charge of that cell's navigation and focus management, <strong>so it needs to be a component that accepts and forwards onwards all incoming props and refs</strong>. 
+                    However, please note that if you pass a child component to a <code>TableCell</code>, it will be put in charge of that cell's navigation and focus management, <strong>so it needs to be a component that accepts and forwards onwards all incoming props and refs</strong>. (Fragments as an immediate child are an exception and are fine to use)
                     <code>{`// The table cell itself will receive focus:
 <TableCell>Text</TableCell>
 <TableCell>0</TableCell>
-<TableCell><>Text</></TableCell> // (Fragments are handled specially and are okay as an immediate child.)
+<TableCell><>Text</></TableCell>
 
 // The table cell will delegate focus to its contents instead:
 <TableCell><div>Text</div></TableCell>
-<TableCell><Input /></TableCell>
+<TableCell><Input type="..." {...} /></TableCell>
 
-// BAD! The cell will try to focus the child but it'll never receive the message!
-<TableCell>{() => "text"}</TableCell>
+// ❌ The cell will try to focus the child but it'll never receive the message!
+<TableCell>{(props) => "text"}</TableCell>
 
-// Fine, the cell can properly delegate all duties to the child DIV.
+// ✅ The cell can properly delegate all duties to the child DIV.
 <TableCell>{forwardRef((p, ref) => <div ref={ref} {...p}>"text"</p>)}</TableCell>`}</code>
                 </CardElement>
 
@@ -123,81 +123,6 @@ export function DemoTable() {
 
     </TableBody>
 </Table>`}</code>
-                </CardElement>
-
-
-                <CardElement>
-                    To display contents that are more complicated than a data literal, like the recursively-complicated structure built by JSX, you'll need a wrapper component. Please note that
-                    the details of this component are very specific, so feel free to copy and paste the example below. If you run into issues:
-
-                    <ul>
-                        <li>The child component must pass its ref and all unused props to <strong>its</strong> child component.</li>
-                        <li>The child component must be a ref-forwarding component.  Use <code>forwardElementRef</code> (or just the built-in <code>forwardRef</code>) to do this.</li>
-                        <li>The child component must be stable (as in, it's not an anonymous function defined on each render).  If the child component is just a plain ol' global function like most, this isn't an issue.  If it's defined inside a component, make sure it's wrapped in <code>useCallback</code> to keep it stable.</li>
-                        <li>If the child component uses both <code>forwardRef</code> and <code>useCallback</code> (from the previous rule), then <code>useCallback</code> must be on the outside. This isn't specific to table cells or anything, but it's easy to miss.</li>
-                        <li>Beyond that, interactions that affect the source row will propogate to the "entangled" row that's actually showing the source row's data.</li>
-                    </ul>
-
-
-                </CardElement>
-
-
-                <CardElement>
-                    <code>{`function CheckboxTableCell({ index }: { index: number }) {
-    const forceUpdate = useForceUpdate();
-
-    // This represents our "true" row, which might not be
-    // what we're currently showing, if the table is sorted.
-    const rowIndexLiteral = useTableRowIndex("literal");
-
-    // This value is "refreshed" by calling forceUpdate() 
-    // instead of via props or state for demonstration.
-    const checked = checkedRows.has(rowIndexLiteral);
-
-    return <TableCell index={index} value={checked} {...{ forceUpdate } as never}>{
-
-        // This is a component, we're just not calling it immediately.
-        // We're passing it to the TableCell for it to create.
-        // You could have it separately as function CheckboxTableCellChild() {}
-        // but it's only going to be used here anyway.
-        //
-        // useCallback because the identity of a function is used 
-        // to determine if two components are the same when diffed together.
-        useCallback(
-
-            // forwardRef because the table needs to give the ref that the
-            // TableCell normally would use for focus management and give
-            // it to this component instead.
-            forwardElementRef(({ overriddenValue, overriddenRowIndex, forceUpdate, ...props }: TableCellChildProps<HTMLButtonElement> & { forceUpdate?(): void; }, ref: any) => {
-
-                // The checkbox sets a global variable and then
-                // calls forceUpdate.
-                const onInput = (c: boolean) => {
-
-                    // Basically, use forceUpdate to pretend this is a setState call
-                    // that would actually cause this component to update and re-render.
-                    // (Just for the sake of demonstration for where the data's stored)
-                    // Causing it to re-render will cause it to let its "partner" sibling
-                    // know of any changes to what it should be displaying.
-                    if (c)
-                        checkedRows.add(overriddenRowIndex)
-                    else
-                        checkedRows.delete(overriddenRowIndex)
-                    forceUpdate!();
-                }
-
-                // Pass along the ref, all unused props, and then any normal props.
-                // Note that while not explicitly documented to, most components
-                // will forward on unused props to the most reasonable target,
-                // which for form-like components is going to be the input element.
-                return <Checkbox ref={ref} {...props} checked={!!overriddenValue} onInput={onInput} labelPosition="hidden">Demo table checkbox</Checkbox>;
-            }), [])
-    }</TableCell>
-}
-
-// Presumably you'll have better state management than a global variable.
-// A context would work nicely.
-let checkedRows = new Set<number>();`}</code>
                 </CardElement>
             </Card>
         </div>
