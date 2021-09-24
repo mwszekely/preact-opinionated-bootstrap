@@ -8469,7 +8469,7 @@
         var _toastQueue$i;
 
         if (set) console.assert(i <= getActiveToastIndex());
-        (_toastQueue$i = toastQueue[i]) === null || _toastQueue$i === void 0 ? void 0 : _toastQueue$i.setStatus(set ? "active" : i < getActiveToastIndex() ? "dismissed" : "pending");
+        (_toastQueue$i = toastQueue[i]) === null || _toastQueue$i === void 0 ? void 0 : _toastQueue$i.setStatus(prev => prev === "dismissed" ? "dismissed" : set ? "active" : i < getActiveToastIndex() ? "dismissed" : "pending");
       });
       const useToast = A$1(({
         politeness,
