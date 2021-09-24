@@ -131,8 +131,17 @@ export type UseTableHeadCellParameters = Omit<UseGridNavigationCellParameters<Ta
 const LocationPriority = { "head": 0, "body": 1, "foot": 2 };
 
 export function useTable<T extends Element, H extends Element, B extends Element, F extends Element, R extends Element, HC extends Element, BC extends Element>({ }: UseTableParameters) {
+    
+    // This is the index of the currently sorted column('s header cell that was clicked to sort it).
+    // This is used by all the header cells to know when to reset their "sort mode" back to its initial state.
     const [sortedColumn, setSortedColumn] = useState<null | number>(null);
-    const { useManagedChild: useManagedHeaderCellChild, managedChildren: managedHeaderCells } = useChildManager<{ index: string; setSortedColumn(column: number): void; }>()
+    const { useManagedChild: useManagedHeaderCellChild, managedChildren: managedHeaderCells } = useChildManager<{ index: string; setSortedColumn(column: number): void; }>();
+
+    // When we sort the table, we need to manually update each table component
+    // A little bit ugly, but it gets the job done.
+    const { useManagedChild: useManagedTableSection, managedChildren: managedTableSections } = useChildManager<{ index: "head" | "body" | "foot", forceUpdate(): void }>();
+
+    // Used for navigation to determine when focus should follow the selected cell
     const { focusedInner, useHasFocusProps } = useHasFocus<T>();
 
     // Whenever any given header cell requests a sort, it sets itself here, in the table,
@@ -144,22 +153,22 @@ export function useTable<T extends Element, H extends Element, B extends Element
         }
     }, [sortedColumn])
 
-    // This is the one that's used for the button in the table head
-    ///const [internalSortHandler, setInternalSortHandler] = useState<null | ((column: number, direction: "ascending" | "descending") => (Promise<void> | void))>(null);
+    // These are used to keep track of a mapping between unsorted index <---> sorted index.
+    // These are needed for navigation with the arrow keys.
     const mangleMap = useRef(new Map<number, number>());
     const demangleMap = useRef(new Map<number, number>());
     const indexMangler = useCallback((n: number) => (mangleMap.current.get(n) ?? n), []);
     const indexDemangler = useCallback((n: number) => (demangleMap.current.get(n) ?? n), []);
+
+    // Actually implement grid navigation
     const { cellIndex, rowIndex, rowCount, useGridNavigationRow, managedRows } = useGridNavigation<R, BC | HC, TableRowInfo, TableBodyCellInfo>({
         focusOnChange: focusedInner,
         indexMangler,
         indexDemangler
     });
 
-    //const forceUpdate = useForceUpdate();
-    const [i, setI] = useState(0);
-
-    // This hooks up to internalSortHandler, used by the table head.
+    // The actual sort function.
+    // Note that it DOES look at header and footer cells, but just tiptoes around them.
     const sort = useCallback((column: number, direction: "ascending" | "descending"): Promise<void> | void => {
         let sortedRows = managedRows.slice().sort((lhsRow, rhsRow) => {
             if (lhsRow.location != rhsRow.location) {
@@ -175,13 +184,14 @@ export function useTable<T extends Element, H extends Element, B extends Element
                 let result = compare(lhsRow.getManagedCells()?.[column]?.literalValue, rhsRow.getManagedCells()?.[column]?.literalValue);
                 if (direction[0] == "d")
                     return -result;
+                return result;
             }
 
             console.assert(false);
             return 0;
         });
 
-        // Go through each DOM row in the table
+        // Go through each DOM-based row in the table
         for (let literalIndex = 0; literalIndex < sortedRows.length; ++literalIndex) {
             // Get the row that should be shown instead of this one
             const overriddenIndex = sortedRows[literalIndex].index;
@@ -193,24 +203,33 @@ export function useTable<T extends Element, H extends Element, B extends Element
             //managedRows[literalIndex].overriddenRowIndex = overriddenIndex;
         }
         setSortedColumn(column);
-        setI(i => ++i)
+        console.log(sortedRows.map(r => r.index).join(", "));
+
+        managedTableSections["head"]?.forceUpdate();
+        managedTableSections["body"]?.forceUpdate();
+        managedTableSections["foot"]?.forceUpdate();
+
     }, [ /* Must remain stable */]);
 
 
-
+    // Tables need a role of "group" in order to be considered 
+    // "interactive content" like a text box that passes through
+    // keyboard inputs
     function useTableProps<P extends h.JSX.HTMLAttributes<T>>({ role, ...props }: P) { return useHasFocusProps(useMergedProps<T>()({ role: "group" }, props)); }
 
 
     const useTableRow: UseTableRow<R, HC, BC> = useCallback(({ index: rowIndexAsUnsorted, location }: UseTableRowParameters) => {
-        const getManagedCells = useStableCallback(() => managedCells);
+        // This is used by the sort function to update this row when everything's shuffled.
         const [rowIndexAsSorted, setRowIndexAsSorted, getRowIndexAsSorted] = useState(rowIndexAsUnsorted);
+        const getManagedCells = useStableCallback(() => managedCells);
 
         const { useGridNavigationCell, useGridNavigationRowProps, cellCount, isTabbableRow, managedCells, tabbableCell } = useGridNavigationRow({ index: rowIndexAsUnsorted, getManagedCells, getRowIndexAsSorted, setRowIndexAsSorted, location });
 
+        // Not public -- just the shared code between header cells and body cells
         const useTableCellShared = useCallback(<C extends Element>({ index: columnIndex, literalValue }: { index: number, literalValue: T2 }) => {
-            const { tabbable, useGridNavigationCellProps } = useGridNavigationCell({ index: columnIndex, literalValue, text: null });
+            const { tabbable, useGridNavigationCellProps, } = useGridNavigationCell({ index: columnIndex, literalValue, text: null });
             function useTableCellProps<P extends h.JSX.HTMLAttributes<C>>({ role, ...props }: P) {
-                return useGridNavigationCellProps(useMergedProps<any>()({ role: "gridcell" }, props));
+                return (useMergedProps<any>()({ role: "gridcell" }, props));
             }
 
             function useTableCellDelegateProps<P extends h.JSX.HTMLAttributes<any>>({ role, ...props }: P) {
@@ -225,11 +244,12 @@ export function useTable<T extends Element, H extends Element, B extends Element
 
             const { useTableCellDelegateProps, useTableCellProps } = useTableCellShared<HC>({ index: columnIndex, literalValue });
 
-            // Header cell stuff
+            // This is mostly all just in regards to
+            // handling the "sort-on-click" interaction.
             const [sortDirection, setSortDirection, getSortDirection] = useState<null | "ascending" | "descending">(null);
             const [isTheSortedColumn, setIsTheSortedColumn] = useState(false);
             const random = useRef(generateRandomId());
-            const { element, getElement, useManagedChildProps } = useManagedHeaderCellChild({ index: random.current, setSortedColumn: useCallback((c) => { setIsTheSortedColumn(c === columnIndex) }, [columnIndex]) })
+            const { element, getElement, useManagedChildProps } = useManagedHeaderCellChild<HC>({ index: random.current, setSortedColumn: useCallback((c) => { setIsTheSortedColumn(c === columnIndex) }, [columnIndex]) })
 
             useEffect(() => {
                 if (!isTheSortedColumn)
@@ -248,7 +268,7 @@ export function useTable<T extends Element, H extends Element, B extends Element
                 sort(columnIndex, nextSortDirection);
             }, []);
 
-            function useTableHeadCellProps<P extends h.JSX.HTMLAttributes<HC>>(props: P) {
+            const useTableHeadCellProps: UseTableHeadCellProps<HC> = <P extends h.JSX.HTMLAttributes<HC>>(props: P) => {
                 const m = useTableCellProps(useButtonLikeEventHandlers<HC>("th" as any, unsortable ? null : onSortClick, undefined)(
                     (useMergedProps<HC>()({
                         role: "columnheader",
@@ -270,15 +290,15 @@ export function useTable<T extends Element, H extends Element, B extends Element
             return useGridNavigationRowProps(useMergedProps<R>()({ role: "row" }, props))
         }
 
-        return { useTableCell, useTableRowProps, useTableHeadCell };
+        return { useTableCell, useTableRowProps, useTableHeadCell, rowIndexAsSorted, rowIndexAsUnsorted };
     }, [])
 
 
 
 
-    const useTableHead: UseTableHead<H> = useCallback(function useTableHead({ }: UseTableHeadParameters) { return { useTableHeadProps: useCallback(<P extends h.JSX.HTMLAttributes<H>>(props: P) => useMergedProps<H>()({ role: "rowgroup" }, props), []) } }, []);
-    const useTableBody: UseTableBody<B> = useCallback(function useTableBody({ }: UseTableBodyParameters) { return { useTableBodyProps: useCallback(<P extends h.JSX.HTMLAttributes<B>>(props: P) => useMergedProps<B>()({ role: "rowgroup" }, props), []) } }, []);
-    const useTableFoot: UseTableFoot<F> = useCallback(function useTableFoot({ }: UseTableFootParameters) { return { useTableFootProps: useCallback(<P extends h.JSX.HTMLAttributes<F>>(props: P) => useMergedProps<F>()({ role: "rowgroup" }, props), []) } }, []);
+    const useTableHead: UseTableHead<H> = useCallback(function useTableHead({ }: UseTableHeadParameters) { const { element, useManagedChildProps } = useManagedTableSection<H>({ index: "head", forceUpdate: useForceUpdate() }); return { useTableHeadProps: useCallback(<P extends h.JSX.HTMLAttributes<H>>(props: P) => useManagedChildProps(useMergedProps<H>()({ role: "rowgroup" }, props)), [useManagedChildProps]) } }, []);
+    const useTableBody: UseTableBody<B> = useCallback(function useTableBody({ }: UseTableBodyParameters) { const { element, useManagedChildProps } = useManagedTableSection<B>({ index: "body", forceUpdate: useForceUpdate() }); return { useTableBodyProps: useCallback(<P extends h.JSX.HTMLAttributes<B>>(props: P) => useManagedChildProps(useMergedProps<B>()({ role: "rowgroup" }, props)), [useManagedChildProps]) } }, []);
+    const useTableFoot: UseTableFoot<F> = useCallback(function useTableFoot({ }: UseTableFootParameters) { const { element, useManagedChildProps } = useManagedTableSection<F>({ index: "foot", forceUpdate: useForceUpdate() }); return { useTableFootProps: useCallback(<P extends h.JSX.HTMLAttributes<F>>(props: P) => useManagedChildProps(useMergedProps<F>()({ role: "rowgroup" }, props)), [useManagedChildProps]) } }, []);
 
     return {
         useTableProps,
@@ -291,25 +311,31 @@ export function useTable<T extends Element, H extends Element, B extends Element
 
 }
 
-type UseTableHead<H extends Element> = (parameters: UseTableHeadParameters) => { useTableHeadProps: <P extends h.JSX.HTMLAttributes<H>>(props: P) => MergedProps<H, { role: string; }, P>; };
-type UseTableBody<B extends Element> = (parameters: UseTableBodyParameters) => { useTableBodyProps: <P extends h.JSX.HTMLAttributes<B>>(props: P) => MergedProps<B, { role: string; }, P>; };
-type UseTableFoot<F extends Element> = (parameters: UseTableFootParameters) => { useTableFootProps: <P extends h.JSX.HTMLAttributes<F>>(props: P) => MergedProps<F, { role: string; }, P>; };
+type UseTableHead<H extends Element> = (parameters: UseTableHeadParameters) => { useTableHeadProps: <P extends h.JSX.HTMLAttributes<H>>(props: P) => h.JSX.HTMLAttributes<H>; };
+type UseTableBody<B extends Element> = (parameters: UseTableBodyParameters) => { useTableBodyProps: <P extends h.JSX.HTMLAttributes<B>>(props: P) => h.JSX.HTMLAttributes<B>; };
+type UseTableFoot<F extends Element> = (parameters: UseTableFootParameters) => { useTableFootProps: <P extends h.JSX.HTMLAttributes<F>>(props: P) => h.JSX.HTMLAttributes<F>; };
 
 type UseTableCell<BC extends Element> = ({ index: columnIndex, literalValue }: UseTableCellParameters) => {
     useTableCellProps: <P extends h.JSX.HTMLAttributes<BC>>({ role, ...props }: P) => h.JSX.HTMLAttributes<BC>
     useTableCellDelegateProps: <P extends h.JSX.HTMLAttributes<any>>(props: P) => h.JSX.HTMLAttributes<any>
 }
 
+type UseTableHeadCellProps<HC extends Element> = <P extends h.JSX.HTMLAttributes<HC>>(props: P) => h.JSX.HTMLAttributes<HC>;
+
+
+
 type UseTableHeadCell<HC extends Element> = ({ index: columnIndex, literalValue, unsortable }: UseTableHeadCellParameters) => {
-    useTableHeadCellProps: <P extends h.JSX.HTMLAttributes<HC>>(props: P) => h.JSX.HTMLAttributes<HC>
-    useTableHeadCellDelegateProps: <P extends h.JSX.HTMLAttributes<HC>>(props: P) =>h.JSX.HTMLAttributes<HC>;
+    useTableHeadCellProps: UseTableHeadCellProps<HC>;
+    useTableHeadCellDelegateProps: <P extends h.JSX.HTMLAttributes<any>>(props: P) => h.JSX.HTMLAttributes<any>;
     sortDirection: "ascending" | "descending" | null;
 }
 
 type UseTableRow<R extends Element, HC extends Element, BC extends Element> = (parameters: UseTableRowParameters) => {
     useTableCell: UseTableCell<BC>;
     useTableRowProps: <P extends h.JSX.HTMLAttributes<R>>(props: P) => h.JSX.HTMLAttributes<R>
-    useTableHeadCell: UseTableHeadCell<HC>
+    useTableHeadCell: UseTableHeadCell<HC>;
+    rowIndexAsSorted: number;
+    rowIndexAsUnsorted: number;
 }
 
 const TableHeadContext = createContext<UseTableHead<HTMLTableSectionElement>>(null!);
@@ -319,9 +345,31 @@ const TableRowContext = createContext<UseTableRow<HTMLTableRowElement, HTMLTable
 
 const ManagedRowsContext = createContext<TableRowInfo[]>([]);
 
+const RecreateChildContext = createContext<(children: VNode<{ index: number }>) => (h.JSX.Element | null)>(null!);
+
+const SetHeaderRowCountContext = createContext<StateUpdater<number>>(null!);
+const SetBodyRowCountContext = createContext<StateUpdater<number>>(null!);
+
 export const Table = forwardElementRef(function Table({ children, small, striped, hoverable, border, variant, borderColor, ...props }: TableProps, ref: Ref<HTMLTableElement>) {
 
     const { useTableProps, useTableBody, useTableFoot, useTableHead, useTableRow, managedRows } = useTable<HTMLTableElement, HTMLTableSectionElement, HTMLTableSectionElement, HTMLTableSectionElement, HTMLTableRowElement, HTMLTableCellElement, HTMLTableCellElement>({});
+
+    // TODO: How bad is the 2 re-renders on mount?
+    const [headerRowCount, setHeaderRowCount] = useState(0);
+    const [bodyRowCount, setBodyRowCount] = useState(0);
+    // Nothing follows tfoot, so there's no need to track that.
+
+    const recreateChildWithSortedKey = useCallback(function ensortenChild(child: VNode<{ index: number }>) {
+        //childIndex += (location === "body" ? headerRowCount : location === "foot" ? (bodyRowCount + headerRowCount) : 0);
+        const { index: childIndex, ...props } = (child.props);
+        const sortedIndex = managedRows[childIndex]?.getRowIndexAsSorted() ?? childIndex;
+        const C = child.type as FunctionComponent<{ index: number }>;
+        let ret = <C key={sortedIndex} index={sortedIndex} {...props} />;
+        return ret;
+    }, [])
+
+    console.log(`Header count: ${headerRowCount}`);
+    console.log(`Body count: ${bodyRowCount}`);
 
     return (
         <table {...useTableProps(useMergedProps<HTMLTableElement>()({
@@ -342,7 +390,13 @@ export const Table = forwardElementRef(function Table({ children, small, striped
                     <TableFootContext.Provider value={useTableFoot}>
                         <TableRowContext.Provider value={useTableRow}>
                             <ManagedRowsContext.Provider value={managedRows}>
-                                {children}
+                                <RecreateChildContext.Provider value={recreateChildWithSortedKey}>
+                                    <SetHeaderRowCountContext.Provider value={setHeaderRowCount}>
+                                        <SetBodyRowCountContext.Provider value={setBodyRowCount}>
+                                            {children}
+                                        </SetBodyRowCountContext.Provider>
+                                    </SetHeaderRowCountContext.Provider>
+                                </RecreateChildContext.Provider>
                             </ManagedRowsContext.Provider>
                         </TableRowContext.Provider>
                     </TableFootContext.Provider>
@@ -427,23 +481,14 @@ export const TableBody = forwardElementRef(function TableBody({ children, varian
     const useTableBody = useContext(TableBodyContext);
     const { useTableBodyProps } = useTableBody({});
 
-
-    const managedRows: TableRowInfo[] = useContext(ManagedRowsContext);
-
-    function ensortenChild(literalIndex: number) {
-        const sortedIndex = managedRows[literalIndex]?.getRowIndexAsSorted() ?? literalIndex;
-        const C = children[literalIndex].type as FunctionComponent<{ index: number }>;
-        const { index, ...props } = children[literalIndex].props;
-        let ret = <C key={sortedIndex} index={sortedIndex} {...props} />
-        return ret;
-    }
+    const recreateChildWithSortedKey = useContext(RecreateChildContext);
 
     return (
         <CellLocationContext.Provider value={"body"}>
             <tbody {...useTableBodyProps(useMergedProps<HTMLTableSectionElement>()({ ref, className: clsx(variant && `table-${variant}`) }, props))}>
                 <>
                     {children.map((tableRow, i) => {
-                        return ensortenChild(i);
+                        return recreateChildWithSortedKey(tableRow);
                     })}
                 </>
             </tbody>
@@ -469,27 +514,43 @@ export const TableFoot = forwardElementRef(function TableFoot({ children, varian
 const TableCellContext = createContext<UseTableCell<HTMLTableCellElement>>(null!);
 const TableHeadCellContext = createContext<UseTableHeadCell<HTMLTableCellElement>>(null!);
 export const TableRow = memo(forwardElementRef(function TableRow({ children, index: indexAsUnsorted, variant, ...props }: TableRowProps, ref: Ref<HTMLTableRowElement>) {
-    //const isInTHead = useContext(CellIsInHeaderContext);
 
     const location = useContext(CellLocationContext);
+    const setHeadRowCount = useContext(SetHeaderRowCountContext);
+    const setBodyRowCount = useContext(SetBodyRowCountContext);
+    useEffect(() => {
+        if (location === "head"){
+            setHeadRowCount(c => ++c);
+            return () => setHeadRowCount(c => --c);
+        }
+        else if (location === "body"){
+            setBodyRowCount(c => ++c);
+            return () => setBodyRowCount(c => --c);
+        }
+    }, [location])
+
     const useTableRow = useContext(TableRowContext);
-    const { useTableCell, useTableHeadCell, useTableRowProps } = useTableRow({ index: indexAsUnsorted, location });
+    if (location === "head")
+        console.assert(indexAsUnsorted === 0);
+    else
+        console.assert(indexAsUnsorted !== 0)
+    const { useTableCell, useTableHeadCell, useTableRowProps, rowIndexAsSorted, rowIndexAsUnsorted } = useTableRow({ index: indexAsUnsorted, location });
 
 
     const rowProps = {
         children, ...useTableRowProps(useMergedProps<HTMLTableRowElement>()({
             ref,
+            "data-row-as-sorted": rowIndexAsSorted,
+            "data-row-as-unsorted": rowIndexAsUnsorted,
             className: clsx(variant && `table-${variant}`),
         }, props))
     };
 
 
-    //const Provider = !isInTHead ? UseBodyGridNavigationCellContext.Provider : UseHeadGridNavigationCellContext.Provider as typeof UseBodyGridNavigationCellContext["Provider"];
-
     return (
         <TableCellContext.Provider value={useTableCell}>
             <TableHeadCellContext.Provider value={useTableHeadCell}>
-                <tr {...useTableRowProps(rowProps)}>
+                <tr {...rowProps}>
                     {children}
                 </tr>
             </TableHeadCellContext.Provider>
@@ -520,7 +581,6 @@ export const TableCell = memo(forwardElementRef(function TableCell({ value: valu
     const cellProps = useTableCellProps({
         ref,
         colSpan,
-        role: "gridcell",
         className: clsx(variant && `table-${variant}`)
     });
 

@@ -11,9 +11,10 @@ import { TableCellChildProps, TableCellProps, useTableRowIndex } from "../../tab
 var RandomWords = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.".split(" ");
 
 const formatter = new Intl.DateTimeFormat("en-US", { year: "numeric", month: "short", day: "numeric" })
-function RandomRow({ index }: { index: number }) {
-    const w = RandomWords[index];
-    const n = (index + 0) ** 2;
+function RandomRow({ index: index }: { index: number }) {
+    console.assert(index !== 0);
+    const w = RandomWords[index - 1];
+    const n = ((index - 1) + 0) ** 2;
     const d = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + n * 7);
     const [checked, setChecked] = useState(false);
 
@@ -24,14 +25,16 @@ function RandomRow({ index }: { index: number }) {
     }, [index])
 
 
-    return (<TableRow index={index}>
-        <TableCell index={0} value={n} colSpan={!w? 2 : undefined} />
-        {w && <TableCell index={1} value={w} />}
-        <TableCell index={2} value={d}>{formatter.format(d)}</TableCell>
-        <TableCell index={3} value={checked}>
-            <Checkbox checked={checked} onInput={onInput} labelPosition="hidden">Demo table checkbox</Checkbox>
-        </TableCell>
-    </TableRow>)
+    return (
+        <TableRow index={index} {...{ "data-test": index } as never}>
+            <TableCell index={0} value={n} colSpan={!w ? 2 : undefined} />
+            {w && <TableCell index={1} value={w} />}
+            <TableCell index={2} value={d}>{formatter.format(d)}</TableCell>
+            <TableCell index={3} value={checked}>
+                <Checkbox checked={checked} onInput={onInput} labelPosition="hidden">Demo table checkbox</Checkbox>
+            </TableCell>
+        </TableRow>
+    )
 }
 
 
@@ -89,8 +92,9 @@ export function DemoTable() {
 
                         <TableBody>
                             {Array.from(function* () {
-                                for (let i = 0; i < rowCount; ++i) {
-                                    yield <RandomRow key={i} index={i} />
+                                for (let i = 1; i <= rowCount; ++i) {
+                                    const R = <RandomRow key={i} index={i} />;
+                                    yield R;
                                 }
                             }())}
                         </TableBody>

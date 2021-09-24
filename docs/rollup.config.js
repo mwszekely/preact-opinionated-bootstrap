@@ -17,10 +17,10 @@ export default {
         typescript({ sourceMap: false }),
         commonjs(),
         resolve({ dedupe: ['preact', "preact/compat", "preact/hooks", "preact/debug", "preact/devtools"] }),
-        babel({
+        /*babel({
             configFile: path.resolve(__dirname, ".babelrc"),
             babelHelpers: "bundled",
             sourceMaps: true
-        }),
+        }),*/
     ]
 }
