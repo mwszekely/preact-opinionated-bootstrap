@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { ComponentChild, createContext, h, Ref } from "preact";
 import { UseAriaButtonParameters } from "preact-aria-widgets/use-button";
 import { useChildManager, useHasFocus, useListNavigation, UseListNavigationChild, useMergedProps } from "preact-prop-helpers";
-import { forwardElementRef, GlobalAttributes } from "../props";
+import { forwardElementRef, GlobalAttributes, useLogRender } from "../props";
 import { useButtonColorVariant, useButtonDisabled, useButtonFillVariant, UseButtonGroupChild, useButtonSize } from "./defaults";
 import { ButtonColorVariant, ButtonFillVariant, ButtonSize } from "./types";
 
@@ -25,6 +25,7 @@ export interface ButtonGroupProps extends ButtonGroupStyleProps, GlobalAttribute
 }
 
 export const ButtonGroup = forwardElementRef(function ButtonGroup(p: ButtonGroupProps, ref: Ref<HTMLDivElement>) {
+    useLogRender("ButtonGroup", `Rendering ButtonGroup`);
 
     const { lastFocusedInner, useHasFocusProps } = useHasFocus<HTMLDivElement>();
     const { indicesByElement, managedChildren, useListNavigationChild, navigateToIndex, childCount } = useListNavigation<HTMLButtonElement>({ focusOnChange: lastFocusedInner });
@@ -72,6 +73,8 @@ export type ButtonGroupChildProps = ButtonProps & {
 
 
 export const ButtonGroupChild = forwardElementRef(function ButtonGroupChild1({ index, ...buttonProps }: ButtonGroupChildProps, ref?: Ref<HTMLButtonElement> | Ref<HTMLAnchorElement>): h.JSX.Element {
+    useLogRender("ButtonGroupChild", `Rendering ButtonGroupChild #${index}`);
+
     // This is more-or-less forced to be a separate component because of the index prop.
     // It would be really nice to find a way to make that implicit based on DOM location,
     // specifically for small things like button groups...

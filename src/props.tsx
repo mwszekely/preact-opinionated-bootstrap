@@ -93,3 +93,22 @@ export function useSpinnerDelay(pending: boolean, timeout?: number) {
 
     return showSpinner;
 }
+
+type LogRenderType =
+    "Accordion" | "AccordionSection" |
+    "ButtonGroup" | "ButtonGroupChild" |
+    "ListSingle" | "ListItemSingle" |
+    "Table" | "TableHead" | "TableBody" | "TableFoot" | "TableRow" | "TableCell" | "TableHeadCell"
+
+export interface DebugUtil {
+    logRender: Set<LogRenderType>;
+}
+export const DebugUtilContext = createContext<DebugUtil | null>(null);
+
+export function useLogRender(type: LogRenderType, ...args: Parameters<Console["log"]>) {
+    if (useContext(DebugUtilContext)?.logRender.has(type)) {
+        console.log(...args);
+    }
+}
+
+

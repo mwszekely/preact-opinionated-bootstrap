@@ -6,7 +6,7 @@ import { useMergedProps } from "preact-prop-helpers/use-merged-props";
 import { useState } from "preact-prop-helpers/use-state";
 import { Collapse } from "preact-transition";
 import { useContext, useImperativeHandle } from "preact/hooks";
-import { forwardElementRef, GlobalAttributes, OptionalTransitionComponent } from "../props";
+import { forwardElementRef, GlobalAttributes, OptionalTransitionComponent, useLogRender } from "../props";
 
 export interface AccordionProps extends UseAriaAccordionParameters {
     expandedIndex: number | null;
@@ -31,6 +31,8 @@ export type AccordionSectionProps<T extends <E extends HTMLElement>(...args: any
 
 const UseAriaAccordionSectionContext = createContext<UseAriaAccordionSection<HTMLButtonElement>>(null!);
 export const Accordion = forwardElementRef(function Accordion({ expandedIndex, setExpandedIndex, children, ...props }: AccordionProps, ref: Ref<HTMLDivElement>) {
+    useLogRender("Accordion", `Rendering Accordion`);
+
     const { useAriaAccordionSection } = useAriaAccordion<HTMLDivElement, HTMLButtonElement>({ expandedIndex, setExpandedIndex });
 
     return (
@@ -41,6 +43,8 @@ export const Accordion = forwardElementRef(function Accordion({ expandedIndex, s
 });
 
 export const AccordionSection = forwardElementRef(function AccordionSection<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element>({ index, open, header, headerLevel, children, Transition, ...props }: AccordionSectionProps<T>, ref: Ref<HTMLDivElement>) {
+    useLogRender("AccordionSection", `Rendering AccordionSection #${index}`);
+
     const useAriaAccordionSection = useContext(UseAriaAccordionSectionContext);
     const { expanded, useAriaAccordionSectionHeader, useAriaAccordionSectionBody } = useAriaAccordionSection({ index, open });
     const { useAriaAccordionSectionHeaderProps } = useAriaAccordionSectionHeader({ tag: "button" });

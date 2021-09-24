@@ -6,14 +6,14 @@ import { Card, CardElement } from "../../card/card";
 import { Checkbox, Input } from "../../input-group";
 import { forwardElementRef } from "../../props";
 import { Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow } from "../../table";
-import { TableCellChildProps, TableCellProps, useTableRowIndex } from "../../table/table";
 
 var RandomWords = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.".split(" ");
 
 const formatter = new Intl.DateTimeFormat("en-US", { year: "numeric", month: "short", day: "numeric" })
-function RandomRow({ index }: { index: number }) {
-    const w = RandomWords[index];
-    const n = (index + 0) ** 2;
+function RandomRow({ rowIndex }: { rowIndex: number }) {
+    const i = rowIndex - 1;
+    const w = RandomWords[i];
+    const n = (i + 0) ** 2;
     const d = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + n * 7);
     const [checked, setChecked] = useState(false);
 
@@ -21,14 +21,14 @@ function RandomRow({ index }: { index: number }) {
     const onInput = useCallback(async (checked: boolean) => {
         await sleep(2000);
         setChecked(checked);
-    }, [index])
+    }, [])
 
 
-    return (<TableRow index={index}>
-        <TableCell index={0} value={n} colSpan={!w? 2 : undefined} />
-        {w && <TableCell index={1} value={w} />}
-        <TableCell index={2} value={d}>{formatter.format(d)}</TableCell>
-        <TableCell index={3} value={checked}>
+    return (<TableRow rowIndex={rowIndex}>
+        <TableCell columnIndex={0} value={n} colSpan={!w ? 2 : undefined} />
+        {w && <TableCell columnIndex={1} value={w} />}
+        <TableCell columnIndex={2} value={d}>{formatter.format(d)}</TableCell>
+        <TableCell columnIndex={3} value={checked}>
             <Checkbox checked={checked} onInput={onInput} labelPosition="hidden">Demo table checkbox</Checkbox>
         </TableCell>
     </TableRow>)
@@ -38,6 +38,13 @@ function RandomRow({ index }: { index: number }) {
 
 export function DemoTable() {
     const [rowCount, setRowCount] = useState(5);
+
+    const h3 = [<TableRow rowIndex={0}>
+        <TableHeaderCell columnIndex={0}>Number</TableHeaderCell>
+        <TableHeaderCell columnIndex={1}>String</TableHeaderCell>
+        <TableHeaderCell columnIndex={2}>Date</TableHeaderCell>
+        <TableHeaderCell columnIndex={3}>Checkbox</TableHeaderCell>
+    </TableRow>];
 
     return (
         <div class="demo">
@@ -79,18 +86,18 @@ export function DemoTable() {
                 <CardElement>
                     <Table>
                         <TableHead>
-                            <TableRow index={0}>
-                                <TableHeaderCell index={0}>Number</TableHeaderCell>
-                                <TableHeaderCell index={1}>String</TableHeaderCell>
-                                <TableHeaderCell index={2}>Date</TableHeaderCell>
-                                <TableHeaderCell index={3}>Checkbox</TableHeaderCell>
+                            <TableRow rowIndex={0}>
+                                <TableHeaderCell columnIndex={0}>Number</TableHeaderCell>
+                                <TableHeaderCell columnIndex={1}>String</TableHeaderCell>
+                                <TableHeaderCell columnIndex={2}>Date</TableHeaderCell>
+                                <TableHeaderCell columnIndex={3}>Checkbox</TableHeaderCell>
                             </TableRow>
                         </TableHead>
 
                         <TableBody>
                             {Array.from(function* () {
                                 for (let i = 0; i < rowCount; ++i) {
-                                    yield <RandomRow key={i} index={i} />
+                                    yield <RandomRow key={i + 1} rowIndex={i + 1} />
                                 }
                             }())}
                         </TableBody>

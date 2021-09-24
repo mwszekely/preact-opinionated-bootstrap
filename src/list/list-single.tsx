@@ -6,7 +6,7 @@ import { UseListboxSingleItem, UseListboxSingleItemInfo, UseListboxSingleItemPar
 import { useAsyncHandler, useMergedProps, useRefElement, useState } from "preact-prop-helpers";
 import { UseLinearNavigationChildInfo, UseLinearNavigationParameters } from "preact-prop-helpers/use-keyboard-navigation";
 import { useContext, useLayoutEffect } from "preact/hooks";
-import { GlobalAttributes, usePseudoActive } from "../props";
+import { GlobalAttributes, useLogRender, usePseudoActive } from "../props";
 
 interface ListSingleItemInfo<E extends Element> extends UseListboxSingleItemInfo<E> {
 
@@ -24,6 +24,7 @@ interface ListSingleProps<E extends HTMLUListElement | HTMLOListElement> extends
 
 export const UseListboxSingleItemContext = createContext<UseListboxSingleItem<HTMLLIElement, UseListboxSingleItemInfo<HTMLLIElement>>>(null!);
 export function ListSingle<E extends HTMLUListElement | HTMLOListElement>(props: ListSingleProps<E>, ref: Ref<E>) {
+    useLogRender("ListSingle", `Rendering ListSingle`);
     const { onSelect: onSelectAsync, selectedIndex, selectionMode, collator, keyNavigation, noTypeahead, noWrap, typeaheadTimeout, tag, select, ...domProps } = props;
     const { getSyncHandler } = useAsyncHandler<E>()({ capture: (e: any) => e[EventDetail].selectedIndex as number });
     const onSelect = getSyncHandler(onSelectAsync);
@@ -35,6 +36,8 @@ export function ListSingle<E extends HTMLUListElement | HTMLOListElement>(props:
 type ListItemSingleProps = ListSingleItemParameters<HTMLLIElement> & GlobalAttributes<HTMLLIElement>;
 
 export function ListItemSingle(props: ListItemSingleProps, ref: Ref<HTMLLIElement>) {
+    useLogRender("ListSingle", `Rendering ListSingleItem #${props.index}`);
+
     const useListItemSingle = useContext(UseListboxSingleItemContext);
     const { index, ...domProps } = { ...props, ref };
 
