@@ -80,6 +80,10 @@ export function DemoTable() {
                 </CardElement>
 
                 <CardElement>
+                    Finally, due to the way sorting works (by manipulating the <code>key</code> prop of the table's rows), your rows <em>must</em> be <em>direct descendants</em> of <code>TableBody</code> (and <code>TableHead</code> and <code>TableFoot</code>) so that it can properly call <code>createElement</code> with the expected results. Note that you can create your own custom <code>TableRow</code> wrapper, and the "direct descendant" restriction will apply to the wrapper instead (it must also accept the same <code>rowIndex</code> prop that a normal <code>TableRow</code> takes).
+                </CardElement>
+
+                <CardElement>
                     <Input type="number" value={rowCount} min={0} max={255} onInput={setRowCount}>Row count</Input>
                 </CardElement>
 
@@ -106,30 +110,32 @@ export function DemoTable() {
                 <CardElement>
                     <code>{`<Table>
     <TableHead>
-        <TableRow index={0}>
-            <TableHeaderCell index={1}>Number</TableHeaderCell>
-            <TableHeaderCell index={0}>String</TableHeaderCell>
-            <TableHeaderCell index={2}>Date</TableHeaderCell>
-            <TableHeaderCell index={3}>Checkbox</TableHeaderCell>
+        <TableRow rowIndex={0}>
+            <TableHeaderCell columnIndex={0}>Number</TableHeaderCell>
+            <TableHeaderCell columnIndex={1}>String</TableHeaderCell>
+            <TableHeaderCell columnIndex={2}>Date</TableHeaderCell>
+            <TableHeaderCell columnIndex={3}>Checkbox</TableHeaderCell>
         </TableRow>
     </TableHead>
     <TableBody>
-
-        <TableRow index={0}>
-            <TableCell index={0} value={RandomWords[index]} />
-            <TableCell index={1} value={n} />
-            <TableCell index={2} value={d}>{d.toLocaleString()}</TableCell>
-            <TableCell index={3} value={checked}>
+        <TableRow rowIndex={1}>
+            <TableCell columnIndex={0} value={n} />
+            <TableCell columnIndex={1} value={RandomWords[index]} />
+            <TableCell columnIndex={2} value={d}>{d.toLocaleString()}</TableCell>
+            <TableCell columnIndex={3} value={checked}>
                 <Checkbox checked={checked} onInput={onInput} labelPosition="hidden">Demo table checkbox</Checkbox>
             </TableCell>
         </TableRow>
 
-        <TableRow index={1} />
-        <TableRow index={2} />
-        <TableRow index={3} />
-        <TableRow index={4} />
+        <TableRow rowIndex={2} />
+        <TableRow rowIndex={3} />
+        <TableRow rowIndex={4} />
+        <TableRow rowIndex={5} />
 
     </TableBody>
+    <TableFoot>
+        <ACustomTableRow rowIndex={6} />
+    </TableFoot>
 </Table>`}</code>
                 </CardElement>
             </Card>

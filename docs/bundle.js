@@ -14318,6 +14318,28 @@
                     ". (Fragments as an immediate child are an exception and are fine to use)",
                     v$1("code", null, "// The table cell itself will receive focus:\n<TableCell>Text</TableCell>\n<TableCell>0</TableCell>\n<TableCell><>Text</></TableCell>\n\n// The table cell will delegate focus to its contents instead:\n<TableCell><div>Text</div></TableCell>\n<TableCell><Input type=\"...\" {...} /></TableCell>\n\n// \u274C The cell will try to focus the child but it'll never receive the message!\n<TableCell>{(props) => \"text\"}</TableCell>\n\n// \u2705 The cell can properly delegate all duties to the child DIV.\n<TableCell>{forwardRef((p, ref) => <div ref={ref} {...p}>\"text\"</p>)}</TableCell>")),
                 v$1(CardElement, null,
+                    "Finally, due to the way sorting works (by manipulating the ",
+                    v$1("code", null, "key"),
+                    " prop of the table's rows), your rows ",
+                    v$1("em", null, "must"),
+                    " be ",
+                    v$1("em", null, "direct descendants"),
+                    " of ",
+                    v$1("code", null, "TableBody"),
+                    " (and ",
+                    v$1("code", null, "TableHead"),
+                    " and ",
+                    v$1("code", null, "TableFoot"),
+                    ") so that it can properly call ",
+                    v$1("code", null, "createElement"),
+                    " with the expected results. Note that you can create your own custom ",
+                    v$1("code", null, "TableRow"),
+                    " wrapper, and the \"direct descendant\" restriction will apply to the wrapper instead (it must also accept the same ",
+                    v$1("code", null, "rowIndex"),
+                    " prop that a normal ",
+                    v$1("code", null, "TableRow"),
+                    " takes)."),
+                v$1(CardElement, null,
                     v$1(Input, { type: "number", value: rowCount, min: 0, max: 255, onInput: setRowCount }, "Row count")),
                 v$1(CardElement, null,
                     v$1(Table, null,
@@ -14348,7 +14370,7 @@
                             });
                         }())))),
                 v$1(CardElement, null,
-                    v$1("code", null, "<Table>\n    <TableHead>\n        <TableRow index={0}>\n            <TableHeaderCell index={1}>Number</TableHeaderCell>\n            <TableHeaderCell index={0}>String</TableHeaderCell>\n            <TableHeaderCell index={2}>Date</TableHeaderCell>\n            <TableHeaderCell index={3}>Checkbox</TableHeaderCell>\n        </TableRow>\n    </TableHead>\n    <TableBody>\n\n        <TableRow index={0}>\n            <TableCell index={0} value={RandomWords[index]} />\n            <TableCell index={1} value={n} />\n            <TableCell index={2} value={d}>{d.toLocaleString()}</TableCell>\n            <TableCell index={3} value={checked}>\n                <Checkbox checked={checked} onInput={onInput} labelPosition=\"hidden\">Demo table checkbox</Checkbox>\n            </TableCell>\n        </TableRow>\n\n        <TableRow index={1} />\n        <TableRow index={2} />\n        <TableRow index={3} />\n        <TableRow index={4} />\n\n    </TableBody>\n</Table>")))));
+                    v$1("code", null, "<Table>\n    <TableHead>\n        <TableRow rowIndex={0}>\n            <TableHeaderCell columnIndex={0}>Number</TableHeaderCell>\n            <TableHeaderCell columnIndex={1}>String</TableHeaderCell>\n            <TableHeaderCell columnIndex={2}>Date</TableHeaderCell>\n            <TableHeaderCell columnIndex={3}>Checkbox</TableHeaderCell>\n        </TableRow>\n    </TableHead>\n    <TableBody>\n        <TableRow rowIndex={1}>\n            <TableCell columnIndex={0} value={n} />\n            <TableCell columnIndex={1} value={RandomWords[index]} />\n            <TableCell columnIndex={2} value={d}>{d.toLocaleString()}</TableCell>\n            <TableCell columnIndex={3} value={checked}>\n                <Checkbox checked={checked} onInput={onInput} labelPosition=\"hidden\">Demo table checkbox</Checkbox>\n            </TableCell>\n        </TableRow>\n\n        <TableRow rowIndex={2} />\n        <TableRow rowIndex={3} />\n        <TableRow rowIndex={4} />\n        <TableRow rowIndex={5} />\n\n    </TableBody>\n    <TableFoot>\n        <ACustomTableRow rowIndex={6} />\n    </TableFoot>\n</Table>")))));
     }
     function sleep$1(arg0) {
         return __awaiter(this, void 0, void 0, function () {
