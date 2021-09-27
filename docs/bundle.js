@@ -2668,17 +2668,17 @@
               But roughly isn't good enough if there are multiple matches.
               To convert our sorted index to the unsorted index we need, we have to find the first
               element that matches us *and* (if any such exist) is *after* our current selection.
-               In other words, the only way typeahead moves backwards relative to our current
+                In other words, the only way typeahead moves backwards relative to our current
               position is if the only other option is behind us.
-               It's not specified in WAI-ARIA what to do in that case.  I suppose wrap back to the start?
+                It's not specified in WAI-ARIA what to do in that case.  I suppose wrap back to the start?
               Though there's also a case for just going upwards to the nearest to prevent jumpiness.
               But if you're already doing typeahead on an unsorted list, like, jumpiness can't be avoided.
               I dunno. Going back to the start is the simplist though.
-               Basically what this does: Starting from where we found ourselves after our binary search,
+                Basically what this does: Starting from where we found ourselves after our binary search,
               scan backwards and forwards through all adjacent entries that also compare equally so that
               we can find the one whose `unsortedIndex` is the lowest amongst all other equal strings
               (and also the lowest `unsortedIndex` yadda yadda except that it comes after us).
-               TODO: The binary search starts this off with a solid O(log n), but one-character
+                TODO: The binary search starts this off with a solid O(log n), but one-character
               searches are, thanks to pigeonhole principal, eventually guaranteed to become
               O(n*log n). This is annoying but probably not easily solvable? There could be an
               exception for one-character strings, but that's just kicking the can down
@@ -8677,11 +8677,9 @@
 
         for (let literalIndex = 0; literalIndex < sortedRows.length; ++literalIndex) {
           // Get the row that should be shown instead of this one
-          const overriddenIndex = sortedRows[literalIndex].index;
-          const overriddenHidden = !!sortedRows[literalIndex].hidden; // Let the DOM-based row know that it's showing a different row
+          const overriddenIndex = sortedRows[literalIndex].index; // Let the DOM-based row know that it's showing a different row
 
           managedRows[literalIndex].setRowIndexAsSorted(overriddenIndex);
-          managedRows[literalIndex].setRowHiddenAsSorted(overriddenHidden);
           mangleMap.current.set(literalIndex, overriddenIndex);
           demangleMap.current.set(overriddenIndex, literalIndex); //managedRows[literalIndex].overriddenRowIndex = overriddenIndex;
         }
@@ -8693,8 +8691,7 @@
         (_managedTableSections3 = managedTableSections["foot"]) === null || _managedTableSections3 === void 0 ? void 0 : _managedTableSections3.forceUpdate();
       }, [
         /* Must remain stable */
-      ]);
-      const prevHidden = s(new Map()); // This function is sort of like cloneElement for each children,
+      ]); // This function is sort of like cloneElement for each children,
       // except the "key" prop is super duper extra special
       // and cloneElement won't work in the expected way to keep
       // element identity between sort operations.
@@ -8702,39 +8699,19 @@
       // and it work just as well.
 
       const recreateChildWithSortedKey = A$1(function ensortenChild(child) {
-        var _managedRows$childInd, _managedRows$childInd2, _managedRows$childInd3, _managedRows$childInd4;
+        var _managedRows$childInd, _managedRows$childInd2;
 
         const {
           rowIndex: childIndex,
-          hidden: hiddenAsUnsorted,
           ...props
         } = child.props;
         const sortedIndex = (_managedRows$childInd = (_managedRows$childInd2 = managedRows[childIndex]) === null || _managedRows$childInd2 === void 0 ? void 0 : _managedRows$childInd2.getRowIndexAsSorted()) !== null && _managedRows$childInd !== void 0 ? _managedRows$childInd : childIndex;
-
-        if (!!hiddenAsUnsorted != !!prevHidden.current.get(childIndex)) {
-          queueMicrotask(() => {
-            var _managedTableSections4, _managedTableSections5, _managedTableSections6;
-
-            // This row's "hidden" prop has changed since last time.
-            // (we can't useEffect in the child, since it runs too late,
-            // after the prop has already been modified by us to use
-            // the sorted version instead, which is why we update there here)
-            managedRows[sortedIndex].setRowHiddenAsSorted(!!hiddenAsUnsorted);
-            prevHidden.current.set(childIndex, !!hiddenAsUnsorted);
-            (_managedTableSections4 = managedTableSections["head"]) === null || _managedTableSections4 === void 0 ? void 0 : _managedTableSections4.forceUpdate();
-            (_managedTableSections5 = managedTableSections["body"]) === null || _managedTableSections5 === void 0 ? void 0 : _managedTableSections5.forceUpdate();
-            (_managedTableSections6 = managedTableSections["foot"]) === null || _managedTableSections6 === void 0 ? void 0 : _managedTableSections6.forceUpdate();
-          });
-        }
-
-        const sortedHidden = (_managedRows$childInd3 = (_managedRows$childInd4 = managedRows[childIndex]) === null || _managedRows$childInd4 === void 0 ? void 0 : _managedRows$childInd4.getRowHiddenAsSorted()) !== null && _managedRows$childInd3 !== void 0 ? _managedRows$childInd3 : hiddenAsUnsorted;
         const C = child.type;
-        console.log(`Re-creating TableRow from ${childIndex} -> ${sortedIndex} and ${hiddenAsUnsorted} -> ${sortedHidden}`);
-        let ret = v$1(C, { ...props,
+        let ret = v$1(C, {
           key: sortedIndex,
           rowIndex: sortedIndex,
-          hidden: sortedHidden,
-          unsortedRowIndex: childIndex
+          unsortedRowIndex: childIndex,
+          ...props
         });
         return ret;
       }, []); // Tables need a role of "grid" in order to be considered 
@@ -8769,12 +8746,10 @@
 
       const useTableRow = A$1(({
         rowIndex: rowIndexAsUnsorted,
-        location,
-        hidden: hiddenAsUnsorted
+        location
       }) => {
         // This is used by the sort function to update this row when everything's shuffled.
         const [rowIndexAsSorted, setRowIndexAsSorted, getRowIndexAsSorted] = useState(rowIndexAsUnsorted);
-        const [rowHiddenAsSorted, setRowHiddenAsSorted, getRowHiddenAsSorted] = useState(!!hiddenAsUnsorted);
         const getManagedCells = useStableCallback(() => managedCells);
         const {
           useGridNavigationCell,
@@ -8784,12 +8759,10 @@
           managedCells
         } = useGridNavigationRow({
           index: rowIndexAsUnsorted,
-          hidden: hiddenAsUnsorted,
-          setRowHiddenAsSorted,
-          getRowHiddenAsSorted,
           getManagedCells,
-          rowIndexAsSorted: rowIndexAsSorted,
-          rowHiddenAsSorted: rowHiddenAsSorted,
+          ...{
+            rowIndexAsSorted: getRowIndexAsSorted()
+          },
           getRowIndexAsSorted,
           setRowIndexAsSorted,
           location
@@ -8803,7 +8776,8 @@
             useGridNavigationCellProps
           } = useGridNavigationCell({
             index: columnIndex,
-            value
+            value,
+            text: null
           });
 
           function useTableCellProps({
@@ -14214,7 +14188,7 @@
       if (childrenReceiveFocus) {
         const p1 = useMergedProps()(useTableCellDelegateProps({}), props);
         return v$1("td", { ...cellProps
-        }, B(children, p1));
+        }, B(children, useMergedProps()(p1, children.props), children.props.children));
       } else {
         const p2 = useMergedProps()(useTableCellDelegateProps(cellProps), props);
         return v$1("td", { ...p2
@@ -14683,4 +14657,4 @@
         S$1(v$1(Component, null), document.getElementById("root"));
     });
 
-}());
+})();

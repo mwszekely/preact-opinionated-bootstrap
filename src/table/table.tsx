@@ -224,7 +224,7 @@ export const TableCell = memo(forwardElementRef(function TableCell({ value: valu
         const p1 = useMergedProps<any>()(useTableCellDelegateProps({}), props);
         return (
             <td {...cellProps}>
-                {cloneElement(children! as any, p1)}
+                {cloneElement(children! as any, useMergedProps<any>()(p1, children.props), children.props.children)}
             </td>
         )
     }
