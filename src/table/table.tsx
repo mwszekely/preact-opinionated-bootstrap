@@ -66,9 +66,9 @@ export interface TableCellChildProps<E extends Element> extends h.JSX.HTMLAttrib
 
 type T2 = number | string | Date | null | undefined | boolean;
 
-export interface TableRowProps extends Omit<UseTableRowParameters, "text" | "location" | "getManagedCells" | "getRowIndexAsSorted" | "setRowIndexAsSorted" | "navIndex"> { variant?: TableCellVariant; children?: ComponentChildren }
-export interface TableCellProps extends Omit<UseTableCellParameters, "text" | "literalValue" | "displayValue" | "navIndex"> { colSpan?: number; value: T2; children?: VNode<any> | string | number | boolean | null, focus?: "cell" | "child", variant?: TableCellVariant; active?: boolean; }
-export interface TableHeaderCellProps extends Omit<UseTableHeadCellParameters<HTMLTableCellElement>, "tag" | "text" | "literalValue" | "displayValue" | "navIndex"> { unsortable?: boolean; children: ComponentChildren; focus?: "cell" | "child"; variant?: TableCellVariant; active?: boolean; }
+export interface TableRowProps extends Omit<UseTableRowParameters, "hiddenAsUnsorted" | "hidden" | "text" | "location" | "getManagedCells" | "getRowIndexAsSorted" | "setRowIndexAsSorted" | "navIndex"> { variant?: TableCellVariant; children?: ComponentChildren; hidden?: boolean; }
+export interface TableCellProps extends Omit<UseTableCellParameters, "hidden" | "text" | "literalValue" | "displayValue" | "navIndex"> { colSpan?: number; value: T2; children?: VNode<any> | string | number | boolean | null, focus?: "cell" | "child", variant?: TableCellVariant; active?: boolean; }
+export interface TableHeaderCellProps extends Omit<UseTableHeadCellParameters<HTMLTableCellElement>, "hidden" | "tag" | "text" | "literalValue" | "displayValue" | "navIndex"> { unsortable?: boolean; children: ComponentChildren; focus?: "cell" | "child"; variant?: TableCellVariant; active?: boolean; }
 
 
 const TableHeadContext = createContext<UseTableHead<HTMLTableSectionElement>>(null!);
@@ -103,7 +103,7 @@ export const Table = forwardElementRef(function Table({ children, small, striped
                     <TableFootContext.Provider value={useTableFoot}>
                         <TableRowContext.Provider value={useTableRow}>
                             <ManagedRowsContext.Provider value={managedRows}>
-                                            {children}
+                                {children}
                             </ManagedRowsContext.Provider>
                         </TableRowContext.Provider>
                     </TableFootContext.Provider>
@@ -167,18 +167,18 @@ export const TableFoot = forwardElementRef(function TableFoot({ children, varian
 
 const TableCellContext = createContext<UseTableCell<HTMLTableCellElement>>(null!);
 const TableHeadCellContext = createContext<UseTableHeadCell<HTMLTableCellElement>>(null!);
-export const TableRow = memo(forwardElementRef(function TableRow({ children, rowIndex: indexAsUnsorted, variant, ...props }: TableRowProps, ref: Ref<HTMLTableRowElement>) {
-    useLogRender("TableRow", `Rendering TableRow #${indexAsUnsorted}`);
+export const TableRow = memo(forwardElementRef(function TableRow({ children, rowIndex: indexAsUnsorted, variant, hidden: hiddenAsUnsorted,  ...props }: TableRowProps, ref: Ref<HTMLTableRowElement>) {
+    useLogRender("TableRow", `Rendering TableRow #${indexAsUnsorted}, ${hiddenAsUnsorted}`);
 
     const location = useContext(CellLocationContext);
 
     const useTableRow = useContext(TableRowContext);
-    const { useTableCell, useTableHeadCell, useTableRowProps } = useTableRow({ rowIndex: indexAsUnsorted, location });
+    const { useTableCell, useTableHeadCell, useTableRowProps } = useTableRow({ rowIndex: indexAsUnsorted, location, hidden: !!hiddenAsUnsorted });
 
 
     const rowProps = useTableRowProps({
         ...(useMergedProps<HTMLTableRowElement>()({
-            children, 
+            children,
             ref,
             className: clsx(variant && `table-${variant}`),
         }, props))

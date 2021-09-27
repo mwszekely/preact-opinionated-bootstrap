@@ -94,7 +94,7 @@ export function useSpinnerDelay(pending: boolean, timeout?: number) {
     return showSpinner;
 }
 
-type LogRenderType =
+export type LogRenderType =
     "Accordion" | "AccordionSection" |
     "ButtonGroup" | "ButtonGroupChild" |
     "ListSingle" | "ListItemSingle" |

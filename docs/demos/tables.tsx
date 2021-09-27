@@ -10,7 +10,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow } fro
 var RandomWords = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.".split(" ");
 
 const formatter = new Intl.DateTimeFormat("en-US", { year: "numeric", month: "short", day: "numeric" })
-function RandomRow({ rowIndex }: { rowIndex: number }) {
+function RandomRow({ rowIndex, unsortedRowIndex, hidden }: { rowIndex: number, unsortedRowIndex?: number, hidden?: boolean }) {
+    console.log(`RandomRow ${rowIndex}, ${unsortedRowIndex}`)
     const i = rowIndex - 1;
     const w = RandomWords[i];
     const n = (i + 0) ** 2;
@@ -24,27 +25,23 @@ function RandomRow({ rowIndex }: { rowIndex: number }) {
     }, [])
 
 
-    return (<TableRow rowIndex={rowIndex}>
-        <TableCell columnIndex={0} value={n} colSpan={!w ? 2 : undefined} />
-        {w && <TableCell columnIndex={1} value={w} />}
-        <TableCell columnIndex={2} value={d}>{formatter.format(d)}</TableCell>
-        <TableCell columnIndex={3} value={checked}>
-            <Checkbox checked={checked} onInput={onInput} labelPosition="hidden">Demo table checkbox</Checkbox>
-        </TableCell>
-    </TableRow>)
+    return (
+        <TableRow hidden={hidden} rowIndex={rowIndex}>
+            <TableCell columnIndex={0} value={n} colSpan={!w ? 2 : undefined} />
+            {w && <TableCell columnIndex={1} value={w} />}
+            <TableCell columnIndex={2} value={d}>{formatter.format(d)}</TableCell>
+            <TableCell columnIndex={3} value={checked}>
+                <Checkbox checked={checked} onInput={onInput} labelPosition="hidden">Demo table checkbox</Checkbox>
+            </TableCell>
+        </TableRow>)
 }
 
 
 
 export function DemoTable() {
     const [rowCount, setRowCount] = useState(5);
+    const [filterEvens, setFilterEvens] = useState(false);
 
-    const h3 = [<TableRow rowIndex={0}>
-        <TableHeaderCell columnIndex={0}>Number</TableHeaderCell>
-        <TableHeaderCell columnIndex={1}>String</TableHeaderCell>
-        <TableHeaderCell columnIndex={2}>Date</TableHeaderCell>
-        <TableHeaderCell columnIndex={3}>Checkbox</TableHeaderCell>
-    </TableRow>];
 
     return (
         <div class="demo">
@@ -85,12 +82,13 @@ export function DemoTable() {
 
                 <CardElement>
                     <Input type="number" value={rowCount} min={0} max={255} onInput={setRowCount}>Row count</Input>
+                    <Checkbox checked={filterEvens} onInput={setFilterEvens}>Filter out every other row</Checkbox>
                 </CardElement>
 
                 <CardElement>
                     <Table>
                         <TableHead>
-                            <TableRow rowIndex={0}>
+                            <TableRow hidden={false} rowIndex={0}>
                                 <TableHeaderCell columnIndex={0}>Number</TableHeaderCell>
                                 <TableHeaderCell columnIndex={1}>String</TableHeaderCell>
                                 <TableHeaderCell columnIndex={2}>Date</TableHeaderCell>
@@ -98,10 +96,10 @@ export function DemoTable() {
                             </TableRow>
                         </TableHead>
 
-                        <TableBody>
+                        <TableBody {...{"data-test": filterEvens}}>
                             {Array.from(function* () {
                                 for (let i = 0; i < rowCount; ++i) {
-                                    yield <RandomRow key={i + 1} rowIndex={i + 1} />
+                                    yield <RandomRow key={i + 1} rowIndex={i + 1} hidden={filterEvens && i % 2 == 0} />
                                 }
                             }())}
                         </TableBody>

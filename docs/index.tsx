@@ -5,7 +5,7 @@ import { useAriaTooltip } from "preact-aria-widgets/use-tooltip";
 import { useAnimationFrame, useDraggable, useDroppable, useElementSize, useFocusTrap, useHasFocus, useMergedProps, useState } from "preact-prop-helpers";
 import { ClipFade, Slide, ZoomFade } from "preact-transition";
 import { memo } from "preact/compat";
-import { useCallback, useRef } from "preact/hooks";
+import { useCallback, useMemo, useRef } from "preact/hooks";
 import { Accordion, AccordionSection } from "../accordion";
 import { Button } from "../button";
 import { Dialog } from "../dialog";
@@ -24,6 +24,7 @@ import { DemoChecks } from "./demos/checks";
 import { DemoInputs } from "./demos/inputs";
 import { DemoLayout } from "./demos/layout";
 import { DemoTable } from "./demos/tables";
+import { useLogRender, DebugUtilContext, DebugUtil, LogRenderType } from "../props";
 
 
 
@@ -353,27 +354,29 @@ const DemoInput = memo(() => {
 
 const Component = () => {
     return <GridResponsive minWidth="35em">
-        <ToastsProvider>
+        <DebugUtilContext.Provider value={useMemo(() => ({ logRender: new Set<LogRenderType>(["Table", "TableBody", "TableRow"]) }), [])}>
+            <ToastsProvider>
 
-            <DemoTable />
-            <DemoButtons />
-            <DemoChecks />
-            <DemoInputs />
-            <DemoLayout />
-            <DemoAccordion />
-            <DemoDialog />
-            <DemoDrawer />
-            <DemoInput />
-            <DemoList />
-            <DemoTabs />
-            <DemoMenu />
-            {/*<DemoFocus />
+                <DemoTable />
+                <DemoButtons />
+                <DemoChecks />
+                <DemoInputs />
+                <DemoLayout />
+                <DemoAccordion />
+                <DemoDialog />
+                <DemoDrawer />
+                <DemoInput />
+                <DemoList />
+                <DemoTabs />
+                <DemoMenu />
+                {/*<DemoFocus />
             <DemoUseTimeout />
             <DemoUseInterval />
             <DemoUseFocusTrap />
             <DemoUseFocusTrap />
             <input />*/}
-        </ToastsProvider>
+            </ToastsProvider>
+        </DebugUtilContext.Provider>
     </GridResponsive>
 }
 

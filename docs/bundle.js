@@ -2668,17 +2668,17 @@
               But roughly isn't good enough if there are multiple matches.
               To convert our sorted index to the unsorted index we need, we have to find the first
               element that matches us *and* (if any such exist) is *after* our current selection.
-                In other words, the only way typeahead moves backwards relative to our current
+               In other words, the only way typeahead moves backwards relative to our current
               position is if the only other option is behind us.
-                It's not specified in WAI-ARIA what to do in that case.  I suppose wrap back to the start?
+               It's not specified in WAI-ARIA what to do in that case.  I suppose wrap back to the start?
               Though there's also a case for just going upwards to the nearest to prevent jumpiness.
               But if you're already doing typeahead on an unsorted list, like, jumpiness can't be avoided.
               I dunno. Going back to the start is the simplist though.
-                Basically what this does: Starting from where we found ourselves after our binary search,
+               Basically what this does: Starting from where we found ourselves after our binary search,
               scan backwards and forwards through all adjacent entries that also compare equally so that
               we can find the one whose `unsortedIndex` is the lowest amongst all other equal strings
               (and also the lowest `unsortedIndex` yadda yadda except that it comes after us).
-                TODO: The binary search starts this off with a solid O(log n), but one-character
+               TODO: The binary search starts this off with a solid O(log n), but one-character
               searches are, thanks to pigeonhole principal, eventually guaranteed to become
               O(n*log n). This is annoying but probably not easily solvable? There could be an
               exception for one-character strings, but that's just kicking the can down
@@ -3203,6 +3203,32 @@
       return t;
     }
 
+    function tryNavigateToIndex(managedCells, initial, target, searchDirection, indexMangler, indexDemangler) {
+      function helper() {
+        if (searchDirection === -1) {
+          while (target >= 0 && (managedCells[target] == null || !!((_managedCells$target = managedCells[target]) !== null && _managedCells$target !== void 0 && _managedCells$target.hidden))) {
+            var _managedCells$target;
+
+            target = indexMangler(indexDemangler(target) - 1);
+          }
+
+          return target < 0 ? initial : target;
+        } else if (searchDirection === 1) {
+          while (target < managedCells.length && managedCells[target] == null || !!((_managedCells$target2 = managedCells[target]) !== null && _managedCells$target2 !== void 0 && _managedCells$target2.hidden)) {
+            var _managedCells$target2;
+
+            target = indexMangler(indexDemangler(target) + 1);
+          }
+
+          return target >= managedCells.length ? initial : target;
+        } else {
+          return initial;
+        }
+      }
+
+      return helper();
+    }
+
     function useGridNavigation({
       focusOnChange: foc,
       indexMangler,
@@ -3212,7 +3238,10 @@
 
       (_indexMangler = indexMangler) !== null && _indexMangler !== void 0 ? _indexMangler : indexMangler = identity$1;
       (_indexDemangler = indexDemangler) !== null && _indexDemangler !== void 0 ? _indexDemangler : indexDemangler = identity$1;
-      const getFocusCellOnRowChange = useStableGetter(foc); // Keep track of our currently tabbable row and column
+      const getFocusCellOnRowChange = useStableGetter(foc); // Keep track of our currently tabbable row and column.
+      // These are mangled, and so relative to the DOM order, not component order.
+      // Any operations done on these numbers need to be demangled first,
+      // otherwise they'll be incorrect.
 
       const [currentRow, setCurrentRow2, getCurrentRow] = useState(0);
       const [currentColumn, setCurrentColumn2, getCurrentColumn] = useState(0); // Functions used for navigating to different rows.
@@ -3221,21 +3250,22 @@
       // Otherwise, it is tabbable, with the tabbable cell being currentColumn.
       // This happens automatically when these functions are called.
 
-      A$1(i => {
-        setCurrentRow2(indexMangler(i !== null && i !== void 0 ? i : 0));
-      }, []);
       const navigateToFirstRow = A$1(() => {
-        setCurrentRow2(indexMangler(0));
-      }, []);
+        setCurrentRow2(c => tryNavigateToIndex(managedRows, c, 0, 1, indexMangler, indexDemangler));
+      }, [indexMangler, indexDemangler]);
       const navigateToLastRow = A$1(() => {
-        setCurrentRow2(indexMangler(managedRows.length - 1));
-      }, []);
+        setCurrentRow2(c => tryNavigateToIndex(managedRows, c, managedRows.length - 1, -1, indexMangler, indexDemangler));
+      }, [indexMangler, indexDemangler]);
       const navigateToPrevRow = A$1(() => {
-        setCurrentRow2(i => indexMangler(Math.max(0, indexDemangler(i !== null && i !== void 0 ? i : 0) - 1)));
-      }, [indexDemangler, indexMangler]);
+        setCurrentRow2(c => {
+          return tryNavigateToIndex(managedRows, c, indexMangler(Math.max(0, indexDemangler(c !== null && c !== void 0 ? c : 0) - 1)), -1, indexMangler, indexDemangler);
+        });
+      }, [indexMangler, indexDemangler]);
       const navigateToNextRow = A$1(() => {
-        setCurrentRow2(i => indexMangler(Math.min(managedRows.length - 1, indexDemangler(i !== null && i !== void 0 ? i : 0) + 1)));
-      }, [indexDemangler, indexMangler]); // Track child rows and manage keyboard navigation among them.
+        setCurrentRow2(c => {
+          return tryNavigateToIndex(managedRows, c, indexMangler(Math.min(managedRows.length - 1, indexDemangler(c !== null && c !== void 0 ? c : 0) + 1)), 1, indexMangler, indexDemangler);
+        });
+      }, [indexMangler, indexDemangler]); // Track child rows and manage keyboard navigation among them.
 
       const {
         childCount,
@@ -3280,11 +3310,12 @@
         });
         const useGridNavigationColumnChild = A$1(({
           index: rowIndex,
-          text
+          text,
+          hidden
         }) => {
           useTypeaheadNavigationChild({
             index: rowIndex,
-            text
+            text: hidden ? null : text
           });
         }, [useTypeaheadNavigationChild]);
         return {
@@ -3296,6 +3327,7 @@
 
       const useGridNavigationRow = A$1(({
         index: rowIndex,
+        hidden,
         ...info
       }) => {
         // When we change the current column, we send that information
@@ -3321,41 +3353,7 @@
         const [isTabbableRow, setIsTabbableRow] = useState(false); // If we're not the tabbable row, then for the purposes of tabIndex
         // calculations, we don't have a tabbable child cell.
 
-        let currentColumn = isTabbableRow ? getCurrentColumn() : null;
-        const tryNavigateToIndex = A$1((initial, target, searchDirection) => {
-          if (searchDirection === -1) {
-            while (target >= 0 && managedCells[target] == null) --target;
-
-            return target < 0 ? initial : target;
-          } else if (searchDirection === 1) {
-            while (target < managedCells.length && managedCells[target] == null) ++target;
-
-            return target >= managedCells.length ? initial : target;
-          } else {
-            return initial;
-          }
-        }, []); // More navigation stuff
-
-        const navigateToFirstColumn = A$1(() => {
-          setCurrentColumn2(tryNavigateToIndex(0, 0, 1));
-          forceUpdate();
-        }, []);
-        const navigateToLastColumn = A$1(() => {
-          setCurrentColumn2(tryNavigateToIndex(managedCells.length, managedCells.length, -1));
-          forceUpdate();
-        }, []);
-        const navigateToPrevColumn = A$1(() => {
-          setCurrentColumn2(c => {
-            return tryNavigateToIndex(c, c - 1, -1);
-          });
-          forceUpdate();
-        }, []);
-        const navigateToNextColumn = A$1(() => {
-          setCurrentColumn2(c => {
-            return tryNavigateToIndex(c, c + 1, 1);
-          });
-          forceUpdate();
-        }, []); // Track child cells and manage keyboard navigation among them.
+        let currentColumn = isTabbableRow ? getCurrentColumn() : null; // Track child cells and manage keyboard navigation among them.
 
         const {
           managedChildren: managedCells,
@@ -3364,7 +3362,28 @@
         } = useRovingTabIndex({
           focusOnChange: isTabbableRow && getFocusCellOnRowChange(),
           tabbableIndex: currentColumn
-        });
+        }); // More navigation stuff
+
+        const navigateToFirstColumn = A$1(() => {
+          setCurrentColumn2(tryNavigateToIndex(managedCells, 0, 0, 1, identity$1, identity$1));
+          forceUpdate();
+        }, []);
+        const navigateToLastColumn = A$1(() => {
+          setCurrentColumn2(tryNavigateToIndex(managedCells, managedCells.length, managedCells.length, -1, identity$1, identity$1));
+          forceUpdate();
+        }, []);
+        const navigateToPrevColumn = A$1(() => {
+          setCurrentColumn2(c => {
+            return tryNavigateToIndex(managedCells, c, c - 1, -1, identity$1, identity$1);
+          });
+          forceUpdate();
+        }, []);
+        const navigateToNextColumn = A$1(() => {
+          setCurrentColumn2(c => {
+            return tryNavigateToIndex(managedCells, c, c + 1, 1, identity$1, identity$1);
+          });
+          forceUpdate();
+        }, []);
         const {
           useLinearNavigationChild: useLinearNavigationChildCell
         } = useLinearNavigation({
@@ -3413,12 +3432,16 @@
         } = useManagedRow({
           index: rowIndex,
           setIsTabbableRow,
+          hidden,
           ...info
         });
         const {
           useLinearNavigationChildProps: useLinearNavigationChildRowProps
         } = useLinearNavigationChildRow();
-        const useGridNavigationRowProps = A$1(props => useManagedRowProps(useLinearNavigationChildRowProps(props)), [useManagedRowProps]);
+        const useGridNavigationRowProps = A$1(props => useManagedRowProps(useLinearNavigationChildRowProps(useMergedProps()({
+          hidden: !!hidden,
+          "data-index": rowIndex
+        }, props))), [useManagedRowProps, !!hidden]);
         const getRowIndex = useStableGetter(rowIndex);
         const useGridNavigationCell = A$1(info => {
           const [tabbable, setTabbable] = useState(false);
@@ -8654,9 +8677,11 @@
 
         for (let literalIndex = 0; literalIndex < sortedRows.length; ++literalIndex) {
           // Get the row that should be shown instead of this one
-          const overriddenIndex = sortedRows[literalIndex].index; // Let the DOM-based row know that it's showing a different row
+          const overriddenIndex = sortedRows[literalIndex].index;
+          const overriddenHidden = !!sortedRows[literalIndex].hidden; // Let the DOM-based row know that it's showing a different row
 
           managedRows[literalIndex].setRowIndexAsSorted(overriddenIndex);
+          managedRows[literalIndex].setRowHiddenAsSorted(overriddenHidden);
           mangleMap.current.set(literalIndex, overriddenIndex);
           demangleMap.current.set(overriddenIndex, literalIndex); //managedRows[literalIndex].overriddenRowIndex = overriddenIndex;
         }
@@ -8668,7 +8693,8 @@
         (_managedTableSections3 = managedTableSections["foot"]) === null || _managedTableSections3 === void 0 ? void 0 : _managedTableSections3.forceUpdate();
       }, [
         /* Must remain stable */
-      ]); // This function is sort of like cloneElement for each children,
+      ]);
+      const prevHidden = s(new Map()); // This function is sort of like cloneElement for each children,
       // except the "key" prop is super duper extra special
       // and cloneElement won't work in the expected way to keep
       // element identity between sort operations.
@@ -8676,19 +8702,39 @@
       // and it work just as well.
 
       const recreateChildWithSortedKey = A$1(function ensortenChild(child) {
-        var _managedRows$childInd, _managedRows$childInd2;
+        var _managedRows$childInd, _managedRows$childInd2, _managedRows$childInd3, _managedRows$childInd4;
 
         const {
           rowIndex: childIndex,
+          hidden: hiddenAsUnsorted,
           ...props
         } = child.props;
         const sortedIndex = (_managedRows$childInd = (_managedRows$childInd2 = managedRows[childIndex]) === null || _managedRows$childInd2 === void 0 ? void 0 : _managedRows$childInd2.getRowIndexAsSorted()) !== null && _managedRows$childInd !== void 0 ? _managedRows$childInd : childIndex;
+
+        if (!!hiddenAsUnsorted != !!prevHidden.current.get(childIndex)) {
+          queueMicrotask(() => {
+            var _managedTableSections4, _managedTableSections5, _managedTableSections6;
+
+            // This row's "hidden" prop has changed since last time.
+            // (we can't useEffect in the child, since it runs too late,
+            // after the prop has already been modified by us to use
+            // the sorted version instead, which is why we update there here)
+            managedRows[sortedIndex].setRowHiddenAsSorted(!!hiddenAsUnsorted);
+            prevHidden.current.set(childIndex, !!hiddenAsUnsorted);
+            (_managedTableSections4 = managedTableSections["head"]) === null || _managedTableSections4 === void 0 ? void 0 : _managedTableSections4.forceUpdate();
+            (_managedTableSections5 = managedTableSections["body"]) === null || _managedTableSections5 === void 0 ? void 0 : _managedTableSections5.forceUpdate();
+            (_managedTableSections6 = managedTableSections["foot"]) === null || _managedTableSections6 === void 0 ? void 0 : _managedTableSections6.forceUpdate();
+          });
+        }
+
+        const sortedHidden = (_managedRows$childInd3 = (_managedRows$childInd4 = managedRows[childIndex]) === null || _managedRows$childInd4 === void 0 ? void 0 : _managedRows$childInd4.getRowHiddenAsSorted()) !== null && _managedRows$childInd3 !== void 0 ? _managedRows$childInd3 : hiddenAsUnsorted;
         const C = child.type;
-        let ret = v$1(C, {
+        console.log(`Re-creating TableRow from ${childIndex} -> ${sortedIndex} and ${hiddenAsUnsorted} -> ${sortedHidden}`);
+        let ret = v$1(C, { ...props,
           key: sortedIndex,
           rowIndex: sortedIndex,
-          unsortedRowIndex: childIndex,
-          ...props
+          hidden: sortedHidden,
+          unsortedRowIndex: childIndex
         });
         return ret;
       }, []); // Tables need a role of "grid" in order to be considered 
@@ -8723,10 +8769,12 @@
 
       const useTableRow = A$1(({
         rowIndex: rowIndexAsUnsorted,
-        location
+        location,
+        hidden: hiddenAsUnsorted
       }) => {
         // This is used by the sort function to update this row when everything's shuffled.
         const [rowIndexAsSorted, setRowIndexAsSorted, getRowIndexAsSorted] = useState(rowIndexAsUnsorted);
+        const [rowHiddenAsSorted, setRowHiddenAsSorted, getRowHiddenAsSorted] = useState(!!hiddenAsUnsorted);
         const getManagedCells = useStableCallback(() => managedCells);
         const {
           useGridNavigationCell,
@@ -8736,10 +8784,12 @@
           managedCells
         } = useGridNavigationRow({
           index: rowIndexAsUnsorted,
+          hidden: hiddenAsUnsorted,
+          setRowHiddenAsSorted,
+          getRowHiddenAsSorted,
           getManagedCells,
-          ...{
-            rowIndexAsSorted: getRowIndexAsSorted()
-          },
+          rowIndexAsSorted: rowIndexAsSorted,
+          rowHiddenAsSorted: rowHiddenAsSorted,
           getRowIndexAsSorted,
           setRowIndexAsSorted,
           location
@@ -8753,8 +8803,7 @@
             useGridNavigationCellProps
           } = useGridNavigationCell({
             index: columnIndex,
-            value,
-            text: null
+            value
           });
 
           function useTableCellProps({
@@ -14104,9 +14153,10 @@
       children,
       rowIndex: indexAsUnsorted,
       variant,
+      hidden: hiddenAsUnsorted,
       ...props
     }, ref) {
-      useLogRender("TableRow", `Rendering TableRow #${indexAsUnsorted}`);
+      useLogRender("TableRow", `Rendering TableRow #${indexAsUnsorted}, ${hiddenAsUnsorted}`);
       const location = F(CellLocationContext);
       const useTableRow = F(TableRowContext);
       const {
@@ -14115,7 +14165,8 @@
         useTableRowProps
       } = useTableRow({
         rowIndex: indexAsUnsorted,
-        location
+        location,
+        hidden: !!hiddenAsUnsorted
       });
       const rowProps = useTableRowProps({ ...useMergedProps()({
           children,
@@ -14256,7 +14307,8 @@
     var formatter = new Intl.DateTimeFormat("en-US", { year: "numeric", month: "short", day: "numeric" });
     function RandomRow(_a) {
         var _this = this;
-        var rowIndex = _a.rowIndex;
+        var rowIndex = _a.rowIndex, unsortedRowIndex = _a.unsortedRowIndex, hidden = _a.hidden;
+        console.log("RandomRow " + rowIndex + ", " + unsortedRowIndex);
         var i = rowIndex - 1;
         var w = RandomWords$1[i];
         var n = Math.pow((i + 0), 2);
@@ -14273,7 +14325,7 @@
                 }
             });
         }); }, []);
-        return (v$1(TableRow, { rowIndex: rowIndex },
+        return (v$1(TableRow, { hidden: hidden, rowIndex: rowIndex },
             v$1(TableCell, { columnIndex: 0, value: n, colSpan: !w ? 2 : undefined }),
             w && v$1(TableCell, { columnIndex: 1, value: w }),
             v$1(TableCell, { columnIndex: 2, value: d }, formatter.format(d)),
@@ -14282,11 +14334,7 @@
     }
     function DemoTable() {
         var _a = useState(5), rowCount = _a[0], setRowCount = _a[1];
-        [v$1(TableRow, { rowIndex: 0 },
-                v$1(TableHeaderCell, { columnIndex: 0 }, "Number"),
-                v$1(TableHeaderCell, { columnIndex: 1 }, "String"),
-                v$1(TableHeaderCell, { columnIndex: 2 }, "Date"),
-                v$1(TableHeaderCell, { columnIndex: 3 }, "Checkbox"))];
+        var _b = useState(false), filterEvens = _b[0], setFilterEvens = _b[1];
         return (v$1("div", { class: "demo" },
             v$1(Card, null,
                 v$1(CardElement, { type: "title", tag: "h2" }, "Table"),
@@ -14340,16 +14388,17 @@
                     v$1("code", null, "TableRow"),
                     " takes)."),
                 v$1(CardElement, null,
-                    v$1(Input, { type: "number", value: rowCount, min: 0, max: 255, onInput: setRowCount }, "Row count")),
+                    v$1(Input, { type: "number", value: rowCount, min: 0, max: 255, onInput: setRowCount }, "Row count"),
+                    v$1(Checkbox, { checked: filterEvens, onInput: setFilterEvens }, "Filter out every other row")),
                 v$1(CardElement, null,
                     v$1(Table, null,
                         v$1(TableHead, null,
-                            v$1(TableRow, { rowIndex: 0 },
+                            v$1(TableRow, { hidden: false, rowIndex: 0 },
                                 v$1(TableHeaderCell, { columnIndex: 0 }, "Number"),
                                 v$1(TableHeaderCell, { columnIndex: 1 }, "String"),
                                 v$1(TableHeaderCell, { columnIndex: 2 }, "Date"),
                                 v$1(TableHeaderCell, { columnIndex: 3 }, "Checkbox"))),
-                        v$1(TableBody, null, Array.from(function () {
+                        v$1(TableBody, __assign({}, { "data-test": filterEvens }), Array.from(function () {
                             var i;
                             return __generator(this, function (_a) {
                                 switch (_a.label) {
@@ -14358,7 +14407,7 @@
                                         _a.label = 1;
                                     case 1:
                                         if (!(i < rowCount)) return [3 /*break*/, 4];
-                                        return [4 /*yield*/, v$1(RandomRow, { key: i + 1, rowIndex: i + 1 })];
+                                        return [4 /*yield*/, v$1(RandomRow, { key: i + 1, rowIndex: i + 1, hidden: filterEvens && i % 2 == 0 })];
                                     case 2:
                                         _a.sent();
                                         _a.label = 3;
@@ -14615,19 +14664,20 @@
     });
     var Component = function () {
         return v$1(GridResponsive, { minWidth: "35em" },
-            v$1(ToastsProvider, null,
-                v$1(DemoTable, null),
-                v$1(DemoButtons, null),
-                v$1(DemoChecks, null),
-                v$1(DemoInputs, null),
-                v$1(DemoLayout, null),
-                v$1(DemoAccordion, null),
-                v$1(DemoDialog, null),
-                v$1(DemoDrawer, null),
-                v$1(DemoInput, null),
-                v$1(DemoList, null),
-                v$1(DemoTabs, null),
-                v$1(DemoMenu, null)));
+            v$1(DebugUtilContext.Provider, { value: d(function () { return ({ logRender: new Set(["Table", "TableBody", "TableRow"]) }); }, []) },
+                v$1(ToastsProvider, null,
+                    v$1(DemoTable, null),
+                    v$1(DemoButtons, null),
+                    v$1(DemoChecks, null),
+                    v$1(DemoInputs, null),
+                    v$1(DemoLayout, null),
+                    v$1(DemoAccordion, null),
+                    v$1(DemoDialog, null),
+                    v$1(DemoDrawer, null),
+                    v$1(DemoInput, null),
+                    v$1(DemoList, null),
+                    v$1(DemoTabs, null),
+                    v$1(DemoMenu, null))));
     };
     requestAnimationFrame(function () {
         S$1(v$1(Component, null), document.getElementById("root"));
