@@ -2668,17 +2668,17 @@
               But roughly isn't good enough if there are multiple matches.
               To convert our sorted index to the unsorted index we need, we have to find the first
               element that matches us *and* (if any such exist) is *after* our current selection.
-                In other words, the only way typeahead moves backwards relative to our current
+               In other words, the only way typeahead moves backwards relative to our current
               position is if the only other option is behind us.
-                It's not specified in WAI-ARIA what to do in that case.  I suppose wrap back to the start?
+               It's not specified in WAI-ARIA what to do in that case.  I suppose wrap back to the start?
               Though there's also a case for just going upwards to the nearest to prevent jumpiness.
               But if you're already doing typeahead on an unsorted list, like, jumpiness can't be avoided.
               I dunno. Going back to the start is the simplist though.
-                Basically what this does: Starting from where we found ourselves after our binary search,
+               Basically what this does: Starting from where we found ourselves after our binary search,
               scan backwards and forwards through all adjacent entries that also compare equally so that
               we can find the one whose `unsortedIndex` is the lowest amongst all other equal strings
               (and also the lowest `unsortedIndex` yadda yadda except that it comes after us).
-                TODO: The binary search starts this off with a solid O(log n), but one-character
+               TODO: The binary search starts this off with a solid O(log n), but one-character
               searches are, thanks to pigeonhole principal, eventually guaranteed to become
               O(n*log n). This is annoying but probably not easily solvable? There could be an
               exception for one-character strings, but that's just kicking the can down
@@ -3065,7 +3065,7 @@
      */
 
     function useRovingTabIndex({
-      focusOnChange: foc,
+      shouldFocusOnChange: foc,
       tabbableIndex
     }) {
       const [rerenderAndFocus, setRerenderAndFocus] = useState(null);
@@ -3230,7 +3230,7 @@
     }
 
     function useGridNavigation({
-      focusOnChange: foc,
+      shouldFocusOnChange,
       indexMangler,
       indexDemangler
     }) {
@@ -3238,7 +3238,7 @@
 
       (_indexMangler = indexMangler) !== null && _indexMangler !== void 0 ? _indexMangler : indexMangler = identity$1;
       (_indexDemangler = indexDemangler) !== null && _indexDemangler !== void 0 ? _indexDemangler : indexDemangler = identity$1;
-      const getFocusCellOnRowChange = useStableGetter(foc); // Keep track of our currently tabbable row and column.
+      const getFocusCellOnRowChange = useStableCallback(shouldFocusOnChange); // Keep track of our currently tabbable row and column.
       // These are mangled, and so relative to the DOM order, not component order.
       // Any operations done on these numbers need to be demangled first,
       // otherwise they'll be incorrect.
@@ -3360,7 +3360,7 @@
           useRovingTabIndexChild: useRovingTabIndexCell,
           childCount: cellCount
         } = useRovingTabIndex({
-          focusOnChange: isTabbableRow && getFocusCellOnRowChange(),
+          shouldFocusOnChange: getFocusCellOnRowChange,
           tabbableIndex: currentColumn
         }); // More navigation stuff
 
@@ -3863,7 +3863,7 @@
 
     function useListNavigation({
       initialIndex,
-      focusOnChange,
+      shouldFocusOnChange,
       collator,
       keyNavigation,
       indexMangler,
@@ -3884,7 +3884,7 @@
         focusCurrent,
         ...rest
       } = useRovingTabIndex({
-        focusOnChange,
+        shouldFocusOnChange,
         tabbableIndex
       });
       const navigateToIndex = A$1(i => {
@@ -7724,7 +7724,7 @@
         currentTypeahead,
         invalidTypeahead
       } = useListNavigation({ ...args,
-        focusOnChange: lastFocusedInner
+        shouldFocusOnChange: () => lastFocusedInner
       });
       const {
         useGenericLabelInputProps
@@ -7868,7 +7868,7 @@
         noTypeahead,
         noWrap,
         typeaheadTimeout,
-        focusOnChange: menuHasFocus || buttonHasFocus
+        shouldFocusOnChange: () => menuHasFocus || buttonHasFocus
       });
       const {
         useRandomIdProps: useMenuIdProps,
@@ -8094,7 +8094,7 @@
         currentTypeahead,
         focusCurrent
       } = useListNavigation({ ...args,
-        focusOnChange: tabListFocused,
+        shouldFocusOnChange: () => tabListFocused,
         keyNavigation: logicalOrientation
       });
       const {
@@ -8611,17 +8611,8 @@
       const {
         focusedInner,
         useHasFocusProps
-      } = useHasFocus(); // Whenever any given header cell requests a sort, it sets itself here, in the table,
-      // as the "sortedColumn" column.  We then, as the parent table, let all the other
-      // header rows know who is the "sortedColumn" column so that they can un-style themselves.
-
-      y(() => {
-        if (sortedColumn != null) {
-          Object.entries(managedHeaderCells).forEach(([index, cell]) => {
-            cell.setSortedColumn(sortedColumn);
-          });
-        }
-      }, [sortedColumn]); // These are used to keep track of a mapping between unsorted index <---> sorted index.
+      } = useHasFocus();
+      const stableGetFocusedInner = useStableGetter(focusedInner); // These are used to keep track of a mapping between unsorted index <---> sorted index.
       // These are needed for navigation with the arrow keys.
 
       const mangleMap = s(new Map());
@@ -8635,24 +8626,15 @@
         var _demangleMap$current$;
 
         return (_demangleMap$current$ = demangleMap.current.get(n)) !== null && _demangleMap$current$ !== void 0 ? _demangleMap$current$ : n;
-      }, []); // Actually implement grid navigation
+      }, []); // Only used by the sorting function, nothing else
 
-      const {
-        cellIndex,
-        rowIndex,
-        rowCount,
-        useGridNavigationRow,
-        managedRows
-      } = useGridNavigation({
-        focusOnChange: focusedInner,
-        indexMangler,
-        indexDemangler
-      }); // The actual sort function.
+      const [bodyRowsGetter, setBodyRowsGetter, getBodyRowsGetter] = useState(null); // The actual sort function.
       // Note that it DOES look at header and footer cells, but just tiptoes around them.
 
       const sort = A$1((column, direction) => {
         var _managedTableSections, _managedTableSections2, _managedTableSections3;
 
+        const managedRows = getBodyRowsGetter()();
         let sortedRows = managedRows.slice().sort((lhsRow, rhsRow) => {
           if (lhsRow.location != rhsRow.location) {
             var _LocationPriority$lhs, _LocationPriority$rhs;
@@ -8673,48 +8655,246 @@
 
           console.assert(false);
           return 0;
-        }); // Go through each DOM-based row in the table
+        }); // Update our sorted <--> unsorted indices map 
+        // and rerender the whole table, basically
 
         for (let literalIndex = 0; literalIndex < sortedRows.length; ++literalIndex) {
-          // Get the row that should be shown instead of this one
-          const overriddenIndex = sortedRows[literalIndex].index; // Let the DOM-based row know that it's showing a different row
-
-          managedRows[literalIndex].setRowIndexAsSorted(overriddenIndex);
+          const overriddenIndex = sortedRows[literalIndex].index;
           mangleMap.current.set(literalIndex, overriddenIndex);
-          demangleMap.current.set(overriddenIndex, literalIndex); //managedRows[literalIndex].overriddenRowIndex = overriddenIndex;
+          demangleMap.current.set(overriddenIndex, literalIndex);
         }
 
         setSortedColumn(column);
-        console.log(sortedRows.map(r => r.index).join(", "));
         (_managedTableSections = managedTableSections["head"]) === null || _managedTableSections === void 0 ? void 0 : _managedTableSections.forceUpdate();
         (_managedTableSections2 = managedTableSections["body"]) === null || _managedTableSections2 === void 0 ? void 0 : _managedTableSections2.forceUpdate();
         (_managedTableSections3 = managedTableSections["foot"]) === null || _managedTableSections3 === void 0 ? void 0 : _managedTableSections3.forceUpdate();
       }, [
         /* Must remain stable */
-      ]); // This function is sort of like cloneElement for each children,
-      // except the "key" prop is super duper extra special
-      // and cloneElement won't work in the expected way to keep
-      // element identity between sort operations.
-      // So we create the element again with the same props but a new key
-      // and it work just as well.
+      ]);
+      const useTableSection = A$1(({
+        location
+      }) => {
+        const {
+          element,
+          useManagedChildProps
+        } = useManagedTableSection({
+          index: location,
+          forceUpdate: useForceUpdate()
+        });
+        const useTableSectionProps = A$1(({
+          children,
+          ...props
+        }) => {
+          return useManagedChildProps(useMergedProps()({
+            role: "rowgroup",
+            children: location === "body" ? children.map((tableRow, i) => {
+              return recreateChildWithSortedKey(children, i);
+            }) : children
+          }, props));
+        }, [useManagedChildProps]); // This function is sort of like cloneElement for each children,
+        // except the "key" prop is super duper extra special
+        // and cloneElement won't work in the expected way to keep
+        // element identity between sort operations.
+        // So we create the element again with the same props but a new key
+        // and it work just as well.
 
-      const recreateChildWithSortedKey = A$1(function ensortenChild(child) {
-        var _managedRows$childInd, _managedRows$childInd2;
+        const recreateChildWithSortedKey = A$1(function ensortenChild(originalChildren, unsortedIndex) {
+          const sortedIndex = indexMangler(unsortedIndex);
+          originalChildren[unsortedIndex];
+          let sortedChild = originalChildren[sortedIndex];
+          return v$1(sortedChild.type, { ...sortedChild.props,
+            key: sortedIndex
+          });
+        }, []); // Actually implement grid navigation
 
         const {
-          rowIndex: childIndex,
-          ...props
-        } = child.props;
-        const sortedIndex = (_managedRows$childInd = (_managedRows$childInd2 = managedRows[childIndex]) === null || _managedRows$childInd2 === void 0 ? void 0 : _managedRows$childInd2.getRowIndexAsSorted()) !== null && _managedRows$childInd !== void 0 ? _managedRows$childInd : childIndex;
-        const C = child.type;
-        let ret = v$1(C, {
-          key: sortedIndex,
-          rowIndex: sortedIndex,
-          unsortedRowIndex: childIndex,
-          ...props
+          cellIndex,
+          rowIndex,
+          rowCount,
+          useGridNavigationRow,
+          managedRows
+        } = useGridNavigation({
+          shouldFocusOnChange: stableGetFocusedInner,
+          indexMangler,
+          indexDemangler
         });
-        return ret;
-      }, []); // Tables need a role of "grid" in order to be considered 
+        y(() => {
+          if (location === "body") setBodyRowsGetter(prev => () => managedRows);
+        }, [location, managedRows]);
+        /**
+         *
+         * IMPORTANT NOTE ABOUT COMPONENTS USING THIS HOOK!!
+         *
+         * The rowIndex prop that you pass to your custom TableRow component
+         * *must* be named "rowIndex" and *must* be, e.g., 0 for the header
+         * row, 1 for the first body row, etc.
+         *
+         * Your custom TableRow component must also be the *direct*
+         * child of whatever implements your TableHead, TableBody, and
+         * TableFoot components.
+         *
+         * The reason is the children elements are re-created using
+         * their type and props but with specific keys that make
+         * sorting work properly.
+         */
+
+        const useTableRow = A$1(({
+          rowIndex: rowIndexAsUnsorted,
+          location,
+          hidden
+        }) => {
+          // This is used by the sort function to update this row when everything's shuffled.
+          const [rowIndexAsSorted, setRowIndexAsSorted, getRowIndexAsSorted] = useState(rowIndexAsUnsorted);
+          const getManagedCells = useStableCallback(() => managedCells);
+          const {
+            useGridNavigationCell,
+            useGridNavigationRowProps,
+            cellCount,
+            isTabbableRow,
+            managedCells
+          } = useGridNavigationRow({
+            index: rowIndexAsUnsorted,
+            getManagedCells,
+            hidden,
+            ...{
+              rowIndexAsSorted: getRowIndexAsSorted()
+            },
+            getRowIndexAsSorted,
+            setRowIndexAsSorted,
+            location
+          }); // Not public -- just the shared code between header cells and body cells
+
+          const useTableCellShared = A$1(({
+            columnIndex,
+            value
+          }) => {
+            const {
+              useGridNavigationCellProps
+            } = useGridNavigationCell({
+              index: columnIndex,
+              value
+            });
+
+            function useTableCellProps({
+              role,
+              ...props
+            }) {
+              return useMergedProps()({
+                role: "gridcell"
+              }, props);
+            }
+
+            function useTableCellDelegateProps({
+              role,
+              ...props
+            }) {
+              return useGridNavigationCellProps(props);
+            }
+
+            return {
+              useTableCellProps,
+              useTableCellDelegateProps
+            };
+          }, []);
+          const useTableHeadCell = A$1(({
+            columnIndex,
+            unsortable,
+            tag
+          }) => {
+            const {
+              useTableCellDelegateProps,
+              useTableCellProps
+            } = useTableCellShared({
+              columnIndex,
+              value: ""
+            }); // This is mostly all just in regards to
+            // handling the "sort-on-click" interaction.
+
+            const [sortDirection, setSortDirection, getSortDirection] = useState(null);
+            const [isTheSortedColumn, setIsTheSortedColumn] = useState(false);
+            const random = s(generateRandomId());
+            const {
+              element,
+              getElement,
+              useManagedChildProps
+            } = useManagedHeaderCellChild({
+              index: random.current,
+              setSortedColumn: A$1(c => {
+                setIsTheSortedColumn(c === columnIndex);
+              }, [columnIndex])
+            });
+            y(() => {
+              if (!isTheSortedColumn) setSortDirection(null);
+            }, [isTheSortedColumn]);
+            const onSortClick = A$1(() => {
+              let nextSortDirection = getSortDirection();
+              if (nextSortDirection === "ascending") nextSortDirection = "descending";else nextSortDirection = "ascending";
+              setSortDirection(nextSortDirection);
+              sort(columnIndex, nextSortDirection);
+            }, []);
+
+            const useTableHeadCellProps = props => {
+              const m = useTableCellProps(useButtonLikeEventHandlers(tag, unsortable ? null : onSortClick, undefined)(useMergedProps()({
+                role: "columnheader"
+              }, props)));
+              return useManagedChildProps(m);
+            };
+
+            return {
+              useTableHeadCellProps,
+              useTableHeadCellDelegateProps: useTableCellDelegateProps,
+              sortDirection
+            };
+          }, []);
+          const useTableCell = A$1(({
+            columnIndex,
+            value
+          }) => {
+            const {
+              useTableCellDelegateProps,
+              useTableCellProps
+            } = useTableCellShared({
+              columnIndex,
+              value
+            });
+            return {
+              useTableCellProps,
+              useTableCellDelegateProps
+            };
+          }, []);
+
+          function useTableRowProps({
+            role,
+            ...props
+          }) {
+            return useGridNavigationRowProps(useMergedProps()({
+              role: "row"
+            }, props));
+          }
+
+          return {
+            useTableCell,
+            useTableRowProps,
+            useTableHeadCell,
+            rowIndexAsSorted,
+            rowIndexAsUnsorted
+          };
+        }, []);
+        return {
+          useTableSectionProps,
+          useTableRow
+        };
+      }, []); // Whenever any given header cell requests a sort, it sets itself here, in the table,
+      // as the "sortedColumn" column.  We then, as the parent table, let all the other
+      // header rows know who is the "sortedColumn" column so that they can un-style themselves.
+
+      y(() => {
+        if (sortedColumn != null) {
+          Object.entries(managedHeaderCells).forEach(([index, cell]) => {
+            cell.setSortedColumn(sortedColumn);
+          });
+        }
+      }, [sortedColumn]); // Tables need a role of "grid" in order to be considered 
       // "interactive content" like a text box that passes through
       // keyboard inputs.
 
@@ -8726,232 +8906,11 @@
           role: "grid"
         }, props));
       }
-      /**
-       *
-       * IMPORTANT NOTE ABOUT COMPONENTS USING THIS HOOK!!
-       *
-       * The rowIndex prop that you pass to your custom TableRow component
-       * *must* be named "rowIndex" and *must* be, e.g., 0 for the header
-       * row, 1 for the first body row, etc.
-       *
-       * Your custom TableRow component must also be the *direct*
-       * child of whatever implements your TableHead, TableBody, and
-       * TableFoot components.
-       *
-       * The reason is the children elements are re-created using
-       * their type and props but with specific keys that make
-       * sorting work properly.
-       */
 
-
-      const useTableRow = A$1(({
-        rowIndex: rowIndexAsUnsorted,
-        location
-      }) => {
-        // This is used by the sort function to update this row when everything's shuffled.
-        const [rowIndexAsSorted, setRowIndexAsSorted, getRowIndexAsSorted] = useState(rowIndexAsUnsorted);
-        const getManagedCells = useStableCallback(() => managedCells);
-        const {
-          useGridNavigationCell,
-          useGridNavigationRowProps,
-          cellCount,
-          isTabbableRow,
-          managedCells
-        } = useGridNavigationRow({
-          index: rowIndexAsUnsorted,
-          getManagedCells,
-          ...{
-            rowIndexAsSorted: getRowIndexAsSorted()
-          },
-          getRowIndexAsSorted,
-          setRowIndexAsSorted,
-          location
-        }); // Not public -- just the shared code between header cells and body cells
-
-        const useTableCellShared = A$1(({
-          columnIndex,
-          value
-        }) => {
-          const {
-            useGridNavigationCellProps
-          } = useGridNavigationCell({
-            index: columnIndex,
-            value,
-            text: null
-          });
-
-          function useTableCellProps({
-            role,
-            ...props
-          }) {
-            return useMergedProps()({
-              role: "gridcell"
-            }, props);
-          }
-
-          function useTableCellDelegateProps({
-            role,
-            ...props
-          }) {
-            return useGridNavigationCellProps(props);
-          }
-
-          return {
-            useTableCellProps,
-            useTableCellDelegateProps
-          };
-        }, []);
-        const useTableHeadCell = A$1(({
-          columnIndex,
-          unsortable,
-          tag
-        }) => {
-          const {
-            useTableCellDelegateProps,
-            useTableCellProps
-          } = useTableCellShared({
-            columnIndex,
-            value: ""
-          }); // This is mostly all just in regards to
-          // handling the "sort-on-click" interaction.
-
-          const [sortDirection, setSortDirection, getSortDirection] = useState(null);
-          const [isTheSortedColumn, setIsTheSortedColumn] = useState(false);
-          const random = s(generateRandomId());
-          const {
-            element,
-            getElement,
-            useManagedChildProps
-          } = useManagedHeaderCellChild({
-            index: random.current,
-            setSortedColumn: A$1(c => {
-              setIsTheSortedColumn(c === columnIndex);
-            }, [columnIndex])
-          });
-          y(() => {
-            if (!isTheSortedColumn) setSortDirection(null);
-          }, [isTheSortedColumn]);
-          const onSortClick = A$1(() => {
-            let nextSortDirection = getSortDirection();
-            if (nextSortDirection === "ascending") nextSortDirection = "descending";else nextSortDirection = "ascending";
-            setSortDirection(nextSortDirection);
-            sort(columnIndex, nextSortDirection);
-          }, []);
-
-          const useTableHeadCellProps = props => {
-            const m = useTableCellProps(useButtonLikeEventHandlers(tag, unsortable ? null : onSortClick, undefined)(useMergedProps()({
-              role: "columnheader"
-            }, props)));
-            return useManagedChildProps(m);
-          };
-
-          return {
-            useTableHeadCellProps,
-            useTableHeadCellDelegateProps: useTableCellDelegateProps,
-            sortDirection
-          };
-        }, []);
-        const useTableCell = A$1(({
-          columnIndex,
-          value
-        }) => {
-          const {
-            useTableCellDelegateProps,
-            useTableCellProps
-          } = useTableCellShared({
-            columnIndex,
-            value
-          });
-          return {
-            useTableCellProps,
-            useTableCellDelegateProps
-          };
-        }, []);
-
-        function useTableRowProps({
-          role,
-          ...props
-        }) {
-          return useGridNavigationRowProps(useMergedProps()({
-            role: "row"
-          }, props));
-        }
-
-        return {
-          useTableCell,
-          useTableRowProps,
-          useTableHeadCell,
-          rowIndexAsSorted,
-          rowIndexAsUnsorted
-        };
-      }, []);
-      const useTableHead = A$1(function useTableHead({}) {
-        const {
-          element,
-          useManagedChildProps
-        } = useManagedTableSection({
-          index: "head",
-          forceUpdate: useForceUpdate()
-        });
-        return {
-          useTableHeadProps: A$1(({
-            children,
-            ...props
-          }) => useManagedChildProps(useMergedProps()({
-            role: "rowgroup",
-            children: children.map((tableRow, i) => {
-              return recreateChildWithSortedKey(tableRow);
-            })
-          }, props)), [useManagedChildProps])
-        };
-      }, []);
-      const useTableBody = A$1(function useTableBody({}) {
-        const {
-          element,
-          useManagedChildProps
-        } = useManagedTableSection({
-          index: "body",
-          forceUpdate: useForceUpdate()
-        });
-        return {
-          useTableBodyProps: A$1(({
-            children,
-            ...props
-          }) => useManagedChildProps(useMergedProps()({
-            role: "rowgroup",
-            children: children.map((tableRow, i) => {
-              return recreateChildWithSortedKey(tableRow);
-            })
-          }, props)), [useManagedChildProps])
-        };
-      }, []);
-      const useTableFoot = A$1(function useTableFoot({}) {
-        const {
-          element,
-          useManagedChildProps
-        } = useManagedTableSection({
-          index: "foot",
-          forceUpdate: useForceUpdate()
-        });
-        return {
-          useTableFootProps: A$1(({
-            children,
-            ...props
-          }) => useManagedChildProps(useMergedProps()({
-            role: "rowgroup",
-            children: children.map((tableRow, i) => {
-              return recreateChildWithSortedKey(tableRow);
-            })
-          }, props)), [useManagedChildProps])
-        };
-      }, []);
       return {
         useTableProps,
-        useTableHead,
-        useTableBody,
-        useTableFoot,
-        useTableRow,
-        managedRows
+        useTableSection,
+        managedTableSections
       };
     }
 
@@ -10044,7 +10003,7 @@
       }));
       const inputElement = v$1(OptionallyInputGroup$1, {
         isInput: true,
-        tag: inInputGroup ? "label" : null,
+        tag: inInputGroup ? "div" : null,
         tabIndex: -1,
         disabled: disabled
       }, v$1(ProgressCircular, {
@@ -14023,12 +13982,10 @@
                             ">, which takes a minimum column count and fits that many columns in no matter the resulting size and/or jankiness"))))));
     }
 
-    const TableHeadContext = D$1(null);
-    const TableBodyContext = D$1(null);
-    const TableFootContext = D$1(null);
+    const TableSectionContext = D$1(null);
     const TableRowContext = D$1(null);
-    const ManagedRowsContext = D$1([]);
-    const Table = forwardElementRef(function Table({
+    D$1([]);
+    const Table = g(forwardElementRef(function Table({
       children,
       small,
       striped,
@@ -14041,86 +13998,100 @@
       useLogRender("Table", `Rendering Table`);
       const {
         useTableProps,
-        useTableBody,
-        useTableFoot,
-        useTableHead,
-        useTableRow,
-        managedRows
+        useTableSection,
+        managedTableSections
       } = useTable({});
       return v$1("table", { ...useTableProps(useMergedProps()({
           ref,
           className: clsx("table", small && "table-sm", striped && "table-striped", hoverable && "table-hover", border === "all" && "table-bordered", border === "none" && "table-borderless", variant && `table-${variant}`, borderColor && `border-${borderColor}`)
         }, props))
-      }, v$1(TableHeadContext.Provider, {
-        value: useTableHead
-      }, v$1(TableBodyContext.Provider, {
-        value: useTableBody
-      }, v$1(TableFootContext.Provider, {
-        value: useTableFoot
-      }, v$1(TableRowContext.Provider, {
-        value: useTableRow
-      }, v$1(ManagedRowsContext.Provider, {
-        value: managedRows
-      }, children))))));
-    });
+      }, v$1(TableSectionContext.Provider, {
+        value: useTableSection
+      }, children));
+    }));
     const CellLocationContext = D$1(null);
-    const TableHead = forwardElementRef(function TableHead({
+    const TableSectionImpl = g(forwardElementRef(function TableSectionImpl({
+      tag,
       children,
+      ...props
+    }, ref) {
+      return v$1(tag, { ...props,
+        children: Array.isArray(children) ? children : [children]
+      });
+    }));
+    const TableSection = g(forwardElementRef(function TableSection({
+      location,
+      tag,
+      ...props
+    }, ref) {
+      const useTableSection = F(TableSectionContext);
+      const {
+        useTableRow,
+        useTableSectionProps
+      } = useTableSection({
+        location
+      });
+      return v$1(TableRowContext.Provider, {
+        value: useTableRow
+      }, v$1(TableSectionImpl, {
+        tag: tag,
+        ...useTableSectionProps({ ...props,
+          ref: ref
+        })
+      }));
+    }));
+    const TableHead = g(forwardElementRef(function TableHead({
       variant,
       ...props
     }, ref) {
       useLogRender("TableHead", `Rendering TableHead`);
-      const useTableHead = F(TableHeadContext);
-      const {
-        useTableHeadProps
-      } = useTableHead({});
       return v$1(CellLocationContext.Provider, {
         value: "head"
-      }, v$1("thead", { ...useMergedProps()(useTableHeadProps({
+      }, v$1(TableSection, {
+        location: "head",
+        tag: "thead",
+        ...useMergedProps()({
           ref,
-          children: Array.isArray(children) ? children : [children],
           className: clsx(variant && `table-${variant}`)
-        }), props)
+        }, props)
       }));
-    });
-    const TableBody = forwardElementRef(function TableBody({
+    }));
+    const TableBody = g(forwardElementRef(function TableBody({
       children,
       variant,
       ...props
     }, ref) {
       useLogRender("TableBody", `Rendering TableBody`);
-      const useTableBody = F(TableBodyContext);
-      const {
-        useTableBodyProps
-      } = useTableBody({});
       return v$1(CellLocationContext.Provider, {
         value: "body"
-      }, v$1("tbody", { ...useMergedProps()(useTableBodyProps({
+      }, v$1(TableSection, {
+        location: "body",
+        tag: "tbody",
+        ...useMergedProps()({
           ref,
           children,
           className: clsx(variant && `table-${variant}`)
-        }), props)
+        }, props)
       }));
-    });
-    forwardElementRef(function TableFoot({
+    }));
+    g(forwardElementRef(function TableFoot({
       children,
       variant,
       ...props
     }, ref) {
       useLogRender("TableFoot", `Rendering TableFoot`);
-      const useTableFoot = F(TableFootContext);
-      const {
-        useTableFootProps
-      } = useTableFoot({});
       return v$1(CellLocationContext.Provider, {
         value: "foot"
-      }, v$1("tfoot", { ...useMergedProps()(useTableFootProps({
+      }, v$1(TableSection, {
+        location: "foot",
+        tag: "tfoot",
+        ...useMergedProps()({
           ref,
           children: Array.isArray(children) ? children : [children],
           className: clsx(variant && `table-${variant}`)
-        }), props)
+        }, props)
       }));
-    });
+    }));
     const TableCellContext = D$1(null);
     const TableHeadCellContext = D$1(null);
     const TableRow = g(forwardElementRef(function TableRow({
@@ -14195,7 +14166,7 @@
         }, stringify(displayValue));
       }
     }));
-    const TableHeaderCell = forwardElementRef(function TableHeaderCell({
+    const TableHeaderCell = g(forwardElementRef(function TableHeaderCell({
       columnIndex,
       focus,
       children,
@@ -14251,7 +14222,7 @@
           class: "th-spacing"
         }, children, sortIcon));
       }
-    });
+    }));
 
     function useIsHovering() {
       const [hovering, setHovering] = useState(false);
@@ -14279,11 +14250,11 @@
 
     var RandomWords$1 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.".split(" ");
     var formatter = new Intl.DateTimeFormat("en-US", { year: "numeric", month: "short", day: "numeric" });
-    function RandomRow(_a) {
+    var RandomRow = g(function RandomRow(_a) {
         var _this = this;
         var rowIndex = _a.rowIndex, unsortedRowIndex = _a.unsortedRowIndex, hidden = _a.hidden;
         console.log("RandomRow " + rowIndex + ", " + unsortedRowIndex);
-        var i = rowIndex - 1;
+        var i = rowIndex;
         var w = RandomWords$1[i];
         var n = Math.pow((i + 0), 2);
         var d = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + n * 7);
@@ -14305,7 +14276,7 @@
             v$1(TableCell, { columnIndex: 2, value: d }, formatter.format(d)),
             v$1(TableCell, { columnIndex: 3, value: checked },
                 v$1(Checkbox, { checked: checked, onInput: onInput, labelPosition: "hidden" }, "Demo table checkbox"))));
-    }
+    });
     function DemoTable() {
         var _a = useState(5), rowCount = _a[0], setRowCount = _a[1];
         var _b = useState(false), filterEvens = _b[0], setFilterEvens = _b[1];
@@ -14381,7 +14352,14 @@
                                         _a.label = 1;
                                     case 1:
                                         if (!(i < rowCount)) return [3 /*break*/, 4];
-                                        return [4 /*yield*/, v$1(RandomRow, { key: i + 1, rowIndex: i + 1, hidden: filterEvens && i % 2 == 0 })];
+                                        return [4 /*yield*/, v$1(RandomRow, { key: i, rowIndex: i, hidden: filterEvens && i % 2 == 0 })
+                                            /*<TableRow rowIndex={1 + i}>
+                                            <TableCell columnIndex={0} value={i} />
+                                            <TableCell columnIndex={1} value={RandomWords[i]} />
+                                            <TableCell columnIndex={2} value={new Date()} />
+                                        </TableRow>*/
+                                            //
+                                        ];
                                     case 2:
                                         _a.sent();
                                         _a.label = 3;

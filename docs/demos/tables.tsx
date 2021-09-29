@@ -1,6 +1,7 @@
 import { h } from "preact";
 import { useForceUpdate, useInterval } from "preact-prop-helpers";
 import { useState } from "preact-prop-helpers/use-state";
+import { memo } from "preact/compat";
 import { useCallback, useContext } from "preact/hooks";
 import { Card, CardElement } from "../../card/card";
 import { Checkbox, Input } from "../../input-group";
@@ -10,9 +11,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow } fro
 var RandomWords = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.".split(" ");
 
 const formatter = new Intl.DateTimeFormat("en-US", { year: "numeric", month: "short", day: "numeric" })
-function RandomRow({ rowIndex, unsortedRowIndex, hidden }: { rowIndex: number, unsortedRowIndex?: number, hidden?: boolean }) {
+const RandomRow = memo(function RandomRow({ rowIndex, unsortedRowIndex, hidden }: { rowIndex: number, unsortedRowIndex?: number, hidden?: boolean }) {
     console.log(`RandomRow ${rowIndex}, ${unsortedRowIndex}`)
-    const i = rowIndex - 1;
+    const i = rowIndex;
     const w = RandomWords[i];
     const n = (i + 0) ** 2;
     const d = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + n * 7);
@@ -34,7 +35,7 @@ function RandomRow({ rowIndex, unsortedRowIndex, hidden }: { rowIndex: number, u
                 <Checkbox checked={checked} onInput={onInput} labelPosition="hidden">Demo table checkbox</Checkbox>
             </TableCell>
         </TableRow>)
-}
+})
 
 
 
@@ -84,7 +85,6 @@ export function DemoTable() {
                     <Input type="number" value={rowCount} min={0} max={255} onInput={setRowCount}>Row count</Input>
                     <Checkbox checked={filterEvens} onInput={setFilterEvens}>Filter out every other row</Checkbox>
                 </CardElement>
-
                 <CardElement>
                     <Table>
                         <TableHead>
@@ -99,7 +99,15 @@ export function DemoTable() {
                         <TableBody {...{"data-test": filterEvens}}>
                             {Array.from(function* () {
                                 for (let i = 0; i < rowCount; ++i) {
-                                    yield <RandomRow key={i + 1} rowIndex={i + 1} hidden={filterEvens && i % 2 == 0} />
+                                    
+                                    yield <RandomRow key={i} rowIndex={i} hidden={filterEvens && i % 2 == 0} />
+                                    /*<TableRow rowIndex={1 + i}>
+                                    <TableCell columnIndex={0} value={i} />
+                                    <TableCell columnIndex={1} value={RandomWords[i]} />
+                                    <TableCell columnIndex={2} value={new Date()} />
+                                </TableRow>*/
+                                    
+                                    //
                                 }
                             }())}
                         </TableBody>

@@ -54,7 +54,7 @@ export const Checkbox = forwardElementRef(function Checkbox({ checked, disabled,
 
     const p = useMergedProps<HTMLInputElement>()(props, useCheckboxInputElementProps({ ref, type: "checkbox", className: clsx("form-check-input", pending && "pending", disabled && "disabled", inInputGroup && "mt-0"), "aria-label": labelPosition === "hidden" ? stringLabel : undefined }));
     const inputElement =
-        <OptionallyInputGroup isInput tag={inInputGroup ? "label" : null} tabIndex={-1} disabled={disabled}>
+        <OptionallyInputGroup isInput tag={inInputGroup ? "div" : null} tabIndex={-1} disabled={disabled}>
             <ProgressCircular childrenPosition="after" colorFill="foreground-only" mode={currentType === "async" ? asyncState : null} color="info">
                 <input {...p} />
             </ProgressCircular>
