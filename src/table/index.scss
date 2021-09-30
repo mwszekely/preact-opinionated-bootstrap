@@ -6,12 +6,13 @@
 @use "sass:list";
 
 .table {
-  // Try to get every possible iteration of a
-  // sticky table header that will work in old
-  // browsers
-  & > thead,
-  & > thead > tr,
-  & > thead > tr > th {
+  position: relative;
+  
+  // Note to self: sticky headers are
+  // *really* weird in Safari and it's
+  // best to keep as few things sticky
+  // as possible
+  & > thead {
     position: sticky;
     top: 0;
     background-color: $body-bg;
