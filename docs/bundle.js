@@ -2668,17 +2668,17 @@
               But roughly isn't good enough if there are multiple matches.
               To convert our sorted index to the unsorted index we need, we have to find the first
               element that matches us *and* (if any such exist) is *after* our current selection.
-               In other words, the only way typeahead moves backwards relative to our current
+                In other words, the only way typeahead moves backwards relative to our current
               position is if the only other option is behind us.
-               It's not specified in WAI-ARIA what to do in that case.  I suppose wrap back to the start?
+                It's not specified in WAI-ARIA what to do in that case.  I suppose wrap back to the start?
               Though there's also a case for just going upwards to the nearest to prevent jumpiness.
               But if you're already doing typeahead on an unsorted list, like, jumpiness can't be avoided.
               I dunno. Going back to the start is the simplist though.
-               Basically what this does: Starting from where we found ourselves after our binary search,
+                Basically what this does: Starting from where we found ourselves after our binary search,
               scan backwards and forwards through all adjacent entries that also compare equally so that
               we can find the one whose `unsortedIndex` is the lowest amongst all other equal strings
               (and also the lowest `unsortedIndex` yadda yadda except that it comes after us).
-               TODO: The binary search starts this off with a solid O(log n), but one-character
+                TODO: The binary search starts this off with a solid O(log n), but one-character
               searches are, thanks to pigeonhole principal, eventually guaranteed to become
               O(n*log n). This is annoying but probably not easily solvable? There could be an
               exception for one-character strings, but that's just kicking the can down
@@ -8685,12 +8685,12 @@
           children,
           ...props
         }) => {
-          return useMergedProps()(useManagedChildProps({
+          return useManagedChildProps(useMergedProps()({
             role: "rowgroup",
             children: location === "body" ? children.map((tableRow, i) => {
               return recreateChildWithSortedKey(children, i);
             }) : children
-          }), props);
+          }, props));
         }, [useManagedChildProps]); // This function is sort of like cloneElement for each children,
         // except the "key" prop is super duper extra special
         // and cloneElement won't work in the expected way to keep
@@ -10607,39 +10607,39 @@
       return placement.split('-')[0];
     }
 
-    var round$1 = Math.round;
-    function getBoundingClientRect(element, includeScale) {
-      if (includeScale === void 0) {
-        includeScale = false;
-      }
+    // import { isHTMLElement } from './instanceOf';
+    function getBoundingClientRect(element, // eslint-disable-next-line unused-imports/no-unused-vars
+    includeScale) {
 
       var rect = element.getBoundingClientRect();
       var scaleX = 1;
-      var scaleY = 1;
-
-      if (isHTMLElement(element) && includeScale) {
-        var offsetHeight = element.offsetHeight;
-        var offsetWidth = element.offsetWidth; // Do not attempt to divide by 0, otherwise we get `Infinity` as scale
-        // Fallback to 1 in case both values are `0`
-
-        if (offsetWidth > 0) {
-          scaleX = rect.width / offsetWidth || 1;
-        }
-
-        if (offsetHeight > 0) {
-          scaleY = rect.height / offsetHeight || 1;
-        }
-      }
+      var scaleY = 1; // FIXME:
+      // `offsetWidth` returns an integer while `getBoundingClientRect`
+      // returns a float. This results in `scaleX` or `scaleY` being
+      // non-1 when it should be for elements that aren't a full pixel in
+      // width or height.
+      // if (isHTMLElement(element) && includeScale) {
+      //   const offsetHeight = element.offsetHeight;
+      //   const offsetWidth = element.offsetWidth;
+      //   // Do not attempt to divide by 0, otherwise we get `Infinity` as scale
+      //   // Fallback to 1 in case both values are `0`
+      //   if (offsetWidth > 0) {
+      //     scaleX = rect.width / offsetWidth || 1;
+      //   }
+      //   if (offsetHeight > 0) {
+      //     scaleY = rect.height / offsetHeight || 1;
+      //   }
+      // }
 
       return {
-        width: round$1(rect.width / scaleX),
-        height: round$1(rect.height / scaleY),
-        top: round$1(rect.top / scaleY),
-        right: round$1(rect.right / scaleX),
-        bottom: round$1(rect.bottom / scaleY),
-        left: round$1(rect.left / scaleX),
-        x: round$1(rect.left / scaleX),
-        y: round$1(rect.top / scaleY)
+        width: rect.width / scaleX,
+        height: rect.height / scaleY,
+        top: rect.top / scaleY,
+        right: rect.right / scaleX,
+        bottom: rect.bottom / scaleY,
+        left: rect.left / scaleX,
+        x: rect.left / scaleX,
+        y: rect.top / scaleY
       };
     }
 
@@ -11906,9 +11906,9 @@
       }
 
       var isOffsetParentAnElement = isHTMLElement(offsetParent);
-      var offsetParentIsScaled = isHTMLElement(offsetParent) && isElementScaled(offsetParent);
+      isHTMLElement(offsetParent) && isElementScaled(offsetParent);
       var documentElement = getDocumentElement(offsetParent);
-      var rect = getBoundingClientRect(elementOrVirtualElement, offsetParentIsScaled);
+      var rect = getBoundingClientRect(elementOrVirtualElement);
       var scroll = {
         scrollLeft: 0,
         scrollTop: 0
@@ -11925,7 +11925,7 @@
         }
 
         if (isHTMLElement(offsetParent)) {
-          offsets = getBoundingClientRect(offsetParent, true);
+          offsets = getBoundingClientRect(offsetParent);
           offsets.x += offsetParent.clientLeft;
           offsets.y += offsetParent.clientTop;
         } else if (documentElement) {
