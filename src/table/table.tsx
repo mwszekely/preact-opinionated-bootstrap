@@ -106,8 +106,8 @@ export const Table = memo(forwardElementRef(function Table({ children, small, st
 
 const CellLocationContext = createContext<"head" | "body" | "foot">(null!);
 
-const TableSectionImpl = memo(forwardElementRef(function TableSectionImpl<E extends HTMLTableSectionElement>({ tag, children, ...props }: Omit<TableSectionProps<E>, "location">, ref: Ref<E>) {
-    return h(tag as any, { ...props, children: Array.isArray(children) ? (children as VNode<any>[]) : [(children as VNode<any>)] });
+const TableSectionImpl = memo(forwardElementRef(function TableSectionImpl<E extends HTMLTableSectionElement>({ tag, children, ...props }: { children?: any } & Omit<TableSectionProps<E>, "location" | "children">, ref: Ref<E>) {
+    return h(tag as any, { ...props, ref, children: Array.isArray(children) ? (children as VNode<any>[]) : [(children as VNode<any>)] });
 }))
 
 const TableSection = memo(forwardElementRef(function TableSection<E extends HTMLTableSectionElement>({ location, tag, ...props }: TableSectionProps<E>, ref: Ref<E>) {
@@ -116,7 +116,7 @@ const TableSection = memo(forwardElementRef(function TableSection<E extends HTML
 
     return (
         <TableRowContext.Provider value={useTableRow}>
-            <TableSectionImpl tag={tag} {...useTableSectionProps({ ...props, ref: ref as Ref<HTMLTableSectionElement> } as any)} />
+            <TableSectionImpl tag={tag} {...useTableSectionProps({ ...props as any, ref: ref as Ref<HTMLTableSectionElement> })} />
         </TableRowContext.Provider>);
 }))
 

@@ -8685,12 +8685,12 @@
           children,
           ...props
         }) => {
-          return useManagedChildProps(useMergedProps()({
+          return useMergedProps()(useManagedChildProps({
             role: "rowgroup",
             children: location === "body" ? children.map((tableRow, i) => {
               return recreateChildWithSortedKey(children, i);
             }) : children
-          }, props));
+          }), props);
         }, [useManagedChildProps]); // This function is sort of like cloneElement for each children,
         // except the "key" prop is super duper extra special
         // and cloneElement won't work in the expected way to keep
@@ -14016,6 +14016,7 @@
       ...props
     }, ref) {
       return v$1(tag, { ...props,
+        ref,
         children: Array.isArray(children) ? children : [children]
       });
     }));
