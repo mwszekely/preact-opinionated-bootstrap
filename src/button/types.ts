@@ -7,7 +7,7 @@ export type ButtonFillVariant = "fill" | "outline";
 export type ButtonSize = "lg" | "md" | "sm";
 
 
-export interface ButtonPropsBase<E extends Element> extends Omit<UseAriaButtonParameters<E>, "pressed" | "tag" | "onClick">, GlobalAttributes<E> {
+export interface ButtonPropsBase<E extends Element> extends Omit<UseAriaButtonParameters<E>, "pressed" | "tag" | "onPress">, GlobalAttributes<E> {
     colorVariant?: ButtonColorVariant;
     fillVariant?: ButtonFillVariant;
     size?: ButtonSize;

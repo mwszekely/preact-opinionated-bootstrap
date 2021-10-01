@@ -185,22 +185,6 @@ const DemoMenu = memo(() => {
     )
 });
 
-
-const DemoFocus = memo(() => {
-    const { focused, focusedInner, useHasFocusProps } = useHasFocus<HTMLDivElement>();
-    return (
-        <div class="demo">
-            <h2>useHasFocus</h2>
-            <div {...useHasFocusProps({ style: { border: "1px solid black" }, tabIndex: 0 })} >Outer <div tabIndex={0} style={{ border: "1px solid black" }}>Inner element</div></div>
-            <div>
-                <ul>
-                    <li>Strictly focused: {focused.toString()}</li>
-                    <li>Inner focused: {focusedInner.toString()}</li>
-                </ul>
-            </div>
-        </div>
-    )
-})
 const DemoTabs = memo(() => {
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [selectionMode, setSelectionMode] = useState<"focus" | "activate">("activate");

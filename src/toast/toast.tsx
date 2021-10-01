@@ -87,7 +87,7 @@ export function Toast({ timeout, politeness, children }: ToastProps) {
                         <div class="toast-body">
                             {children}
                         </div>
-                        <Button class="btn-close me-2 m-auto" aria-label="Dismiss alert" onClick={dismiss} />
+                        <Button class="btn-close me-2 m-auto" aria-label="Dismiss alert" onPress={dismiss} />
                     </div>
                 </div>
             </SlideFade>

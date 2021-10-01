@@ -34,7 +34,7 @@ export function Drawer<T extends <E extends HTMLElement>(...args: any[]) => h.JS
                     <div {...useDrawerProps({ class: "offcanvas offcanvas-start", tabindex: -1 })}>
                         <div class="offcanvas-header">
                             <h5 {...useDrawerTitleProps({ class: "offcanvas-title" })}>Drawer</h5>
-                            <Button tag="button" class="btn-close text-reset" aria-label="Close" onClick={() => onClose("escape")}></Button>
+                            <Button tag="button" class="btn-close text-reset" aria-label="Close" onPress={() => onClose("escape")}></Button>
                         </div>
                         <div {...useDrawerBodyProps({ class: "offcanvas-body" })}>
                             {children}

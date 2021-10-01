@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { ComponentChild, createContext, h, Ref } from "preact";
 import { UseAriaButtonParameters } from "preact-aria-widgets/use-button";
-import { useChildManager, useHasFocus, useListNavigation, UseListNavigationChild, useMergedProps } from "preact-prop-helpers";
+import { useChildManager, useHasFocus, useListNavigation, UseListNavigationChild, useMergedProps, useState } from "preact-prop-helpers";
 import { forwardElementRef, GlobalAttributes, useLogRender } from "../props";
 import { useButtonColorVariant, useButtonDisabled, useButtonFillVariant, UseButtonGroupChild, useButtonSize } from "./defaults";
 import { ButtonColorVariant, ButtonFillVariant, ButtonSize } from "./types";
@@ -9,7 +9,7 @@ import { ButtonColorVariant, ButtonFillVariant, ButtonSize } from "./types";
 import { ProvideDefaultButtonColor, ProvideDefaultButtonSize, ProvideDefaultButtonDisabled, ProvideDefaultButtonFill } from "./defaults"
 import { ManagedChildInfo, UsedManagedChild } from "preact-prop-helpers/use-child-manager";
 import { useContext, useEffect } from "preact/hooks";
-import { Button, ButtonProps } from "./button";
+import { AnchorButtonProps, Button, ButtonButtonProps, ButtonProps, ToggleButtonProps } from "./button";
 
 export interface ButtonGroupStyleProps {
     colorVariant?: ButtonColorVariant;
@@ -27,8 +27,9 @@ export interface ButtonGroupProps extends ButtonGroupStyleProps, GlobalAttribute
 export const ButtonGroup = forwardElementRef(function ButtonGroup(p: ButtonGroupProps, ref: Ref<HTMLDivElement>) {
     useLogRender("ButtonGroup", `Rendering ButtonGroup`);
 
-    const { lastFocusedInner, useHasFocusProps } = useHasFocus<HTMLDivElement>();
-    const { indicesByElement, managedChildren, useListNavigationChild, navigateToIndex, childCount } = useListNavigation<HTMLButtonElement>({ focusOnChange: lastFocusedInner });
+    const [focusedInner, setFocusedInner, getFocusedInner] = useState(false);
+    const { useHasFocusProps } = useHasFocus<HTMLDivElement>({ setFocusedInner });
+    const { indicesByElement, managedChildren, useListNavigationChild, navigateToIndex, childCount } = useListNavigation<HTMLButtonElement>({ shouldFocusOnChange: getFocusedInner });
 
     // Styling props
     let { colorVariant, fillVariant, size, disabled, selectedIndex, wrap, children, ...p3 } = p;
@@ -67,9 +68,16 @@ export const ButtonGroup = forwardElementRef(function ButtonGroup(p: ButtonGroup
     );
 });
 
-export type ButtonGroupChildProps = ButtonProps & {
-    index: number
+interface ButtonGroupChildBaseProps {
+    index: number;
 }
+
+export interface ButtonGroupChildToggleButtonProps extends ToggleButtonProps, ButtonGroupChildBaseProps {}
+export interface ButtonGroupChildButtonButtonProps extends ButtonButtonProps, ButtonGroupChildBaseProps {}
+export interface ButtonGroupChildAnchorButtonProps extends AnchorButtonProps, ButtonGroupChildBaseProps {}
+
+
+export type ButtonGroupChildProps = (ButtonGroupChildAnchorButtonProps | ButtonGroupChildButtonButtonProps | ButtonGroupChildToggleButtonProps);
 
 
 export const ButtonGroupChild = forwardElementRef(function ButtonGroupChild1({ index, ...buttonProps }: ButtonGroupChildProps, ref?: Ref<HTMLButtonElement> | Ref<HTMLAnchorElement>): h.JSX.Element {
@@ -82,16 +90,14 @@ export const ButtonGroupChild = forwardElementRef(function ButtonGroupChild1({ i
     const useButtonGroupChild = useContext(UseButtonGroupChild);
     const { tabbable, useListNavigationChildProps, useListNavigationSiblingProps } = useButtonGroupChild!({ index, text: null });
 
-    // TODO: It's kinda fragile here how the sync onClick of listNavigation 
-    // and the async onClick of button are mixing.
     const p = useListNavigationChildProps({ ref, role: "gridcell", ...buttonProps as any });
     return <Button {...p as any} />
 });
 
 () => {
-    <ButtonGroupChild index={0} pressed={true} onInput={b => { }} />;
+    <ButtonGroupChild index={0} pressed={true} onPressToggle={b => { }} />;
     <ButtonGroupChild index={0} tag="a" href=" " />;
-    <ButtonGroupChild index={0} onClick={(n, e) => { }} />;
+    <ButtonGroupChild index={0} onPress={(n, e) => { }} />;
 
 
     <ButtonGroupChild tag="button" index={0} />;
@@ -99,11 +105,13 @@ export const ButtonGroupChild = forwardElementRef(function ButtonGroupChild1({ i
     <ButtonGroupChild tag="button" />;
 
     /// @ts-expect-error
-    <ButtonGroupChild tag="button" index={0} pressed={true} onClick={b => { }} />;
+    <ButtonGroupChild tag="button" index={0} pressed={true} onPress={b => { }} />;
     /// @ts-expect-error
-    <ButtonGroupChild tag="a" index={0} pressed={true} onClick={b => { }} />;
+    <ButtonGroupChild tag="a" index={0} pressed={true} onPress={b => { }} />;
     /// @ts-expect-error
-    <ButtonGroupChild tag="a" index={0} onClick={b => { }} />;
+    <ButtonGroupChild tag="a" index={0} onPress={b => { }} />;
 
 }
+
+<Button pressed={true} onPress={p => console.log(p)}></Button>
 

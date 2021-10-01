@@ -3069,7 +3069,7 @@
       tabbableIndex
     }) {
       const [rerenderAndFocus, setRerenderAndFocus] = useState(null);
-      const getFocusOnChange = useStableGetter(foc);
+      const getShouldFocusOnChange = useStableGetter(foc);
       const getTabbableIndex = useStableGetter(tabbableIndex);
       s(-Infinity); // Call the hook that allows us to collect information from children who provide it
 
@@ -3112,8 +3112,9 @@
         y(() => {
           if (element && tabbable) {
             setRerenderAndFocus(_ => rerenderAndFocus);
+            const shouldFocusOnChange = getShouldFocusOnChange();
 
-            if (getFocusOnChange() && "focus" in element) {
+            if (shouldFocusOnChange() && "focus" in element) {
               requestAnimationFrame(() => {
                 queueMicrotask(() => {
                   element.focus();
@@ -3234,7 +3235,7 @@
       indexMangler,
       indexDemangler
     }) {
-      var _indexMangler, _indexDemangler;
+      var _indexMangler, _indexDemangler, _getCurrentRow;
 
       (_indexMangler = indexMangler) !== null && _indexMangler !== void 0 ? _indexMangler : indexMangler = identity$1;
       (_indexDemangler = indexDemangler) !== null && _indexDemangler !== void 0 ? _indexDemangler : indexDemangler = identity$1;
@@ -3251,19 +3252,19 @@
       // This happens automatically when these functions are called.
 
       const navigateToFirstRow = A$1(() => {
-        setCurrentRow2(c => tryNavigateToIndex(managedRows, c, 0, 1, indexMangler, indexDemangler));
+        setCurrentRow2(c => tryNavigateToIndex(managedRows, c !== null && c !== void 0 ? c : 0, 0, 1, indexMangler, indexDemangler));
       }, [indexMangler, indexDemangler]);
       const navigateToLastRow = A$1(() => {
-        setCurrentRow2(c => tryNavigateToIndex(managedRows, c, managedRows.length - 1, -1, indexMangler, indexDemangler));
+        setCurrentRow2(c => tryNavigateToIndex(managedRows, c !== null && c !== void 0 ? c : 0, managedRows.length - 1, -1, indexMangler, indexDemangler));
       }, [indexMangler, indexDemangler]);
       const navigateToPrevRow = A$1(() => {
         setCurrentRow2(c => {
-          return tryNavigateToIndex(managedRows, c, indexMangler(Math.max(0, indexDemangler(c !== null && c !== void 0 ? c : 0) - 1)), -1, indexMangler, indexDemangler);
+          return tryNavigateToIndex(managedRows, c !== null && c !== void 0 ? c : 0, indexMangler(Math.max(0, indexDemangler(c !== null && c !== void 0 ? c : 0) - 1)), -1, indexMangler, indexDemangler);
         });
       }, [indexMangler, indexDemangler]);
       const navigateToNextRow = A$1(() => {
         setCurrentRow2(c => {
-          return tryNavigateToIndex(managedRows, c, indexMangler(Math.min(managedRows.length - 1, indexDemangler(c !== null && c !== void 0 ? c : 0) + 1)), 1, indexMangler, indexDemangler);
+          return tryNavigateToIndex(managedRows, c !== null && c !== void 0 ? c : 0, indexMangler(Math.min(managedRows.length - 1, indexDemangler(c !== null && c !== void 0 ? c : 0) + 1)), 1, indexMangler, indexDemangler);
         });
       }, [indexMangler, indexDemangler]); // Track child rows and manage keyboard navigation among them.
 
@@ -3281,7 +3282,7 @@
         useLinearNavigationChild: useLinearNavigationChildRow
       } = useLinearNavigation({
         managedChildren: managedRows,
-        index: indexMangler(getCurrentRow()),
+        index: indexMangler((_getCurrentRow = getCurrentRow()) !== null && _getCurrentRow !== void 0 ? _getCurrentRow : 0),
         navigateToFirst: navigateToFirstRow,
         navigateToLast: navigateToLastRow,
         navigateToNext: navigateToNextRow,
@@ -3564,76 +3565,39 @@
     let currentlyFocusedElement = null;
     let lastFocusedElement = null;
 
-    function getLastFocusedElement() {
-      return lastFocusedElement;
-    }
-
-    function getCurrentlyFocusedElement() {
-      return currentlyFocusedElement;
-    }
-
-    const updaters = new Set();
+    const activeElementUpdaters = new Set();
+    const lastActiveElementUpdaters = new Set();
+    const windowFocusedUpdaters = new Set();
 
     function focusout(e) {
       if (e.relatedTarget == null) {
         currentlyFocusedElement = null;
 
-        for (let f of updaters) {
-          f({
-            current: currentlyFocusedElement,
-            last: lastFocusedElement,
-            windowFocused
-          });
-        }
+        for (let f of activeElementUpdaters) f === null || f === void 0 ? void 0 : f(currentlyFocusedElement);
       }
     }
 
     function focusin(e) {
       currentlyFocusedElement = lastFocusedElement = e.target;
-
-      for (let f of updaters) {
-        f({
-          current: currentlyFocusedElement,
-          last: lastFocusedElement,
-          windowFocused
-        });
-      }
+      activeElementUpdaters.forEach(f => f === null || f === void 0 ? void 0 : f(currentlyFocusedElement));
+      lastActiveElementUpdaters.forEach(f => f === null || f === void 0 ? void 0 : f(lastFocusedElement)); //for (let f of updaters) { f({ current: currentlyFocusedElement, last: lastFocusedElement, windowFocused }); }
     }
 
-    let windowFocused = true;
-
     function windowFocus() {
-      windowFocused = true;
-
-      for (let f of updaters) {
-        f({
-          current: currentlyFocusedElement,
-          last: lastFocusedElement,
-          windowFocused
-        });
-      }
+      windowFocusedUpdaters.forEach(f => f === null || f === void 0 ? void 0 : f(true));
     }
 
     function windowBlur() {
-      windowFocused = false;
-
-      for (let f of updaters) {
-        f({
-          current: currentlyFocusedElement,
-          last: lastFocusedElement,
-          windowFocused
-        });
-      }
+      windowFocusedUpdaters.forEach(f => f === null || f === void 0 ? void 0 : f(false));
     }
 
-    function useActiveElement(filter) {
-      const [i, setI] = useState(0);
+    function useActiveElement({
+      setActiveElement,
+      setLastActiveElement,
+      setWindowFocused
+    }) {
       h(() => {
-        const F = info => {
-          if (filter == null || filter(info)) setI(i => ++i);
-        };
-
-        if (updaters.size === 0) {
+        if (activeElementUpdaters.size === 0) {
           document.addEventListener("focusin", focusin, {
             passive: true
           });
@@ -3646,106 +3610,58 @@
           window.addEventListener("blur", windowBlur, {
             passive: true
           });
-        }
+        } // Add them even if they're undefined to more easily
+        // manage the ">0 means don't add handlers" logic.
 
-        updaters.add(F);
+
+        activeElementUpdaters.add(setActiveElement);
+        lastActiveElementUpdaters.add(setLastActiveElement);
+        windowFocusedUpdaters.add(setWindowFocused);
         return () => {
-          updaters.delete(F);
+          activeElementUpdaters.delete(setActiveElement);
+          lastActiveElementUpdaters.delete(setLastActiveElement);
+          windowFocusedUpdaters.delete(setWindowFocused);
 
-          if (updaters.size === 0) {
+          if (activeElementUpdaters.size === 0) {
             document.removeEventListener("focusin", focusin);
             document.removeEventListener("focusout", focusout);
             window.removeEventListener("focus", windowFocus);
             window.removeEventListener("blur", windowBlur);
           }
         };
-      }, [filter]);
-      return {
-        activeElement: currentlyFocusedElement,
-        lastActiveElement: lastFocusedElement,
-        getActiveElement: getCurrentlyFocusedElement,
-        getLastActiveElement: getLastFocusedElement,
-        windowFocused
-      };
+      }, [setActiveElement, setLastActiveElement, setWindowFocused]);
     }
 
-    function useHasFocus({} = {}) {
-      // These are slightly redundant, but any time the focus changes, we need to know if it's "relevant" to us.
-      // It's "relevant" if the newly-focused element is a child of us,
-      // OR if we're focused and focus moves OUTSIDE of us our our children.
-      // Because of that second bit, we need to keep track of where the focus was the last time we checked for the filter.
-      const [hasFocus, setHasFocus, getHasFocus] = useState(false);
-      const [hasLastFocus, setHasLastFocus, getHasLastFocus] = useState(false);
+    function useHasFocus({
+      setFocused,
+      setFocusedInner,
+      setLastFocused,
+      setLastFocusedInner
+    }) {
       const {
         element,
         getElement,
         useRefElementProps
       } = useRefElement();
-      const {
-        activeElement,
-        lastActiveElement
-      } = useActiveElement(A$1(({
-        current,
-        last,
-        windowFocused
-      }) => {
-        // Keep in mind that once we get our element, even if the hook and filter functions
-        // don't re-run, the currently-focused element will still be returned below, and,
-        // even if it's not us or one of our children, will still be safely filtered out at render time.
-        let element = getElement();
-        if (!element) return false;
-        let hasFocusNow = element.contains(current) || element.contains(last);
-
-        if (hasFocusNow) {
-          return true;
-        } else {
-          let hadFocusBeforeThis = getHasLastFocus() || getHasFocus();
-
-          if (hadFocusBeforeThis) {
-            // Return true once, so that useActiveElement will return one instance of a different element having focus.
-            // Then, back outside this filter function, we'll know that we're no longer focused.
-            return true;
-          }
-
-          return false;
-        }
-      }, [])); // These are primarily used for bookkeeping during the filter function above.
-
-      h(() => {
-        var _element$contains;
-
-        setHasFocus((_element$contains = element === null || element === void 0 ? void 0 : element.contains(activeElement)) !== null && _element$contains !== void 0 ? _element$contains : false);
-      }, [element, activeElement]);
-      h(() => {
-        var _element$contains2;
-
-        setHasLastFocus((_element$contains2 = element === null || element === void 0 ? void 0 : element.contains(lastActiveElement)) !== null && _element$contains2 !== void 0 ? _element$contains2 : false);
-      }, [element, lastActiveElement]);
+      const setActiveElement = A$1(node => {
+        setFocused === null || setFocused === void 0 ? void 0 : setFocused(element == node && element != null);
+        setFocusedInner === null || setFocusedInner === void 0 ? void 0 : setFocusedInner(!!(element !== null && element !== void 0 && element.contains(node)));
+      }, [setFocused, setFocusedInner, element]);
+      const setLastActiveElement = A$1(node => {
+        setLastFocused === null || setLastFocused === void 0 ? void 0 : setLastFocused(element == node && element != null);
+        setLastFocusedInner === null || setLastFocusedInner === void 0 ? void 0 : setLastFocusedInner(!!(element !== null && element !== void 0 && element.contains(node)));
+      }, [setLastFocused, setLastFocusedInner, element]);
+      useActiveElement({
+        setActiveElement,
+        setLastActiveElement
+      });
       const useHasFocusProps = A$1(props => {
         return useRefElementProps(props);
       }, [useRefElementProps]);
-      const focused = d(() => {
-        return element == activeElement;
-      }, [element, activeElement]);
-      const focusedInner = d(() => {
-        var _element$contains3;
-
-        return (_element$contains3 = element === null || element === void 0 ? void 0 : element.contains(activeElement)) !== null && _element$contains3 !== void 0 ? _element$contains3 : false;
-      }, [element, activeElement]);
-      const lastFocused = d(() => {
-        return element == lastActiveElement;
-      }, [element, lastActiveElement]);
-      const lastFocusedInner = d(() => {
-        var _element$contains4;
-
-        return (_element$contains4 = element === null || element === void 0 ? void 0 : element.contains(lastActiveElement)) !== null && _element$contains4 !== void 0 ? _element$contains4 : false;
-      }, [element, lastActiveElement]);
       return {
         useHasFocusProps,
-        focused,
-        focusedInner,
-        lastFocused,
-        lastFocusedInner
+        element,
+        getElement
       };
     }
 
@@ -5481,9 +5397,10 @@
         useRefElementProps,
         getElement
       } = useRefElement();
-      const {
-        getLastActiveElement
-      } = useActiveElement(); // When the trap becomes active, before we let the blockingElements hook run,
+      const [lastActiveElement, setLastActiveElement, getLastActiveElement] = useState(null);
+      useActiveElement({
+        setLastActiveElement
+      }); // When the trap becomes active, before we let the blockingElements hook run,
       // keep track of whatever's currently focused and save it.
 
       h(() => {
@@ -5576,10 +5493,12 @@
       } = useRandomId({
         prefix: "aria-tooltip-"
       });
+      const [triggerFocusedInner, setTriggerFocusedInner, getTriggerFocusedInner] = useState(false);
       const {
-        focusedInner: triggerFocused,
         useHasFocusProps
-      } = useHasFocus();
+      } = useHasFocus({
+        setFocusedInner: setTriggerFocusedInner
+      });
       const [triggerHasMouseover, setTriggerHasMouseover] = useState(false);
       const [tooltipHasMouseover, setTooltipHasMouseover] = useState(false);
       useTimeout({
@@ -5597,8 +5516,8 @@
         }
       });
       y(() => {
-        setOpen(hasAnyMouseover || triggerFocused);
-      }, [hasAnyMouseover, triggerFocused]);
+        setOpen(hasAnyMouseover || triggerFocusedInner);
+      }, [hasAnyMouseover, triggerFocusedInner]);
       const useTooltipTrigger = A$1(function useTooltipTrigger() {
         function onPointerEnter(e) {
           setTriggerHasMouseover(true);
@@ -6778,9 +6697,8 @@
 
     let pulse = "vibrate" in navigator ? () => navigator.vibrate(10) : () => {};
 
-    function excludes(tag, target, exclude) {
+    function excludes(target, exclude) {
       if (exclude !== null && exclude !== void 0 && exclude[target]) return true;
-      if (target === "space" || target === "enter") return tag == "button";
       return false;
     }
     /**
@@ -6799,31 +6717,29 @@
      * @param exclude Whether the polyfill should apply (can specify for specific interactions)
      */
 
-
-    function useButtonLikeEventHandlers(tag, onClickSync, exclude) {
-      const [active, setActive] = useState(false);
-      const onKeyUp = excludes(tag, "space", exclude) ? undefined : e => {
-        if (e.key == " " && onClickSync) {
+    function useButtonLikeEventHandlers(onClickSync, exclude) {
+      const [active, setActive, getActive] = useState(false);
+      const handlePress = useStableCallback(e => {
+        if (onClickSync) {
           e.preventDefault();
-          onClickSync(e);
+          pulse();
           setActive(false);
+          onClickSync(e);
+        }
+      });
+      const onKeyUp = excludes("space", exclude) ? undefined : e => {
+        if (active && e.key == " " && onClickSync) {
+          handlePress(e);
         }
       };
-      const onMouseDown = excludes(tag, "click", exclude) ? undefined : e => {
+      const onMouseDown = excludes("click", exclude) ? undefined : e => {
         if (e.button === 0) setActive(true);
       };
-      const onMouseUp = excludes(tag, "click", exclude) ? undefined : e => {
+      const onMouseUp = excludes("click", exclude) ? undefined : e => {
         if (active) {
           if (e.button === 0) {
-            setActive(false);
-
-            if (onClickSync) {
-              pulse();
-              onClickSync(e);
-            }
+            handlePress(e);
           }
-
-          onBlur(e);
         }
       };
 
@@ -6831,16 +6747,16 @@
         setActive(false);
       };
 
-      const onMouseOut = excludes(tag, "click", exclude) ? undefined : onBlur;
-      const onKeyDown = excludes(tag, "space", exclude) && excludes(tag, "enter", exclude) ? undefined : e => {
-        if (e.key == " " && onClickSync && !excludes(tag, "space", exclude)) {
+      const onMouseOut = excludes("click", exclude) ? undefined : onBlur;
+      const onKeyDown = excludes("space", exclude) && excludes("enter", exclude) ? undefined : e => {
+        if (e.key == " " && onClickSync && !excludes("space", exclude)) {
           // We don't actually activate it on a space keydown
           // but we do preventDefault to stop the page from scrolling.
           setActive(true);
           e.preventDefault();
         }
 
-        if (e.key == "Enter" && onClickSync && !excludes(tag, "enter", exclude)) {
+        if (e.key == "Enter" && onClickSync && !excludes("enter", exclude)) {
           e.preventDefault();
           onClickSync(e);
         }
@@ -6860,7 +6776,7 @@
     function useAriaButton({
       tag,
       pressed,
-      onClick
+      onPress
     }) {
       function useAriaButtonProps({
         "aria-pressed": ariaPressed,
@@ -6868,7 +6784,7 @@
         role,
         ...p
       }) {
-        const props = useButtonLikeEventHandlers(tag, e => onClick === null || onClick === void 0 ? void 0 : onClick(enhanceEvent(e, {
+        const props = useButtonLikeEventHandlers(e => onPress === null || onPress === void 0 ? void 0 : onPress(enhanceEvent(e, {
           pressed: pressed == null ? null : !pressed
         })), undefined)(p);
         const buttonProps = {
@@ -7003,7 +6919,7 @@
 
             let retB = useMergedProps()({
               tabIndex: 0
-            }, useButtonLikeEventHandlers(tag, onClick, undefined)(props));
+            }, useButtonLikeEventHandlers(onClick, undefined)(props));
             let ret3 = useMergedProps()(useHeadRandomIdProps(useReferencedBodyIdProps("aria-controls")({
               "aria-expanded": ariaExpanded !== null && ariaExpanded !== void 0 ? ariaExpanded : (!!open).toString(),
               "aria-disabled": ariaDisabled !== null && ariaDisabled !== void 0 ? ariaDisabled : open ? "true" : undefined,
@@ -7257,7 +7173,7 @@
           // For some reason, Chrome won't fire onInput events for radio buttons that are tabIndex=-1??
           // Needs investigating, but onInput works fine in Firefox
           // TODO
-          let props = useButtonLikeEventHandlers(tag, disabled || !handlesInput(tag, labelPosition, "input-element") ? undefined : stableOnInput, undefined)({});
+          let props = useButtonLikeEventHandlers(disabled || !handlesInput(tag, labelPosition, "input-element") ? undefined : stableOnInput, undefined)({});
           if (tag == "input") props.onInput = e => e.preventDefault();
           props = useRefElementProps(useILInputProps(props));
 
@@ -7299,7 +7215,7 @@
 
         function useCheckboxLikeLabelElementProps({ ...p0
         }) {
-          let newProps = useButtonLikeEventHandlers("div", disabled || !handlesInput(tag, labelPosition, "label-element") ? undefined : stableOnInput, undefined)({});
+          let newProps = useButtonLikeEventHandlers(disabled || !handlesInput(tag, labelPosition, "label-element") ? undefined : stableOnInput, undefined)({});
 
           if (labelPosition == "wrapping") {
             newProps.tabIndex = 0;
@@ -7700,10 +7616,18 @@
       selectionMode,
       ...args
     }) {
+      const [focusedInner, setFocusedInner, getFocusedInner] = useState(false);
       const {
-        lastFocusedInner,
         useHasFocusProps
-      } = useHasFocus();
+      } = useHasFocus({
+        setFocusedInner: A$1(focused => {
+          if (!focused) {
+            setTabbableIndex(selectedIndex);
+          }
+
+          setFocusedInner(focused);
+        }, [selectedIndex])
+      });
       const {
         useGenericLabelInput,
         useGenericLabelLabel,
@@ -7724,7 +7648,7 @@
         currentTypeahead,
         invalidTypeahead
       } = useListNavigation({ ...args,
-        shouldFocusOnChange: () => lastFocusedInner
+        shouldFocusOnChange: getFocusedInner
       });
       const {
         useGenericLabelInputProps
@@ -7739,13 +7663,6 @@
         navigateToIndex(selectedIndex);
       }, [selectedIndex, managedChildren.length]);
       const childCount = managedChildren.length;
-      const {
-        lastActiveElement
-      } = useActiveElement();
-      let anyRadiosFocused = !!(inputElement !== null && inputElement !== void 0 && inputElement.contains(lastActiveElement));
-      y(() => {
-        if (!anyRadiosFocused) setTabbableIndex(selectedIndex);
-      }, [anyRadiosFocused, selectedIndex, setTabbableIndex]);
       const useListboxSingleItem = A$1(info => {
         const [selected, setSelected, getSelected] = useState(false);
         const {
@@ -7780,7 +7697,7 @@
         };
 
         function useListboxSingleItemProps(props) {
-          const newProps = useButtonLikeEventHandlers(info.tag, e => {
+          const newProps = useButtonLikeEventHandlers(e => {
             navigateToIndex(info.index);
             if (element) stableOnSelect === null || stableOnSelect === void 0 ? void 0 : stableOnSelect({
               target: element,
@@ -7834,29 +7751,28 @@
       typeaheadTimeout,
       ...args
     }) {
-      const [focusTrapActive, setFocusTrapActive] = l(null);
+      const [focusTrapActive, setFocusTrapActive] = useState(null);
       let onClose = args.onClose;
       let onOpen = args.onOpen;
       let menubar = args.menubar;
       let open = menubar ? true : args.open;
-      const stableOnClose = useStableCallback(onClose !== null && onClose !== void 0 ? onClose : () => {}); // TODO: It's awkward that the button focus props are out here where we don't have its type,
+      const stableOnClose = useStableCallback(onClose !== null && onClose !== void 0 ? onClose : () => {});
+      const [menuLastFocusedInner, setMenuLastFocusedInner, getMenuLastFocusedInner] = useState(false);
+      const [buttonLastFocusedInner, setButtonLastFocusedInner, getButtonLastFocusedInner] = useState(false); // TODO: It's awkward that the button focus props are out here where we don't have its type,
       // but focus management is super sensitive, and even waiting for a useLayoutEffect to sync state here
       // would be too late, so it would look like there's a moment between menu focus lost and button focus gained
       // where nothing is focused. 
 
       const {
-        focusedInner: menuHasFocus,
         useHasFocusProps: useMenuHasFocusProps
-      } = useHasFocus();
+      } = useHasFocus({
+        setLastFocusedInner: setMenuLastFocusedInner
+      });
       const {
-        focusedInner: buttonHasFocus,
         useHasFocusProps: useButtonHasFocusProps
-      } = useHasFocus();
-      const {
-        activeElement,
-        lastActiveElement,
-        windowFocused
-      } = useActiveElement();
+      } = useHasFocus({
+        setLastFocusedInner: setButtonLastFocusedInner
+      });
       const {
         managedChildren,
         useListNavigationChild,
@@ -7868,7 +7784,7 @@
         noTypeahead,
         noWrap,
         typeaheadTimeout,
-        shouldFocusOnChange: () => menuHasFocus || buttonHasFocus
+        shouldFocusOnChange: A$1(() => getMenuLastFocusedInner() || getButtonLastFocusedInner(), [])
       });
       const {
         useRandomIdProps: useMenuIdProps,
@@ -7876,7 +7792,7 @@
       } = useRandomId({
         prefix: "aria-menu-"
       });
-      const [openerElement, setOpenerElement] = l(null);
+      const [openerElement, setOpenerElement] = useState(null);
       const {
         useSoftDismissProps
       } = useSoftDismiss({
@@ -7890,7 +7806,7 @@
         if (focusTrapActive) {
           focusMenuStable === null || focusMenuStable === void 0 ? void 0 : focusMenuStable();
         } else if (focusTrapActive === false) {
-          openerElement === null || openerElement === void 0 ? void 0 : openerElement.focus();
+          if (getMenuLastFocusedInner()) openerElement === null || openerElement === void 0 ? void 0 : openerElement.focus();
         } else ;
       }, [focusTrapActive]); // Focus management is really finicky, and there's always going to be 
       // an edge case where nothing's focused for two consecutive frames 
@@ -7898,7 +7814,7 @@
       // any time it's been opened. So any time it *looks* like we should close,
       // try waiting 100ms. If it's still true then, then yeah, we should close.
 
-      let shouldClose = focusTrapActive && windowFocused && !menuHasFocus && !buttonHasFocus;
+      let shouldClose = focusTrapActive && !menuLastFocusedInner && !buttonLastFocusedInner;
       useTimeout({
         timeout: 100,
         callback: () => {
@@ -7916,7 +7832,7 @@
       // screen readers and other input methods that don't use those two become stuck.
 
       const useMenuSentinel = A$1(() => {
-        const [firstSentinelIsActive, setFirstSentinelIsActive] = l(false);
+        const [firstSentinelIsActive, setFirstSentinelIsActive] = useState(false);
         useTimeout({
           callback: () => {
             setFirstSentinelIsActive(open);
@@ -8063,10 +7979,12 @@
       orientation: logicalOrientation,
       ...args
     }) {
+      const [tabListFocusedInner, setTabListFocusedInner, getTabListFocusedInner] = useState(false);
       const {
-        useHasFocusProps: useTabListHasFocusProps,
-        focusedInner: tabListFocused
-      } = useHasFocus();
+        useHasFocusProps: useTabListHasFocusProps
+      } = useHasFocus({
+        setFocusedInner: setTabListFocusedInner
+      });
       const {
         element: listElement,
         useRefElementProps
@@ -8094,7 +8012,7 @@
         currentTypeahead,
         focusCurrent
       } = useListNavigation({ ...args,
-        shouldFocusOnChange: () => tabListFocused,
+        shouldFocusOnChange: getTabListFocusedInner,
         keyNavigation: logicalOrientation
       });
       const {
@@ -8123,7 +8041,6 @@
           (_managedPanels$select = managedPanels[selectedIndex]) === null || _managedPanels$select === void 0 ? void 0 : _managedPanels$select.focus();
         }
       }, [childCount, selectedIndex, selectionMode]);
-      const getTabListIsFocused = useStableGetter(tabListFocused);
       const useTab = A$1(function useTab(info) {
         //const [selectedTabId, setSelectedTabId, getSelectedTabId] = useState<string | undefined>(undefined);
         const [selectionModeL, setSelectionModeL] = useState(selectionMode);
@@ -8176,7 +8093,7 @@
 
         function useTabProps({ ...props
         }) {
-          const newProps = useButtonLikeEventHandlers(info.tag, e => {
+          const newProps = useButtonLikeEventHandlers(e => {
             navigateToIndex(info.index);
             onSelect === null || onSelect === void 0 ? void 0 : onSelect(enhanceEvent(e, {
               selectedIndex: getIndex()
@@ -8217,7 +8134,7 @@
         });
 
         function focus() {
-          if (getTabListIsFocused()) {
+          if (getTabListFocusedInner()) {
             setShouldFocus(true);
           }
         }
@@ -8293,13 +8210,28 @@
         element,
         useRefElementProps
       } = useRefElement();
-      const [selectedIndex, setSelectedIndex, getSelectedIndex] = useState(null);
+      const getSelectedIndex = A$1(selectedValue => {
+        var _byName$current$get;
+
+        return (_byName$current$get = byName.current.get(selectedValue)) !== null && _byName$current$get !== void 0 ? _byName$current$get : 0;
+      }, []);
       const byName = s(new Map());
       const stableOnInput = useStableCallback(onInput);
+      const [focusedInner, setFocusedInner, getFocusedInner] = useState(false);
       const {
-        useHasFocusProps,
-        lastFocusedInner
-      } = useHasFocus();
+        useHasFocusProps
+      } = useHasFocus({
+        setFocusedInner: A$1(focused => {
+          const selectedIndex = getSelectedIndex(selectedValue);
+          console.assert(selectedIndex != null);
+
+          if (!focused) {
+            setTabbableIndex(selectedIndex);
+          }
+
+          setFocusedInner(focused);
+        }, [selectedValue])
+      });
       const {
         managedChildren,
         useListNavigationChild,
@@ -8309,30 +8241,18 @@
         currentTypeahead,
         invalidTypeahead
       } = useListNavigation({
-        focusOnChange: lastFocusedInner
+        shouldFocusOnChange: getFocusedInner
       });
       const useRadioGroupProps = A$1(({ ...props
       }) => {
         props.role = "radiogroup";
         return useRefElementProps(useHasFocusProps(props));
       }, [useHasFocusProps, useRefElementProps]);
-      useChildFlag(selectedIndex, managedChildren.length, (i, checked) => {
+      useChildFlag(getSelectedIndex(selectedValue), managedChildren.length, (i, checked) => {
         var _managedChildren$i;
 
         return (_managedChildren$i = managedChildren[i]) === null || _managedChildren$i === void 0 ? void 0 : _managedChildren$i.setChecked(checked);
       });
-      const {
-        lastActiveElement
-      } = useActiveElement();
-      let anyRadiosFocused = !!(element !== null && element !== void 0 && element.contains(lastActiveElement));
-      y(() => {
-        if (!anyRadiosFocused && selectedIndex != null) setTabbableIndex(selectedIndex);
-      }, [anyRadiosFocused, selectedIndex, setTabbableIndex]);
-      y(() => {
-        getSelectedIndex();
-        let newIndex = byName.current.get(selectedValue);
-        setSelectedIndex(newIndex);
-      }, [selectedValue]);
       const useRadio = A$1(function useAriaRadio({
         value,
         index,
@@ -8608,10 +8528,12 @@
         managedChildren: managedTableSections
       } = useChildManager(); // Used for navigation to determine when focus should follow the selected cell
 
+      const [focusedInner, setFocusedInner, getFocusedInner] = useState(false);
       const {
-        focusedInner,
         useHasFocusProps
-      } = useHasFocus();
+      } = useHasFocus({
+        setFocusedInner
+      });
       const stableGetFocusedInner = useStableGetter(focusedInner); // These are used to keep track of a mapping between unsorted index <---> sorted index.
       // These are needed for navigation with the arrow keys.
 
@@ -8685,12 +8607,12 @@
           children,
           ...props
         }) => {
-          return useMergedProps()(useManagedChildProps({
+          return useManagedChildProps(useMergedProps()({
             role: "rowgroup",
             children: location === "body" ? children.map((tableRow, i) => {
               return recreateChildWithSortedKey(children, i);
             }) : children
-          }), props);
+          }, props));
         }, [useManagedChildProps]); // This function is sort of like cloneElement for each children,
         // except the "key" prop is super duper extra special
         // and cloneElement won't work in the expected way to keep
@@ -8834,7 +8756,7 @@
             }, []);
 
             const useTableHeadCellProps = props => {
-              const m = useTableCellProps(useButtonLikeEventHandlers(tag, unsortable ? null : onSortClick, undefined)(useMergedProps()({
+              const m = useTableCellProps(useButtonLikeEventHandlers(unsortable ? null : onSortClick, undefined)(useMergedProps()({
                 role: "columnheader"
               }, props)));
               return useManagedChildProps(m);
@@ -9360,9 +9282,9 @@
       size = buttonStyleInfo.size;
       fillVariant = buttonStyleInfo.fillVariant;
       const useButtonStylesProps = buttonStyleInfo.useButtonStylesProps;
-      return v$1("a", { ...useButtonStylesProps({ ...props,
+      return v$1("a", { ...usePseudoActive(useButtonStylesProps({ ...props,
           ref
-        })
+        }))
       });
     });
     const ButtonButton = forwardElementRef(function ButtonButton(p, ref) {
@@ -9373,7 +9295,7 @@
         disabled,
         debounce,
         showAsyncSuccess,
-        onClick: onClickAsync,
+        onPress: onPressAsync,
         ...props
       } = p;
       const {
@@ -9388,10 +9310,12 @@
         }, [])
       });
       disabled || (disabled = pending);
+      const onPress = getSyncHandler(pending ? null : onPressAsync);
       const {
         useAriaButtonProps
       } = useAriaButton({
-        tag: "button"
+        tag: "button",
+        onPress
       });
       const buttonStyleInfo = useButtonStyles({
         colorVariant,
@@ -9404,17 +9328,16 @@
       size = buttonStyleInfo.size;
       fillVariant = buttonStyleInfo.fillVariant;
       const useButtonStylesProps = buttonStyleInfo.useButtonStylesProps;
-      const onClick = getSyncHandler(pending ? null : onClickAsync);
       return v$1(ProgressCircular, {
         mode: hasError ? "failed" : pending ? "pending" : settleCount && showAsyncSuccess ? "succeeded" : null,
         childrenPosition: "child",
         colorFill: fillVariant == "fill" ? "foreground" : "background"
-      }, v$1("button", { ...useAriaButtonProps(useButtonStylesProps(useMergedProps()({
+      }, v$1("button", { ...usePseudoActive(useAriaButtonProps(useButtonStylesProps(useMergedProps()({
           className: clsx(pending && "pending active", disabled && "disabled")
         }, { ...props,
-          onClick,
+          onPress,
           ref
-        })))
+        }))))
       }));
     });
     const ToggleButton = forwardElementRef(function ToggleButton(p, ref) {
@@ -9424,7 +9347,7 @@
         disabled,
         pressed,
         debounce,
-        onInput: onPressAsync,
+        onPressToggle: onPressAsync,
         showAsyncSuccess,
         ...props
       } = p;
@@ -9446,11 +9369,13 @@
       });
       disabled || (disabled = pending);
       if (hasCapture && pending) pressed = currentCapture;
+      const onPress = getSyncHandler(pending ? null : onPressAsync);
       const {
         useAriaButtonProps
       } = useAriaButton({
         tag: "button",
-        pressed
+        pressed,
+        onPress
       });
       const buttonStyleInfo = useButtonStyles({
         colorVariant,
@@ -9462,27 +9387,27 @@
       colorVariant = buttonStyleInfo.colorVariant;
       size = buttonStyleInfo.size;
       const useButtonStylesProps = buttonStyleInfo.useButtonStylesProps;
-      const onClick = getSyncHandler(pending ? null : onPressAsync);
       return v$1(ProgressCircular, {
         mode: hasError ? "failed" : pending ? "pending" : settleCount && showAsyncSuccess ? "succeeded" : null,
         childrenPosition: "child",
         colorFill: fillVariant == "fill" ? "foreground" : "background"
-      }, v$1("button", { ...useAriaButtonProps(useButtonStylesProps({ ...useMergedProps()({
+      }, v$1("button", { ...usePseudoActive(useAriaButtonProps(useButtonStylesProps({ ...useMergedProps()({
             className: clsx("toggle-button", (pending || inButtonGroup && pressed) && "active"),
-            onClick,
             ref
           }, props)
-        }))
+        })))
       }));
     });
     const Button = forwardElementRef(ButtonR);
 
     const ButtonGroup = forwardElementRef(function ButtonGroup(p, ref) {
       useLogRender("ButtonGroup", `Rendering ButtonGroup`);
+      const [focusedInner, setFocusedInner, getFocusedInner] = useState(false);
       const {
-        lastFocusedInner,
         useHasFocusProps
-      } = useHasFocus();
+      } = useHasFocus({
+        setFocusedInner
+      });
       const {
         indicesByElement,
         managedChildren,
@@ -9490,7 +9415,7 @@
         navigateToIndex,
         childCount
       } = useListNavigation({
-        focusOnChange: lastFocusedInner
+        shouldFocusOnChange: getFocusedInner
       }); // Styling props
 
       let {
@@ -9554,9 +9479,7 @@
       } = useButtonGroupChild({
         index,
         text: null
-      }); // TODO: It's kinda fragile here how the sync onClick of listNavigation 
-      // and the async onClick of button are mixing.
-
+      });
       const p = useListNavigationChildProps({
         ref,
         role: "gridcell",
@@ -9564,6 +9487,11 @@
       });
       return v$1(Button, { ...p
       });
+    });
+
+    v$1(Button, {
+      pressed: true,
+      onPress: p => console.log(p)
     });
 
     const baseId = generateRandomId("render-portal-container-");
@@ -9713,7 +9641,7 @@
         tag: "button",
         class: "btn-close text-reset",
         "aria-label": "Close",
-        onClick: () => onClose("escape")
+        onPress: () => onClose("escape")
       })), v$1("div", { ...useDrawerBodyProps({
           class: "offcanvas-body"
         })
@@ -9834,14 +9762,16 @@
       onInput: onInputAsync,
       ...props
     }) {
+      const [focusedInner, setFocusedInner, getFocusedInner] = useState(false);
       const {
         capture,
         uncapture
       } = useInputCaptures(type, props.min, props.max);
       const {
-        focusedInner,
         useHasFocusProps
-      } = useHasFocus();
+      } = useHasFocus({
+        setFocusedInner
+      });
       const {
         getSyncHandler,
         currentCapture,
@@ -10112,7 +10042,7 @@
       }
 
       const inputElement = v$1(OptionallyInputGroup, {
-        tag: inInputGroup ? "label" : null,
+        tag: inInputGroup ? "div" : null,
         disabled: disabled,
         tabIndex: -1,
         isInput: true
@@ -10298,7 +10228,7 @@
 
       const inputElement = v$1(OptionallyInputGroup$1, {
         isInput: true,
-        tag: inInputGroup ? "label" : null,
+        tag: inInputGroup ? "div" : null,
         disabled: disabled,
         tabIndex: -1
       }, v$1(ProgressCircular, {
@@ -10607,39 +10537,39 @@
       return placement.split('-')[0];
     }
 
-    var round$1 = Math.round;
-    function getBoundingClientRect(element, includeScale) {
-      if (includeScale === void 0) {
-        includeScale = false;
-      }
+    // import { isHTMLElement } from './instanceOf';
+    function getBoundingClientRect(element, // eslint-disable-next-line unused-imports/no-unused-vars
+    includeScale) {
 
       var rect = element.getBoundingClientRect();
       var scaleX = 1;
-      var scaleY = 1;
-
-      if (isHTMLElement(element) && includeScale) {
-        var offsetHeight = element.offsetHeight;
-        var offsetWidth = element.offsetWidth; // Do not attempt to divide by 0, otherwise we get `Infinity` as scale
-        // Fallback to 1 in case both values are `0`
-
-        if (offsetWidth > 0) {
-          scaleX = rect.width / offsetWidth || 1;
-        }
-
-        if (offsetHeight > 0) {
-          scaleY = rect.height / offsetHeight || 1;
-        }
-      }
+      var scaleY = 1; // FIXME:
+      // `offsetWidth` returns an integer while `getBoundingClientRect`
+      // returns a float. This results in `scaleX` or `scaleY` being
+      // non-1 when it should be for elements that aren't a full pixel in
+      // width or height.
+      // if (isHTMLElement(element) && includeScale) {
+      //   const offsetHeight = element.offsetHeight;
+      //   const offsetWidth = element.offsetWidth;
+      //   // Do not attempt to divide by 0, otherwise we get `Infinity` as scale
+      //   // Fallback to 1 in case both values are `0`
+      //   if (offsetWidth > 0) {
+      //     scaleX = rect.width / offsetWidth || 1;
+      //   }
+      //   if (offsetHeight > 0) {
+      //     scaleY = rect.height / offsetHeight || 1;
+      //   }
+      // }
 
       return {
-        width: round$1(rect.width / scaleX),
-        height: round$1(rect.height / scaleY),
-        top: round$1(rect.top / scaleY),
-        right: round$1(rect.right / scaleX),
-        bottom: round$1(rect.bottom / scaleY),
-        left: round$1(rect.left / scaleX),
-        x: round$1(rect.left / scaleX),
-        y: round$1(rect.top / scaleY)
+        width: rect.width / scaleX,
+        height: rect.height / scaleY,
+        top: rect.top / scaleY,
+        right: rect.right / scaleX,
+        bottom: rect.bottom / scaleY,
+        left: rect.left / scaleX,
+        x: rect.left / scaleX,
+        y: rect.top / scaleY
       };
     }
 
@@ -11906,9 +11836,9 @@
       }
 
       var isOffsetParentAnElement = isHTMLElement(offsetParent);
-      var offsetParentIsScaled = isHTMLElement(offsetParent) && isElementScaled(offsetParent);
+      isHTMLElement(offsetParent) && isElementScaled(offsetParent);
       var documentElement = getDocumentElement(offsetParent);
-      var rect = getBoundingClientRect(elementOrVirtualElement, offsetParentIsScaled);
+      var rect = getBoundingClientRect(elementOrVirtualElement);
       var scroll = {
         scrollLeft: 0,
         scrollTop: 0
@@ -11925,7 +11855,7 @@
         }
 
         if (isHTMLElement(offsetParent)) {
-          offsets = getBoundingClientRect(offsetParent, true);
+          offsets = getBoundingClientRect(offsetParent);
           offsets.x += offsetParent.clientLeft;
           offsets.y += offsetParent.clientTop;
         } else if (documentElement) {
@@ -13210,7 +13140,7 @@
       }, children), v$1(Button, {
         class: "btn-close me-2 m-auto",
         "aria-label": "Dismiss alert",
-        onClick: dismiss
+        onPress: dismiss
       })))));
     }
     /*
@@ -13483,8 +13413,8 @@
         var _g = useState(false), asyncFails = _g[0], setAsyncFails = _g[1];
         var _h = useState(true), usesLinkButton = _h[0], setUsesLinkButton = _h[1];
         var pushToast = usePushToast();
-        var onClickSync = function () { return pushToast(v$1(Toast, null, "Button was clicked")); };
-        var onClickAsync = function () { return __awaiter(_this, void 0, void 0, function () {
+        var onPressSync = function () { return pushToast(v$1(Toast, null, "Button was clicked")); };
+        var onPressAsync = function () { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, sleep$4(asyncTimeout)];
@@ -13493,12 +13423,12 @@
                         if (asyncFails)
                             throw new Error("Button operation failed.");
                         else
-                            onClickSync();
+                            onPressSync();
                         return [2 /*return*/];
                 }
             });
         }); };
-        var onClick = usesAsync ? onClickAsync : onClickSync;
+        var onPress = usesAsync ? onPressAsync : onPressSync;
         var onToggleInputAsync = function (b) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -13521,7 +13451,7 @@
                         v$1(Card, null,
                             v$1(CardElement, { type: "title", tag: "h2" }, "Buttons"),
                             v$1(CardElement, null,
-                                v$1(Button, { onClick: onClick }, "I'm a button")),
+                                v$1(Button, { onPress: onPress }, "I'm a button")),
                             v$1(CardElement, null,
                                 "A ",
                                 v$1("code", null, "Button"),
@@ -13533,7 +13463,7 @@
                             v$1(CardElement, { type: "subtitle", tag: "h3" }, "Async inputs"),
                             v$1(CardElement, null,
                                 "The ",
-                                v$1("code", null, "onClick"),
+                                v$1("code", null, "onPress"),
                                 " event handler for buttons can be sync or async, and they will react appropriately if the operation takes long enough.",
                                 v$1(InputGrid, null,
                                     v$1(InputGroup, null,
@@ -13543,9 +13473,9 @@
                                     v$1(InputGroup, null,
                                         v$1(Input, { width: "8ch", disabled: !usesAsync, type: "number", onInput: setAsyncTimeout, value: asyncTimeout }, "Async timeout")))),
                             v$1(CardElement, null,
-                                v$1(Button, { onClick: onClick }, "Click me")),
+                                v$1(Button, { onPress: onPress }, "Click me")),
                             v$1(CardElement, { type: "paragraph" },
-                                v$1("code", null, "const onClick = " + (usesAsync ? "async " : "") + "() => { " + (usesAsync ? "await sleep(" + asyncTimeout + "); " : "") + "pushToast(<Toast ... />); }\n<Button onClick={onClick}>Click me</Button>")),
+                                v$1("code", null, "const onPress = " + (usesAsync ? "async " : "") + "() => { " + (usesAsync ? "await sleep(" + asyncTimeout + "); " : "") + "pushToast(<Toast ... />); }\n<Button onPress={onPress}>Click me</Button>")),
                             v$1("hr", null),
                             v$1(CardElement, { type: "subtitle", tag: "h3" }, "Color & fill"),
                             v$1(CardElement, { type: "paragraph" },
@@ -13560,20 +13490,20 @@
                                 " to be controlled."),
                             v$1(CardElement, null,
                                 v$1(ButtonGroup, null,
-                                    v$1(ButtonGroupChild, { index: 0, onInput: function () { return setButtonsFill("fill"); }, pressed: buttonsFill === "fill", colorVariant: "primary" }, "Fill"),
-                                    v$1(ButtonGroupChild, { index: 1, onInput: function () { return setButtonsFill("outline"); }, pressed: buttonsFill === "outline", colorVariant: "primary" }, "Outline"))),
+                                    v$1(ButtonGroupChild, { index: 0, onPressToggle: function () { return setButtonsFill("fill"); }, pressed: buttonsFill === "fill" }, "Fill"),
+                                    v$1(ButtonGroupChild, { index: 1, onPressToggle: function () { return setButtonsFill("outline"); }, pressed: buttonsFill === "outline" }, "Outline"))),
                             v$1(CardElement, null,
                                 v$1(ButtonGroup, { wrap: true },
-                                    v$1(ButtonGroupChild, { index: 0, colorVariant: "primary", pressed: buttonsColor == "primary", onInput: function () { return setButtonsColor("primary"); } }, "Primary"),
-                                    v$1(ButtonGroupChild, { index: 1, colorVariant: "secondary", pressed: buttonsColor == "secondary", onInput: function () { return setButtonsColor("secondary"); } }, "Secondary"),
-                                    v$1(ButtonGroupChild, { index: 2, colorVariant: "success", pressed: buttonsColor == "success", onInput: function () { return setButtonsColor("success"); } }, "Success"),
-                                    v$1(ButtonGroupChild, { index: 3, colorVariant: "warning", pressed: buttonsColor == "warning", onInput: function () { return setButtonsColor("warning"); } }, "Warning"),
-                                    v$1(ButtonGroupChild, { index: 4, colorVariant: "danger", pressed: buttonsColor == "danger", onInput: function () { return setButtonsColor("danger"); } }, "Danger"),
-                                    v$1(ButtonGroupChild, { index: 5, colorVariant: "info", pressed: buttonsColor == "info", onInput: function () { return setButtonsColor("info"); } }, "Info"),
-                                    v$1(ButtonGroupChild, { index: 6, colorVariant: "light", pressed: buttonsColor == "light", onInput: function () { return setButtonsColor("light"); } }, "Light"),
-                                    v$1(ButtonGroupChild, { index: 7, colorVariant: "dark", pressed: buttonsColor == "dark", onInput: function () { return setButtonsColor("dark"); } }, "Dark"))),
+                                    v$1(ButtonGroupChild, { index: 0, colorVariant: "primary", pressed: buttonsColor == "primary", onPressToggle: function () { return setButtonsColor("primary"); } }, "Primary"),
+                                    v$1(ButtonGroupChild, { index: 1, colorVariant: "secondary", pressed: buttonsColor == "secondary", onPressToggle: function () { return setButtonsColor("secondary"); } }, "Secondary"),
+                                    v$1(ButtonGroupChild, { index: 2, colorVariant: "success", pressed: buttonsColor == "success", onPressToggle: function () { return setButtonsColor("success"); } }, "Success"),
+                                    v$1(ButtonGroupChild, { index: 3, colorVariant: "warning", pressed: buttonsColor == "warning", onPressToggle: function () { return setButtonsColor("warning"); } }, "Warning"),
+                                    v$1(ButtonGroupChild, { index: 4, colorVariant: "danger", pressed: buttonsColor == "danger", onPressToggle: function () { return setButtonsColor("danger"); } }, "Danger"),
+                                    v$1(ButtonGroupChild, { index: 5, colorVariant: "info", pressed: buttonsColor == "info", onPressToggle: function () { return setButtonsColor("info"); } }, "Info"),
+                                    v$1(ButtonGroupChild, { index: 6, colorVariant: "light", pressed: buttonsColor == "light", onPressToggle: function () { return setButtonsColor("light"); } }, "Light"),
+                                    v$1(ButtonGroupChild, { index: 7, colorVariant: "dark", pressed: buttonsColor == "dark", onPressToggle: function () { return setButtonsColor("dark"); } }, "Dark"))),
                             v$1(CardElement, null,
-                                v$1(Button, { onClick: onClick },
+                                v$1(Button, { onPress: onPress },
                                     buttonsFill === "fill" ? "Filled" : "Outlined",
                                     " ",
                                     buttonsColor,
@@ -13584,7 +13514,7 @@
                             v$1(CardElement, { type: "subtitle", tag: "h3" }, "Link buttons"),
                             v$1(CardElement, null,
                                 "A link can be styled as a button while retaining native link functionality (middle clicks, etc.). These buttons have no ",
-                                v$1("code", null, "onClick"),
+                                v$1("code", null, "onPress"),
                                 " handler, instead taking ",
                                 v$1("code", null, "href"),
                                 " and the other ",
@@ -13604,9 +13534,9 @@
                                     v$1(Checkbox, { onInput: setUsesLinkButton, checked: usesLinkButton, labelPosition: "start" }, "Use link button"))),
                             v$1(CardElement, null, usesLinkButton ? v$1(Button, { target: "_blank", href: "https://www.example.com" },
                                 "example.com ",
-                                v$1("i", { class: "bi bi-box-arrow-up-right" })) : v$1(Button, { onClick: onClick }, "Regular button")),
+                                v$1("i", { class: "bi bi-box-arrow-up-right" })) : v$1(Button, { onPress: onPress }, "Regular button")),
                             v$1(CardElement, { type: "paragraph" },
-                                v$1("code", null, usesLinkButton ? "<Button href=\"https://www.example.com\">Link button</Button>" : "<Button onClick={onClick}>Regular button</Button>")),
+                                v$1("code", null, usesLinkButton ? "<Button href=\"https://www.example.com\">Link button</Button>" : "<Button onPress={onPress}>Regular button</Button>")),
                             v$1("hr", null),
                             v$1(CardElement, { type: "subtitle", tag: "h3" }, "Toggle buttons"),
                             v$1(CardElement, null,
@@ -13614,7 +13544,7 @@
                                 v$1("code", null, "pressed"),
                                 " prop, a button will become a toggle button, with an off/on state.  It will style itself as outlined when unpressed, and filled when pressed, so they are best used in groups."),
                             v$1(CardElement, null,
-                                v$1(Button, { pressed: toggleOn, onInput: onToggleInput }, "Toggle button")),
+                                v$1(Button, { pressed: toggleOn, onPressToggle: onToggleInput }, "Toggle button")),
                             v$1(CardElement, { type: "paragraph" },
                                 v$1("code", null, "<Button pressed={pressed} onInput={onInput}>Toggle button</Button>")),
                             v$1("hr", null),
@@ -13631,14 +13561,14 @@
                                 " prop). This gives them keyboard navigation abilities."),
                             v$1(CardElement, null,
                                 v$1(ButtonGroup, { wrap: true },
-                                    v$1(ButtonGroupChild, { index: 0, fillVariant: buttonsFill, colorVariant: buttonsColor, onClick: onClick }, "First button"),
-                                    v$1(ButtonGroupChild, { index: 1, fillVariant: buttonsFill, colorVariant: buttonsColor, onClick: onClick }, "Second button"),
-                                    v$1(ButtonGroupChild, { index: 2, fillVariant: buttonsFill, colorVariant: buttonsColor, onClick: onClick }, "Third button"),
-                                    v$1(ButtonGroupChild, { index: 3, fillVariant: buttonsFill, colorVariant: buttonsColor, onClick: onClick }, "Fourth button"),
-                                    v$1(ButtonGroupChild, { index: 4, fillVariant: buttonsFill, colorVariant: buttonsColor, onClick: onClick }, "Fifth button"),
-                                    v$1(ButtonGroupChild, { index: 5, fillVariant: buttonsFill, colorVariant: buttonsColor, onClick: onClick }, "Sixth button"),
-                                    v$1(ButtonGroupChild, { index: 6, fillVariant: buttonsFill, colorVariant: buttonsColor, onClick: onClick }, "Seventh button"),
-                                    v$1(ButtonGroupChild, { index: 7, fillVariant: buttonsFill, colorVariant: buttonsColor, onClick: onClick }, "Eighth button"))),
+                                    v$1(ButtonGroupChild, { index: 0, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress }, "First button"),
+                                    v$1(ButtonGroupChild, { index: 1, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress }, "Second button"),
+                                    v$1(ButtonGroupChild, { index: 2, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress }, "Third button"),
+                                    v$1(ButtonGroupChild, { index: 3, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress }, "Fourth button"),
+                                    v$1(ButtonGroupChild, { index: 4, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress }, "Fifth button"),
+                                    v$1(ButtonGroupChild, { index: 5, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress }, "Sixth button"),
+                                    v$1(ButtonGroupChild, { index: 6, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress }, "Seventh button"),
+                                    v$1(ButtonGroupChild, { index: 7, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress }, "Eighth button"))),
                             v$1(CardElement, { type: "paragraph" },
                                 v$1("code", null, "<ButtonGroup wrap>\n    <ButtonGroupChild index={0}>First button</ButtonGroupChild>\n    <ButtonGroupChild index={1}>Second button</ButtonGroupChild>\n    <ButtonGroupChild index={2}>Third button</ButtonGroupChild>\n    <ButtonGroupChild index={3}>Fourth button</ButtonGroupChild>\n    <ButtonGroupChild index={4}>Fifth button</ButtonGroupChild>\n    <ButtonGroupChild index={5}>Sixth button</ButtonGroupChild>\n    <ButtonGroupChild index={6}>Seventh button</ButtonGroupChild>\n    <ButtonGroupChild index={7}>Eighth button</ButtonGroupChild>\n</ButtonGroup>"))))))));
     }
@@ -14285,21 +14215,21 @@
             v$1(Card, null,
                 v$1(CardElement, { type: "title", tag: "h2" }, "Table"),
                 v$1(CardElement, null,
-                    "Tables allow for automatic display, navigation, and sorting of data.  All data is provided by the children and you don't need to provide a data structure to the parent ",
+                    "Tables allow for automatic display, navigation, sorting, and filtering of data. All data is provided by the children and you don't need to provide a data structure to the parent ",
                     v$1("code", null, "Table"),
-                    " element, and by default all columns are sortable."),
+                    " element, and by default all columns are user-sortable."),
                 v$1(CardElement, null,
                     "All ",
                     v$1("code", null, "TableCell"),
                     "s must be given a ",
                     v$1("code", null, "value"),
-                    " prop that represents its data.  This can be anything from a string to a number to a Date, and it controls how, when that column is sorted, it is compared against its siblings."),
+                    " prop that represents its data. This can be anything from a string to a number to a Date, and it controls how, when that column is sorted, it is compared against its siblings."),
                 v$1(CardElement, null,
                     "A ",
                     v$1("code", null, "<TableCell>"),
                     " will, by default, just display its ",
                     v$1("code", null, "value"),
-                    ". If you need to show something different, format the value, etc. just pass the value you'd like to show instead as a child.  Children will take priority over ",
+                    ". If you need to show something different, format the value, etc. just pass the value you'd like to show instead as a child. Children will take priority over ",
                     v$1("code", null, "value"),
                     " in terms of what to display, but sorting will be entirely unaffected by this, relying solely on the ",
                     v$1("code", null, "value"),
@@ -14326,16 +14256,12 @@
                     v$1("code", null, "TableFoot"),
                     ") so that it can properly call ",
                     v$1("code", null, "createElement"),
-                    " with the expected results. Note that you can create your own custom ",
+                    " with the expected results. You can create your own custom ",
                     v$1("code", null, "TableRow"),
-                    " wrapper, and the \"direct descendant\" restriction will apply to the wrapper instead (it must also accept the same ",
-                    v$1("code", null, "rowIndex"),
-                    " prop that a normal ",
-                    v$1("code", null, "TableRow"),
-                    " takes)."),
+                    " wrapper component, and the \"direct descendant\" restriction will apply to the wrapper instead."),
                 v$1(CardElement, null,
                     v$1(Input, { type: "number", value: rowCount, min: 0, max: 255, onInput: setRowCount }, "Row count"),
-                    v$1(Checkbox, { checked: filterEvens, onInput: setFilterEvens }, "Filter out every other row")),
+                    v$1(Checkbox, { checked: filterEvens, onInput: setFilterEvens }, "Filter out even numbers")),
                 v$1(CardElement, null,
                     v$1(Table, null,
                         v$1(TableHead, null,
@@ -14372,7 +14298,7 @@
                             });
                         }())))),
                 v$1(CardElement, null,
-                    v$1("code", null, "<Table>\n    <TableHead>\n        <TableRow rowIndex={0}>\n            <TableHeaderCell columnIndex={0}>Number</TableHeaderCell>\n            <TableHeaderCell columnIndex={1}>String</TableHeaderCell>\n            <TableHeaderCell columnIndex={2}>Date</TableHeaderCell>\n            <TableHeaderCell columnIndex={3}>Checkbox</TableHeaderCell>\n        </TableRow>\n    </TableHead>\n    <TableBody>\n        <TableRow rowIndex={1}>\n            <TableCell columnIndex={0} value={n} />\n            <TableCell columnIndex={1} value={RandomWords[index]} />\n            <TableCell columnIndex={2} value={d}>{d.toLocaleString()}</TableCell>\n            <TableCell columnIndex={3} value={checked}>\n                <Checkbox checked={checked} onInput={onInput} labelPosition=\"hidden\">Demo table checkbox</Checkbox>\n            </TableCell>\n        </TableRow>\n\n        <TableRow rowIndex={2} />\n        <TableRow rowIndex={3} />\n        <TableRow rowIndex={4} />\n        <TableRow rowIndex={5} />\n\n    </TableBody>\n    <TableFoot>\n        <ACustomTableRow rowIndex={6} />\n    </TableFoot>\n</Table>")))));
+                    v$1("code", null, "<Table>\n    <TableHead>\n        <TableRow rowIndex={0}>\n            <TableHeaderCell columnIndex={0}>Number</TableHeaderCell>\n            <TableHeaderCell columnIndex={1}>String</TableHeaderCell>\n            <TableHeaderCell columnIndex={2}>Date</TableHeaderCell>\n            <TableHeaderCell columnIndex={3}>Checkbox</TableHeaderCell>\n        </TableRow>\n    </TableHead>\n    <TableBody>\n        <TableRow rowIndex={1}>\n            <TableCell columnIndex={0} value={n} />\n            <TableCell columnIndex={1} value={RandomWords[index]} />\n            <TableCell columnIndex={2} value={d}>{d.toLocaleString()}</TableCell>\n            <TableCell columnIndex={3} value={checked}>\n                <Checkbox checked={checked} onInput={onInput} labelPosition=\"hidden\">Demo table checkbox</Checkbox>\n            </TableCell>\n        </TableRow>\n\n        <TableRow rowIndex={2} />\n        <TableRow rowIndex={3} hidden />\n        <TableRow rowIndex={4} />\n        <TableRow rowIndex={5} />\n\n    </TableBody>\n    <TableFoot>\n        <ACustomTableRow rowIndex={6} />\n    </TableFoot>\n</Table>")))));
     }
     function sleep$1(arg0) {
         return __awaiter(this, void 0, void 0, function () {
@@ -14442,22 +14368,6 @@
                 v$1(MenuItem, { index: 1 }, "BItem #2"),
                 v$1(MenuItem, { index: 2 }, "CItem #3"),
                 v$1(MenuItem, { index: 3 }, "DItem #4"))));
-    });
-    g(function () {
-        var _a = useHasFocus(), focused = _a.focused, focusedInner = _a.focusedInner, useHasFocusProps = _a.useHasFocusProps;
-        return (v$1("div", { class: "demo" },
-            v$1("h2", null, "useHasFocus"),
-            v$1("div", __assign({}, useHasFocusProps({ style: { border: "1px solid black" }, tabIndex: 0 })),
-                "Outer ",
-                v$1("div", { tabIndex: 0, style: { border: "1px solid black" } }, "Inner element")),
-            v$1("div", null,
-                v$1("ul", null,
-                    v$1("li", null,
-                        "Strictly focused: ",
-                        focused.toString()),
-                    v$1("li", null,
-                        "Inner focused: ",
-                        focusedInner.toString())))));
     });
     var DemoTabs = g(function () {
         var _a = useState(0), selectedIndex = _a[0], setSelectedIndex = _a[1];

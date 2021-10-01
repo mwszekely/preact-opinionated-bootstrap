@@ -54,7 +54,7 @@ export function Switch({ checked, disabled, onInput: onInputAsync, children: lab
         console.error(`Hidden labels require a string-based label for the aria-label attribute.`);
     }
 
-    const inputElement = <OptionallyInputGroup tag={inInputGroup ? "label" : null} disabled={disabled} tabIndex={-1} isInput={true}>
+    const inputElement = <OptionallyInputGroup tag={inInputGroup ? "div" : null} disabled={disabled} tabIndex={-1} isInput={true}>
         <ProgressCircular childrenPosition="after" colorFill="foreground-only" mode={currentType === "async" ? asyncState : null} color="info">
             <input {...useSwitchInputElementProps({ type: "checkbox", className: clsx(pending && "pending", "form-check-input", disabled && "disabled"), "aria-label": labelPosition === "hidden" ? stringLabel : undefined })} />
         </ProgressCircular>

@@ -1,6 +1,6 @@
 import { ComponentChildren, Fragment, h } from "preact";
 import { useInputLabel } from "preact-aria-widgets/use-label";
-import { useAsyncHandler, useMergedProps, useRefElement } from "preact-prop-helpers";
+import { useAsyncHandler, useMergedProps, useRefElement, useState } from "preact-prop-helpers";
 import { useContext, useEffect } from "preact/hooks";
 import { useSpinnerDelay } from "../props";
 import { ProgressCircular } from "../progress";
@@ -12,8 +12,9 @@ function UnlabelledInput(props: UnlabelledInputNumberProps): h.JSX.Element;
 function UnlabelledInput(props: UnlabelledInputProps): h.JSX.Element;
 function UnlabelledInput({ type, disabled, value, onInput: onInputAsync, ...props }: UnlabelledInputProps): h.JSX.Element {
 
+    const [focusedInner, setFocusedInner, getFocusedInner] = useState(false);
     const { capture, uncapture } = useInputCaptures(type, (props as UnlabelledInputNumberProps).min, (props as UnlabelledInputNumberProps).max!);
-    const { focusedInner, useHasFocusProps } = useHasFocus<HTMLInputElement>();
+    const { useHasFocusProps } = useHasFocus<HTMLInputElement>({ setFocusedInner });
 
     const { getSyncHandler, currentCapture, pending, hasError, settleCount, flushDebouncedPromise, currentType, ...asyncInfo } = useAsyncHandler<HTMLInputElement>()({ capture, debounce: type === "text" ? 1500 : undefined });
     const onInput = getSyncHandler(disabled ? null : onInputAsync as any);

@@ -21,15 +21,15 @@ export function DemoButtons() {
     const [usesLinkButton, setUsesLinkButton] = useState(true);
 
     const pushToast = usePushToast();
-    const onClickSync = () => pushToast(<Toast>Button was clicked</Toast>);
-    const onClickAsync = async () => {
+    const onPressSync = () => pushToast(<Toast>Button was clicked</Toast>);
+    const onPressAsync = async () => {
         await sleep(asyncTimeout);
         if (asyncFails)
             throw new Error("Button operation failed.");
         else
-            onClickSync();
+            onPressSync();
     }
-    const onClick = usesAsync ? onClickAsync : onClickSync;
+    const onPress = usesAsync ? onPressAsync : onPressSync;
 
     const onToggleInputAsync = async (b: boolean) => {
         await sleep(asyncTimeout);
@@ -47,7 +47,7 @@ export function DemoButtons() {
                     <div class="demo">
                         <Card>
                             <CardElement type="title" tag="h2">Buttons</CardElement>
-                            <CardElement><Button onClick={onClick}>I'm a button</Button></CardElement>
+                            <CardElement><Button onPress={onPress}>I'm a button</Button></CardElement>
 
                             <CardElement>
                                 A <code>Button</code> is a <code>Button</code> is a <code>Button</code> &ndash; you can click, tap, or Space-key it to activate it and do something.  If the given action is asynchronous, then the button will disable itself and display a spinner during the operation.
@@ -56,7 +56,7 @@ export function DemoButtons() {
                             <CardElement type="subtitle" tag="h3">Async inputs</CardElement>
 
                             <CardElement>
-                                The <code>onClick</code> event handler for buttons can be sync or async, and they will react appropriately if the operation takes long enough.
+                                The <code>onPress</code> event handler for buttons can be sync or async, and they will react appropriately if the operation takes long enough.
                                 <InputGrid>
                                     <InputGroup><Checkbox onInput={setUsesAsync} checked={usesAsync} labelPosition="start">Use async handler</Checkbox></InputGroup>
                                     <InputGroup><Checkbox onInput={setAsyncFails} checked={asyncFails} labelPosition="start" disabled={!usesAsync}>Async handler rejects</Checkbox></InputGroup>
@@ -64,11 +64,11 @@ export function DemoButtons() {
                                 </InputGrid>
                             </CardElement>
                             <CardElement >
-                                <Button onClick={onClick}>Click me</Button>
+                                <Button onPress={onPress}>Click me</Button>
                             </CardElement>
 
-                            <CardElement type="paragraph"><code>{`const onClick = ${usesAsync ? `async ` : ""}() => { ${usesAsync ? `await sleep(${asyncTimeout}); ` : ""}pushToast(<Toast ... />); }
-<Button onClick={onClick}>Click me</Button>`}</code></CardElement>
+                            <CardElement type="paragraph"><code>{`const onPress = ${usesAsync ? `async ` : ""}() => { ${usesAsync ? `await sleep(${asyncTimeout}); ` : ""}pushToast(<Toast ... />); }
+<Button onPress={onPress}>Click me</Button>`}</code></CardElement>
 
                             <hr />
 
@@ -82,24 +82,24 @@ export function DemoButtons() {
                             </CardElement>
                             <CardElement>
                                 <ButtonGroup>
-                                    <ButtonGroupChild index={0} onInput={() => setButtonsFill("fill")} pressed={buttonsFill === "fill"} colorVariant="primary">Fill</ButtonGroupChild>
-                                    <ButtonGroupChild index={1} onInput={() => setButtonsFill("outline")} pressed={buttonsFill === "outline"} colorVariant="primary">Outline</ButtonGroupChild>
+                                    <ButtonGroupChild index={0} onPressToggle={() => setButtonsFill("fill")} pressed={buttonsFill === "fill"}>Fill</ButtonGroupChild>
+                                    <ButtonGroupChild index={1} onPressToggle={() => setButtonsFill("outline")} pressed={buttonsFill === "outline"}>Outline</ButtonGroupChild>
                                 </ButtonGroup>
                             </CardElement>
                             <CardElement>
                                 <ButtonGroup wrap>
-                                    <ButtonGroupChild index={0} colorVariant="primary" pressed={buttonsColor == "primary"} onInput={() => setButtonsColor("primary")}>Primary</ButtonGroupChild>
-                                    <ButtonGroupChild index={1} colorVariant="secondary" pressed={buttonsColor == "secondary"} onInput={() => setButtonsColor("secondary")}>Secondary</ButtonGroupChild>
-                                    <ButtonGroupChild index={2} colorVariant="success" pressed={buttonsColor == "success"} onInput={() => setButtonsColor("success")}>Success</ButtonGroupChild>
-                                    <ButtonGroupChild index={3} colorVariant="warning" pressed={buttonsColor == "warning"} onInput={() => setButtonsColor("warning")}>Warning</ButtonGroupChild>
-                                    <ButtonGroupChild index={4} colorVariant="danger" pressed={buttonsColor == "danger"} onInput={() => setButtonsColor("danger")}>Danger</ButtonGroupChild>
-                                    <ButtonGroupChild index={5} colorVariant="info" pressed={buttonsColor == "info"} onInput={() => setButtonsColor("info")}>Info</ButtonGroupChild>
-                                    <ButtonGroupChild index={6} colorVariant="light" pressed={buttonsColor == "light"} onInput={() => setButtonsColor("light")}>Light</ButtonGroupChild>
-                                    <ButtonGroupChild index={7} colorVariant="dark" pressed={buttonsColor == "dark"} onInput={() => setButtonsColor("dark")}>Dark</ButtonGroupChild>
+                                    <ButtonGroupChild index={0} colorVariant="primary" pressed={buttonsColor == "primary"} onPressToggle={() => setButtonsColor("primary")}>Primary</ButtonGroupChild>
+                                    <ButtonGroupChild index={1} colorVariant="secondary" pressed={buttonsColor == "secondary"} onPressToggle={() => setButtonsColor("secondary")}>Secondary</ButtonGroupChild>
+                                    <ButtonGroupChild index={2} colorVariant="success" pressed={buttonsColor == "success"} onPressToggle={() => setButtonsColor("success")}>Success</ButtonGroupChild>
+                                    <ButtonGroupChild index={3} colorVariant="warning" pressed={buttonsColor == "warning"} onPressToggle={() => setButtonsColor("warning")}>Warning</ButtonGroupChild>
+                                    <ButtonGroupChild index={4} colorVariant="danger" pressed={buttonsColor == "danger"} onPressToggle={() => setButtonsColor("danger")}>Danger</ButtonGroupChild>
+                                    <ButtonGroupChild index={5} colorVariant="info" pressed={buttonsColor == "info"} onPressToggle={() => setButtonsColor("info")}>Info</ButtonGroupChild>
+                                    <ButtonGroupChild index={6} colorVariant="light" pressed={buttonsColor == "light"} onPressToggle={() => setButtonsColor("light")}>Light</ButtonGroupChild>
+                                    <ButtonGroupChild index={7} colorVariant="dark" pressed={buttonsColor == "dark"} onPressToggle={() => setButtonsColor("dark")}>Dark</ButtonGroupChild>
                                 </ButtonGroup>
                             </CardElement>
                             <CardElement>
-                                <Button onClick={onClick}>{buttonsFill === "fill" ? "Filled" : "Outlined"} {buttonsColor} button</Button>
+                                <Button onPress={onPress}>{buttonsFill === "fill" ? "Filled" : "Outlined"} {buttonsColor} button</Button>
                             </CardElement>
                             <CardElement><code>{`<Button fillVariant="${buttonsFill}" colorVariant="${buttonsColor}">Variant button</Button>`}</code></CardElement>
 
@@ -109,17 +109,17 @@ export function DemoButtons() {
 
                             <CardElement>
                                 A link can be styled as a button while retaining native link functionality (middle clicks, etc.).
-                                These buttons have no <code>onClick</code> handler, instead taking <code>href</code> and the other <code>&lt;a&gt;</code> props.
+                                These buttons have no <code>onPress</code> handler, instead taking <code>href</code> and the other <code>&lt;a&gt;</code> props.
                             </CardElement>
                             <CardElement>
                                 A <code>&lt;Button&gt;</code> will use an anchor link internally if you provide it with an <code>href</code> prop, or optionally setting the <code>tag</code> prop to <code>a</code>.
                                 <InputGroup><Checkbox onInput={setUsesLinkButton} checked={usesLinkButton} labelPosition="start">Use link button</Checkbox></InputGroup>
                             </CardElement>
                             <CardElement >
-                                {usesLinkButton ? <Button target="_blank" href="https://www.example.com">example.com <i class="bi bi-box-arrow-up-right"></i></Button> : <Button onClick={onClick}>Regular button</Button>}
+                                {usesLinkButton ? <Button target="_blank" href="https://www.example.com">example.com <i class="bi bi-box-arrow-up-right"></i></Button> : <Button onPress={onPress}>Regular button</Button>}
                             </CardElement>
 
-                            <CardElement type="paragraph"><code>{usesLinkButton ? `<Button href="https://www.example.com">Link button</Button>` : `<Button onClick={onClick}>Regular button</Button>`}</code></CardElement>
+                            <CardElement type="paragraph"><code>{usesLinkButton ? `<Button href="https://www.example.com">Link button</Button>` : `<Button onPress={onPress}>Regular button</Button>`}</code></CardElement>
 
 
 
@@ -131,7 +131,7 @@ export function DemoButtons() {
                                 If given a <code>pressed</code> prop, a button will become a toggle button, with an off/on state.  It will style itself as outlined when unpressed, and filled when pressed, so they are best used in groups.
                             </CardElement>
                             <CardElement >
-                                <Button pressed={toggleOn} onInput={onToggleInput}>Toggle button</Button>
+                                <Button pressed={toggleOn} onPressToggle={onToggleInput}>Toggle button</Button>
                             </CardElement>
 
                             <CardElement type="paragraph"><code>{`<Button pressed={pressed} onInput={onInput}>Toggle button</Button>`}</code></CardElement>
@@ -145,14 +145,14 @@ export function DemoButtons() {
                             </CardElement>
                             <CardElement >
                                 <ButtonGroup wrap>
-                                    <ButtonGroupChild index={0} fillVariant={buttonsFill} colorVariant={buttonsColor} onClick={onClick}>First button</ButtonGroupChild>
-                                    <ButtonGroupChild index={1} fillVariant={buttonsFill} colorVariant={buttonsColor} onClick={onClick}>Second button</ButtonGroupChild>
-                                    <ButtonGroupChild index={2} fillVariant={buttonsFill} colorVariant={buttonsColor} onClick={onClick}>Third button</ButtonGroupChild>
-                                    <ButtonGroupChild index={3} fillVariant={buttonsFill} colorVariant={buttonsColor} onClick={onClick}>Fourth button</ButtonGroupChild>
-                                    <ButtonGroupChild index={4} fillVariant={buttonsFill} colorVariant={buttonsColor} onClick={onClick}>Fifth button</ButtonGroupChild>
-                                    <ButtonGroupChild index={5} fillVariant={buttonsFill} colorVariant={buttonsColor} onClick={onClick}>Sixth button</ButtonGroupChild>
-                                    <ButtonGroupChild index={6} fillVariant={buttonsFill} colorVariant={buttonsColor} onClick={onClick}>Seventh button</ButtonGroupChild>
-                                    <ButtonGroupChild index={7} fillVariant={buttonsFill} colorVariant={buttonsColor} onClick={onClick}>Eighth button</ButtonGroupChild>
+                                    <ButtonGroupChild index={0} fillVariant={buttonsFill} colorVariant={buttonsColor} onPress={onPress}>First button</ButtonGroupChild>
+                                    <ButtonGroupChild index={1} fillVariant={buttonsFill} colorVariant={buttonsColor} onPress={onPress}>Second button</ButtonGroupChild>
+                                    <ButtonGroupChild index={2} fillVariant={buttonsFill} colorVariant={buttonsColor} onPress={onPress}>Third button</ButtonGroupChild>
+                                    <ButtonGroupChild index={3} fillVariant={buttonsFill} colorVariant={buttonsColor} onPress={onPress}>Fourth button</ButtonGroupChild>
+                                    <ButtonGroupChild index={4} fillVariant={buttonsFill} colorVariant={buttonsColor} onPress={onPress}>Fifth button</ButtonGroupChild>
+                                    <ButtonGroupChild index={5} fillVariant={buttonsFill} colorVariant={buttonsColor} onPress={onPress}>Sixth button</ButtonGroupChild>
+                                    <ButtonGroupChild index={6} fillVariant={buttonsFill} colorVariant={buttonsColor} onPress={onPress}>Seventh button</ButtonGroupChild>
+                                    <ButtonGroupChild index={7} fillVariant={buttonsFill} colorVariant={buttonsColor} onPress={onPress}>Eighth button</ButtonGroupChild>
                                 </ButtonGroup>
                             </CardElement>
 
