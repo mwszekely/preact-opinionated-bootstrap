@@ -72,32 +72,12 @@ const DemoUseDraggable = () => {
         </div>)
 }
 
-const DemoUseElementSizeAnimation = () => {
-    const [height, setHeight] = useState(0);
-    const [angle, setAngle] = useState(0);
-    useAnimationFrame({
-        callback: (ms) => {
-            setAngle(a => a + 0.01)
-            setHeight((Math.sin(angle) + 1) / 0.5);
-        }
-    });
-
-    const { element, elementSize, useElementSizeProps } = useElementSize<HTMLDivElement>();
-
-    return (
-        <div {...useElementSizeProps({ ref: undefined, className: "demo", style: { height: `${(height * 100) + 100}px` } })}>
-            <pre>{JSON.stringify(elementSize, null, 2)}</pre>
-        </div>
-    );
-}
-
 
 const DemoUseFocusTrap = memo(({ depth }: { depth?: number }) => {
 
     const [active, setActive] = useState(false);
 
     const { useFocusTrapProps } = useFocusTrap<HTMLDivElement>({ trapActive: active });
-    //const { useRovingTabIndexChild, useRovingTabIndexProps } = useRovingTabIndex<HTMLUListElement, RovingTabIndexChildInfo>({ tabbableIndex, focusOnChange: false });
 
     const divProps = useFocusTrapProps({ ref: undefined, className: "focus-trap-demo" });
     if (depth == 2)

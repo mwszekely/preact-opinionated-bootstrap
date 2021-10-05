@@ -14,6 +14,7 @@ import { ElementSize } from "preact-prop-helpers/use-element-size";
 
 export type MenuProps<E extends Element, T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element> = FlippableTransitionComponent<T> & TagSensitiveProps<E> & {
     anchor: VNode<{}>;
+    anchorEventName?: string;
     anchorTag?: (keyof HTMLElementTagNameMap);
     children: ComponentChildren;
 }
@@ -29,15 +30,19 @@ function foo<P>(placement: BasePlacement, props: P) {
 
 const OnCloseContext = createContext<(() => void) | undefined>(undefined);
 const UseMenuItemContext = createContext<UseMenuItem<HTMLButtonElement>>(null!);
-export function Menu<E extends Element, T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element>({ anchor, anchorTag, children, tag, Transition, ...rest }: MenuProps<E, T>) {
+export function Menu<E extends Element, T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element>({ anchor, anchorEventName, anchorTag, children, tag, Transition, ...rest }: MenuProps<E, T>) {
 
 
 
     const [open, setOpen] = useState(false);
     const onClose = useCallback(() => setOpen(false), []);
     const onOpen = () => setOpen(true);
-    const { useElementSizeProps, elementSize } = useElementSize<any>();
-    const { shouldUpdate: updatingForABit, onInteraction } = useShouldUpdatePopper(open, elementSize);
+    const { shouldUpdate: updatingForABit, onInteraction } = useShouldUpdatePopper(open);
+    
+    const [size, setSize] = useState<string | null>(null);
+    const { useElementSizeProps } = useElementSize<any>({ setSize: size => setSize(prevSize => JSON.stringify(size)) });
+    useEffect(() => { onInteraction?.(); }, [onInteraction, size]);
+
     const { usePopperArrow, usePopperPopup, usePopperSource, usedPlacement, getLogicalDirection } = usePopperApi({ position: "block-end", updating: updatingForABit });
     const { useMenuButton, useMenuItem, useMenuItemCheckbox, useMenuProps, useMenuSubmenuItem, focusMenu } = useAriaMenu<HTMLDivElement, HTMLButtonElement>({ open, onClose, onOpen });
     const { useMenuButtonProps } = useMenuButton<Element>({ tag: anchorTag ?? "button" });
@@ -70,11 +75,13 @@ export function Menu<E extends Element, T extends <E extends HTMLElement>(...arg
     if (logicalDirection && usedPlacement)
         rest = fixProps(logicalDirection, "block-end", usedPlacement, rest) as typeof rest;
 
+    const onAnchorClick = () => setOpen(open => !open);
+
     return (
         <>
             <OnCloseContext.Provider value={onClose}>
                 <UseMenuItemContext.Provider value={useMenuItem}>
-                    {cloneElement(anchor, useMergedProps<any>()(useElementSizeProps({ ref: anchor.ref as Ref<Element>, class: `dropdown-toggle ${open ? "active" : ""}` }), usePopperSourceProps(useMenuButtonProps(anchor.props))))}
+                    {cloneElement(anchor, useMergedProps<any>()({ [anchorEventName ?? "onPress"]: onAnchorClick, ref: anchor.ref as Ref<Element>, class: `dropdown-toggle ${open ? "active" : ""}` }, useElementSizeProps(usePopperSourceProps(useMenuButtonProps(anchor.props)))))}
                     <BodyPortal>
                         <div {...usePopperPopupProps({ class: "dropdown-menu-popper" })}>
                             <Transition {...(useMenuProps(rest) as any)} open={open} onTransitionUpdate={onInteraction} exitVisibility="hidden">

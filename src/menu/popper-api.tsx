@@ -266,7 +266,7 @@ export function logicalToPlacement(logicalDirection: LogicalDirectionInfo, posit
     return placement;
 }
 
-export function useShouldUpdatePopper(open: boolean, elementSize: ElementSize | null) {
+export function useShouldUpdatePopper(open: boolean) {
     // Since scroll events are asynchronous, especially on iOS devices,
     // just manually adjust the position of the popper for a bit
     // any time basically any user interaction happens.
@@ -282,7 +282,6 @@ export function useShouldUpdatePopper(open: boolean, elementSize: ElementSize | 
     useGlobalHandler(window, "scroll", open? onInteraction : null, { passive: true, capture: true });
     useGlobalHandler(window, "pointermove", open? onInteraction : null, { passive: true, capture: true });
     useGlobalHandler(window, "resize", open? onInteraction : null, { passive: true, capture: true });
-    useEffect(() => { onInteraction?.(); }, Object.values(elementSize ?? {}));
 
     return { shouldUpdate: !!updatingForABit, onInteraction };
 

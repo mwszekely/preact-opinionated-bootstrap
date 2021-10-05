@@ -5,6 +5,8 @@ import { useElementSize } from "preact-prop-helpers/use-element-size";
 import { fixProps, usePopperApi, useShouldUpdatePopper } from "../menu/popper-api"
 import { FlippableTransitionComponent } from "../props";
 import { useMergedProps } from "preact-prop-helpers/use-merged-props";
+import { useEffect } from "preact/hooks";
+import { useState } from "preact-prop-helpers";
 
 type UseTooltipProps = Parameters<typeof useAriaTooltip>[0];
 
@@ -19,7 +21,6 @@ export type TooltipProps<T extends <E extends HTMLElement>(...args: any[]) => h.
 
 export function Tooltip<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element>({ children, position, tooltip, Transition, mouseoverDelay, ...rest }: TooltipProps<T>) {
     const { getIsOpen, isOpen, useTooltip, useTooltipTrigger } = useAriaTooltip({ mouseoverDelay });
-    const { useElementSizeProps, elementSize } = useElementSize<any>();
 
     let cloneable: VNode;
     if (typeof children === "string" || typeof children === "number" || typeof children == "boolean" || typeof children === "bigint") {
@@ -34,7 +35,10 @@ export function Tooltip<T extends <E extends HTMLElement>(...args: any[]) => h.J
 
     const { useTooltipProps } = useTooltip<HTMLDivElement>();
     const { useTooltipTriggerProps } = useTooltipTrigger();
-    const { shouldUpdate, onInteraction } = useShouldUpdatePopper(isOpen, elementSize);
+    const [size, setSize] = useState<string | null>(null);
+    const { shouldUpdate, onInteraction } = useShouldUpdatePopper(isOpen);
+    const { useElementSizeProps } = useElementSize<any>({ setSize: size => setSize(prevSize => JSON.stringify(size)) });
+    useEffect(() => { onInteraction?.(); }, [onInteraction, size]);
     const { getLogicalDirection, usePopperArrow, usePopperPopup, usePopperSource, usedPlacement } = usePopperApi({ updating: shouldUpdate, position, });
 
     const { usePopperPopupProps } = usePopperPopup<HTMLDivElement>({open: isOpen});

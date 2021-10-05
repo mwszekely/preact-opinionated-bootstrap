@@ -1391,6 +1391,10 @@
         ref(instance);
       } else if (ref != null) {
         ref.current = instance;
+      } else {
+        debugger; // Intentional
+
+        console.assert(false, "Unknown ref type found that was neither a RefCallback nor a RefObject");
       }
     }
     /**
@@ -1458,6 +1462,10 @@
     }
     */
 
+    function styleStringToObject(style) {
+      // TODO: This sucks D:
+      return Object.fromEntries(style.split(";").map(statement => statement.split(":")));
+    }
     /**
      * Merges two style objects, returning the result.
      *
@@ -1465,6 +1473,8 @@
      * @param obj The CSS properties you want added to the user-given style
      * @returns A CSS object containing the properties of both objects.
      */
+
+
     function useMergedStyles(lhs, rhs) {
       var _lhs$style, _rhs$style2;
 
@@ -1480,10 +1490,10 @@
         if (lhs !== null && lhs !== void 0 && lhs.style && rhs !== null && rhs !== void 0 && rhs.style) {
           // (useMergedStyles isn't a true hook -- this isn't a violation)
           if (typeof (lhs === null || lhs === void 0 ? void 0 : lhs.style) == "string") return useMergedStyles({
-            style: Object.fromEntries(lhs === null || lhs === void 0 ? void 0 : lhs.style.split(";").map(statement => statement.split(":")))
+            style: styleStringToObject(lhs === null || lhs === void 0 ? void 0 : lhs.style)
           }, rhs);
-          if (typeof (rhs === null || rhs === void 0 ? void 0 : rhs.style) == "string") return useMergedStyles(lhs === null || lhs === void 0 ? void 0 : lhs.style, {
-            style: Object.fromEntries(lhs === null || lhs === void 0 ? void 0 : lhs.style.split(";").map(statement => statement.split(":")))
+          if (typeof (rhs === null || rhs === void 0 ? void 0 : rhs.style) == "string") return useMergedStyles(lhs, {
+            style: styleStringToObject(rhs === null || rhs === void 0 ? void 0 : rhs.style)
           });
         } // Logic???
 
@@ -1506,6 +1516,7 @@
 
     let log = str => {
       debugger;
+      console.warn(`Trying to merge two props with the same name: ${str}`);
       /* Intentional */
     };
     /**
@@ -1585,8 +1596,8 @@
       if (!lhs) return rhs;
       if (!rhs) return lhs;
       return (...args) => {
-        let lv = lhs === null || lhs === void 0 ? void 0 : lhs(...args);
-        let rv = rhs === null || rhs === void 0 ? void 0 : rhs(...args);
+        let lv = lhs(...args);
+        let rv = rhs(...args);
         if (lv instanceof Promise || rv instanceof Promise) return Promise.all([lv, rv]);
       };
     }
@@ -1776,31 +1787,31 @@
      */
 
     function useState(initialState) {
-      // We keep both
-      const [state, setState] = l(initialState);
+      // We keep both, but overrride the `setState` functionality
+      const [state, setStateP] = l(initialState);
       const ref = s(state); // Hijack the normal setter function 
       // to also set our ref to the new value
 
-      const set = A$1(value => {
+      const setState = A$1(value => {
         if (typeof value === "function") {
           let callback = value;
-          setState(prevValue => {
+          setStateP(prevValue => {
             let nextValue = callback(prevValue);
             ref.current = nextValue;
             return nextValue;
           });
         } else {
           ref.current = value;
-          setState(value);
+          setStateP(value);
         }
       }, []);
 
-      const get = () => {
+      const getState = () => {
         return ref.current;
       };
 
       console.assert(ref.current === state);
-      return [state, set, get];
+      return [state, setState, getState];
     }
 
     /**
@@ -1833,14 +1844,61 @@
       };
     }
 
+    const Unset = Symbol("unset");
+    /**
+     * Given an input value, returns a constant getter function that can be used
+     * inside of `useEffect` and friends without including it in the dependency array.
+     *
+     * Use with caution, and **do not use the getter in useLayoutEffect!!**
+     * `setState`'s getter does not have this problem, but then you're using your own state
+     * instead of an existing value, which might not always be feasible.
+     *
+     * Weigh your options, and hopefully one of them gets the job done.
+     *
+     * @param value
+     * @returns
+     */
+
+    function useStableGetter(value) {
+      const ref = s(Unset);
+      _(ref, () => value);
+      return A$1(() => {
+        if (ref.current === Unset) {
+          throw new Error('Value retrieved from useStableGetter() cannot be called from useLayoutEffect().');
+        }
+
+        return ref.current;
+      }, []);
+    }
+
+    /**
+     * Alternate useCallback() which always returns the same (wrapped) function reference
+     * so that it can be excluded from the dependency arrays of `useEffect` and friends.
+     *
+     * DO NOT USE THE RESULT IN useLayoutEffect!!
+     *
+     * TODO: Investigate options.diffed if the useLayoutEffect limitation becomes limitlessly limiting.
+     *
+     * Source: https://github.com/facebook/react/issues/14099#issuecomment-659298422
+     */
+
+    function useStableCallback(fn) {
+      const currentCallbackGetter = useStableGetter(fn);
+      return A$1((...args) => {
+        return currentCallbackGetter()(...args);
+      }, []);
+    }
+
     function useElementSize({
-      observeBox
-    } = {}) {
+      observeBox,
+      setSize
+    }) {
       const {
         element,
+        getElement,
         useRefElementProps
       } = useRefElement();
-      const [size, setSize, getSize] = useState(null);
+      const stableSetSize = useStableCallback(setSize);
       y(() => {
         if (element) {
           const handleUpdate = () => {
@@ -1858,7 +1916,7 @@
               scrollTop,
               offsetTop
             } = element;
-            setSize({
+            stableSetSize({
               clientWidth,
               scrollWidth,
               offsetWidth,
@@ -1892,8 +1950,7 @@
       }, [element, observeBox]);
       return {
         element,
-        elementSize: size,
-        getElementSize: getSize,
+        getElement,
         useElementSizeProps: useRefElementProps
       };
     }
@@ -2130,52 +2187,6 @@
     };
 
     /**
-     * Given an input value, returns a constant getter function that can be used
-     * inside of `useEffect` and friends without including it in the dependency array.
-     *
-     * Use with caution, and **do not use the getter in useLayoutEffect!!**
-     * `setState`'s getter does not have this problem, but then you're using your own state
-     * instead of an existing value, which might not always be feasible.
-     *
-     * Weigh your options, and hopefully one of them gets the job done.
-     *
-     * @param value
-     * @returns
-     */
-
-    function useStableGetter(value) {
-      const ref = s(value);
-      _(ref, () => value);
-      return A$1(() => {
-        return ref.current;
-      }, []);
-    }
-
-    /**
-     * Alternate useCallback() which always returns the same (wrapped) function reference
-     * so that it can be excluded from the dependency arrays of `useEffect` and friends.
-     *
-     * DO NOT USE THE RESULT IN useLayoutEffect!!
-     *
-     * TODO: Investigate options.diffed if the useLayoutEffect limitation becomes limitlessly limiting.
-     *
-     * Source: https://github.com/facebook/react/issues/14099#issuecomment-659298422
-     */
-
-    function useStableCallback(fn) {
-      const currentCallbackGetter = useStableGetter(fn);
-      return A$1((...args) => {
-        const currentFunc = currentCallbackGetter();
-
-        if (!currentFunc) {
-          throw new Error('Callback retrieved from useStableCallback() cannot be called from useLayoutEffect().');
-        }
-
-        return currentFunc(...args);
-      }, []);
-    }
-
-    /**
      * Wrap the native `useLayoutEffect` to add arguments
      * that allow accessing the previous value as the first argument,
      * as well as the changes that caused the hook to be called as the second argument.
@@ -2210,18 +2221,41 @@
       callback,
       triggerIndex
     }) {
-      const stableCallback = useStableCallback(callback);
-      const getTimeout = useStableGetter(timeout);
-      const timeoutIsNull = timeout == null;
+      const stableCallback = useStableCallback(() => {
+        startTimeRef.current = null;
+        callback();
+      });
+      const getTimeout = useStableGetter(timeout); // Set any time we start timeout.
+      // Unset any time the timeout completes
+
+      const startTimeRef = s(null);
+      const timeoutIsNull = timeout == null; // Any time the triggerIndex changes (including on mount)
+      // restart the timeout.  The timeout does NOT reset
+      // when the duration or callback changes, only triggerIndex.
+
       y(() => {
-        const timeout = getTimeout();
+        let timeout = getTimeout();
         console.assert(timeoutIsNull == (timeout == null));
 
-        if (timeout) {
+        if (timeout != null) {
+          startTimeRef.current = +new Date();
           const handle = setTimeout(stableCallback, timeout);
           return () => clearTimeout(handle);
         }
       }, [triggerIndex, timeoutIsNull]);
+      const getElapsedTime = A$1(() => {
+        var _startTimeRef$current;
+
+        return +new Date() - +((_startTimeRef$current = startTimeRef.current) !== null && _startTimeRef$current !== void 0 ? _startTimeRef$current : new Date());
+      }, []);
+      const getRemainingTime = A$1(() => {
+        const timeout = getTimeout();
+        return timeout == null ? null : Math.max(0, timeout - getElapsedTime());
+      }, []);
+      return {
+        getElapsedTime,
+        getRemainingTime
+      };
     }
 
     /**
@@ -2466,9 +2500,6 @@
           element
         } = useRefElement(); // Prefer the parent element's direction so that we're not calling getComputedStyle
         // on every single individual child, which is likely redundant.
-        // TODO: Does useLogicalDirection need to hold a per-render & per-element cache to make this work?
-        // Or does the browser automatically cache the computations until something changes?
-        // Given that the values are live, it seems like it should be the latter...
 
         const {
           convertElementSize,
@@ -2668,17 +2699,17 @@
               But roughly isn't good enough if there are multiple matches.
               To convert our sorted index to the unsorted index we need, we have to find the first
               element that matches us *and* (if any such exist) is *after* our current selection.
-               In other words, the only way typeahead moves backwards relative to our current
+                In other words, the only way typeahead moves backwards relative to our current
               position is if the only other option is behind us.
-               It's not specified in WAI-ARIA what to do in that case.  I suppose wrap back to the start?
+                It's not specified in WAI-ARIA what to do in that case.  I suppose wrap back to the start?
               Though there's also a case for just going upwards to the nearest to prevent jumpiness.
               But if you're already doing typeahead on an unsorted list, like, jumpiness can't be avoided.
               I dunno. Going back to the start is the simplist though.
-               Basically what this does: Starting from where we found ourselves after our binary search,
+                Basically what this does: Starting from where we found ourselves after our binary search,
               scan backwards and forwards through all adjacent entries that also compare equally so that
               we can find the one whose `unsortedIndex` is the lowest amongst all other equal strings
               (and also the lowest `unsortedIndex` yadda yadda except that it comes after us).
-               TODO: The binary search starts this off with a solid O(log n), but one-character
+                TODO: The binary search starts this off with a solid O(log n), but one-character
               searches are, thanks to pigeonhole principal, eventually guaranteed to become
               O(n*log n). This is annoying but probably not easily solvable? There could be an
               exception for one-character strings, but that's just kicking the can down
@@ -3036,6 +3067,48 @@
     }
 
     /**
+     * Wrap the native `useEffect` to add arguments
+     * that allow accessing the previous value as the first argument,
+     * as well as the changes that caused the hook to be called as the second argument.
+     *
+     * @param effect
+     * @param inputs
+     */
+
+    function useEffect(effect, inputs) {
+      const prevInputs = s(inputs);
+
+      const effect2 = () => {
+        let changes = [];
+
+        for (let i = 0; i < Math.max(prevInputs.current.length, inputs.length); ++i) {
+          if (prevInputs.current[i] != inputs[i]) changes[i] = {
+            from: prevInputs.current[i],
+            to: inputs[i]
+          };
+        }
+
+        const ret = effect(prevInputs.current, changes);
+        prevInputs.current = inputs;
+        return ret;
+      };
+
+      y(effect2, inputs);
+    }
+
+    /**
+     * Returns a function that will, when called, force the component
+     * that uses this hook to re-render itself.
+     *
+     * It's a bit smelly, so best to use sparingly.
+     */
+
+    function useForceUpdate() {
+      const [, set] = l(0);
+      return s(() => set(i => ++i)).current;
+    }
+
+    /**
      * Implements a roving tabindex system where only one "focusable"
      * component in a set is able to receive a tab focus. *Which*
      * of those elements receives focus is determined by you, but it's
@@ -3051,11 +3124,12 @@
      * on the child's element, as well as any other elements you'd like
      * to be explicitly made untabbable too.
      *
-     * `focusOnChange` should be set to true if focus is
+     * `shouldFocusOnChange` should return true if focus is
      * contained within whatever element contains the roving tab index.
      * Generally as simple as the following:
      * ```
-     * const { focused, focusedInner, useHasFocusProps } = useHasFocus<ParentElement>();
+     * const [focusedInner, setFocusedInner] = useState(false);
+     * const { useHasFocusProps } = useHasFocus<ParentElement>({ setFocusedInner });
      * const focusOnChange = (focusedInner != false);
      * ```
      * It's not included here because `useRovingTabIndex` doesn't know
@@ -3070,7 +3144,7 @@
     }) {
       const [rerenderAndFocus, setRerenderAndFocus] = useState(null);
       const getShouldFocusOnChange = useStableGetter(foc);
-      const getTabbableIndex = useStableGetter(tabbableIndex);
+      useStableGetter(tabbableIndex);
       s(-Infinity); // Call the hook that allows us to collect information from children who provide it
 
       const {
@@ -3106,9 +3180,8 @@
           element,
           getElement,
           useManagedChildProps
-        } = useManagedChild(newInfo); // TODO: Using getTabbableIndex during render phase on mount
-
-        const [tabbable, setTabbable] = useState(getTabbableIndex() == info.index);
+        } = useManagedChild(newInfo);
+        const [tabbable, setTabbable] = useState(null);
         y(() => {
           if (element && tabbable) {
             setRerenderAndFocus(_ => rerenderAndFocus);
@@ -3163,41 +3236,6 @@
         focusCurrent: rerenderAndFocus,
         ...rest
       };
-    }
-
-    /**
-     * Wrap the native `useEffect` to add arguments
-     * that allow accessing the previous value as the first argument,
-     * as well as the changes that caused the hook to be called as the second argument.
-     *
-     * @param effect
-     * @param inputs
-     */
-
-    function useEffect(effect, inputs) {
-      const prevInputs = s(inputs);
-
-      const effect2 = () => {
-        let changes = [];
-
-        for (let i = 0; i < Math.max(prevInputs.current.length, inputs.length); ++i) {
-          if (prevInputs.current[i] != inputs[i]) changes[i] = {
-            from: prevInputs.current[i],
-            to: inputs[i]
-          };
-        }
-
-        const ret = effect(prevInputs.current, changes);
-        prevInputs.current = inputs;
-        return ret;
-      };
-
-      y(effect2, inputs);
-    }
-
-    function useForceUpdate() {
-      const [, set] = l(0);
-      return s(() => set(i => ++i)).current;
     }
 
     function identity$1(t) {
@@ -3523,64 +3561,21 @@
       }, [target, type, stableHandler]);
     }
 
-    /**
-     *
-     * There are several different ways that a focus event can happen.  Assume
-     * the following steps happen in order:
-     *
-     * 1. The page loads.
-     *    * Nothing is focused, but `document.activeElement` is `body`.
-     *    * No focus events are fired.
-     * 2. The window is focused, an unfocusable element is clicked, text is selected, etc.
-     *    * The `activeElement` remains as `body`.
-     *    * A `focus`/`focusin` event *MIGHT* be fired for `body`. Depending on
-     *      the browser, this depends on whether the handler was attached to `window` or `document`.
-     *      Probably just best to not rely on it, or listen to `window` focus events directly.
-     * 3. A focusable element is clicked, etc.
-     *    * The `activeElement` is set to the new element before any event even fires.
-     *    * `focusout` and `blur` are *not* fired on `body`.
-     *    * `focus` and `focusin` are fired on the new element. `relatedTarget` is null.
-     * 4. A focusable element is clicked, etc.
-     *    * **The `activeElement` is set to the `body`** before any event even fires.
-     *    * `blur` and `focusout` are fired on the old element. `relatedTarget` is the new element.
-     *    * The `activeElement` is now set to the new element.
-     *    * `focusin` is fired on the new element. `relatedTarget` is the old element.
-     * 5. An unfocusable element is clicked, text is selected, etc.
-     *    * The `activeElement` is set to `body`.
-     *    * `blur` and `focusout` are fired on the old element. `relatedTarget` is null.
-     *    * `focusin` is *not* fired on `body`.
-     *
-     *
-     * In summary:
-     * 1. Focus events *do* notify us of all changes in focus, but there is no one single comprehensive event that provides us with all available information.
-     * 2. `document.activeElement` *is not* always the same as what's being referenced by a focus event. In particular, it may become `body` at any arbitrary time.
-     * 3. A `blur` without a `focus` can and will occur. This means it is not possible to solely use `focus` to detect all changes.
-     * 4. A `blur` event whose `relatedTarget` is null indicates that there will be no following `focus` event.
-     *
-     *
-     * @param callback
-     * @returns
-     */
-
-    let currentlyFocusedElement = null;
-    let lastFocusedElement = null;
-
     const activeElementUpdaters = new Set();
     const lastActiveElementUpdaters = new Set();
     const windowFocusedUpdaters = new Set();
 
     function focusout(e) {
       if (e.relatedTarget == null) {
-        currentlyFocusedElement = null;
-
-        for (let f of activeElementUpdaters) f === null || f === void 0 ? void 0 : f(currentlyFocusedElement);
+        for (let f of activeElementUpdaters) f === null || f === void 0 ? void 0 : f(null);
       }
     }
 
     function focusin(e) {
-      currentlyFocusedElement = lastFocusedElement = e.target;
+      let currentlyFocusedElement = e.target;
+      let lastFocusedElement = e.target;
       activeElementUpdaters.forEach(f => f === null || f === void 0 ? void 0 : f(currentlyFocusedElement));
-      lastActiveElementUpdaters.forEach(f => f === null || f === void 0 ? void 0 : f(lastFocusedElement)); //for (let f of updaters) { f({ current: currentlyFocusedElement, last: lastFocusedElement, windowFocused }); }
+      lastActiveElementUpdaters.forEach(f => f === null || f === void 0 ? void 0 : f(lastFocusedElement));
     }
 
     function windowFocus() {
@@ -3596,6 +3591,9 @@
       setLastActiveElement,
       setWindowFocused
     }) {
+      const stableSetActiveElement = useStableCallback(setActiveElement !== null && setActiveElement !== void 0 ? setActiveElement : () => {});
+      const stableSetLastActiveElement = useStableCallback(setLastActiveElement !== null && setLastActiveElement !== void 0 ? setLastActiveElement : () => {});
+      const stableSetWindowFocused = useStableCallback(setWindowFocused !== null && setWindowFocused !== void 0 ? setWindowFocused : () => {});
       h(() => {
         if (activeElementUpdaters.size === 0) {
           document.addEventListener("focusin", focusin, {
@@ -3614,13 +3612,13 @@
         // manage the ">0 means don't add handlers" logic.
 
 
-        activeElementUpdaters.add(setActiveElement);
-        lastActiveElementUpdaters.add(setLastActiveElement);
-        windowFocusedUpdaters.add(setWindowFocused);
+        activeElementUpdaters.add(stableSetActiveElement);
+        lastActiveElementUpdaters.add(stableSetLastActiveElement);
+        windowFocusedUpdaters.add(stableSetWindowFocused);
         return () => {
-          activeElementUpdaters.delete(setActiveElement);
-          lastActiveElementUpdaters.delete(setLastActiveElement);
-          windowFocusedUpdaters.delete(setWindowFocused);
+          activeElementUpdaters.delete(stableSetActiveElement);
+          lastActiveElementUpdaters.delete(stableSetLastActiveElement);
+          windowFocusedUpdaters.delete(stableSetWindowFocused);
 
           if (activeElementUpdaters.size === 0) {
             document.removeEventListener("focusin", focusin);
@@ -3629,7 +3627,7 @@
             window.removeEventListener("blur", windowBlur);
           }
         };
-      }, [setActiveElement, setLastActiveElement, setWindowFocused]);
+      }, []);
     }
 
     function useHasFocus({
@@ -4007,430 +4005,6 @@
 
       return isNodeMatchingSelectorFocusable(options, node);
     };
-
-    /**
-     * @license
-     * Copyright 2016 Google Inc. All rights reserved.
-     *
-     * Licensed under the Apache License, Version 2.0 (the "License");
-     * you may not use this file except in compliance with the License.
-     * You may obtain a copy of the License at
-     *
-     *     http://www.apache.org/licenses/LICENSE-2.0
-     *
-     * Unless required by applicable law or agreed to in writing, software
-     * distributed under the License is distributed on an "AS IS" BASIS,
-     * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-     * See the License for the specific language governing permissions and
-     * limitations under the License.
-     */
-    (() => {
-      var _a, _b, _c;
-      /* Symbols for private properties */
-
-
-      const _blockingElements = Symbol();
-
-      const _alreadyInertElements = Symbol();
-
-      const _topElParents = Symbol();
-
-      const _siblingsToRestore = Symbol();
-
-      const _parentMO = Symbol();
-      /* Symbols for private static methods */
-
-
-      const _topChanged = Symbol();
-
-      const _swapInertedSibling = Symbol();
-
-      const _inertSiblings = Symbol();
-
-      const _restoreInertedSiblings = Symbol();
-
-      const _getParents = Symbol();
-
-      const _getDistributedChildren = Symbol();
-
-      const _isInertable = Symbol();
-
-      const _handleMutations = Symbol();
-
-      class BlockingElementsImpl {
-        constructor() {
-          /**
-           * The blocking elements.
-           */
-          this[_a] = [];
-          /**
-           * Used to keep track of the parents of the top element, from the element
-           * itself up to body. When top changes, the old top might have been removed
-           * from the document, so we need to memoize the inerted parents' siblings
-           * in order to restore their inerteness when top changes.
-           */
-
-          this[_b] = [];
-          /**
-           * Elements that are already inert before the first blocking element is
-           * pushed.
-           */
-
-          this[_c] = new Set();
-        }
-
-        destructor() {
-          // Restore original inertness.
-          this[_restoreInertedSiblings](this[_topElParents]); // Note we don't want to make these properties nullable on the class,
-          // since then we'd need non-null casts in many places. Calling a method on
-          // a BlockingElements instance after calling destructor will result in an
-          // exception.
-
-
-          const nullable = this;
-          nullable[_blockingElements] = null;
-          nullable[_topElParents] = null;
-          nullable[_alreadyInertElements] = null;
-        }
-
-        get top() {
-          const elems = this[_blockingElements];
-          return elems[elems.length - 1] || null;
-        }
-
-        push(element) {
-          if (!element || element === this.top) {
-            return;
-          } // Remove it from the stack, we'll bring it to the top.
-
-
-          this.remove(element);
-
-          this[_topChanged](element);
-
-          this[_blockingElements].push(element);
-        }
-
-        remove(element) {
-          const i = this[_blockingElements].indexOf(element);
-
-          if (i === -1) {
-            return false;
-          }
-
-          this[_blockingElements].splice(i, 1); // Top changed only if the removed element was the top element.
-
-
-          if (i === this[_blockingElements].length) {
-            this[_topChanged](this.top);
-          }
-
-          return true;
-        }
-
-        pop() {
-          const top = this.top;
-          top && this.remove(top);
-          return top;
-        }
-
-        has(element) {
-          return this[_blockingElements].indexOf(element) !== -1;
-        }
-        /**
-         * Sets `inert` to all document elements except the new top element, its
-         * parents, and its distributed content.
-         */
-
-
-        [(_a = _blockingElements, _b = _topElParents, _c = _alreadyInertElements, _topChanged)](newTop) {
-          const toKeepInert = this[_alreadyInertElements];
-          const oldParents = this[_topElParents]; // No new top, reset old top if any.
-
-          if (!newTop) {
-            this[_restoreInertedSiblings](oldParents);
-
-            toKeepInert.clear();
-            this[_topElParents] = [];
-            return;
-          }
-
-          const newParents = this[_getParents](newTop); // New top is not contained in the main document!
-
-
-          if (newParents[newParents.length - 1].parentNode !== document.body) {
-            throw Error('Non-connected element cannot be a blocking element');
-          } // Cast here because we know we'll call _inertSiblings on newParents
-          // below.
-
-
-          this[_topElParents] = newParents;
-
-          const toSkip = this[_getDistributedChildren](newTop); // No previous top element.
-
-
-          if (!oldParents.length) {
-            this[_inertSiblings](newParents, toSkip, toKeepInert);
-
-            return;
-          }
-
-          let i = oldParents.length - 1;
-          let j = newParents.length - 1; // Find common parent. Index 0 is the element itself (so stop before it).
-
-          while (i > 0 && j > 0 && oldParents[i] === newParents[j]) {
-            i--;
-            j--;
-          } // If up the parents tree there are 2 elements that are siblings, swap
-          // the inerted sibling.
-
-
-          if (oldParents[i] !== newParents[j]) {
-            this[_swapInertedSibling](oldParents[i], newParents[j]);
-          } // Restore old parents siblings inertness.
-
-
-          i > 0 && this[_restoreInertedSiblings](oldParents.slice(0, i)); // Make new parents siblings inert.
-
-          j > 0 && this[_inertSiblings](newParents.slice(0, j), toSkip, null);
-        }
-        /**
-         * Swaps inertness between two sibling elements.
-         * Sets the property `inert` over the attribute since the inert spec
-         * doesn't specify if it should be reflected.
-         * https://html.spec.whatwg.org/multipage/interaction.html#inert
-         */
-
-
-        [_swapInertedSibling](oldInert, newInert) {
-          const siblingsToRestore = oldInert[_siblingsToRestore]; // oldInert is not contained in siblings to restore, so we have to check
-          // if it's inertable and if already inert.
-
-          if (this[_isInertable](oldInert) && !oldInert.inert) {
-            oldInert.inert = true;
-            siblingsToRestore.add(oldInert);
-          } // If newInert was already between the siblings to restore, it means it is
-          // inertable and must be restored.
-
-
-          if (siblingsToRestore.has(newInert)) {
-            newInert.inert = false;
-            siblingsToRestore.delete(newInert);
-          }
-
-          newInert[_parentMO] = oldInert[_parentMO];
-          newInert[_siblingsToRestore] = siblingsToRestore;
-          oldInert[_parentMO] = undefined;
-          oldInert[_siblingsToRestore] = undefined;
-        }
-        /**
-         * Restores original inertness to the siblings of the elements.
-         * Sets the property `inert` over the attribute since the inert spec
-         * doesn't specify if it should be reflected.
-         * https://html.spec.whatwg.org/multipage/interaction.html#inert
-         */
-
-
-        [_restoreInertedSiblings](elements) {
-          for (const element of elements) {
-            const mo = element[_parentMO];
-            mo.disconnect();
-            element[_parentMO] = undefined;
-            const siblings = element[_siblingsToRestore];
-
-            for (const sibling of siblings) {
-              sibling.inert = false;
-            }
-
-            element[_siblingsToRestore] = undefined;
-          }
-        }
-        /**
-         * Inerts the siblings of the elements except the elements to skip. Stores
-         * the inerted siblings into the element's symbol `_siblingsToRestore`.
-         * Pass `toKeepInert` to collect the already inert elements.
-         * Sets the property `inert` over the attribute since the inert spec
-         * doesn't specify if it should be reflected.
-         * https://html.spec.whatwg.org/multipage/interaction.html#inert
-         */
-
-
-        [_inertSiblings](elements, toSkip, toKeepInert) {
-          for (const element of elements) {
-            // Assume element is not a Document, so it must have a parentNode.
-            const parent = element.parentNode;
-            const children = parent.children;
-            const inertedSiblings = new Set();
-
-            for (let j = 0; j < children.length; j++) {
-              const sibling = children[j]; // Skip the input element, if not inertable or to be skipped.
-
-              if (sibling === element || !this[_isInertable](sibling) || toSkip && toSkip.has(sibling)) {
-                continue;
-              } // Should be collected since already inerted.
-
-
-              if (toKeepInert && sibling.inert) {
-                toKeepInert.add(sibling);
-              } else {
-                sibling.inert = true;
-                inertedSiblings.add(sibling);
-              }
-            } // Store the siblings that were inerted.
-
-
-            element[_siblingsToRestore] = inertedSiblings; // Observe only immediate children mutations on the parent.
-
-            const mo = new MutationObserver(this[_handleMutations].bind(this));
-            element[_parentMO] = mo;
-            let parentToObserve = parent; // If we're using the ShadyDOM polyfill, then our parent could be a
-            // shady root, which is an object that acts like a ShadowRoot, but isn't
-            // actually a node in the real DOM. Observe the real DOM parent instead.
-
-            const maybeShadyRoot = parentToObserve;
-
-            if (maybeShadyRoot.__shady && maybeShadyRoot.host) {
-              parentToObserve = maybeShadyRoot.host;
-            }
-
-            mo.observe(parentToObserve, {
-              childList: true
-            });
-          }
-        }
-        /**
-         * Handles newly added/removed nodes by toggling their inertness.
-         * It also checks if the current top Blocking Element has been removed,
-         * notifying and removing it.
-         */
-
-
-        [_handleMutations](mutations) {
-          const parents = this[_topElParents];
-          const toKeepInert = this[_alreadyInertElements];
-
-          for (const mutation of mutations) {
-            // If the target is a shadowRoot, get its host as we skip shadowRoots when
-            // computing _topElParents.
-            const target = mutation.target.host || mutation.target;
-            const idx = target === document.body ? parents.length : parents.indexOf(target);
-            const inertedChild = parents[idx - 1];
-            const inertedSiblings = inertedChild[_siblingsToRestore]; // To restore.
-
-            for (let i = 0; i < mutation.removedNodes.length; i++) {
-              const sibling = mutation.removedNodes[i];
-
-              if (sibling === inertedChild) {
-                console.info('Detected removal of the top Blocking Element.');
-                this.pop();
-                return;
-              }
-
-              if (inertedSiblings.has(sibling)) {
-                sibling.inert = false;
-                inertedSiblings.delete(sibling);
-              }
-            } // To inert.
-
-
-            for (let i = 0; i < mutation.addedNodes.length; i++) {
-              const sibling = mutation.addedNodes[i];
-
-              if (!this[_isInertable](sibling)) {
-                continue;
-              }
-
-              if (toKeepInert && sibling.inert) {
-                toKeepInert.add(sibling);
-              } else {
-                sibling.inert = true;
-                inertedSiblings.add(sibling);
-              }
-            }
-          }
-        }
-        /**
-         * Returns if the element is inertable.
-         */
-
-
-        [_isInertable](element) {
-          return false === /^(style|template|script)$/.test(element.localName);
-        }
-        /**
-         * Returns the list of newParents of an element, starting from element
-         * (included) up to `document.body` (excluded).
-         */
-
-
-        [_getParents](element) {
-          const parents = [];
-          let current = element; // Stop to body.
-
-          while (current && current !== document.body) {
-            // Skip shadow roots.
-            if (current.nodeType === Node.ELEMENT_NODE) {
-              parents.push(current);
-            } // ShadowDom v1
-
-
-            if (current.assignedSlot) {
-              // Collect slots from deepest slot to top.
-              while (current = current.assignedSlot) {
-                parents.push(current);
-              } // Continue the search on the top slot.
-
-
-              current = parents.pop();
-              continue;
-            }
-
-            current = current.parentNode || current.host;
-          }
-
-          return parents;
-        }
-        /**
-         * Returns the distributed children of the element's shadow root.
-         * Returns null if the element doesn't have a shadow root.
-         */
-
-
-        [_getDistributedChildren](element) {
-          const shadowRoot = element.shadowRoot;
-
-          if (!shadowRoot) {
-            return null;
-          }
-
-          const result = new Set();
-          let i;
-          let j;
-          let nodes;
-          const slots = shadowRoot.querySelectorAll('slot');
-
-          if (slots.length && slots[0].assignedNodes) {
-            for (i = 0; i < slots.length; i++) {
-              nodes = slots[i].assignedNodes({
-                flatten: true
-              });
-
-              for (j = 0; j < nodes.length; j++) {
-                if (nodes[j].nodeType === Node.ELEMENT_NODE) {
-                  result.add(nodes[j]);
-                }
-              }
-            } // No need to search for <content>.
-
-          }
-
-          return result;
-        }
-
-      }
-
-      document.$blockingElements = new BlockingElementsImpl();
-    })();
 
     createCommonjsModule(function (module, exports) {
       (function (global, factory) {
@@ -5360,6 +4934,430 @@
         })();
       });
     });
+
+    /**
+     * @license
+     * Copyright 2016 Google Inc. All rights reserved.
+     *
+     * Licensed under the Apache License, Version 2.0 (the "License");
+     * you may not use this file except in compliance with the License.
+     * You may obtain a copy of the License at
+     *
+     *     http://www.apache.org/licenses/LICENSE-2.0
+     *
+     * Unless required by applicable law or agreed to in writing, software
+     * distributed under the License is distributed on an "AS IS" BASIS,
+     * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     * See the License for the specific language governing permissions and
+     * limitations under the License.
+     */
+    (() => {
+      var _a, _b, _c;
+      /* Symbols for private properties */
+
+
+      const _blockingElements = Symbol();
+
+      const _alreadyInertElements = Symbol();
+
+      const _topElParents = Symbol();
+
+      const _siblingsToRestore = Symbol();
+
+      const _parentMO = Symbol();
+      /* Symbols for private static methods */
+
+
+      const _topChanged = Symbol();
+
+      const _swapInertedSibling = Symbol();
+
+      const _inertSiblings = Symbol();
+
+      const _restoreInertedSiblings = Symbol();
+
+      const _getParents = Symbol();
+
+      const _getDistributedChildren = Symbol();
+
+      const _isInertable = Symbol();
+
+      const _handleMutations = Symbol();
+
+      class BlockingElementsImpl {
+        constructor() {
+          /**
+           * The blocking elements.
+           */
+          this[_a] = [];
+          /**
+           * Used to keep track of the parents of the top element, from the element
+           * itself up to body. When top changes, the old top might have been removed
+           * from the document, so we need to memoize the inerted parents' siblings
+           * in order to restore their inerteness when top changes.
+           */
+
+          this[_b] = [];
+          /**
+           * Elements that are already inert before the first blocking element is
+           * pushed.
+           */
+
+          this[_c] = new Set();
+        }
+
+        destructor() {
+          // Restore original inertness.
+          this[_restoreInertedSiblings](this[_topElParents]); // Note we don't want to make these properties nullable on the class,
+          // since then we'd need non-null casts in many places. Calling a method on
+          // a BlockingElements instance after calling destructor will result in an
+          // exception.
+
+
+          const nullable = this;
+          nullable[_blockingElements] = null;
+          nullable[_topElParents] = null;
+          nullable[_alreadyInertElements] = null;
+        }
+
+        get top() {
+          const elems = this[_blockingElements];
+          return elems[elems.length - 1] || null;
+        }
+
+        push(element) {
+          if (!element || element === this.top) {
+            return;
+          } // Remove it from the stack, we'll bring it to the top.
+
+
+          this.remove(element);
+
+          this[_topChanged](element);
+
+          this[_blockingElements].push(element);
+        }
+
+        remove(element) {
+          const i = this[_blockingElements].indexOf(element);
+
+          if (i === -1) {
+            return false;
+          }
+
+          this[_blockingElements].splice(i, 1); // Top changed only if the removed element was the top element.
+
+
+          if (i === this[_blockingElements].length) {
+            this[_topChanged](this.top);
+          }
+
+          return true;
+        }
+
+        pop() {
+          const top = this.top;
+          top && this.remove(top);
+          return top;
+        }
+
+        has(element) {
+          return this[_blockingElements].indexOf(element) !== -1;
+        }
+        /**
+         * Sets `inert` to all document elements except the new top element, its
+         * parents, and its distributed content.
+         */
+
+
+        [(_a = _blockingElements, _b = _topElParents, _c = _alreadyInertElements, _topChanged)](newTop) {
+          const toKeepInert = this[_alreadyInertElements];
+          const oldParents = this[_topElParents]; // No new top, reset old top if any.
+
+          if (!newTop) {
+            this[_restoreInertedSiblings](oldParents);
+
+            toKeepInert.clear();
+            this[_topElParents] = [];
+            return;
+          }
+
+          const newParents = this[_getParents](newTop); // New top is not contained in the main document!
+
+
+          if (newParents[newParents.length - 1].parentNode !== document.body) {
+            throw Error('Non-connected element cannot be a blocking element');
+          } // Cast here because we know we'll call _inertSiblings on newParents
+          // below.
+
+
+          this[_topElParents] = newParents;
+
+          const toSkip = this[_getDistributedChildren](newTop); // No previous top element.
+
+
+          if (!oldParents.length) {
+            this[_inertSiblings](newParents, toSkip, toKeepInert);
+
+            return;
+          }
+
+          let i = oldParents.length - 1;
+          let j = newParents.length - 1; // Find common parent. Index 0 is the element itself (so stop before it).
+
+          while (i > 0 && j > 0 && oldParents[i] === newParents[j]) {
+            i--;
+            j--;
+          } // If up the parents tree there are 2 elements that are siblings, swap
+          // the inerted sibling.
+
+
+          if (oldParents[i] !== newParents[j]) {
+            this[_swapInertedSibling](oldParents[i], newParents[j]);
+          } // Restore old parents siblings inertness.
+
+
+          i > 0 && this[_restoreInertedSiblings](oldParents.slice(0, i)); // Make new parents siblings inert.
+
+          j > 0 && this[_inertSiblings](newParents.slice(0, j), toSkip, null);
+        }
+        /**
+         * Swaps inertness between two sibling elements.
+         * Sets the property `inert` over the attribute since the inert spec
+         * doesn't specify if it should be reflected.
+         * https://html.spec.whatwg.org/multipage/interaction.html#inert
+         */
+
+
+        [_swapInertedSibling](oldInert, newInert) {
+          const siblingsToRestore = oldInert[_siblingsToRestore]; // oldInert is not contained in siblings to restore, so we have to check
+          // if it's inertable and if already inert.
+
+          if (this[_isInertable](oldInert) && !oldInert.inert) {
+            oldInert.inert = true;
+            siblingsToRestore.add(oldInert);
+          } // If newInert was already between the siblings to restore, it means it is
+          // inertable and must be restored.
+
+
+          if (siblingsToRestore.has(newInert)) {
+            newInert.inert = false;
+            siblingsToRestore.delete(newInert);
+          }
+
+          newInert[_parentMO] = oldInert[_parentMO];
+          newInert[_siblingsToRestore] = siblingsToRestore;
+          oldInert[_parentMO] = undefined;
+          oldInert[_siblingsToRestore] = undefined;
+        }
+        /**
+         * Restores original inertness to the siblings of the elements.
+         * Sets the property `inert` over the attribute since the inert spec
+         * doesn't specify if it should be reflected.
+         * https://html.spec.whatwg.org/multipage/interaction.html#inert
+         */
+
+
+        [_restoreInertedSiblings](elements) {
+          for (const element of elements) {
+            const mo = element[_parentMO];
+            mo.disconnect();
+            element[_parentMO] = undefined;
+            const siblings = element[_siblingsToRestore];
+
+            for (const sibling of siblings) {
+              sibling.inert = false;
+            }
+
+            element[_siblingsToRestore] = undefined;
+          }
+        }
+        /**
+         * Inerts the siblings of the elements except the elements to skip. Stores
+         * the inerted siblings into the element's symbol `_siblingsToRestore`.
+         * Pass `toKeepInert` to collect the already inert elements.
+         * Sets the property `inert` over the attribute since the inert spec
+         * doesn't specify if it should be reflected.
+         * https://html.spec.whatwg.org/multipage/interaction.html#inert
+         */
+
+
+        [_inertSiblings](elements, toSkip, toKeepInert) {
+          for (const element of elements) {
+            // Assume element is not a Document, so it must have a parentNode.
+            const parent = element.parentNode;
+            const children = parent.children;
+            const inertedSiblings = new Set();
+
+            for (let j = 0; j < children.length; j++) {
+              const sibling = children[j]; // Skip the input element, if not inertable or to be skipped.
+
+              if (sibling === element || !this[_isInertable](sibling) || toSkip && toSkip.has(sibling)) {
+                continue;
+              } // Should be collected since already inerted.
+
+
+              if (toKeepInert && sibling.inert) {
+                toKeepInert.add(sibling);
+              } else {
+                sibling.inert = true;
+                inertedSiblings.add(sibling);
+              }
+            } // Store the siblings that were inerted.
+
+
+            element[_siblingsToRestore] = inertedSiblings; // Observe only immediate children mutations on the parent.
+
+            const mo = new MutationObserver(this[_handleMutations].bind(this));
+            element[_parentMO] = mo;
+            let parentToObserve = parent; // If we're using the ShadyDOM polyfill, then our parent could be a
+            // shady root, which is an object that acts like a ShadowRoot, but isn't
+            // actually a node in the real DOM. Observe the real DOM parent instead.
+
+            const maybeShadyRoot = parentToObserve;
+
+            if (maybeShadyRoot.__shady && maybeShadyRoot.host) {
+              parentToObserve = maybeShadyRoot.host;
+            }
+
+            mo.observe(parentToObserve, {
+              childList: true
+            });
+          }
+        }
+        /**
+         * Handles newly added/removed nodes by toggling their inertness.
+         * It also checks if the current top Blocking Element has been removed,
+         * notifying and removing it.
+         */
+
+
+        [_handleMutations](mutations) {
+          const parents = this[_topElParents];
+          const toKeepInert = this[_alreadyInertElements];
+
+          for (const mutation of mutations) {
+            // If the target is a shadowRoot, get its host as we skip shadowRoots when
+            // computing _topElParents.
+            const target = mutation.target.host || mutation.target;
+            const idx = target === document.body ? parents.length : parents.indexOf(target);
+            const inertedChild = parents[idx - 1];
+            const inertedSiblings = inertedChild[_siblingsToRestore]; // To restore.
+
+            for (let i = 0; i < mutation.removedNodes.length; i++) {
+              const sibling = mutation.removedNodes[i];
+
+              if (sibling === inertedChild) {
+                console.info('Detected removal of the top Blocking Element.');
+                this.pop();
+                return;
+              }
+
+              if (inertedSiblings.has(sibling)) {
+                sibling.inert = false;
+                inertedSiblings.delete(sibling);
+              }
+            } // To inert.
+
+
+            for (let i = 0; i < mutation.addedNodes.length; i++) {
+              const sibling = mutation.addedNodes[i];
+
+              if (!this[_isInertable](sibling)) {
+                continue;
+              }
+
+              if (toKeepInert && sibling.inert) {
+                toKeepInert.add(sibling);
+              } else {
+                sibling.inert = true;
+                inertedSiblings.add(sibling);
+              }
+            }
+          }
+        }
+        /**
+         * Returns if the element is inertable.
+         */
+
+
+        [_isInertable](element) {
+          return false === /^(style|template|script)$/.test(element.localName);
+        }
+        /**
+         * Returns the list of newParents of an element, starting from element
+         * (included) up to `document.body` (excluded).
+         */
+
+
+        [_getParents](element) {
+          const parents = [];
+          let current = element; // Stop to body.
+
+          while (current && current !== document.body) {
+            // Skip shadow roots.
+            if (current.nodeType === Node.ELEMENT_NODE) {
+              parents.push(current);
+            } // ShadowDom v1
+
+
+            if (current.assignedSlot) {
+              // Collect slots from deepest slot to top.
+              while (current = current.assignedSlot) {
+                parents.push(current);
+              } // Continue the search on the top slot.
+
+
+              current = parents.pop();
+              continue;
+            }
+
+            current = current.parentNode || current.host;
+          }
+
+          return parents;
+        }
+        /**
+         * Returns the distributed children of the element's shadow root.
+         * Returns null if the element doesn't have a shadow root.
+         */
+
+
+        [_getDistributedChildren](element) {
+          const shadowRoot = element.shadowRoot;
+
+          if (!shadowRoot) {
+            return null;
+          }
+
+          const result = new Set();
+          let i;
+          let j;
+          let nodes;
+          const slots = shadowRoot.querySelectorAll('slot');
+
+          if (slots.length && slots[0].assignedNodes) {
+            for (i = 0; i < slots.length; i++) {
+              nodes = slots[i].assignedNodes({
+                flatten: true
+              });
+
+              for (j = 0; j < nodes.length; j++) {
+                if (nodes[j].nodeType === Node.ELEMENT_NODE) {
+                  result.add(nodes[j]);
+                }
+              }
+            } // No need to search for <content>.
+
+          }
+
+          return result;
+        }
+
+      }
+
+      document.$blockingElements = new BlockingElementsImpl();
+    })();
 
     const blockingElements = document.$blockingElements;
     /**
@@ -7616,18 +7614,7 @@
       selectionMode,
       ...args
     }) {
-      const [focusedInner, setFocusedInner, getFocusedInner] = useState(false);
-      const {
-        useHasFocusProps
-      } = useHasFocus({
-        setFocusedInner: A$1(focused => {
-          if (!focused) {
-            setTabbableIndex(selectedIndex);
-          }
-
-          setFocusedInner(focused);
-        }, [selectedIndex])
-      });
+      const [anyItemsFocused, setAnyItemsFocused, getAnyItemsFocused] = useState(false);
       const {
         useGenericLabelInput,
         useGenericLabelLabel,
@@ -7648,12 +7635,20 @@
         currentTypeahead,
         invalidTypeahead
       } = useListNavigation({ ...args,
-        shouldFocusOnChange: getFocusedInner
+        shouldFocusOnChange: getAnyItemsFocused
       });
       const {
         useGenericLabelInputProps
       } = useGenericLabelInput();
-      const stableOnSelect = useStableCallback(onSelect !== null && onSelect !== void 0 ? onSelect : () => {});
+      const stableOnSelect = useStableCallback(onSelect !== null && onSelect !== void 0 ? onSelect : () => {}); // Track whether the currently focused element is a child of the list box parent element.
+      // When it's not, we reset the tabbable index back to the currently selected element.
+
+      useActiveElement({
+        setActiveElement: activeElement => setAnyItemsFocused(!!(inputElement !== null && inputElement !== void 0 && inputElement.contains(activeElement)))
+      });
+      y(() => {
+        if (!anyItemsFocused) setTabbableIndex(selectedIndex);
+      }, [anyItemsFocused, selectedIndex, setTabbableIndex]);
       useChildFlag(selectedIndex, managedChildren.length, (i, selected) => {
         var _managedChildren$i;
 
@@ -7739,7 +7734,7 @@
 
       function useListboxSingleProps(props) {
         props.role = "listbox";
-        return useHasFocusProps(useGenericLabelInputProps(props));
+        return useGenericLabelInputProps(props);
       }
     }
 
@@ -7866,11 +7861,7 @@
         }, [element]);
         return {
           useMenuButtonProps: function (p) {
-            let props = useRefElementProps(useMergedProps()({
-              onClick: () => {
-                return open ? onClose === null || onClose === void 0 ? void 0 : onClose() : onOpen === null || onOpen === void 0 ? void 0 : onOpen();
-              }
-            }, useMenuIdReferencingProps("aria-controls")(useButtonHasFocusProps(p))));
+            let props = useRefElementProps(useMergedProps()({}, useMenuIdReferencingProps("aria-controls")(useButtonHasFocusProps(p))));
             props["aria-haspopup"] = "menu";
             props["aria-expanded"] = open ? "true" : undefined;
             return props;
@@ -8207,7 +8198,7 @@
       onInput
     }) {
       const {
-        element,
+        element: radioGroupParentElement,
         useRefElementProps
       } = useRefElement();
       const getSelectedIndex = A$1(selectedValue => {
@@ -8217,21 +8208,7 @@
       }, []);
       const byName = s(new Map());
       const stableOnInput = useStableCallback(onInput);
-      const [focusedInner, setFocusedInner, getFocusedInner] = useState(false);
-      const {
-        useHasFocusProps
-      } = useHasFocus({
-        setFocusedInner: A$1(focused => {
-          const selectedIndex = getSelectedIndex(selectedValue);
-          console.assert(selectedIndex != null);
-
-          if (!focused) {
-            setTabbableIndex(selectedIndex);
-          }
-
-          setFocusedInner(focused);
-        }, [selectedValue])
-      });
+      const [anyRadiosFocused, setAnyRadiosFocused, getAnyRadiosFocused] = useState(false);
       const {
         managedChildren,
         useListNavigationChild,
@@ -8241,13 +8218,21 @@
         currentTypeahead,
         invalidTypeahead
       } = useListNavigation({
-        shouldFocusOnChange: getFocusedInner
+        shouldFocusOnChange: getAnyRadiosFocused
+      }); // Track whether the currently focused element is a child of the radio group parent element.
+      // When it's not, we reset the tabbable index back to the currently selected element.
+
+      useActiveElement({
+        setActiveElement: activeElement => setAnyRadiosFocused(!!(radioGroupParentElement !== null && radioGroupParentElement !== void 0 && radioGroupParentElement.contains(activeElement)))
       });
+      y(() => {
+        if (!anyRadiosFocused) setTabbableIndex(getSelectedIndex(selectedValue));
+      }, [anyRadiosFocused, getSelectedIndex(selectedValue), setTabbableIndex]);
       const useRadioGroupProps = A$1(({ ...props
       }) => {
         props.role = "radiogroup";
-        return useRefElementProps(useHasFocusProps(props));
-      }, [useHasFocusProps, useRefElementProps]);
+        return useRefElementProps(props);
+      }, [useRefElementProps]);
       useChildFlag(getSelectedIndex(selectedValue), managedChildren.length, (i, checked) => {
         var _managedChildren$i;
 
@@ -8621,11 +8606,17 @@
         // and it work just as well.
 
         const recreateChildWithSortedKey = A$1(function ensortenChild(originalChildren, unsortedIndex) {
-          const sortedIndex = indexMangler(unsortedIndex);
-          originalChildren[unsortedIndex];
+          const sortedIndex = indexMangler(unsortedIndex); // TODO: A bit of cheating here ensures that when a row unmounts while we're still
+          // "borrowing" its data to show as our own, we'll instead just default to showing
+          // ourselves (imagine a table sorted in reverse order, then row #100 unmounts while
+          // row #0 is still displaying it).  This should probably be handled a bit more robustly.
+
+          let unsortedChild = originalChildren[unsortedIndex];
           let sortedChild = originalChildren[sortedIndex];
-          return v$1(sortedChild.type, { ...sortedChild.props,
-            key: sortedIndex
+          let childToImitate = sortedChild !== null && sortedChild !== void 0 ? sortedChild : unsortedChild;
+          let key = sortedChild ? sortedIndex : unsortedIndex;
+          return v$1(childToImitate.type, { ...childToImitate.props,
+            key
           });
         }, []); // Actually implement grid navigation
 
@@ -12735,7 +12726,7 @@
 
       return placement;
     }
-    function useShouldUpdatePopper(open, elementSize) {
+    function useShouldUpdatePopper(open) {
       // Since scroll events are asynchronous, especially on iOS devices,
       // just manually adjust the position of the popper for a bit
       // any time basically any user interaction happens.
@@ -12771,11 +12762,6 @@
         passive: true,
         capture: true
       });
-      y(() => {
-        var _onInteraction;
-
-        (_onInteraction = onInteraction) === null || _onInteraction === void 0 ? void 0 : _onInteraction();
-      }, Object.values(elementSize !== null && elementSize !== void 0 ? elementSize : {}));
       return {
         shouldUpdate: !!updatingForABit,
         onInteraction
@@ -12831,6 +12817,7 @@
     const UseMenuItemContext = D$1(null);
     function Menu({
       anchor,
+      anchorEventName,
       anchorTag,
       children,
       tag,
@@ -12843,13 +12830,18 @@
       const onOpen = () => setOpen(true);
 
       const {
-        useElementSizeProps,
-        elementSize
-      } = useElementSize();
-      const {
         shouldUpdate: updatingForABit,
         onInteraction
-      } = useShouldUpdatePopper(open, elementSize);
+      } = useShouldUpdatePopper(open);
+      const [size, setSize] = useState(null);
+      const {
+        useElementSizeProps
+      } = useElementSize({
+        setSize: size => setSize(prevSize => JSON.stringify(size))
+      });
+      y(() => {
+        onInteraction === null || onInteraction === void 0 ? void 0 : onInteraction();
+      }, [onInteraction, size]);
       const {
         usePopperArrow,
         usePopperPopup,
@@ -12911,14 +12903,18 @@
       }, "Close menu"));
       const logicalDirection = getLogicalDirection();
       if (logicalDirection && usedPlacement) rest = fixProps(logicalDirection, "block-end", usedPlacement, rest);
+
+      const onAnchorClick = () => setOpen(open => !open);
+
       return v$1(d$1, null, v$1(OnCloseContext.Provider, {
         value: onClose
       }, v$1(UseMenuItemContext.Provider, {
         value: useMenuItem
-      }, B(anchor, useMergedProps()(useElementSizeProps({
+      }, B(anchor, useMergedProps()({
+        [anchorEventName !== null && anchorEventName !== void 0 ? anchorEventName : "onPress"]: onAnchorClick,
         ref: anchor.ref,
         class: `dropdown-toggle ${open ? "active" : ""}`
-      }), usePopperSourceProps(useMenuButtonProps(anchor.props)))), v$1(BodyPortal, null, v$1("div", { ...usePopperPopupProps({
+      }, useElementSizeProps(usePopperSourceProps(useMenuButtonProps(anchor.props))))), v$1(BodyPortal, null, v$1("div", { ...usePopperPopupProps({
           class: "dropdown-menu-popper"
         })
       }, v$1(Transition, { ...useMenuProps(rest),
@@ -13171,10 +13167,6 @@
       } = useAriaTooltip({
         mouseoverDelay
       });
-      const {
-        useElementSizeProps,
-        elementSize
-      } = useElementSize();
       let cloneable;
 
       if (typeof children === "string" || typeof children === "number" || typeof children == "boolean" || typeof children === "bigint") {
@@ -13191,10 +13183,19 @@
       const {
         useTooltipTriggerProps
       } = useTooltipTrigger();
+      const [size, setSize] = useState(null);
       const {
         shouldUpdate,
         onInteraction
-      } = useShouldUpdatePopper(isOpen, elementSize);
+      } = useShouldUpdatePopper(isOpen);
+      const {
+        useElementSizeProps
+      } = useElementSize({
+        setSize: size => setSize(prevSize => JSON.stringify(size))
+      });
+      y(() => {
+        onInteraction === null || onInteraction === void 0 ? void 0 : onInteraction();
+      }, [onInteraction, size]);
       const {
         getLogicalDirection,
         usePopperArrow,
@@ -14313,7 +14314,6 @@
         var depth = _a.depth;
         var _b = useState(false), active = _b[0], setActive = _b[1];
         var useFocusTrapProps = useFocusTrap({ trapActive: active }).useFocusTrapProps;
-        //const { useRovingTabIndexChild, useRovingTabIndexProps } = useRovingTabIndex<HTMLUListElement, RovingTabIndexChildInfo>({ tabbableIndex, focusOnChange: false });
         var divProps = useFocusTrapProps({ ref: undefined, className: "focus-trap-demo" });
         if (depth == 2)
             return v$1("div", null);
