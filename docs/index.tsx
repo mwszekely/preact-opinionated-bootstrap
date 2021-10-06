@@ -11,8 +11,8 @@ import { Button } from "../button";
 import { Dialog } from "../dialog";
 import { Drawer } from "../drawer";
 import { Input, InputGroup } from "../input-group";
-import { Checkbox } from "../input-group/input-check";
-import { Radio, RadioGroup } from "../input-group/input-radio";
+import { Checkbox } from "../input-group";
+import { Radio, RadioGroup } from "../input-group";
 import { GridResponsive } from "../layout";
 import { ListItemSingle, ListSingle } from "../list";
 import { Menu, MenuItem } from "../menu";
@@ -261,7 +261,7 @@ const DemoInput = memo(() => {
 
 const Component = () => {
     return <GridResponsive minWidth="35em">
-        <DebugUtilContext.Provider value={useMemo(() => ({ logRender: new Set<LogRenderType>(["Table", "TableBody", "TableRow", "Menu", "MenuItem"]) }), [])}>
+        <DebugUtilContext.Provider value={useMemo(() => ({ logRender: new Set<LogRenderType>(["Menu", "MenuItem"]) }), [])}>
             <ToastsProvider>
 
                 <DemoTable />

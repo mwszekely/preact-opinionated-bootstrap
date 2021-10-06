@@ -34,11 +34,12 @@ const knownNames = new Set<string>();
 
 const CurrentHandlerTypeContext = createContext<"sync" | "async">("sync");
 const RadioGroupContext = createContext<UseRadio<string | number, HTMLInputElement, HTMLLabelElement, RadioInfo>>(null!);
+
 export function RadioGroup<V extends string | number>({ children, name, selectedValue, label, labelPosition, onValueChange: onInputAsync }: RadioGroupProps<V>) {
     const { getSyncHandler, pending, hasError, settleCount, currentCapture, currentType } = useAsyncHandler<HTMLInputElement | HTMLLabelElement>()({ capture: (e) => (e as RadioChangeEvent<any>)[EventDetail].selectedValue as V });
     const onInput = getSyncHandler(onInputAsync);
 
-    const { useRadio, useRadioGroupProps, managedChildren, getIndex } = useAriaRadioGroup<V, HTMLDivElement, HTMLInputElement, HTMLLabelElement, RadioInfo>({ name, selectedValue: pending? currentCapture! : selectedValue, onInput: onInput as any });
+    const { useRadio, useRadioGroupProps, managedChildren, selectedIndex } = useAriaRadioGroup<V, HTMLDivElement, HTMLInputElement, HTMLLabelElement, RadioInfo>({ name, selectedValue: pending? currentCapture! : selectedValue, onInput: onInput as any });
 
     let stringLabel: string | undefined = undefined;
     if (labelPosition === "hidden") {
@@ -59,9 +60,8 @@ export function RadioGroup<V extends string | number>({ children, name, selected
         return () => knownNames.delete(name);
     }, [name])
 
-    const selectedIndex = getIndex(currentCapture ?? selectedValue);
-    //const capturedIndex = getIndex(currentCapture!);
-    useChildFlag(selectedIndex, managedChildren.length, (index, isSelected) => managedChildren[index]?.setAsyncState(isSelected? (hasError? "failed" : pending? "pending" :  "succeeded") : null ));
+
+    useChildFlag(selectedIndex, managedChildren.length, (index, isSelected) =>{ console.log(`Setting ${index} to ${isSelected}`); managedChildren[index]?.setAsyncState(isSelected? (hasError? "failed" : pending? "pending" :  "succeeded") : null )});
 
     
    // useChildFlag(pending ? capturedIndex : null, managedChildren.length, useCallback((index, isCaptured) => managedChildren[index].setPending(isCaptured? "in" : false), []));
