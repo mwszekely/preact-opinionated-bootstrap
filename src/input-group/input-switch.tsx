@@ -55,7 +55,7 @@ export function Switch({ checked, disabled, onInput: onInputAsync, children: lab
     }
 
     const inputElement = <OptionallyInputGroup tag={inInputGroup ? "div" : null} disabled={disabled} tabIndex={-1} isInput={true}>
-        <ProgressCircular childrenPosition="after" colorFill="foreground-only" mode={currentType === "async" ? asyncState : null} color="info">
+        <ProgressCircular childrenPosition="after" colorFill="foreground-only" mode={currentType === "async" ? asyncState : null} colorVariant="info">
             <input {...useSwitchInputElementProps({ type: "checkbox", className: clsx(pending && "pending", "form-check-input", disabled && "disabled"), "aria-label": labelPosition === "hidden" ? stringLabel : undefined })} />
         </ProgressCircular>
     </OptionallyInputGroup>;

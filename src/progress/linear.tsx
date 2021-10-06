@@ -16,7 +16,7 @@ export type ProgressColorVariant = Exclude<ButtonColorVariant, "link">;
 export interface LinearProgressProps extends Omit<UseAriaProgressBarParameters<HTMLProgressElement>, "tag"> {
     striped?: boolean;
     variant?: "solid" | "striped" | "animated";
-    color?: ProgressColorVariant;
+    colorVariant?: ProgressColorVariant;
 }
 
 
@@ -27,7 +27,7 @@ export interface UseAriaProgressBarParameters<E extends Element> extends TagSens
 }
 
 export interface CircularProgressProps extends GlobalAttributes<HTMLDivElement> {
-    color?: ProgressColorVariant;
+    colorVariant?: ProgressColorVariant;
     children?: VNode<any>;
     childrenPosition?: "child" | "before" | "after";
 
@@ -131,7 +131,7 @@ const ProgressValueTextContext = createContext<undefined | string>(undefined);
  * @param param0 
  * @returns 
  */
-export function ProgressLinear({ color, max: maxProp, value: valueProp, valueText: valueTextProp, striped, variant, ...rest }: LinearProgressProps) {
+export function ProgressLinear({ colorVariant, max: maxProp, value: valueProp, valueText: valueTextProp, striped, variant, ...rest }: LinearProgressProps) {
     let value = (useContext(ProgressValueContext));
     let max = useContext(ProgressMaxContext);
     let valueText = useContext(ProgressValueTextContext);
@@ -152,7 +152,7 @@ export function ProgressLinear({ color, max: maxProp, value: valueProp, valueTex
     useLayoutEffect(() => { provideParentWithHook?.(useReferencedElement) }, [useReferencedElement, provideParentWithHook])
 
     return (
-        <div {...useMergedProps<HTMLDivElement>()({ className: clsx("progress", `bg-${color ?? "primary"}`) }, rest)}>
+        <div {...useMergedProps<HTMLDivElement>()({ className: clsx("progress", `bg-${colorVariant ?? "primary"}`) }, rest)}>
             <progress {...useProgressProps({ className: "progress-bar" })} />
         </div>
     )
@@ -186,7 +186,7 @@ interface Persistence {
     "circular-progress-gimmick-count": number;
 }
 
-export const ProgressCircular = forwardElementRef(function ({ loadingLabel, spinnerTimeout, mode, colorFill, childrenPosition, children, color, ...p }: CircularProgressProps, ref: Ref<HTMLDivElement>) {
+export const ProgressCircular = forwardElementRef(function ({ loadingLabel, spinnerTimeout, mode, colorFill, childrenPosition, children, colorVariant, ...p }: CircularProgressProps, ref: Ref<HTMLDivElement>) {
     loadingLabel ??= "Operation pending";
     const { useProgressProps, useReferencedElement } = useAriaProgressBar<HTMLDivElement>({ value: null, valueText: loadingLabel, max: 1, tag: "div" });
 
@@ -234,7 +234,7 @@ export const ProgressCircular = forwardElementRef(function ({ loadingLabel, spin
             <Swappable>
                 <div className="circular-progress-swappable">
                     <Fade open={mode === "pending" && showSpinner} exitVisibility="removed">
-                        <div style={{ "--count": gimmickCount } as any} className={clsx("circular-progress", color ? `circular-progress-${color}` : undefined, colorFill == "foreground" && "inverse-fill", colorFill === "foreground-only" && "no-fill")}>
+                        <div style={{ "--count": gimmickCount } as any} className={clsx("circular-progress", colorVariant ? `circular-progress-${colorVariant}` : undefined, colorFill == "foreground" && "inverse-fill", colorFill === "foreground-only" && "no-fill")}>
                             {Array.from(function* () {
                                 for (let i = 0; i < gimmickCount; ++i)
                                     yield <div class={clsx("circular-progress-ball-origin", `circular-progress-ball-origin-${i}`)}><div class="circular-progress-ball" /></div>;

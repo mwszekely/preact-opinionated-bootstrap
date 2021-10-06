@@ -1,23 +1,35 @@
 @use "../variables.scss" as *;
 @forward "../variables";
 
-.dropdown-menu-popper>*:first-child {
-    box-shadow: 
-    rgb(0 0 0 / 60%) 0px 5px 5px -3px, 
-    rgb(0 0 0 / 42%) 0px 8px 10px 1px, 
-    rgb(0 0 0 / 36%) 0px 3px 14px 2px;
+.dropdown-menu-popper > *:first-child {
+  box-shadow: rgb(0 0 0 / 60%) 0px 5px 5px -3px,
+    rgb(0 0 0 / 42%) 0px 8px 10px 1px, rgb(0 0 0 / 36%) 0px 3px 14px 2px;
 }
 
 .dropdown-menu {
-    display: revert;
-    position: relative;
+  display: revert;
+  position: relative;
 }
 
 .dropdown-menu-popper {
-    z-index: $zindex-popover;
+  z-index: $zindex-popover;
 }
 
-.dropdown-item[tabindex="0"] {
+button.dropdown-item {
+  &.pending {
+    cursor: progress;
+    pointer-events: auto;
+  }
+
+  & > .circular-progress-container {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+  }
+
+  position: relative;
   outline: none;
   transition: $inset-press-transition;
   &:active:not(:focus),
@@ -27,8 +39,8 @@
   &:active:focus,
   &.active:focus {
     box-shadow: $input-focus-box-shadow, $btn-active-box-shadow;
-    padding-bottom: $dropdown-item-padding-y* 0.5;
-    padding-top: $dropdown-item-padding-y + $dropdown-item-padding-y* 0.5;
+    padding-bottom: $dropdown-item-padding-y * 0.5;
+    padding-top: $dropdown-item-padding-y + $dropdown-item-padding-y * 0.5;
   }
   &:not(:active):not(.active):focus {
     box-shadow: $input-focus-box-shadow;

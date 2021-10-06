@@ -5,7 +5,7 @@ import { LogicalDirectionInfo, useGlobalHandler, useLogicalDirection, useMergedP
 import { ElementSize } from "preact-prop-helpers/use-element-size";
 import { useCallback, useEffect, useMemo } from "preact/hooks";
 
-export function usePopperApi({ updating, inlinePosition, blockPosition, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight }: UsePopperParameters) {
+export function usePopperApi({ updating, positionInline, positionBlock, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight }: UsePopperParameters) {
 
     const [popperInstance, setPopperInstance, getPopperInstance] = useState<Instance | null>(null);
     const [usedPlacement, setUsedPlacement] = useState<BasePlacement | null>(null);
@@ -90,7 +90,7 @@ export function usePopperApi({ updating, inlinePosition, blockPosition, skidding
         if (sourceElement && popperElement) {
             const onFirstUpdate: (arg0: Partial<State>) => void = () => { };
             const strategy: PositioningStrategy | undefined = "absolute";
-            let placement: Placement = logicalToPlacement(getLogicalDirection()!, inlinePosition, blockPosition);
+            let placement: Placement = logicalToPlacement(getLogicalDirection()!, positionInline, positionBlock);
 
 
             setPopperInstance(createPopper<StrictModifiers>(sourceElement, popperElement, {
@@ -106,7 +106,7 @@ export function usePopperApi({ updating, inlinePosition, blockPosition, skidding
                 strategy
             }));
         }
-    }, [sourceElement, popperElement, inlinePosition, blockPosition, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight]);
+    }, [sourceElement, popperElement, positionInline, positionBlock, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight]);
 
     function usePopperSource<E extends Element>() {
         function usePopperSourceProps<P extends h.JSX.HTMLAttributes<E>>(props: P) {
@@ -143,8 +143,8 @@ export function usePopperApi({ updating, inlinePosition, blockPosition, skidding
 
 
 export interface UsePopperParameters {
-    blockPosition: "start" | "end";
-    inlinePosition: "start" | "end";
+    positionBlock: "start" | "end";
+    positionInline: "start" | "end";
     //position: "block-start" | "block-end" | "inline-start" | "inline-end";
     skidding?: number;
     distance?: number;

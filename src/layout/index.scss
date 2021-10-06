@@ -8,5 +8,5 @@
 .static-grid {
     display: grid;
     gap: 0.5em;
-    grid-template-columns: var(--static-grid-columns, repeat(var(--grid-column-unit, 1fr), var(--grid-column-count)))
+    grid-template-columns: var(--static-grid-columns, repeat(var(--grid-column-count), var(--grid-column-unit, 1fr)))
 }

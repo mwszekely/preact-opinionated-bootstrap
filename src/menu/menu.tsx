@@ -2,35 +2,37 @@ import { BasePlacement, Placement } from "@popperjs/core";
 import { cloneElement, ComponentChildren, createContext, Fragment, h, Ref, VNode } from "preact";
 import { useAriaMenu } from "preact-aria-widgets";
 import { UseMenuItem } from "preact-aria-widgets/use-menu";
-import { LogicalDirectionInfo, useElementSize, useGlobalHandler, useMergedProps, useRefElement, useState, useTimeout } from "preact-prop-helpers";
+import { LogicalDirectionInfo, useAsyncHandler, useElementSize, useGlobalHandler, useMergedProps, useRefElement, useState, useTimeout } from "preact-prop-helpers";
 import { useCallback, useContext, useEffect, useLayoutEffect } from "preact/hooks";
 import { BodyPortal } from "../portal";
-import { FlippableTransitionComponent, TagSensitiveProps, TransitionComponent } from "../props";
+import { FlippableTransitionComponent, TagSensitiveProps, TransitionComponent, usePseudoActive } from "../props";
 import { CreateZoomProps, Zoom } from "preact-transition/zoom";
 import { ZoomFade, ZoomFadeProps, SlideZoomFadeProps } from "preact-transition";
 import { TransitionDirection, TransitionPhase } from "preact-transition/transitionable";
 import { fixProps, placementToLogical, usePopperApi, useShouldUpdatePopper } from "./popper-api";
 import { ElementSize } from "preact-prop-helpers/use-element-size";
+import { useButtonLikeEventHandlers } from "preact-aria-widgets/use-button";
+import { ProgressCircular } from "../progress";
 
-export type MenuProps<E extends Element, T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element> = FlippableTransitionComponent<T> & TagSensitiveProps<E> & {
+export type MenuProps<E extends Element, T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element> = FlippableTransitionComponent<T> & Partial<TagSensitiveProps<E>> & {
     anchor: VNode<{}>;
     anchorEventName?: string;
     anchorTag?: (keyof HTMLElementTagNameMap);
     children: ComponentChildren;
+    positionInline?: "start" | "end";
+    positionBlock?: "start" | "end";
 }
 
 export interface MenuItemProps {
     children: ComponentChildren;
     index: number;
-}
-
-function foo<P>(placement: BasePlacement, props: P) {
-
+    onPress?(): (Promise<void> | void);
+    disabled?: boolean;
 }
 
 const OnCloseContext = createContext<(() => void) | undefined>(undefined);
 const UseMenuItemContext = createContext<UseMenuItem<HTMLButtonElement>>(null!);
-export function Menu<E extends Element, T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element>({ anchor, anchorEventName, anchorTag, children, tag, Transition, ...rest }: MenuProps<E, T>) {
+export function Menu<E extends Element, T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element>({ anchor, anchorEventName, anchorTag, children, tag, positionInline, positionBlock, Transition, ...rest }: MenuProps<E, T>) {
 
 
 
@@ -38,16 +40,16 @@ export function Menu<E extends Element, T extends <E extends HTMLElement>(...arg
     const onClose = useCallback(() => setOpen(false), []);
     const onOpen = () => setOpen(true);
     const { shouldUpdate: updatingForABit, onInteraction } = useShouldUpdatePopper(open);
-    
+
     const [size, setSize] = useState<string | null>(null);
     const { useElementSizeProps } = useElementSize<any>({ setSize: size => setSize(prevSize => JSON.stringify(size)) });
     useEffect(() => { onInteraction?.(); }, [onInteraction, size]);
 
-    const { usePopperArrow, usePopperPopup, usePopperSource, usedPlacement, getLogicalDirection } = usePopperApi({ inlinePosition: "start", blockPosition: "end", updating: updatingForABit });
+    const { usePopperArrow, usePopperPopup, usePopperSource, usedPlacement, getLogicalDirection } = usePopperApi({ positionInline: positionInline ?? "start", positionBlock: positionBlock ?? "end", updating: updatingForABit });
     const { useMenuButton, useMenuItem, useMenuItemCheckbox, useMenuProps, useMenuSubmenuItem, focusMenu } = useAriaMenu<HTMLDivElement, HTMLButtonElement>({ open, onClose, onOpen });
     const { useMenuButtonProps } = useMenuButton<Element>({ tag: anchorTag ?? "button" });
     const { usePopperSourceProps } = usePopperSource<any>();
-    const { usePopperPopupProps } = usePopperPopup<HTMLDivElement>({open});
+    const { usePopperPopupProps } = usePopperPopup<HTMLDivElement>({ open });
     const { usePopperArrowProps } = usePopperArrow<HTMLDivElement>();
 
 
@@ -55,27 +57,19 @@ export function Menu<E extends Element, T extends <E extends HTMLElement>(...arg
     useTimeout({ callback: () => { if (sentinelFocused) onClose(); setSentinelFocused(false); }, timeout: 1000, triggerIndex: sentinelFocused.toString() })*/
 
     const [firstSentinelIsActive, setFirstSentinelIsActive] = useState(false);
-    useTimeout({ callback: () => { setFirstSentinelIsActive(open); }, timeout: 100, triggerIndex: `${firstSentinelIsActive}` })
-
-    const menuChildren = (
-        <>
-            <div {...usePopperArrowProps({})} />
-            <button className={"visually-hidden"} onFocus={!firstSentinelIsActive ? () => focusMenu?.() : () => onClose()} onClick={onClose}>Close menu</button>
-            {children}
-            {/*
-                Add a sentinel to the end that catches attempts to tab out of the menu
-                (Also a way for assistive technologies to find a way to close the menu)
-            
-            */}
-            <button className={"visually-hidden"} onFocus={onClose} onClick={onClose}>Close menu</button>
-        </>
-    );
+    useTimeout({ callback: () => { setFirstSentinelIsActive(open); }, timeout: 100, triggerIndex: `${firstSentinelIsActive}` });
 
     const logicalDirection = getLogicalDirection();
     if (logicalDirection && usedPlacement)
         rest = fixProps(logicalDirection, "block-end", usedPlacement, rest) as typeof rest;
 
     const onAnchorClick = () => setOpen(open => !open);
+
+    if (Transition == undefined) {
+        Transition = ZoomFade as NonNullable<typeof Transition>;
+        (rest as any).zoomOriginDynamic = 0;
+        (rest as any).zoomMin = 0.85;
+    }
 
     return (
         <>
@@ -85,7 +79,18 @@ export function Menu<E extends Element, T extends <E extends HTMLElement>(...arg
                     <BodyPortal>
                         <div {...usePopperPopupProps({ class: "dropdown-menu-popper" })}>
                             <Transition {...(useMenuProps(rest) as any)} open={open} onTransitionUpdate={onInteraction} exitVisibility="hidden">
-                                <div>{h(tag, { children: menuChildren, className: "dropdown-menu" })}</div>
+                                <div>
+
+                                    <div {...usePopperArrowProps({})} />
+                                    <button className={"visually-hidden"} onFocus={!firstSentinelIsActive ? () => focusMenu?.() : () => onClose()} onClick={onClose}>Close menu</button>
+                                    {h(tag ?? "ul", { children, className: "dropdown-menu" })}
+                                    {/*
+                                        Add a sentinel to the end that catches attempts to tab out of the menu
+                                        (Also a way for assistive technologies to find a way to close the menu)
+                                    
+                                    */}
+                                    <button className={"visually-hidden"} onFocus={onClose} onClick={onClose}>Close menu</button>
+                                </div>
                             </Transition>
                         </div>
                     </BodyPortal>
@@ -96,9 +101,10 @@ export function Menu<E extends Element, T extends <E extends HTMLElement>(...arg
 }
 
 
-export function MenuItem({ children, index, ...rest }: MenuItemProps) {
+export function MenuItem({ children, disabled, onPress: onPressAsync, index, ...rest }: MenuItemProps) {
     const useMenuItem = useContext(UseMenuItemContext);
 
+    const isInteractive = (onPressAsync != null);
     const [text, setText] = useState<string | null>(null);
     const { useRefElementProps, element } = useRefElement<HTMLButtonElement>();
     useLayoutEffect(() => {
@@ -107,9 +113,37 @@ export function MenuItem({ children, index, ...rest }: MenuItemProps) {
     }, [element]);
 
     const { useMenuItemProps } = useMenuItem({ index, text });
-    return (
-        <li ><button {...useMenuItemProps(useRefElementProps(useMergedProps<HTMLButtonElement>()(rest, { class: "dropdown-item" })))}>{children}</button></li>
-    )
+
+    const onClose = useContext(OnCloseContext);
+
+
+    const { getSyncHandler, pending, settleCount, hasError } = useAsyncHandler<HTMLButtonElement>()({ capture: useCallback(() => { return undefined!; }, []) });
+    disabled ||= pending;
+
+    const onPress = getSyncHandler((pending || !onPressAsync) ? null : () => onPressAsync?.()?.then(() => onClose?.()));
+
+    const newProps = useMenuItemProps(useRefElementProps(useMergedProps<HTMLButtonElement>()(rest, { class: "dropdown-item" })));
+    const buttonProps = usePseudoActive(useButtonLikeEventHandlers<HTMLButtonElement>(disabled? null : onPress, undefined)(newProps));
+
+    if (isInteractive) {
+        return (
+            <li>
+                <ProgressCircular mode={hasError ? "failed" : pending ? "pending" : (settleCount) ? "succeeded" : null} childrenPosition="child" colorFill="foreground-only" colorVariant="info">
+                    <button {...buttonProps}>
+                        {children}
+                    </button>
+                </ProgressCircular>
+            </li>
+        )
+    }
+    else {
+        return (
+            <li {...newProps as any}>
+                {children}
+            </li>
+        )
+    }
+
 }
 
 function flipTransitionComponent<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element>(input: FlippableTransitionComponent<T>, { inline, block }: { inline: boolean, block: boolean }): TransitionComponent<T> {

@@ -7,6 +7,7 @@ import { FlippableTransitionComponent } from "../props";
 import { useMergedProps } from "preact-prop-helpers/use-merged-props";
 import { useEffect } from "preact/hooks";
 import { useState } from "preact-prop-helpers";
+import { ZoomFade } from "preact-transition";
 
 type UseTooltipProps = Parameters<typeof useAriaTooltip>[0];
 
@@ -20,7 +21,7 @@ export type TooltipProps<T extends <E extends HTMLElement>(...args: any[]) => h.
         blockPosition?: "start" | "end";
     }
 
-export function Tooltip<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element>({ children, inlinePosition, blockPosition, tooltip, Transition, mouseoverDelay, ...rest }: TooltipProps<T>) {
+export function Tooltip<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element>({ children, positionInline, positionBlock, tooltip, Transition, mouseoverDelay, ...rest }: TooltipProps<T>) {
     const { getIsOpen, isOpen, useTooltip, useTooltipTrigger } = useAriaTooltip({ mouseoverDelay });
 
     let cloneable: VNode;
@@ -40,9 +41,9 @@ export function Tooltip<T extends <E extends HTMLElement>(...args: any[]) => h.J
     const { shouldUpdate, onInteraction } = useShouldUpdatePopper(isOpen);
     const { useElementSizeProps } = useElementSize<any>({ setSize: size => setSize(prevSize => JSON.stringify(size)) });
     useEffect(() => { onInteraction?.(); }, [onInteraction, size]);
-    const { getLogicalDirection, usePopperArrow, usePopperPopup, usePopperSource, usedPlacement } = usePopperApi({ updating: shouldUpdate, inlinePosition: (inlinePosition ?? "start"), blockPosition: "end" });
+    const { getLogicalDirection, usePopperArrow, usePopperPopup, usePopperSource, usedPlacement } = usePopperApi({ updating: shouldUpdate, positionInline: (positionInline ?? "start"), positionBlock: (positionBlock ?? "end") });
 
-    const { usePopperPopupProps } = usePopperPopup<HTMLDivElement>({open: isOpen});
+    const { usePopperPopupProps } = usePopperPopup<HTMLDivElement>({ open: isOpen });
     const { usePopperArrowProps } = usePopperArrow<HTMLDivElement>();
     const { usePopperSourceProps } = usePopperSource();
 
@@ -51,10 +52,16 @@ export function Tooltip<T extends <E extends HTMLElement>(...args: any[]) => h.J
     if (logicalDirection && usedPlacement)
         rest = fixProps(logicalDirection, "block-end", usedPlacement, rest) as typeof rest;
 
+    if (Transition == undefined) {
+        Transition = ZoomFade as NonNullable<typeof Transition>;
+        (rest as any).zoomOriginDynamic = 0;
+        (rest as any).zoomMin = 0.85;
+    }
+
     // TODO: It's required for this to be exitVisibility="hidden" for transforms to work?
     // Probably an issue in the Transition element itself because it's not browser-specific but it's a little weird
     return <>
-        {cloneElement(cloneable, useMergedProps<any>()({ ref: cloneable.ref! },  useTooltipTriggerProps(useElementSizeProps(usePopperSourceProps(cloneable.props)))))}
+        {cloneElement(cloneable, useMergedProps<any>()({ ref: cloneable.ref! }, useTooltipTriggerProps(useElementSizeProps(usePopperSourceProps(cloneable.props)))))}
         <BodyPortal>
             <div {...usePopperPopupProps({ class: "tooltip-wrapper" })} >
                 <Transition {...rest as any} open={isOpen} onTransitionUpdate={onInteraction} exitVisibility="hidden">

@@ -23,7 +23,7 @@ function UnlabelledInput({ type, disabled, value, onInput: onInputAsync, ...prop
     const onBlur = flushDebouncedPromise;
 
     return (
-        <ProgressCircular spinnerTimeout={10} mode={currentType === "async" ? asyncState : null} /*className="input-group-text"*/ childrenPosition="after" color="info">
+        <ProgressCircular spinnerTimeout={10} mode={currentType === "async" ? asyncState : null} /*className="input-group-text"*/ childrenPosition="after" colorVariant="info">
             <input {...(useHasFocusProps(useMergedProps<HTMLInputElement>()(props, {
                 "aria-disabled": disabled ? "true" : undefined,
                 readOnly: disabled,

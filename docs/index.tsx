@@ -25,6 +25,7 @@ import { DemoInputs } from "./demos/inputs";
 import { DemoLayout } from "./demos/layout";
 import { DemoTable } from "./demos/tables";
 import { useLogRender, DebugUtilContext, DebugUtil, LogRenderType } from "../props";
+import { DemoMenus } from "./demos/menus";
 
 
 
@@ -264,6 +265,7 @@ const Component = () => {
             <ToastsProvider>
 
                 <DemoTable />
+                <DemoMenus />
                 <DemoButtons />
                 <DemoChecks />
                 <DemoInputs />

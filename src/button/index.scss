@@ -180,6 +180,8 @@
       // * Their opacity has been lowered
       &:hover,
       &:focus,
+      &.active,
+      &:active,
       &:disabled,
       &.disabled {
         @if $tinted-ratio > $shaded-ratio {

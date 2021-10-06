@@ -9071,7 +9071,7 @@
       colorFill,
       childrenPosition,
       children,
-      color,
+      colorVariant,
       ...p
     }, ref) {
       var _loadingLabel, _childrenPosition;
@@ -9141,7 +9141,7 @@
         style: {
           "--count": gimmickCount
         },
-        className: clsx("circular-progress", color ? `circular-progress-${color}` : undefined, colorFill == "foreground" && "inverse-fill", colorFill === "foreground-only" && "no-fill")
+        className: clsx("circular-progress", colorVariant ? `circular-progress-${colorVariant}` : undefined, colorFill == "foreground" && "inverse-fill", colorFill === "foreground-only" && "no-fill")
       }, Array.from(function* () {
         for (let i = 0; i < gimmickCount; ++i) yield v$1("div", {
           class: clsx("circular-progress-ball-origin", `circular-progress-ball-origin-${i}`)
@@ -9787,7 +9787,7 @@
         spinnerTimeout: 10,
         mode: currentType === "async" ? asyncState : null,
         childrenPosition: "after",
-        color: "info"
+        colorVariant: "info"
       }, v$1("input", { ...useHasFocusProps(useMergedProps()(props, {
           "aria-disabled": disabled ? "true" : undefined,
           readOnly: disabled,
@@ -9935,7 +9935,7 @@
         childrenPosition: "after",
         colorFill: "foreground-only",
         mode: currentType === "async" ? asyncState : null,
-        color: "info"
+        colorVariant: "info"
       }, v$1("input", { ...p
       })));
       const p2 = { ...useCheckboxLabelElementProps({
@@ -10045,7 +10045,7 @@
         childrenPosition: "after",
         colorFill: "foreground-only",
         mode: currentType === "async" ? asyncState : null,
-        color: "info"
+        colorVariant: "info"
       }, v$1("input", { ...useSwitchInputElementProps({
           type: "checkbox",
           className: clsx(pending && "pending", "form-check-input", disabled && "disabled"),
@@ -10230,7 +10230,7 @@
         childrenPosition: "after",
         colorFill: "foreground-only",
         mode: currentHandlerType == "async" ? asyncState : null,
-        color: "info"
+        colorVariant: "info"
       }, v$1("input", { ...useRadioInputProps({
           type: "radio",
           className: clsx(asyncState === "pending" && "pending", disabled && "disabled", "form-check-input"),
@@ -10277,7 +10277,7 @@
      * no matter how janky it looks.
      */
 
-    forwardElementRef(function ResponsiveGrid({
+    const GridStatic = forwardElementRef(function ResponsiveGrid({
       tag,
       columns,
       children,
@@ -12292,8 +12292,8 @@
 
     function usePopperApi({
       updating,
-      inlinePosition,
-      blockPosition,
+      positionInline,
+      positionBlock,
       skidding,
       distance,
       paddingTop,
@@ -12381,7 +12381,7 @@
           const onFirstUpdate = () => {};
 
           const strategy = "absolute";
-          let placement = logicalToPlacement(getLogicalDirection(), inlinePosition, blockPosition);
+          let placement = logicalToPlacement(getLogicalDirection(), positionInline, positionBlock);
           setPopperInstance(createPopper(sourceElement, popperElement, {
             modifiers: [{
               name: "flip",
@@ -12408,7 +12408,7 @@
             strategy
           }));
         }
-      }, [sourceElement, popperElement, inlinePosition, blockPosition, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight]);
+      }, [sourceElement, popperElement, positionInline, positionBlock, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight]);
 
       function usePopperSource() {
         function usePopperSourceProps(props) {
@@ -12768,6 +12768,8 @@
       anchorTag,
       children,
       tag,
+      positionInline,
+      positionBlock,
       Transition,
       ...rest
     }) {
@@ -12796,8 +12798,8 @@
         usedPlacement,
         getLogicalDirection
       } = usePopperApi({
-        inlinePosition: "start",
-        blockPosition: "end",
+        positionInline: positionInline !== null && positionInline !== void 0 ? positionInline : "start",
+        positionBlock: positionBlock !== null && positionBlock !== void 0 ? positionBlock : "end",
         updating: updatingForABit
       });
       const {
@@ -12839,20 +12841,16 @@
         timeout: 100,
         triggerIndex: `${firstSentinelIsActive}`
       });
-      const menuChildren = v$1(d$1, null, v$1("div", { ...usePopperArrowProps({})
-      }), v$1("button", {
-        className: "visually-hidden",
-        onFocus: !firstSentinelIsActive ? () => focusMenu === null || focusMenu === void 0 ? void 0 : focusMenu() : () => onClose(),
-        onClick: onClose
-      }, "Close menu"), children, v$1("button", {
-        className: "visually-hidden",
-        onFocus: onClose,
-        onClick: onClose
-      }, "Close menu"));
       const logicalDirection = getLogicalDirection();
       if (logicalDirection && usedPlacement) rest = fixProps(logicalDirection, "block-end", usedPlacement, rest);
 
       const onAnchorClick = () => setOpen(open => !open);
+
+      if (Transition == undefined) {
+        Transition = ZoomFade;
+        rest.zoomOriginDynamic = 0;
+        rest.zoomMin = 0.85;
+      }
 
       return v$1(d$1, null, v$1(OnCloseContext.Provider, {
         value: onClose
@@ -12869,17 +12867,29 @@
         open: open,
         onTransitionUpdate: onInteraction,
         exitVisibility: "hidden"
-      }, v$1("div", null, v$1(tag, {
-        children: menuChildren,
+      }, v$1("div", null, v$1("div", { ...usePopperArrowProps({})
+      }), v$1("button", {
+        className: "visually-hidden",
+        onFocus: !firstSentinelIsActive ? () => focusMenu === null || focusMenu === void 0 ? void 0 : focusMenu() : () => onClose(),
+        onClick: onClose
+      }, "Close menu"), v$1(tag !== null && tag !== void 0 ? tag : "ul", {
+        children,
         className: "dropdown-menu"
-      }))))))));
+      }), v$1("button", {
+        className: "visually-hidden",
+        onFocus: onClose,
+        onClick: onClose
+      }, "Close menu"))))))));
     }
     function MenuItem({
       children,
+      disabled,
+      onPress: onPressAsync,
       index,
       ...rest
     }) {
       const useMenuItem = F(UseMenuItemContext);
+      const isInteractive = onPressAsync != null;
       const [text, setText] = useState(null);
       const {
         useRefElementProps,
@@ -12894,10 +12904,40 @@
         index,
         text
       });
-      return v$1("li", null, v$1("button", { ...useMenuItemProps(useRefElementProps(useMergedProps()(rest, {
-          class: "dropdown-item"
-        })))
-      }, children));
+      const onClose = F(OnCloseContext);
+      const {
+        getSyncHandler,
+        pending,
+        settleCount,
+        hasError
+      } = useAsyncHandler()({
+        capture: A$1(() => {
+          return undefined;
+        }, [])
+      });
+      disabled || (disabled = pending);
+      const onPress = getSyncHandler(pending || !onPressAsync ? null : () => {
+        var _onPressAsync;
+
+        return onPressAsync === null || onPressAsync === void 0 ? void 0 : (_onPressAsync = onPressAsync()) === null || _onPressAsync === void 0 ? void 0 : _onPressAsync.then(() => onClose === null || onClose === void 0 ? void 0 : onClose());
+      });
+      const newProps = useMenuItemProps(useRefElementProps(useMergedProps()(rest, {
+        class: "dropdown-item"
+      })));
+      const buttonProps = usePseudoActive(useButtonLikeEventHandlers(disabled ? null : onPress, undefined)(newProps));
+
+      if (isInteractive) {
+        return v$1("li", null, v$1(ProgressCircular, {
+          mode: hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null,
+          childrenPosition: "child",
+          colorFill: "foreground-only",
+          colorVariant: "info"
+        }, v$1("button", { ...buttonProps
+        }, children)));
+      } else {
+        return v$1("li", { ...newProps
+        }, children);
+      }
     }
 
     const UseTabContext = D$1(null);
@@ -13101,8 +13141,8 @@
 
     function Tooltip({
       children,
-      inlinePosition,
-      blockPosition,
+      positionInline,
+      positionBlock,
       tooltip,
       Transition,
       mouseoverDelay,
@@ -13153,8 +13193,8 @@
         usedPlacement
       } = usePopperApi({
         updating: shouldUpdate,
-        inlinePosition: inlinePosition !== null && inlinePosition !== void 0 ? inlinePosition : "start",
-        blockPosition: "end"
+        positionInline: positionInline !== null && positionInline !== void 0 ? positionInline : "start",
+        positionBlock: positionBlock !== null && positionBlock !== void 0 ? positionBlock : "end"
       });
       const {
         usePopperPopupProps
@@ -13168,8 +13208,15 @@
         usePopperSourceProps
       } = usePopperSource();
       const logicalDirection = getLogicalDirection();
-      if (logicalDirection && usedPlacement) rest = fixProps(logicalDirection, "block-end", usedPlacement, rest); // TODO: It's required for this to be exitVisibility="hidden" for transforms to work?
+      if (logicalDirection && usedPlacement) rest = fixProps(logicalDirection, "block-end", usedPlacement, rest);
+
+      if (Transition == undefined) {
+        Transition = ZoomFade;
+        rest.zoomOriginDynamic = 0;
+        rest.zoomMin = 0.85;
+      } // TODO: It's required for this to be exitVisibility="hidden" for transforms to work?
       // Probably an issue in the Transition element itself because it's not browser-specific but it's a little weird
+
 
       return v$1(d$1, null, B(cloneable, useMergedProps()({
         ref: cloneable.ref
@@ -13368,7 +13415,7 @@
         var onPressAsync = function () { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, sleep$4(asyncTimeout)];
+                    case 0: return [4 /*yield*/, sleep$5(asyncTimeout)];
                     case 1:
                         _a.sent();
                         if (asyncFails)
@@ -13383,7 +13430,7 @@
         var onToggleInputAsync = function (b) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, sleep$4(asyncTimeout)];
+                    case 0: return [4 /*yield*/, sleep$5(asyncTimeout)];
                     case 1:
                         _a.sent();
                         if (asyncFails)
@@ -13523,7 +13570,7 @@
                             v$1(CardElement, { type: "paragraph" },
                                 v$1("code", null, "<ButtonGroup wrap>\n    <ButtonGroupChild index={0}>First button</ButtonGroupChild>\n    <ButtonGroupChild index={1}>Second button</ButtonGroupChild>\n    <ButtonGroupChild index={2}>Third button</ButtonGroupChild>\n    <ButtonGroupChild index={3}>Fourth button</ButtonGroupChild>\n    <ButtonGroupChild index={4}>Fifth button</ButtonGroupChild>\n    <ButtonGroupChild index={5}>Sixth button</ButtonGroupChild>\n    <ButtonGroupChild index={6}>Seventh button</ButtonGroupChild>\n    <ButtonGroupChild index={7}>Eighth button</ButtonGroupChild>\n</ButtonGroup>"))))))));
     }
-    function sleep$4(arg0) {
+    function sleep$5(arg0) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 return [2 /*return*/, new Promise(function (resolve) { return setTimeout(resolve, arg0); })];
@@ -13544,7 +13591,7 @@
         var asyncCheckboxInput = A$1(function (checked) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, sleep$3(asyncTimeout)];
+                    case 0: return [4 /*yield*/, sleep$4(asyncTimeout)];
                     case 1:
                         _a.sent();
                         if (asyncFails)
@@ -13557,7 +13604,7 @@
         var asyncRadioInput = A$1(function (value) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, sleep$3(asyncTimeout)];
+                    case 0: return [4 /*yield*/, sleep$4(asyncTimeout)];
                     case 1:
                         _a.sent();
                         if (asyncFails)
@@ -13719,7 +13766,7 @@
                             v$1(InputGroup, null,
                                 v$1(Radio, { labelPosition: labelPosition, index: 2, value: 2 }, "Radio #3"))))))));
     }
-    function sleep$3(arg0) {
+    function sleep$4(arg0) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 return [2 /*return*/, new Promise(function (resolve) { return setTimeout(resolve, arg0); })];
@@ -13737,7 +13784,7 @@
         var asyncTextInput = A$1(function (text) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, sleep$2(asyncTimeout)];
+                    case 0: return [4 /*yield*/, sleep$3(asyncTimeout)];
                     case 1:
                         _a.sent();
                         if (asyncFails)
@@ -13750,7 +13797,7 @@
         var asyncNumberInput = A$1(function (value) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, sleep$2(asyncTimeout)];
+                    case 0: return [4 /*yield*/, sleep$3(asyncTimeout)];
                     case 1:
                         _a.sent();
                         if (asyncFails)
@@ -13803,7 +13850,7 @@
                 v$1(CardElement, { type: "paragraph" },
                     v$1("code", null, "<InputGrid>\n    <InputGroup><Input type=\"text\" value={text} onInput={onTextInput}>Text-based input</Input></InputGroup>\n    <InputGroup><Input type=\"number\" value={number} onInput={onNumberInput} min={-5}>Number-based input</Input></InputGroup>\n</InputGrid>")))));
     }
-    function sleep$2(arg0) {
+    function sleep$3(arg0) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 return [2 /*return*/, new Promise(function (resolve) { return setTimeout(resolve, arg0); })];
@@ -14144,7 +14191,7 @@
         var onInput = A$1(function (checked) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, sleep$1(2000)];
+                    case 0: return [4 /*yield*/, sleep$2(2000)];
                     case 1:
                         _a.sent();
                         setChecked(checked);
@@ -14250,6 +14297,140 @@
                         }())))),
                 v$1(CardElement, null,
                     v$1("code", null, "<Table>\n    <TableHead>\n        <TableRow rowIndex={0}>\n            <TableHeaderCell columnIndex={0}>Number</TableHeaderCell>\n            <TableHeaderCell columnIndex={1}>String</TableHeaderCell>\n            <TableHeaderCell columnIndex={2}>Date</TableHeaderCell>\n            <TableHeaderCell columnIndex={3}>Checkbox</TableHeaderCell>\n        </TableRow>\n    </TableHead>\n    <TableBody>\n        <TableRow rowIndex={1}>\n            <TableCell columnIndex={0} value={n} />\n            <TableCell columnIndex={1} value={RandomWords[index]} />\n            <TableCell columnIndex={2} value={d}>{d.toLocaleString()}</TableCell>\n            <TableCell columnIndex={3} value={checked}>\n                <Checkbox checked={checked} onInput={onInput} labelPosition=\"hidden\">Demo table checkbox</Checkbox>\n            </TableCell>\n        </TableRow>\n\n        <TableRow rowIndex={2} />\n        <TableRow rowIndex={3} hidden />\n        <TableRow rowIndex={4} />\n        <TableRow rowIndex={5} />\n\n    </TableBody>\n    <TableFoot>\n        <ACustomTableRow rowIndex={6} />\n    </TableFoot>\n</Table>")))));
+    }
+    function sleep$2(arg0) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, new Promise(function (resolve) { return setTimeout(resolve, arg0); })];
+            });
+        });
+    }
+
+    function DemoMenus() {
+        var _this = this;
+        var _a = useState("start"), positionInline = _a[0], setPositionInline = _a[1];
+        var _b = useState("end"), positionBlock = _b[0], setPositionBlock = _b[1];
+        useState(false);
+        var _d = useState(3000), asyncTimeout = _d[0];
+        useState(true);
+        var _f = useState(false), asyncFails = _f[0];
+        useState(true);
+        var pushToast = usePushToast();
+        var onPressSync = function () { return pushToast(v$1(Toast, null, "Menu item was clicked")); };
+        var onPressAsync = function () { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, sleep$1(asyncTimeout)];
+                    case 1:
+                        _a.sent();
+                        if (asyncFails)
+                            throw new Error("Button operation failed.");
+                        else
+                            onPressSync();
+                        return [2 /*return*/];
+                }
+            });
+        }); };
+        return (v$1("div", { class: "demo" },
+            v$1(Card, null,
+                v$1(CardElement, { type: "title", tag: "h2" }, "Menus"),
+                v$1(CardElement, null,
+                    v$1(Menu, { anchor: v$1(Button, null, "I'm a menu"), Transition: ZoomFade },
+                        v$1(MenuItem, { index: 0, onPress: onPressAsync }, "A: Item 1"),
+                        v$1(MenuItem, { index: 1, onPress: onPressAsync }, "B: Item 2"),
+                        v$1(MenuItem, { index: 2, onPress: onPressAsync }, "C: Item 3"),
+                        v$1(MenuItem, { index: 3 }, "I'm static"))),
+                v$1(CardElement, null,
+                    v$1("code", null, "<Menu>"),
+                    "s are effectively popup ",
+                    v$1("code", null, "<List>"),
+                    "s. This gives them all the usual list stuff like keyboard navigation (either with the arrow keys or by typing the text content of the ",
+                    v$1("code", null, "<MenuItem>"),
+                    "), with the popup logic handled by ",
+                    v$1("a", { href: "https://popper.js.org/" }, "Popper"),
+                    "."),
+                v$1(CardElement, null,
+                    v$1("code", null, "<Menu anchor={<Button>I'm a menu</Button>}>\n    <MenuItem index={0} onPress={onPress}>A: Item 1</MenuItem>\n    <MenuItem index={1} onPress={onPress}>B: Item 2</MenuItem>\n    <MenuItem index={2} onPress={onPress}>C: Item 3</MenuItem>\n    <MenuItem index={3}>I'm static</MenuItem>\n</Menu>")),
+                v$1("hr", null),
+                v$1(CardElement, { type: "subtitle", tag: "h3" }, "Structure"),
+                v$1(CardElement, null,
+                    "A ",
+                    v$1("code", null, "<Menu>"),
+                    " requires both a selection of ",
+                    v$1("code", null, "<MenuItem>"),
+                    "s and also an ",
+                    v$1("code", null, "anchor"),
+                    ", provided by the prop of the same name.  By default, it's assumed that this will be a component that acceps an ",
+                    v$1("code", null, "onPress"),
+                    " event handler, like ",
+                    v$1("code", null, "<Button>"),
+                    "s do.  If you need to use a different event handler (such as ",
+                    v$1("code", null, "onClick"),
+                    ", if your menu isn't tied to a ",
+                    v$1("code", null, "<Button>"),
+                    "), you can pass the name of the prop to use instead to ",
+                    v$1("code", null, "<anchorEventName>")),
+                v$1("hr", null),
+                v$1(CardElement, { type: "subtitle", tag: "h3" }, "Positioning"),
+                v$1(CardElement, { type: "paragraph" },
+                    "A menu's position is, by default, at the start of the line and the bottom of the block (the bottom left corner for this writing mode). You can manipulate this with the ",
+                    v$1("code", null, "inlinePosition"),
+                    " and ",
+                    v$1("code", null, "blockPosition"),
+                    " props."),
+                v$1(CardElement, { type: "paragraph" }, "The menu will also automatically flip when reaching the edge of the viewport."),
+                v$1(CardElement, null,
+                    v$1(GridStatic, { columns: 3 },
+                        v$1("div", null),
+                        v$1(Button, { colorVariant: "secondary", pressed: positionBlock === "start", disabled: positionBlock === "start", onPressToggle: function (pressed) { return void (pressed && setPositionBlock("start")); } }, "Block start"),
+                        v$1("div", null),
+                        v$1(Button, { colorVariant: "secondary", pressed: positionInline === "start", disabled: positionInline === "start", onPressToggle: function (pressed) { return void (pressed && setPositionInline("start")); } }, "Inline start"),
+                        v$1(Menu, { anchor: v$1(Button, null, "Anchored menu"), positionBlock: positionBlock, positionInline: positionInline },
+                            v$1(MenuItem, { index: 0, onPress: onPressAsync }, "A: Item 1"),
+                            v$1(MenuItem, { index: 1, onPress: onPressAsync }, "B: Item 2"),
+                            v$1(MenuItem, { index: 2, onPress: onPressAsync }, "C: Item 3"),
+                            v$1(MenuItem, { index: 3 }, "I'm static")),
+                        v$1(Button, { colorVariant: "secondary", pressed: positionInline === "end", disabled: positionInline === "end", onPressToggle: function (pressed) { return void (pressed && setPositionInline("end")); } }, "Inline end"),
+                        v$1("div", null),
+                        v$1(Button, { colorVariant: "secondary", pressed: positionBlock === "end", disabled: positionBlock === "end", onPressToggle: function (pressed) { return void (pressed && setPositionBlock("end")); } }, "Block end"),
+                        v$1("div", null))),
+                v$1("hr", null),
+                v$1(CardElement, { type: "subtitle", tag: "h3" }, "Transitions"),
+                v$1(CardElement, { tag: "div" },
+                    "By default, ",
+                    v$1("code", null, "<Menu>"),
+                    "s use a ",
+                    v$1("code", null, "<ZoomFade>"),
+                    " as their transition. This can be customized by doing the following:",
+                    v$1("ul", null,
+                        v$1("li", null,
+                            "Provide a ",
+                            v$1("code", null, "Transition"),
+                            " prop."),
+                        v$1("li", null,
+                            "The ",
+                            v$1("code", null, "<Menu>"),
+                            " now accepts the same props as the transition component you passed in, with some key differences:"),
+                        v$1("li", null,
+                            "Any props that this ",
+                            v$1("code", null, "Transition"),
+                            " takes with both inline and block components, like ",
+                            v$1("code", null, "fooInline"),
+                            " and ",
+                            v$1("code", null, "fooBlock"),
+                            ", are now replaced with ",
+                            v$1("code", null, "fooDynamic"),
+                            ", which is relative to the location of the anchor to the menu."),
+                        v$1("li", null,
+                            "The menu will, based on the position of the anchor and current position of the menu, turn ",
+                            v$1("code", null, "fooDynamic"),
+                            " into ",
+                            v$1("code", null, "fooInline"),
+                            " or ",
+                            v$1("code", null, "fooBlock"),
+                            ", optionally negated (",
+                            v$1("code", null, "1 - fooDynamic"),
+                            ") if the menu is flipped because it's near the edge of the viewport."))))));
     }
     function sleep$1(arg0) {
         return __awaiter(this, void 0, void 0, function () {
@@ -14466,6 +14647,7 @@
             v$1(DebugUtilContext.Provider, { value: d(function () { return ({ logRender: new Set(["Table", "TableBody", "TableRow"]) }); }, []) },
                 v$1(ToastsProvider, null,
                     v$1(DemoTable, null),
+                    v$1(DemoMenus, null),
                     v$1(DemoButtons, null),
                     v$1(DemoChecks, null),
                     v$1(DemoInputs, null),

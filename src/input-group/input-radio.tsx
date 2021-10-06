@@ -116,7 +116,7 @@ export function Radio<V extends string | number>({ disabled, children: label, in
     }
 
     const inputElement = <OptionallyInputGroup isInput tag={inInputGroup? "div" : null} disabled={disabled} tabIndex={-1}>
-        <ProgressCircular childrenPosition="after" colorFill="foreground-only" mode={currentHandlerType == "async"? asyncState : null} color="info">
+        <ProgressCircular childrenPosition="after" colorFill="foreground-only" mode={currentHandlerType == "async"? asyncState : null} colorVariant="info">
             <input {...useRadioInputProps({ type: "radio", className: clsx(asyncState === "pending" && "pending", disabled && "disabled", "form-check-input"), "aria-label": labelPosition === "hidden" ? stringLabel : undefined })} />
         </ProgressCircular>
     </OptionallyInputGroup>;

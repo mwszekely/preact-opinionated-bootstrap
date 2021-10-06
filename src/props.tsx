@@ -59,7 +59,7 @@ type MakeDynamicTransitionProps<T> = {
 
 //type T8 = MakeDynamicTransitionProps<SlideZoomFadeProps<HTMLElement>>;
 
-export type FlippableTransitionComponent<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element> = TransitionComponent<T> & {
+export type FlippableTransitionComponent<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element> = OptionalTransitionComponent<T> & {
     [K in Exclude<keyof Parameters<T>[0], "open"> as `${K & string}Dynamic`]?: number;
 };
 
