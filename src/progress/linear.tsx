@@ -206,6 +206,26 @@ export const ProgressCircular = forwardElementRef(function ({ loadingLabel, spin
         triggerIndex: mode
     });
 
+    // This is used to ensure that the "success" icon
+    // is only shown immediately after a failure has occurred.
+    const [previousSettledMode, setPreviousSettledMode, getPreviousSettledMode] = useState<typeof mode>("pending");
+    const [succeededAfterFailure, setSucceededAfterFailure, getSucceededAfterFailure] = useState(false);
+    useEffect(() => {
+        if (getSucceededAfterFailure())
+            setSucceededAfterFailure(false);
+
+        if (mode == "succeeded") {
+            if (getPreviousSettledMode() == "failed") {
+                setSucceededAfterFailure(true);
+            }
+
+            setPreviousSettledMode(mode);
+        }
+        else if (mode == "failed") {
+            setPreviousSettledMode("failed");
+        }
+    }, [mode]);
+
 
     const progressProps = useProgressProps({ "aria-hidden": `${mode != "pending"}` });
     const progressElement = (
@@ -214,14 +234,14 @@ export const ProgressCircular = forwardElementRef(function ({ loadingLabel, spin
             <Swappable>
                 <div className="circular-progress-swappable">
                     <Fade open={mode === "pending" && showSpinner} exitVisibility="removed">
-                        <div style={{ "--count": gimmickCount } as any} className={clsx("circular-progress", color? `circular-progress-${color}` : undefined, colorFill == "foreground" && "inverse-fill", colorFill === "foreground-only" && "no-fill")}>
+                        <div style={{ "--count": gimmickCount } as any} className={clsx("circular-progress", color ? `circular-progress-${color}` : undefined, colorFill == "foreground" && "inverse-fill", colorFill === "foreground-only" && "no-fill")}>
                             {Array.from(function* () {
                                 for (let i = 0; i < gimmickCount; ++i)
                                     yield <div class={clsx("circular-progress-ball-origin", `circular-progress-ball-origin-${i}`)}><div class="circular-progress-ball" /></div>;
                             }())}
                         </div>
                     </Fade>
-                    <Fade open={!shownStatusLongEnough && mode === "succeeded"}><div class="circular-progress-succeeded"><Check /></div></Fade>
+                    <Fade open={!shownStatusLongEnough && mode === "succeeded" && succeededAfterFailure}><div class="circular-progress-succeeded"><Check /></div></Fade>
                     <Fade open={!shownStatusLongEnough && mode === "failed"}><div class="circular-progress-failed"><Cross /></div></Fade>
                 </div>
             </Swappable>

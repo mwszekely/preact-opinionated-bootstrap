@@ -44,7 +44,7 @@ export const ButtonGroup = forwardElementRef(function ButtonGroup(p: ButtonGroup
     size = useButtonSize(size);
     fillVariant = useButtonFillVariant(fillVariant);
     disabled = useButtonDisabled(disabled);
-    const outerDomProps: h.JSX.HTMLAttributes<any> =  useHasFocusProps(useMergedProps<any>()({ ref, role: "grid", class: "btn-group-aria-gridrow" }, p3));
+    const outerDomProps: h.JSX.HTMLAttributes<any> = useHasFocusProps(useMergedProps<any>()({ ref, role: "grid", class: "btn-group-aria-gridrow" }, p3));
     const innerDomProps: h.JSX.HTMLAttributes<any> = { role: "gridrow", disabled, className: clsx("btn-group", wrap && "wrap") };
 
     // Remaining props, forwarded onto the DOM
@@ -72,9 +72,9 @@ interface ButtonGroupChildBaseProps {
     index: number;
 }
 
-export interface ButtonGroupChildToggleButtonProps extends ToggleButtonProps, ButtonGroupChildBaseProps {}
-export interface ButtonGroupChildButtonButtonProps extends ButtonButtonProps, ButtonGroupChildBaseProps {}
-export interface ButtonGroupChildAnchorButtonProps extends AnchorButtonProps, ButtonGroupChildBaseProps {}
+export interface ButtonGroupChildToggleButtonProps extends ToggleButtonProps, ButtonGroupChildBaseProps { }
+export interface ButtonGroupChildButtonButtonProps extends ButtonButtonProps, ButtonGroupChildBaseProps { }
+export interface ButtonGroupChildAnchorButtonProps extends AnchorButtonProps, ButtonGroupChildBaseProps { }
 
 
 export type ButtonGroupChildProps = (ButtonGroupChildAnchorButtonProps | ButtonGroupChildButtonButtonProps | ButtonGroupChildToggleButtonProps);
@@ -90,7 +90,7 @@ export const ButtonGroupChild = forwardElementRef(function ButtonGroupChild1({ i
     const useButtonGroupChild = useContext(UseButtonGroupChild);
     const { tabbable, useListNavigationChildProps, useListNavigationSiblingProps } = useButtonGroupChild!({ index, text: null });
 
-    const p = useListNavigationChildProps({ ref, role: "gridcell", ...buttonProps as any });
+    const p = useListNavigationChildProps(useMergedProps<any>()({ ref, role: "gridcell" }, { ...buttonProps as any }));
     return <Button {...p as any} />
 });
 

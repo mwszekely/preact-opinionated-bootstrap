@@ -34,64 +34,6 @@ type E = (EventTarget & HTMLInputElement);
 type E2 = E["className"]
 
 
-const DemoUseDroppable = () => {
-    const { droppedFiles, droppedStrings, filesForConsideration, stringsForConsideration, useDroppableProps, dropError } = useDroppable<HTMLDivElement>({ effect: "copy" });
-
-    const { ref } = useMergedProps<HTMLInputElement>()({}, { ref: useRef<HTMLInputElement>(null!) })
-
-    const p = useDroppableProps({ className: "demo droppable" });
-
-    const r = p.ref;
-
-    return (
-        <div {...p}>
-
-            {droppedStrings != null && <div>Data dropped: <ul>{(Object.entries(droppedStrings) as [keyof typeof stringsForConsideration, string][]).map(([type, value]) => <li>{type}: {value}</li>)}</ul></div>}
-            {droppedFiles != null && <div>Files dropped: <table>
-                <thead><tr><th>Name</th><th>Size</th><th>Type</th><th>Last modified</th></tr></thead>
-                <tbody>{droppedFiles.map(f => <tr><td>{f.name}</td>{f.data.byteLength}<td>{f.type}</td><td>{new Date(f.lastModified ?? 0)}</td></tr>)}</tbody>
-            </table></div>}
-            <hr />
-
-            {stringsForConsideration != null && <div>Data being considered: <ul>{Array.from(stringsForConsideration).map(type => <li>{type}</li>)}</ul></div>}
-            {filesForConsideration != null && <div>Files being considered: <ul>{filesForConsideration.map(f => <li>{JSON.stringify(f)}</li>)}</ul></div>}
-
-            <hr />
-            {dropError && <div>{dropError instanceof Error ? dropError.message : JSON.stringify(dropError)}</div>}
-        </div>
-    )
-}
-
-const DemoUseDraggable = () => {
-    const { dragging, useDraggableProps, lastDropEffect, getLastDropEffect, getDragging } = useDraggable<HTMLDivElement>({ data: { "text/plain": "This is custom draggable content of type text/plain." } });
-
-
-    return (
-        <div {...useDraggableProps({ className: "demo" })}>
-            Draggable content
-        </div>)
-}
-
-
-const DemoUseFocusTrap = memo(({ depth }: { depth?: number }) => {
-
-    const [active, setActive] = useState(false);
-
-    const { useFocusTrapProps } = useFocusTrap<HTMLDivElement>({ trapActive: active });
-
-    const divProps = useFocusTrapProps({ ref: undefined, className: "focus-trap-demo" });
-    if (depth == 2)
-        return <div />;
-
-    return (
-        <div className="demo">
-            <label>Active: <input type="checkbox" checked={active} onInput={e => { e.preventDefault(); setActive(e.currentTarget.checked); }} /></label>
-            <div {...divProps} >
-                <DemoUseFocusTrapChild active={active} setActive={setActive} depth={depth ?? 0} />
-            </div>
-        </div>
-    );
-});
 
 
 const DemoUseFocusTrapChild = memo(({ setActive, active, depth }: { active: boolean, setActive: (active: boolean) => void, depth: number }) => {
@@ -114,7 +56,7 @@ const DemoDialog = memo(() => {
 
     return (
         <div class="demo">
-            <Tooltip tooltip="Open dialog" position="block-start" Transition={ZoomFade} zoomOriginDynamic={0} zoomMin={0.85} >
+            <Tooltip tooltip="Open dialog" Transition={ZoomFade} zoomOriginDynamic={0} zoomMin={0.85} >
                 <InputGroup>
                     <Checkbox checked={open} onInput={setOpen}>Open dialog</Checkbox>
                 </InputGroup>
@@ -155,7 +97,7 @@ const DemoMenu = memo(() => {
 
     return (
         <div class="demo">
-            <Menu Transition={ZoomFade} zoomOriginDynamic={0} zoomMin={0.85} tag="ul" anchor={<Button >Open menu</Button>} >
+            <Menu Transition={ZoomFade} zoomOriginDynamic={0} zoomMin={0.85} tag="ul" anchor={<Button dropdownVariant="combined">Open menu</Button>}>
                 <MenuItem index={0}>AItem #1</MenuItem>
                 <MenuItem index={1}>BItem #2</MenuItem>
                 <MenuItem index={2}>CItem #3</MenuItem>

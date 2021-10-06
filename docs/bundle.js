@@ -2187,15 +2187,17 @@
     };
 
     /**
-     * Wrap the native `useLayoutEffect` to add arguments
+     * Wrap the native `useEffect` to add arguments
      * that allow accessing the previous value as the first argument,
      * as well as the changes that caused the hook to be called as the second argument.
      *
      * @param effect
      * @param inputs
+     * @param impl You can choose whether to use `useEffect` or `useLayoutEffect` by
+     * passing one of them as this argument. By default, it's `useEffect`.
      */
 
-    function useLayoutEffect(effect, inputs) {
+    function useEffect(effect, inputs, impl = y) {
       const prevInputs = s(inputs);
 
       const effect2 = () => {
@@ -2213,7 +2215,20 @@
         return ret;
       };
 
-      h(effect2, inputs);
+      impl(effect2, inputs);
+    }
+
+    /**
+     * Wrap the native `useLayoutEffect` to add arguments
+     * that allow accessing the previous value as the first argument,
+     * as well as the changes that caused the hook to be called as the second argument.
+     *
+     * @param effect
+     * @param inputs
+     */
+
+    function useLayoutEffect(effect, inputs) {
+      return useEffect(effect, inputs, h);
     }
 
     function useTimeout({
@@ -2699,17 +2714,17 @@
               But roughly isn't good enough if there are multiple matches.
               To convert our sorted index to the unsorted index we need, we have to find the first
               element that matches us *and* (if any such exist) is *after* our current selection.
-                In other words, the only way typeahead moves backwards relative to our current
+               In other words, the only way typeahead moves backwards relative to our current
               position is if the only other option is behind us.
-                It's not specified in WAI-ARIA what to do in that case.  I suppose wrap back to the start?
+               It's not specified in WAI-ARIA what to do in that case.  I suppose wrap back to the start?
               Though there's also a case for just going upwards to the nearest to prevent jumpiness.
               But if you're already doing typeahead on an unsorted list, like, jumpiness can't be avoided.
               I dunno. Going back to the start is the simplist though.
-                Basically what this does: Starting from where we found ourselves after our binary search,
+               Basically what this does: Starting from where we found ourselves after our binary search,
               scan backwards and forwards through all adjacent entries that also compare equally so that
               we can find the one whose `unsortedIndex` is the lowest amongst all other equal strings
               (and also the lowest `unsortedIndex` yadda yadda except that it comes after us).
-                TODO: The binary search starts this off with a solid O(log n), but one-character
+               TODO: The binary search starts this off with a solid O(log n), but one-character
               searches are, thanks to pigeonhole principal, eventually guaranteed to become
               O(n*log n). This is annoying but probably not easily solvable? There could be an
               exception for one-character strings, but that's just kicking the can down
@@ -3067,36 +3082,6 @@
     }
 
     /**
-     * Wrap the native `useEffect` to add arguments
-     * that allow accessing the previous value as the first argument,
-     * as well as the changes that caused the hook to be called as the second argument.
-     *
-     * @param effect
-     * @param inputs
-     */
-
-    function useEffect(effect, inputs) {
-      const prevInputs = s(inputs);
-
-      const effect2 = () => {
-        let changes = [];
-
-        for (let i = 0; i < Math.max(prevInputs.current.length, inputs.length); ++i) {
-          if (prevInputs.current[i] != inputs[i]) changes[i] = {
-            from: prevInputs.current[i],
-            to: inputs[i]
-          };
-        }
-
-        const ret = effect(prevInputs.current, changes);
-        prevInputs.current = inputs;
-        return ret;
-      };
-
-      y(effect2, inputs);
-    }
-
-    /**
      * Returns a function that will, when called, force the component
      * that uses this hook to re-render itself.
      *
@@ -3389,7 +3374,7 @@
         // if a change to the current selected cell should also
         // trigger focusing that cell.
 
-        const [isTabbableRow, setIsTabbableRow] = useState(false); // If we're not the tabbable row, then for the purposes of tabIndex
+        const [isTabbableRow, setIsTabbableRow, getIsTabbableRow] = useState(false); // If we're not the tabbable row, then for the purposes of tabIndex
         // calculations, we don't have a tabbable child cell.
 
         let currentColumn = isTabbableRow ? getCurrentColumn() : null; // Track child cells and manage keyboard navigation among them.
@@ -3399,7 +3384,9 @@
           useRovingTabIndexChild: useRovingTabIndexCell,
           childCount: cellCount
         } = useRovingTabIndex({
-          shouldFocusOnChange: getFocusCellOnRowChange,
+          shouldFocusOnChange: A$1(() => {
+            return getFocusCellOnRowChange() && getIsTabbableRow();
+          }, []),
           tabbableIndex: currentColumn
         }); // More navigation stuff
 
@@ -9116,7 +9103,24 @@
         },
         timeout: 1000,
         triggerIndex: mode
-      });
+      }); // This is used to ensure that the "success" icon
+      // is only shown immediately after a failure has occurred.
+
+      const [previousSettledMode, setPreviousSettledMode, getPreviousSettledMode] = useState("pending");
+      const [succeededAfterFailure, setSucceededAfterFailure, getSucceededAfterFailure] = useState(false);
+      y(() => {
+        if (getSucceededAfterFailure()) setSucceededAfterFailure(false);
+
+        if (mode == "succeeded") {
+          if (getPreviousSettledMode() == "failed") {
+            setSucceededAfterFailure(true);
+          }
+
+          setPreviousSettledMode(mode);
+        } else if (mode == "failed") {
+          setPreviousSettledMode("failed");
+        }
+      }, [mode]);
       const progressProps = useProgressProps({
         "aria-hidden": `${mode != "pending"}`
       });
@@ -9145,7 +9149,7 @@
           class: "circular-progress-ball"
         }));
       }()))), v$1(Fade, {
-        open: !shownStatusLongEnough && mode === "succeeded"
+        open: !shownStatusLongEnough && mode === "succeeded" && succeededAfterFailure
       }, v$1("div", {
         class: "circular-progress-succeeded"
       }, v$1(Check, null))), v$1(Fade, {
@@ -9280,12 +9284,12 @@
     });
     const ButtonButton = forwardElementRef(function ButtonButton(p, ref) {
       let {
+        dropdownVariant,
         colorVariant,
         size,
         fillVariant,
         disabled,
         debounce,
-        showAsyncSuccess,
         onPress: onPressAsync,
         ...props
       } = p;
@@ -9320,11 +9324,11 @@
       fillVariant = buttonStyleInfo.fillVariant;
       const useButtonStylesProps = buttonStyleInfo.useButtonStylesProps;
       return v$1(ProgressCircular, {
-        mode: hasError ? "failed" : pending ? "pending" : settleCount && showAsyncSuccess ? "succeeded" : null,
+        mode: hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null,
         childrenPosition: "child",
         colorFill: fillVariant == "fill" ? "foreground" : "background"
       }, v$1("button", { ...usePseudoActive(useAriaButtonProps(useButtonStylesProps(useMergedProps()({
-          className: clsx(pending && "pending active", disabled && "disabled")
+          className: clsx(pending && "pending active", disabled && "disabled", dropdownVariant && `dropdown-toggle`, dropdownVariant === "separate" && `dropdown-toggle-split`)
         }, { ...props,
           onPress,
           ref
@@ -9471,11 +9475,11 @@
         index,
         text: null
       });
-      const p = useListNavigationChildProps({
+      const p = useListNavigationChildProps(useMergedProps()({
         ref,
-        role: "gridcell",
-        ...buttonProps
-      });
+        role: "gridcell"
+      }, { ...buttonProps
+      }));
       return v$1(Button, { ...p
       });
     });
@@ -12288,7 +12292,8 @@
 
     function usePopperApi({
       updating,
-      position,
+      inlinePosition,
+      blockPosition,
       skidding,
       distance,
       paddingTop,
@@ -12376,7 +12381,7 @@
           const onFirstUpdate = () => {};
 
           const strategy = "absolute";
-          let placement = logicalToPlacement(getLogicalDirection(), position);
+          let placement = logicalToPlacement(getLogicalDirection(), inlinePosition, blockPosition);
           setPopperInstance(createPopper(sourceElement, popperElement, {
             modifiers: [{
               name: "flip",
@@ -12385,10 +12390,10 @@
               name: "preventOverflow",
               options: {
                 padding: {
-                  bottom: paddingBottom,
-                  top: paddingTop,
-                  left: paddingLeft,
-                  right: paddingRight
+                  bottom: paddingBottom !== null && paddingBottom !== void 0 ? paddingBottom : 0,
+                  top: paddingTop !== null && paddingTop !== void 0 ? paddingTop : 0,
+                  left: paddingLeft !== null && paddingLeft !== void 0 ? paddingLeft : 0,
+                  right: paddingRight !== null && paddingRight !== void 0 ? paddingRight : 0
                 }
               }
             }, updateStateModifier, {
@@ -12403,7 +12408,7 @@
             strategy
           }));
         }
-      }, [sourceElement, popperElement, position, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight]);
+      }, [sourceElement, popperElement, inlinePosition, blockPosition, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight]);
 
       function usePopperSource() {
         function usePopperSourceProps(props) {
@@ -12637,94 +12642,36 @@
 
       return logical;
     }
-    function logicalToPlacement(logicalDirection, position) {
-      let placement;
+    function logicalToPlacement(logicalDirection, inlinePosition, blockPosition) {
+      let placementInline;
+      let placementBlock;
       const {
         blockDirection,
         blockOrientation,
         inlineDirection,
         inlineOrientation
       } = logicalDirection;
+      placementInline = inlinePosition;
 
-      if (position === "block-start" || position == "block-end") {
-        switch (`${position}-${blockDirection}`) {
-          case "block-start-ttb":
-            placement = "top";
-            break;
+      switch (blockDirection) {
+        case "ttb":
+          placementBlock = blockPosition === "start" ? "top" : "bottom";
+          break;
 
-          case "block-end-btt":
-            placement = "top";
-            break;
+        case "btt":
+          placementBlock = blockPosition === "end" ? "top" : "bottom";
+          break;
 
-          case "block-start-btt":
-            placement = "bottom";
-            break;
+        case "ltr":
+          placementBlock = blockPosition === "start" ? "left" : "right";
+          break;
 
-          case "block-end-ttb":
-            placement = "bottom";
-            break;
-
-          case "block-start-ltr":
-            placement = "left";
-            break;
-
-          case "block-end-rtl":
-            placement = "left";
-            break;
-
-          case "block-end-ltr":
-            placement = "right";
-            break;
-
-          case "block-start-rtl":
-            placement = "right";
-            break;
-
-          default:
-            placement = "bottom";
-            break;
-        }
-      } else {
-        switch (`${position}-${inlineDirection}`) {
-          case "inline-start-ltr":
-            placement = "left";
-            break;
-
-          case "inline-end-rtl":
-            placement = "left";
-            break;
-
-          case "inline-end-ltr":
-            placement = "right";
-            break;
-
-          case "inline-start-rtl":
-            placement = "right";
-            break;
-
-          case "inline-start-ttb":
-            placement = "top";
-            break;
-
-          case "inline-end-btt":
-            placement = "top";
-            break;
-
-          case "inline-end-ttb":
-            placement = "bottom";
-            break;
-
-          case "inline-start-btt":
-            placement = "bottom";
-            break;
-
-          default:
-            placement = "right";
-            break;
-        }
+        case "rtl":
+          placementBlock = blockPosition === "end" ? "left" : "right";
+          break;
       }
 
-      return placement;
+      return `${placementBlock}-${placementInline}`;
     }
     function useShouldUpdatePopper(open) {
       // Since scroll events are asynchronous, especially on iOS devices,
@@ -12849,7 +12796,8 @@
         usedPlacement,
         getLogicalDirection
       } = usePopperApi({
-        position: "block-end",
+        inlinePosition: "start",
+        blockPosition: "end",
         updating: updatingForABit
       });
       const {
@@ -12913,7 +12861,7 @@
       }, B(anchor, useMergedProps()({
         [anchorEventName !== null && anchorEventName !== void 0 ? anchorEventName : "onPress"]: onAnchorClick,
         ref: anchor.ref,
-        class: `dropdown-toggle ${open ? "active" : ""}`
+        class: `${open ? "active" : ""}`
       }, useElementSizeProps(usePopperSourceProps(useMenuButtonProps(anchor.props))))), v$1(BodyPortal, null, v$1("div", { ...usePopperPopupProps({
           class: "dropdown-menu-popper"
         })
@@ -13153,7 +13101,8 @@
 
     function Tooltip({
       children,
-      position,
+      inlinePosition,
+      blockPosition,
       tooltip,
       Transition,
       mouseoverDelay,
@@ -13204,7 +13153,8 @@
         usedPlacement
       } = usePopperApi({
         updating: shouldUpdate,
-        position
+        inlinePosition: inlinePosition !== null && inlinePosition !== void 0 ? inlinePosition : "start",
+        blockPosition: "end"
       });
       const {
         usePopperPopupProps
@@ -14311,20 +14261,6 @@
 
     var RandomWords = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.".split(" ");
     g(function (_a) {
-        var depth = _a.depth;
-        var _b = useState(false), active = _b[0], setActive = _b[1];
-        var useFocusTrapProps = useFocusTrap({ trapActive: active }).useFocusTrapProps;
-        var divProps = useFocusTrapProps({ ref: undefined, className: "focus-trap-demo" });
-        if (depth == 2)
-            return v$1("div", null);
-        return (v$1("div", { className: "demo" },
-            v$1("label", null,
-                "Active: ",
-                v$1("input", { type: "checkbox", checked: active, onInput: function (e) { e.preventDefault(); setActive(e.currentTarget.checked); } })),
-            v$1("div", __assign({}, divProps),
-                v$1(DemoUseFocusTrapChild, { active: active, setActive: setActive, depth: depth !== null && depth !== void 0 ? depth : 0 }))));
-    });
-    var DemoUseFocusTrapChild = g(function (_a) {
         var setActive = _a.setActive, active = _a.active; _a.depth;
         return (v$1(d$1, null,
             v$1("button", null, "Button 1"),
@@ -14338,7 +14274,7 @@
         var onClose = (function () { return setOpen(false); });
         var _a = useState(false), open = _a[0], setOpen = _a[1];
         return (v$1("div", { class: "demo" },
-            v$1(Tooltip, { tooltip: "Open dialog", position: "block-start", Transition: ZoomFade, zoomOriginDynamic: 0, zoomMin: 0.85 },
+            v$1(Tooltip, { tooltip: "Open dialog", Transition: ZoomFade, zoomOriginDynamic: 0, zoomMin: 0.85 },
                 v$1(InputGroup, null,
                     v$1(Checkbox, { checked: open, onInput: setOpen }, "Open dialog"))),
             v$1(Dialog, { Transition: ClipFade, clipOriginBlock: 0, open: open, onClose: onClose, descriptive: false, title: "Dialog Title", footer: v$1("button", { onClick: onClose }, "Close") },
@@ -14363,7 +14299,7 @@
     });
     var DemoMenu = g(function () {
         return (v$1("div", { class: "demo" },
-            v$1(Menu, { Transition: ZoomFade, zoomOriginDynamic: 0, zoomMin: 0.85, tag: "ul", anchor: v$1(Button, null, "Open menu") },
+            v$1(Menu, { Transition: ZoomFade, zoomOriginDynamic: 0, zoomMin: 0.85, tag: "ul", anchor: v$1(Button, { dropdownVariant: "combined" }, "Open menu") },
                 v$1(MenuItem, { index: 0 }, "AItem #1"),
                 v$1(MenuItem, { index: 1 }, "BItem #2"),
                 v$1(MenuItem, { index: 2 }, "CItem #3"),

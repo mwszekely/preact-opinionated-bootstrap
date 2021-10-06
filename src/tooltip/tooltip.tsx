@@ -16,10 +16,11 @@ export type TooltipProps<T extends <E extends HTMLElement>(...args: any[]) => h.
     {
         children: ComponentChild;
         tooltip: ComponentChildren;
-        position: "block-start" | "block-end" | "inline-start" | "inline-end";
+        inlinePosition?: "start" | "end";
+        blockPosition?: "start" | "end";
     }
 
-export function Tooltip<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element>({ children, position, tooltip, Transition, mouseoverDelay, ...rest }: TooltipProps<T>) {
+export function Tooltip<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element>({ children, inlinePosition, blockPosition, tooltip, Transition, mouseoverDelay, ...rest }: TooltipProps<T>) {
     const { getIsOpen, isOpen, useTooltip, useTooltipTrigger } = useAriaTooltip({ mouseoverDelay });
 
     let cloneable: VNode;
@@ -39,7 +40,7 @@ export function Tooltip<T extends <E extends HTMLElement>(...args: any[]) => h.J
     const { shouldUpdate, onInteraction } = useShouldUpdatePopper(isOpen);
     const { useElementSizeProps } = useElementSize<any>({ setSize: size => setSize(prevSize => JSON.stringify(size)) });
     useEffect(() => { onInteraction?.(); }, [onInteraction, size]);
-    const { getLogicalDirection, usePopperArrow, usePopperPopup, usePopperSource, usedPlacement } = usePopperApi({ updating: shouldUpdate, position, });
+    const { getLogicalDirection, usePopperArrow, usePopperPopup, usePopperSource, usedPlacement } = usePopperApi({ updating: shouldUpdate, inlinePosition: (inlinePosition ?? "start"), blockPosition: "end" });
 
     const { usePopperPopupProps } = usePopperPopup<HTMLDivElement>({open: isOpen});
     const { usePopperArrowProps } = usePopperArrow<HTMLDivElement>();

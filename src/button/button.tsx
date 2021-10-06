@@ -41,6 +41,7 @@ type LinkTypes =
 
 export interface ToggleButtonProps extends Omit<ButtonPropsBase<HTMLButtonElement>, "onPress" | "fillVariant" | "children">, Omit<UseAsyncHandlerParameters<HTMLButtonElement, h.JSX.TargetedEvent<HTMLButtonElement>, boolean>, "capture"> {
     pressed: boolean;
+
     onPressToggle?(pressed: boolean, event: h.JSX.TargetedEvent<HTMLButtonElement>): void | Promise<void>;
     children?: ComponentChild;
     showAsyncSuccess?: boolean;
@@ -49,8 +50,8 @@ export interface ToggleButtonProps extends Omit<ButtonPropsBase<HTMLButtonElemen
 
 export interface ButtonButtonProps extends ButtonPropsBase<HTMLButtonElement>, Omit<UseAsyncHandlerParameters<HTMLButtonElement, h.JSX.TargetedEvent<HTMLButtonElement>, never>, "capture"> {
     tag?: "button";
-    showAsyncSuccess?: boolean;
     onPress?: (never: never, event: h.JSX.TargetedEvent<HTMLButtonElement>) => (void | Promise<void>);
+    dropdownVariant?: null | undefined | "separate" | "combined";
 }
 
 export interface AnchorButtonProps extends ButtonPropsBase<HTMLAnchorElement> {
@@ -95,7 +96,7 @@ const AnchorButton = forwardElementRef(function AnchorButton(p: Omit<AnchorButto
 });
 
 const ButtonButton = forwardElementRef(function ButtonButton(p: Omit<ButtonButtonProps, "tag">, ref?: Ref<HTMLButtonElement>) {
-    let { colorVariant, size, fillVariant, disabled, debounce, showAsyncSuccess, onPress: onPressAsync, ...props } = p;
+    let { dropdownVariant, colorVariant, size, fillVariant, disabled, debounce, onPress: onPressAsync, ...props } = p;
     const { getSyncHandler, pending, settleCount, hasError } = useAsyncHandler<HTMLButtonElement>()({ debounce, capture: useCallback(() => { return undefined!; }, []) });
     disabled ||= pending;
 
@@ -111,8 +112,8 @@ const ButtonButton = forwardElementRef(function ButtonButton(p: Omit<ButtonButto
 
 
     return (
-        <ProgressCircular mode={hasError ? "failed" : pending ? "pending" : (settleCount && showAsyncSuccess) ? "succeeded" : null} childrenPosition="child" colorFill={fillVariant == "fill" ? "foreground" : "background"}>
-            <button {...usePseudoActive(useAriaButtonProps(useButtonStylesProps(useMergedProps<HTMLButtonElement>()({ className: clsx(pending && "pending active", disabled && "disabled") }, { ...props, onPress, ref }))))} />
+        <ProgressCircular mode={hasError ? "failed" : pending ? "pending" : (settleCount) ? "succeeded" : null} childrenPosition="child" colorFill={fillVariant == "fill" ? "foreground" : "background"}>
+            <button {...usePseudoActive(useAriaButtonProps(useButtonStylesProps(useMergedProps<HTMLButtonElement>()({ className: clsx(pending && "pending active", disabled && "disabled", dropdownVariant && `dropdown-toggle`, dropdownVariant === "separate" && `dropdown-toggle-split`) }, { ...props, onPress, ref }))))} />
         </ProgressCircular>
     )
 });

@@ -5,7 +5,7 @@ import { LogicalDirectionInfo, useGlobalHandler, useLogicalDirection, useMergedP
 import { ElementSize } from "preact-prop-helpers/use-element-size";
 import { useCallback, useEffect, useMemo } from "preact/hooks";
 
-export function usePopperApi({ updating, position, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight }: UsePopperParameters) {
+export function usePopperApi({ updating, inlinePosition, blockPosition, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight }: UsePopperParameters) {
 
     const [popperInstance, setPopperInstance, getPopperInstance] = useState<Instance | null>(null);
     const [usedPlacement, setUsedPlacement] = useState<BasePlacement | null>(null);
@@ -90,20 +90,23 @@ export function usePopperApi({ updating, position, skidding, distance, paddingTo
         if (sourceElement && popperElement) {
             const onFirstUpdate: (arg0: Partial<State>) => void = () => { };
             const strategy: PositioningStrategy | undefined = "absolute";
-            let placement: Placement = logicalToPlacement(getLogicalDirection()!, position);
+            let placement: Placement = logicalToPlacement(getLogicalDirection()!, inlinePosition, blockPosition);
 
 
             setPopperInstance(createPopper<StrictModifiers>(sourceElement, popperElement, {
                 modifiers: [
                     { name: "flip", options: {} },
-                    { name: "preventOverflow", options: { padding: { bottom: paddingBottom, top: paddingTop, left: paddingLeft, right: paddingRight } } },
+                    { name: "preventOverflow", options: { padding: { bottom: (paddingBottom ?? 0), top: (paddingTop ?? 0), left: (paddingLeft ?? 0), right: (paddingRight ?? 0) } } },
                     updateStateModifier as any,
                     { name: 'eventListeners', enabled: false },
                     { name: "applyStyles", enabled: false },
-                ], onFirstUpdate, placement, strategy
+                ], 
+                onFirstUpdate, 
+                placement, 
+                strategy
             }));
         }
-    }, [sourceElement, popperElement, position, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight]);
+    }, [sourceElement, popperElement, inlinePosition, blockPosition, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight]);
 
     function usePopperSource<E extends Element>() {
         function usePopperSourceProps<P extends h.JSX.HTMLAttributes<E>>(props: P) {
@@ -140,7 +143,9 @@ export function usePopperApi({ updating, position, skidding, distance, paddingTo
 
 
 export interface UsePopperParameters {
-    position: "block-start" | "block-end" | "inline-start" | "inline-end";
+    blockPosition: "start" | "end";
+    inlinePosition: "start" | "end";
+    //position: "block-start" | "block-end" | "inline-start" | "inline-end";
     skidding?: number;
     distance?: number;
 
@@ -224,46 +229,23 @@ export function placementToLogical(logicalDirection: LogicalDirectionInfo, place
     return logical;
 }
 
-export function logicalToPlacement(logicalDirection: LogicalDirectionInfo, position: `${"block" | "inline"}-${"start" | "end"}`) {
-    let placement: Placement;
+export function logicalToPlacement(logicalDirection: LogicalDirectionInfo, inlinePosition: `${"start" | "end"}`, blockPosition: `${"start" | "end"}`): Placement {
+    let placementInline: "start" | "end";
+    let placementBlock: "top" | "bottom" | "left" | "right";
+
     const { blockDirection, blockOrientation, inlineDirection, inlineOrientation } = logicalDirection;
 
-    if (position === "block-start" || position == "block-end") {
-        switch (`${position}-${blockDirection}` as const) {
-            case "block-start-ttb": placement = "top"; break;
-            case "block-end-btt": placement = "top"; break;
+    placementInline = inlinePosition;
 
-            case "block-start-btt": placement = "bottom"; break;
-            case "block-end-ttb": placement = "bottom"; break;
-
-            case "block-start-ltr": placement = "left"; break;
-            case "block-end-rtl": placement = "left"; break;
-
-            case "block-end-ltr": placement = "right"; break;
-            case "block-start-rtl": placement = "right"; break;
-
-            default: placement = "bottom"; break;
-        }
+    switch (blockDirection) {
+        case "ttb": placementBlock = (blockPosition === "start"? "top" : "bottom"); break;
+        case "btt": placementBlock = (blockPosition === "end"? "top" : "bottom"); break;
+        case "ltr": placementBlock = (blockPosition === "start"? "left" : "right"); break;
+        case "rtl": placementBlock = (blockPosition === "end"? "left" : "right"); break;
     }
-    else {
-        switch (`${position}-${inlineDirection}` as const) {
 
-            case "inline-start-ltr": placement = "left"; break;
-            case "inline-end-rtl": placement = "left"; break;
-
-            case "inline-end-ltr": placement = "right"; break;
-            case "inline-start-rtl": placement = "right"; break;
-
-            case "inline-start-ttb": placement = "top"; break;
-            case "inline-end-btt": placement = "top"; break;
-
-            case "inline-end-ttb": placement = "bottom"; break;
-            case "inline-start-btt": placement = "bottom"; break;
-
-            default: placement = "right"; break;
-        }
-    }
-    return placement;
+    return `${placementBlock}-${placementInline}`;
+    
 }
 
 export function useShouldUpdatePopper(open: boolean) {

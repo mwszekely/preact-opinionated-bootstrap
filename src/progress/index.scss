@@ -37,7 +37,7 @@
     // TODO: The check is confusing on checkboxes specifically
     // and since it's the default it feels sort of redundant always appearing.
     // Probably better to have no indicator for success for now.
-    opacity: 0 !important;
+    // opacity: 0 !important;
   }
 
   & .circular-progress-failed {
