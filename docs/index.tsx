@@ -59,7 +59,7 @@ const DemoDialog = memo(() => {
         <div class="demo">
             <Tooltip tooltip="Open dialog" Transition={ZoomFade} zoomOriginDynamic={0} zoomMin={0.85} >
                 <InputGroup>
-                    <Checkbox checked={open} onInput={setOpen}>Open dialog</Checkbox>
+                    <Checkbox checked={open} onCheck={setOpen}>Open dialog</Checkbox>
                 </InputGroup>
             </Tooltip>
             <Dialog Transition={ClipFade} clipOriginBlock={0} open={open} onClose={onClose} descriptive={false} title="Dialog Title" footer={<button onClick={onClose}>Close</button>}>
@@ -81,7 +81,7 @@ const DemoDrawer = memo(() => {
     //open = true;
     return (
         <div class="demo">
-            <Checkbox checked={open} onInput={setOpen}>Open Drawer</Checkbox>
+            <Checkbox checked={open} onCheck={setOpen}>Open Drawer</Checkbox>
             {/*<label><input type="checkbox" checked={open} onInput={e => { e.preventDefault(); setOpen(e.currentTarget.checked) }} /></label>*/}
             <Drawer Transition={Slide} slideTargetInline={-1} open={open} onClose={onClose} descriptive={false} title="Dialog Title" >
                 <p tabIndex={-1}>Dialog body content</p>
@@ -248,7 +248,7 @@ const DemoInput = memo(() => {
             <InputGroup>
                 <Input type="text" onInput={onInput1} value={text} width="100%">Test input</Input>
             </InputGroup>
-            <RadioGroup selectedValue={radioValue} name="demo-radio" onInput={onInput2}>
+            <RadioGroup selectedValue={radioValue} name="demo-radio" onValueChange={onInput2}>
                 <InputGroup><Radio index={0} value="ARadio" /></InputGroup>
                 <InputGroup><Radio index={1} value="BRadio" /></InputGroup>
                 <InputGroup><Radio index={2} value="CRadio" /></InputGroup>
@@ -261,7 +261,7 @@ const DemoInput = memo(() => {
 
 const Component = () => {
     return <GridResponsive minWidth="35em">
-        <DebugUtilContext.Provider value={useMemo(() => ({ logRender: new Set<LogRenderType>(["Table", "TableBody", "TableRow"]) }), [])}>
+        <DebugUtilContext.Provider value={useMemo(() => ({ logRender: new Set<LogRenderType>(["Table", "TableBody", "TableRow", "Menu", "MenuItem"]) }), [])}>
             <ToastsProvider>
 
                 <DemoTable />

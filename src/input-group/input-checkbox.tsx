@@ -8,14 +8,14 @@ import { useAsyncHandler, useMergedProps } from "preact-prop-helpers";
 import { MergedProps } from "preact-prop-helpers/use-merged-props";
 import { useCallback, useContext } from "preact/hooks";
 import { ProgressCircular } from "../progress/linear";
-import { forwardElementRef, GlobalAttributes } from "../props";
-import { InputGroupText, InputGroupTextProps } from "./input-group";
-import { InInputGridContext, InInputGroupContext } from "./props";
+import { forwardElementRef, GlobalAttributes, OmitStrong } from "../props";
+import { InputGroupText, InputGroupTextProps } from "./grouping";
+import { InInputGridContext, InInputGroupContext, UseCheckboxGroupChildContext } from "./props";
 
 export interface CheckboxProps extends GlobalAttributes<HTMLInputElement> {
     checked: boolean | "mixed";
     disabled?: boolean;
-    onInput?(checked: boolean, event: h.JSX.TargetedEvent<HTMLInputElement>): void | Promise<void>;
+    onCheck?(checked: boolean, event: h.JSX.TargetedEvent<HTMLInputElement>): void | Promise<void>;
     labelPosition?: "start" | "end" | "hidden";
 }
 
@@ -29,7 +29,7 @@ function capture(e: h.JSX.TargetedEvent<HTMLInputElement>): boolean {
  * Probably need separate `inputRef` & `labelRef` properties for that, 
  * but given there's also no easy way to forward props to just them a solution like that feels incomplete.
  */
-export const Checkbox = forwardElementRef(function Checkbox({ checked, disabled, onInput: onInputAsync, labelPosition, children: label, ...props }: CheckboxProps, ref: Ref<HTMLInputElement>) {
+export const Checkbox = forwardElementRef(function Checkbox({ checked, disabled, onCheck: onCheckedAsync, labelPosition, children: label, ...props }: CheckboxProps, ref: Ref<HTMLInputElement>) {
     labelPosition ??= "end";
 
     type I = { (event: CheckboxChangeEvent<h.JSX.TargetedEvent<HTMLInputElement, Event>>): void; (event: CheckboxChangeEvent<h.JSX.TargetedEvent<HTMLLabelElement, Event>>): void; };
@@ -37,8 +37,8 @@ export const Checkbox = forwardElementRef(function Checkbox({ checked, disabled,
     const { getSyncHandler, pending, hasError, settleCount, hasCapture, currentCapture, currentType } = useAsyncHandler()({ capture });
     disabled ||= pending;
 
-    const onInput = getSyncHandler(onInputAsync) as unknown as I;
-    const { useCheckboxInputElement, useCheckboxLabelElement } = useAriaCheckbox<HTMLInputElement, HTMLLabelElement>({ checked: pending ? currentCapture! : ((checked as string) === "indeterminate" ? "mixed" : checked), disabled: disabled ?? false, onInput, labelPosition: "separate" });
+    const onChecked = getSyncHandler(onCheckedAsync) as unknown as I;
+    const { useCheckboxInputElement, useCheckboxLabelElement } = useAriaCheckbox<HTMLInputElement, HTMLLabelElement>({ checked: pending ? currentCapture! : ((checked as string) === "indeterminate" ? "mixed" : checked), disabled: disabled ?? false, onInput: onChecked, labelPosition: "separate" });
 
     const { useCheckboxInputElementProps } = useCheckboxInputElement({ tag: "input" });
     const { useCheckboxLabelElementProps } = useCheckboxLabelElement({ tag: "label" });
@@ -75,27 +75,9 @@ export const Checkbox = forwardElementRef(function Checkbox({ checked, disabled,
         return <div {...useMergedProps<HTMLDivElement>()({}, { class: "form-check" })}>{ret}</div>
     return ret;
 
-})
+});
 
-type UseCheckboxGroupCheckboxProps = <P extends h.JSX.HTMLAttributes<HTMLInputElement>>(props: P) => MergedProps<HTMLInputElement, { "aria-controls": string; }, P>;
-const CheckboxGroupParentCheckboxPropsContext = createContext<any>(null!);
-const CheckboxGroupChildContext = createContext<UseCheckboxGroupChild<HTMLInputElement>>(null!);
-export function CheckboxGroup({ children }: { children: ComponentChildren }) {
-    const { percentChecked, selfIsChecked, onCheckboxGroupInput, useCheckboxGroupCheckboxProps, useCheckboxGroupChild } = useCheckboxGroup<HTMLInputElement>({});
-
-    return (
-        <>
-            <CheckboxGroupParentCheckboxPropsContext.Provider value={useCheckboxGroupCheckboxProps}>
-                <Checkbox className="checkbox-group-parent" checked={selfIsChecked} onInput={useCallback((checked: any, e: h.JSX.TargetedEvent<HTMLInputElement>) => { onCheckboxGroupInput(e) }, [onCheckboxGroupInput])} />
-            </CheckboxGroupParentCheckboxPropsContext.Provider>
-
-            <CheckboxGroupChildContext.Provider value={useCheckboxGroupChild}>{children}</CheckboxGroupChildContext.Provider>
-
-        </>
-    )
-};
-
-export function OptionallyInputGroup<E extends Element>({ tag, children, isInput, ...props }: Omit<InputGroupTextProps<E>, "tag"> & { isInput: boolean, tag: InputGroupTextProps<E>["tag"] | null }) {
+export function OptionallyInputGroup<E extends Element>({ tag, children, isInput, ...props }: OmitStrong<InputGroupTextProps<E>, "tag"> & { isInput: boolean, tag: InputGroupTextProps<E>["tag"] | null }) {
     const inInputGroup = useContext(InInputGroupContext);
     const inInputGrid = !!useContext(InInputGridContext);
 

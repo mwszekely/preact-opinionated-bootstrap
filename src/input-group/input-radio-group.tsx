@@ -5,20 +5,20 @@ import { RadioChangeEvent, useAriaRadioGroup, UseAriaRadioGroupParameters, UseAr
 import { useAsyncHandler, useState } from "preact-prop-helpers";
 import { useChildFlag } from "preact-prop-helpers/use-child-manager";
 import { useCallback, useContext, useEffect } from "preact/hooks";
-import { useSpinnerDelay } from "../props";
+import { useSpinnerDelay, OmitStrong } from "../props";
 import { ProgressCircular } from "../progress";
 import { InInputGroupContext } from "./props";
 import clsx from "clsx";
-import { OptionallyInputGroup } from "./input-check";
+import { OptionallyInputGroup } from "./input-checkbox";
 
-interface RadioGroupProps<V extends string | number> extends Omit<UseAriaRadioGroupParameters<V>, "onInput"> {
+interface RadioGroupProps<V extends string | number> extends OmitStrong<UseAriaRadioGroupParameters<V>, "onInput"> {
     children?: ComponentChildren;
     label?: ComponentChildren;
     labelPosition?: "start" | "end" | "hidden";
-    onInput(value: V, event: h.JSX.TargetedEvent<HTMLInputElement | HTMLLabelElement>): (void | Promise<void>);
+    onValueChange(value: V, event: h.JSX.TargetedEvent<HTMLInputElement | HTMLLabelElement>): (void | Promise<void>);
 }
 
-interface RadioProps<V extends string | number, I extends Element, L extends Element> extends Omit<UseAriaRadioParameters<V, I, L, RadioInfo>, "labelPosition" | "text" | "disabled" | "setAsyncState"> {
+interface RadioProps<V extends string | number, I extends Element, L extends Element> extends OmitStrong<UseAriaRadioParameters<V, I, L, RadioInfo>, "labelPosition" | "text" | "disabled" | "setAsyncState"> {
     index: number;
     value: V;
     children?: ComponentChildren;
@@ -34,7 +34,7 @@ const knownNames = new Set<string>();
 
 const CurrentHandlerTypeContext = createContext<"sync" | "async">("sync");
 const RadioGroupContext = createContext<UseRadio<string | number, HTMLInputElement, HTMLLabelElement, RadioInfo>>(null!);
-export function RadioGroup<V extends string | number>({ children, name, selectedValue, label, labelPosition, onInput: onInputAsync }: RadioGroupProps<V>) {
+export function RadioGroup<V extends string | number>({ children, name, selectedValue, label, labelPosition, onValueChange: onInputAsync }: RadioGroupProps<V>) {
     const { getSyncHandler, pending, hasError, settleCount, currentCapture, currentType } = useAsyncHandler<HTMLInputElement | HTMLLabelElement>()({ capture: (e) => (e as RadioChangeEvent<any>)[EventDetail].selectedValue as V });
     const onInput = getSyncHandler(onInputAsync);
 

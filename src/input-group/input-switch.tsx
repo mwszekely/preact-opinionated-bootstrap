@@ -16,7 +16,7 @@ import { MergedProps } from "preact-prop-helpers/use-merged-props";
 import { useCallback, } from "preact/hooks";
 import { ProgressCircular } from "../progress/linear";
 import { GlobalAttributes } from "../props";
-import { InputGroupText, InputGroupTextProps } from "./input-group";
+import { InputGroupText, InputGroupTextProps } from "./grouping";
 
 
 
@@ -24,7 +24,7 @@ import { InputGroupText, InputGroupTextProps } from "./input-group";
 export interface SwitchProps {
     checked: boolean;
     disabled?: boolean;
-    onInput?(checked: boolean): void | Promise<void>;
+    onCheck?(checked: boolean): void | Promise<void>;
     children?: ComponentChildren;
     labelPosition?: "start" | "end" | "hidden";
 }
@@ -34,7 +34,7 @@ export interface SwitchProps {
  * @param ref 
  * @returns 
  */
-export function Switch({ checked, disabled, onInput: onInputAsync, children: label, labelPosition, ...rest }: SwitchProps, ref: Ref<HTMLDivElement>) {
+export function Switch({ checked, disabled, onCheck: onInputAsync, children: label, labelPosition, ...rest }: SwitchProps, ref: Ref<HTMLDivElement>) {
     labelPosition ??= "end";
 
     const { getSyncHandler, pending, currentType, hasError, settleCount, currentCapture } = useAsyncHandler()({ capture: (e: Event) => (e as CheckboxChangeEvent<any>)[EventDetail].checked });

@@ -2714,17 +2714,17 @@
               But roughly isn't good enough if there are multiple matches.
               To convert our sorted index to the unsorted index we need, we have to find the first
               element that matches us *and* (if any such exist) is *after* our current selection.
-               In other words, the only way typeahead moves backwards relative to our current
+                In other words, the only way typeahead moves backwards relative to our current
               position is if the only other option is behind us.
-               It's not specified in WAI-ARIA what to do in that case.  I suppose wrap back to the start?
+                It's not specified in WAI-ARIA what to do in that case.  I suppose wrap back to the start?
               Though there's also a case for just going upwards to the nearest to prevent jumpiness.
               But if you're already doing typeahead on an unsorted list, like, jumpiness can't be avoided.
               I dunno. Going back to the start is the simplist though.
-               Basically what this does: Starting from where we found ourselves after our binary search,
+                Basically what this does: Starting from where we found ourselves after our binary search,
               scan backwards and forwards through all adjacent entries that also compare equally so that
               we can find the one whose `unsortedIndex` is the lowest amongst all other equal strings
               (and also the lowest `unsortedIndex` yadda yadda except that it comes after us).
-               TODO: The binary search starts this off with a solid O(log n), but one-character
+                TODO: The binary search starts this off with a solid O(log n), but one-character
               searches are, thanks to pigeonhole principal, eventually guaranteed to become
               O(n*log n). This is annoying but probably not easily solvable? There could be an
               exception for one-character strings, but that's just kicking the can down
@@ -3374,7 +3374,7 @@
         // if a change to the current selected cell should also
         // trigger focusing that cell.
 
-        const [isTabbableRow, setIsTabbableRow, getIsTabbableRow] = useState(false); // If we're not the tabbable row, then for the purposes of tabIndex
+        const [isTabbableRow, setIsTabbableRow] = useState(false); // If we're not the tabbable row, then for the purposes of tabIndex
         // calculations, we don't have a tabbable child cell.
 
         let currentColumn = isTabbableRow ? getCurrentColumn() : null; // Track child cells and manage keyboard navigation among them.
@@ -3384,9 +3384,7 @@
           useRovingTabIndexChild: useRovingTabIndexCell,
           childCount: cellCount
         } = useRovingTabIndex({
-          shouldFocusOnChange: A$1(() => {
-            return getFocusCellOnRowChange() && getIsTabbableRow();
-          }, []),
+          shouldFocusOnChange: getFocusCellOnRowChange,
           tabbableIndex: currentColumn
         }); // More navigation stuff
 
@@ -7774,7 +7772,7 @@
       } = useRandomId({
         prefix: "aria-menu-"
       });
-      const [openerElement, setOpenerElement] = useState(null);
+      const [openerElement, setOpenerElement, getOpenerElement] = useState(null);
       const {
         useSoftDismissProps
       } = useSoftDismiss({
@@ -7788,7 +7786,9 @@
         if (focusTrapActive) {
           focusMenuStable === null || focusMenuStable === void 0 ? void 0 : focusMenuStable();
         } else if (focusTrapActive === false) {
-          if (getMenuLastFocusedInner()) openerElement === null || openerElement === void 0 ? void 0 : openerElement.focus();
+          var _getOpenerElement;
+
+          if (getMenuLastFocusedInner()) (_getOpenerElement = getOpenerElement()) === null || _getOpenerElement === void 0 ? void 0 : _getOpenerElement.focus();
         } else ;
       }, [focusTrapActive]); // Focus management is really finicky, and there's always going to be 
       // an edge case where nothing's focused for two consecutive frames 
@@ -7835,9 +7835,7 @@
           }
         };
       }, [focusMenu, open]);
-      const useMenuButton = A$1(({
-        tag
-      }) => {
+      const useMenuButton = A$1(({}) => {
         const {
           element,
           getElement,
@@ -7887,9 +7885,7 @@
       const useMenuItem = A$1(args => {
         const {
           useListNavigationChildProps
-        } = useListNavigationChild(args); // const { getSyncHandler, ...asyncInfo } = useAsyncHandler<E>()({ capture: _ => void (0) });
-        // const onClick = getSyncHandler(asyncInfo.pending ? null : (args.onClick ?? null));
-
+        } = useListNavigationChild(args);
         const onClick = args.onClick;
 
         function useMenuItemProps({ ...props
@@ -7905,8 +7901,6 @@
         };
       }, []);
       const useMenuItemCheckbox = A$1(args => {
-        //const { getSyncHandler, ...asyncInfo } = useAsyncHandler<E>()({ capture: _ => !args.checked });
-        //const onClick = getSyncHandler(asyncInfo.pending ? null : args.onChange);
         const onClick = e => args.onChange(enhanceEvent(e, {
           checked: !args.checked
         }));
@@ -9643,6 +9637,7 @@
       }, children)))));
     }
 
+    D$1(null);
     const InInputGroupContext = D$1(false);
     const InInputGridContext = D$1(0);
 
@@ -9688,7 +9683,7 @@
       };
     }
 
-    const InputGrid = forwardElementRef(function InputGrid({
+    forwardElementRef(function InputGrid({
       tag,
       children,
       ...props
@@ -9730,20 +9725,6 @@
       disabled,
       ...props
     }, ref) {
-      /*
-          return (
-              cloneElement(children,
-                  useMergedProps<any>()({ class: "input-group", ref }, children.props),
-                  <InInputGroupContext.Provider value={true}>
-                      {children}
-                  </InInputGroupContext.Provider>
-              )
-          );*/
-
-      /*const inInputGrid = !!useContext(InInputGridContext);
-      if (inInputGrid) {
-          children = <div class="form-control faux-form-control">{children}</div>
-      }*/
       return v$1(tag !== null && tag !== void 0 ? tag : "div", useMergedProps()({
         class: clsx(disabled && "disabled", "input-group-text"),
         ref
@@ -9858,7 +9839,7 @@
       }, inputJsx);
     }
 
-    function capture(e) {
+    function capture$1(e) {
       return e[EventDetail].checked;
     }
     /**
@@ -9869,10 +9850,10 @@
      */
 
 
-    const Checkbox = forwardElementRef(function Checkbox({
+    const Checkbox$1 = forwardElementRef(function Checkbox({
       checked,
       disabled,
-      onInput: onInputAsync,
+      onCheck: onCheckedAsync,
       labelPosition,
       children: label,
       ...props
@@ -9889,17 +9870,17 @@
         currentCapture,
         currentType
       } = useAsyncHandler()({
-        capture
+        capture: capture$1
       });
       disabled || (disabled = pending);
-      const onInput = getSyncHandler(onInputAsync);
+      const onChecked = getSyncHandler(onCheckedAsync);
       const {
         useCheckboxInputElement,
         useCheckboxLabelElement
       } = useAriaCheckbox({
         checked: pending ? currentCapture : checked === "indeterminate" ? "mixed" : checked,
         disabled: (_disabled = disabled) !== null && _disabled !== void 0 ? _disabled : false,
-        onInput,
+        onInput: onChecked,
         labelPosition: "separate"
       });
       const {
@@ -9926,7 +9907,7 @@
         className: clsx("form-check-input", pending && "pending", disabled && "disabled", inInputGroup && "mt-0"),
         "aria-label": labelPosition === "hidden" ? stringLabel : undefined
       }));
-      const inputElement = v$1(OptionallyInputGroup$1, {
+      const inputElement = v$1(OptionallyInputGroup$2, {
         isInput: true,
         tag: inInputGroup ? "div" : null,
         tabIndex: -1,
@@ -9943,7 +9924,7 @@
           "aria-hidden": "true"
         })
       };
-      const labelElement = v$1(d$1, null, label != null && v$1(OptionallyInputGroup$1, {
+      const labelElement = v$1(d$1, null, label != null && v$1(OptionallyInputGroup$2, {
         isInput: false,
         tag: "label",
         ...p2
@@ -9955,9 +9936,7 @@
       }, ret);
       return ret;
     });
-    D$1(null);
-    D$1(null);
-    function OptionallyInputGroup$1({
+    function OptionallyInputGroup$2({
       tag,
       children,
       isInput,
@@ -9980,6 +9959,10 @@
       }, children);
     }
 
+    D$1(null);
+    D$1(false);
+    D$1(null);
+
     /**
      * @see Checkbox
      * @param ref
@@ -9989,7 +9972,7 @@
     function Switch({
       checked,
       disabled,
-      onInput: onInputAsync,
+      onCheck: onInputAsync,
       children: label,
       labelPosition,
       ...rest
@@ -10036,7 +10019,7 @@
         console.error(`Hidden labels require a string-based label for the aria-label attribute.`);
       }
 
-      const inputElement = v$1(OptionallyInputGroup, {
+      const inputElement = v$1(OptionallyInputGroup$1, {
         tag: inInputGroup ? "div" : null,
         disabled: disabled,
         tabIndex: -1,
@@ -10057,7 +10040,7 @@
           "aria-hidden": "true"
         })
       };
-      const labelElement = v$1(d$1, null, label != null && v$1(OptionallyInputGroup, {
+      const labelElement = v$1(d$1, null, label != null && v$1(OptionallyInputGroup$1, {
         tag: "label",
         isInput: false,
         ...p2
@@ -10072,7 +10055,7 @@
     } // Note: Slightly different from the others
     // (^^^^ I'm really glad I left that there)
 
-    function OptionallyInputGroup({
+    function OptionallyInputGroup$1({
       tag,
       isInput,
       children,
@@ -10092,6 +10075,286 @@
       }, children);
     }
 
+    const knownNames$1 = new Set();
+    const CurrentHandlerTypeContext$1 = D$1("sync");
+    const RadioGroupContext$1 = D$1(null);
+    function RadioGroup$1({
+      children,
+      name,
+      selectedValue,
+      label,
+      labelPosition,
+      onValueChange: onInputAsync
+    }) {
+      const {
+        getSyncHandler,
+        pending,
+        hasError,
+        settleCount,
+        currentCapture,
+        currentType
+      } = useAsyncHandler()({
+        capture: e => e[EventDetail].selectedValue
+      });
+      const onInput = getSyncHandler(onInputAsync);
+      const {
+        useRadio,
+        useRadioGroupProps,
+        managedChildren,
+        getIndex
+      } = useAriaRadioGroup({
+        name,
+        selectedValue: pending ? currentCapture : selectedValue,
+        onInput: onInput
+      });
+      let stringLabel = undefined;
+
+      if (labelPosition === "hidden") {
+        if (label != null && !["string", "number", "boolean"].includes(typeof label)) {
+          console.error(`Hidden labels require a string-based label for the aria-label attribute.`);
+        } else {
+          stringLabel = `${label}`;
+        }
+      } // Debugging check -- multiple groups with the same name can cause weird glitches from native radio selection behavior.
+
+
+      y(() => {
+        if (knownNames$1.has(name)) {
+          console.error(`Multiple radio groups with the name "${name}" exist on the same page at the same time!`);
+        }
+
+        knownNames$1.add(name);
+        return () => knownNames$1.delete(name);
+      }, [name]);
+      const selectedIndex = getIndex(currentCapture !== null && currentCapture !== void 0 ? currentCapture : selectedValue); //const capturedIndex = getIndex(currentCapture!);
+
+      useChildFlag(selectedIndex, managedChildren.length, (index, isSelected) => {
+        var _managedChildren$inde;
+
+        return (_managedChildren$inde = managedChildren[index]) === null || _managedChildren$inde === void 0 ? void 0 : _managedChildren$inde.setAsyncState(isSelected ? hasError ? "failed" : pending ? "pending" : "succeeded" : null);
+      }); // useChildFlag(pending ? capturedIndex : null, managedChildren.length, useCallback((index, isCaptured) => managedChildren[index].setPending(isCaptured? "in" : false), []));
+
+      const {
+        useGenericLabelLabel,
+        useGenericLabelInput
+      } = useGenericLabel({
+        inputPrefix: "aria-radiogroup",
+        labelPrefix: "aria-radiogroup-label",
+        backupText: stringLabel
+      });
+      const {
+        useGenericLabelInputProps
+      } = useGenericLabelInput();
+      const {
+        useGenericLabelLabelProps
+      } = useGenericLabelLabel();
+      let labelJsx = v$1("div", { ...useGenericLabelLabelProps({})
+      });
+      let groupJsx = v$1("div", { ...useGenericLabelInputProps(useRadioGroupProps({
+          "aria-label": labelPosition === "hidden" ? stringLabel : undefined
+        }))
+      }, children);
+      return v$1(CurrentHandlerTypeContext$1.Provider, {
+        value: currentType !== null && currentType !== void 0 ? currentType : "sync"
+      }, v$1(RadioGroupContext$1.Provider, {
+        value: useRadio
+      }, labelPosition == "start" && labelJsx, groupJsx, labelPosition == "end" && labelJsx));
+    }
+    function Radio$1({
+      disabled,
+      children: label,
+      index,
+      value,
+      labelPosition
+    }) {
+      var _labelPosition, _disabled, _label;
+
+      const useAriaRadio = F(RadioGroupContext$1);
+      (_labelPosition = labelPosition) !== null && _labelPosition !== void 0 ? _labelPosition : labelPosition = "end";
+      const text = null;
+      const currentHandlerType = F(CurrentHandlerTypeContext$1);
+      const [asyncState, setAsyncState] = useState(null);
+      disabled || (disabled = asyncState === "pending");
+      const {
+        useRadioInput,
+        useRadioLabel
+      } = useAriaRadio({
+        disabled: (_disabled = disabled) !== null && _disabled !== void 0 ? _disabled : false,
+        labelPosition: "separate",
+        index,
+        text,
+        value,
+        setAsyncState
+      });
+      const {
+        useRadioInputProps
+      } = useRadioInput({
+        tag: "input"
+      });
+      const {
+        useRadioLabelProps
+      } = useRadioLabel({
+        tag: "label"
+      });
+      const inInputGroup = F(InInputGroupContext);
+      (_label = label) !== null && _label !== void 0 ? _label : label = value;
+      let stringLabel = `${label}`;
+
+      if (label != null && labelPosition === "hidden" && !["string", "number", "boolean"].includes(typeof label)) {
+        console.error(`Hidden labels require a string-based label for the aria-label attribute.`);
+      }
+
+      const inputElement = v$1(OptionallyInputGroup$2, {
+        isInput: true,
+        tag: inInputGroup ? "div" : null,
+        disabled: disabled,
+        tabIndex: -1
+      }, v$1(ProgressCircular, {
+        childrenPosition: "after",
+        colorFill: "foreground-only",
+        mode: currentHandlerType == "async" ? asyncState : null,
+        colorVariant: "info"
+      }, v$1("input", { ...useRadioInputProps({
+          type: "radio",
+          className: clsx(asyncState === "pending" && "pending", disabled && "disabled", "form-check-input"),
+          "aria-label": labelPosition === "hidden" ? stringLabel : undefined
+        })
+      })));
+      const labelElement = v$1(d$1, null, label != null && v$1(OptionallyInputGroup$2, {
+        isInput: false,
+        tag: "label",
+        ...useRadioLabelProps({
+          className: clsx(asyncState === "pending" && "pending", disabled && "disabled", "form-check-label"),
+          "aria-hidden": "true"
+        })
+      }, label));
+      const ret = v$1(d$1, null, labelPosition == "start" && labelElement, inputElement, labelPosition == "end" && labelElement);
+      if (!inInputGroup) return v$1("div", {
+        class: "form-check"
+      }, ret);
+      return ret;
+    }
+
+    function capture(e) {
+      return e[EventDetail].checked;
+    }
+    /**
+     * TODO: When inside an InputGroup, Checkboxes don't forward any properties or refs because there's no one DOM element to attach to.
+     *
+     * Probably need separate `inputRef` & `labelRef` properties for that,
+     * but given there's also no easy way to forward props to just them a solution like that feels incomplete.
+     */
+
+
+    const Checkbox = forwardElementRef(function Checkbox({
+      checked,
+      disabled,
+      onCheck: onCheckedAsync,
+      labelPosition,
+      children: label,
+      ...props
+    }, ref) {
+      var _labelPosition, _disabled;
+
+      (_labelPosition = labelPosition) !== null && _labelPosition !== void 0 ? _labelPosition : labelPosition = "end";
+      const {
+        getSyncHandler,
+        pending,
+        hasError,
+        settleCount,
+        hasCapture,
+        currentCapture,
+        currentType
+      } = useAsyncHandler()({
+        capture
+      });
+      disabled || (disabled = pending);
+      const onChecked = getSyncHandler(onCheckedAsync);
+      const {
+        useCheckboxInputElement,
+        useCheckboxLabelElement
+      } = useAriaCheckbox({
+        checked: pending ? currentCapture : checked === "indeterminate" ? "mixed" : checked,
+        disabled: (_disabled = disabled) !== null && _disabled !== void 0 ? _disabled : false,
+        onInput: onChecked,
+        labelPosition: "separate"
+      });
+      const {
+        useCheckboxInputElementProps
+      } = useCheckboxInputElement({
+        tag: "input"
+      });
+      const {
+        useCheckboxLabelElementProps
+      } = useCheckboxLabelElement({
+        tag: "label"
+      });
+      const inInputGroup = F(InInputGroupContext);
+      let stringLabel = `${label}`;
+
+      if (label != null && labelPosition === "hidden" && !["string", "number", "boolean"].includes(typeof label)) {
+        console.error(`Hidden labels require a string-based label for the aria-label attribute.`);
+      }
+
+      const asyncState = hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null;
+      const p = useMergedProps()(props, useCheckboxInputElementProps({
+        ref,
+        type: "checkbox",
+        className: clsx("form-check-input", pending && "pending", disabled && "disabled", inInputGroup && "mt-0"),
+        "aria-label": labelPosition === "hidden" ? stringLabel : undefined
+      }));
+      const inputElement = v$1(OptionallyInputGroup, {
+        isInput: true,
+        tag: inInputGroup ? "div" : null,
+        tabIndex: -1,
+        disabled: disabled
+      }, v$1(ProgressCircular, {
+        childrenPosition: "after",
+        colorFill: "foreground-only",
+        mode: currentType === "async" ? asyncState : null,
+        colorVariant: "info"
+      }, v$1("input", { ...p
+      })));
+      const p2 = { ...useCheckboxLabelElementProps({
+          className: clsx(pending && "pending", disabled && "disabled", "form-check-label"),
+          "aria-hidden": "true"
+        })
+      };
+      const labelElement = v$1(d$1, null, label != null && v$1(OptionallyInputGroup, {
+        isInput: false,
+        tag: "label",
+        ...p2
+      }, label));
+      const ret = v$1(d$1, null, labelPosition == "start" && labelElement, inputElement, labelPosition == "end" && labelElement);
+      if (!inInputGroup) return v$1("div", { ...useMergedProps()({}, {
+          class: "form-check"
+        })
+      }, ret);
+      return ret;
+    });
+    function OptionallyInputGroup({
+      tag,
+      children,
+      isInput,
+      ...props
+    }) {
+      const inInputGroup = F(InInputGroupContext);
+      const inInputGrid = !!F(InInputGridContext);
+      if (!inInputGroup) return v$1(tag !== null && tag !== void 0 ? tag : d$1, props, children); // If we're in an InputGrid's InputGroup, then create a 
+      // new child that's, CSS-wise, the "true" input.
+      // The other one is used for its border styles and relative positioning.
+
+      if (inInputGrid && isInput) children = v$1("div", {
+        className: "input-group-text"
+      }, children);
+      return v$1(InputGroupText, {
+        tag: tag !== null && tag !== void 0 ? tag : "div",
+        ...useMergedProps()({
+          className: clsx(isInput && inInputGrid && "faux-input-group-text")
+        }, props)
+      }, children);
+    }
+
     const knownNames = new Set();
     const CurrentHandlerTypeContext = D$1("sync");
     const RadioGroupContext = D$1(null);
@@ -10101,7 +10364,7 @@
       selectedValue,
       label,
       labelPosition,
-      onInput: onInputAsync
+      onValueChange: onInputAsync
     }) {
       const {
         getSyncHandler,
@@ -10221,7 +10484,7 @@
         console.error(`Hidden labels require a string-based label for the aria-label attribute.`);
       }
 
-      const inputElement = v$1(OptionallyInputGroup$1, {
+      const inputElement = v$1(OptionallyInputGroup, {
         isInput: true,
         tag: inInputGroup ? "div" : null,
         disabled: disabled,
@@ -10237,7 +10500,7 @@
           "aria-label": labelPosition === "hidden" ? stringLabel : undefined
         })
       })));
-      const labelElement = v$1(d$1, null, label != null && v$1(OptionallyInputGroup$1, {
+      const labelElement = v$1(d$1, null, label != null && v$1(OptionallyInputGroup, {
         isInput: false,
         tag: "label",
         ...useRadioLabelProps({
@@ -12773,6 +13036,7 @@
       Transition,
       ...rest
     }) {
+      useLogRender("Menu", `Rendering Menu`);
       const [open, setOpen] = useState(false);
       const onClose = A$1(() => setOpen(false), []);
 
@@ -12888,6 +13152,7 @@
       index,
       ...rest
     }) {
+      useLogRender("MenuItem", `Rendering MenuItem`);
       const useMenuItem = F(UseMenuItemContext);
       const isInteractive = onPressAsync != null;
       const [text, setText] = useState(null);
@@ -13400,6 +13665,54 @@
       class: ""
     });
 
+    const InputGrid = forwardElementRef(function InputGrid({
+      tag,
+      children,
+      ...props
+    }, ref) {
+      return v$1(tag !== null && tag !== void 0 ? tag : "div", useMergedProps()({
+        class: "input-grid",
+        ref
+      }, props), v$1(InInputGridContext.Provider, {
+        value: F(InInputGridContext) + 1
+      }, children));
+    });
+    /**
+     * An InputGroup, that puts an Input and its Label together, visually, into one component.
+     *
+     * All Input-type components automatically detect when they're in an InputGroup and render different accordingly.
+     */
+
+    forwardElementRef(function InputGroup({
+      children,
+      tag,
+      ...props
+    }, ref) {
+      return v$1(tag !== null && tag !== void 0 ? tag : "div", useMergedProps()({
+        class: "input-group",
+        ref
+      }, props), v$1(InInputGroupContext.Provider, {
+        value: true
+      }, children));
+    });
+    /**
+     * Not generally needed, since most input components come with labels that do this for you.
+     *
+     * That being said, if you just need a static block of text not hooked up to any input element, this is your component.
+     */
+
+    forwardElementRef(function InputGroupText({
+      tag,
+      children,
+      disabled,
+      ...props
+    }, ref) {
+      return v$1(tag !== null && tag !== void 0 ? tag : "div", useMergedProps()({
+        class: clsx(disabled && "disabled", "input-group-text"),
+        ref
+      }, props), children);
+    });
+
     function DemoButtons() {
         var _this = this;
         var _a = useState("outline"), buttonsFill = _a[0], setButtonsFill = _a[1];
@@ -13465,9 +13778,9 @@
                                 " event handler for buttons can be sync or async, and they will react appropriately if the operation takes long enough.",
                                 v$1(InputGrid, null,
                                     v$1(InputGroup, null,
-                                        v$1(Checkbox, { onInput: setUsesAsync, checked: usesAsync, labelPosition: "start" }, "Use async handler")),
+                                        v$1(Checkbox$1, { onCheck: setUsesAsync, checked: usesAsync, labelPosition: "start" }, "Use async handler")),
                                     v$1(InputGroup, null,
-                                        v$1(Checkbox, { onInput: setAsyncFails, checked: asyncFails, labelPosition: "start", disabled: !usesAsync }, "Async handler rejects")),
+                                        v$1(Checkbox$1, { onCheck: setAsyncFails, checked: asyncFails, labelPosition: "start", disabled: !usesAsync }, "Async handler rejects")),
                                     v$1(InputGroup, null,
                                         v$1(Input, { width: "8ch", disabled: !usesAsync, type: "number", onInput: setAsyncTimeout, value: asyncTimeout }, "Async timeout")))),
                             v$1(CardElement, null,
@@ -13529,7 +13842,7 @@
                                 v$1("code", null, "a"),
                                 ".",
                                 v$1(InputGroup, null,
-                                    v$1(Checkbox, { onInput: setUsesLinkButton, checked: usesLinkButton, labelPosition: "start" }, "Use link button"))),
+                                    v$1(Checkbox$1, { onCheck: setUsesLinkButton, checked: usesLinkButton, labelPosition: "start" }, "Use link button"))),
                             v$1(CardElement, null, usesLinkButton ? v$1(Button, { target: "_blank", href: "https://www.example.com" },
                                 "example.com ",
                                 v$1("i", { class: "bi bi-box-arrow-up-right" })) : v$1(Button, { onPress: onPress }, "Regular button")),
@@ -13618,7 +13931,7 @@
             v$1(Card, null,
                 v$1(CardElement, { type: "title", tag: "h2" }, "Checkboxes, switches, & radios"),
                 v$1(CardElement, null,
-                    v$1(Checkbox, { checked: demoChecked, onInput: usesAsync ? asyncCheckboxInput : setDemoChecked }, "I'm a checkbox")),
+                    v$1(Checkbox$1, { checked: demoChecked, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "I'm a checkbox")),
                 v$1(CardElement, null,
                     "Several components related to on/off togglable form-like selection controls are provided:",
                     v$1("ul", null,
@@ -13661,18 +13974,18 @@
                     " event handler for all types of inputs can be sync or async.",
                     v$1(InputGrid, null,
                         v$1(InputGroup, null,
-                            v$1(Checkbox, { onInput: setUsesAsync, checked: usesAsync, labelPosition: "start" }, "Async event handler")),
+                            v$1(Checkbox$1, { onCheck: setUsesAsync, checked: usesAsync, labelPosition: "start" }, "Async event handler")),
                         v$1(InputGroup, null,
-                            v$1(Checkbox, { onInput: setAsyncFails, checked: asyncFails, labelPosition: "start", disabled: !usesAsync }, "Async handler rejects")),
+                            v$1(Checkbox$1, { onCheck: setAsyncFails, checked: asyncFails, labelPosition: "start", disabled: !usesAsync }, "Async handler rejects")),
                         v$1(InputGroup, null,
                             v$1(Input, { disabled: !usesAsync, type: "number", onInput: setAsyncTimeout, value: asyncTimeout }, "Async timeout")),
                         v$1(InputGroup, null,
                             v$1(Input, { type: "number", onInput: setRadioCount, value: radioCount }, "# of radio buttons")))),
                 v$1(CardElement, null,
-                    v$1(Checkbox, { checked: demoChecked, onInput: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Checkbox"),
-                    v$1(Switch, { checked: demoChecked, onInput: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Switch")),
+                    v$1(Checkbox$1, { checked: demoChecked, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Checkbox"),
+                    v$1(Switch, { checked: demoChecked, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Switch")),
                 v$1(CardElement, null,
-                    v$1(RadioGroup, { name: "radio-demo-1", selectedValue: demoRadio, onInput: usesAsync ? asyncRadioInput : setDemoRadio }, Array.from(function () {
+                    v$1(RadioGroup$1, { name: "radio-demo-1", selectedValue: demoRadio, onValueChange: usesAsync ? asyncRadioInput : setDemoRadio }, Array.from(function () {
                         var i;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -13681,7 +13994,7 @@
                                     _a.label = 1;
                                 case 1:
                                     if (!(i < radioCount)) return [3 /*break*/, 4];
-                                    return [4 /*yield*/, v$1(Radio, { index: i, value: i, key: i },
+                                    return [4 /*yield*/, v$1(Radio$1, { index: i, value: i, key: i },
                                             "Radio #",
                                             i + 1)];
                                 case 2:
@@ -13701,15 +14014,15 @@
                 v$1(CardElement, null,
                     "When disabled, all inputs remain focusable so that they can still be announced by screen readers, have tooltips via mouseover, etc.",
                     v$1(InputGroup, null,
-                        v$1(Checkbox, { onInput: setDisabled, checked: disabled, labelPosition: "start" }, "Inputs disabled"))),
+                        v$1(Checkbox$1, { onCheck: setDisabled, checked: disabled, labelPosition: "start" }, "Inputs disabled"))),
                 v$1(CardElement, null,
-                    v$1(Checkbox, { disabled: disabled, checked: demoChecked, onInput: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Checkbox "),
-                    v$1(Switch, { disabled: disabled, checked: demoChecked, onInput: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Switch")),
+                    v$1(Checkbox$1, { disabled: disabled, checked: demoChecked, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Checkbox "),
+                    v$1(Switch, { disabled: disabled, checked: demoChecked, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Switch")),
                 v$1(CardElement, null,
-                    v$1(RadioGroup, { name: "radio-demo-2", selectedValue: demoRadio, onInput: usesAsync ? asyncRadioInput : setDemoRadio },
-                        v$1(Radio, { disabled: disabled, index: 0, value: 0 }, "Radio #1"),
-                        v$1(Radio, { disabled: disabled, index: 1, value: 1 }, "Radio #2"),
-                        v$1(Radio, { disabled: disabled, index: 2, value: 2 }, "Radio #3"))),
+                    v$1(RadioGroup$1, { name: "radio-demo-2", selectedValue: demoRadio, onValueChange: usesAsync ? asyncRadioInput : setDemoRadio },
+                        v$1(Radio$1, { disabled: disabled, index: 0, value: 0 }, "Radio #1"),
+                        v$1(Radio$1, { disabled: disabled, index: 1, value: 1 }, "Radio #2"),
+                        v$1(Radio$1, { disabled: disabled, index: 2, value: 2 }, "Radio #3"))),
                 v$1("hr", null),
                 v$1(CardElement, { type: "subtitle", tag: "h3" },
                     v$1("code", null, "InputGroup"),
@@ -13723,16 +14036,16 @@
                 v$1(CardElement, null,
                     v$1(InputGrid, null,
                         v$1(InputGroup, null,
-                            v$1(Checkbox, { checked: demoChecked, onInput: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Checkbox")),
+                            v$1(Checkbox$1, { checked: demoChecked, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Checkbox")),
                         v$1(InputGroup, null,
-                            v$1(Switch, { checked: demoChecked, onInput: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Switch")),
-                        v$1(RadioGroup, { name: "radio-demo-5", selectedValue: demoRadio, onInput: usesAsync ? asyncRadioInput : setDemoRadio },
+                            v$1(Switch, { checked: demoChecked, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Switch")),
+                        v$1(RadioGroup$1, { name: "radio-demo-5", selectedValue: demoRadio, onValueChange: usesAsync ? asyncRadioInput : setDemoRadio },
                             v$1(InputGroup, null,
-                                v$1(Radio, { index: 0, value: 0 }, "Radio #1")),
+                                v$1(Radio$1, { index: 0, value: 0 }, "Radio #1")),
                             v$1(InputGroup, null,
-                                v$1(Radio, { index: 1, value: 1 }, "Radio #2")),
+                                v$1(Radio$1, { index: 1, value: 1 }, "Radio #2")),
                             v$1(InputGroup, null,
-                                v$1(Radio, { index: 2, value: 2 }, "Radio #3"))))),
+                                v$1(Radio$1, { index: 2, value: 2 }, "Radio #3"))))),
                 v$1(CardElement, { type: "paragraph" },
                     v$1("code", null, "<InputGroup>\n    <Checkbox checked={checked} onInput={setChecked}>Checkbox</Checkbox>\n</InputGroup>\n<InputGroup>\n    <Switch checked={checked} onInput={onInput}>Switch</Switch>\n</InputGroup>\n<RadioGroup name=\"radio-demo-5\" selectedValue={value} onInput={setValue}>\n    <InputGroup>\n        <Radio index={0} value=\"value1\" labelPosition=\"start\">Radio #1</Radio>\n        <Radio index={1} value=\"value2\" labelPosition=\"hidden\">Radio #2</Radio>\n        <Radio index={2} value=\"value3\" labelPosition=\"end\">Radio #3</Radio>\n    </InputGroup>\n</RadioGroup>")),
                 v$1("hr", null),
@@ -13748,23 +14061,23 @@
                     v$1("code", null, "InputGroup"),
                     ", as Bootstrap places \"naked\" checkboxes and such in the margin area before the label no matter what order they come in the DOM."),
                 v$1(CardElement, null,
-                    v$1(RadioGroup, { name: "radio-demo-6", selectedValue: labelPosition, onInput: setLabelPosition, labelPosition: labelPosition },
-                        v$1(Radio, { labelPosition: labelPosition, index: 0, value: "start" }, "Before"),
-                        v$1(Radio, { labelPosition: labelPosition, index: 1, value: "end" }, "After"),
-                        v$1(Radio, { labelPosition: labelPosition, index: 2, value: "hidden" }, "Hidden (still announced verbally)"))),
+                    v$1(RadioGroup$1, { name: "radio-demo-6", selectedValue: labelPosition, onValueChange: setLabelPosition, labelPosition: labelPosition },
+                        v$1(Radio$1, { labelPosition: labelPosition, index: 0, value: "start" }, "Before"),
+                        v$1(Radio$1, { labelPosition: labelPosition, index: 1, value: "end" }, "After"),
+                        v$1(Radio$1, { labelPosition: labelPosition, index: 2, value: "hidden" }, "Hidden (still announced verbally)"))),
                 v$1(CardElement, null,
                     v$1(InputGrid, null,
                         v$1(InputGroup, null,
-                            v$1(Checkbox, { labelPosition: labelPosition, checked: demoChecked, onInput: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Checkbox")),
+                            v$1(Checkbox$1, { labelPosition: labelPosition, checked: demoChecked, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Checkbox")),
                         v$1(InputGroup, null,
-                            v$1(Switch, { labelPosition: labelPosition, checked: demoChecked, onInput: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Switch")),
-                        v$1(RadioGroup, { name: "radio-demo-7", selectedValue: demoRadio, onInput: usesAsync ? asyncRadioInput : setDemoRadio },
+                            v$1(Switch, { labelPosition: labelPosition, checked: demoChecked, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Switch")),
+                        v$1(RadioGroup$1, { name: "radio-demo-7", selectedValue: demoRadio, onValueChange: usesAsync ? asyncRadioInput : setDemoRadio },
                             v$1(InputGroup, null,
-                                v$1(Radio, { labelPosition: labelPosition, index: 0, value: 0 }, "Radio #1")),
+                                v$1(Radio$1, { labelPosition: labelPosition, index: 0, value: 0 }, "Radio #1")),
                             v$1(InputGroup, null,
-                                v$1(Radio, { labelPosition: labelPosition, index: 1, value: 1 }, "Radio #2")),
+                                v$1(Radio$1, { labelPosition: labelPosition, index: 1, value: 1 }, "Radio #2")),
                             v$1(InputGroup, null,
-                                v$1(Radio, { labelPosition: labelPosition, index: 2, value: 2 }, "Radio #3"))))))));
+                                v$1(Radio$1, { labelPosition: labelPosition, index: 2, value: 2 }, "Radio #3"))))))));
     }
     function sleep$4(arg0) {
         return __awaiter(this, void 0, void 0, function () {
@@ -13825,9 +14138,9 @@
                     " event handler for all types of inputs can be sync or async.",
                     v$1(InputGrid, null,
                         v$1(InputGroup, null,
-                            v$1(Checkbox, { onInput: setUsesAsync, checked: usesAsync, labelPosition: "start" }, "Async event handler")),
+                            v$1(Checkbox$1, { onCheck: setUsesAsync, checked: usesAsync, labelPosition: "start" }, "Async event handler")),
                         v$1(InputGroup, null,
-                            v$1(Checkbox, { onInput: setAsyncFails, checked: asyncFails, labelPosition: "start", disabled: !usesAsync }, "Async handler rejects")),
+                            v$1(Checkbox$1, { onCheck: setAsyncFails, checked: asyncFails, labelPosition: "start", disabled: !usesAsync }, "Async handler rejects")),
                         v$1(InputGroup, null,
                             v$1(Input, { disabled: !usesAsync, type: "number", onInput: setAsyncTimeout, value: asyncTimeout }, "Async timeout")))),
                 v$1(CardElement, null,
@@ -13881,9 +14194,9 @@
                     ":",
                     v$1(InputGrid, null,
                         v$1(InputGroup, null,
-                            v$1(Checkbox, { disabled: true, checked: true, labelPosition: "start" }, "Checkbox")),
+                            v$1(Checkbox$1, { disabled: true, checked: true, labelPosition: "start" }, "Checkbox")),
                         v$1(InputGroup, null,
-                            v$1(Checkbox, { disabled: true, checked: true, labelPosition: "start" }, "Another checkbox")),
+                            v$1(Checkbox$1, { disabled: true, checked: true, labelPosition: "start" }, "Another checkbox")),
                         v$1(InputGroup, null,
                             v$1(Input, { disabled: true, onInput: function () { }, type: "number", value: 0 }, "Numeric input")))),
                 v$1(CardElement, null,
@@ -13891,9 +14204,9 @@
                     v$1("code", null, "<InputGrid>"),
                     ":",
                     v$1(InputGroup, null,
-                        v$1(Checkbox, { disabled: true, checked: true, labelPosition: "start" }, "Checkbox")),
+                        v$1(Checkbox$1, { disabled: true, checked: true, labelPosition: "start" }, "Checkbox")),
                     v$1(InputGroup, null,
-                        v$1(Checkbox, { disabled: true, checked: true, labelPosition: "start" }, "Another checkbox")),
+                        v$1(Checkbox$1, { disabled: true, checked: true, labelPosition: "start" }, "Another checkbox")),
                     v$1(InputGroup, null,
                         v$1(Input, { disabled: true, onInput: function () { }, type: "number", value: 0 }, "Numeric input"))),
                 v$1(CardElement, { type: "subtitle", tag: "h3" }, "Simple grids"),
@@ -14204,7 +14517,7 @@
             w && v$1(TableCell, { columnIndex: 1, value: w }),
             v$1(TableCell, { columnIndex: 2, value: d }, formatter.format(d)),
             v$1(TableCell, { columnIndex: 3, value: checked },
-                v$1(Checkbox, { checked: checked, onInput: onInput, labelPosition: "hidden" }, "Demo table checkbox"))));
+                v$1(Checkbox$1, { checked: checked, onCheck: onInput, labelPosition: "hidden" }, "Demo table checkbox"))));
     });
     function DemoTable() {
         var _a = useState(5), rowCount = _a[0], setRowCount = _a[1];
@@ -14259,7 +14572,7 @@
                     " wrapper component, and the \"direct descendant\" restriction will apply to the wrapper instead."),
                 v$1(CardElement, null,
                     v$1(Input, { type: "number", value: rowCount, min: 0, max: 255, onInput: setRowCount }, "Row count"),
-                    v$1(Checkbox, { checked: filterEvens, onInput: setFilterEvens }, "Filter out even numbers")),
+                    v$1(Checkbox$1, { checked: filterEvens, onCheck: setFilterEvens }, "Filter out even numbers")),
                 v$1(CardElement, null,
                     v$1(Table, null,
                         v$1(TableHead, null,
@@ -14457,7 +14770,7 @@
         return (v$1("div", { class: "demo" },
             v$1(Tooltip, { tooltip: "Open dialog", Transition: ZoomFade, zoomOriginDynamic: 0, zoomMin: 0.85 },
                 v$1(InputGroup, null,
-                    v$1(Checkbox, { checked: open, onInput: setOpen }, "Open dialog"))),
+                    v$1(Checkbox, { checked: open, onCheck: setOpen }, "Open dialog"))),
             v$1(Dialog, { Transition: ClipFade, clipOriginBlock: 0, open: open, onClose: onClose, descriptive: false, title: "Dialog Title", footer: v$1("button", { onClick: onClose }, "Close") },
                 v$1("p", { tabIndex: -1 }, "Dialog body content"),
                 v$1("p", null, RandomWords.join(" ")),
@@ -14471,7 +14784,7 @@
         var _a = useState(false), open = _a[0], setOpen = _a[1];
         //open = true;
         return (v$1("div", { class: "demo" },
-            v$1(Checkbox, { checked: open, onInput: setOpen }, "Open Drawer"),
+            v$1(Checkbox, { checked: open, onCheck: setOpen }, "Open Drawer"),
             v$1(Drawer, { Transition: Slide, slideTargetInline: -1, open: open, onClose: onClose, descriptive: false, title: "Dialog Title" },
                 v$1("p", { tabIndex: -1 }, "Dialog body content"),
                 v$1("p", null, RandomWords.join(" ")),
@@ -14634,7 +14947,7 @@
         return (v$1("div", { class: "demo" },
             v$1(InputGroup, null,
                 v$1(Input, { type: "text", onInput: onInput1, value: text, width: "100%" }, "Test input")),
-            v$1(RadioGroup, { selectedValue: radioValue, name: "demo-radio", onInput: onInput2 },
+            v$1(RadioGroup, { selectedValue: radioValue, name: "demo-radio", onValueChange: onInput2 },
                 v$1(InputGroup, null,
                     v$1(Radio, { index: 0, value: "ARadio" })),
                 v$1(InputGroup, null,
@@ -14644,7 +14957,7 @@
     });
     var Component = function () {
         return v$1(GridResponsive, { minWidth: "35em" },
-            v$1(DebugUtilContext.Provider, { value: d(function () { return ({ logRender: new Set(["Table", "TableBody", "TableRow"]) }); }, []) },
+            v$1(DebugUtilContext.Provider, { value: d(function () { return ({ logRender: new Set(["Table", "TableBody", "TableRow", "Menu", "MenuItem"]) }); }, []) },
                 v$1(ToastsProvider, null,
                     v$1(DemoTable, null),
                     v$1(DemoMenus, null),

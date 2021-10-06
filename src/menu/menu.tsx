@@ -5,7 +5,7 @@ import { UseMenuItem } from "preact-aria-widgets/use-menu";
 import { LogicalDirectionInfo, useAsyncHandler, useElementSize, useGlobalHandler, useMergedProps, useRefElement, useState, useTimeout } from "preact-prop-helpers";
 import { useCallback, useContext, useEffect, useLayoutEffect } from "preact/hooks";
 import { BodyPortal } from "../portal";
-import { FlippableTransitionComponent, TagSensitiveProps, TransitionComponent, usePseudoActive } from "../props";
+import { FlippableTransitionComponent, TagSensitiveProps, TransitionComponent, useLogRender, usePseudoActive } from "../props";
 import { CreateZoomProps, Zoom } from "preact-transition/zoom";
 import { ZoomFade, ZoomFadeProps, SlideZoomFadeProps } from "preact-transition";
 import { TransitionDirection, TransitionPhase } from "preact-transition/transitionable";
@@ -33,7 +33,7 @@ export interface MenuItemProps {
 const OnCloseContext = createContext<(() => void) | undefined>(undefined);
 const UseMenuItemContext = createContext<UseMenuItem<HTMLButtonElement>>(null!);
 export function Menu<E extends Element, T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element>({ anchor, anchorEventName, anchorTag, children, tag, positionInline, positionBlock, Transition, ...rest }: MenuProps<E, T>) {
-
+    useLogRender("Menu", `Rendering Menu`);
 
 
     const [open, setOpen] = useState(false);
@@ -102,6 +102,7 @@ export function Menu<E extends Element, T extends <E extends HTMLElement>(...arg
 
 
 export function MenuItem({ children, disabled, onPress: onPressAsync, index, ...rest }: MenuItemProps) {
+    useLogRender("MenuItem", `Rendering MenuItem`);
     const useMenuItem = useContext(UseMenuItemContext);
 
     const isInteractive = (onPressAsync != null);

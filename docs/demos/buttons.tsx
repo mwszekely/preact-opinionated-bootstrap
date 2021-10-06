@@ -58,8 +58,8 @@ export function DemoButtons() {
                             <CardElement>
                                 The <code>onPress</code> event handler for buttons can be sync or async, and they will react appropriately if the operation takes long enough.
                                 <InputGrid>
-                                    <InputGroup><Checkbox onInput={setUsesAsync} checked={usesAsync} labelPosition="start">Use async handler</Checkbox></InputGroup>
-                                    <InputGroup><Checkbox onInput={setAsyncFails} checked={asyncFails} labelPosition="start" disabled={!usesAsync}>Async handler rejects</Checkbox></InputGroup>
+                                    <InputGroup><Checkbox onCheck={setUsesAsync} checked={usesAsync} labelPosition="start">Use async handler</Checkbox></InputGroup>
+                                    <InputGroup><Checkbox onCheck={setAsyncFails} checked={asyncFails} labelPosition="start" disabled={!usesAsync}>Async handler rejects</Checkbox></InputGroup>
                                     <InputGroup><Input width="8ch" disabled={!usesAsync} type="number" onInput={setAsyncTimeout} value={asyncTimeout}>Async timeout</Input></InputGroup>
                                 </InputGrid>
                             </CardElement>
@@ -113,7 +113,7 @@ export function DemoButtons() {
                             </CardElement>
                             <CardElement>
                                 A <code>&lt;Button&gt;</code> will use an anchor link internally if you provide it with an <code>href</code> prop, or optionally setting the <code>tag</code> prop to <code>a</code>.
-                                <InputGroup><Checkbox onInput={setUsesLinkButton} checked={usesLinkButton} labelPosition="start">Use link button</Checkbox></InputGroup>
+                                <InputGroup><Checkbox onCheck={setUsesLinkButton} checked={usesLinkButton} labelPosition="start">Use link button</Checkbox></InputGroup>
                             </CardElement>
                             <CardElement >
                                 {usesLinkButton ? <Button target="_blank" href="https://www.example.com">example.com <i class="bi bi-box-arrow-up-right"></i></Button> : <Button onPress={onPress}>Regular button</Button>}

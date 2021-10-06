@@ -46,21 +46,5 @@ export const InputGroup = forwardElementRef(function InputGroup<E extends Elemen
  * That being said, if you just need a static block of text not hooked up to any input element, this is your component.
  */
 export const InputGroupText = forwardElementRef(function InputGroupText<E extends Element>({ tag, children, disabled, ...props }: InputGroupTextProps<E>, ref: Ref<E>) {
-
-/*
-    return (
-        cloneElement(children,
-            useMergedProps<any>()({ class: "input-group", ref }, children.props),
-            <InInputGroupContext.Provider value={true}>
-                {children}
-            </InInputGroupContext.Provider>
-        )
-    );*/
-
-    /*const inInputGrid = !!useContext(InInputGridContext);
-    if (inInputGrid) {
-        children = <div class="form-control faux-form-control">{children}</div>
-    }*/
-
     return createElement(tag ?? "div" as any, useMergedProps<E>()({ class: clsx(disabled && "disabled", "input-group-text"), ref }, props), children);
 })

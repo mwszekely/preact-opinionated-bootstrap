@@ -98,7 +98,8 @@ export type LogRenderType =
     "Accordion" | "AccordionSection" |
     "ButtonGroup" | "ButtonGroupChild" |
     "ListSingle" | "ListItemSingle" |
-    "Table" | "TableHead" | "TableBody" | "TableFoot" | "TableRow" | "TableCell" | "TableHeadCell"
+    "Table" | "TableHead" | "TableBody" | "TableFoot" | "TableRow" | "TableCell" | "TableHeadCell" |
+    "Menu" | "MenuItem";
 
 export interface DebugUtil {
     logRender: Set<LogRenderType>;
@@ -111,4 +112,5 @@ export function useLogRender(type: LogRenderType, ...args: Parameters<Console["l
     }
 }
 
+export type OmitStrong<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 

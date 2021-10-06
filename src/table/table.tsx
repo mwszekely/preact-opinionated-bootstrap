@@ -16,7 +16,7 @@ import { useMergedProps } from "preact-prop-helpers/use-merged-props";
 import { Flip, Swappable } from "preact-transition";
 import { memo } from "preact/compat";
 import { useCallback, useContext } from "preact/hooks";
-import { forwardElementRef, GlobalAttributes, TagSensitiveProps, useLogRender } from "../props";
+import { forwardElementRef, GlobalAttributes, OmitStrong, TagSensitiveProps, useLogRender } from "../props";
 
 export type TableBorderColor = "primary" | "secondary" | "success" | "danger" | "warning" | "info" | "light" | "dark" | "link";
 export type TableVariant = TableBorderColor;
@@ -43,10 +43,10 @@ export interface TableProps extends GlobalAttributes<HTMLTableElement> {
     //dealWithNewSortIndices(info: Array<{ originalIndex: number } & TableRowInfo>): (void | Promise<void>);
 }
 
-export interface TableSectionProps<T extends HTMLTableSectionElement> extends TagSensitiveProps<T>, Omit<GlobalAttributes<HTMLTableSectionElement>, "children"> { location: "head" | "body" | "foot"; children?: ComponentChildren; variant?: TableVariant; };
-export interface TableHeadProps extends Omit<TableSectionProps<HTMLTableSectionElement>, "location" | "tag" | "children"> { children: VNode<any>[] | VNode<any> };
-export interface TableBodyProps extends Omit<TableSectionProps<HTMLTableSectionElement>, "location" | "tag" | "children"> { children: VNode<any>[] | VNode<any> };
-export interface TableFootProps extends Omit<TableSectionProps<HTMLTableSectionElement>, "location" | "tag" | "children"> { children: VNode<any>[] | VNode<any> };
+export interface TableSectionProps<T extends HTMLTableSectionElement> extends TagSensitiveProps<T>, OmitStrong<GlobalAttributes<HTMLTableSectionElement>, "children"> { location: "head" | "body" | "foot"; children?: ComponentChildren; variant?: TableVariant; };
+export interface TableHeadProps extends OmitStrong<TableSectionProps<HTMLTableSectionElement>, "location" | "tag" | "children"> { children: VNode<any>[] | VNode<any> };
+export interface TableBodyProps extends OmitStrong<TableSectionProps<HTMLTableSectionElement>, "location" | "tag" | "children"> { children: VNode<any>[] | VNode<any> };
+export interface TableFootProps extends OmitStrong<TableSectionProps<HTMLTableSectionElement>, "location" | "tag" | "children"> { children: VNode<any>[] | VNode<any> };
 
 export interface TableCellChildProps<E extends Element> extends h.JSX.HTMLAttributes<E> {
     /**
@@ -65,9 +65,9 @@ export interface TableCellChildProps<E extends Element> extends h.JSX.HTMLAttrib
 
 type T2 = number | string | Date | null | undefined | boolean;
 
-export interface TableRowProps extends Omit<UseTableRowParameters, "hiddenAsUnsorted" | "hidden" | "text" | "location" | "getManagedCells" | "getRowIndexAsSorted" | "setRowIndexAsSorted" | "navIndex"> { variant?: TableCellVariant; children?: ComponentChildren; hidden?: boolean; }
-export interface TableCellProps extends Omit<UseTableCellParameters, "hidden" | "text" | "literalValue" | "displayValue" | "navIndex"> { colSpan?: number; value: T2; children?: VNode<any> | string | number | boolean | null, focus?: "cell" | "child", variant?: TableCellVariant; active?: boolean; }
-export interface TableHeaderCellProps extends Omit<UseTableHeadCellParameters<HTMLTableCellElement>, "hidden" | "tag" | "text" | "literalValue" | "displayValue" | "navIndex"> { unsortable?: boolean; children: ComponentChildren; focus?: "cell" | "child"; variant?: TableCellVariant; active?: boolean; }
+export interface TableRowProps extends OmitStrong<UseTableRowParameters, "hidden" | "location"> { variant?: TableCellVariant; children?: ComponentChildren; hidden?: boolean; }
+export interface TableCellProps extends UseTableCellParameters { colSpan?: number; value: T2; children?: VNode<any> | string | number | boolean | null, focus?: "cell" | "child", variant?: TableCellVariant; active?: boolean; }
+export interface TableHeaderCellProps extends OmitStrong<UseTableHeadCellParameters<HTMLTableCellElement>, "tag"> { unsortable?: boolean; children: ComponentChildren; focus?: "cell" | "child"; variant?: TableCellVariant; active?: boolean; }
 
 
 const TableSectionContext = createContext<UseTableSection<HTMLTableSectionElement, HTMLTableRowElement, HTMLTableCellElement>>(null!);
@@ -106,7 +106,7 @@ export const Table = memo(forwardElementRef(function Table({ children, small, st
 
 const CellLocationContext = createContext<"head" | "body" | "foot">(null!);
 
-const TableSectionImpl = memo(forwardElementRef(function TableSectionImpl<E extends HTMLTableSectionElement>({ tag, children, ...props }: { children?: any } & Omit<TableSectionProps<E>, "location" | "children">, ref: Ref<E>) {
+const TableSectionImpl = memo(forwardElementRef(function TableSectionImpl<E extends HTMLTableSectionElement>({ tag, children, ...props }: { children?: any } & OmitStrong<TableSectionProps<E>, "location" | "children">, ref: Ref<E>) {
     return h(tag as any, { ...props, ref, children: Array.isArray(children) ? (children as VNode<any>[]) : [(children as VNode<any>)] });
 }))
 

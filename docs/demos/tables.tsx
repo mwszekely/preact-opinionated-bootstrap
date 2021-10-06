@@ -32,7 +32,7 @@ const RandomRow = memo(function RandomRow({ rowIndex, unsortedRowIndex, hidden }
             {w && <TableCell columnIndex={1} value={w} />}
             <TableCell columnIndex={2} value={d}>{formatter.format(d)}</TableCell>
             <TableCell columnIndex={3} value={checked}>
-                <Checkbox checked={checked} onInput={onInput} labelPosition="hidden">Demo table checkbox</Checkbox>
+                <Checkbox checked={checked} onCheck={onInput} labelPosition="hidden">Demo table checkbox</Checkbox>
             </TableCell>
         </TableRow>)
 })
@@ -90,7 +90,7 @@ export function DemoTable() {
 
                 <CardElement>
                     <Input type="number" value={rowCount} min={0} max={255} onInput={setRowCount}>Row count</Input>
-                    <Checkbox checked={filterEvens} onInput={setFilterEvens}>Filter out even numbers</Checkbox>
+                    <Checkbox checked={filterEvens} onCheck={setFilterEvens}>Filter out even numbers</Checkbox>
                 </CardElement>
                 <CardElement>
                     <Table>

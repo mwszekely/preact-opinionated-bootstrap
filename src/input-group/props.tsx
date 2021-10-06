@@ -1,5 +1,18 @@
 import { ComponentChildren, createContext, h } from "preact";
+import { UseCheckboxGroupChild } from "preact-aria-widgets";
+import { EventDetail } from "preact-aria-widgets/props";
+import { UseCheckboxGroupChildInfo } from "preact-aria-widgets/use-checkbox-group";
+import { MergedProps, UseListNavigationChildInfo, UseListNavigationChildParameters, UseListNavigationChildPropsReturnType, UseListNavigationParameters } from "preact-prop-helpers";
 import { useCallback } from "preact/hooks";
+import { OmitStrong } from "../props";
+
+
+
+
+
+
+
+
 
 
 interface BaseUnlabelledInputProps<T> {
@@ -7,6 +20,10 @@ interface BaseUnlabelledInputProps<T> {
     disabled?: boolean;
     onInput: (value: T, event: InputEvent) => (Promise<void> | void);
 }
+
+
+
+export const UseCheckboxGroupChildContext = createContext<UseCheckboxGroupChild<HTMLInputElement, CheckboxGroupChildInfo> | null>(null);
 
 export interface UnlabelledInputTextProps extends BaseUnlabelledInputProps<string> { type: "text"; }
 export interface UnlabelledInputNumberProps extends BaseUnlabelledInputProps<number> { type: "number"; min?: number; max?: number; step?: number; }
@@ -21,6 +38,10 @@ export type InputProps = UnlabelledInputProps & {
 export const InInputGroupContext = createContext(false);
 export const InInputGridContext = createContext(0);
 
+
+export interface CheckboxGroupChildInfo extends UseCheckboxGroupChildInfo {
+    setChecked(checked: boolean | "mixed"): (void | Promise<void>)
+}
 
 function max<T extends number | string | Date>(value: T, max?: T) {
     if (max == null)
