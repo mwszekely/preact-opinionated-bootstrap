@@ -1,11 +1,10 @@
 import clsx from "clsx";
 import { ComponentChildren, createContext, h, Ref } from "preact";
-import { useAriaAccordion } from "preact-aria-widgets";
-import { UseAriaAccordionParameters, UseAriaAccordionSection, UseAriaAccordionSectionBody, UseAriaAccordionSectionHeader, UseAriaAccordionSectionParameters } from "preact-aria-widgets/use-accordion";
-import { useMergedProps } from "preact-prop-helpers/use-merged-props";
-import { useState } from "preact-prop-helpers/use-state";
+import { useAriaAccordion, UseAriaAccordionParameters, UseAriaAccordionSection, UseAriaAccordionSectionParameters } from "preact-aria-widgets";
+import { useMergedProps } from "preact-prop-helpers";
 import { Collapse } from "preact-transition";
-import { useContext, useImperativeHandle } from "preact/hooks";
+import { memo } from "preact/compat";
+import { useContext } from "preact/hooks";
 import { forwardElementRef, GlobalAttributes, OptionalTransitionComponent, useLogRender } from "../props";
 
 export interface AccordionProps extends UseAriaAccordionParameters {
@@ -30,7 +29,7 @@ export type AccordionSectionProps<T extends <E extends HTMLElement>(...args: any
 }
 
 const UseAriaAccordionSectionContext = createContext<UseAriaAccordionSection<HTMLButtonElement>>(null!);
-export const Accordion = forwardElementRef(function Accordion({ expandedIndex, setExpandedIndex, children, ...props }: AccordionProps, ref: Ref<HTMLDivElement>) {
+export const Accordion = memo(forwardElementRef(function Accordion({ expandedIndex, setExpandedIndex, children, ...props }: AccordionProps, ref: Ref<HTMLDivElement>) {
     useLogRender("Accordion", `Rendering Accordion`);
 
     const { useAriaAccordionSection } = useAriaAccordion<HTMLDivElement, HTMLButtonElement>({ expandedIndex, setExpandedIndex });
@@ -40,9 +39,9 @@ export const Accordion = forwardElementRef(function Accordion({ expandedIndex, s
             <UseAriaAccordionSectionContext.Provider value={useAriaAccordionSection}>{children}</UseAriaAccordionSectionContext.Provider>
         </div>
     );
-});
+}));
 
-export const AccordionSection = forwardElementRef(function AccordionSection<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element>({ index, open, header, headerLevel, children, Transition, ...props }: AccordionSectionProps<T>, ref: Ref<HTMLDivElement>) {
+export const AccordionSection = memo(forwardElementRef(function AccordionSection<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element>({ index, open, header, headerLevel, children, Transition, ...props }: AccordionSectionProps<T>, ref: Ref<HTMLDivElement>) {
     useLogRender("AccordionSection", `Rendering AccordionSection #${index}`);
 
     const useAriaAccordionSection = useContext(UseAriaAccordionSectionContext);
@@ -64,4 +63,4 @@ export const AccordionSection = forwardElementRef(function AccordionSection<T ex
             <Transition open={expanded} {...useAriaAccordionSectionBodyProps(useMergedProps<any>()(props, { class: "" })) as any}><div><div class="accordion-body">{children}</div></div></Transition>
         </div>
     );
-})
+}))

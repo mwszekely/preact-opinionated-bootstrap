@@ -1,13 +1,10 @@
-import { BodyPortal } from "../portal";
-import { ComponentChildren, createContext, h, Ref, RenderableProps } from "preact";
-import { useAriaDialog } from "preact-aria-widgets";
-import { forwardElementRef, TransitionComponent } from "../props";
-import { Fade } from "preact-transition/fade";
 import "wicg-inert";
-
-//type UseDialogTitle = Required<ReturnType<typeof useAriaDialog>["useDialogTitle"]>;
-
-//const UseDialogTitleContext = createContext<UseDialogTitle>(null!);
+import { ComponentChildren, h, Ref, RenderableProps } from "preact";
+import { useAriaDialog } from "preact-aria-widgets";
+import { Fade } from "preact-transition/fade";
+import { memo } from "preact/compat";
+import { BodyPortal } from "../portal";
+import { forwardElementRef, TransitionComponent } from "../props";
 
 export type DialogProps<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element> = TransitionComponent<T> & {
     open: boolean;
@@ -17,8 +14,8 @@ export type DialogProps<T extends <E extends HTMLElement>(...args: any[]) => h.J
     footer?: ComponentChildren;
 };
 
-export const Dialog = forwardElementRef(function Dialog<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element>({ onClose, open, descriptive, title, footer, Transition, children, ...rest }: RenderableProps<DialogProps<T>>, ref: Ref<HTMLDivElement>) {
-    
+export const Dialog = memo(forwardElementRef(function Dialog<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element>({ onClose, open, descriptive, title, footer, Transition, children, ...rest }: RenderableProps<DialogProps<T>>, ref: Ref<HTMLDivElement>) {
+
     const { useDialogBackdrop, useDialogBody, useDialogProps, useDialogTitle } = useAriaDialog<HTMLDivElement>({ open, onClose });
     const { useDialogBackdropProps } = useDialogBackdrop<HTMLDivElement>();
     const { useDialogBodyProps, } = useDialogBody<HTMLDivElement>({ descriptive });
@@ -48,4 +45,4 @@ export const Dialog = forwardElementRef(function Dialog<T extends <E extends HTM
             </div>
         </BodyPortal>
     )
-})
+}))

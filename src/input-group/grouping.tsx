@@ -1,7 +1,8 @@
 import clsx from "clsx";
-import { ComponentChildren, createContext, createElement, Fragment, h, Ref } from "preact";
-import { TagSensitiveProps } from "preact-aria-widgets/props";
+import { ComponentChildren, createElement, Fragment, h, Ref } from "preact";
+import { TagSensitiveProps } from "preact-aria-widgets";
 import { useMergedProps } from "preact-prop-helpers";
+import { memo } from "preact/compat";
 import { useContext } from "preact/hooks";
 import { forwardElementRef, GlobalAttributes } from "../props";
 import { InInputGridContext, InInputGroupContext } from "./props";
@@ -19,18 +20,18 @@ export interface InputGroupTextProps<E extends Element> extends Partial<TagSensi
     disabled?: boolean;
 }
 
-export const InputGrid = forwardElementRef(function InputGrid<E extends Element>({ tag, children, ...props }: InputGridProps<E>, ref: Ref<E>) {
+export const InputGrid = memo(forwardElementRef(function InputGrid<E extends Element>({ tag, children, ...props }: InputGridProps<E>, ref: Ref<E>) {
     return createElement(tag ?? "div" as any,  useMergedProps<E>()({ class: "input-grid", ref }, props),
         <InInputGridContext.Provider value={useContext(InInputGridContext) + 1}>{children}</InInputGridContext.Provider>
     );
-})
+}));
 
 /**
  * An InputGroup, that puts an Input and its Label together, visually, into one component.
  * 
  * All Input-type components automatically detect when they're in an InputGroup and render different accordingly.
  */
-export const InputGroup = forwardElementRef(function InputGroup<E extends Element>({ children, tag, ...props }: InputGroupProps<E>, ref: Ref<E>) {
+export const InputGroup = memo(forwardElementRef(function InputGroup<E extends Element>({ children, tag, ...props }: InputGroupProps<E>, ref: Ref<E>) {
     return (
         createElement(tag ?? "div" as any, useMergedProps<E>()({ class: "input-group", ref }, props),
             <InInputGroupContext.Provider value={true}>
@@ -38,7 +39,7 @@ export const InputGroup = forwardElementRef(function InputGroup<E extends Elemen
             </InInputGroupContext.Provider>
         )
     );
-});
+}));
 
 /**
  * Not generally needed, since most input components come with labels that do this for you.

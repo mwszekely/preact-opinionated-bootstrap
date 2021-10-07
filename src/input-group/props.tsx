@@ -1,18 +1,6 @@
 import { ComponentChildren, createContext, h } from "preact";
-import { UseCheckboxGroupChild } from "preact-aria-widgets";
-import { EventDetail } from "preact-aria-widgets/props";
-import { UseCheckboxGroupChildInfo } from "preact-aria-widgets/use-checkbox-group";
-import { MergedProps, UseListNavigationChildInfo, UseListNavigationChildParameters, UseListNavigationChildPropsReturnType, UseListNavigationParameters } from "preact-prop-helpers";
+import { UseCheckboxGroupChild, UseCheckboxGroupChildInfo } from "preact-aria-widgets";
 import { useCallback } from "preact/hooks";
-import { OmitStrong } from "../props";
-
-
-
-
-
-
-
-
 
 
 interface BaseUnlabelledInputProps<T> {
@@ -20,7 +8,6 @@ interface BaseUnlabelledInputProps<T> {
     disabled?: boolean;
     onInput: (value: T, event: InputEvent) => (Promise<void> | void);
 }
-
 
 
 export const UseCheckboxGroupChildContext = createContext<UseCheckboxGroupChild<HTMLInputElement, CheckboxGroupChildInfo> | null>(null);

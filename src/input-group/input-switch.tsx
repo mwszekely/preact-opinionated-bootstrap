@@ -1,24 +1,13 @@
-import { ComponentChild, ComponentChildren, createElement, Fragment, h, Ref, RenderableProps } from "preact";
-import { useAriaCheckbox } from "preact-aria-widgets";
-import { EventDetail } from "preact-aria-widgets/props";
-import { CheckboxChangeEvent } from "preact-aria-widgets/use-checkbox";
-import { useAsyncHandler, useMergedProps } from "preact-prop-helpers";
-import { useContext } from "preact/hooks";
-import { InInputGridContext, InInputGroupContext } from "./props";
 import clsx from "clsx";
-import { createContext } from "preact";
-import { useCheckboxGroup } from "preact-aria-widgets";
-import { } from "preact-aria-widgets/props";
-import { } from "preact-aria-widgets/use-checkbox";
-import { UseCheckboxGroupChild, UseCheckboxGroupParameters } from "preact-aria-widgets/use-checkbox-group";
-import { } from "preact-prop-helpers";
-import { MergedProps } from "preact-prop-helpers/use-merged-props";
-import { useCallback, } from "preact/hooks";
+import { ComponentChildren, createElement, Fragment, h, Ref } from "preact";
+import { CheckboxChangeEvent, EventDetail, useAriaCheckbox } from "preact-aria-widgets";
+import { useAsyncHandler, useMergedProps } from "preact-prop-helpers";
+import { memo } from "preact/compat";
+import { useContext } from "preact/hooks";
 import { ProgressCircular } from "../progress/linear";
-import { GlobalAttributes } from "../props";
+import { forwardElementRef } from "../props";
 import { InputGroupText, InputGroupTextProps } from "./grouping";
-
-
+import { InInputGridContext, InInputGroupContext } from "./props";
 
 
 export interface SwitchProps {
@@ -34,7 +23,7 @@ export interface SwitchProps {
  * @param ref 
  * @returns 
  */
-export function Switch({ checked, disabled, onCheck: onInputAsync, children: label, labelPosition, ...rest }: SwitchProps, ref: Ref<HTMLDivElement>) {
+export const Switch = memo(forwardElementRef(function Switch({ checked, disabled, onCheck: onInputAsync, children: label, labelPosition, ...rest }: SwitchProps, ref: Ref<HTMLInputElement>) {
     labelPosition ??= "end";
 
     const { getSyncHandler, pending, currentType, hasError, settleCount, currentCapture } = useAsyncHandler()({ capture: (e: Event) => (e as CheckboxChangeEvent<any>)[EventDetail].checked });
@@ -56,7 +45,7 @@ export function Switch({ checked, disabled, onCheck: onInputAsync, children: lab
 
     const inputElement = <OptionallyInputGroup tag={inInputGroup ? "div" : null} disabled={disabled} tabIndex={-1} isInput={true}>
         <ProgressCircular childrenPosition="after" colorFill="foreground-only" mode={currentType === "async" ? asyncState : null} colorVariant="info">
-            <input {...useSwitchInputElementProps({ type: "checkbox", className: clsx(pending && "pending", "form-check-input", disabled && "disabled"), "aria-label": labelPosition === "hidden" ? stringLabel : undefined })} />
+            <input {...useSwitchInputElementProps({ ref, type: "checkbox", className: clsx(pending && "pending", "form-check-input", disabled && "disabled"), "aria-label": labelPosition === "hidden" ? stringLabel : undefined })} />
         </ProgressCircular>
     </OptionallyInputGroup>;
 
@@ -72,11 +61,11 @@ export function Switch({ checked, disabled, onCheck: onInputAsync, children: lab
     );
 
     if (!inInputGroup)
-        return <div {...useMergedProps<HTMLDivElement>()(rest, { ref, class: "form-check form-switch" })}>{ret}</div>
+        return <div {...useMergedProps<HTMLDivElement>()(rest, { class: "form-check form-switch" })}>{ret}</div>
 
     return ret
 
-}
+}));
 
 // Note: Slightly different from the others
 // (^^^^ I'm really glad I left that there)

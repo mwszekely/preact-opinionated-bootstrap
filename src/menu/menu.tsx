@@ -1,18 +1,12 @@
-import { BasePlacement, Placement } from "@popperjs/core";
 import { cloneElement, ComponentChildren, createContext, Fragment, h, Ref, VNode } from "preact";
-import { useAriaMenu } from "preact-aria-widgets";
-import { UseMenuItem } from "preact-aria-widgets/use-menu";
-import { LogicalDirectionInfo, useAsyncHandler, useElementSize, useGlobalHandler, useMergedProps, useRefElement, useState, useTimeout } from "preact-prop-helpers";
+import { useAriaMenu, useButtonLikeEventHandlers, UseMenuItem } from "preact-aria-widgets";
+import { useAsyncHandler, useElementSize, useMergedProps, useRefElement, useState, useTimeout } from "preact-prop-helpers";
+import { ZoomFade } from "preact-transition";
 import { useCallback, useContext, useEffect, useLayoutEffect } from "preact/hooks";
 import { BodyPortal } from "../portal";
-import { FlippableTransitionComponent, TagSensitiveProps, TransitionComponent, useLogRender, usePseudoActive } from "../props";
-import { CreateZoomProps, Zoom } from "preact-transition/zoom";
-import { ZoomFade, ZoomFadeProps, SlideZoomFadeProps } from "preact-transition";
-import { TransitionDirection, TransitionPhase } from "preact-transition/transitionable";
-import { fixProps, placementToLogical, usePopperApi, useShouldUpdatePopper } from "./popper-api";
-import { ElementSize } from "preact-prop-helpers/use-element-size";
-import { useButtonLikeEventHandlers } from "preact-aria-widgets/use-button";
 import { ProgressCircular } from "../progress";
+import { FlippableTransitionComponent, TagSensitiveProps, TransitionComponent, useLogRender, usePseudoActive } from "../props";
+import { fixProps, usePopperApi, useShouldUpdatePopper } from "./popper-api";
 
 export type MenuProps<E extends Element, T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element> = FlippableTransitionComponent<T> & Partial<TagSensitiveProps<E>> & {
     anchor: VNode<{}>;

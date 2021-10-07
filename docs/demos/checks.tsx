@@ -1,5 +1,5 @@
 import { ComponentChildren, h, VNode } from "preact";
-import { useState } from "preact-prop-helpers/use-state";
+import { useState } from "preact-prop-helpers";
 import { Button, ButtonGroup, ProvideDefaultButtonColor, ProvideDefaultButtonFill, ProvideDefaultButtonSize } from "../../button";
 import { Toast, usePushToast } from "../../toast";
 import { Card, CardElement } from "../../card/card";
@@ -112,11 +112,11 @@ export function DemoChecks() {
                     <InputGroup><Checkbox onCheck={setDisabled} checked={disabled} labelPosition="start">Inputs disabled</Checkbox></InputGroup>
                 </CardElement>
                 <CardElement>
-                    <Checkbox disabled={disabled} checked={demoChecked} onCheck={usesAsync ? asyncCheckboxInput : setDemoChecked}>Checkbox </Checkbox>
+                    <Checkbox disabled={disabled} checked={demoChecked} onCheck={usesAsync ? asyncCheckboxInput : setDemoChecked}>Checkbox</Checkbox>
                     <Switch disabled={disabled} checked={demoChecked} onCheck={usesAsync ? asyncCheckboxInput : setDemoChecked}>Switch</Switch>
                 </CardElement>
                 <CardElement >
-                    <RadioGroup<number> name="radio-demo-2" selectedValue={demoRadio} onValueChange={usesAsync ? asyncRadioInput : setDemoRadio}>
+                    <RadioGroup<number> name="radio-demo-2" selectedValue={Math.min(2, demoRadio)} onValueChange={usesAsync ? asyncRadioInput : setDemoRadio}>
                         <Radio disabled={disabled} index={0} value={0}>Radio #1</Radio>
                         <Radio disabled={disabled} index={1} value={1}>Radio #2</Radio>
                         <Radio disabled={disabled} index={2} value={2}>Radio #3</Radio>
@@ -139,7 +139,7 @@ export function DemoChecks() {
                         <InputGroup>
                             <Switch checked={demoChecked} onCheck={usesAsync ? asyncCheckboxInput : setDemoChecked}>Switch</Switch>
                         </InputGroup>
-                        <RadioGroup<number> name="radio-demo-5" selectedValue={demoRadio} onValueChange={usesAsync ? asyncRadioInput : setDemoRadio}>
+                        <RadioGroup<number> name="radio-demo-5" selectedValue={Math.min(2, demoRadio)} onValueChange={usesAsync ? asyncRadioInput : setDemoRadio}>
                             <InputGroup><Radio index={0} value={0}>Radio #1</Radio></InputGroup>
                             <InputGroup><Radio index={1} value={1}>Radio #2</Radio></InputGroup>
                             <InputGroup><Radio index={2} value={2}>Radio #3</Radio></InputGroup>
@@ -181,7 +181,7 @@ export function DemoChecks() {
                     <InputGrid>
                         <InputGroup><Checkbox labelPosition={labelPosition} checked={demoChecked} onCheck={usesAsync ? asyncCheckboxInput : setDemoChecked}>Checkbox</Checkbox></InputGroup>
                         <InputGroup><Switch labelPosition={labelPosition} checked={demoChecked} onCheck={usesAsync ? asyncCheckboxInput : setDemoChecked}>Switch</Switch></InputGroup>
-                        <RadioGroup<number> name="radio-demo-7" selectedValue={demoRadio} onValueChange={usesAsync ? asyncRadioInput : setDemoRadio}>
+                        <RadioGroup<number> name="radio-demo-7" selectedValue={Math.min(2, demoRadio)} onValueChange={usesAsync ? asyncRadioInput : setDemoRadio}>
                             <InputGroup><Radio labelPosition={labelPosition} index={0} value={0}>Radio #1</Radio></InputGroup>
                             <InputGroup><Radio labelPosition={labelPosition} index={1} value={1}>Radio #2</Radio></InputGroup>
                             <InputGroup><Radio labelPosition={labelPosition} index={2} value={2}>Radio #3</Radio></InputGroup>

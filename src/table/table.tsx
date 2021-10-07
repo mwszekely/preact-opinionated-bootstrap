@@ -1,18 +1,7 @@
 import clsx from "clsx";
 import { cloneElement, ComponentChildren, createContext, Fragment, h, Ref, VNode } from "preact";
-import {
-    useTable,
-    TableRowInfo,
-    UseTableSection,
-    UseTableCell,
-    UseTableCellParameters,
-    UseTableHeadCell,
-    UseTableHeadCellParameters,
-    UseTableRow,
-    UseTableRowParameters
-} from "preact-aria-widgets/use-table";
-import { useGlobalHandler, useState } from "preact-prop-helpers";
-import { useMergedProps } from "preact-prop-helpers/use-merged-props";
+import { TableRowInfo, useTable, UseTableCell, UseTableCellParameters, UseTableHeadCell, UseTableHeadCellParameters, UseTableRow, UseTableRowParameters, UseTableSection } from "preact-aria-widgets";
+import { useGlobalHandler, useMergedProps, useState } from "preact-prop-helpers";
 import { Flip, Swappable } from "preact-transition";
 import { memo } from "preact/compat";
 import { useCallback, useContext } from "preact/hooks";
@@ -47,21 +36,6 @@ export interface TableSectionProps<T extends HTMLTableSectionElement> extends Ta
 export interface TableHeadProps extends OmitStrong<TableSectionProps<HTMLTableSectionElement>, "location" | "tag" | "children"> { children: VNode<any>[] | VNode<any> };
 export interface TableBodyProps extends OmitStrong<TableSectionProps<HTMLTableSectionElement>, "location" | "tag" | "children"> { children: VNode<any>[] | VNode<any> };
 export interface TableFootProps extends OmitStrong<TableSectionProps<HTMLTableSectionElement>, "location" | "tag" | "children"> { children: VNode<any>[] | VNode<any> };
-
-export interface TableCellChildProps<E extends Element> extends h.JSX.HTMLAttributes<E> {
-    /**
-     * When a table is sorted, the actual displayed content for this row
-     * (and so this cell) may change.
-     * 
-     * Any child must consume this prop and display the correct data according to it,
-     * *not* whatever it is there at that child index #.
-     * 
-     * Alternatively, using `overriddenValue`, the child may
-     * use the valud directly.  Use whichever is more
-     * appropriate for your use case.
-     */
-    rowIndexAsSorted: number;
-}
 
 type T2 = number | string | Date | null | undefined | boolean;
 

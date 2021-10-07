@@ -1,15 +1,12 @@
 import clsx from "clsx";
-import { cloneElement, ComponentChildren, createContext, createElement, Fragment, h, Ref, VNode } from "preact";
-import { useGenericLabel } from "preact-aria-widgets/use-label";
-import { ManagedChildInfo, useMergedProps, usePersistentState, useRandomId, useState, useTimeout } from "preact-prop-helpers";
-import { getFromLocalStorage, storeToLocalStorage } from "preact-prop-helpers/use-persistent-state"
-import { UsedManagedChild } from "preact-prop-helpers/use-child-manager";
-import { UseReferencedIdPropsReturnType } from "preact-prop-helpers/use-random-id";
-import { useCallback, useContext, useEffect, useLayoutEffect, useRef } from "preact/hooks";
-import { forwardElementRef, GlobalAttributes, TagSensitiveProps, useSpinnerDelay } from "../props";
-import { ButtonColorVariant } from "../button/types";
-import { Fade } from "preact-transition/fade";
+import { createContext, createElement, Fragment, h, Ref, VNode } from "preact";
+import { getFromLocalStorage, ManagedChildInfo, storeToLocalStorage, useMergedProps, useRandomId, UseReferencedIdPropsReturnType, useState, useTimeout } from "preact-prop-helpers";
 import { Swappable } from "preact-transition";
+import { Fade } from "preact-transition/fade";
+import { memo } from "preact/compat";
+import { useCallback, useContext, useEffect, useLayoutEffect } from "preact/hooks";
+import { ButtonColorVariant } from "../button/types";
+import { forwardElementRef, GlobalAttributes, TagSensitiveProps, useSpinnerDelay } from "../props";
 
 export type ProgressColorVariant = Exclude<ButtonColorVariant, "link">;
 
@@ -51,14 +48,14 @@ export interface CircularProgressProps extends GlobalAttributes<HTMLDivElement> 
 }
 
 // It's possible to do this as useEffect, but doing so screws up the animation in Chrome sometimes
-// resumably because the number of elements changes. 
+// presumably because the number of elements changes. 
 // (and in really weird ways -- changing the animation speed in the console fixes it until you put it back at 100% speed???).
 // Assuming that's the case, it's easier to just take care of the element count on page load.
 let gimmickCount = 8;
 (() => {
     let lastSet = (getFromLocalStorage<Persistence>()("circular-progress-gimmick-last-set", str => new Date(str)) ?? new Date(1970, 0, 1));
 
-    const daysSinceLastGimmickSet = Math.floor((+(new Date()) - +lastSet) / 1000 / 60 / 60 / 24);
+    const daysSinceLastGimmickSet = Math.floor((+(new Date()) - +lastSet) / 1000 / 60 / 60 / (24 - 5));
     if (daysSinceLastGimmickSet > 0) {
         let newCount = 4 + Math.round(Math.random() * 2 + Math.random() * 2);
         gimmickCount = newCount;
@@ -131,7 +128,7 @@ const ProgressValueTextContext = createContext<undefined | string>(undefined);
  * @param param0 
  * @returns 
  */
-export function ProgressLinear({ colorVariant, max: maxProp, value: valueProp, valueText: valueTextProp, striped, variant, ...rest }: LinearProgressProps) {
+export const ProgressLinear = memo(forwardElementRef( function ProgressLinear({ colorVariant, max: maxProp, value: valueProp, valueText: valueTextProp, striped, variant, ...rest }: LinearProgressProps, ref: Ref<HTMLDivElement>) {
     let value = (useContext(ProgressValueContext));
     let max = useContext(ProgressMaxContext);
     let valueText = useContext(ProgressValueTextContext);
@@ -152,11 +149,11 @@ export function ProgressLinear({ colorVariant, max: maxProp, value: valueProp, v
     useLayoutEffect(() => { provideParentWithHook?.(useReferencedElement) }, [useReferencedElement, provideParentWithHook])
 
     return (
-        <div {...useMergedProps<HTMLDivElement>()({ className: clsx("progress", `bg-${colorVariant ?? "primary"}`) }, rest)}>
+        <div {...useMergedProps<HTMLDivElement>()({ ref, className: clsx("progress", `bg-${colorVariant ?? "primary"}`) }, rest)}>
             <progress {...useProgressProps({ className: "progress-bar" })} />
         </div>
     )
-}
+}))
 
 
 // :)

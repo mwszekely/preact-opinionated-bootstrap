@@ -1,15 +1,12 @@
 import clsx from "clsx";
-import { ComponentChild, createContext, h, Ref } from "preact";
-import { UseAriaButtonParameters } from "preact-aria-widgets/use-button";
-import { useChildManager, useHasFocus, useListNavigation, UseListNavigationChild, useMergedProps, useState } from "preact-prop-helpers";
-import { forwardElementRef, GlobalAttributes, useLogRender } from "../props";
-import { useButtonColorVariant, useButtonDisabled, useButtonFillVariant, UseButtonGroupChild, useButtonSize } from "./defaults";
-import { ButtonColorVariant, ButtonFillVariant, ButtonSize } from "./types";
-
-import { ProvideDefaultButtonColor, ProvideDefaultButtonSize, ProvideDefaultButtonDisabled, ProvideDefaultButtonFill } from "./defaults"
-import { ManagedChildInfo, UsedManagedChild } from "preact-prop-helpers/use-child-manager";
+import { ComponentChild, h, Ref } from "preact";
+import { useHasFocus, useListNavigation, useMergedProps, useState } from "preact-prop-helpers";
+import { memo } from "preact/compat";
 import { useContext, useEffect } from "preact/hooks";
-import { AnchorButtonProps, Button, ButtonButtonProps, ButtonProps, ToggleButtonProps } from "./button";
+import { forwardElementRef, GlobalAttributes, useLogRender } from "../props";
+import { AnchorButtonProps, Button, ButtonButtonProps, ToggleButtonProps } from "./button";
+import { ProvideDefaultButtonColor, ProvideDefaultButtonDisabled, ProvideDefaultButtonFill, ProvideDefaultButtonSize, useButtonColorVariant, useButtonDisabled, useButtonFillVariant, UseButtonGroupChild, useButtonSize } from "./defaults";
+import { ButtonColorVariant, ButtonFillVariant, ButtonSize } from "./types";
 
 export interface ButtonGroupStyleProps {
     colorVariant?: ButtonColorVariant;
@@ -24,7 +21,7 @@ export interface ButtonGroupProps extends ButtonGroupStyleProps, GlobalAttribute
     children?: ComponentChild;
 }
 
-export const ButtonGroup = forwardElementRef(function ButtonGroup(p: ButtonGroupProps, ref: Ref<HTMLDivElement>) {
+export const ButtonGroup = memo(forwardElementRef(function ButtonGroup(p: ButtonGroupProps, ref: Ref<HTMLDivElement>) {
     useLogRender("ButtonGroup", `Rendering ButtonGroup`);
 
     const [focusedInner, setFocusedInner, getFocusedInner] = useState(false);
@@ -66,7 +63,7 @@ export const ButtonGroup = forwardElementRef(function ButtonGroup(p: ButtonGroup
             </ProvideDefaultButtonColor>
         </UseButtonGroupChild.Provider>
     );
-});
+}));
 
 interface ButtonGroupChildBaseProps {
     index: number;
@@ -80,7 +77,7 @@ export interface ButtonGroupChildAnchorButtonProps extends AnchorButtonProps, Bu
 export type ButtonGroupChildProps = (ButtonGroupChildAnchorButtonProps | ButtonGroupChildButtonButtonProps | ButtonGroupChildToggleButtonProps);
 
 
-export const ButtonGroupChild = forwardElementRef(function ButtonGroupChild1({ index, ...buttonProps }: ButtonGroupChildProps, ref?: Ref<HTMLButtonElement> | Ref<HTMLAnchorElement>): h.JSX.Element {
+export const ButtonGroupChild = memo(forwardElementRef(function ButtonGroupChild1({ index, ...buttonProps }: ButtonGroupChildProps, ref?: Ref<HTMLButtonElement> | Ref<HTMLAnchorElement>): h.JSX.Element {
     useLogRender("ButtonGroupChild", `Rendering ButtonGroupChild #${index}`);
 
     // This is more-or-less forced to be a separate component because of the index prop.
@@ -92,7 +89,7 @@ export const ButtonGroupChild = forwardElementRef(function ButtonGroupChild1({ i
 
     const p = useListNavigationChildProps(useMergedProps<any>()({ ref, role: "gridcell" }, { ...buttonProps as any }));
     return <Button {...p as any} />
-});
+}));
 
 () => {
     <ButtonGroupChild index={0} pressed={true} onPressToggle={b => { }} />;

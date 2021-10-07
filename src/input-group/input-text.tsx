@@ -1,12 +1,13 @@
-import { ComponentChildren, Fragment, h } from "preact";
-import { useInputLabel } from "preact-aria-widgets/use-label";
-import { useAsyncHandler, useMergedProps, useRefElement, useState } from "preact-prop-helpers";
-import { useContext, useEffect } from "preact/hooks";
-import { useSpinnerDelay } from "../props";
-import { ProgressCircular } from "../progress";
-import { InInputGroupContext, useInputCaptures, UnlabelledInputTextProps, UnlabelledInputNumberProps, UnlabelledInputProps, InputProps, InInputGridContext } from "./props";
 import clsx from "clsx";
-import { useHasFocus } from "preact-prop-helpers";
+import { Fragment, h } from "preact";
+import { useInputLabel } from "preact-aria-widgets";
+import { useAsyncHandler, useHasFocus, useMergedProps, useState } from "preact-prop-helpers";
+import { memo } from "preact/compat";
+import { useContext } from "preact/hooks";
+import { ProgressCircular } from "../progress";
+import { InInputGridContext, InInputGroupContext, InputProps, UnlabelledInputNumberProps, UnlabelledInputProps, UnlabelledInputTextProps, useInputCaptures } from "./props";
+
+
 function UnlabelledInput(props: UnlabelledInputTextProps): h.JSX.Element;
 function UnlabelledInput(props: UnlabelledInputNumberProps): h.JSX.Element;
 function UnlabelledInput(props: UnlabelledInputProps): h.JSX.Element;
@@ -23,7 +24,7 @@ function UnlabelledInput({ type, disabled, value, onInput: onInputAsync, ...prop
     const onBlur = flushDebouncedPromise;
 
     return (
-        <ProgressCircular spinnerTimeout={10} mode={currentType === "async" ? asyncState : null} /*className="input-group-text"*/ childrenPosition="after" colorVariant="info">
+        <ProgressCircular spinnerTimeout={10} mode={currentType === "async" ? asyncState : null} childrenPosition="after" colorVariant="info">
             <input {...(useHasFocusProps(useMergedProps<HTMLInputElement>()(props, {
                 "aria-disabled": disabled ? "true" : undefined,
                 readOnly: disabled,
@@ -38,7 +39,7 @@ function UnlabelledInput({ type, disabled, value, onInput: onInputAsync, ...prop
 
 
 
-export function Input({ children, width, labelPosition, ...props }: InputProps) {
+export const Input = memo(function Input({ children, width, labelPosition, ...props }: InputProps) {
     labelPosition ??= "start";
 
     const { inputId, labelId, useInputLabelInput, useInputLabelLabel } = useInputLabel({ inputPrefix: "input-", labelPrefix: "input-label-" });
@@ -75,5 +76,5 @@ export function Input({ children, width, labelPosition, ...props }: InputProps) 
         return inputWithLabel;
     else
         return <div class="form-floating">{inputJsx}</div>
-}
+});
 

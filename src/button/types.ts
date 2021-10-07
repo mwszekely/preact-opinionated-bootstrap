@@ -1,4 +1,4 @@
-import { UseAriaButtonParameters } from "preact-aria-widgets/use-button";
+import { UseAriaButtonParameters } from "preact-aria-widgets";
 import { GlobalAttributes } from "../props";
 
 export type ButtonColorVariant = "primary" | "secondary" | "success" | "danger" | "warning" | "info" | "light" | "dark" | "link";

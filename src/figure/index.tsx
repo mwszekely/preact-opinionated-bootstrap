@@ -1,1 +1,1 @@
-export { Figure } from "./figure";
+export { Figure, FigureProps } from "./figure";

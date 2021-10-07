@@ -1,1 +1,2 @@
-export { Table, TableHead, TableBody, TableRow, TableCell, TableHeaderCell } from "./table";
+export { Table, TableBody, TableBodyProps, TableCell, TableCellProps, TableFootProps, TableHead, TableHeaderCell, TableHeaderCellProps, TableHeadProps, TableProps, TableRow, TableRowProps, TableSectionProps } from "./table";
+

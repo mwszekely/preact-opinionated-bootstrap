@@ -1,7 +1,7 @@
 import { VNode } from "preact";
-import { generateRandomId } from "preact-prop-helpers/use-random-id";
+import { generateRandomId } from "preact-prop-helpers";
 import { createPortal } from "preact/compat";
-import { useEffect, useRef, useState } from "preact/hooks"
+import { useEffect, useRef, useState } from "preact/hooks";
 
 const baseId = generateRandomId("render-portal-container-")
 

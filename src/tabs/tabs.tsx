@@ -1,14 +1,11 @@
 import clsx from "clsx";
-import { h, Fragment, createContext, ComponentChildren, cloneElement, VNode } from "preact";
-import { useAriaTabs } from "preact-aria-widgets";
-import { UseAriaTabsParameters, UseTab, UseTabPanel, UseTabPanelParameters, UseTabParameters, TabsChangeEvent } from "preact-aria-widgets/use-tabs";
-import { EventDetail } from "preact-aria-widgets/props";
-import { useAsyncHandler } from "preact-prop-helpers";
-import { useMergedProps } from "preact-prop-helpers/use-merged-props";
-import { useState } from "preact-prop-helpers/use-state";
-import { Fade, Swappable, Zoom } from "preact-transition";
+import { cloneElement, ComponentChildren, createContext, Fragment, h, Ref, VNode } from "preact";
+import { EventDetail, TabsChangeEvent, useAriaTabs, UseAriaTabsParameters, UseTab, UseTabPanel, UseTabPanelParameters, UseTabParameters } from "preact-aria-widgets";
+import { useAsyncHandler, useMergedProps } from "preact-prop-helpers";
+import { Swappable } from "preact-transition";
+import { memo } from "preact/compat";
 import { useContext } from "preact/hooks";
-import { GlobalAttributes, TagSensitiveProps, TransitionComponent } from "../props";
+import { forwardElementRef, GlobalAttributes, TagSensitiveProps, TransitionComponent } from "../props";
 
 export interface TabsProps<E extends HTMLUListElement | HTMLOListElement> extends Omit<UseAriaTabsParameters, "orientation" | "collator" | "typeaheadTimeout" | "keyNavigation" | "onSelect">, Omit<GlobalAttributes<E>, "children">, TagSensitiveProps<E> {
     children: ComponentChildren[];
@@ -29,7 +26,7 @@ export type TabPanelProps<T extends <E extends HTMLElement>(...args: any[]) => h
 const UseTabContext = createContext<UseTab<HTMLButtonElement>>(null!);
 const UseTabPanelContext = createContext<UseTabPanel<HTMLDivElement>>(null!);
 
-export function Tabs<E extends HTMLUListElement | HTMLOListElement>({ onSelect: onSelectAsync, orientation, selectedIndex, selectionMode, tag, children, visualVariant, ...props }: TabsProps<E>) {
+export const Tabs = memo(function Tabs<E extends HTMLUListElement | HTMLOListElement>({ onSelect: onSelectAsync, orientation, selectedIndex, selectionMode, tag, children, visualVariant, ...props }: TabsProps<E>) {
     const capture = (e: TabsChangeEvent<E>) => { return e[EventDetail].selectedIndex };
     orientation ??= "inline";
     const { getSyncHandler } = useAsyncHandler<E>()({ capture: capture as any as () => number });
@@ -53,19 +50,19 @@ export function Tabs<E extends HTMLUListElement | HTMLOListElement>({ onSelect: 
             </UseTabPanelContext.Provider>
         </div>
     );
-}
+});
 
-export function Tab({ index, children, ...props }: TabProps) {
+export const Tab = memo(forwardElementRef(function Tab({ index, children, ...props }: TabProps, ref?: Ref<HTMLButtonElement>) {
     const useTabContext = useContext(UseTabContext);
     const { useTabProps, selected } = useTabContext({ index, text: null, tag: "button" })
-    return <li className="nav-item" role="presentation"><button {...useTabProps(useMergedProps<HTMLButtonElement>()({ class: clsx(`nav-link`, selected && `active`) }, props))}>{children}</button></li>
-}
+    return <li className="nav-item" role="presentation"><button {...useTabProps(useMergedProps<HTMLButtonElement>()({ ref, class: clsx(`nav-link`, selected && `active`) }, props))}>{children}</button></li>
+}))
 
 
 
-export function TabPanel<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element>({ index, children, Transition, ...rest }: TabPanelProps<T>) {
+export const TabPanel = memo(forwardElementRef(function TabPanel<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element>({ index, children, Transition, ...rest }: TabPanelProps<T>, ref?: Ref<any>) {
     const useTabPanel = useContext(UseTabPanelContext);
     const { useTabPanelProps, selected } = useTabPanel({ index });
 
-    return h(Transition, useTabPanelProps({ class: "", open: selected, children, ...(rest as any) }));
-}
+    return h(Transition, useTabPanelProps({ ref, class: "", open: selected, children, ...(rest as any) }));
+}));

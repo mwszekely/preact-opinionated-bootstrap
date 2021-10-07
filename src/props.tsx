@@ -1,8 +1,7 @@
-import { ComponentChildren, createContext, h, Ref, VNode } from "preact";
-import { forwardRef, useCallback, useContext, useEffect } from "preact/compat";
-import { useMergedProps } from "preact-prop-helpers/use-merged-props"
 import clsx from "clsx";
-import { useState, useTimeout } from "preact-prop-helpers";
+import { ComponentChildren, createContext, h, Ref, VNode } from "preact";
+import { useMergedProps, useState, useTimeout } from "preact-prop-helpers";
+import { forwardRef, useContext, useEffect } from "preact/compat";
 
 export type RefFromTag<T extends keyof h.JSX.IntrinsicElements> = NonNullable<h.JSX.IntrinsicElements[T]["ref"]>;
 export type ElementFromRef<R extends Ref<any>> = R extends Ref<infer E> ? E : EventTarget;

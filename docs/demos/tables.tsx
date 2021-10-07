@@ -1,6 +1,6 @@
 import { h } from "preact";
 import { useForceUpdate, useInterval } from "preact-prop-helpers";
-import { useState } from "preact-prop-helpers/use-state";
+import { useState } from "preact-prop-helpers";
 import { memo } from "preact/compat";
 import { useCallback, useContext } from "preact/hooks";
 import { Card, CardElement } from "../../card/card";

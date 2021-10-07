@@ -2,7 +2,6 @@ import "./popper-config";
 import { BasePlacement, createPopper, Instance, Modifier, Placement, PositioningStrategy, State, StrictModifiers } from "@popperjs/core";
 import { h } from "preact";
 import { LogicalDirectionInfo, useGlobalHandler, useLogicalDirection, useMergedProps, useRefElement, useState, useTimeout } from "preact-prop-helpers";
-import { ElementSize } from "preact-prop-helpers/use-element-size";
 import { useCallback, useEffect, useMemo } from "preact/hooks";
 
 export function usePopperApi({ updating, positionInline, positionBlock, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight }: UsePopperParameters) {

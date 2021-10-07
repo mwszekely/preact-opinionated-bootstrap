@@ -1,2 +1,2 @@
 
-export { Drawer } from "./drawer";
+export { Drawer, DrawerProps } from "./drawer";

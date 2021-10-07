@@ -1,12 +1,12 @@
 import clsx from "clsx";
 import { ComponentChildren, createContext, h, Ref } from "preact";
 import { useAriaListboxSingle } from "preact-aria-widgets";
-import { EventDetail } from "preact-aria-widgets/props";
-import { UseListboxSingleItem, UseListboxSingleItemInfo, UseListboxSingleItemParameters, UseListboxSingleParameters } from "preact-aria-widgets/use-listbox-single";
+import { EventDetail } from "preact-aria-widgets";
+import { UseListboxSingleItem, UseListboxSingleItemInfo, UseListboxSingleItemParameters, UseListboxSingleParameters } from "preact-aria-widgets";
 import { useAsyncHandler, useMergedProps, useRefElement, useState } from "preact-prop-helpers";
-import { UseLinearNavigationChildInfo, UseLinearNavigationParameters } from "preact-prop-helpers/use-keyboard-navigation";
+import { memo } from "preact/compat";
 import { useContext, useLayoutEffect } from "preact/hooks";
-import { GlobalAttributes, useLogRender, usePseudoActive } from "../props";
+import { GlobalAttributes, useLogRender, usePseudoActive, forwardElementRef } from "../props";
 
 interface ListSingleItemInfo<E extends Element> extends UseListboxSingleItemInfo<E> {
 
@@ -35,7 +35,7 @@ export function ListSingle<E extends HTMLUListElement | HTMLOListElement>(props:
 
 type ListItemSingleProps = ListSingleItemParameters<HTMLLIElement> & GlobalAttributes<HTMLLIElement>;
 
-export function ListItemSingle(props: ListItemSingleProps, ref: Ref<HTMLLIElement>) {
+export const ListItemSingle = memo(forwardElementRef(function ListItemSingle(props: ListItemSingleProps, ref: Ref<HTMLLIElement>) {
     useLogRender("ListSingle", `Rendering ListSingleItem #${props.index}`);
 
     const useListItemSingle = useContext(UseListboxSingleItemContext);
@@ -50,4 +50,4 @@ export function ListItemSingle(props: ListItemSingleProps, ref: Ref<HTMLLIElemen
 
     const { getSelected, tabbable, selected, useListboxSingleItemProps } = useListItemSingle({ index, text, tag: "li" });
     return <li {...usePseudoActive(useMergedProps<HTMLLIElement>()({ class: clsx("list-group-item", "list-group-item-action", selected && "active") } as any, useListboxSingleItemProps(useRefElementProps(domProps))))} />
-}
+}))

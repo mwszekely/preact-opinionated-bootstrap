@@ -1,2 +1,3 @@
 
-export { Accordion, AccordionSection } from "./accordion";
+export { Accordion, AccordionSection, AccordionProps, AccordionSectionProps } from "./accordion";
+

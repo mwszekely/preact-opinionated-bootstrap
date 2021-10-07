@@ -1,10 +1,9 @@
 import clsx from "clsx";
 import { createContext, Fragment, h, RenderableProps } from "preact";
-import { UseListNavigationChild } from "preact-prop-helpers";
-import { useMergedProps } from "preact-prop-helpers/use-merged-props";
+import { UseListNavigationChild, useMergedProps } from "preact-prop-helpers";
 import { memo } from "preact/compat";
-import { useContext } from "preact/hooks"
-import { ButtonColorVariant, ButtonFillVariant, ButtonSize, ButtonPropsBase } from "./types";
+import { useContext } from "preact/hooks";
+import { ButtonColorVariant, ButtonFillVariant, ButtonPropsBase, ButtonSize } from "./types";
 
 
 export const UseButtonGroupChild = createContext<UseListNavigationChild<HTMLButtonElement> | null>(null);

@@ -1,5 +1,5 @@
 import { h } from "preact";
-import { useState } from "preact-prop-helpers/use-state";
+import { useState } from "preact-prop-helpers";
 import { ZoomFade } from "preact-transition";
 import { Button } from "../../button";
 import { Card, CardElement } from "../../card/card";

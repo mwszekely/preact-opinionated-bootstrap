@@ -1,7 +1,8 @@
-import { h, Ref } from "preact";
-import { forwardElementRef, GlobalAttributes } from "../props";
 import clsx from "clsx";
-import { useMergedProps } from "preact-prop-helpers/use-merged-props";
+import { h, Ref } from "preact";
+import { useMergedProps } from "preact-prop-helpers";
+import { memo } from "preact/compat";
+import { forwardElementRef, GlobalAttributes } from "../props";
 
 export type BadgeColorVariant = "primary" | "secondary" | "success" | "danger" | "warning" | "info" | "light" | "dark";
 
@@ -11,6 +12,6 @@ export interface BadgeProps extends GlobalAttributes<HTMLSpanElement> {
     className?: string;
 }
 
-export const Badge = forwardElementRef(function Badge({ colorVariant, roundedPill, ...props }: BadgeProps, ref: Ref<HTMLSpanElement>) {
+export const Badge = memo(forwardElementRef(function Badge({ colorVariant, roundedPill, ...props }: BadgeProps, ref: Ref<HTMLSpanElement>) {
     return <span {...useMergedProps<HTMLSpanElement>()({ ref, className: clsx("badge", roundedPill && "rounded-pill", `bg-${colorVariant ?? "secondary"}`) }, props)} />
-});
+}));

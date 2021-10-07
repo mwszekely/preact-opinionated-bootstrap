@@ -1,1 +1,2 @@
-export { Card, CardElement } from "./card"
+export { Card, CardElement, CardElementProps } from "./card";
+

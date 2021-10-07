@@ -1,16 +1,13 @@
 import clsx from "clsx";
-import { ComponentChild, ComponentChildren, createContext, createElement, Fragment, h, Ref, RenderableProps } from "preact";
-import { useAriaCheckbox, useCheckboxGroup } from "preact-aria-widgets";
-import { EventDetail } from "preact-aria-widgets/props";
-import { CheckboxChangeEvent } from "preact-aria-widgets/use-checkbox";
-import { UseCheckboxGroupChild, UseCheckboxGroupParameters } from "preact-aria-widgets/use-checkbox-group";
+import { createElement, Fragment, h, Ref } from "preact";
+import { CheckboxChangeEvent, EventDetail, useAriaCheckbox } from "preact-aria-widgets";
 import { useAsyncHandler, useMergedProps } from "preact-prop-helpers";
-import { MergedProps } from "preact-prop-helpers/use-merged-props";
-import { useCallback, useContext } from "preact/hooks";
+import { memo } from "preact/compat";
+import { useContext } from "preact/hooks";
 import { ProgressCircular } from "../progress/linear";
 import { forwardElementRef, GlobalAttributes, OmitStrong } from "../props";
 import { InputGroupText, InputGroupTextProps } from "./grouping";
-import { InInputGridContext, InInputGroupContext, UseCheckboxGroupChildContext } from "./props";
+import { InInputGridContext, InInputGroupContext } from "./props";
 
 export interface CheckboxProps extends GlobalAttributes<HTMLInputElement> {
     checked: boolean | "mixed";
@@ -29,7 +26,7 @@ function capture(e: h.JSX.TargetedEvent<HTMLInputElement>): boolean {
  * Probably need separate `inputRef` & `labelRef` properties for that, 
  * but given there's also no easy way to forward props to just them a solution like that feels incomplete.
  */
-export const Checkbox = forwardElementRef(function Checkbox({ checked, disabled, onCheck: onCheckedAsync, labelPosition, children: label, ...props }: CheckboxProps, ref: Ref<HTMLInputElement>) {
+export const Checkbox = memo(forwardElementRef(function Checkbox({ checked, disabled, onCheck: onCheckedAsync, labelPosition, children: label, ...props }: CheckboxProps, ref: Ref<HTMLInputElement>) {
     labelPosition ??= "end";
 
     type I = { (event: CheckboxChangeEvent<h.JSX.TargetedEvent<HTMLInputElement, Event>>): void; (event: CheckboxChangeEvent<h.JSX.TargetedEvent<HTMLLabelElement, Event>>): void; };
@@ -75,7 +72,7 @@ export const Checkbox = forwardElementRef(function Checkbox({ checked, disabled,
         return <div {...useMergedProps<HTMLDivElement>()({}, { class: "form-check" })}>{ret}</div>
     return ret;
 
-});
+}));
 
 export function OptionallyInputGroup<E extends Element>({ tag, children, isInput, ...props }: OmitStrong<InputGroupTextProps<E>, "tag"> & { isInput: boolean, tag: InputGroupTextProps<E>["tag"] | null }) {
     const inInputGroup = useContext(InInputGroupContext);

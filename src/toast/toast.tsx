@@ -1,15 +1,11 @@
+import { cloneElement, ComponentChildren, createContext, Fragment, h } from "preact";
+import { UseToast, UseToastParameters, useToasts } from "preact-aria-widgets";
+import { generateRandomId, useStableCallback, useState } from "preact-prop-helpers";
+import { SlideFade } from "preact-transition";
+import { useCallback, useContext, useLayoutEffect } from "preact/hooks";
 import { Button } from "../button/button";
 import { BodyPortal } from "../portal";
-import { ComponentChildren, createContext, Fragment, h, cloneElement } from "preact";
-import { ManagedChildInfo, useChildManager, useMergedProps, useRandomId, useRefElement, UseRefElementPropsReturnType, useStableCallback, useState, useTimeout } from "preact-prop-helpers";
-import { MergedProps } from "preact-prop-helpers/use-merged-props";
-import { generateRandomId } from "preact-prop-helpers/use-random-id";
-import { useCallback, useContext, useEffect, useLayoutEffect, useRef } from "preact/hooks";
 import { GlobalAttributes } from "../props";
-import { useChildFlag } from "preact-prop-helpers/use-child-manager";
-import { SlideFade } from "preact-transition";
-import { findFirstFocusable } from "preact-prop-helpers/use-focus-trap";
-import { UseToast, UseToastParameters, useToasts } from "preact-aria-widgets"
 
 export type PushToast = (toast: h.JSX.Element) => void;
 const PushToastContext = createContext<PushToast>(null!);

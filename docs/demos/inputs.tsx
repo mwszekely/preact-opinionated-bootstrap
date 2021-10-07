@@ -1,5 +1,5 @@
 import { ComponentChildren, h, VNode } from "preact";
-import { useState } from "preact-prop-helpers/use-state";
+import { useState } from "preact-prop-helpers";
 import { Button, ButtonGroup, ProvideDefaultButtonColor, ProvideDefaultButtonFill, ProvideDefaultButtonSize } from "../../button";
 import { Toast, usePushToast } from "../../toast";
 import { Card, CardElement } from "../../card/card";
