@@ -11,7 +11,7 @@ $zindex-toast: 1060 !default;
   position: fixed;
   left: 0;
   right: 0;
-  top: 0;
+  // Don't set top to improve scrolling on mobile
   bottom: 0;
   pointer-events: none;
 
