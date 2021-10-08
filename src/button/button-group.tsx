@@ -41,8 +41,8 @@ export const ButtonGroup = memo(forwardElementRef(function ButtonGroup(p: Button
     size = useButtonSize(size);
     fillVariant = useButtonFillVariant(fillVariant);
     disabled = useButtonDisabled(disabled);
-    const outerDomProps: h.JSX.HTMLAttributes<any> = useHasFocusProps(useMergedProps<any>()({ ref, role: "grid", class: "btn-group-aria-gridrow" }, p3));
-    const innerDomProps: h.JSX.HTMLAttributes<any> = { role: "gridrow", disabled, className: clsx("btn-group", wrap && "wrap") };
+    const outerDomProps: h.JSX.HTMLAttributes<any> = useHasFocusProps(useMergedProps<any>()({ ref, class: "btn-group-aria-gridrow" }, p3));
+    const innerDomProps: h.JSX.HTMLAttributes<any> = { role: "toolbar", disabled, className: clsx("btn-group", wrap && "wrap") };
 
     // Remaining props, forwarded onto the DOM
     //const domProps =newDomProps, p3));
@@ -87,7 +87,7 @@ export const ButtonGroupChild = memo(forwardElementRef(function ButtonGroupChild
     const useButtonGroupChild = useContext(UseButtonGroupChild);
     const { tabbable, useListNavigationChildProps, useListNavigationSiblingProps } = useButtonGroupChild!({ index, text: null });
 
-    const p = useListNavigationChildProps(useMergedProps<any>()({ ref, role: "gridcell" }, { ...buttonProps as any }));
+    const p = useListNavigationChildProps(useMergedProps<any>()({ ref }, { ...buttonProps as any }));
     return <Button {...p as any} />
 }));
 
