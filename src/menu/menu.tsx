@@ -53,17 +53,18 @@ export function Menu<E extends Element, T extends <E extends HTMLElement>(...arg
     const [firstSentinelIsActive, setFirstSentinelIsActive] = useState(false);
     useTimeout({ callback: () => { setFirstSentinelIsActive(open); }, timeout: 100, triggerIndex: `${firstSentinelIsActive}` });
 
+    if (Transition == undefined) {
+        Transition = ZoomFade as NonNullable<typeof Transition>;
+        (rest as any).zoomOriginDynamic = 0;
+        (rest as any).zoomMin = 0.85;
+    }
+    
     const logicalDirection = getLogicalDirection();
     if (logicalDirection && usedPlacement)
         rest = fixProps(logicalDirection, "block-end", usedPlacement, rest) as typeof rest;
 
     const onAnchorClick = () => setOpen(open => !open);
 
-    if (Transition == undefined) {
-        Transition = ZoomFade as NonNullable<typeof Transition>;
-        (rest as any).zoomOriginDynamic = 0;
-        (rest as any).zoomMin = 0.85;
-    }
 
     return (
         <>

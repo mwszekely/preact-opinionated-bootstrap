@@ -43,7 +43,7 @@ export function DemoMenus() {
             <Card>
                 <CardElement type="title" tag="h2">Menus</CardElement>
                 <CardElement>
-                    <Menu anchor={<Button>I'm a menu</Button>} Transition={ZoomFade}>
+                    <Menu anchor={<Button>I'm a menu</Button>}>
                         <MenuItem index={0} onPress={onPressAsync}>A: Item 1</MenuItem>
                         <MenuItem index={1} onPress={onPressAsync}>B: Item 2</MenuItem>
                         <MenuItem index={2} onPress={onPressAsync}>C: Item 3</MenuItem>

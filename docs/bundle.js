@@ -2948,23 +2948,16 @@
           element,
           getElement,
           useRefElementProps
-        } = useRefElement();
-        useLayoutEffect(() => {
-          let index = getTotalChildrenMounted();
-          mountOrder.current.set(info.index, index);
-          mountedChildren.current[index] = info;
-          setTotalChildrenMounted(t => ++t);
-          return () => {
-            mountOrder.current.delete(info.index);
-            mountedChildren.current[index] = null;
-            setTotalChildrenUnounted(t => ++t);
-          };
-        }, [info.index]); // As soon as the component mounts, notify the parent and request a rerender.
+        } = useRefElement(); // As soon as the component mounts, notify the parent and request a rerender.
 
         useLayoutEffect(([prevElement, prevIndex], changes) => {
           if (element) {
             indicesByElement.current.set(element, info.index);
             deletedIndices.current.delete(info.index);
+            let index = getTotalChildrenMounted();
+            mountOrder.current.set(info.index, index);
+            mountedChildren.current[index] = info;
+            setTotalChildrenMounted(t => ++t);
 
             if (managedChildren.current[info.index] != undefined) {
               var _overmountCount$curre;
@@ -2978,6 +2971,9 @@
             return () => {
               var _overmountCount$curre2;
 
+              mountOrder.current.delete(info.index);
+              mountedChildren.current[index] = null;
+              setTotalChildrenUnounted(t => ++t);
               setChildUpdateIndex(c => ++c);
 
               if (((_overmountCount$curre2 = overmountCount.current.get(info.index)) !== null && _overmountCount$curre2 !== void 0 ? _overmountCount$curre2 : 0) > 0) {
@@ -9476,11 +9472,10 @@
       disabled = useButtonDisabled(disabled);
       const outerDomProps = useHasFocusProps(useMergedProps()({
         ref,
-        role: "grid",
         class: "btn-group-aria-gridrow"
       }, p3));
       const innerDomProps = {
-        role: "gridrow",
+        role: "toolbar",
         disabled,
         className: clsx("btn-group", wrap && "wrap")
       }; // Remaining props, forwarded onto the DOM
@@ -9519,8 +9514,7 @@
         text: null
       });
       const p = useListNavigationChildProps(useMergedProps()({
-        ref,
-        role: "gridcell"
+        ref
       }, { ...buttonProps
       }));
       return v$1(Button, { ...p
@@ -9842,7 +9836,7 @@
       }
 
       const asyncState = hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null;
-      const p = useMergedProps()(props, useCheckboxInputElementProps({
+      const propsForInput = useMergedProps()(props, useCheckboxInputElementProps({
         ref,
         type: "checkbox",
         className: clsx("form-check-input", pending && "pending", disabled && "disabled", inInputGroup && "mt-0"),
@@ -9858,7 +9852,7 @@
         colorFill: "foreground-only",
         mode: currentType === "async" ? asyncState : null,
         colorVariant: "info"
-      }, v$1("input", { ...p
+      }, v$1("input", { ...propsForInput
       })));
       const p2 = { ...useCheckboxLabelElementProps({
           className: clsx(pending && "pending", disabled && "disabled", "form-check-label"),
@@ -12882,16 +12876,17 @@
         timeout: 100,
         triggerIndex: `${firstSentinelIsActive}`
       });
-      const logicalDirection = getLogicalDirection();
-      if (logicalDirection && usedPlacement) rest = fixProps(logicalDirection, "block-end", usedPlacement, rest);
-
-      const onAnchorClick = () => setOpen(open => !open);
 
       if (Transition == undefined) {
         Transition = ZoomFade;
         rest.zoomOriginDynamic = 0;
         rest.zoomMin = 0.85;
       }
+
+      const logicalDirection = getLogicalDirection();
+      if (logicalDirection && usedPlacement) rest = fixProps(logicalDirection, "block-end", usedPlacement, rest);
+
+      const onAnchorClick = () => setOpen(open => !open);
 
       return v$1(d$1, null, v$1(OnCloseContext.Provider, {
         value: onClose
@@ -14421,7 +14416,7 @@
             v$1(Card, null,
                 v$1(CardElement, { type: "title", tag: "h2" }, "Menus"),
                 v$1(CardElement, null,
-                    v$1(Menu, { anchor: v$1(Button, null, "I'm a menu"), Transition: ZoomFade },
+                    v$1(Menu, { anchor: v$1(Button, null, "I'm a menu") },
                         v$1(MenuItem, { index: 0, onPress: onPressAsync }, "A: Item 1"),
                         v$1(MenuItem, { index: 1, onPress: onPressAsync }, "B: Item 2"),
                         v$1(MenuItem, { index: 2, onPress: onPressAsync }, "C: Item 3"),
