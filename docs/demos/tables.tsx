@@ -1,11 +1,9 @@
 import { h } from "preact";
-import { useForceUpdate, useInterval } from "preact-prop-helpers";
 import { useState } from "preact-prop-helpers";
 import { memo } from "preact/compat";
-import { useCallback, useContext } from "preact/hooks";
+import { useCallback } from "preact/hooks";
 import { Card, CardElement } from "../../card/card";
 import { Checkbox, Input } from "../../input-group";
-import { forwardElementRef } from "../../props";
 import { Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow } from "../../table";
 
 var RandomWords = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.".split(" ");
@@ -89,7 +87,7 @@ export function DemoTable() {
                 </CardElement>
 
                 <CardElement>
-                    <Input type="number" value={rowCount} min={0} max={255} onInput={setRowCount}>Row count</Input>
+                    <Input type="number" value={rowCount} min={0} max={255} onValueChange={setRowCount}>Row count</Input>
                     <Checkbox checked={filterEvens} onCheck={setFilterEvens}>Filter out even numbers</Checkbox>
                 </CardElement>
                 <CardElement>

@@ -1,13 +1,8 @@
-import { ComponentChildren, h, VNode } from "preact";
+import { h } from "preact";
 import { useState } from "preact-prop-helpers";
-import { Button, ButtonGroup, ProvideDefaultButtonColor, ProvideDefaultButtonFill, ProvideDefaultButtonSize } from "../../button";
-import { Toast, usePushToast } from "../../toast";
-import { Card, CardElement } from "../../card/card";
-import { ButtonGroupChild } from "../../button/button-group";
-import { Checkbox, Input, InputGroup, Radio, RadioGroup, Switch } from "../../input-group";
-import { ButtonColorVariant } from "../../button/types";
-import { GlobalAttributes, TagSensitiveProps } from "../../props";
 import { useCallback } from "preact/hooks";
+import { Card, CardElement } from "../../card/card";
+import { Checkbox, Input, InputGroup, Radio, RadioGroup, Switch } from "../../input-group";
 import type { CheckboxProps } from "../../input-group/input-check";
 import { InputGrid } from "../../input-group/input-group";
 
@@ -72,8 +67,8 @@ export function DemoChecks() {
                     <InputGrid>
                         <InputGroup><Checkbox onCheck={setUsesAsync} checked={usesAsync} labelPosition="start">Async event handler</Checkbox></InputGroup>
                         <InputGroup><Checkbox onCheck={setAsyncFails} checked={asyncFails} labelPosition="start" disabled={!usesAsync}>Async handler rejects</Checkbox></InputGroup>
-                        <InputGroup><Input disabled={!usesAsync} type="number" onInput={setAsyncTimeout} value={asyncTimeout}>Async timeout</Input></InputGroup>
-                        <InputGroup><Input type="number" onInput={setRadioCount} value={radioCount}># of radio buttons</Input></InputGroup>
+                        <InputGroup><Input disabled={!usesAsync} type="number" onValueChange={setAsyncTimeout} value={asyncTimeout}>Async timeout</Input></InputGroup>
+                        <InputGroup><Input type="number" onValueChange={setRadioCount} value={radioCount}># of radio buttons</Input></InputGroup>
                     </InputGrid>
                 </CardElement>
                 <CardElement>

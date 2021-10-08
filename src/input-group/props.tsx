@@ -6,7 +6,7 @@ import { useCallback } from "preact/hooks";
 interface BaseUnlabelledInputProps<T> {
     value: T;
     disabled?: boolean;
-    onInput: (value: T, event: InputEvent) => (Promise<void> | void);
+    onValueChange: (value: T, event: InputEvent) => (Promise<void> | void);
 }
 
 

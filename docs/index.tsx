@@ -246,7 +246,7 @@ const DemoInput = memo(() => {
         <div class="demo">
 
             <InputGroup>
-                <Input type="text" onInput={onInput1} value={text} width="100%">Test input</Input>
+                <Input type="text" onValueChange={onInput1} value={text} width="100%">Test input</Input>
             </InputGroup>
             <RadioGroup selectedValue={radioValue} name="demo-radio" onValueChange={onInput2}>
                 <InputGroup><Radio index={0} value="ARadio" /></InputGroup>

@@ -121,14 +121,15 @@ const ButtonButton = forwardElementRef(function ButtonButton(p: Omit<ButtonButto
 
 export const ToggleButton = forwardElementRef(function ToggleButton(p: ToggleButtonProps, ref: Ref<HTMLButtonElement>) {
     let { colorVariant, size, disabled, pressed, debounce, onPressToggle: onPressAsync, showAsyncSuccess, ...props } = p;
-    const fillVariant = pressed ? "fill" : "outline";
     const inButtonGroup = !!useContext(UseButtonGroupChild);
     const getPressed = useStableGetter(pressed);
     const { getSyncHandler, pending, hasError, settleCount, hasCapture, currentCapture } = useAsyncHandler<HTMLButtonElement>()({ debounce, capture: useCallback(() => { return !getPressed(); }, []) });
-    disabled ||= pending;
     if (hasCapture && pending)
-        pressed = currentCapture!;
-        
+        pressed = !!currentCapture;
+    disabled ||= pending;
+
+    const fillVariant = pressed ? "fill" : "outline";
+
     const onPress = getSyncHandler(pending ? null : onPressAsync);
     const { useAriaButtonProps } = useAriaButton<HTMLButtonElement>({ tag: "button", pressed, onPress });
 
@@ -141,7 +142,7 @@ export const ToggleButton = forwardElementRef(function ToggleButton(p: ToggleBut
 
     return (
         <ProgressCircular mode={hasError ? "failed" : pending ? "pending" : (settleCount && showAsyncSuccess) ? "succeeded" : null} childrenPosition="child" colorFill={fillVariant == "fill" ? "foreground" : "background"}>
-            <button {...usePseudoActive(useAriaButtonProps(useButtonStylesProps({ ...useMergedProps<HTMLButtonElement>()({ className: clsx("toggle-button", (pending || (inButtonGroup && pressed)) && "active"), ref }, props) })))} />
+            <button {...usePseudoActive(useAriaButtonProps(useButtonStylesProps({ ...useMergedProps<HTMLButtonElement>()({ className: clsx("toggle-button", (pressed) && "active"), ref }, props) })))} />
         </ProgressCircular>
     );
 })

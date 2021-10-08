@@ -11,7 +11,7 @@ import { InInputGridContext, InInputGroupContext, InputProps, UnlabelledInputNum
 function UnlabelledInput(props: UnlabelledInputTextProps): h.JSX.Element;
 function UnlabelledInput(props: UnlabelledInputNumberProps): h.JSX.Element;
 function UnlabelledInput(props: UnlabelledInputProps): h.JSX.Element;
-function UnlabelledInput({ type, disabled, value, onInput: onInputAsync, ...props }: UnlabelledInputProps): h.JSX.Element {
+function UnlabelledInput({ type, disabled, value, onValueChange: onInputAsync, ...props }: UnlabelledInputProps): h.JSX.Element {
 
     const [focusedInner, setFocusedInner, getFocusedInner] = useState(false);
     const { capture, uncapture } = useInputCaptures(type, (props as UnlabelledInputNumberProps).min, (props as UnlabelledInputNumberProps).max!);

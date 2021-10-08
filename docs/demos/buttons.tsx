@@ -1,13 +1,12 @@
-import { ComponentChildren, h, VNode } from "preact";
+import { h } from "preact";
 import { useState } from "preact-prop-helpers";
 import { Button, ButtonGroup, ProvideDefaultButtonColor, ProvideDefaultButtonFill, ProvideDefaultButtonSize } from "../../button";
-import { Toast, usePushToast } from "../../toast";
-import { Card, CardElement } from "../../card/card";
 import { ButtonGroupChild } from "../../button/button-group";
-import { Checkbox, Input, InputGroup } from "../../input-group";
 import { ButtonColorVariant } from "../../button/types";
-import { GlobalAttributes, TagSensitiveProps } from "../../props";
+import { Card, CardElement } from "../../card/card";
+import { Checkbox, Input, InputGroup } from "../../input-group";
 import { InputGrid } from "../../input-group/input-group";
+import { Toast, usePushToast } from "../../toast";
 
 export function DemoButtons() {
     const [buttonsFill, setButtonsFill] = useState<"fill" | "outline">("outline");
@@ -60,7 +59,7 @@ export function DemoButtons() {
                                 <InputGrid>
                                     <InputGroup><Checkbox onCheck={setUsesAsync} checked={usesAsync} labelPosition="start">Use async handler</Checkbox></InputGroup>
                                     <InputGroup><Checkbox onCheck={setAsyncFails} checked={asyncFails} labelPosition="start" disabled={!usesAsync}>Async handler rejects</Checkbox></InputGroup>
-                                    <InputGroup><Input width="8ch" disabled={!usesAsync} type="number" onInput={setAsyncTimeout} value={asyncTimeout}>Async timeout</Input></InputGroup>
+                                    <InputGroup><Input width="8ch" disabled={!usesAsync} type="number" onValueChange={setAsyncTimeout} value={asyncTimeout}>Async timeout</Input></InputGroup>
                                 </InputGrid>
                             </CardElement>
                             <CardElement >

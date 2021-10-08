@@ -1,13 +1,6 @@
-import { ComponentChildren, h, VNode } from "preact";
-import { useState } from "preact-prop-helpers";
-import { Button, ButtonGroup, ProvideDefaultButtonColor, ProvideDefaultButtonFill, ProvideDefaultButtonSize } from "../../button";
-import { Toast, usePushToast } from "../../toast";
+import { h } from "preact";
 import { Card, CardElement } from "../../card/card";
-import { ButtonGroupChild } from "../../button/button-group";
-import { Checkbox, Input, InputGroup, Radio, RadioGroup, Switch } from "../../input-group";
-import { ButtonColorVariant } from "../../button/types";
-import { GlobalAttributes, TagSensitiveProps } from "../../props";
-import { useCallback } from "preact/hooks";
+import { Checkbox, Input, InputGroup } from "../../input-group";
 import { InputGrid } from "../../input-group/input-group";
 
 export function DemoLayout() {
@@ -26,7 +19,7 @@ export function DemoLayout() {
                     <InputGrid>
                         <InputGroup><Checkbox disabled checked={true} labelPosition="start">Checkbox</Checkbox></InputGroup>
                         <InputGroup><Checkbox disabled checked={true} labelPosition="start">Another checkbox</Checkbox></InputGroup>
-                        <InputGroup><Input disabled onInput={() => { }} type="number" value={0}>Numeric input</Input></InputGroup>
+                        <InputGroup><Input disabled onValueChange={() => { }} type="number" value={0}>Numeric input</Input></InputGroup>
                     </InputGrid>
 
                 </CardElement>
@@ -34,7 +27,7 @@ export function DemoLayout() {
                     Without an <code>&lt;InputGrid&gt;</code>:
                     <InputGroup><Checkbox disabled checked={true} labelPosition="start">Checkbox</Checkbox></InputGroup>
                     <InputGroup><Checkbox disabled checked={true} labelPosition="start">Another checkbox</Checkbox></InputGroup>
-                    <InputGroup><Input disabled onInput={() => { }} type="number" value={0}>Numeric input</Input></InputGroup>
+                    <InputGroup><Input disabled onValueChange={() => { }} type="number" value={0}>Numeric input</Input></InputGroup>
                 </CardElement>
                 <CardElement type="subtitle" tag="h3">Simple grids</CardElement>
                 <CardElement>

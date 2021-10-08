@@ -1,13 +1,8 @@
-import { ComponentChildren, h, VNode } from "preact";
+import { h } from "preact";
 import { useState } from "preact-prop-helpers";
-import { Button, ButtonGroup, ProvideDefaultButtonColor, ProvideDefaultButtonFill, ProvideDefaultButtonSize } from "../../button";
-import { Toast, usePushToast } from "../../toast";
-import { Card, CardElement } from "../../card/card";
-import { ButtonGroupChild } from "../../button/button-group";
-import { Checkbox, Input, InputGroup, Radio, RadioGroup, Switch } from "../../input-group";
-import { ButtonColorVariant } from "../../button/types";
-import { GlobalAttributes, TagSensitiveProps } from "../../props";
 import { useCallback } from "preact/hooks";
+import { Card, CardElement } from "../../card/card";
+import { Checkbox, Input, InputGroup } from "../../input-group";
 import { InputGrid } from "../../input-group/input-group";
 
 export function DemoInputs() {
@@ -40,7 +35,7 @@ export function DemoInputs() {
         <div class="demo">
             <Card>
                 <CardElement type="title" tag="h2">Text boxes</CardElement>
-                <CardElement><div class="position-relative"><Input type="text" value={text} onInput={onTextInput}>I'm a text box</Input></div></CardElement>
+                <CardElement><div class="position-relative"><Input type="text" value={text} onValueChange={onTextInput}>I'm a text box</Input></div></CardElement>
                 <CardElement>
                     <code>&lt;Input&gt;</code> components allow for inputting text, numbers, etc. and asyncronously saving it somewhere else as it's being typed.
                     </CardElement>
@@ -51,12 +46,12 @@ export function DemoInputs() {
                     <InputGrid>
                         <InputGroup><Checkbox onCheck={setUsesAsync} checked={usesAsync} labelPosition="start">Async event handler</Checkbox></InputGroup>
                         <InputGroup><Checkbox onCheck={setAsyncFails} checked={asyncFails} labelPosition="start" disabled={!usesAsync}>Async handler rejects</Checkbox></InputGroup>
-                        <InputGroup><Input disabled={!usesAsync} type="number" onInput={setAsyncTimeout} value={asyncTimeout}>Async timeout</Input></InputGroup>
+                        <InputGroup><Input disabled={!usesAsync} type="number" onValueChange={setAsyncTimeout} value={asyncTimeout}>Async timeout</Input></InputGroup>
                     </InputGrid>
                 </CardElement>
                 <CardElement>
-                    <div class="position-relative"><Input type="text" value={text} onInput={onTextInput}>Text-based input</Input></div>
-                    <div class="position-relative"><Input type="number" value={number} onInput={onNumberInput} min={-5}>Number-based input</Input></div>
+                    <div class="position-relative"><Input type="text" value={text} onValueChange={onTextInput}>Text-based input</Input></div>
+                    <div class="position-relative"><Input type="number" value={number} onValueChange={onNumberInput} min={-5}>Number-based input</Input></div>
                 </CardElement>
                 <CardElement type="paragraph">
                     <code>{`<Input type="text" value={text} onInput={onTextInput}>Text-based input</Input>
@@ -70,8 +65,8 @@ export function DemoInputs() {
                 <CardElement>
 
                     <InputGrid>
-                        <InputGroup><Input type="text" value={text} onInput={onTextInput}>Text-based input</Input></InputGroup>
-                        <InputGroup><Input type="number" value={number} onInput={onNumberInput} min={-5}>Number-based input</Input></InputGroup>
+                        <InputGroup><Input type="text" value={text} onValueChange={onTextInput}>Text-based input</Input></InputGroup>
+                        <InputGroup><Input type="number" value={number} onValueChange={onNumberInput} min={-5}>Number-based input</Input></InputGroup>
                     </InputGrid>
                 </CardElement>
                 <CardElement type="paragraph">

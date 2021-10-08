@@ -3,7 +3,6 @@ import { useState } from "preact-prop-helpers";
 import { ZoomFade } from "preact-transition";
 import { Button } from "../../button";
 import { Card, CardElement } from "../../card/card";
-import { Checkbox, InputGroup } from "../../input-group";
 import { GridStatic } from "../../layout";
 import { Menu, MenuItem } from "../../menu";
 import { Toast, usePushToast } from "../../toast";
@@ -85,20 +84,20 @@ export function DemoMenus() {
                 <CardElement>
                     <GridStatic columns={3}>
                         <div />
-                        <Button colorVariant="secondary" pressed={positionBlock === "start"} disabled={positionBlock === "start"} onPressToggle={(pressed) => void (pressed && setPositionBlock("start"))}>Block start</Button>
+                        <Button colorVariant="secondary" pressed={positionBlock === "start"} onPressToggle={(pressed) => void (pressed && setPositionBlock("start"))}>Block start</Button>
                         <div />
 
-                        <Button colorVariant="secondary" pressed={positionInline === "start"} disabled={positionInline === "start"} onPressToggle={(pressed) => void (pressed && setPositionInline("start"))}>Inline start</Button>
+                        <Button colorVariant="secondary" pressed={positionInline === "start"} onPressToggle={(pressed) => void (pressed && setPositionInline("start"))}>Inline start</Button>
                         <Menu anchor={<Button>Anchored menu</Button>} positionBlock={positionBlock} positionInline={positionInline}>
                             <MenuItem index={0} onPress={onPressAsync}>A: Item 1</MenuItem>
                             <MenuItem index={1} onPress={onPressAsync}>B: Item 2</MenuItem>
                             <MenuItem index={2} onPress={onPressAsync}>C: Item 3</MenuItem>
                             <MenuItem index={3}>I'm static</MenuItem>
                         </Menu>
-                        <Button colorVariant="secondary" pressed={positionInline === "end"} disabled={positionInline === "end"} onPressToggle={(pressed) => void (pressed && setPositionInline("end"))}>Inline end</Button>
+                        <Button colorVariant="secondary" pressed={positionInline === "end"} onPressToggle={(pressed) => void (pressed && setPositionInline("end"))}>Inline end</Button>
 
                         <div />
-                        <Button colorVariant="secondary" pressed={positionBlock === "end"} disabled={positionBlock === "end"} onPressToggle={(pressed) => void (pressed && setPositionBlock("end"))}>Block end</Button>
+                        <Button colorVariant="secondary" pressed={positionBlock === "end"} onPressToggle={(pressed) => void (pressed && setPositionBlock("end"))}>Block end</Button>
                         <div />
 
                     </GridStatic>

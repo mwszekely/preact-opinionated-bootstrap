@@ -9389,8 +9389,7 @@
         showAsyncSuccess,
         ...props
       } = p;
-      const fillVariant = pressed ? "fill" : "outline";
-      const inButtonGroup = !!F(UseButtonGroupChild);
+      !!F(UseButtonGroupChild);
       const getPressed = useStableGetter(pressed);
       const {
         getSyncHandler,
@@ -9405,8 +9404,9 @@
           return !getPressed();
         }, [])
       });
+      if (hasCapture && pending) pressed = !!currentCapture;
       disabled || (disabled = pending);
-      if (hasCapture && pending) pressed = currentCapture;
+      const fillVariant = pressed ? "fill" : "outline";
       const onPress = getSyncHandler(pending ? null : onPressAsync);
       const {
         useAriaButtonProps
@@ -9430,7 +9430,7 @@
         childrenPosition: "child",
         colorFill: fillVariant == "fill" ? "foreground" : "background"
       }, v$1("button", { ...usePseudoActive(useAriaButtonProps(useButtonStylesProps({ ...useMergedProps()({
-            className: clsx("toggle-button", (pending || inButtonGroup && pressed) && "active"),
+            className: clsx("toggle-button", pressed && "active"),
             ref
           }, props)
         })))
@@ -10188,7 +10188,7 @@
       type,
       disabled,
       value,
-      onInput: onInputAsync,
+      onValueChange: onInputAsync,
       ...props
     }) {
       const [focusedInner, setFocusedInner, getFocusedInner] = useState(false);
@@ -13555,7 +13555,7 @@
                                     v$1(InputGroup, null,
                                         v$1(Checkbox, { onCheck: setAsyncFails, checked: asyncFails, labelPosition: "start", disabled: !usesAsync }, "Async handler rejects")),
                                     v$1(InputGroup, null,
-                                        v$1(Input, { width: "8ch", disabled: !usesAsync, type: "number", onInput: setAsyncTimeout, value: asyncTimeout }, "Async timeout")))),
+                                        v$1(Input, { width: "8ch", disabled: !usesAsync, type: "number", onValueChange: setAsyncTimeout, value: asyncTimeout }, "Async timeout")))),
                             v$1(CardElement, null,
                                 v$1(Button, { onPress: onPress }, "Click me")),
                             v$1(CardElement, { type: "paragraph" },
@@ -13751,9 +13751,9 @@
                         v$1(InputGroup, null,
                             v$1(Checkbox, { onCheck: setAsyncFails, checked: asyncFails, labelPosition: "start", disabled: !usesAsync }, "Async handler rejects")),
                         v$1(InputGroup, null,
-                            v$1(Input, { disabled: !usesAsync, type: "number", onInput: setAsyncTimeout, value: asyncTimeout }, "Async timeout")),
+                            v$1(Input, { disabled: !usesAsync, type: "number", onValueChange: setAsyncTimeout, value: asyncTimeout }, "Async timeout")),
                         v$1(InputGroup, null,
-                            v$1(Input, { type: "number", onInput: setRadioCount, value: radioCount }, "# of radio buttons")))),
+                            v$1(Input, { type: "number", onValueChange: setRadioCount, value: radioCount }, "# of radio buttons")))),
                 v$1(CardElement, null,
                     v$1(Checkbox, { checked: demoChecked, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Checkbox"),
                     v$1(Switch, { checked: demoChecked, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Switch")),
@@ -13900,7 +13900,7 @@
                 v$1(CardElement, { type: "title", tag: "h2" }, "Text boxes"),
                 v$1(CardElement, null,
                     v$1("div", { class: "position-relative" },
-                        v$1(Input, { type: "text", value: text, onInput: onTextInput }, "I'm a text box"))),
+                        v$1(Input, { type: "text", value: text, onValueChange: onTextInput }, "I'm a text box"))),
                 v$1(CardElement, null,
                     v$1("code", null, "<Input>"),
                     " components allow for inputting text, numbers, etc. and asyncronously saving it somewhere else as it's being typed."),
@@ -13915,12 +13915,12 @@
                         v$1(InputGroup, null,
                             v$1(Checkbox, { onCheck: setAsyncFails, checked: asyncFails, labelPosition: "start", disabled: !usesAsync }, "Async handler rejects")),
                         v$1(InputGroup, null,
-                            v$1(Input, { disabled: !usesAsync, type: "number", onInput: setAsyncTimeout, value: asyncTimeout }, "Async timeout")))),
+                            v$1(Input, { disabled: !usesAsync, type: "number", onValueChange: setAsyncTimeout, value: asyncTimeout }, "Async timeout")))),
                 v$1(CardElement, null,
                     v$1("div", { class: "position-relative" },
-                        v$1(Input, { type: "text", value: text, onInput: onTextInput }, "Text-based input")),
+                        v$1(Input, { type: "text", value: text, onValueChange: onTextInput }, "Text-based input")),
                     v$1("div", { class: "position-relative" },
-                        v$1(Input, { type: "number", value: number, onInput: onNumberInput, min: -5 }, "Number-based input"))),
+                        v$1(Input, { type: "number", value: number, onValueChange: onNumberInput, min: -5 }, "Number-based input"))),
                 v$1(CardElement, { type: "paragraph" },
                     v$1("code", null, "<Input type=\"text\" value={text} onInput={onTextInput}>Text-based input</Input>\n<Input type=\"number\" value={number} onInput={onNumberInput} min={-5}>Number-based input</Input>")),
                 v$1(CardElement, { type: "paragraph" },
@@ -13930,9 +13930,9 @@
                 v$1(CardElement, null,
                     v$1(InputGrid, null,
                         v$1(InputGroup, null,
-                            v$1(Input, { type: "text", value: text, onInput: onTextInput }, "Text-based input")),
+                            v$1(Input, { type: "text", value: text, onValueChange: onTextInput }, "Text-based input")),
                         v$1(InputGroup, null,
-                            v$1(Input, { type: "number", value: number, onInput: onNumberInput, min: -5 }, "Number-based input")))),
+                            v$1(Input, { type: "number", value: number, onValueChange: onNumberInput, min: -5 }, "Number-based input")))),
                 v$1(CardElement, { type: "paragraph" },
                     v$1("code", null, "<InputGrid>\n    <InputGroup><Input type=\"text\" value={text} onInput={onTextInput}>Text-based input</Input></InputGroup>\n    <InputGroup><Input type=\"number\" value={number} onInput={onNumberInput} min={-5}>Number-based input</Input></InputGroup>\n</InputGrid>")))));
     }
@@ -13971,7 +13971,7 @@
                         v$1(InputGroup, null,
                             v$1(Checkbox, { disabled: true, checked: true, labelPosition: "start" }, "Another checkbox")),
                         v$1(InputGroup, null,
-                            v$1(Input, { disabled: true, onInput: function () { }, type: "number", value: 0 }, "Numeric input")))),
+                            v$1(Input, { disabled: true, onValueChange: function () { }, type: "number", value: 0 }, "Numeric input")))),
                 v$1(CardElement, null,
                     "Without an ",
                     v$1("code", null, "<InputGrid>"),
@@ -13981,7 +13981,7 @@
                     v$1(InputGroup, null,
                         v$1(Checkbox, { disabled: true, checked: true, labelPosition: "start" }, "Another checkbox")),
                     v$1(InputGroup, null,
-                        v$1(Input, { disabled: true, onInput: function () { }, type: "number", value: 0 }, "Numeric input"))),
+                        v$1(Input, { disabled: true, onValueChange: function () { }, type: "number", value: 0 }, "Numeric input"))),
                 v$1(CardElement, { type: "subtitle", tag: "h3" }, "Simple grids"),
                 v$1(CardElement, null,
                     "Two different grid components are provided for two separate use cases:",
@@ -14344,7 +14344,7 @@
                     v$1("code", null, "TableRow"),
                     " wrapper component, and the \"direct descendant\" restriction will apply to the wrapper instead."),
                 v$1(CardElement, null,
-                    v$1(Input, { type: "number", value: rowCount, min: 0, max: 255, onInput: setRowCount }, "Row count"),
+                    v$1(Input, { type: "number", value: rowCount, min: 0, max: 255, onValueChange: setRowCount }, "Row count"),
                     v$1(Checkbox, { checked: filterEvens, onCheck: setFilterEvens }, "Filter out even numbers")),
                 v$1(CardElement, null,
                     v$1(Table, null,
@@ -14468,17 +14468,17 @@
                 v$1(CardElement, null,
                     v$1(GridStatic, { columns: 3 },
                         v$1("div", null),
-                        v$1(Button, { colorVariant: "secondary", pressed: positionBlock === "start", disabled: positionBlock === "start", onPressToggle: function (pressed) { return void (pressed && setPositionBlock("start")); } }, "Block start"),
+                        v$1(Button, { colorVariant: "secondary", pressed: positionBlock === "start", onPressToggle: function (pressed) { return void (pressed && setPositionBlock("start")); } }, "Block start"),
                         v$1("div", null),
-                        v$1(Button, { colorVariant: "secondary", pressed: positionInline === "start", disabled: positionInline === "start", onPressToggle: function (pressed) { return void (pressed && setPositionInline("start")); } }, "Inline start"),
+                        v$1(Button, { colorVariant: "secondary", pressed: positionInline === "start", onPressToggle: function (pressed) { return void (pressed && setPositionInline("start")); } }, "Inline start"),
                         v$1(Menu, { anchor: v$1(Button, null, "Anchored menu"), positionBlock: positionBlock, positionInline: positionInline },
                             v$1(MenuItem, { index: 0, onPress: onPressAsync }, "A: Item 1"),
                             v$1(MenuItem, { index: 1, onPress: onPressAsync }, "B: Item 2"),
                             v$1(MenuItem, { index: 2, onPress: onPressAsync }, "C: Item 3"),
                             v$1(MenuItem, { index: 3 }, "I'm static")),
-                        v$1(Button, { colorVariant: "secondary", pressed: positionInline === "end", disabled: positionInline === "end", onPressToggle: function (pressed) { return void (pressed && setPositionInline("end")); } }, "Inline end"),
+                        v$1(Button, { colorVariant: "secondary", pressed: positionInline === "end", onPressToggle: function (pressed) { return void (pressed && setPositionInline("end")); } }, "Inline end"),
                         v$1("div", null),
-                        v$1(Button, { colorVariant: "secondary", pressed: positionBlock === "end", disabled: positionBlock === "end", onPressToggle: function (pressed) { return void (pressed && setPositionBlock("end")); } }, "Block end"),
+                        v$1(Button, { colorVariant: "secondary", pressed: positionBlock === "end", onPressToggle: function (pressed) { return void (pressed && setPositionBlock("end")); } }, "Block end"),
                         v$1("div", null))),
                 v$1("hr", null),
                 v$1(CardElement, { type: "subtitle", tag: "h3" }, "Transitions"),
@@ -14719,7 +14719,7 @@
         }); }, [setRadioValue]);
         return (v$1("div", { class: "demo" },
             v$1(InputGroup, null,
-                v$1(Input, { type: "text", onInput: onInput1, value: text, width: "100%" }, "Test input")),
+                v$1(Input, { type: "text", onValueChange: onInput1, value: text, width: "100%" }, "Test input")),
             v$1(RadioGroup, { selectedValue: radioValue, name: "demo-radio", onValueChange: onInput2 },
                 v$1(InputGroup, null,
                     v$1(Radio, { index: 0, value: "ARadio" })),
