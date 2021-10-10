@@ -7,24 +7,37 @@ import { Button } from "../button/button";
 import { BodyPortal } from "../portal";
 import { GlobalAttributes } from "../props";
 
-export type PushToast = (toast: h.JSX.Element) => void;
+
+export type StateUpdater<S> = (value: ((prevState: S) => S)) => void;
+export type PushToast = (toast: h.JSX.Element) => number;
+export type UpdateToast = (index: number, toast: h.JSX.Element) => void;
 const PushToastContext = createContext<PushToast>(null!);
+const UpdateToastContext = createContext<UpdateToast>(null!);
 const DefaultToastTimeout = createContext(5000);
 export function ToastsProvider({ children, defaultTimeout }: { children: ComponentChildren, defaultTimeout?: number }) {
 
     const [pushToast, setPushToast] = useState<PushToast | null>(null);
+    const [updateToast, setUpdateToast] = useState<UpdateToast | null>(null);
 
     const pushToastStable = useStableCallback<NonNullable<typeof pushToast>>((toast) => {
-        pushToast?.(toast);
-    })
+        return pushToast?.(toast) ?? -1;
+    });
+
+    const updateToastStable = useStableCallback<NonNullable<typeof updateToast>>((index, toast) => {
+        return updateToast?.(index, toast);
+    });
 
     return (
         <>
             <DefaultToastTimeout.Provider value={defaultTimeout ?? 5000}>
-                <ToastsProviderHelper setPushToast={setPushToast} />
-                    {pushToast && <PushToastContext.Provider value={pushToastStable}>
-                    {children}
-                </PushToastContext.Provider>}
+                <ToastsProviderHelper setPushToast={setPushToast} setUpdateToast={setUpdateToast} />
+                {pushToast && updateToast &&
+                    <PushToastContext.Provider value={pushToastStable}>
+                        <UpdateToastContext.Provider value={updateToastStable}>
+                            {children}
+                        </UpdateToastContext.Provider>
+                    </PushToastContext.Provider>
+                }
             </DefaultToastTimeout.Provider>
         </>
     )
@@ -36,11 +49,31 @@ export function usePushToast() {
 }
 
 // Extracted to a separate component to avoid rerendering all non-toast children
-function ToastsProviderHelper({ setPushToast }: { setPushToast: (pushToast: PushToast) => void }) {
+function ToastsProviderHelper({ setPushToast, setUpdateToast }: { setPushToast: StateUpdater<PushToast | null>, setUpdateToast: StateUpdater<UpdateToast | null> }) {
 
-    const [children, setChildren] = useState<h.JSX.Element[]>([]);
-    const pushToast = useCallback((toast: h.JSX.Element) => { const randomKey = generateRandomId(); setChildren(prev => ([...prev, cloneElement(toast, { key: randomKey })])) }, []);
+    const [children, setChildren, getChildren] = useState<h.JSX.Element[]>([]);
+    const pushToast: PushToast | null = useCallback((toast: h.JSX.Element) => {
+        const randomKey = generateRandomId();
+        let index = getChildren().length;
+        setChildren(prev => ([...prev, cloneElement(toast, { key: randomKey })]));
+        return index;
+    }, []);
+
+    const updateToast: UpdateToast | null = useCallback((index: number, toast: h.JSX.Element) => {
+        const key = getChildren()[index]?.key;
+        console.assert(key);
+        if (key) {
+            setChildren(prev => {
+                let newChildren = prev.slice();
+                newChildren.splice(index, 1, cloneElement(toast, { key: key as string }));
+                return newChildren;
+            });
+            return index;
+        }
+    }, []);
+
     useLayoutEffect(() => { setPushToast(_ => pushToast); }, [pushToast]);
+    useLayoutEffect(() => { setUpdateToast(_ => updateToast); }, [updateToast]);
 
     return (
         <BodyPortal>
