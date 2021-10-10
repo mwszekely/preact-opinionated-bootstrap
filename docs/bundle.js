@@ -7162,7 +7162,7 @@
 	      if (dismissed) onAnyToastDismissed(getMountIndex(toastId));
 	    }, [dismissed]);
 	    useTimeout({
-	      timeout,
+	      timeout: timeout == null ? null : isFinite(timeout) ? timeout : timeout > 0 ? null : 0,
 	      callback: () => {
 	        if (isActive) setStatus("dismissed");
 	      },
@@ -13375,7 +13375,7 @@
 	    const [asyncFails, setAsyncFails] = useState(false);
 	    const [usesLinkButton, setUsesLinkButton] = useState(true);
 	    const pushToast = usePushToast();
-	    const onPressSync = () => pushToast(v$1(Toast, null, "Button was clicked"));
+	    const onPressSync = () => void (pushToast(v$1(Toast, null, "Button was clicked")));
 	    const onPressAsync = async () => {
 	        await sleep$5(asyncTimeout);
 	        if (asyncFails)

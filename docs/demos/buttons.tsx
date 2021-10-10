@@ -20,7 +20,7 @@ export function DemoButtons() {
     const [usesLinkButton, setUsesLinkButton] = useState(true);
 
     const pushToast = usePushToast();
-    const onPressSync = () => pushToast(<Toast>Button was clicked</Toast>);
+    const onPressSync = () => void (pushToast(<Toast>Button was clicked</Toast>));
     const onPressAsync = async () => {
         await sleep(asyncTimeout);
         if (asyncFails)

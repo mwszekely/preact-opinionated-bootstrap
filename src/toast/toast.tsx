@@ -2,7 +2,7 @@ import { cloneElement, ComponentChildren, createContext, Fragment, h } from "pre
 import { UseToast, UseToastParameters, useToasts } from "preact-aria-widgets";
 import { generateRandomId, useStableCallback, useState } from "preact-prop-helpers";
 import { SlideFade } from "preact-transition";
-import { useCallback, useContext, useLayoutEffect } from "preact/hooks";
+import { useCallback, useContext, useErrorBoundary, useLayoutEffect } from "preact/hooks";
 import { Button } from "../button/button";
 import { BodyPortal } from "../portal";
 import { GlobalAttributes } from "../props";
@@ -122,6 +122,25 @@ export function Toast({ timeout, politeness, children }: ToastProps) {
             </SlideFade>
         </ToastDismissContext.Provider>
     )
+}
+
+function defaultErrorToToast(error: any) {
+    return <Toast timeout={Infinity}>{error instanceof Error? error.message : JSON.stringify(error)}</Toast>
+}
+
+/**
+ * A component that will catch any errors thrown during render
+ * and present them as toasts.
+ * 
+ * Ideally you should provide a custom errorToToast function that can handle expected types of errors,
+ * but having a default one at the root of the app probably isn't a bad idea.
+ * @param param0 
+ * @returns 
+ */
+export function ToastErrorBoundary({ errorToToast, children }: { errorToToast?: (error: any) => h.JSX.Element, children: ComponentChildren }) {
+    const pushToast = usePushToast();
+    const [error, resetError] = useErrorBoundary(error => void (pushToast((errorToToast ?? defaultErrorToToast)(error))));
+    return <>{children}</>;
 }
 
 /*
