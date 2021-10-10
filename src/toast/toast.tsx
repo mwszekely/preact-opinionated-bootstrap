@@ -48,6 +48,11 @@ export function usePushToast() {
     return pushToast;
 }
 
+export function useUpdateToast() {
+    const updateToast = useContext(UpdateToastContext);
+    return updateToast;
+}
+
 // Extracted to a separate component to avoid rerendering all non-toast children
 function ToastsProviderHelper({ setPushToast, setUpdateToast }: { setPushToast: StateUpdater<PushToast | null>, setUpdateToast: StateUpdater<UpdateToast | null> }) {
 

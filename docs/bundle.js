@@ -12942,7 +12942,7 @@
 	function usePushToast() {
 	  const pushToast = F(PushToastContext);
 	  return pushToast;
-	} // Extracted to a separate component to avoid rerendering all non-toast children
+	}
 
 	function ToastsProviderHelper({
 	  setPushToast,

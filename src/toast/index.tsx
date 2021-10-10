@@ -1,2 +1,2 @@
-export { PushToast, Toast, ToastErrorBoundary, ToastProps, ToastsProvider, usePushToast } from "./toast";
+export { PushToast, Toast, ToastErrorBoundary, ToastProps, ToastsProvider, usePushToast, useUpdateToast } from "./toast";
 

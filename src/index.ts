@@ -12,6 +12,6 @@ export { Menu, MenuItem } from "./menu";
 export { ProgressCircular, ProgressLinear } from "./progress";
 export { Table, TableBody, TableBodyProps, TableCell, TableCellProps, TableFootProps, TableHead, TableHeaderCell, TableHeaderCellProps, TableHeadProps, TableProps, TableRow, TableRowProps, TableSectionProps } from "./table";
 export { Tab, TabPanel, TabPanelProps, TabProps, Tabs, TabsProps } from "./tabs";
-export { PushToast, Toast, ToastErrorBoundary, ToastProps, ToastsProvider, usePushToast } from "./toast";
+export { PushToast, Toast, ToastErrorBoundary, ToastProps, ToastsProvider, usePushToast, useUpdateToast } from "./toast";
 export { Tooltip, TooltipProps } from "./tooltip";
 
