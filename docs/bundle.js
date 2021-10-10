@@ -9572,12 +9572,11 @@
 
 	g(forwardElementRef(function InputGrid({
 	  tag,
-	  size,
 	  children,
 	  ...props
 	}, ref) {
 	  return v$1(tag !== null && tag !== void 0 ? tag : "div", useMergedProps()({
-	    class: clsx("input-grid", size && size != "md" && `input-group-${size}`),
+	    class: "input-grid",
 	    ref
 	  }, props), v$1(InInputGridContext.Provider, {
 	    value: F(InInputGridContext) + 1
@@ -9591,11 +9590,12 @@
 
 	const InputGroup = g(forwardElementRef(function InputGroup({
 	  children,
+	  size,
 	  tag,
 	  ...props
 	}, ref) {
 	  return v$1(tag !== null && tag !== void 0 ? tag : "div", useMergedProps()({
-	    class: "input-group",
+	    class: clsx("input-group", size && size != "md" && `input-group-${size}`),
 	    ref
 	  }, props), v$1(InInputGroupContext.Provider, {
 	    value: true
