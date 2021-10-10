@@ -1,7 +1,18 @@
+@use "../variables.scss" as *;
+@forward "../variables";
+@use "sass:color";
+@use "sass:map";
+@use "sass:string";
+@use "sass:list";
+
+
 .tooltip {
     position: relative;
 }
 
 .tooltip-wrapper {
     position: absolute;
+
+
+    z-index: $zindex-tooltip;
 }
