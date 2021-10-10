@@ -9393,7 +9393,7 @@
 	    }
 
 	    setPortalElement(element);
-	    return () => document.removeChild(element);
+	    return () => document.contains(element) ? document.removeChild(element) : undefined;
 	  }, []);
 	  if (portalElement) return W(children, portalElement);else return null;
 	}

@@ -30,7 +30,7 @@ export function BodyPortal({ children }: { children: VNode<{}> }) {
 
         setPortalElement(element);
 
-        return () => document.removeChild(element!);
+        return () => document.contains(element) ? document.removeChild(element!) : undefined;
 
     }, []);
 
