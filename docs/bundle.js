@@ -9464,6 +9464,7 @@
 	  descriptive,
 	  title,
 	  footer,
+	  closeButton,
 	  Transition,
 	  children,
 	  ...rest
@@ -9488,6 +9489,12 @@
 	  const {
 	    useDrawerTitleProps
 	  } = useDrawerTitle();
+
+	  if (!Transition) {
+	    Transition = Slide;
+	    rest.slideTargetInline = -1;
+	  }
+
 	  return v$1(BodyPortal, null, v$1("div", null, v$1(Fade, {
 	    open: open
 	  }, v$1("div", { ...useDrawerBackdropProps({
@@ -9506,7 +9513,7 @@
 	  }, v$1("h5", { ...useDrawerTitleProps({
 	      class: "offcanvas-title"
 	    })
-	  }, "Drawer"), v$1(Button, {
+	  }, "Drawer"), closeButton !== null && closeButton !== void 0 ? closeButton : v$1(Button, {
 	    tag: "button",
 	    class: "btn-close text-reset",
 	    "aria-label": "Close",
