@@ -12,7 +12,7 @@ export interface InputGroupProps<E extends Element> extends Partial<TagSensitive
 }
 
 export interface InputGridProps<E extends Element> extends Partial<TagSensitiveProps<E>>, GlobalAttributes<E> {
-
+    size?: "sm" | "md" | "lg";
 }
 
 export interface InputGroupTextProps<E extends Element> extends Partial<TagSensitiveProps<E>>, Omit<h.JSX.HTMLAttributes<E>, "children"> {
@@ -20,8 +20,8 @@ export interface InputGroupTextProps<E extends Element> extends Partial<TagSensi
     disabled?: boolean;
 }
 
-export const InputGrid = memo(forwardElementRef(function InputGrid<E extends Element>({ tag, children, ...props }: InputGridProps<E>, ref: Ref<E>) {
-    return createElement(tag ?? "div" as any,  useMergedProps<E>()({ class: "input-grid", ref }, props),
+export const InputGrid = memo(forwardElementRef(function InputGrid<E extends Element>({ tag, size, children, ...props }: InputGridProps<E>, ref: Ref<E>) {
+    return createElement(tag ?? "div" as any, useMergedProps<E>()({ class: clsx("input-grid", size && size != "md" && `input-group-${size}`), ref }, props),
         <InInputGridContext.Provider value={useContext(InInputGridContext) + 1}>{children}</InInputGridContext.Provider>
     );
 }));
