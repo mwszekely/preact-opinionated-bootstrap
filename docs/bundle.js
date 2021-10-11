@@ -3205,7 +3205,7 @@
 	    // if a change to the current selected cell should also
 	    // trigger focusing that cell.
 
-	    const [isTabbableRow, setIsTabbableRow] = useState(false); // If we're not the tabbable row, then for the purposes of tabIndex
+	    const [isTabbableRow, setIsTabbableRow, getIsTabbableRow] = useState(false); // If we're not the tabbable row, then for the purposes of tabIndex
 	    // calculations, we don't have a tabbable child cell.
 
 	    let currentColumn = isTabbableRow ? getCurrentColumn() : null; // Track child cells and manage keyboard navigation among them.
@@ -3215,7 +3215,9 @@
 	      useRovingTabIndexChild: useRovingTabIndexCell,
 	      childCount: cellCount
 	    } = useRovingTabIndex({
-	      shouldFocusOnChange: getFocusCellOnRowChange,
+	      shouldFocusOnChange: A$1(() => {
+	        return getFocusCellOnRowChange() && getIsTabbableRow();
+	      }, []),
 	      tabbableIndex: currentColumn
 	    }); // More navigation stuff
 
@@ -12675,6 +12677,12 @@
 	  y(() => {
 	    onInteraction === null || onInteraction === void 0 ? void 0 : onInteraction();
 	  }, [onInteraction, size]);
+	  const [menuHasFocusInner, setMenuHasFocusInner, getMenuHasFocusInner] = useState(false);
+	  const {
+	    useHasFocusProps
+	  } = useHasFocus({
+	    setFocusedInner: setMenuHasFocusInner
+	  });
 	  const {
 	    usePopperArrow,
 	    usePopperPopup,
@@ -12694,6 +12702,7 @@
 	    useMenuSubmenuItem,
 	    focusMenu
 	  } = useAriaMenu({
+	    shouldFocusOnChange: getMenuHasFocusInner,
 	    open,
 	    onClose,
 	    onOpen
@@ -12752,7 +12761,8 @@
 	    open: open,
 	    onTransitionUpdate: onInteraction,
 	    exitVisibility: "hidden"
-	  }, v$1("div", null, v$1("div", { ...usePopperArrowProps({})
+	  }, v$1("div", { ...useHasFocusProps({})
+	  }, v$1("div", { ...usePopperArrowProps({})
 	  }), v$1("button", {
 	    className: "visually-hidden",
 	    onFocus: !firstSentinelIsActive ? () => focusMenu === null || focusMenu === void 0 ? void 0 : focusMenu() : () => onClose(),

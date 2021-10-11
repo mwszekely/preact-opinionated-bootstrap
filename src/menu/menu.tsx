@@ -1,6 +1,6 @@
 import { cloneElement, ComponentChildren, createContext, Fragment, h, Ref, VNode } from "preact";
 import { useAriaMenu, useButtonLikeEventHandlers, UseMenuItem } from "preact-aria-widgets";
-import { useAsyncHandler, useElementSize, useMergedProps, useRefElement, useState, useTimeout } from "preact-prop-helpers";
+import { useAsyncHandler, useElementSize, useHasFocus, useMergedProps, useRefElement, useState, useTimeout } from "preact-prop-helpers";
 import { ZoomFade } from "preact-transition";
 import { useCallback, useContext, useEffect, useLayoutEffect } from "preact/hooks";
 import { BodyPortal } from "../portal";
@@ -39,8 +39,10 @@ export function Menu<E extends Element, T extends <E extends HTMLElement>(...arg
     const { useElementSizeProps } = useElementSize<any>({ setSize: size => setSize(prevSize => JSON.stringify(size)) });
     useEffect(() => { onInteraction?.(); }, [onInteraction, size]);
 
+    const [menuHasFocusInner, setMenuHasFocusInner, getMenuHasFocusInner] = useState(false);
+    const { useHasFocusProps } = useHasFocus<HTMLDivElement>({ setFocusedInner: setMenuHasFocusInner });
     const { usePopperArrow, usePopperPopup, usePopperSource, usedPlacement, getLogicalDirection } = usePopperApi({ positionInline: positionInline ?? "start", positionBlock: positionBlock ?? "end", updating: updatingForABit });
-    const { useMenuButton, useMenuItem, useMenuItemCheckbox, useMenuProps, useMenuSubmenuItem, focusMenu } = useAriaMenu<HTMLDivElement, HTMLButtonElement>({ open, onClose, onOpen });
+    const { useMenuButton, useMenuItem, useMenuItemCheckbox, useMenuProps, useMenuSubmenuItem, focusMenu } = useAriaMenu<HTMLDivElement, HTMLButtonElement>({ shouldFocusOnChange: getMenuHasFocusInner, open, onClose, onOpen });
     const { useMenuButtonProps } = useMenuButton<Element>({ tag: anchorTag ?? "button" });
     const { usePopperSourceProps } = usePopperSource<any>();
     const { usePopperPopupProps } = usePopperPopup<HTMLDivElement>({ open });
@@ -74,7 +76,7 @@ export function Menu<E extends Element, T extends <E extends HTMLElement>(...arg
                     <BodyPortal>
                         <div {...usePopperPopupProps({ class: "dropdown-menu-popper" })}>
                             <Transition {...(useMenuProps(rest) as any)} open={open} onTransitionUpdate={onInteraction} exitVisibility="hidden">
-                                <div>
+                                <div {...useHasFocusProps({})}>
 
                                     <div {...usePopperArrowProps({})} />
                                     <button className={"visually-hidden"} onFocus={!firstSentinelIsActive ? () => focusMenu?.() : () => onClose()} onClick={onClose}>Close menu</button>
