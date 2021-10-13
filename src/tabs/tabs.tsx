@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import { cloneElement, ComponentChildren, createContext, Fragment, h, Ref, VNode } from "preact";
 import { EventDetail, TabsChangeEvent, useAriaTabs, UseAriaTabsParameters, UseTab, UseTabPanel, UseTabPanelParameters, UseTabParameters } from "preact-aria-widgets";
+import { UseTabInfo } from "preact-aria-widgets/use-tabs";
 import { useAsyncHandler, useMergedProps } from "preact-prop-helpers";
 import { Swappable } from "preact-transition";
 import { memo } from "preact/compat";
@@ -14,7 +15,7 @@ export interface TabsProps<E extends HTMLUListElement | HTMLOListElement> extend
     onSelect(index: number): void | Promise<void>;
 }
 
-export interface TabProps extends Omit<UseTabParameters<HTMLButtonElement>, "text" | "tag">, GlobalAttributes<HTMLButtonElement> {
+export interface TabProps extends Omit<UseTabParameters<HTMLButtonElement, UseTabInfo>, "text" | "tag">, GlobalAttributes<HTMLButtonElement> {
 
 }
 
@@ -23,7 +24,7 @@ export type TabPanelProps<T extends <E extends HTMLElement>(...args: any[]) => h
     GlobalAttributes<HTMLLIElement> &
     TransitionComponent<T>
 
-const UseTabContext = createContext<UseTab<HTMLButtonElement>>(null!);
+const UseTabContext = createContext<UseTab<HTMLButtonElement, UseTabInfo>>(null!);
 const UseTabPanelContext = createContext<UseTabPanel<HTMLDivElement>>(null!);
 
 export const Tabs = memo(function Tabs<E extends HTMLUListElement | HTMLOListElement>({ onSelect: onSelectAsync, orientation, selectedIndex, selectionMode, tag, children, visualVariant, ...props }: TabsProps<E>) {

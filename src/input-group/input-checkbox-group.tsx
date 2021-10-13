@@ -36,12 +36,12 @@ export function CheckboxGroup({ children }: CheckboxGroupProps) {
 
     const onUpdateChildrenSync = getSyncHandler(pending ? () => { } : onUpdateChildrenAsync);
 
-    const { managedCheckboxes, currentTypeahead, focus, invalidTypeahead, onCheckboxGroupParentInput, tabbableIndex, useCheckboxGroupChild, useCheckboxGroupParentProps, getParentIsChecked, parentPercentChecked } = useCheckboxGroup<HTMLInputElement, CheckboxGroupChildInfo>({ shouldFocusOnChange: getShouldFocusOnChange, onUpdateChildren: onUpdateChildrenSync! })
+    const { managedCheckboxes, currentTypeahead, focus, invalidTypeahead, onCheckboxGroupParentInput, tabbableIndex, useCheckboxGroupChild, useCheckboxGroupParentProps, parentIsChecked, parentPercentChecked } = useCheckboxGroup<HTMLInputElement, CheckboxGroupChildInfo>({ shouldFocusOnChange: getShouldFocusOnChange, onUpdateChildren: onUpdateChildrenSync! })
 
 
     return (
         <CheckboxGroupParentOnInputContext.Provider value={onCheckboxGroupParentInput}>
-            <CheckboxGroupParentCheckedContext.Provider value={getParentIsChecked()}>
+            <CheckboxGroupParentCheckedContext.Provider value={parentIsChecked}>
                 <UseCheckboxGroupParentPropsContext.Provider value={useCheckboxGroupParentProps}>
                     <UseCheckboxGroupChildContext.Provider value={useCheckboxGroupChild}>
                         <div {...useHasFocusProps({ class: "checkbox-group" })}>

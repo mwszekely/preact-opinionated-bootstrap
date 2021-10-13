@@ -63,9 +63,12 @@ export const RadioGroup = memo(forwardElementRef(function RadioGroup<V extends s
 
     // Any time the selected index changes, let the previous radio button know that it shouldn't be displaying a spinner (if it was).
     const currentCheckboxPendingState = (hasError ? ("failed" as const) : pending ? ("pending" as const) : ("succeeded" as const));
-    useEffect(([prevSelectedIndex]) => {
-        if (prevSelectedIndex != null && prevSelectedIndex >= 0 && prevSelectedIndex < managedChildren.length)
-            managedChildren[prevSelectedIndex]?.setAsyncState(null);
+    useEffect((prev) => {
+        if (prev) {
+            const [prevSelectedIndex] = prev;
+            if (prevSelectedIndex != null && prevSelectedIndex >= 0 && prevSelectedIndex < managedChildren.length)
+                managedChildren[prevSelectedIndex]?.setAsyncState(null);
+        }
 
     }, [selectedIndex]);
 

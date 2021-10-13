@@ -6,13 +6,13 @@ import { UseListboxSingleItem, UseListboxSingleItemInfo, UseListboxSingleItemPar
 import { useAsyncHandler, useMergedProps, useRefElement, useState } from "preact-prop-helpers";
 import { memo } from "preact/compat";
 import { useContext, useLayoutEffect } from "preact/hooks";
-import { GlobalAttributes, useLogRender, usePseudoActive, forwardElementRef } from "../props";
+import { GlobalAttributes, useLogRender, usePseudoActive, forwardElementRef, OmitStrong } from "../props";
 
 interface ListSingleItemInfo<E extends Element> extends UseListboxSingleItemInfo<E> {
 
 }
 
-export type ListSingleItemParameters<E extends Element> = Omit<UseListboxSingleItemParameters<E, ListSingleItemInfo<E>>, "text" | "tag">;
+export type ListSingleItemParameters<E extends Element> = OmitStrong<UseListboxSingleItemParameters<E, ListSingleItemInfo<E>>, "text" | "tag">;
 
 interface ListSingleProps<E extends HTMLUListElement | HTMLOListElement> extends Omit<UseListboxSingleParameters, "onSelect">, GlobalAttributes<E> {
     select: "single";
