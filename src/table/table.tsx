@@ -40,8 +40,22 @@ export interface TableFootProps extends OmitStrong<TableSectionProps<HTMLTableSe
 type T2 = number | string | Date | null | undefined | boolean;
 
 export interface TableRowProps extends OmitStrong<UseTableRowParameters, "hidden" | "location"> { variant?: TableCellVariant; children?: ComponentChildren; hidden?: boolean; }
-export interface TableCellProps extends UseTableCellParameters { colSpan?: number; value: T2; children?: VNode<any> | string | number | boolean | null, focus?: "cell" | "child", variant?: TableCellVariant; active?: boolean; }
-export interface TableHeaderCellProps extends OmitStrong<UseTableHeadCellParameters<HTMLTableCellElement>, "tag"> { unsortable?: boolean; children: ComponentChildren; focus?: "cell" | "child"; variant?: TableCellVariant; active?: boolean; }
+
+interface TableCellSharedProps extends GlobalAttributes<HTMLTableCellElement> {
+    focus?: "cell" | "child";
+    active?: boolean;
+    variant?: TableCellVariant;
+    children?: VNode<any> | string | number | boolean | null;
+}
+
+export interface TableCellProps extends UseTableCellParameters, TableCellSharedProps {
+    colSpan?: number;
+    value: T2;
+}
+
+export interface TableHeaderCellProps extends OmitStrong<UseTableHeadCellParameters<HTMLTableCellElement>, "tag">, TableCellSharedProps {
+    unsortable?: boolean;
+}
 
 
 const TableSectionContext = createContext<UseTableSection<HTMLTableSectionElement, HTMLTableRowElement, HTMLTableCellElement>>(null!);
@@ -161,23 +175,19 @@ export const TableRow = memo(forwardElementRef(function TableRow({ children, row
 }))
 
 
-
 export const TableCell = memo(forwardElementRef(function TableCell({ value: valueAsUnsorted, colSpan, children, columnIndex, variant, focus, active, ...props }: TableCellProps, ref: Ref<HTMLTableCellElement>) {
-    focus ??= "cell";
+    //focus ??= "cell";
 
     const useTableCell = useContext(TableCellContext);
     const { useTableCellDelegateProps, useTableCellProps } = useTableCell({ columnIndex, value: valueAsUnsorted });
 
-    const childrenReceiveFocus = (
-        children &&
-        typeof children != "string" &&
-        typeof children != "number" &&
-        typeof children != "boolean" &&
-        !Array.isArray(children) &&
+    const childrenReceiveFocus = (focus != "cell" && (
+        !!children &&
+        typeof children == "object" &&
+        ("type" in (children as VNode<any>)) &&
         (children as VNode).type !== Fragment
-    );
+    ));
 
-    //const isFocusbleChildren = 
     const displayValue = (children ?? valueAsUnsorted);
 
     const cellProps = useTableCellProps({
@@ -206,11 +216,16 @@ export const TableCell = memo(forwardElementRef(function TableCell({ value: valu
 }));
 
 export const TableHeaderCell = memo(forwardElementRef(function TableHeaderCell({ columnIndex, focus, children, variant, active, unsortable, ...props }: TableHeaderCellProps, ref: Ref<HTMLTableCellElement>) {
-    focus ??= "cell";
 
     const useTableHeadCell = useContext(TableHeadCellContext);
     const { useTableHeadCellDelegateProps, useTableHeadCellProps, sortDirection } = useTableHeadCell({ tag: "th", columnIndex });
 
+    const childrenReceiveFocus = (focus != "cell" && (
+        !!children &&
+        typeof children == "object" &&
+        ("type" in (children as VNode<any>)) &&
+        (children as VNode).type !== Fragment
+    ));
 
     const { hovering, useIsHoveringProps } = useIsHovering<HTMLTableCellElement>();
 
@@ -231,11 +246,22 @@ export const TableHeaderCell = memo(forwardElementRef(function TableHeaderCell({
         </Swappable>
     );
 
-    if (focus === "child") {
-        return <th {...cellProps}><div class="th-spacing">{cloneElement(children as VNode<any>, useTableHeadCellDelegateProps({}), (children as VNode<any>).props.children)}{sortIcon}</div></th>;
+
+    if (childrenReceiveFocus) {
+        const p1 = useMergedProps<any>()(useTableHeadCellDelegateProps({}), props);
+        return (
+            <th {...cellProps}>
+                <div class="th-spacing">{cloneElement(children! as any, useMergedProps<any>()(p1, children.props), children.props.children)}{sortIcon}</div>
+            </th>
+        )
     }
     else {
-        return <th {...useTableHeadCellDelegateProps(cellProps)}><div class="th-spacing">{children}{sortIcon}</div></th>
+        const p2 = useMergedProps<any>()(useTableHeadCellDelegateProps(cellProps), props);
+        return (
+            <th {...p2}>
+                <div class="th-spacing">{children}{sortIcon}</div>
+            </th>
+        )
     }
 
 }));
