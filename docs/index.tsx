@@ -116,7 +116,7 @@ const DemoTabs = memo(() => {
     return (
         <div class="demo">
             <div>
-                <Tabs orientation="block" onSelect={setSelectedIndex} selectedIndex={selectedIndex} selectionMode={selectionMode} tag="ol">
+                <Tabs orientation="block" onSelect={setSelectedIndex} selectedIndex={selectedIndex} selectionMode={selectionMode}>
                     <ol>
                         <Tab index={0}>Tab #1</Tab>
                         <Tab index={1}>Tab #2</Tab>
@@ -267,7 +267,7 @@ const Component = () => {
             let prev = theme;
             let next = prev === "theme-dark" ? "theme-light" : "theme-dark";
             setTheme(next);
-            await new Promise<void>(resolve => setTimeout(resolve, 1));
+            await new Promise<void>(resolve => setTimeout(resolve, 100));
             document.documentElement.classList.add("switching-theme");
             document.documentElement.classList.add(next);
             document.documentElement.classList.remove(prev);

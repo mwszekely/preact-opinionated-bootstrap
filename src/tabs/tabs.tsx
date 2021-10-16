@@ -8,7 +8,7 @@ import { memo } from "preact/compat";
 import { useContext } from "preact/hooks";
 import { forwardElementRef, GlobalAttributes, TagSensitiveProps, TransitionComponent } from "../props";
 
-export interface TabsProps<E extends HTMLUListElement | HTMLOListElement> extends Omit<UseAriaTabsParameters, "orientation" | "collator" | "typeaheadTimeout" | "keyNavigation" | "onSelect">, Omit<GlobalAttributes<E>, "children">, TagSensitiveProps<E> {
+export interface TabsProps<E extends HTMLUListElement | HTMLOListElement> extends Omit<UseAriaTabsParameters, "orientation" | "collator" | "typeaheadTimeout" | "keyNavigation" | "onSelect">, Omit<GlobalAttributes<E>, "children"> {
     children: ComponentChildren[];
     visualVariant?: "tabs" | "pills";
     orientation?: "inline" | "block" | undefined;
@@ -27,7 +27,7 @@ export type TabPanelProps<T extends <E extends HTMLElement>(...args: any[]) => h
 const UseTabContext = createContext<UseTab<HTMLButtonElement, UseTabInfo>>(null!);
 const UseTabPanelContext = createContext<UseTabPanel<HTMLDivElement>>(null!);
 
-export const Tabs = memo(function Tabs<E extends HTMLUListElement | HTMLOListElement>({ onSelect: onSelectAsync, orientation, selectedIndex, selectionMode, tag, children, visualVariant, ...props }: TabsProps<E>) {
+export const Tabs = memo(function Tabs<E extends HTMLUListElement | HTMLOListElement>({ onSelect: onSelectAsync, orientation, selectedIndex, selectionMode, children, visualVariant, ...props }: TabsProps<E>) {
     const capture = (e: TabsChangeEvent<E>) => { return e[EventDetail].selectedIndex };
     orientation ??= "inline";
     const { getSyncHandler } = useAsyncHandler<E>()({ capture: capture as any as () => number });

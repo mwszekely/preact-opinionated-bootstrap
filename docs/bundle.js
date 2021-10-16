@@ -13088,7 +13088,6 @@
 	  orientation,
 	  selectedIndex,
 	  selectionMode,
-	  tag,
 	  children,
 	  visualVariant,
 	  ...props
@@ -14702,7 +14701,7 @@
 	    const [selectionMode, setSelectionMode] = useState("activate");
 	    return (v$1("div", { class: "demo" },
 	        v$1("div", null,
-	            v$1(Tabs, { orientation: "block", onSelect: setSelectedIndex, selectedIndex: selectedIndex, selectionMode: selectionMode, tag: "ol" },
+	            v$1(Tabs, { orientation: "block", onSelect: setSelectedIndex, selectedIndex: selectedIndex, selectionMode: selectionMode },
 	                v$1("ol", null,
 	                    v$1(Tab, { index: 0 }, "Tab #1"),
 	                    v$1(Tab, { index: 1 }, "Tab #2"),
@@ -14837,7 +14836,7 @@
 	                let prev = theme;
 	                let next = prev === "theme-dark" ? "theme-light" : "theme-dark";
 	                setTheme(next);
-	                await new Promise(resolve => setTimeout(resolve, 1));
+	                await new Promise(resolve => setTimeout(resolve, 100));
 	                document.documentElement.classList.add("switching-theme");
 	                document.documentElement.classList.add(next);
 	                document.documentElement.classList.remove(prev);
