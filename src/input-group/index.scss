@@ -51,9 +51,6 @@
 .form-check-label,
 .form-check-input {
   touch-action: manipulation;
-
-  // TODO: Would prefer to just cancel any selection events so that manual selection could still occur, but preventDefault on click/dblclick doesn't work.
-  user-select: none;
 }
 
 // "Polyfill" disabled controls

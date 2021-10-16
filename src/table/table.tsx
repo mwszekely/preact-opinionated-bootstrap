@@ -240,8 +240,8 @@ export const TableHeaderCell = memo(forwardElementRef(function TableHeaderCell({
     const sortIcon = (
         <Swappable>
             <div {...{ class: clsx("table-sort-icon-container") }}>
-                <Flip flipAngleInline={180} open={sortDirection == "descending"}><div class="bi bi-sort-up" /></Flip>
-                <Flip flipAngleInline={180} open={(hovering && sortDirection == null) || (sortDirection == "ascending")}><div class="bi bi-sort-down-alt" /></Flip>
+                <Flip flipAngleInline={180} show={sortDirection == "descending"}><div class="bi bi-sort-up" /></Flip>
+                <Flip flipAngleInline={180} show={(hovering && sortDirection == null) || (sortDirection == "ascending")}><div class="bi bi-sort-down-alt" /></Flip>
             </div>
         </Swappable>
     );

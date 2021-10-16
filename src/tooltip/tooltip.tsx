@@ -62,7 +62,7 @@ export function Tooltip<T extends <E extends HTMLElement>(...args: any[]) => h.J
         {cloneElement(cloneable, useMergedProps<any>()({ ref: cloneable.ref! }, useTooltipTriggerProps(useElementSizeProps(usePopperSourceProps(cloneable.props)))))}
         <BodyPortal>
             <div {...usePopperPopupProps({ class: "tooltip-wrapper" })} >
-                <Transition {...rest as any} open={isOpen} onTransitionUpdate={onInteraction} exitVisibility="hidden">
+                <Transition {...rest as any} show={isOpen} onTransitionUpdate={onInteraction} exitVisibility="hidden">
                     <div {...(useTooltipProps(useMergedProps<HTMLDivElement>()({ class: "tooltip show", role: "tooltip" }, {})) as any)}>
                         <div {...usePopperArrowProps({ class: "tooltip-arrow" })}></div>
                         <div class="tooltip-inner">{tooltip}</div>

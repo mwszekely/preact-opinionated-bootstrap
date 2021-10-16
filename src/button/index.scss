@@ -2,6 +2,7 @@
 @use "sass:color";
 @use "sass:map";
 @use "sass:string";
+@use "./ensure-contrast.scss" as *;
 
 @forward "../variables.scss";
 
@@ -46,7 +47,10 @@
     // Box shadows should always appear when active.
     @each $color, $value in $theme-colors {
       &.btn-#{$color} {
-        @include box-shadow($btn-active-box-shadow, 0 0 0 0 rgba(mix($value, $value, 15%), 0.5));
+        @include box-shadow(
+          $btn-active-box-shadow,
+          0 0 0 0 rgba(mix($value, $value, 15%), 0.5)
+        );
       }
       &.btn-outline-#{$color} {
         @include box-shadow($btn-active-box-shadow, 0 0 0 0 rgba($value, 0.5));
@@ -69,13 +73,20 @@
       //text-shadow: 0 0 0 $black;
     }
 
-    &:focus, &.pending:focus {
+    &:focus,
+    &.pending:focus {
       @each $color, $value in $theme-colors {
         &.btn-#{$color} {
-          @include box-shadow($btn-active-box-shadow, 0 0 0 $btn-focus-width rgba(mix($value, $value, 15%), 0.5));
+          @include box-shadow(
+            $btn-active-box-shadow,
+            0 0 0 $btn-focus-width rgba(mix($value, $value, 15%), 0.5)
+          );
         }
         &.btn-outline-#{$color} {
-          @include box-shadow($btn-active-box-shadow, 0 0 0 $btn-focus-width rgba($value, 0.5));
+          @include box-shadow(
+            $btn-active-box-shadow,
+            0 0 0 $btn-focus-width rgba($value, 0.5)
+          );
         }
       }
     }
@@ -83,10 +94,16 @@
     &:not(:focus).pending {
       @each $color, $value in $theme-colors {
         &.btn-#{$color} {
-          @include box-shadow($btn-active-box-shadow, 0 0 0 0 rgba(mix($value, $value, 15%), 0.5));
+          @include box-shadow(
+            $btn-active-box-shadow,
+            0 0 0 0 rgba(mix($value, $value, 15%), 0.5)
+          );
         }
         &.btn-outline-#{$color} {
-          @include box-shadow($btn-active-box-shadow, 0 0 0 0 rgba($value, 0.5));
+          @include box-shadow(
+            $btn-active-box-shadow,
+            0 0 0 0 rgba($value, 0.5)
+          );
         }
       }
     }
@@ -153,26 +170,8 @@
     // (Especially a problem for dark themes)
     $contrast-ratio: contrast-ratio($body-bg, $value);
     @if $contrast-ratio <= $min-contrast-ratio {
-      // We need to know if we should shade (darken) or tint (lighten)
-      // the color in order to increase its contrast against the background.
-      $tinted-ratio: contrast-ratio($body-bg, tint-color($value, 50%));
-      $shaded-ratio: contrast-ratio($body-bg, shade-color($value, 50%));
-
-      // Not impossible that there's no valid contrast ratio for a given BG I guess.
-      // Also just to be safe.
-      $loop-prevention: 10;
-
-      @while $loop-prevention >= 0 and $contrast-ratio <= $min-contrast-ratio {
-        @if $tinted-ratio > $shaded-ratio {
-          $value: tint-color($value, 10%);
-        } @else {
-          $value: shade-color($value, 10%);
-        }
-        $contrast-ratio: contrast-ratio($body-bg, $value);
-        $loop-prevention: $loop-prevention - 1;
-      }
-
-      color: $value;
+      
+      color: ensure-contrasting-color($body-bg, $value);
 
       // Adjust these colors because either
       // * They're over a translucent colored background
@@ -183,11 +182,7 @@
       &:active,
       &:disabled,
       &.disabled {
-        @if $tinted-ratio > $shaded-ratio {
-          color: tint-color($value, 20%);
-        } @else {
-          color: shade-color($value, 20%);
-        }
+          color: ensure-contrasting-color($value, $value);
       }
     }
 

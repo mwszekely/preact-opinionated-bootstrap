@@ -28,10 +28,10 @@ export const Drawer = memo(function Drawer<T extends <E extends HTMLElement>(...
     return (
         <BodyPortal>
             <div>
-                <Fade open={open}>
+                <Fade show={open}>
                     <div {...useDrawerBackdropProps({ class: "offcanvas-backdrop backdrop-filter-transition" })} />
                 </Fade>
-                <Transition {...{ open, ...rest } as any}>
+                <Transition {...{ show: open, ...rest } as any}>
                     <div {...useDrawerProps({ class: "offcanvas offcanvas-start", tabindex: -1 })}>
                         <div class="offcanvas-header">
                             <h5 {...useDrawerTitleProps({ class: "offcanvas-title" })}>Drawer</h5>

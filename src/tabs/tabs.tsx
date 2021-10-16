@@ -63,7 +63,7 @@ export const Tab = memo(forwardElementRef(function Tab({ index, children, ...pro
 
 export const TabPanel = memo(forwardElementRef(function TabPanel<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element>({ index, children, Transition, ...rest }: TabPanelProps<T>, ref?: Ref<any>) {
     const useTabPanel = useContext(UseTabPanelContext);
-    const { useTabPanelProps, selected } = useTabPanel({ index });
+    const { useTabPanelProps, visible } = useTabPanel({ index });
 
-    return h(Transition, useTabPanelProps({ ref, class: "", open: selected, children, ...(rest as any) }));
+    return h(Transition, useTabPanelProps({ ref, class: "", show: visible, children, ...(rest as any) }));
 }));

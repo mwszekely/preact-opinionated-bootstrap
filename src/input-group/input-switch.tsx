@@ -69,9 +69,10 @@ export const Switch = memo(forwardElementRef(function Switch({ checked, disabled
 
 // Note: Slightly different from the others
 // (^^^^ I'm really glad I left that there)
-function OptionallyInputGroup<E extends Element>({ tag, isInput, children, ...props }: Omit<InputGroupTextProps<E>, "tag"> & { isInput: boolean, tag: InputGroupTextProps<E>["tag"] | null }) {
+export const OptionallyInputGroup = forwardElementRef(function OptionallyInputGroup<E extends Element>({ tag, isInput, children, ...props }: Omit<InputGroupTextProps<E>, "tag"> & { isInput: boolean, tag: InputGroupTextProps<E>["tag"] | null }, ref?: Ref<any>) {
     const inInputGroup = useContext(InInputGroupContext);
     const inInputGrid = useContext(InInputGridContext);
+    props = { ...props, ref };
 
     if (!inInputGroup)
         return createElement(tag ?? Fragment as any, props, children);
@@ -84,7 +85,7 @@ function OptionallyInputGroup<E extends Element>({ tag, isInput, children, ...pr
             {children}
         </InputGroupText>
     );
-}
+})
 
 
 

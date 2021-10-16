@@ -1,3 +1,10 @@
+@use "../variables.scss" as *;
+@forward "../variables";
+@use "sass:color";
+@use "sass:map";
+@use "sass:string";
+@use "sass:list";
+
 // Higher than modal, lower than tooltip.
 $zindex-toast: 1060 !default;
 
@@ -14,6 +21,8 @@ $zindex-toast: 1060 !default;
   // Don't set top to improve scrolling on mobile
   bottom: 0;
   pointer-events: none;
+  max-height: calc(var(--max-toast-count, 4) * 4em);
+  overflow: hidden;
 
   & > .toast {
     pointer-events: all;
@@ -30,4 +39,14 @@ $zindex-toast: 1060 !default;
 
 html.document-scroll-hidden .toasts-container {
   inset-inline-end: var(--scrollbar-width, 0px);
+}
+
+.toast {
+  background: $body-bg;
+  color: $body-color;
+
+  /*& .btn {
+    // Oh geez.
+    filter: invert(1);
+  }*/
 }

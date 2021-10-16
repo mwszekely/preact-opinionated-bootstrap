@@ -60,7 +60,7 @@ export const AccordionSection = memo(forwardElementRef(function AccordionSection
     return (
         <div {...{ ref, class: "accordion-item" }}>
             {headerJsx}
-            <Transition open={expanded} {...useAriaAccordionSectionBodyProps(useMergedProps<any>()(props, { class: "" })) as any}><div><div class="accordion-body">{children}</div></div></Transition>
+            <Transition show={expanded} {...useAriaAccordionSectionBodyProps(useMergedProps<any>()(props, { class: "" })) as any}><div><div class="accordion-body">{children}</div></div></Transition>
         </div>
     );
 }))

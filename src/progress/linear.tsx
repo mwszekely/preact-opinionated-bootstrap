@@ -230,7 +230,7 @@ export const ProgressCircular = forwardElementRef(function ({ loadingLabel, spin
             {mode === "pending" && !!loadingLabel && <div role="alert" aria-live="assertive" class="visually-hidden">{loadingLabel}</div>}
             <Swappable>
                 <div className="circular-progress-swappable">
-                    <Fade open={mode === "pending" && showSpinner} exitVisibility="removed">
+                    <Fade show={mode === "pending" && showSpinner} exitVisibility="removed">
                         <div style={{ "--count": gimmickCount } as any} className={clsx("circular-progress", colorVariant ? `circular-progress-${colorVariant}` : undefined, colorFill == "foreground" && "inverse-fill", colorFill === "foreground-only" && "no-fill")}>
                             {Array.from(function* () {
                                 for (let i = 0; i < gimmickCount; ++i)
@@ -238,8 +238,8 @@ export const ProgressCircular = forwardElementRef(function ({ loadingLabel, spin
                             }())}
                         </div>
                     </Fade>
-                    <Fade open={!shownStatusLongEnough && mode === "succeeded" && succeededAfterFailure}><div class="circular-progress-succeeded"><Check /></div></Fade>
-                    <Fade open={!shownStatusLongEnough && mode === "failed"}><div class="circular-progress-failed"><Cross /></div></Fade>
+                    <Fade show={!shownStatusLongEnough && mode === "succeeded" && succeededAfterFailure}><div class="circular-progress-succeeded"><Check /></div></Fade>
+                    <Fade show={!shownStatusLongEnough && mode === "failed"}><div class="circular-progress-failed"><Cross /></div></Fade>
                 </div>
             </Swappable>
         </div>);

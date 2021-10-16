@@ -7,10 +7,19 @@ index.css.map
 package-lock.json
 !rollup.config.js
 !docs/bundle.js
-!docs/index.css
-!docs/index.css.map
-docs/index-unprefixed.css
-docs/index-unprefixed.css.map
+!docs/index-light.css
+!docs/index-light.css.map
+!docs/index-dark.css
+!docs/index-dark.css.map
+docs/index-light-unprefixed.css
+docs/index-light-unprefixed.css.map
+docs/index-dark-unprefixed.css.map
+docs/index-dark-unprefixed.css
+/index-dark.css
+/index-dark.css.map
+/index-light.css
+/index-light.css.map
+
 
 # Logs
 logs

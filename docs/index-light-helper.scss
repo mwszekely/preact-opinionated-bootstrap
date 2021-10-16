@@ -1,0 +1,8 @@
+@use "../src/theme-light.scss";
+@use "../src/index.scss" as *;
+@import "./index-shared.scss";
+
+code {
+  color: #051b00;
+  background-color: #f4fff5;
+}

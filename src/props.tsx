@@ -39,12 +39,12 @@ export function forwardElementRef<C extends (p: any, ref?: any) => (VNode<any> |
 
 export type TransitionComponent<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element> = {
     Transition: T;
-} & Omit<Parameters<T>[0], "open">;
+} & Omit<Parameters<T>[0], "show">;
 
 
 export type OptionalTransitionComponent<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element> = {
     Transition?: T;
-} & Omit<Parameters<T>[0], "open">;
+} & Omit<Parameters<T>[0], "show">;
 
 // Get all transform parameters with both a "block" version and an "inline" version
 type ExtractGenericParameter1<T> = T extends `${infer U}Block` ? U : never
@@ -59,7 +59,7 @@ type MakeDynamicTransitionProps<T> = {
 //type T8 = MakeDynamicTransitionProps<SlideZoomFadeProps<HTMLElement>>;
 
 export type FlippableTransitionComponent<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element> = OptionalTransitionComponent<T> & {
-    [K in Exclude<keyof Parameters<T>[0], "open"> as `${K & string}Dynamic`]?: number;
+    [K in Exclude<keyof Parameters<T>[0], "show"> as `${K & string}Dynamic`]?: number;
 };
 
 

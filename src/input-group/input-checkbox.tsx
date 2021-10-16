@@ -74,9 +74,10 @@ export const Checkbox = memo(forwardElementRef(function Checkbox({ checked, disa
 
 }));
 
-export function OptionallyInputGroup<E extends Element>({ tag, children, isInput, ...props }: OmitStrong<InputGroupTextProps<E>, "tag"> & { isInput: boolean, tag: InputGroupTextProps<E>["tag"] | null }) {
+export const OptionallyInputGroup = forwardElementRef(function OptionallyInputGroup<E extends Element>({ tag, children, isInput, ...props }: OmitStrong<InputGroupTextProps<E>, "tag"> & { isInput: boolean, tag: InputGroupTextProps<E>["tag"] | null }, ref?: Ref<any>) {
     const inInputGroup = useContext(InInputGroupContext);
     const inInputGrid = !!useContext(InInputGridContext);
+    props = { ...props, ref };
 
     if (!inInputGroup)
         return createElement(tag ?? Fragment as any, props, children);
@@ -89,6 +90,6 @@ export function OptionallyInputGroup<E extends Element>({ tag, children, isInput
 
     return <InputGroupText tag={tag ?? "div" as any} {...useMergedProps<E>()({ className: clsx(isInput && inInputGrid && "faux-input-group-text") }, props)}>{children}</InputGroupText>;
 }
-
+)
 
 

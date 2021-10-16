@@ -1,0 +1,34 @@
+@use "../variables.scss" as *;
+@use "sass:color";
+@use "sass:map";
+@use "sass:string";
+
+// Shades or tints a color until a contrasting one is found, if necessary
+@function ensure-contrasting-color($background, $foreground) {
+  // Make sure all colors are visible on the default body background
+  // (Especially a problem for dark themes)
+  $contrast-ratio: contrast-ratio($body-bg, $foreground);
+  @if $contrast-ratio <= $min-contrast-ratio {
+    // We need to know if we should shade (darken) or tint (lighten)
+    // the color in order to increase its contrast against the background.
+    $foreground-tinted: tint-color($foreground, 10%);
+    $foreground-shaded: shade-color($foreground, 10%);
+
+    $loop-prevention: 10;
+    @while ($loop-prevention >= 0 and $contrast-ratio <= $min-contrast-ratio) {
+      $tinted-ratio: contrast-ratio($body-bg, $foreground-tinted);
+      $shaded-ratio: contrast-ratio($body-bg, $foreground-shaded);
+
+      @if $tinted-ratio > $shaded-ratio {
+        $foreground: $foreground-tinted;
+        $contrast-ratio: $tinted-ratio;
+      } @else {
+        $foreground: $foreground-shaded;
+        $contrast-ratio: $shaded-ratio;
+      }
+      $loop-prevention: $loop-prevention - 1;
+    }
+  }
+
+  @return $foreground;
+}

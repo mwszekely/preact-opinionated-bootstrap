@@ -260,32 +260,47 @@ const DemoInput = memo(() => {
 
 
 const Component = () => {
-    return <GridResponsive minWidth="35em">
-        <DebugUtilContext.Provider value={useMemo(() => ({ logRender: new Set<LogRenderType>(["Menu", "MenuItem"]) }), [])}>
-            <ToastsProvider>
+    const [theme, setTheme] = useState("theme-dark");
 
-                <DemoTable />
-                <DemoMenus />
-                <DemoButtons />
-                <DemoChecks />
-                <DemoInputs />
-                <DemoLayout />
-                <DemoAccordion />
-                <DemoDialog />
-                <DemoDrawer />
-                <DemoInput />
-                <DemoList />
-                <DemoTabs />
-                <DemoMenu />
-                {/*<DemoFocus />
+    return <>
+        <Button colorVariant={theme == "theme-dark"? "light" : "dark"} style={{ position: "fixed", insetBlockStart: "0.5em", insetInlineEnd: "0.5em", zIndex: 9999999 }} spinnerTimeout={999999999} onPress={async () => {
+            let prev = theme;
+            let next = prev === "theme-dark" ? "theme-light" : "theme-dark";
+            setTheme(next);
+            await new Promise<void>(resolve => setTimeout(resolve, 1));
+            document.documentElement.classList.add("switching-theme");
+            document.documentElement.classList.add(next);
+            document.documentElement.classList.remove(prev);
+            await new Promise<void>(resolve => setTimeout(resolve, 2000));
+            document.documentElement.classList.remove("switching-theme");
+        }}>Switch theme to <strong>{theme === "theme-dark" ? "light" : "dark"}</strong></Button>
+        <GridResponsive minWidth="35em">
+            <DebugUtilContext.Provider value={useMemo(() => ({ logRender: new Set<LogRenderType>(["Menu", "MenuItem"]) }), [])}>
+                <ToastsProvider>
+
+                    <DemoTable />
+                    <DemoMenus />
+                    <DemoButtons />
+                    <DemoChecks />
+                    <DemoInputs />
+                    <DemoLayout />
+                    <DemoAccordion />
+                    <DemoDialog />
+                    <DemoDrawer />
+                    <DemoInput />
+                    <DemoList />
+                    <DemoTabs />
+                    <DemoMenu />
+                    {/*<DemoFocus />
             <DemoUseTimeout />
             <DemoUseInterval />
             <DemoUseFocusTrap />
             <DemoUseFocusTrap />
             <input />*/}
-            </ToastsProvider>
-        </DebugUtilContext.Provider>
-    </GridResponsive>
+                </ToastsProvider>
+            </DebugUtilContext.Provider>
+        </GridResponsive>
+    </>
 }
 
 requestAnimationFrame(() => {

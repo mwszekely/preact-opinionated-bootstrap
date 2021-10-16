@@ -1,6 +1,6 @@
 import { cloneElement, ComponentChildren, createContext, Fragment, h } from "preact";
 import { UseToast, UseToastParameters, useToasts } from "preact-aria-widgets";
-import { generateRandomId, useStableCallback, useState } from "preact-prop-helpers";
+import { generateRandomId, useMergedProps, useMutationObserver, useStableCallback, useState } from "preact-prop-helpers";
 import { SlideFade } from "preact-transition";
 import { useCallback, useContext, useErrorBoundary, useLayoutEffect } from "preact/hooks";
 import { Button } from "../button/button";
@@ -98,13 +98,34 @@ function ToastsContainer(props: ToastsContainerProps) {
     const children = useContext(ToastsContainerChildrenContext);
     const { useToast, useToastContainerProps } = useToasts<HTMLDivElement>(props);
 
+    const [theme, setTheme] = useState(oppositeTheme(document.documentElement.classList));
+
+    useMutationObserver(document.documentElement, {
+        attributeFilter: ["class"],
+        onAttributes: ({ attributeName }) => {
+            if (attributeName === "class") {
+                setTheme(oppositeTheme(document.documentElement.classList));
+            }
+        }
+    });
+
     return (
         <UseToastContext.Provider value={useToast}>
-            <div {...useToastContainerProps(props)}>
+            <div {...useToastContainerProps(useMergedProps<HTMLDivElement>()({ className: theme }, props))}>
                 {children}
             </div>
         </UseToastContext.Provider>
     )
+}
+
+
+function oppositeTheme(classList: HTMLElement["classList"]) {
+    if (document.documentElement.classList.contains("theme-dark"))
+        return "theme-light";
+    else if (document.documentElement.classList.contains("theme-light"))
+        return "theme-dark";
+    else
+        return "";
 }
 
 const ToastDismissContext = createContext<() => void>(null!);
@@ -113,9 +134,11 @@ export function Toast({ timeout, politeness, children }: ToastProps) {
     const defaultTimeout = useContext(DefaultToastTimeout);
     const { useToastProps, dismiss, status } = useToast<HTMLDivElement>({ timeout: timeout ?? defaultTimeout, politeness });
 
+    const show = (status != "dismissed");
+
     return (
         <ToastDismissContext.Provider value={dismiss}>
-            <SlideFade open={status != "dismissed"} slideTargetInline={1} animateOnMount={true} exitVisibility="removed">
+            <SlideFade show={show} slideTargetInline={1} animateOnMount={show} exitVisibility="removed">
                 <div {...useToastProps({ class: "toast show" })} >
                     <div class="d-flex">
                         <div class="toast-body">
@@ -130,7 +153,7 @@ export function Toast({ timeout, politeness, children }: ToastProps) {
 }
 
 function defaultErrorToToast(error: any) {
-    return <Toast timeout={Infinity}>{error instanceof Error? error.message : JSON.stringify(error)}</Toast>
+    return <Toast timeout={Infinity}>{error instanceof Error ? error.message : JSON.stringify(error)}</Toast>
 }
 
 /**

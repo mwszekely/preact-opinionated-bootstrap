@@ -7,7 +7,7 @@
 
 .table {
   position: relative;
-  
+
   // Note to self: sticky headers are
   // *really* weird in Safari and it's
   // best to keep as few things sticky
@@ -25,8 +25,19 @@
   border-spacing: 0;
 }
 
+.table th,td {
+  &:focus-visible {
+    box-shadow: $input-btn-focus-box-shadow;
+    outline: none;
+  }
+}
+
 .table th {
   cursor: pointer;
+
+  &  .bi.transition-flip {
+    will-change: transform;
+  }
 
   &:hover {
     & .no-hover-only {

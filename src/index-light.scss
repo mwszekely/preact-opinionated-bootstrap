@@ -1,0 +1,9 @@
+html.theme-light, .toasts-container.theme-light {
+    @import "./index-light-helper.scss";
+}
+
+html.switching-theme {
+    * {
+        transition: all 2s;
+    }
+}

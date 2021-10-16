@@ -9,9 +9,9 @@
   "scripts": {
     "build": "npx npm-run-all --npm-path npm -sc build:sass build:ts",
     "watch": "npx npm-run-all --npm-path npm -pc watch:*",
-    "watch:sass": "sass --watch ./src/index.scss:./index.css",
+    "watch:sass": "sass --watch ./src/index-light.scss:./index-light.css ./src/index-dark.scss:./index-dark.css",
     "watch:ts": "tsc --watch",
-    "build:sass": "sass ./src/index.scss:./index.css",
+    "build:sass": "sass ./src/index-light.scss:./index-light.css ./src/index-dark.scss:./index-dark.css",
     "build:ts": "tsc --build",
     "test": "jest",
     "prepare": "npm run build || node ./true",

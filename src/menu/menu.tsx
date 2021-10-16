@@ -76,7 +76,7 @@ export function Menu<E extends Element, T extends <E extends HTMLElement>(...arg
                     {cloneElement(anchor, useMergedProps<any>()({ [anchorEventName ?? "onPress"]: onAnchorClick, ref: anchor.ref as Ref<Element>, class: `${open ? "active" : ""}` }, useElementSizeProps(usePopperSourceProps(useMenuButtonProps(anchor.props)))))}
                     <BodyPortal>
                         <div {...usePopperPopupProps({ class: "dropdown-menu-popper" })}>
-                            <Transition {...(useMenuProps(rest) as any)} open={open} onTransitionUpdate={onInteraction} exitVisibility="hidden">
+                            <Transition {...(useMenuProps(rest) as any)} show={open} onTransitionUpdate={onInteraction} exitVisibility="hidden">
                                 <div {...useHasFocusProps({})}>
 
                                     <div {...usePopperArrowProps({})} />

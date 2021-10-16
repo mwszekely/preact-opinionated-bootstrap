@@ -1,0 +1,13 @@
+@use "../src/fonts.scss";
+
+code {
+  border-radius: 0.25em;
+  border: 0.1em solid rgb(5, 60, 0);
+  white-space: pre;
+  display: inline-block;
+  overflow: auto;
+  position: relative;
+  max-width: 100%;
+  vertical-align: top;
+  transform: translateZ(0);
+}

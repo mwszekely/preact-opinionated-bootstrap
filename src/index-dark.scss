@@ -1,0 +1,9 @@
+html.theme-dark, .toasts-container.theme-dark {
+    @import "./index-dark-helper.scss";
+}
+
+html.switching-theme {
+    * {
+        transition: all 2s;
+    }
+}
