@@ -2,8 +2,7 @@ import { h } from "preact";
 import { useState } from "preact-prop-helpers";
 import { useCallback } from "preact/hooks";
 import { Card, CardElement } from "../../card/card";
-import { Checkbox, Input, InputGroup } from "../../input-group";
-import { InputGrid } from "../../input-group/input-group";
+import { Checkbox, Input, InputGroup, InputGrid } from "../../input-group";
 
 export function DemoInputs() {
     const [asyncFails, setAsyncFails] = useState(false);

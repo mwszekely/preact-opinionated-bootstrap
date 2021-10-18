@@ -20,7 +20,7 @@ export const Card = memo(forwardElementRef(function Card(p: CardProps, ref: Ref<
     let { children, ...props } = p;
 
     return (
-        <div {...useMergedProps<HTMLDivElement>()({ ref, className: "card" }, props)}>{children}</div>
+        <div {...useMergedProps<HTMLDivElement>()({ ref, className: "card elevation-raised-1 elevation-body-surface" }, props)}>{children}</div>
     )
 }));
 

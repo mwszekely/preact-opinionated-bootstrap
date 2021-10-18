@@ -2,9 +2,7 @@ import { h } from "preact";
 import { useState } from "preact-prop-helpers";
 import { useCallback } from "preact/hooks";
 import { Card, CardElement } from "../../card/card";
-import { Checkbox, Input, InputGroup, Radio, RadioGroup, Switch } from "../../input-group";
-import type { CheckboxProps } from "../../input-group/input-check";
-import { InputGrid } from "../../input-group/input-group";
+import { Checkbox, Input, InputGroup, Radio, RadioGroup, Switch, InputGrid, CheckboxProps } from "../../input-group";
 
 type LabelPosition = NonNullable<CheckboxProps["labelPosition"]>;
 

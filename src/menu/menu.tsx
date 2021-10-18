@@ -77,11 +77,11 @@ export function Menu<E extends Element, T extends <E extends HTMLElement>(...arg
                     <BodyPortal>
                         <div {...usePopperPopupProps({ class: "dropdown-menu-popper" })}>
                             <Transition {...(useMenuProps(rest) as any)} show={open} onTransitionUpdate={onInteraction} exitVisibility="hidden">
-                                <div {...useHasFocusProps({})}>
+                                <div {...useHasFocusProps({ })}>
 
                                     <div {...usePopperArrowProps({})} />
                                     <button className={"visually-hidden"} onFocus={!firstSentinelIsActive ? () => focusMenu?.() : () => onClose()} onClick={onClose}>Close menu</button>
-                                    {h(tag ?? "ul", { children, className: "dropdown-menu" })}
+                                    {h(tag ?? "ul", { children, className: "dropdown-menu elevation-raised-4 elevation-body-surface" })}
                                     {/*
                                         Add a sentinel to the end that catches attempts to tab out of the menu
                                         (Also a way for assistive technologies to find a way to close the menu)

@@ -32,7 +32,7 @@ export const Drawer = memo(function Drawer<T extends <E extends HTMLElement>(...
                     <div {...useDrawerBackdropProps({ class: "offcanvas-backdrop backdrop-filter-transition" })} />
                 </Fade>
                 <Transition {...{ show: open, ...rest } as any}>
-                    <div {...useDrawerProps({ class: "offcanvas offcanvas-start", tabindex: -1 })}>
+                    <div {...useDrawerProps({ class: "offcanvas offcanvas-start elevation-raised-5 elevation-body-surface", tabindex: -1 })}>
                         <div class="offcanvas-header">
                             <h5 {...useDrawerTitleProps({ class: "offcanvas-title" })}>Drawer</h5>
                             {closeButton ?? <Button tag="button" class="btn-close text-reset" aria-label="Close" onPress={() => onClose("escape")}></Button>}

@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { cloneElement, ComponentChildren, createContext, Fragment, h, Ref, VNode } from "preact";
 import { TableRowInfo, useTable, UseTableCell, UseTableCellParameters, UseTableHeadCell, UseTableHeadCellParameters, UseTableRow, UseTableRowParameters, UseTableSection } from "preact-aria-widgets";
-import { useGlobalHandler, useMergedProps, useState } from "preact-prop-helpers";
+import { useGlobalHandler, useMergedProps, useRefElement, useState } from "preact-prop-helpers";
 import { Flip, Swappable } from "preact-transition";
 import { memo } from "preact/compat";
 import { useCallback, useContext } from "preact/hooks";
@@ -110,11 +110,15 @@ const TableSection = memo(forwardElementRef(function TableSection<E extends HTML
 
 export const TableHead = memo(forwardElementRef(function TableHead({ variant, ...props }: TableHeadProps, ref: Ref<HTMLTableSectionElement>) {
     useLogRender("TableHead", `Rendering TableHead`);
+    const [showShadow, setShowShadow] = useState(false);
 
+    const { element, useRefElementProps } = useRefElement<HTMLTableSectionElement>();
+
+    useGlobalHandler(window, "scroll", e => setShowShadow(!!element?.offsetTop));
 
     return (
         <CellLocationContext.Provider value={"head"}>
-            <TableSection location="head" tag="thead" {...useMergedProps<HTMLTableSectionElement>()({ ref, className: clsx(variant && `table-${variant}`) }, props)} />
+            <TableSection location="head" tag="thead" {...useRefElementProps(useMergedProps<HTMLTableSectionElement>()({ ref, className: clsx("elevation-body-surface", showShadow && "floating", variant && `table-${variant}`) }, props))} />
         </CellLocationContext.Provider>
     )
 

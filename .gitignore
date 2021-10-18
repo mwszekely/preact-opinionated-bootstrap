@@ -11,6 +11,8 @@ package-lock.json
 !docs/index-light.css.map
 !docs/index-dark.css
 !docs/index-dark.css.map
+docs/index-unprefixed.css
+docs/index-unprefixed.css.map
 docs/index-light-unprefixed.css
 docs/index-light-unprefixed.css.map
 docs/index-dark-unprefixed.css.map

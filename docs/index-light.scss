@@ -1,10 +1,10 @@
 @use "../src/index-light.scss" as *;
-@use "../src/bootstrap-light.scss" as *;
+//@use "../src/variables.scss" as *;
 @forward "../src/index-light.scss";
 @import "./index-shared.scss";
 
 code {
-  font-family: $font-family-monospace;
+  //font-family: $font-family-monospace;
 }
 /*
 

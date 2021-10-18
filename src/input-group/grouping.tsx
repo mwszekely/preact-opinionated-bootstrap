@@ -20,7 +20,7 @@ export interface InputGroupTextProps<E extends Element> extends Partial<TagSensi
 }
 
 export const InputGrid = memo(forwardElementRef(function InputGrid<E extends Element>({ tag, children, ...props }: InputGridProps<E>, ref: Ref<E>) {
-    return createElement(tag ?? "div" as any, useMergedProps<E>()({ class: "input-grid", ref }, props),
+    return createElement(tag ?? "div" as any, useMergedProps<E>()({ class: "elevation-raised-1 input-grid", ref }, props),
         <InInputGridContext.Provider value={useContext(InInputGridContext) + 1}>{children}</InInputGridContext.Provider>
     );
 }));
@@ -32,7 +32,7 @@ export const InputGrid = memo(forwardElementRef(function InputGrid<E extends Ele
  */
 export const InputGroup = memo(forwardElementRef(function InputGroup<E extends Element>({ children, size, tag, ...props }: InputGroupProps<E>, ref: Ref<E>) {
     return (
-        createElement(tag ?? "div" as any, useMergedProps<E>()({ class: clsx("input-group", size && size != "md" && `input-group-${size}`), ref }, props),
+        createElement(tag ?? "div" as any, useMergedProps<E>()({ class: clsx("elevation-raised-1 input-group", size && size != "md" && `input-group-${size}`), ref }, props),
             <InInputGroupContext.Provider value={true}>
                 {children}
             </InInputGroupContext.Provider>

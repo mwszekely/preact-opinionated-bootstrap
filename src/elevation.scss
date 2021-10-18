@@ -1,0 +1,228 @@
+@use "@material/elevation/elevation-theme.scss" as elevation;
+@use "./variables.scss" as *;
+@forward "./variables";
+@use "sass:color";
+@use "sass:map";
+@use "sass:math";
+@use "sass:string";
+@use "sass:list";
+
+// Basically the same as the MDC ones, except for the drop-shadow SVG filter instead.
+// Note that the values are slightly different between drop-shadow and box-shadow
+// (in particular by using the same values the shadow's blur is twice as blurry)
+// but by coincidence it more-or-less makes up for the lack of a spread parameter,
+// so it sort of balances out.
+//
+// Either way, we use normal MDC box shadow for insets, since there's no alternative.
+$umbra-map: (
+    0: "0px 0px 0px",
+    1: "0px 2px 1px",
+    2: "0px 3px 1px",
+    3: "0px 3px 3px",
+    4: "0px 2px 4px",
+    5: "0px 3px 5px",
+    6: "0px 3px 5px",
+    7: "0px 4px 5px",
+    8: "0px 5px 5px",
+    9: "0px 5px 6px",
+    10: "0px 6px 6px",
+    11: "0px 6px 7px",
+    12: "0px 7px 8px",
+    13: "0px 7px 8px",
+    14: "0px 7px 9px",
+    15: "0px 8px 9px",
+    16: "0px 8px 10px",
+    17: "0px 8px 11px",
+    18: "0px 9px 11px",
+    19: "0px 9px 12px",
+    20: "0px 10px 13px",
+    21: "0px 10px 13px",
+    22: "0px 10px 14px",
+    23: "0px 11px 14px",
+    24: "0px 11px 15px",
+);
+
+$penumbra-map: (
+    0: "0px 0px 0px",
+    1: "0px 1px 1px",
+    2: "0px 2px 2px",
+    3: "0px 3px 4px",
+    4: "0px 4px 5px",
+    5: "0px 5px 8px",
+    6: "0px 6px 10px",
+    7: "0px 7px 10px",
+    8: "0px 8px 10px",
+    9: "0px 9px 12px",
+    10: "0px 10px 14px",
+    11: "0px 11px 15px",
+    12: "0px 12px 17px",
+    13: "0px 13px 19px",
+    14: "0px 14px 21px",
+    15: "0px 15px 22px",
+    16: "0px 16px 24px",
+    17: "0px 17px 26px",
+    18: "0px 18px 28px",
+    19: "0px 19px 29px",
+    20: "0px 20px 31px",
+    21: "0px 21px 33px",
+    22: "0px 22px 35px",
+    23: "0px 23px 36px",
+    24: "0px 24px 38px",
+);
+
+$ambient-map: (
+    0: "0px 0px 0px",
+    1: "0px 1px 3px",
+    2: "0px 1px 5px",
+    3: "0px 1px 8px",
+    4: "0px 1px 10px",
+    5: "0px 1px 14px",
+    6: "0px 1px 18px",
+    7: "0px 2px 16px",
+    8: "0px 3px 14px",
+    9: "0px 3px 16px",
+    10: "0px 4px 18px",
+    11: "0px 4px 20px",
+    12: "0px 5px 22px",
+    13: "0px 5px 24px",
+    14: "0px 5px 26px",
+    15: "0px 6px 28px",
+    16: "0px 6px 30px",
+    17: "0px 6px 32px",
+    18: "0px 7px 34px",
+    19: "0px 7px 36px",
+    20: "0px 8px 38px",
+    21: "0px 8px 40px",
+    22: "0px 8px 42px",
+    23: "0px 9px 44px",
+    24: "0px 9px 46px",
+);
+
+// Surfaces in dark mode compensate for decreased shadow visibility
+// by having a lighter background color instead.
+// This mixin sets the correct background color for a given elevation.
+@mixin apply-elevation-surface-color($md-elevation) {
+    &.elevation-body-surface {
+        @if (luminance($body-bg) < 0.5) {
+            @if $md-elevation >= 0 {
+                $tint-percent: (0.0363 * math.log($md-elevation) + 0.0468) * 100%;
+                $tinted-body-bg: #{tint-color($body-bg, $tint-percent)};
+
+                background-color: #{tint-color($body-bg, $tint-percent)};
+                --bs-body-bg: #{$tinted-body-bg};
+            } @else {
+                $shade-percent: (0.0363 * math.log(-1 * $md-elevation) + 0.0468) * 100%;
+                $shaded-body-bg: #{shade-color($body-bg, $shade-percent)};
+                background-color: #{$shaded-body-bg};
+                --bs-body-bg: #{$shaded-body-bg};
+            }
+        } @else {
+            background-color: #{$body-bg};
+            --bs-body-bg: #{$body-bg};
+        }
+    }
+}
+
+// This is like the normal MDC elevation mixin, with some differences:
+// 1. Dark mode is accounted for implicitly
+// 2. Uses filter: drop-shadow instead of box-shadow (more versatile)
+// 3. Accepts negative values for an inset instead of only outset shadows.
+@mixin elevation-even-with-dark-mode($md-elevation) {
+
+    // This is here because **usually** a border is redundant with
+    // elevation shadow, which is basically used here as a "better" border.
+    // That being said, TODO, because this feels a bit like overkill.
+    // We really just want to undo the default Bootstrap borders.
+    border: none;
+
+    @if $md-elevation >= 0 {
+        $shadow-color: rgb(0 0 0 / 20%);
+        $umbra-z-value: map.get($umbra-map, $md-elevation);
+        $penumbra-z-value: map.get($penumbra-map, $md-elevation);
+        $ambient-z-value: map.get($ambient-map, $md-elevation);
+        filter: drop-shadow(#{$umbra-z-value} #{$shadow-color})
+            drop-shadow(#{$penumbra-z-value} #{$shadow-color})
+            drop-shadow(#{$ambient-z-value} #{$shadow-color});
+        box-shadow: none;
+    } @else {
+        $shadow: elevation.elevation-box-shadow(-1 * $md-elevation);
+        box-shadow: inset #{list.nth($shadow, 1)}, inset #{list.nth($shadow, 2)}, inset #{list.nth($shadow, 3)};
+    }
+
+    @include apply-elevation-surface-color($md-elevation);
+}
+
+// The actual classes that implement the shadows.
+// The numbering is different from MDC to simplify things--
+// instead of 1-24, it's 1-6.
+.elevation {
+    // Corresponds to Material elevation 1
+    // (cards and other subtle things)
+    &-raised-1 {
+        @include elevation-even-with-dark-mode(1);
+    }
+
+    // Corresponds to Material elevation 2
+    // (Raised buttons and other emphasized things)
+    &-raised-2 {
+        @include elevation-even-with-dark-mode(2);
+    }
+
+    // Corresponds to Material elevation 4
+    // (Top app bar)
+    &-raised-3 {
+        @include elevation-even-with-dark-mode(4);
+    }
+
+    // Corresponds to Material elevation 8
+    // (Menus, cards when picked up)
+    &-raised-4 {
+        @include elevation-even-with-dark-mode(8);
+    }
+
+    // Corresponds to Material elevation 16
+    // (Drawers and other non-dialog screen hogs)
+    &-raised-5 {
+        @include elevation-even-with-dark-mode(16);
+    }
+
+    // Corresponds to Material elevation 24
+    // (Dialogs)
+    &-raised-6 {
+        @include elevation-even-with-dark-mode(24);
+    }
+
+    &-depressed-1 {
+        @include elevation-even-with-dark-mode(-1);
+    }
+
+    // Corresponds to Material elevation 2
+    // (Raised buttons and other emphasized things)
+    &-depressed-2 {
+        @include elevation-even-with-dark-mode(-2);
+    }
+
+    // Corresponds to Material elevation 4
+    // (Top app bar)
+    &-depressed-3 {
+        @include elevation-even-with-dark-mode(-4);
+    }
+
+    // Corresponds to Material elevation 8
+    // (Menus, cards when picked up)
+    &-depressed-4 {
+        @include elevation-even-with-dark-mode(-8);
+    }
+
+    // Corresponds to Material elevation 16
+    // (Drawers and other non-dialog screen hogs)
+    &-depressed-5 {
+        @include elevation-even-with-dark-mode(-16);
+    }
+
+    // Corresponds to Material elevation 24
+    // (Dialogs)
+    &-depressed-6 {
+        @include elevation-even-with-dark-mode(-24);
+    }
+}

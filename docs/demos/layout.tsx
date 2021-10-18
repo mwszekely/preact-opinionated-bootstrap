@@ -1,7 +1,7 @@
 import { h } from "preact";
 import { Card, CardElement } from "../../card/card";
 import { Checkbox, Input, InputGroup } from "../../input-group";
-import { InputGrid } from "../../input-group/input-group";
+import { InputGrid } from "../../input-group";
 
 export function DemoLayout() {
     return (

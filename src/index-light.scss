@@ -1,5 +1,7 @@
+@use "sass:meta";
+
 html.theme-light, .toasts-container.theme-light {
-    @import "./index-light-helper.scss";
+    @include meta.load-css("./index-light-helper.scss");
 }
 
 html.switching-theme {

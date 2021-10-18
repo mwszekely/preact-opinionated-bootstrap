@@ -1,11 +1,8 @@
 import { h } from "preact";
 import { useState } from "preact-prop-helpers";
-import { Button, ButtonGroup, ProvideDefaultButtonColor, ProvideDefaultButtonFill, ProvideDefaultButtonSize } from "../../button";
-import { ButtonGroupChild } from "../../button/button-group";
-import { ButtonColorVariant } from "../../button/types";
+import { Button, ButtonColorVariant, ButtonGroup, ButtonGroupChild, ProvideDefaultButtonColor, ProvideDefaultButtonFill, ProvideDefaultButtonSize } from "../../button";
 import { Card, CardElement } from "../../card/card";
-import { Checkbox, Input, InputGroup } from "../../input-group";
-import { InputGrid } from "../../input-group/input-group";
+import { InputGrid, Checkbox, Input, InputGroup } from "../../input-group";
 import { Toast, usePushToast } from "../../toast";
 
 export function DemoButtons() {

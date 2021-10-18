@@ -89,7 +89,7 @@ export const OptionallyInputGroup = forwardElementRef(function OptionallyInputGr
         children = <div className="input-group-text">{children}</div>
 
     return <InputGroupText tag={tag ?? "div" as any} {...useMergedProps<E>()({ className: clsx(isInput && inInputGrid && "faux-input-group-text") }, props)}>{children}</InputGroupText>;
-}
-)
+})
+
 
 

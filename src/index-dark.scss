@@ -1,5 +1,7 @@
+@use "sass:meta";
+
 html.theme-dark, .toasts-container.theme-dark {
-    @import "./index-dark-helper.scss";
+    @include meta.load-css("./index-dark-helper.scss");
 }
 
 html.switching-theme {

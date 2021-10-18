@@ -25,11 +25,11 @@ export const Dialog = memo(forwardElementRef(function Dialog<T extends <E extend
         <BodyPortal>
             <div class="modal-portal-container">
                 <Fade show={open}>
-                    <div {...useDialogBackdropProps({ class: "modal-backdrop  backdrop-filter-transition" })} />
+                    <div {...useDialogBackdropProps({ class: "modal-backdrop backdrop-filter-transition" })} />
                 </Fade>
                 <Transition {...{ ref, show: open, ...rest } as any}>
                     <div {...useDialogProps({ class: "modal-dialog modal-dialog-scrollable" })}>
-                        <div class="modal-content ">
+                        <div class="modal-content elevation-raised-6 elevation-body-surface">
                             {title != null && <div {...useDialogTitleProps({ class: "modal-header" })}>
                                 <h1 class="modal-title">{title}</h1>
                             </div>}

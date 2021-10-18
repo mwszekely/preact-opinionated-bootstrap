@@ -14,7 +14,7 @@
 @use "./layout/" as *;
 @use "./table/" as *;
 
-@use "../node_modules/preact-transition/src/index.scss";
+@use "preact-transition/src/index.scss";
 
 @forward "./variables.scss";
 @forward "./button";
@@ -33,12 +33,10 @@
 @forward "./table/";
 
 @use "./button/ensure-contrast.scss" as *;
+@use "./elevation.scss";
 
 $scrollbar-track-background: ensure-contrasting-color($body-bg, $body-bg);
-$scrollbar-thumb-background: ensure-contrasting-color(
-  $scrollbar-track-background,
-  $scrollbar-track-background
-);
+$scrollbar-thumb-background: ensure-contrasting-color($scrollbar-track-background, $scrollbar-track-background);
 $scrollbar-thumb-active-background: color-contrast($body-bg);
 
 *::-webkit-scrollbar {
@@ -56,10 +54,7 @@ $scrollbar-thumb-active-background: color-contrast($body-bg);
   background: var(--scrollbar-background-color, #{$scrollbar-track-background});
 }
 *::-webkit-scrollbar-thumb {
-  background-color: var(
-    --scrollbar-thumb-color,
-    #{$scrollbar-thumb-background}
-  );
+  background-color: var(--scrollbar-thumb-color, #{$scrollbar-thumb-background});
   border-radius: 6px;
   &:active {
     background-color: #{$scrollbar-thumb-active-background};

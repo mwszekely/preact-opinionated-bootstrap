@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { cloneElement, ComponentChildren, createContext, Fragment, h, Ref, VNode } from "preact";
 import { EventDetail, TabsChangeEvent, useAriaTabs, UseAriaTabsParameters, UseTab, UseTabPanel, UseTabPanelParameters, UseTabParameters } from "preact-aria-widgets";
-import { UseTabInfo } from "preact-aria-widgets/use-tabs";
+import { UseTabInfo } from "preact-aria-widgets";
 import { useAsyncHandler, useMergedProps } from "preact-prop-helpers";
 import { Swappable } from "preact-transition";
 import { memo } from "preact/compat";
@@ -44,7 +44,7 @@ export const Tabs = memo(function Tabs<E extends HTMLUListElement | HTMLOListEle
             </UseTabContext.Provider>
             <UseTabPanelContext.Provider value={useTabPanel}>
                 <Swappable>
-                    <div class="tab-content">
+                    <div class="tab-content elevation-depressed-3 elevation-body-surface">
                         {...children.slice(1)}
                     </div>
                 </Swappable>
