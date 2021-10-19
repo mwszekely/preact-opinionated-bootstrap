@@ -2,8 +2,22 @@
 @use "sass:math";
 @use "./bootstrap/functions" as *;
 
+$blue: #2b35ca;
+$primary: $blue;
+$component-active-bg: $primary;
+$input-btn-focus-color-opacity: 0.4;
+$input-btn-focus-color-opacity: $input-btn-focus-color-opacity;
+$input-btn-focus-color: rgba(
+  tint-color($component-active-bg, 40%),
+  $input-btn-focus-color-opacity
+);
+
 $primary-font-family: #{"Jost", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"} !default;
 
+$input-btn-focus-width:         .25rem !default;
+$input-btn-focus-box-shadow:    0 0 0 $input-btn-focus-width $input-btn-focus-color !default;
+$input-focus-box-shadow: #{$input-btn-focus-box-shadow, inset 0 0 0 rgb(0 0 0 / 40%)} !default;
+$input-box-shadow: #{0 0 0 $input-btn-focus-color, inset 0 0 0 rgb(0 0 0 / 40%)} !default;
 
 @use "./bootstrap/bootstrap" with (
     $enable-shadows: true,
@@ -20,7 +34,12 @@ $primary-font-family: #{"Jost", system-ui, -apple-system, "Segoe UI", Roboto, "H
     $font-family-sans-serif: $primary-font-family,
     $progress-bar-transition: #{width, clip-path 0.6s ease},
     $btn-box-shadow: #{inset 0 0 0 rgb(0 0 0 / 40%), var(--btn-box-shadow, 0 0 black)},
-    $btn-active-box-shadow: #{inset 0 3px 5px rgb(0 0 0 / 40%), 0 0 transparent}
+    $btn-active-box-shadow: #{inset 0 3px 5px rgb(0 0 0 / 40%), 0 0 transparent},
+    $input-focus-box-shadow: $input-focus-box-shadow,
+    $input-btn-focus-color-opacity: $input-btn-focus-color-opacity,
+    $input-btn-focus-color: $input-btn-focus-color,
+    $input-btn-focus-box-shadow: $input-btn-focus-box-shadow,
+    $input-box-shadow:  $input-box-shadow
   );
 
 @forward "./bootstrap/bootstrap";

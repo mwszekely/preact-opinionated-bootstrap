@@ -9,7 +9,7 @@
     --ball-color: #{$value};
   }
   .circular-progress-#{$color}:not(.inverse-fill):not(.no-fill) {
-    background: #{$body-bg};
+    background: var(--bs-body-bg, #{$body-bg});
   }
 
   .circular-progress-#{$color}.inverse-fill {

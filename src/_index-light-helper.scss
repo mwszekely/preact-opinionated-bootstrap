@@ -1,2 +1,4 @@
 @use "./bootstrap-light.scss";
 @use "./index.scss" as *;
+
+@debug $input-btn-focus-box-shadow;

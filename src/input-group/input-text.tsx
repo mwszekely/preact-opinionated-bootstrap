@@ -29,7 +29,7 @@ function UnlabelledInput({ type, disabled, value, onValueChange: onInputAsync, .
                 "aria-disabled": disabled ? "true" : undefined,
                 readOnly: disabled,
                 onBlur,
-                class: clsx(`form-control`, disabled && "disabled", pending && "with-end-icon"),
+                class: clsx(`form-control`, "elevation-body-surface", "elevation-depressed-2", (value as number) !== 0 && value == "" && "focus-only", disabled && "disabled", pending && "with-end-icon"),
                 type,
                 value: (pending || focusedInner) ? currentCapture : uncapture(value), onInput
             })))} />
