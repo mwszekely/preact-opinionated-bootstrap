@@ -22,6 +22,11 @@
 
   transition: $btn-transition, text-shadow 0.15s ease-in-out;
 
+  @include box-shadow(
+    0 0 0 0 rgb(0 0 0 / 40%),
+    0 0 0 0 $input-btn-focus-color
+  );
+
   &:not(.disabled):not(:disabled):not(.pending) {
     cursor: pointer;
   }
@@ -49,11 +54,11 @@
       &.btn-#{$color} {
         @include box-shadow(
           $btn-active-box-shadow,
-          0 0 0 0 rgba(mix($value, $value, 15%), 0.5)
+          0 0 0 0 rgba(tint-color($value, 40%), $input-btn-focus-color-opacity)
         );
       }
       &.btn-outline-#{$color} {
-        @include box-shadow($btn-active-box-shadow, 0 0 0 0 rgba($value, 0.5));
+        @include box-shadow($btn-active-box-shadow, 0 0 0 0 rgba(tint-color($value, 40%), $input-btn-focus-color-opacity));
       }
     }
 
@@ -79,13 +84,13 @@
         &.btn-#{$color} {
           @include box-shadow(
             $btn-active-box-shadow,
-            0 0 0 $btn-focus-width rgba(mix($value, $value, 15%), 0.5)
+            0 0 0 $btn-focus-width rgba(tint-color($value, 40%), $input-btn-focus-color-opacity)
           );
         }
         &.btn-outline-#{$color} {
           @include box-shadow(
             $btn-active-box-shadow,
-            0 0 0 $btn-focus-width rgba($value, 0.5)
+            0 0 0 $btn-focus-width rgba(tint-color($value, 40%), $input-btn-focus-color-opacity)
           );
         }
       }
@@ -96,13 +101,13 @@
         &.btn-#{$color} {
           @include box-shadow(
             $btn-active-box-shadow,
-            0 0 0 0 rgba(mix($value, $value, 15%), 0.5)
+            0 0 0 0 rgba(tint-color($value, 40%), $input-btn-focus-color-opacity)
           );
         }
         &.btn-outline-#{$color} {
           @include box-shadow(
             $btn-active-box-shadow,
-            0 0 0 0 rgba($value, 0.5)
+            0 0 0 0 rgba(tint-color($value, 40%), $input-btn-focus-color-opacity)
           );
         }
       }
@@ -171,7 +176,9 @@
     $contrast-ratio: contrast-ratio($body-bg, $value);
     @if $contrast-ratio <= $min-contrast-ratio {
       
-      color: ensure-contrasting-color($body-bg, $value);
+      $adjusted-color: ensure-contrasting-color($body-bg, $value);
+      color: $adjusted-color;
+      border-color: $adjusted-color;
 
       // Adjust these colors because either
       // * They're over a translucent colored background
@@ -182,7 +189,7 @@
       &:active,
       &:disabled,
       &.disabled {
-          color: ensure-contrasting-color($value, $value);
+          color: ensure-contrasting-color(mix($value, $body-bg), $value);
       }
     }
 

@@ -1,23 +1,39 @@
 @use "../variables.scss" as *;
 @use "sass:color";
 @use "sass:map";
+@use "sass:math";
 @use "sass:string";
 
 // Shades or tints a color until a contrasting one is found, if necessary
-@function ensure-contrasting-color($background, $foreground) {
+// Won't always be as good as a hand-picked approach
+// (especially for yellows, ugh)
+// but good enough if you need to procedurally-generate a lot of colors.
+@function ensure-contrasting-color($background, $foreground, $required-contrast-ratio: $min-contrast-ratio) {
+  $original-foreground: $foreground;
+
   // Make sure all colors are visible on the default body background
   // (Especially a problem for dark themes)
-  $contrast-ratio: contrast-ratio($body-bg, $foreground);
-  @if $contrast-ratio <= $min-contrast-ratio {
+  $contrast-ratio: contrast-ratio($background, $foreground, $required-contrast-ratio);
+  @if $contrast-ratio <= $required-contrast-ratio {
     // We need to know if we should shade (darken) or tint (lighten)
     // the color in order to increase its contrast against the background.
-    $foreground-tinted: tint-color($foreground, 10%);
-    $foreground-shaded: shade-color($foreground, 10%);
+    $foreground-tinted: $foreground;
+    $foreground-shaded: $foreground;
 
-    $loop-prevention: 10;
-    @while ($loop-prevention >= 0 and $contrast-ratio <= $min-contrast-ratio) {
-      $tinted-ratio: contrast-ratio($body-bg, $foreground-tinted);
-      $shaded-ratio: contrast-ratio($body-bg, $foreground-shaded);
+    // To prevent rounding errors
+    // (as in, "oh no, #111 shaded by 5% is still #111")
+    // bump these numbers up as they fail to make any change.
+    $tint-percent-delta: 1%;
+    $shade-percent-delta: 1%;
+
+    $loop-count: 0;
+
+    @while ($tint-percent-delta < 100% and $shade-percent-delta < 100% and $contrast-ratio <= $required-contrast-ratio) {
+      // Change our current color to either shade or tint it.
+      $foreground-tinted: tint-color($original-foreground, $tint-percent-delta);
+      $foreground-shaded: shade-color($original-foreground, $shade-percent-delta);
+      $tinted-ratio: contrast-ratio($background, $foreground-tinted);
+      $shaded-ratio: contrast-ratio($background, $foreground-shaded);
 
       @if $tinted-ratio > $shaded-ratio {
         $foreground: $foreground-tinted;
@@ -26,8 +42,12 @@
         $foreground: $foreground-shaded;
         $contrast-ratio: $shaded-ratio;
       }
-      $loop-prevention: $loop-prevention - 1;
+
+      $loop-count: $loop-count + 1;
+      $tint-percent-delta: math.min(100%, $tint-percent-delta + 1%);
+      $shade-percent-delta: math.min(100%, $shade-percent-delta + 1%);
     }
+    
   }
 
   @return $foreground;

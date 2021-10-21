@@ -9805,7 +9805,8 @@
 	        return value;
 
 	      case "number":
-	        return `${value}`;
+	        if (value != null) return `${value}`;
+	        return "";
 	    }
 	  }, [type]);
 	  return {
@@ -10306,9 +10307,39 @@
 	    capture,
 	    debounce: type === "text" ? 1500 : undefined
 	  });
-	  const onInput = getSyncHandler(disabled ? null : onInputAsync);
+	  const onInputIfValid = getSyncHandler(disabled ? null : onInputAsync);
+
+	  const onInput = e => {
+	    const target = e.currentTarget;
+
+	    if (type == "number") {
+	      // When typing numbers, they'll "autocorrect" to their
+	      // most natural represented form when the input re-renders.
+	      //
+	      // This is a problem when typing, e.g., "-5", because
+	      // when the user is typing character-by-character, 
+	      // the closest number to "-" is "NaN", which makes it
+	      // impossible to enter "-5" with the "-" as the first character.
+	      //
+	      // To fix this, we don't do anything if we received an onInput
+	      // event but there's no valid numeric representation for
+	      // whatever was typed.  We just ignore it, and wait until
+	      // an actual number comes in.
+	      //
+	      // NOTE: When valueAsNumber is NaN, value is "".  That means
+	      // that it's *NOT* possible to store the partially typed
+	      // value anywhere -- it's completely hidden away.
+	      if (target !== null && target !== void 0 && target.value || (target === null || target === void 0 ? void 0 : target.valueAsNumber) === 0) {
+	        return onInputIfValid === null || onInputIfValid === void 0 ? void 0 : onInputIfValid.bind(target)(e);
+	      }
+	    } else {
+	      return onInputIfValid === null || onInputIfValid === void 0 ? void 0 : onInputIfValid.bind(target)(e);
+	    }
+	  };
+
 	  const asyncState = hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null;
 	  const onBlur = flushDebouncedPromise;
+	  F(InInputGridContext);
 	  return v$1(ProgressCircular, {
 	    spinnerTimeout: 10,
 	    mode: currentType === "async" ? asyncState : null,
@@ -10318,7 +10349,7 @@
 	      "aria-disabled": disabled ? "true" : undefined,
 	      readOnly: disabled,
 	      onBlur,
-	      class: clsx(`form-control`, "elevation-body-surface", "elevation-depressed-2", value !== 0 && value == "" && "focus-only", disabled && "disabled", pending && "with-end-icon"),
+	      class: clsx("form-control", "faux-form-control-inner", disabled && "disabled", pending && "with-end-icon"),
 	      type,
 	      value: pending || focusedInner ? currentCapture : uncapture(value),
 	      onInput
@@ -10353,7 +10384,7 @@
 	    tag: "label"
 	  });
 	  const isInInputGroup = F(InInputGroupContext);
-	  const isInInputGrid = F(InInputGridContext);
+	  F(InInputGridContext);
 	  let stringLabel = `${children}`;
 
 	  if (children != null && labelPosition === "hidden") {
@@ -10365,18 +10396,16 @@
 	    })
 	  }, children);
 	  let inputJsx = v$1(UnlabelledInput, { ...useInputLabelInputProps(props)
-	  });
+	  }); //if (isInInputGrid) {
 
-	  if (isInInputGrid) {
-	    inputJsx = v$1("div", {
-	      class: "form-control faux-form-control",
-	      style: width !== null && width !== void 0 && width.endsWith("ch") ? {
-	        "--form-control-width": width !== null && width !== void 0 ? width : "20ch"
-	      } : width ? {
-	        width
-	      } : undefined
-	    }, inputJsx);
-	  }
+	  inputJsx = v$1("div", {
+	    class: clsx("form-control faux-form-control-outer elevation-depressed-2", "elevation-body-surface", "focusable-within", props.value !== 0 && props.value == "" && "focus-within-only", props.disabled && "disabled"),
+	    style: width !== null && width !== void 0 && width.endsWith("ch") ? {
+	      "--form-control-width": width !== null && width !== void 0 ? width : "20ch"
+	    } : width ? {
+	      width
+	    } : undefined
+	  }, inputJsx); // }
 
 	  const inputWithLabel = v$1(d$1, null, labelPosition === "start" && labelJsx, inputJsx, (labelPosition === "end" || labelPosition == "floating") && labelJsx);
 	  if (labelPosition !== "floating") return inputWithLabel;else return v$1("div", {
@@ -13673,7 +13702,9 @@
 	                                v$1(ButtonGroupChild, { index: 4, colorVariant: "danger", pressed: buttonsColor == "danger", onPressToggle: () => setButtonsColor("danger") }, "Danger"),
 	                                v$1(ButtonGroupChild, { index: 5, colorVariant: "info", pressed: buttonsColor == "info", onPressToggle: () => setButtonsColor("info") }, "Info"),
 	                                v$1(ButtonGroupChild, { index: 6, colorVariant: "light", pressed: buttonsColor == "light", onPressToggle: () => setButtonsColor("light") }, "Light"),
-	                                v$1(ButtonGroupChild, { index: 7, colorVariant: "dark", pressed: buttonsColor == "dark", onPressToggle: () => setButtonsColor("dark") }, "Dark"))),
+	                                v$1(ButtonGroupChild, { index: 7, colorVariant: "dark", pressed: buttonsColor == "dark", onPressToggle: () => setButtonsColor("dark") }, "Dark"),
+	                                v$1(ButtonGroupChild, { index: 8, colorVariant: "contrast", pressed: buttonsColor == "contrast", onPressToggle: () => setButtonsColor("contrast") }, "Contrast"),
+	                                v$1(ButtonGroupChild, { index: 9, colorVariant: "subtle", pressed: buttonsColor == "subtle", onPressToggle: () => setButtonsColor("subtle") }, "Subtle"))),
 	                        v$1(CardElement, null,
 	                            v$1(Button, { onPress: onPress },
 	                                buttonsFill === "fill" ? "Filled" : "Outlined",

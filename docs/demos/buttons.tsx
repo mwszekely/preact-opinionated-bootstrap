@@ -92,6 +92,8 @@ export function DemoButtons() {
                                     <ButtonGroupChild index={5} colorVariant="info" pressed={buttonsColor == "info"} onPressToggle={() => setButtonsColor("info")}>Info</ButtonGroupChild>
                                     <ButtonGroupChild index={6} colorVariant="light" pressed={buttonsColor == "light"} onPressToggle={() => setButtonsColor("light")}>Light</ButtonGroupChild>
                                     <ButtonGroupChild index={7} colorVariant="dark" pressed={buttonsColor == "dark"} onPressToggle={() => setButtonsColor("dark")}>Dark</ButtonGroupChild>
+                                    <ButtonGroupChild index={8} colorVariant="contrast" pressed={buttonsColor == "contrast"} onPressToggle={() => setButtonsColor("contrast")}>Contrast</ButtonGroupChild>
+                                    <ButtonGroupChild index={9} colorVariant="subtle" pressed={buttonsColor == "subtle"} onPressToggle={() => setButtonsColor("subtle")}>Subtle</ButtonGroupChild>
                                 </ButtonGroup>
                             </CardElement>
                             <CardElement>

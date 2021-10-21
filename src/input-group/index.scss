@@ -23,6 +23,40 @@
   position: relative;
 }
 
+// All of this is to allow us to wrap form-control
+// input elements, to allow us to have a child
+// of a form-control.
+// Basically, we create two form-control elements,
+// an outer one that handles things related to
+// "I'm the first form-control in this input-group
+// so my left borders are rounded", and an inner
+// one that handles "I control the styling of
+// the actual <input> element.
+.faux-form-control-inner {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 0;
+
+  &.form-control {
+    background: transparent;
+    &:focus {
+      background: transparent;
+    }
+  }
+}
+
+.faux-form-control-outer {
+  position: relative;
+  overflow: hidden;
+  padding: 0;
+
+  @include box-shadow($input-box-shadow);
+}
+
+
+
+
 .form-check-input + .circular-progress-container {
   position: absolute;
   left: 0;
@@ -88,9 +122,7 @@ label.input-group-text:not(.disabled) {
 .form-check {
   position: relative;
 
-  &.form-switch
-    > .form-check-input:not(:checked)
-    + .circular-progress-container {
+  &.form-switch > .form-check-input:not(:checked) + .circular-progress-container {
     //inset-inline-start: -1.05em;
   }
 
@@ -126,13 +158,13 @@ designed to allow a "wrapper" that we can position: relative.
       width: unset;
     }
 
-    & .form-control.faux-form-control {
+    & .form-control.faux-form-control-outer {
       justify-self: stretch;
       width: 100%;
       max-width: calc(#{2 * $input-padding-x} + 15px + var(--form-control-width, 50ch));
     }
 
-    & .form-control.faux-form-control,
+    & .form-control.faux-form-control-outer,
     & .input-group-text.faux-input-group-text {
       position: relative;
       padding: 0;
@@ -158,7 +190,7 @@ designed to allow a "wrapper" that we can position: relative.
   }
 }
 
-.faux-form-control {
+.faux-form-control-outer {
   position: relative;
 }
 

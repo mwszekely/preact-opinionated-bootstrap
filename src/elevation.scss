@@ -149,16 +149,17 @@ $ambient-map: (
             drop-shadow(#{$ambient-z-value} #{$shadow-color});
         @if $focus-box-shadow != none {
             box-shadow: $focus-box-shadow;
-        }
-        @else {
+        } @else {
             box-shadow: none;
         }
     } @else {
         $shadow: elevation.elevation-box-shadow(-1 * $md-elevation);
         @if $focus-box-shadow == none {
-            box-shadow: 0 0 0 rgba(0 0 0 / 40%), inset #{list.nth($shadow, 1)}, inset #{list.nth($shadow, 2)}, inset #{list.nth($shadow, 3)};
+            box-shadow: 0 0 0 #{$input-btn-focus-color}, inset #{list.nth($shadow, 1)}, inset #{list.nth($shadow, 2)},
+                inset #{list.nth($shadow, 3)};
         } @else {
-            box-shadow: #{$focus-box-shadow}, inset #{list.nth($shadow, 1)}, inset #{list.nth($shadow, 2)}, inset #{list.nth($shadow, 3)};
+            box-shadow: #{$focus-box-shadow}, inset #{list.nth($shadow, 1)}, inset #{list.nth($shadow, 2)},
+                inset #{list.nth($shadow, 3)};
         }
     }
 
@@ -168,14 +169,28 @@ $ambient-map: (
 @mixin conditional-elevation($md-elevation) {
     background-color: var(--bs-body-bg, #{$body-bg});
 
-    &:not(.hover-only):not(.focus-only) {
+    &:not(.focusable):not(.focusable-within) {
         @include elevation-even-with-dark-mode($md-elevation, none);
     }
-    &.focus-only:focus {
-        @include elevation-even-with-dark-mode($md-elevation, $input-btn-focus-box-shadow);
+
+    &.focusable {
+        &:not(.focus-only) {
+            @include elevation-even-with-dark-mode($md-elevation, none);
+        }
+
+        &:focus {
+            @include elevation-even-with-dark-mode($md-elevation, $input-btn-focus-box-shadow);
+        }
     }
-    &.hover-only:hover {
-        @include elevation-even-with-dark-mode($md-elevation, none);
+
+    &.focusable-within {
+        &:not(.focus-within-only) {
+            @include elevation-even-with-dark-mode($md-elevation, none);
+        }
+
+        &:focus-within {
+            @include elevation-even-with-dark-mode($md-elevation, $input-btn-focus-box-shadow);
+        }
     }
 }
 

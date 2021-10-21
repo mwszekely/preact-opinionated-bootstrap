@@ -1,3 +1,4 @@
+import { ButtonColorVariant } from "button";
 import clsx from "clsx";
 import { cloneElement, ComponentChildren, createContext, Fragment, h, Ref, VNode } from "preact";
 import { TableRowInfo, useTable, UseTableCell, UseTableCellParameters, UseTableHeadCell, UseTableHeadCellParameters, UseTableRow, UseTableRowParameters, UseTableSection } from "preact-aria-widgets";
@@ -7,7 +8,7 @@ import { memo } from "preact/compat";
 import { useCallback, useContext } from "preact/hooks";
 import { forwardElementRef, GlobalAttributes, OmitStrong, TagSensitiveProps, useLogRender } from "../props";
 
-export type TableBorderColor = "primary" | "secondary" | "success" | "danger" | "warning" | "info" | "light" | "dark" | "link";
+export type TableBorderColor = Omit<ButtonColorVariant, "link">;
 export type TableVariant = TableBorderColor;
 export type TableRowVariant = TableVariant;
 export type TableCellVariant = TableVariant;

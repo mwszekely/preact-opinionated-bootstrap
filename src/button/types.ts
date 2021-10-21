@@ -1,7 +1,7 @@
 import { UseAriaButtonParameters } from "preact-aria-widgets";
 import { GlobalAttributes } from "../props";
 
-export type ButtonColorVariant = "primary" | "secondary" | "success" | "danger" | "warning" | "info" | "light" | "dark" | "link";
+export type ButtonColorVariant = "primary" | "secondary" | "success" | "danger" | "warning" | "info" | "light" | "dark" | "subtle" | "contrast" | "link";
 
 export type ButtonFillVariant = "fill" | "outline";
 export type ButtonSize = "lg" | "md" | "sm";

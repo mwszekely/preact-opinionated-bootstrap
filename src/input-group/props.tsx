@@ -16,10 +16,10 @@ export interface UnlabelledInputTextProps extends BaseUnlabelledInputProps<strin
 export interface UnlabelledInputNumberProps extends BaseUnlabelledInputProps<number> { type: "number"; min?: number; max?: number; step?: number; }
 export type UnlabelledInputProps = UnlabelledInputTextProps | UnlabelledInputNumberProps;
 
-export type InputProps = UnlabelledInputProps & { 
-    children: ComponentChildren, 
+export type InputProps = UnlabelledInputProps & {
+    children: ComponentChildren,
     labelPosition?: "start" | "end" | "floating" | "hidden";
-    width?: `${number}ch` | `100%`; 
+    width?: `${number}ch` | `100%`;
 }
 
 export const InInputGroupContext = createContext(false);
@@ -51,13 +51,14 @@ export function useInputCaptures<T>(type: "text" | "number", min2: number, max2:
 export function useInputCaptures<T>(type: "text" | "number", min2: T, max2: T)*/
 export function useInputCaptures<T>(type: "text" | "number", min2?: T, max2?: T) {
 
-    const capture = useCallback((event: h.JSX.TargetedEvent<HTMLInputElement>): T  => {
+    const capture = useCallback((event: h.JSX.TargetedEvent<HTMLInputElement>): T => {
         switch (type) {
             case "text":
                 return max(min(event.currentTarget.value, min2 as any), max2 as any) as T;
 
             case "number":
                 return max(min(event.currentTarget.valueAsNumber, min2 as any), max2 as any) as T;
+
         }
     }, [type]);
 
@@ -67,7 +68,9 @@ export function useInputCaptures<T>(type: "text" | "number", min2?: T, max2?: T)
                 return value as string;
 
             case "number":
-                return `${value as number}`;
+                if (value != null)
+                    return `${value as number}`;
+                return "";
 
         }
     }, [type]);

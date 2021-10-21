@@ -1,10 +1,11 @@
+import type { ButtonColorVariant } from "button";
 import clsx from "clsx";
 import { h, Ref } from "preact";
 import { useMergedProps } from "preact-prop-helpers";
 import { memo } from "preact/compat";
 import { forwardElementRef, GlobalAttributes } from "../props";
 
-export type BadgeColorVariant = "primary" | "secondary" | "success" | "danger" | "warning" | "info" | "light" | "dark";
+export type BadgeColorVariant = Omit<ButtonColorVariant, "link">;
 
 export interface BadgeProps extends GlobalAttributes<HTMLSpanElement> {
     colorVariant?: BadgeColorVariant;

@@ -34,10 +34,17 @@
 
 @use "./button/ensure-contrast.scss" as *;
 @use "./elevation.scss";
+@use "sass:color";
 
 $scrollbar-track-background: ensure-contrasting-color($body-bg, $body-bg);
-$scrollbar-thumb-background: ensure-contrasting-color($scrollbar-track-background, $scrollbar-track-background);
+$scrollbar-thumb-background: ensure-contrasting-color(color.mix($body-bg, $scrollbar-track-background), $scrollbar-track-background);
 $scrollbar-thumb-active-background: color-contrast($body-bg);
+
+code {
+  font-family: $font-family-monospace;
+  background-color: change-color($color: $green, $alpha: 0.2);
+  color: $body-color;
+}
 
 *::-webkit-scrollbar {
   width: 11px;
