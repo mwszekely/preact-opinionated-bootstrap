@@ -83,7 +83,7 @@ function ButtonR(p: ButtonProps, ref?: Ref<HTMLButtonElement> | Ref<HTMLAnchorEl
 
 const AnchorButton = forwardElementRef(function AnchorButton(p: Omit<AnchorButtonProps, "tag">, ref?: Ref<HTMLAnchorElement>) {
     let { colorVariant, size, fillVariant, disabled, ...props } = p;
-    const buttonStyleInfo = useButtonStyles<HTMLAnchorElement>({ colorVariant, size, fillVariant, disabled });
+    const buttonStyleInfo = useButtonStyles<HTMLAnchorElement>({ colorVariant, size, fillVariant, disabled }, "a");
     disabled = buttonStyleInfo.disabled;
     colorVariant = buttonStyleInfo.colorVariant;
     size = buttonStyleInfo.size;
@@ -101,7 +101,7 @@ const ButtonButton = forwardElementRef(function ButtonButton(p: Omit<ButtonButto
     const onPress = getSyncHandler(pending ? null : onPressAsync);
     const { useAriaButtonProps } = useAriaButton<HTMLButtonElement>({ tag: "button", onPress });
 
-    const buttonStyleInfo = useButtonStyles<HTMLButtonElement>({ colorVariant, size, fillVariant, disabled });
+    const buttonStyleInfo = useButtonStyles<HTMLButtonElement>({ colorVariant, size, fillVariant, disabled }, "button");
     disabled = buttonStyleInfo.disabled;
     colorVariant = buttonStyleInfo.colorVariant;
     size = buttonStyleInfo.size;
@@ -141,7 +141,7 @@ export const ToggleButton = forwardElementRef(function ToggleButton(p: ToggleBut
     const onPress = getSyncHandler(pending ? null : onPressAsync);
     const { useAriaButtonProps } = useAriaButton<HTMLButtonElement>({ tag: "button", pressed, onPress });
 
-    const buttonStyleInfo = useButtonStyles<HTMLButtonElement>({ colorVariant, size, fillVariant, disabled });
+    const buttonStyleInfo = useButtonStyles<HTMLButtonElement>({ colorVariant, size, fillVariant, disabled }, "button");
     disabled = buttonStyleInfo.disabled;
     colorVariant = buttonStyleInfo.colorVariant;
     size = buttonStyleInfo.size;

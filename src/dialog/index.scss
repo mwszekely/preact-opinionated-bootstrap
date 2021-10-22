@@ -125,3 +125,10 @@ $scroll-fade-height: 2em;
     );
   }
 }
+
+// Lessen scrolling performance issues with scrollable dialog bodies.
+.modal-dialog-scrollable {
+  .modal-body {
+    transform: translateZ(0px);
+  }
+}

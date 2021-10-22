@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import { cloneElement, ComponentChildren, createContext, Fragment, h, Ref, VNode } from "preact";
 import { useAriaMenu, useButtonLikeEventHandlers, UseMenuItem } from "preact-aria-widgets";
 import { UseMenuItemDefaultInfo } from "preact-aria-widgets/use-menu";
@@ -119,9 +120,9 @@ export function MenuItem({ children, disabled, onPress: onPressAsync, index, ...
     const { getSyncHandler, pending, settleCount, hasError } = useAsyncHandler<HTMLButtonElement>()({ capture: useCallback(() => { return undefined!; }, []) });
     disabled ||= pending;
 
-    const onPress = getSyncHandler((pending || !onPressAsync) ? null : () => onPressAsync?.()?.then(() => onClose?.()));
+    const onPress = getSyncHandler((disabled || !onPressAsync) ? null : () => onPressAsync?.()?.then(() => onClose?.()));
 
-    const newProps = useMenuItemProps(useRefElementProps(useMergedProps<HTMLButtonElement>()(rest, { class: "dropdown-item" })));
+    const newProps = useMenuItemProps(useRefElementProps(useMergedProps<HTMLButtonElement>()(rest, { class: clsx(onPressAsync? "dropdown-item" : "dropdown-item-text", disabled && "disabled"), "aria-disabled": disabled? "true" : undefined })));
     const buttonProps = usePseudoActive(useButtonLikeEventHandlers<HTMLButtonElement>(disabled? null : onPress, undefined)(newProps));
 
     if (isInteractive) {

@@ -6,6 +6,6 @@ html.theme-dark, .toasts-container.theme-dark {
 
 html.switching-theme {
     * {
-        transition: all 2s;
+        transition: all 2s !important;
     }
 }

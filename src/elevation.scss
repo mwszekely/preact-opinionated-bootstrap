@@ -133,12 +133,6 @@ $ambient-map: (
 // 2. Uses filter: drop-shadow instead of box-shadow (more versatile)
 // 3. Accepts negative values for an inset instead of only outset shadows.
 @mixin elevation-even-with-dark-mode($md-elevation, $focus-box-shadow) {
-    // This is here because **usually** a border is redundant with
-    // elevation shadow, which is basically used here as a "better" border.
-    // That being said, TODO, because this is a bit hacky, and really
-    // should be a case-by-case sort of thing.
-    border-color: transparent; // var(--bs-body-bg, #{$body-bg});
-
     @if $md-elevation >= 0 {
         $shadow-color: rgb(0 0 0 / 20%);
         $umbra-z-value: map.get($umbra-map, $md-elevation);
@@ -171,25 +165,36 @@ $ambient-map: (
 
     &:not(.focusable):not(.focusable-within) {
         @include elevation-even-with-dark-mode($md-elevation, none);
+        @if ($md-elevation > 0) {
+            border-color: transparent;
+        }
     }
 
     &.focusable {
         &:not(.focus-only) {
             @include elevation-even-with-dark-mode($md-elevation, none);
+            @if ($md-elevation > 0) {
+                border-color: transparent;
+            }
         }
 
         &:focus {
             @include elevation-even-with-dark-mode($md-elevation, $input-btn-focus-box-shadow);
+            border-color: $input-btn-focus-color;
         }
     }
 
     &.focusable-within {
         &:not(.focus-within-only) {
             @include elevation-even-with-dark-mode($md-elevation, none);
+            @if ($md-elevation > 0) {
+                border-color: transparent;
+            }
         }
 
         &:focus-within {
             @include elevation-even-with-dark-mode($md-elevation, $input-btn-focus-box-shadow);
+            border-color: $input-btn-focus-color;
         }
     }
 }

@@ -189,6 +189,7 @@ export const ProgressCircular = forwardElementRef(function ({ loadingLabel, spin
 
     //useLayoutEffect(() => { provideParentWithHook?.(useReferencedElement) }, [useReferencedElement, provideParentWithHook])
 
+    const [delay, setDelay] = useState(`-${Math.random() * 30}s`);
     const { useReferencedProps } = useReferencedElement<any>();
     const showSpinner = useSpinnerDelay(mode === "pending", spinnerTimeout);
     //const [spinnerShowCount, setSpinnerShowCount] = useState(0);
@@ -231,7 +232,7 @@ export const ProgressCircular = forwardElementRef(function ({ loadingLabel, spin
             <Swappable>
                 <div className="circular-progress-swappable">
                     <Fade show={mode === "pending" && showSpinner} exitVisibility="removed">
-                        <div style={{ "--count": gimmickCount } as any} className={clsx("circular-progress", colorVariant ? `circular-progress-${colorVariant}` : undefined, colorFill == "foreground" && "inverse-fill", colorFill === "foreground-only" && "no-fill")}>
+                        <div style={{ "--count": gimmickCount, "--delay": delay } as any} className={clsx("circular-progress", colorVariant ? `circular-progress-${colorVariant}` : undefined, colorFill == "foreground" && "inverse-fill", colorFill === "foreground-only" && "no-fill")}>
                             {Array.from(function* () {
                                 for (let i = 0; i < gimmickCount; ++i)
                                     yield <div class={clsx("circular-progress-ball-origin", `circular-progress-ball-origin-${i}`)}><div class="circular-progress-ball" /></div>;

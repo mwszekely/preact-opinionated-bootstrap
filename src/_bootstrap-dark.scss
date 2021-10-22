@@ -6,18 +6,18 @@ $primary-font-family: #{"Jost", system-ui, -apple-system, "Segoe UI", Roboto,
   "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
   "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"} !default;
 
-$max-dark: -0.9 !default;
+$max-dark: -1 !default;
 
-$blue: #2b35ca;
-$indigo: #4500e4;
-$purple: #4c2ea9;
-$pink: #ac0063;
-$red: #c02333;
-$orange: #fd7e14;
-$yellow: #ffb300;
-$green: #10673e;
-$teal: #00a15f;
-$cyan: #009cbb;
+$blue: #2b35CA;
+$indigo: #24066a;
+$purple: #4C2EA9;
+$pink: #AC0063;
+$red: #9B1C29;
+$orange: #FD7E14;
+$yellow: #FFB300;
+$green: #0D5E21;
+$teal: #00BD6E;
+$cyan: #00AED1;
 
 $white: color.adjust(#fff, $lightness: 0% * $max-dark);
 $gray-100: color.adjust(#fff, $lightness: 10% * $max-dark);
@@ -32,7 +32,7 @@ $gray-900: color.adjust(#fff, $lightness: 90% * $max-dark);
 $black: color.adjust(#fff, $lightness: 100% * $max-dark);
 
 $primary: $blue;
-$secondary: $gray-600;
+$secondary: $indigo;
 $success: $green;
 $info: $cyan;
 $warning: $yellow;
@@ -56,15 +56,19 @@ $theme-colors: (
 $link-color: $info;
 $link-shade-percentage: 20%;
 
-// Acceptable values for WCAG 2.0 are 3, 4.5 and 7.
-// See https://www.w3.org/TR/WCAG20/#visual-audio-contrast-contrast
-$min-contrast-ratio: 4.5;
+// In dark mode, we raise the minimum contrast ratio to AAA by default
+// because surfaces increase their luminocity higher than $body-bg in this mode.
+// So just to play it safe with the different background combinations,
+// we assume the worst.
+$min-contrast-ratio: 7;
 
 // Customize the light and dark text colors for use in our color contrast function.
 $color-contrast-dark: $black;
 $color-contrast-light: $white;
 
-$body-bg: $black;
+$table-bg-scale:              80%;
+
+$body-bg: $gray-900;
 $body-color: $gray-100;
 $body-text-align: null;
 $table-color: $body-color;
@@ -77,8 +81,6 @@ $table-hover-bg-factor: 0.075;
 $border-color: $gray-700;
 
 $text-muted: $gray-400;
-
-$table-bg-scale: -80%;
 
 $component-active-bg: $primary;
 
@@ -285,18 +287,6 @@ $theme-colors: $theme-colors,
 
   $table-bg-scale: $table-bg-scale,
   // scss-docs-end table-variables
-
-  // scss-docs-start table-loop
-  $table-variants: (
-    "primary": color.adjust($primary, $alpha: math.div($table-bg-scale, 100%)),
-    "secondary": color.adjust($secondary, $alpha: math.div($table-bg-scale, 100%)),
-    "success": color.adjust($success, $alpha: math.div($table-bg-scale, 100%)),
-    "info": color.adjust($info, $alpha: math.div($table-bg-scale, 100%)),
-    "warning": color.adjust($warning, $alpha: math.div($table-bg-scale, 100%)),
-    "danger": color.adjust($danger, $alpha: math.div($table-bg-scale, 100%)),
-    "light": $light,
-    "dark": $dark,
-  ),
 
   // Buttons + Forms
   //
