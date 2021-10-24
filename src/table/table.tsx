@@ -1,4 +1,4 @@
-import { ButtonColorVariant } from "button";
+import { ButtonColorVariant } from "../button";
 import clsx from "clsx";
 import { cloneElement, ComponentChildren, createContext, Fragment, h, Ref, VNode } from "preact";
 import { TableRowInfo, useTable, UseTableCell, UseTableCellParameters, UseTableHeadCell, UseTableHeadCellParameters, UseTableRow, UseTableRowParameters, UseTableSection } from "preact-aria-widgets";

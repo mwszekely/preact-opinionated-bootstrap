@@ -1,4 +1,4 @@
-import type { ButtonColorVariant } from "button";
+import type { ButtonColorVariant } from "../button";
 import clsx from "clsx";
 import { h, Ref } from "preact";
 import { useMergedProps } from "preact-prop-helpers";
