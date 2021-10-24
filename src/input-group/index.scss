@@ -53,6 +53,8 @@
 .form-control.faux-form-control-outer {
   position: relative;
   overflow: hidden;
+  width: 100%;
+  max-width: calc(#{2 * $input-padding-x} + 15px + var(--form-control-width, 50ch));
 
   @include box-shadow($input-box-shadow);
 }
@@ -148,7 +150,7 @@ absolutely relative to the input, to be placed there *despite*
 input not allowing children, and the Bootstrap DOM generally not being
 designed to allow a "wrapper" that we can position: relative.
 */
-  &>.input-group {
+  & .input-group {
     & > *:nth-child(2n + 0) {
       justify-self: flex-start;
     }
@@ -163,8 +165,6 @@ designed to allow a "wrapper" that we can position: relative.
 
     & .form-control.faux-form-control-outer {
       justify-self: stretch;
-      width: 100%;
-      max-width: calc(#{2 * $input-padding-x} + 15px + var(--form-control-width, 50ch));
     }
 
     & .form-control.faux-form-control-outer,
