@@ -53,7 +53,6 @@
 .form-control.faux-form-control-outer {
   position: relative;
   overflow: hidden;
-  width: 100%;
   max-width: calc(#{2 * $input-padding-x} + 15px + var(--form-control-width, 9999ch));
 
   @include box-shadow($input-box-shadow);
@@ -165,6 +164,7 @@ designed to allow a "wrapper" that we can position: relative.
 
     & .form-control.faux-form-control-outer {
       justify-self: stretch;
+      width: 100%;
     }
 
     & .form-control.faux-form-control-outer,
