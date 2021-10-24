@@ -54,7 +54,7 @@
   position: relative;
   overflow: hidden;
   width: 100%;
-  max-width: calc(#{2 * $input-padding-x} + 15px + var(--form-control-width, 50ch));
+  max-width: calc(#{2 * $input-padding-x} + 15px + var(--form-control-width, 9999ch));
 
   @include box-shadow($input-box-shadow);
 }
