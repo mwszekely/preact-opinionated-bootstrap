@@ -6,19 +6,21 @@ import { useCallback } from "preact/hooks";
 interface BaseUnlabelledInputProps<T> {
     value: T;
     disabled?: boolean;
+    placeholder?: string; 
     onValueChange: (value: T, event: InputEvent) => (Promise<void> | void);
 }
 
 
 export const UseCheckboxGroupChildContext = createContext<UseCheckboxGroupChild<HTMLInputElement, CheckboxGroupChildInfo> | null>(null);
 
-export interface UnlabelledInputTextProps extends BaseUnlabelledInputProps<string> { type: "text"; }
+export interface UnlabelledInputTextProps extends BaseUnlabelledInputProps<string> { type: "text"; maxLength?: number; }
 export interface UnlabelledInputNumberProps extends BaseUnlabelledInputProps<number> { type: "number"; min?: number; max?: number; step?: number; }
 export type UnlabelledInputProps = UnlabelledInputTextProps | UnlabelledInputNumberProps;
 
 export type InputProps = UnlabelledInputProps & {
     children: ComponentChildren,
-    labelPosition?: "start" | "end" | "floating" | "hidden";
+    labelPosition?: "start" | "end" | "floating" | "hidden" | "placeholder";
+    
     width?: `${number}ch` | `100%`;
 }
 

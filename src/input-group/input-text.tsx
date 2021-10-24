@@ -69,8 +69,9 @@ function UnlabelledInput({ type, disabled, value, onValueChange: onInputAsync, .
 
 
 
-export const Input = memo(function Input({ children, width, labelPosition, ...props }: InputProps) {
+export const Input = memo(function Input({ children, width, labelPosition, placeholder, ...props }: InputProps) {
     labelPosition ??= "start";
+
 
     const { inputId, labelId, useInputLabelInput, useInputLabelLabel } = useInputLabel({ inputPrefix: "input-", labelPrefix: "input-label-" });
     const { useInputLabelInputProps } = useInputLabelInput();
@@ -80,19 +81,22 @@ export const Input = memo(function Input({ children, width, labelPosition, ...pr
     const isInInputGrid = useContext(InInputGridContext);
 
     let stringLabel = `${children}`;
-    if (children != null && labelPosition === "hidden") {
+    if (children != null && (labelPosition === "hidden" || labelPosition === "placeholder")) {
         if (!["string", "number", "boolean"].includes(typeof children))
             console.error(`Hidden labels require a string-based label for the aria-label attribute.`);
-        else
+        else {
             (props as any)["aria-label"] = stringLabel;
+            if (placeholder == null && labelPosition === "placeholder")
+                placeholder = stringLabel;
+        }
     }
 
     const labelJsx = <label {...useInputLabelLabelProps({ class: clsx(props.disabled && "disabled", isInInputGroup ? "input-group-text" : labelPosition != "floating" ? "form-label" : "") })}>{children}</label>
-    let inputJsx = <UnlabelledInput {...useInputLabelInputProps(props as any) as any as UnlabelledInputTextProps} />;
+    let inputJsx = <UnlabelledInput placeholder={placeholder} {...useInputLabelInputProps(props as any) as any as UnlabelledInputTextProps} />;
 
     //if (isInInputGrid) {
-        inputJsx = <div class={clsx("form-control faux-form-control-outer elevation-depressed-2", "elevation-body-surface", "focusable-within", (props.value as number) !== 0 && props.value == "" && "focus-within-only", props.disabled && "disabled")} style={width?.endsWith("ch") ? { "--form-control-width": (width ?? "20ch") } as any : width ? { width } : undefined}>{inputJsx}</div>
-   // }
+    inputJsx = <div class={clsx("form-control faux-form-control-outer elevation-depressed-2", "elevation-body-surface", "focusable-within", (props.value as number) !== 0 && props.value == "" && "focus-within-only", props.disabled && "disabled")} style={width?.endsWith("ch") ? { "--form-control-width": (width ?? "20ch") } as any : width ? { width } : undefined}>{inputJsx}</div>
+    // }
 
     const inputWithLabel = (
         <>

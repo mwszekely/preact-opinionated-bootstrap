@@ -1,3 +1,6 @@
+// If you include just this file instead of index-light or index-dark,
+// you can configure the bootstrap SASS variables via
+// `@use "" with ()` by including that configuration before this one.
 @use "./variables.scss" as *;
 @use "./accordion" as *;
 @use "./button" as *;

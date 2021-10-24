@@ -1,7 +1,7 @@
 import "wicg-inert";
 import { ComponentChildren, h, Ref, RenderableProps } from "preact";
 import { useAriaDialog } from "preact-aria-widgets";
-import { Fade } from "preact-transition/fade";
+import { Fade } from "preact-transition";
 import { memo } from "preact/compat";
 import { BodyPortal } from "../portal";
 import { forwardElementRef, TransitionComponent } from "../props";

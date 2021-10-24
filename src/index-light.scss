@@ -1,3 +1,8 @@
+// Include this file & index-dark.scss to get auto-configured
+// CSS styles that include all the component styles as well.
+//
+// If you don't want all the extra color configuration,
+// just @use "index.scss" instead.
 @use "sass:meta";
 
 html.theme-light, .toasts-container.theme-light {

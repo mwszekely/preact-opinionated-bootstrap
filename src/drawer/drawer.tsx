@@ -1,7 +1,7 @@
 import { ComponentChildren, h, RenderableProps } from "preact";
 import { useDrawer, UseDrawerParameters } from "preact-aria-widgets";
 import { Slide } from "preact-transition";
-import { Fade } from "preact-transition/fade";
+import { Fade } from "preact-transition";
 import { memo } from "preact/compat";
 import { Button } from "../button";
 import { BodyPortal } from "../portal";

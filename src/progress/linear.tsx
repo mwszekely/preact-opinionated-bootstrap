@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { createContext, createElement, Fragment, h, Ref, VNode } from "preact";
 import { getFromLocalStorage, ManagedChildInfo, storeToLocalStorage, useMergedProps, useRandomId, UseReferencedIdPropsReturnType, useState, useTimeout } from "preact-prop-helpers";
 import { Swappable } from "preact-transition";
-import { Fade } from "preact-transition/fade";
+import { Fade } from "preact-transition";
 import { memo } from "preact/compat";
 import { useCallback, useContext, useEffect, useLayoutEffect } from "preact/hooks";
 import { ButtonColorVariant } from "../button/types";
