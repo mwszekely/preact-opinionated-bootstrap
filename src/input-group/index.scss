@@ -32,11 +32,15 @@
 // so my left borders are rounded", and an inner
 // one that handles "I control the styling of
 // the actual <input> element.
-.faux-form-control-inner {
+.form-control.faux-form-control-inner {
   width: 100%;
   height: 100%;
   border: none;
   border-radius: 0;
+  box-shadow: none;
+  padding: 0;
+  background: transparent;
+  font-size: unset;
 
   &.form-control {
     background: transparent;
@@ -46,10 +50,9 @@
   }
 }
 
-.faux-form-control-outer {
+.form-control.faux-form-control-outer {
   position: relative;
   overflow: hidden;
-  padding: 0;
 
   @include box-shadow($input-box-shadow);
 }
@@ -145,7 +148,7 @@ absolutely relative to the input, to be placed there *despite*
 input not allowing children, and the Bootstrap DOM generally not being
 designed to allow a "wrapper" that we can position: relative.
 */
-  & .input-group {
+  &>.input-group {
     & > *:nth-child(2n + 0) {
       justify-self: flex-start;
     }
@@ -167,12 +170,12 @@ designed to allow a "wrapper" that we can position: relative.
     & .form-control.faux-form-control-outer,
     & .input-group-text.faux-input-group-text {
       position: relative;
-      padding: 0;
       width: unset;
 
       & > .form-control,
       & > .input-group-text {
         border: none;
+        padding: 0;
       }
 
       & > .circular-progress-container {

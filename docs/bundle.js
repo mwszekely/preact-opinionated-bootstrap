@@ -13982,6 +13982,7 @@
 	    const [usesAsync, setUsesAsync] = useState(true);
 	    const [text, setText] = useState("");
 	    const [number, setNumber] = useState(0);
+	    const [size, setSize] = useState("md");
 	    const asyncTextInput = F(async (text) => {
 	        await sleep$3(asyncTimeout);
 	        if (asyncFails)
@@ -14030,15 +14031,20 @@
 	                v$1("code", null, "<InputGroup>"),
 	                ", the styling will be significantly different:"),
 	            v$1(CardElement, null,
+	                v$1(ButtonGroup, null,
+	                    v$1(ButtonGroupChild, { index: 0, pressed: size == "sm", onPressToggle: e => setSize("sm") }, "Small"),
+	                    v$1(ButtonGroupChild, { index: 1, pressed: size == "md", onPressToggle: e => setSize("md") }, "Medium"),
+	                    v$1(ButtonGroupChild, { index: 2, pressed: size == "lg", onPressToggle: e => setSize("lg") }, "Large"))),
+	            v$1(CardElement, null,
 	                v$1(InputGrid, null,
-	                    v$1(InputGroup, null,
+	                    v$1(InputGroup, { size: size },
 	                        v$1(Input, { type: "text", value: text, onValueChange: onTextInput }, "Text-based input")),
-	                    v$1(InputGroup, null,
+	                    v$1(InputGroup, { size: size },
 	                        v$1(Input, { type: "number", value: number, onValueChange: onNumberInput, min: -5 }, "Number-based input")))),
 	            v$1(CardElement, { type: "paragraph" },
 	                v$1("code", null, `<InputGrid>
-    <InputGroup><Input type="text" value={text} onInput={onTextInput}>Text-based input</Input></InputGroup>
-    <InputGroup><Input type="number" value={number} onInput={onNumberInput} min={-5}>Number-based input</Input></InputGroup>
+    <InputGroup size={size}><Input type="text" value={text} onInput={onTextInput}>Text-based input</Input></InputGroup>
+    <InputGroup size={size}><Input type="number" value={number} onInput={onNumberInput} min={-5}>Number-based input</Input></InputGroup>
 </InputGrid>`)))));
 	}
 	async function sleep$3(arg0) {
