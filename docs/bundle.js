@@ -13312,7 +13312,7 @@
 	  return v$1(UseToastContext.Provider, {
 	    value: useToast
 	  }, v$1("div", { ...useToastContainerProps(useMergedProps()({
-	      className: theme
+	      className: `set-theme ${theme}`
 	    }, props))
 	  }, children));
 	}

@@ -1,6 +1,6 @@
 @use "sass:meta";
 
-html.theme-dark, .toasts-container.theme-dark {
+html.theme-dark, .set-theme.theme-dark {
     @include meta.load-css("./index-dark-helper.scss");
 }
 
