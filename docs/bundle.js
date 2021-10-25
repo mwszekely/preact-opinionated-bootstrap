@@ -10432,13 +10432,17 @@
 	  children,
 	  ...props
 	}, ref) {
-	  return v$1(tag !== null && tag !== void 0 ? tag : "div", useMergedProps()({
+	  var _children$props$child, _children$props;
+
+	  const mergedProps = useMergedProps()({
 	    className: "responsive-grid",
 	    style: minWidth ? {
 	      "--grid-min-width": `${minWidth}`
 	    } : {},
 	    ref
-	  }, props), children);
+	  }, props);
+	  const passthroughProps = useMergedProps()(mergedProps, (_children$props$child = children === null || children === void 0 ? void 0 : (_children$props = children.props) === null || _children$props === void 0 ? void 0 : _children$props.children) !== null && _children$props$child !== void 0 ? _children$props$child : {});
+	  if (tag === "passthrough") return B(children, passthroughProps);else return v$1(tag !== null && tag !== void 0 ? tag : "div", mergedProps, children);
 	}));
 	/**
 	 * Very simple, easy static grid that guarantees the number of columns is displayed,
@@ -10451,7 +10455,9 @@
 	  children,
 	  ...props
 	}, ref) {
-	  return v$1(tag !== null && tag !== void 0 ? tag : "div", useMergedProps()({
+	  var _children$props$child2, _children$props2;
+
+	  const mergedProps = useMergedProps()({
 	    className: "static-grid",
 	    style: typeof columns === "string" ? {
 	      "--static-grid-columns": columns
@@ -10459,7 +10465,9 @@
 	      "--grid-column-count": columns
 	    },
 	    ref
-	  }, props), children);
+	  }, props);
+	  const passthroughProps = useMergedProps()(mergedProps, (_children$props$child2 = children === null || children === void 0 ? void 0 : (_children$props2 = children.props) === null || _children$props2 === void 0 ? void 0 : _children$props2.children) !== null && _children$props$child2 !== void 0 ? _children$props$child2 : {});
+	  if (tag === "passthrough") return B(children, passthroughProps);else return v$1(tag !== null && tag !== void 0 ? tag : "div", mergedProps, children);
 	}));
 
 	const UseListboxSingleItemContext = D$1(null);
