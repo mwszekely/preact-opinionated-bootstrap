@@ -9605,11 +9605,21 @@
 	});
 
 	const baseId = generateRandomId("render-portal-container-");
+	const BodyPortalClassContext = D$1("");
+	g(function SetBodyPortalClass({
+	  className,
+	  children
+	}) {
+	  return v$1(BodyPortalClassContext.Provider, {
+	    value: className
+	  }, children);
+	});
 	function BodyPortal({
 	  children
 	}) {
 	  const id = s(null);
 	  const [portalElement, setPortalElement] = l(null);
+	  const bodyPortalClass = T$1(BodyPortalClassContext);
 	  y(() => {
 	    if (id.current == null) {
 	      id.current = generateRandomId();
@@ -9628,7 +9638,7 @@
 
 	    if (!element) {
 	      element = document.createElement("div");
-	      element.className = "body-portal";
+	      element.className = `body-portal ${bodyPortalClass}`;
 	      element.id = id.current;
 	      container.appendChild(element);
 	    }
@@ -9639,7 +9649,7 @@
 
 	      return document.contains(element) ? (_element = element) === null || _element === void 0 ? void 0 : _element.remove() : undefined;
 	    };
-	  }, []);
+	  }, [bodyPortalClass]);
 	  if (portalElement) return W(children, portalElement);else return null;
 	}
 
