@@ -77,11 +77,11 @@ function CardElement2<E extends Element>({ children, ...p }: CardElementProps<E>
         }
         case "subtitle": {
             const { type, tag, ...props } = p;
-            return <CardBody {...props} ref={ref as any}><CardSubtitle tag={tag}>{children}</CardSubtitle></CardBody>;
+            return <CardSubtitle tag={tag} {...useMergedProps<any>()({ className: "card-body" }, props)} ref={ref as any}>{children}</CardSubtitle>;
         }
         case "title": {
             const { type, tag, ...props } = p;
-            return <CardBody {...props} ref={ref as any}><CardTitle tag={tag}>{children}</CardTitle></CardBody>;
+            return <CardTitle tag={tag} {...useMergedProps<any>()({ className: "card-body" }, props)} ref={ref as any}>{children}</CardTitle>;
         }
         case "image": {
             const { type, src, ...props } = p;

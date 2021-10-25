@@ -13525,11 +13525,13 @@
 	          tag,
 	          ...props
 	        } = p;
-	        return v$1(CardBody, { ...props,
+	        return v$1(CardSubtitle, {
+	          tag: tag,
+	          ...useMergedProps()({
+	            className: "card-body"
+	          }, props),
 	          ref: ref
-	        }, v$1(CardSubtitle, {
-	          tag: tag
-	        }, children));
+	        }, children);
 	      }
 
 	    case "title":
@@ -13539,11 +13541,13 @@
 	          tag,
 	          ...props
 	        } = p;
-	        return v$1(CardBody, { ...props,
+	        return v$1(CardTitle, {
+	          tag: tag,
+	          ...useMergedProps()({
+	            className: "card-body"
+	          }, props),
 	          ref: ref
-	        }, v$1(CardTitle, {
-	          tag: tag
-	        }, children));
+	        }, children);
 	      }
 
 	    case "image":
