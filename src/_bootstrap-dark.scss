@@ -8,37 +8,37 @@ $primary-font-family: #{"Jost", system-ui, -apple-system, "Segoe UI", Roboto,
 
 $max-dark: -1 !default;
 
-$blue: #2b35CA;
-$indigo: #24066a;
-$purple: #4C2EA9;
-$pink: #AC0063;
-$red: #9B1C29;
-$orange: #FD7E14;
-$yellow: #FFB300;
-$green: #0D5E21;
-$teal: #00BD6E;
-$cyan: #00AED1;
+$blue: #2b35CA !default;
+$indigo: #24066a !default;
+$purple: #4C2EA9 !default;
+$pink: #AC0063 !default;
+$red: #9B1C29 !default;
+$orange: #FD7E14 !default;
+$yellow: #FFB300 !default;
+$green: #0D5E21 !default;
+$teal: #00BD6E !default;
+$cyan: #00AED1 !default;
 
-$white: color.adjust(#fff, $lightness: 0% * $max-dark);
-$gray-100: color.adjust(#fff, $lightness: 10% * $max-dark);
-$gray-200: color.adjust(#fff, $lightness: 20% * $max-dark);
-$gray-300: color.adjust(#fff, $lightness: 30% * $max-dark);
-$gray-400: color.adjust(#fff, $lightness: 40% * $max-dark);
-$gray-500: color.adjust(#fff, $lightness: 50% * $max-dark);
-$gray-600: color.adjust(#fff, $lightness: 60% * $max-dark);
-$gray-700: color.adjust(#fff, $lightness: 70% * $max-dark);
-$gray-800: color.adjust(#fff, $lightness: 80% * $max-dark);
-$gray-900: color.adjust(#fff, $lightness: 90% * $max-dark);
-$black: color.adjust(#fff, $lightness: 100% * $max-dark);
+$white: color.adjust(#fff, $lightness: 0% * $max-dark) !default;
+$gray-100: color.adjust(#fff, $lightness: 10% * $max-dark) !default;
+$gray-200: color.adjust(#fff, $lightness: 20% * $max-dark) !default;
+$gray-300: color.adjust(#fff, $lightness: 30% * $max-dark) !default;
+$gray-400: color.adjust(#fff, $lightness: 40% * $max-dark) !default;
+$gray-500: color.adjust(#fff, $lightness: 50% * $max-dark) !default;
+$gray-600: color.adjust(#fff, $lightness: 60% * $max-dark) !default;
+$gray-700: color.adjust(#fff, $lightness: 70% * $max-dark) !default;
+$gray-800: color.adjust(#fff, $lightness: 80% * $max-dark) !default;
+$gray-900: color.adjust(#fff, $lightness: 90% * $max-dark) !default;
+$black: color.adjust(#fff, $lightness: 100% * $max-dark) !default;
 
-$primary: $blue;
-$secondary: $indigo;
-$success: $green;
-$info: $cyan;
-$warning: $yellow;
-$danger: $red;
-$light: $gray-100;
-$dark: $gray-900;
+$primary: $blue !default;
+$secondary: $indigo !default;
+$success: $green !default;
+$info: $cyan !default;
+$warning: $yellow !default;
+$danger: $red !default;
+$light: $gray-100 !default;
+$dark: $gray-900 !default;
 
 $theme-colors: (
   "primary":    $primary,
@@ -53,141 +53,146 @@ $theme-colors: (
   "subtle":     $dark,
 ) !default;
 
-$link-color: $info;
-$link-shade-percentage: 20%;
+$link-color: $info !default;
+$link-shade-percentage: 20% !default;
 
 // In dark mode, we raise the minimum contrast ratio to AAA by default
 // because surfaces increase their luminocity higher than $body-bg in this mode.
 // So just to play it safe with the different background combinations,
 // we assume the worst.
-$min-contrast-ratio: 7;
+$min-contrast-ratio: 7 !default;
 
 // Customize the light and dark text colors for use in our color contrast function.
-$color-contrast-dark: $black;
-$color-contrast-light: $white;
+$color-contrast-dark: $black !default;
+$color-contrast-light: $white !default;
 
-$table-bg-scale:              80%;
+$table-bg-scale:              80% !default;
+$list-group-item-bg-scale:          80% !default;
+$list-group-item-color-scale:       -40% !default;
+$alert-bg-scale:                80% !default;
+$alert-border-scale:            70% !default;
+$alert-color-scale:             -40% !default;
 
-$body-bg: $gray-900;
-$body-color: $gray-100;
-$body-text-align: null;
-$table-color: $body-color;
+$body-bg: $gray-900 !default;
+$body-color: $gray-100 !default;
+$body-text-align: null !default;
+$table-color: $body-color !default;
 
-$table-striped-bg-factor: 0.1;
+$table-striped-bg-factor: 0.1 !default;
 
-$table-active-bg-factor: 0.1;
-$table-hover-bg-factor: 0.075;
+$table-active-bg-factor: 0.1 !default;
+$table-hover-bg-factor: 0.075 !default;
 
-$border-color: $gray-700;
+$border-color: $gray-700 !default;
 
-$text-muted: $gray-400;
+$text-muted: $gray-400 !default;
 
-$component-active-bg: $primary;
+$component-active-bg: $primary !default;
 
 
-$btn-close-color: $white;
+$btn-close-color: $white !default;
 
-$input-bg: $black;
+$input-bg: $black !default;
 
-$input-color: $body-color;
+$input-color: $body-color !default;
 
-$input-focus-border-color: shade-color($component-active-bg, 50%);
-$input-btn-focus-color-opacity: 0.4;
+$input-focus-border-color: shade-color($component-active-bg, 50%) !default;
+$input-btn-focus-color-opacity: 0.4 !default;
 $input-btn-focus-color: rgba(
   tint-color($component-active-bg, 40%),
   $input-btn-focus-color-opacity
-);
+) !default;
 $input-btn-focus-width:         .25rem !default;
 $input-btn-focus-box-shadow:    0 0 0 $input-btn-focus-width $input-btn-focus-color !default;
 $input-focus-box-shadow: #{$input-btn-focus-box-shadow, inset 0 0 0 rgb(0 0 0 / 40%)} !default;
 $input-box-shadow: #{0 0 0 $input-btn-focus-color, inset 0 0 0 rgb(0 0 0 / 40%)} !default;
 
-$input-btn-focus-box-shadow: $input-btn-focus-box-shadow;
-$input-box-shadow:  $input-box-shadow;
+$input-btn-focus-box-shadow: $input-btn-focus-box-shadow !default;
+$input-box-shadow:  $input-box-shadow !default;
 
-$component-active-color: tint-color($primary, 80%);
+$component-active-color: tint-color($primary, 80%) !default;
 
-$form-check-input-checked-bg-color: $component-active-bg;
-$form-check-input-indeterminate-bg-color: $component-active-bg;
+$form-check-input-checked-bg-color: $component-active-bg !default;
+$form-check-input-indeterminate-bg-color: $component-active-bg !default;
 
-$form-switch-color: rgba(255, 255, 255, 0.25);
-$form-switch-focus-color: $input-focus-border-color;
-$form-switch-checked-color: $component-active-color;
+$form-switch-color: rgba(255, 255, 255, 0.25) !default;
+$form-switch-focus-color: $input-focus-border-color !default;
+$form-switch-checked-color: $component-active-color !default;
 
-$input-border-color: $gray-600;
+$input-border-color: $gray-600 !default;
 
-$input-disabled-border-color: null;
+$input-disabled-border-color: null !default;
 
-$input-group-addon-bg: $gray-800;
-$form-file-button-bg: $input-group-addon-bg;
+$input-group-addon-bg: $gray-800 !default;
+$form-file-button-bg: $input-group-addon-bg !default;
 
-$form-feedback-valid-color: $success;
-$form-feedback-invalid-color: $success;
-$form-feedback-icon-valid-color: $form-feedback-valid-color;
-$form-feedback-icon-invalid-color: $form-feedback-valid-color;
+$form-feedback-valid-color: $success !default;
+$form-feedback-invalid-color: $success !default;
+$form-feedback-icon-valid-color: $form-feedback-valid-color !default;
+$form-feedback-icon-invalid-color: $form-feedback-valid-color !default;
 
-$link-hover-color: shift-color($link-color, $link-shade-percentage);
+$link-hover-color: shift-color($link-color, $link-shade-percentage) !default;
 
-$nav-tabs-border-color: $gray-700;
-$nav-tabs-link-active-bg: $body-bg;
-$navbar-light-active-color: rgba($white, 0.9);
-$navbar-dark-active-color: $black;
-$dropdown-border-color: rgba($white, 0.15);
-$dropdown-divider-bg: $dropdown-border-color;
-$dropdown-dark-color: $gray-700;
-$dropdown-link-active-color: $component-active-color;
-$dropdown-dark-link-active-color: $dropdown-link-active-color;
-$dropdown-link-active-bg: $component-active-bg;
-$pagination-active-bg: $component-active-bg;
-$pagination-active-border-color: $pagination-active-bg;
+$nav-tabs-border-color: $gray-700 !default;
+$nav-tabs-link-active-bg: $body-bg !default;
+$navbar-light-active-color: rgba($white, 0.9) !default;
+$navbar-dark-active-color: $black !default;
+$dropdown-border-color: rgba($white, 0.15) !default;
+$dropdown-divider-bg: $dropdown-border-color !default;
+$dropdown-dark-color: $gray-700 !default;
+$dropdown-link-active-color: $component-active-color !default;
+$dropdown-dark-link-active-color: $dropdown-link-active-color !default;
+$dropdown-link-active-bg: $component-active-bg !default;
+$pagination-active-bg: $component-active-bg !default;
+$pagination-active-border-color: $pagination-active-bg !default;
 
-$accordion-color: $body-color;
-$accordion-bg: $body-bg;
-$accordion-button-color: $accordion-color;
-$accordion-button-active-color: tint-color($primary, 70%);
-$tooltip-bg: $white;
-$popover-bg: $black;
-$headings-color: null;
-$popover-border-color: rgba($white, 0.2);
-$modal-header-border-color: $border-color;
-$list-group-active-bg: $component-active-bg;
-$list-group-bg: $black;
-$list-group-action-color: $gray-300;
-$modal-content-border-color: rgba($white, 0.2);
-$modal-content-bg: $black;
-$modal-content-color: null;
+$accordion-color: $body-color !default;
+$accordion-bg: $body-bg !default;
+$accordion-button-color: $accordion-color !default;
+$accordion-button-active-color: tint-color($primary, 70%) !default;
+$tooltip-bg: $white !default;
+$popover-bg: $black !default;
+$headings-color: null !default;
+$popover-border-color: rgba($white, 0.2) !default;
+$modal-header-border-color: $border-color !default;
+$list-group-active-bg: $component-active-bg !default;
+$list-group-bg: $black !default;
+$list-group-action-color: $gray-300 !default;
+$modal-content-border-color: rgba($white, 0.2) !default;
+$modal-content-bg: $black !default;
+$modal-content-color: null !default;
 
-$accordion-icon-color: $accordion-color;
-$accordion-icon-active-color: $accordion-button-active-color;
+$accordion-icon-color: $accordion-color !default;
+$accordion-icon-active-color: $accordion-button-active-color !default;
 
 @use "./bootstrap/bootstrap" with (
-    $enable-shadows: true,
-    $btn-transition: #{
-      box-shadow        0.10s cubic-bezier(0, 1, 0.33, 1), 
-      padding           0.10s cubic-bezier(0, 1, 0.33, 1), 
-      text-shadow       0.10s cubic-bezier(0, 1, 0.33, 1), 
-      color             0.15s ease-in-out, 
-      background-color  0.15s ease-in-out, 
-      border-color      0.15s ease-in-out
-    },
-    $btn-close-padding-y: 0,
-    $btn-close-padding-x: 0,
-    $font-family-sans-serif: $primary-font-family,
-    $progress-bar-transition: #{width, clip-path 0.6s ease},
-    $btn-box-shadow: #{inset 0 0 0 rgb(0 0 0 / 40%)},
-    $btn-active-box-shadow: #{inset 0 3px 5px rgb(0 0 0 / 40%)},
+  $enable-shadows: true,
+  $btn-transition: #{
+    box-shadow        0.10s cubic-bezier(0, 1, 0.33, 1), 
+    padding           0.10s cubic-bezier(0, 1, 0.33, 1), 
+    text-shadow       0.10s cubic-bezier(0, 1, 0.33, 1), 
+    color             0.15s ease-in-out, 
+    background-color  0.15s ease-in-out, 
+    border-color      0.15s ease-in-out
+  },
+  $btn-close-padding-y: 0,
+  $btn-close-padding-x: 0,
+  $font-family-sans-serif: $primary-font-family,
+  $progress-bar-transition: #{width, clip-path 0.6s ease},
+  $btn-box-shadow: #{inset 0 0 0 rgb(0 0 0 / 40%)},
+  $btn-active-box-shadow: #{inset 0 3px 5px rgb(0 0 0 / 40%)},
 
-    $white: $white,
-    $gray-100: $gray-100,
-    $gray-200: $gray-200,
-    $gray-300: $gray-300,
-    $gray-400: $gray-400,
-    $gray-500: $gray-500,
-    $gray-600: $gray-600,
-    $gray-700: $gray-700,
-    $gray-800: $gray-800,
-    $gray-900: $gray-900,
-    $black: $black,
+  $white: $white,
+  $gray-100: $gray-100,
+  $gray-200: $gray-200,
+  $gray-300: $gray-300,
+  $gray-400: $gray-400,
+  $gray-500: $gray-500,
+  $gray-600: $gray-600,
+  $gray-700: $gray-700,
+  $gray-800: $gray-800,
+  $gray-900: $gray-900,
+  $black: $black,
       
 
   $blue: $blue,
@@ -221,11 +226,7 @@ $accordion-icon-active-color: $accordion-button-active-color;
   $light: $light,
   $dark: $dark,
 
-$theme-colors: $theme-colors,
-
-
-
-
+  $theme-colors: $theme-colors,
 
   // Acceptable values for WCAG 2.0 are 3, 4.5 and 7.
   // See https://www.w3.org/TR/WCAG20/#visual-audio-contrast-contrast
@@ -286,6 +287,11 @@ $theme-colors: $theme-colors,
   $table-caption-color: $text-muted,
 
   $table-bg-scale: $table-bg-scale,
+  $list-group-item-bg-scale: $list-group-item-bg-scale, 
+  $list-group-item-color-scale: $list-group-item-color-scale, 
+  $alert-bg-scale: $alert-bg-scale, 
+  $alert-border-scale: $alert-border-scale, 
+  $alert-color-scale: $alert-color-scale, 
   // scss-docs-end table-variables
 
   // Buttons + Forms
