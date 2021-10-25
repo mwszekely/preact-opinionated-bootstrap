@@ -13216,7 +13216,6 @@
 	  });
 	  return v$1(Transition, useTabPanelProps({
 	    ref,
-	    class: "",
 	    show: visible,
 	    children,
 	    ...rest

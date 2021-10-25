@@ -65,5 +65,5 @@ export const TabPanel = memo(forwardElementRef(function TabPanel<T extends <E ex
     const useTabPanel = useContext(UseTabPanelContext);
     const { useTabPanelProps, visible } = useTabPanel({ index });
 
-    return h(Transition, useTabPanelProps({ ref, class: "", show: visible, children, ...(rest as any) }));
+    return h(Transition, useTabPanelProps({ ref, show: visible, children, ...(rest as any) }));
 }));
