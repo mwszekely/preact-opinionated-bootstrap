@@ -1,6 +1,6 @@
 export { Accordion, AccordionProps, AccordionSection, AccordionSectionProps } from "./accordion";
 export { Badge, BadgeColorVariant, BadgeProps } from "./badge";
-export { Button, ButtonGroup, ProvideDefaultButtonColor, ProvideDefaultButtonDisabled, ProvideDefaultButtonFill, ProvideDefaultButtonSize } from "./button";
+export { Button, ButtonGroup, ButtonGroupChild, ProvideDefaultButtonColor, ProvideDefaultButtonDisabled, ProvideDefaultButtonFill, ProvideDefaultButtonSize } from "./button";
 export { Card, CardElement, CardElementProps } from "./card";
 export { Dialog, DialogProps } from "./dialog";
 export { Drawer, DrawerProps } from "./drawer";
