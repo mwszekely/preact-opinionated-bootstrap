@@ -27,7 +27,7 @@ export type TabPanelProps<T extends <E extends HTMLElement>(...args: any[]) => h
 const UseTabContext = createContext<UseTab<HTMLButtonElement, UseTabInfo>>(null!);
 const UseTabPanelContext = createContext<UseTabPanel<HTMLDivElement>>(null!);
 
-export const Tabs = memo(function Tabs<E extends HTMLUListElement | HTMLOListElement>({ onSelect: onSelectAsync, orientation, selectedIndex, selectionMode, children, visualVariant, ...props }: TabsProps<E>) {
+export const Tabs = memo(forwardElementRef(function Tabs<E extends HTMLUListElement | HTMLOListElement>({ onSelect: onSelectAsync, orientation, selectedIndex, selectionMode, children, visualVariant, ...props }: TabsProps<E>, ref?: Ref<HTMLDivElement>) {
     const capture = (e: TabsChangeEvent<E>) => { return e[EventDetail].selectedIndex };
     orientation ??= "inline";
     const { getSyncHandler } = useAsyncHandler<E>()({ capture: capture as any as () => number });
@@ -40,18 +40,18 @@ export const Tabs = memo(function Tabs<E extends HTMLUListElement | HTMLOListEle
     return (
         <div class={clsx("tabs-container", `tabs-orientation-${orientation}`)}>
             <UseTabContext.Provider value={useTab}>
-                {cloneElement(children[0] as any, useTabListProps(useMergedProps<E>()({ className: clsx("nav", visualVariant == "pills"? "nav-pills" : "nav-tabs") }, { ...props })), (children[0] as VNode<any>).props.children)}
+                {cloneElement(children[0] as any, useTabListProps({ className: clsx("nav", visualVariant == "pills"? "nav-pills" : "nav-tabs") }), (children[0] as VNode<any>).props.children)}
             </UseTabContext.Provider>
             <UseTabPanelContext.Provider value={useTabPanel}>
                 <Swappable>
-                    <div class="tab-content elevation-depressed-3 elevation-body-surface">
+                    <div {...useMergedProps<HTMLDivElement>()({className: "tab-content elevation-depressed-3 elevation-body-surface" }, { ...props, ref })}>
                         {...children.slice(1)}
                     </div>
                 </Swappable>
             </UseTabPanelContext.Provider>
         </div>
     );
-});
+}));
 
 export const Tab = memo(forwardElementRef(function Tab({ index, children, ...props }: TabProps, ref?: Ref<HTMLButtonElement>) {
     const useTabContext = useContext(UseTabContext);

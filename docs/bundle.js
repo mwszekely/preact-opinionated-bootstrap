@@ -13129,7 +13129,7 @@
 
 	const UseTabContext = D$1(null);
 	const UseTabPanelContext = D$1(null);
-	const Tabs = g(function Tabs({
+	const Tabs = g(forwardElementRef(function Tabs({
 	  onSelect: onSelectAsync,
 	  orientation,
 	  selectedIndex,
@@ -13137,7 +13137,7 @@
 	  children,
 	  visualVariant,
 	  ...props
-	}) {
+	}, ref) {
 	  var _orientation;
 
 	  const capture = e => {
@@ -13169,15 +13169,17 @@
 	    class: clsx("tabs-container", `tabs-orientation-${orientation}`)
 	  }, v$1(UseTabContext.Provider, {
 	    value: useTab
-	  }, B(children[0], useTabListProps(useMergedProps()({
+	  }, B(children[0], useTabListProps({
 	    className: clsx("nav", visualVariant == "pills" ? "nav-pills" : "nav-tabs")
-	  }, { ...props
-	  })), children[0].props.children)), v$1(UseTabPanelContext.Provider, {
+	  }), children[0].props.children)), v$1(UseTabPanelContext.Provider, {
 	    value: useTabPanel
-	  }, v$1(Swappable, null, v$1("div", {
-	    class: "tab-content elevation-depressed-3 elevation-body-surface"
+	  }, v$1(Swappable, null, v$1("div", { ...useMergedProps()({
+	      className: "tab-content elevation-depressed-3 elevation-body-surface"
+	    }, { ...props,
+	      ref
+	    })
 	  }, children.slice(1)))));
-	});
+	}));
 	const Tab = g(forwardElementRef(function Tab({
 	  index,
 	  children,
