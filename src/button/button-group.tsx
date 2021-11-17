@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { ComponentChild, h, Ref } from "preact";
-import { useHasFocus, useListNavigation, UseListNavigationChildInfo, useMergedProps, useState } from "preact-prop-helpers";
+import { useHasFocus, useListNavigation, UseListNavigationChildInfo, useMergedProps, usePassiveState, useState } from "preact-prop-helpers";
 import { memo } from "preact/compat";
 import { useContext, useEffect } from "preact/hooks";
 import { forwardElementRef, GlobalAttributes, useLogRender } from "../props";
@@ -24,8 +24,7 @@ export interface ButtonGroupProps extends ButtonGroupStyleProps, GlobalAttribute
 export const ButtonGroup = memo(forwardElementRef(function ButtonGroup(p: ButtonGroupProps, ref: Ref<HTMLDivElement>) {
     useLogRender("ButtonGroup", `Rendering ButtonGroup`);
 
-    const [focusedInner, setFocusedInner, getFocusedInner] = useState(false);
-    const { useHasFocusProps } = useHasFocus<HTMLDivElement>({ setFocusedInner });
+    const { useHasFocusProps, getFocusedInner  } = useHasFocus<HTMLDivElement>({  });
     const { indicesByElement, managedChildren, useListNavigationChild, navigateToIndex, childCount } = useListNavigation<HTMLButtonElement, UseListNavigationChildInfo>({ shouldFocusOnChange: getFocusedInner });
 
     // Styling props

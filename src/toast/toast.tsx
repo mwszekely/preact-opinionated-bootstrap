@@ -100,7 +100,7 @@ function ToastsContainer(props: ToastsContainerProps) {
 
     const [theme, setTheme] = useState(oppositeTheme(document.documentElement.classList));
 
-    useMutationObserver(document.documentElement, {
+    useMutationObserver(() => document.documentElement, {
         attributeFilter: ["class"],
         onAttributes: ({ attributeName }) => {
             if (attributeName === "class") {

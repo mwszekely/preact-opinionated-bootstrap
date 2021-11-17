@@ -113,9 +113,9 @@ export const TableHead = memo(forwardElementRef(function TableHead({ variant, ..
     useLogRender("TableHead", `Rendering TableHead`);
     const [showShadow, setShowShadow] = useState(false);
 
-    const { element, useRefElementProps } = useRefElement<HTMLTableSectionElement>();
+    const { getElement, useRefElementProps } = useRefElement<HTMLTableSectionElement>({});
 
-    useGlobalHandler(window, "scroll", e => setShowShadow(!!element?.offsetTop), { passive: true });
+    useGlobalHandler(window, "scroll", e => setShowShadow(!!getElement()?.offsetTop), { passive: true });
 
     return (
         <CellLocationContext.Provider value={"head"}>

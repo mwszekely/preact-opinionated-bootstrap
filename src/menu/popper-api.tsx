@@ -9,9 +9,36 @@ export function usePopperApi({ updating, positionInline, positionBlock, skidding
     const [popperInstance, setPopperInstance, getPopperInstance] = useState<Instance | null>(null);
     const [usedPlacement, setUsedPlacement] = useState<BasePlacement | null>(null);
 
-    const { element: sourceElement, getElement: getSourceElement, useRefElementProps: useSourceElementRefProps } = useRefElement<Element>();
-    const { element: popperElement, getElement: getPopperElement, useRefElementProps: usePopperElementRefProps } = useRefElement<HTMLElement>();
-    const { element: arrowElement, getElement: getArrowElement, useRefElementProps: useArrowElementRefProps } = useRefElement<Element>();
+
+
+    const resetPopperInstance = useCallback(() => {
+        const sourceElement = getSourceElement();
+        const popperElement = getPopperElement();
+
+        if (sourceElement && popperElement) {
+            const onFirstUpdate: (arg0: Partial<State>) => void = () => { };
+            const strategy: PositioningStrategy | undefined = "absolute";
+            let placement: Placement = logicalToPlacement(getLogicalDirection()!, positionInline, positionBlock);
+
+
+            setPopperInstance(createPopper<StrictModifiers>(sourceElement, popperElement, {
+                modifiers: [
+                    { name: "flip", options: {} },
+                    { name: "preventOverflow", options: { padding: { bottom: (paddingBottom ?? 0), top: (paddingTop ?? 0), left: (paddingLeft ?? 0), right: (paddingRight ?? 0) } } },
+                    updateStateModifier as any,
+                    { name: 'eventListeners', enabled: false },
+                    { name: "applyStyles", enabled: false },
+                ],
+                onFirstUpdate,
+                placement,
+                strategy
+            }));
+        }
+    }, [positionInline, positionBlock, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight]);
+
+    const { getElement: getSourceElement, useRefElementProps: useSourceElementRefProps } = useRefElement<Element>({ onElementChange: resetPopperInstance });
+    const { getElement: getPopperElement, useRefElementProps: usePopperElementRefProps } = useRefElement<HTMLElement>({ onElementChange: resetPopperInstance });
+    const { getElement: getArrowElement, useRefElementProps: useArrowElementRefProps } = useRefElement<Element>({});
 
     const [sourceStyle, setSourceStyle] = useState<Partial<Omit<CSSStyleDeclaration, typeof Symbol["iterator"]>> | null>(null);
     const [sourceAttributes, setSourceAttributes] = useState<{ [key: string]: string | boolean; }>({});
@@ -83,34 +110,16 @@ export function usePopperApi({ updating, positionInline, positionBlock, skidding
         return modifier;
     }, []);
 
-    const { convertElementSize, getLogicalDirection } = useLogicalDirection(sourceElement);
+    const { convertElementSize, getLogicalDirection, useLogicalDirectionProps } = useLogicalDirection();
 
-    useEffect(() => {
-        if (sourceElement && popperElement) {
-            const onFirstUpdate: (arg0: Partial<State>) => void = () => { };
-            const strategy: PositioningStrategy | undefined = "absolute";
-            let placement: Placement = logicalToPlacement(getLogicalDirection()!, positionInline, positionBlock);
-
-
-            setPopperInstance(createPopper<StrictModifiers>(sourceElement, popperElement, {
-                modifiers: [
-                    { name: "flip", options: {} },
-                    { name: "preventOverflow", options: { padding: { bottom: (paddingBottom ?? 0), top: (paddingTop ?? 0), left: (paddingLeft ?? 0), right: (paddingRight ?? 0) } } },
-                    updateStateModifier as any,
-                    { name: 'eventListeners', enabled: false },
-                    { name: "applyStyles", enabled: false },
-                ], 
-                onFirstUpdate, 
-                placement, 
-                strategy
-            }));
-        }
-    }, [sourceElement, popperElement, positionInline, positionBlock, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight]);
+    /*useEffect(() => {
+        resetPopperInstance();
+    }, [resetPopperInstance]);*/
 
     function usePopperSource<E extends Element>() {
         function usePopperSourceProps<P extends h.JSX.HTMLAttributes<E>>(props: P) {
             let style = { ...(sourceStyle as h.JSX.CSSProperties) };
-            return useMergedProps<E>()(sourceAttributes as any, useMergedProps<E>()({ style }, (useSourceElementRefProps(props as any) as h.JSX.HTMLAttributes<E>)));
+            return useSourceElementRefProps(useMergedProps<E>()(sourceAttributes as any, useMergedProps<E>()({ style }, ((useLogicalDirectionProps(props) as any) as h.JSX.HTMLAttributes<E>))));
         }
 
         return { usePopperSourceProps };
@@ -119,8 +128,8 @@ export function usePopperApi({ updating, positionInline, positionBlock, skidding
 
     function usePopperPopup<E extends Element>({ open }: { open: boolean }) {
         function usePopperPopupProps<P extends h.JSX.HTMLAttributes<E>>(props: P) {
-            let style = { ...(popperStyle as h.JSX.CSSProperties), pointerEvents: open? undefined : "none" };
-            return useMergedProps<E>()(popperAttributes as any, useMergedProps<E>()({ style }, usePopperElementRefProps(props as any) as h.JSX.HTMLAttributes<E>));
+            let style = { ...(popperStyle as h.JSX.CSSProperties), pointerEvents: open ? undefined : "none" };
+            return usePopperElementRefProps(useMergedProps<E>()(useMergedProps<E>()({ style }, props as any), { ref: (e) => { debugger; console.log(e); } }) as h.JSX.HTMLAttributes<E>);
         }
 
         return { usePopperPopupProps };
@@ -237,14 +246,14 @@ export function logicalToPlacement(logicalDirection: LogicalDirectionInfo, inlin
     placementInline = inlinePosition;
 
     switch (blockDirection) {
-        case "ttb": placementBlock = (blockPosition === "start"? "top" : "bottom"); break;
-        case "btt": placementBlock = (blockPosition === "end"? "top" : "bottom"); break;
-        case "ltr": placementBlock = (blockPosition === "start"? "left" : "right"); break;
-        case "rtl": placementBlock = (blockPosition === "end"? "left" : "right"); break;
+        case "ttb": placementBlock = (blockPosition === "start" ? "top" : "bottom"); break;
+        case "btt": placementBlock = (blockPosition === "end" ? "top" : "bottom"); break;
+        case "ltr": placementBlock = (blockPosition === "start" ? "left" : "right"); break;
+        case "rtl": placementBlock = (blockPosition === "end" ? "left" : "right"); break;
     }
 
     return `${placementBlock}-${placementInline}`;
-    
+
 }
 
 export function useShouldUpdatePopper(open: boolean) {
@@ -260,9 +269,9 @@ export function useShouldUpdatePopper(open: boolean) {
 
     useGlobalHandler(document, "keydown", onInteraction, { passive: true, capture: true });
     useGlobalHandler(window, "click", onInteraction, { passive: true, capture: true });
-    useGlobalHandler(window, "scroll", open? onInteraction : null, { passive: true, capture: true });
-    useGlobalHandler(window, "pointermove", open? onInteraction : null, { passive: true, capture: true });
-    useGlobalHandler(window, "resize", open? onInteraction : null, { passive: true, capture: true });
+    useGlobalHandler(window, "scroll", open ? onInteraction : null, { passive: true, capture: true });
+    useGlobalHandler(window, "pointermove", open ? onInteraction : null, { passive: true, capture: true });
+    useGlobalHandler(window, "resize", open ? onInteraction : null, { passive: true, capture: true });
 
     return { shouldUpdate: !!updatingForABit, onInteraction };
 
@@ -274,7 +283,7 @@ export function useShouldUpdatePopper(open: boolean) {
  * Handle the e.g. zoomOriginDynamic props, to turn them into zoomOriginInline or zoomOriginBlock as appropriate.
  * TODO: Right now, all *Dynamic props are just handled as 1 - prop. Some probably need to be -1 * prop though.
  */
- export function fixProps<P extends {}>(logicalDirection: LogicalDirectionInfo, requestedPlacement: `${"block" | "inline"}-${"start" | "end"}`, usedPlacement: BasePlacement, props: P) {
+export function fixProps<P extends {}>(logicalDirection: LogicalDirectionInfo, requestedPlacement: `${"block" | "inline"}-${"start" | "end"}`, usedPlacement: BasePlacement, props: P) {
     let logicalSnake = placementToLogical(logicalDirection, usedPlacement);
 
     let propAxis: `${"Block" | "Inline"}`;

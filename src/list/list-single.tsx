@@ -3,7 +3,7 @@ import { ComponentChildren, createContext, h, Ref } from "preact";
 import { useAriaListboxSingle } from "preact-aria-widgets";
 import { EventDetail } from "preact-aria-widgets";
 import { UseListboxSingleItem, UseListboxSingleItemInfo, UseListboxSingleItemParameters, UseListboxSingleParameters } from "preact-aria-widgets";
-import { useAsyncHandler, useMergedProps, useRefElement, useState } from "preact-prop-helpers";
+import { useAsyncHandler, useMergedProps, useMutationObserver, useRefElement, useState } from "preact-prop-helpers";
 import { memo } from "preact/compat";
 import { useContext, useLayoutEffect } from "preact/hooks";
 import { GlobalAttributes, useLogRender, usePseudoActive, forwardElementRef, OmitStrong } from "../props";
@@ -42,11 +42,8 @@ export const ListItemSingle = memo(forwardElementRef(function ListItemSingle(pro
     const { index, ...domProps } = { ...props, ref };
 
     const [text, setText] = useState<string | null>(null);
-    const { useRefElementProps, element } = useRefElement<HTMLLIElement>();
-    useLayoutEffect(() => {
-        if (element)
-            setText(element.innerText);
-    }, [element]);
+    const { useRefElementProps, getElement } = useRefElement<HTMLLIElement>({});
+    useMutationObserver(getElement, { subtree: true, onCharacterData: (info) => setText(getElement()?.innerText ?? "") });
 
     const { getSelected, tabbable, selected, useListboxSingleItemProps } = useListItemSingle({ index, text, tag: "li" });
     return <li {...usePseudoActive(useMergedProps<HTMLLIElement>()({ class: clsx("list-group-item", "list-group-item-action", selected && "active") } as any, useListboxSingleItemProps(useRefElementProps(domProps))))} />

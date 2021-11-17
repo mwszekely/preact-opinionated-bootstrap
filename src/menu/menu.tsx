@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { cloneElement, ComponentChildren, createContext, Fragment, h, Ref, VNode } from "preact";
 import { useAriaMenu, useButtonLikeEventHandlers, UseMenuItem } from "preact-aria-widgets";
 import { UseMenuItemDefaultInfo } from "preact-aria-widgets/use-menu";
-import { useAsyncHandler, useElementSize, useHasFocus, useMergedProps, useRefElement, useState, useTimeout } from "preact-prop-helpers";
+import { useAsyncHandler, useElementSize, useHasFocus, useMergedProps, useMutationObserver, useRefElement, useState, useTimeout, usePassiveState } from "preact-prop-helpers";
 import { ZoomFade } from "preact-transition";
 import { useCallback, useContext, useEffect, useLayoutEffect } from "preact/hooks";
 import { BodyPortal } from "../portal";
@@ -41,8 +41,7 @@ export function Menu<E extends Element, T extends <E extends HTMLElement>(...arg
     const { useElementSizeProps } = useElementSize<any>({ setSize: size => setSize(prevSize => JSON.stringify(size)) });
     useEffect(() => { onInteraction?.(); }, [onInteraction, size]);
 
-    const [menuHasFocusInner, setMenuHasFocusInner, getMenuHasFocusInner] = useState(false);
-    const { useHasFocusProps } = useHasFocus<HTMLDivElement>({ setFocusedInner: setMenuHasFocusInner });
+    const { useHasFocusProps, getFocusedInner: getMenuHasFocusInner } = useHasFocus<HTMLDivElement>({  });
     const { usePopperArrow, usePopperPopup, usePopperSource, usedPlacement, getLogicalDirection } = usePopperApi({ positionInline: positionInline ?? "start", positionBlock: positionBlock ?? "end", updating: updatingForABit });
     const { useMenuButton, useMenuItem, useMenuProps, useMenuSubmenuItem, focusMenu } = useAriaMenu<HTMLDivElement, HTMLButtonElement, UseMenuItemDefaultInfo<HTMLButtonElement>>({ shouldFocusOnChange: getMenuHasFocusInner, open, onClose, onOpen });
     const { useMenuButtonProps } = useMenuButton<Element>({ tag: anchorTag ?? "button" });
@@ -77,7 +76,7 @@ export function Menu<E extends Element, T extends <E extends HTMLElement>(...arg
                     {cloneElement(anchor, useMergedProps<any>()({ [anchorEventName ?? "onPress"]: onAnchorClick, ref: anchor.ref as Ref<Element>, class: `${open ? "active" : ""}` }, useElementSizeProps(usePopperSourceProps(useMenuButtonProps(anchor.props)))))}
                     <BodyPortal>
                         <div {...usePopperPopupProps({ class: "dropdown-menu-popper" })}>
-                            <Transition {...(useMenuProps(rest) as any)} show={open} onTransitionUpdate={onInteraction} exitVisibility="hidden">
+                            <Transition {...(useMenuProps(rest) as any)} show={open} onTransitionUpdate={onInteraction} exitVisibility="hidden" >
                                 <div {...useHasFocusProps({ })}>
 
                                     <div {...usePopperArrowProps({})} />
@@ -106,11 +105,8 @@ export function MenuItem({ children, disabled, onPress: onPressAsync, index, ...
 
     const isInteractive = (onPressAsync != null);
     const [text, setText] = useState<string | null>(null);
-    const { useRefElementProps, element } = useRefElement<HTMLButtonElement>();
-    useLayoutEffect(() => {
-        if (element)
-            setText(element.innerText);
-    }, [element]);
+    const { useRefElementProps, getElement } = useRefElement<HTMLButtonElement>({});
+    useMutationObserver(getElement, { subtree: true, onCharacterData: (info) => setText(getElement()?.innerText ?? "") });
 
     const { useMenuItemProps } = useMenuItem({ index, text });
 

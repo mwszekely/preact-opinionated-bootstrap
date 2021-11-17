@@ -15,7 +15,7 @@ function UnlabelledInput({ type, disabled, value, onValueChange: onInputAsync, .
 
     const [focusedInner, setFocusedInner, getFocusedInner] = useState(false);
     const { capture, uncapture } = useInputCaptures(type, (props as UnlabelledInputNumberProps).min, (props as UnlabelledInputNumberProps).max!);
-    const { useHasFocusProps } = useHasFocus<HTMLInputElement>({ setFocusedInner });
+    const { useHasFocusProps } = useHasFocus<HTMLInputElement>({ onFocusedInnerChanged: setFocusedInner });
 
     const { getSyncHandler, currentCapture, pending, hasError, settleCount, flushDebouncedPromise, currentType, ...asyncInfo } = useAsyncHandler<HTMLInputElement>()({ capture, debounce: type === "text" ? 1500 : undefined });
     const onInputIfValid = getSyncHandler(disabled ? null : onInputAsync as any);
