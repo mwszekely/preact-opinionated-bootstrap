@@ -11,15 +11,11 @@ export function usePopperApi({ updating, positionInline, positionBlock, skidding
 
 
 
-    const resetPopperInstance = useCallback(() => {
-        const sourceElement = getSourceElement();
-        const popperElement = getPopperElement();
-
+    const resetPopperInstance = useCallback((sourceElement: Element | null, popperElement: HTMLElement | null) => {
         if (sourceElement && popperElement) {
             const onFirstUpdate: (arg0: Partial<State>) => void = () => { };
             const strategy: PositioningStrategy | undefined = "absolute";
-            let placement: Placement = logicalToPlacement(getLogicalDirection()!, positionInline, positionBlock);
-
+            let placement: Placement = "auto"; //logicalToPlacement(getLogicalDirection()!, positionInline, positionBlock);
 
             setPopperInstance(createPopper<StrictModifiers>(sourceElement, popperElement, {
                 modifiers: [
@@ -36,8 +32,8 @@ export function usePopperApi({ updating, positionInline, positionBlock, skidding
         }
     }, [positionInline, positionBlock, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight]);
 
-    const { getElement: getSourceElement, useRefElementProps: useSourceElementRefProps } = useRefElement<Element>({ onElementChange: resetPopperInstance });
-    const { getElement: getPopperElement, useRefElementProps: usePopperElementRefProps } = useRefElement<HTMLElement>({ onElementChange: resetPopperInstance });
+    const { getElement: getSourceElement, useRefElementProps: useSourceElementRefProps } = useRefElement<Element>({ onElementChange: (e: any) => resetPopperInstance(e, (getPopperElement as any)()!) } as any);
+    const { getElement: getPopperElement, useRefElementProps: usePopperElementRefProps } = useRefElement<HTMLElement>({ onElementChange: e => resetPopperInstance((getSourceElement as any)()!, e) });
     const { getElement: getArrowElement, useRefElementProps: useArrowElementRefProps } = useRefElement<Element>({});
 
     const [sourceStyle, setSourceStyle] = useState<Partial<Omit<CSSStyleDeclaration, typeof Symbol["iterator"]>> | null>(null);
@@ -112,9 +108,6 @@ export function usePopperApi({ updating, positionInline, positionBlock, skidding
 
     const { convertElementSize, getLogicalDirection, useLogicalDirectionProps } = useLogicalDirection();
 
-    /*useEffect(() => {
-        resetPopperInstance();
-    }, [resetPopperInstance]);*/
 
     function usePopperSource<E extends Element>() {
         function usePopperSourceProps<P extends h.JSX.HTMLAttributes<E>>(props: P) {
@@ -129,7 +122,7 @@ export function usePopperApi({ updating, positionInline, positionBlock, skidding
     function usePopperPopup<E extends Element>({ open }: { open: boolean }) {
         function usePopperPopupProps<P extends h.JSX.HTMLAttributes<E>>(props: P) {
             let style = { ...(popperStyle as h.JSX.CSSProperties), pointerEvents: open ? undefined : "none" };
-            return usePopperElementRefProps(useMergedProps<E>()(useMergedProps<E>()({ style }, props as any), { ref: (e) => { debugger; console.log(e); } }) as h.JSX.HTMLAttributes<E>);
+            return usePopperElementRefProps(useMergedProps<E>()({ style }, props as any) as h.JSX.HTMLAttributes<E>);
         }
 
         return { usePopperPopupProps };
