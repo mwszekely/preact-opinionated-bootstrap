@@ -226,7 +226,7 @@ export const ProgressCircular = forwardElementRef(function ({ loadingLabel, spin
 
 
     const progressProps = useProgressProps({ "aria-hidden": `${mode != "pending"}` });
-    const progressElement = (
+    const progressElement = null /*(
         <div {...useMergedProps<HTMLDivElement>()({ ref, className: clsx("circular-progress-container") }, useMergedProps<HTMLDivElement>()(progressProps, p))}>
             {mode === "pending" && !!loadingLabel && <div role="alert" aria-live="assertive" class="visually-hidden">{loadingLabel}</div>}
             <Swappable>
@@ -243,7 +243,7 @@ export const ProgressCircular = forwardElementRef(function ({ loadingLabel, spin
                     <Fade show={!shownStatusLongEnough && mode === "failed"}><div class="circular-progress-failed"><Cross /></div></Fade>
                 </div>
             </Swappable>
-        </div>);
+        </div>);*/
 
     childrenPosition ??= "after";
 

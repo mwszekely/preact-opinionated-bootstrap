@@ -44,12 +44,19 @@
     </style>
 
     <script>
-        window.onerror = function (e) {
+        
+
+function namedFunction(name, body) {
+    const F = (new Function("func", `return function ${name}(action) { return action(); }`))();
+    return F(body);
+}
+
+        /*window.onerror = function (e) {
             debugger;
             for (let p of arguments) {
             alert(p);
             }
-        }
+        }*/
         </script>
 </head>
 

@@ -106,7 +106,9 @@ export function usePopperApi({ updating, positionInline, positionBlock, skidding
         return modifier;
     }, []);
 
-    const { convertElementSize, getLogicalDirection, useLogicalDirectionProps } = useLogicalDirection();
+    
+    const [logicalDirection, setLogicalDirection] = useState<LogicalDirectionInfo | null>(null);
+    const { convertElementSize, getLogicalDirectionInfo, useLogicalDirectionProps } = useLogicalDirection<any>({ onLogicalDirectionChange: setLogicalDirection });
 
 
     function usePopperSource<E extends Element>() {
@@ -137,7 +139,7 @@ export function usePopperApi({ updating, positionInline, positionBlock, skidding
         return { usePopperArrowProps };
     }
 
-    return { usePopperSource, usePopperPopup, usePopperArrow, usedPlacement, getLogicalDirection };
+    return { usePopperSource, usePopperPopup, usePopperArrow, usedPlacement, logicalDirection };
 
 }
 

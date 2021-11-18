@@ -37,12 +37,10 @@ export function Menu<E extends Element, T extends <E extends HTMLElement>(...arg
     const onOpen = () => setOpen(true);
     const { shouldUpdate: updatingForABit, onInteraction } = useShouldUpdatePopper(open);
 
-    const [size, setSize] = useState<string | null>(null);
-    const { useElementSizeProps } = useElementSize<any>({ setSize: size => setSize(prevSize => JSON.stringify(size)) });
-    useEffect(() => { onInteraction?.(); }, [onInteraction, size]);
+    const { useElementSizeProps } = useElementSize<any>({ onSizeChange: onInteraction ?? (() => {}) });
 
     const { useHasFocusProps, getFocusedInner: getMenuHasFocusInner } = useHasFocus<HTMLDivElement>({  });
-    const { usePopperArrow, usePopperPopup, usePopperSource, usedPlacement, getLogicalDirection } = usePopperApi({ positionInline: positionInline ?? "start", positionBlock: positionBlock ?? "end", updating: updatingForABit });
+    const { usePopperArrow, usePopperPopup, usePopperSource, usedPlacement, logicalDirection } = usePopperApi({ positionInline: positionInline ?? "start", positionBlock: positionBlock ?? "end", updating: updatingForABit });
     const { useMenuButton, useMenuItem, useMenuProps, useMenuSubmenuItem, focusMenu } = useAriaMenu<HTMLDivElement, HTMLButtonElement, UseMenuItemDefaultInfo<HTMLButtonElement>>({ shouldFocusOnChange: getMenuHasFocusInner, open, onClose, onOpen });
     const { useMenuButtonProps } = useMenuButton<Element>({ tag: anchorTag ?? "button" });
     const { usePopperSourceProps } = usePopperSource<any>();
@@ -62,7 +60,6 @@ export function Menu<E extends Element, T extends <E extends HTMLElement>(...arg
         (rest as any).zoomMin = 0.85;
     }
     
-    const logicalDirection = getLogicalDirection();
     if (logicalDirection && usedPlacement)
         rest = fixProps(logicalDirection, "block-end", usedPlacement, rest) as typeof rest;
 

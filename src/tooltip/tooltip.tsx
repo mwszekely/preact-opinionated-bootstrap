@@ -35,18 +35,15 @@ export function Tooltip<T extends <E extends HTMLElement>(...args: any[]) => h.J
 
     const { useTooltipProps } = useTooltip<HTMLDivElement>();
     const { useTooltipTriggerProps } = useTooltipTrigger();
-    const [size, setSize] = useState<string | null>(null);
     const { shouldUpdate, onInteraction } = useShouldUpdatePopper(isOpen);
-    const { useElementSizeProps } = useElementSize<any>({ setSize: size => setSize(prevSize => JSON.stringify(size)) });
-    useEffect(() => { onInteraction?.(); }, [onInteraction, size]);
-    const { getLogicalDirection, usePopperArrow, usePopperPopup, usePopperSource, usedPlacement } = usePopperApi({ updating: shouldUpdate, positionInline: (positionInline ?? "start"), positionBlock: (positionBlock ?? "end") });
+    const { useElementSizeProps } = useElementSize<any>({ onSizeChange: onInteraction ?? (() => {}) });
+    const { logicalDirection, usePopperArrow, usePopperPopup, usePopperSource, usedPlacement } = usePopperApi({ updating: shouldUpdate, positionInline: (positionInline ?? "start"), positionBlock: (positionBlock ?? "end") });
 
     const { usePopperPopupProps } = usePopperPopup<HTMLDivElement>({ open: isOpen });
     const { usePopperArrowProps } = usePopperArrow<HTMLDivElement>();
     const { usePopperSourceProps } = usePopperSource();
 
 
-    const logicalDirection = getLogicalDirection();
     if (logicalDirection && usedPlacement)
         rest = fixProps(logicalDirection, "block-end", usedPlacement, rest) as typeof rest;
 
