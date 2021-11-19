@@ -8,6 +8,9 @@ export function usePopperApi({ updating, positionInline, positionBlock, skidding
 
     const [popperInstance, setPopperInstance, getPopperInstance] = useState<Instance | null>(null);
     const [usedPlacement, setUsedPlacement] = useState<BasePlacement | null>(null);
+    const [logicalDirection, setLogicalDirection] = useState<LogicalDirectionInfo | null>(null);
+    const { convertElementSize, getLogicalDirectionInfo, useLogicalDirectionProps } = useLogicalDirection<any>({ onLogicalDirectionChange: setLogicalDirection });
+    useEffect(() => {resetPopperInstance(getSourceElement() as any, getPopperElement() as any);  }, [logicalDirection])
 
 
 
@@ -15,7 +18,7 @@ export function usePopperApi({ updating, positionInline, positionBlock, skidding
         if (sourceElement && popperElement) {
             const onFirstUpdate: (arg0: Partial<State>) => void = () => { };
             const strategy: PositioningStrategy | undefined = "absolute";
-            let placement: Placement = "auto"; //logicalToPlacement(getLogicalDirection()!, positionInline, positionBlock);
+            let placement: Placement = logicalToPlacement(logicalDirection!, positionInline, positionBlock);
 
             setPopperInstance(createPopper<StrictModifiers>(sourceElement, popperElement, {
                 modifiers: [
@@ -30,7 +33,7 @@ export function usePopperApi({ updating, positionInline, positionBlock, skidding
                 strategy
             }));
         }
-    }, [positionInline, positionBlock, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight]);
+    }, [positionInline, positionBlock, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight, logicalDirection]);
 
     const { getElement: getSourceElement, useRefElementProps: useSourceElementRefProps } = useRefElement<Element>({ onElementChange: (e: any) => resetPopperInstance(e, (getPopperElement as any)()!) } as any);
     const { getElement: getPopperElement, useRefElementProps: usePopperElementRefProps } = useRefElement<HTMLElement>({ onElementChange: e => resetPopperInstance((getSourceElement as any)()!, e) });
@@ -107,8 +110,6 @@ export function usePopperApi({ updating, positionInline, positionBlock, skidding
     }, []);
 
     
-    const [logicalDirection, setLogicalDirection] = useState<LogicalDirectionInfo | null>(null);
-    const { convertElementSize, getLogicalDirectionInfo, useLogicalDirectionProps } = useLogicalDirection<any>({ onLogicalDirectionChange: setLogicalDirection });
 
 
     function usePopperSource<E extends Element>() {

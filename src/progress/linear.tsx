@@ -226,10 +226,10 @@ export const ProgressCircular = forwardElementRef(function ({ loadingLabel, spin
 
 
     const progressProps = useProgressProps({ "aria-hidden": `${mode != "pending"}` });
-    const progressElement = null /*(
+    const progressElement = (
         <div {...useMergedProps<HTMLDivElement>()({ ref, className: clsx("circular-progress-container") }, useMergedProps<HTMLDivElement>()(progressProps, p))}>
             {mode === "pending" && !!loadingLabel && <div role="alert" aria-live="assertive" class="visually-hidden">{loadingLabel}</div>}
-            <Swappable>
+            {mode !== null && <Swappable>
                 <div className="circular-progress-swappable">
                     <Fade show={mode === "pending" && showSpinner} exitVisibility="removed">
                         <div style={{ "--count": gimmickCount, "--delay": delay } as any} className={clsx("circular-progress", colorVariant ? `circular-progress-${colorVariant}` : undefined, colorFill == "foreground" && "inverse-fill", colorFill === "foreground-only" && "no-fill")}>
@@ -242,8 +242,8 @@ export const ProgressCircular = forwardElementRef(function ({ loadingLabel, spin
                     <Fade show={!shownStatusLongEnough && mode === "succeeded" && succeededAfterFailure}><div class="circular-progress-succeeded"><Check /></div></Fade>
                     <Fade show={!shownStatusLongEnough && mode === "failed"}><div class="circular-progress-failed"><Cross /></div></Fade>
                 </div>
-            </Swappable>
-        </div>);*/
+            </Swappable>}
+        </div>);
 
     childrenPosition ??= "after";
 
