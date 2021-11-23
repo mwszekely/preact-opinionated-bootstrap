@@ -7275,18 +7275,12 @@
 	  const [triggerFocusedInner, setTriggerFocusedInner, getTriggerFocusedInner] = useState(false);
 	  const [triggerHasMouseover, setTriggerHasMouseover] = useState(false);
 	  const [tooltipHasMouseover, setTooltipHasMouseover] = useState(false);
+	  const [tooltipHasFocus, setTooltipHasFocus] = useState(false);
 	  useTimeout({
 	    timeout: mouseoverDelay,
-	    triggerIndex: +triggerHasMouseover + +tooltipHasMouseover,
+	    triggerIndex: !!(+triggerHasMouseover + +tooltipHasMouseover + +tooltipHasFocus),
 	    callback: () => {
-	      if (triggerHasMouseover || tooltipHasMouseover) setHasAnyMouseover(true);
-	    }
-	  });
-	  useTimeout({
-	    timeout: 50,
-	    triggerIndex: +triggerHasMouseover + +tooltipHasMouseover,
-	    callback: () => {
-	      if (!triggerHasMouseover && !tooltipHasMouseover) setHasAnyMouseover(false);
+	      setHasAnyMouseover(triggerHasMouseover || tooltipHasMouseover || tooltipHasFocus);
 	    }
 	  });
 	  y(() => {
@@ -7301,15 +7295,28 @@
 	      setTriggerHasMouseover(false);
 	    }
 
+	    function onClick(e) {
+	      e.target.focus();
+	    }
+	    const {
+	      useHasFocusProps
+	    } = useHasFocus({
+	      onFocusedInnerChanged: setTooltipHasFocus
+	    });
+
 	    function useTooltipTriggerProps({ ...props
 	    }) {
+	      var _props$tabIndex;
+
 	      // Note: Though it's important to make sure that focusing activates a tooltip,
 	      // it's perfectly reasonable that a child element will be the one that's focused,
 	      // not this one, so we don't set tabIndex=0
-	      return useTooltipIdReferencingProps("aria-describedby")(useMergedProps()({
+	      (_props$tabIndex = props.tabIndex) !== null && _props$tabIndex !== void 0 ? _props$tabIndex : props.tabIndex = -1;
+	      return useTooltipIdReferencingProps("aria-describedby")(useHasFocusProps(useMergedProps()({
 	        onPointerEnter,
-	        onPointerLeave
-	      }, props));
+	        onPointerLeave,
+	        onClick
+	      }, props)));
 	    }
 
 	    return {
@@ -7327,7 +7334,6 @@
 
 	    function useTooltipProps({ ...props
 	    }) {
-	      props.role = "tooltip";
 	      return useTooltipIdProps(useMergedProps()({
 	        onPointerEnter,
 	        onPointerLeave
@@ -14458,12 +14464,13 @@
 	    getElement,
 	    useRefElementProps
 	  } = useRefElement({});
-	  useGlobalHandler(window, "scroll", e => {
+	  useGlobalHandler(window.document, "scroll", e => {
 	    var _getElement;
 
 	    return setShowShadow(!!((_getElement = getElement()) !== null && _getElement !== void 0 && _getElement.offsetTop));
 	  }, {
-	    passive: true
+	    passive: true,
+	    capture: true
 	  });
 	  return v$1(CellLocationContext.Provider, {
 	    value: "head"
