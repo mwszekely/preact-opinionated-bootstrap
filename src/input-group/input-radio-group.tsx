@@ -107,7 +107,7 @@ export const RadioGroup = memo(forwardElementRef(function RadioGroup<V extends s
 }));
 
 export const Radio = memo(forwardElementRef(function Radio<V extends string | number>({ disabled, children: label, index, value, labelPosition }: RadioProps<V, HTMLInputElement, HTMLLabelElement>, ref?: Ref<HTMLInputElement>) {
-    const useAriaRadio = useContext(RadioGroupContext) as UseRadio<V, HTMLInputElement, HTMLLabelElement, RadioInfo>;
+    const useAriaRadio = useContext(RadioGroupContext) as UseRadio<V, HTMLInputElement, HTMLLabelElement | HTMLDivElement, RadioInfo>;
     labelPosition ??= "end";
     const text = null;
     const currentHandlerType = useContext(CurrentHandlerTypeContext);
@@ -118,6 +118,7 @@ export const Radio = memo(forwardElementRef(function Radio<V extends string | nu
 
     const { useRadioInputProps } = useRadioInput({ tag: "input" });
     const { useRadioLabelProps } = useRadioLabel({ tag: "label" });
+    const { useRadioLabelProps: useWrapperLabelProps } = useRadioLabel({ tag: "div" });
 
 
     const inInputGroup = useContext(InInputGroupContext);
@@ -129,7 +130,7 @@ export const Radio = memo(forwardElementRef(function Radio<V extends string | nu
         console.error(`Hidden labels require a string-based label for the aria-label attribute.`);
     }
 
-    const inputElement = <OptionallyInputGroup isInput tag={inInputGroup ? "div" : null} disabled={disabled} tabIndex={-1}>
+    const inputElement = <OptionallyInputGroup isInput tag={inInputGroup ? "div" : null} {...useRadioLabelProps({disabled, tabIndex: -1})}>
         <ProgressCircular childrenPosition="after" colorFill="foreground-only" mode={currentHandlerType == "async" ? asyncState : null} colorVariant="info">
             <input {...useRadioInputProps({ ref, type: "radio", className: clsx(asyncState === "pending" && "pending", disabled && "disabled", "form-check-input"), "aria-label": labelPosition === "hidden" ? stringLabel : undefined })} />
         </ProgressCircular>

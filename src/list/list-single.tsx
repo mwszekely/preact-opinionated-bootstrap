@@ -42,7 +42,7 @@ export const ListItemSingle = memo(forwardElementRef(function ListItemSingle(pro
     const { index, ...domProps } = { ...props, ref };
 
     const [text, setText] = useState<string | null>(null);
-    const { useRefElementProps, getElement } = useRefElement<HTMLLIElement>({});
+    const { useRefElementProps, getElement } = useRefElement<HTMLLIElement>({ onElementChange: element => setText(element?.innerText ?? "") });
     useMutationObserver(getElement, { subtree: true, onCharacterData: (info) => setText(getElement()?.innerText ?? "") });
 
     const { getSelected, tabbable, selected, useListboxSingleItemProps } = useListItemSingle({ index, text, tag: "li" });

@@ -7,6 +7,15 @@
 @use "sass:list";
 
 .table {
+  contain: content;
+  
+  & tr,
+  & td {
+    contain: content;
+  }
+}
+
+.table {
   position: relative;
 
   // Note to self: sticky headers are
@@ -33,7 +42,8 @@
   border-spacing: 0;
 }
 
-.table th,td {
+.table th,
+td {
   &:focus-visible {
     box-shadow: $input-btn-focus-box-shadow;
     outline: none;
@@ -43,7 +53,7 @@
 .table th {
   cursor: pointer;
 
-  &  .bi.transition-flip {
+  & .bi.transition-flip {
     will-change: transform;
   }
 

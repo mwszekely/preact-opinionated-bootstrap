@@ -94,8 +94,10 @@ export const Input = memo(function Input({ children, width, labelPosition, place
     const labelJsx = <label {...useInputLabelLabelProps({ class: clsx(props.disabled && "disabled", isInInputGroup ? "input-group-text" : labelPosition != "floating" ? "form-label" : "") })}>{children}</label>
     let inputJsx = <UnlabelledInput placeholder={placeholder} {...useInputLabelInputProps(props as any) as any as UnlabelledInputTextProps} />;
 
+    const isEmpty = ((props.value as number) !== 0 && props.value == "");
+
     //if (isInInputGrid) {
-    inputJsx = <div class={clsx("form-control faux-form-control-outer elevation-depressed-2", "elevation-body-surface", "focusable-within", (props.value as number) !== 0 && props.value == "" && "focus-within-only", props.disabled && "disabled")} style={width?.endsWith("ch") ? { "--form-control-width": (width ?? "20ch") } as any : width ? { width } : undefined}>{inputJsx}</div>
+    inputJsx = <div class={clsx("form-control faux-form-control-outer elevation-depressed-2", "elevation-body-surface", "focusable-within", !isEmpty && "focus-within-only", props.disabled && "disabled")} style={width?.endsWith("ch") ? { "--form-control-width": (width ?? "20ch") } as any : width ? { width } : undefined}>{inputJsx}</div>
     // }
 
     const inputWithLabel = (

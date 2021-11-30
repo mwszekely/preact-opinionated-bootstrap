@@ -19,6 +19,10 @@
   padding-left: $form-check-padding-start;
 }
 
+.form-control, .input-group {
+  contain: content;
+}
+
 .input-group-text {
   position: relative;
 }

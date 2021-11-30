@@ -10161,6 +10161,11 @@
 	  } = useCheckboxLabelElement({
 	    tag: "label"
 	  });
+	  const {
+	    useCheckboxLabelElementProps: useWrapperLabelProps
+	  } = useCheckboxLabelElement({
+	    tag: "div"
+	  });
 	  const inInputGroup = F(InInputGroupContext);
 	  let stringLabel = `${label}`;
 
@@ -10178,8 +10183,10 @@
 	  const inputElement = v$1(OptionallyInputGroup$1, {
 	    isInput: true,
 	    tag: inInputGroup ? "div" : null,
-	    tabIndex: -1,
-	    disabled: disabled
+	    ...useWrapperLabelProps({
+	      disabled,
+	      tabIndex: -1
+	    })
 	  }, v$1(ProgressCircular, {
 	    childrenPosition: "after",
 	    colorFill: "foreground-only",
@@ -10365,6 +10372,9 @@
 	  } = useRadioLabel({
 	    tag: "label"
 	  });
+	  useRadioLabel({
+	    tag: "div"
+	  });
 	  const inInputGroup = F(InInputGroupContext);
 	  (_label = label) !== null && _label !== void 0 ? _label : label = value;
 	  let stringLabel = `${label}`;
@@ -10376,8 +10386,10 @@
 	  const inputElement = v$1(OptionallyInputGroup$1, {
 	    isInput: true,
 	    tag: inInputGroup ? "div" : null,
-	    disabled: disabled,
-	    tabIndex: -1
+	    ...useRadioLabelProps({
+	      disabled,
+	      tabIndex: -1
+	    })
 	  }, v$1(ProgressCircular, {
 	    childrenPosition: "after",
 	    colorFill: "foreground-only",
@@ -10454,6 +10466,11 @@
 	  } = useSwitchLabelElement({
 	    tag: "label"
 	  });
+	  const {
+	    useCheckboxLabelElementProps: useWrapperLabelProps
+	  } = useSwitchLabelElement({
+	    tag: "div"
+	  });
 	  const inInputGroup = F(InInputGroupContext);
 	  let stringLabel = `${label}`;
 
@@ -10463,9 +10480,11 @@
 
 	  const inputElement = v$1(OptionallyInputGroup, {
 	    tag: inInputGroup ? "div" : null,
-	    disabled: disabled,
-	    tabIndex: -1,
-	    isInput: true
+	    isInput: true,
+	    ...useWrapperLabelProps({
+	      disabled,
+	      tabIndex: -1
+	    })
 	  }, v$1(ProgressCircular, {
 	    childrenPosition: "after",
 	    colorFill: "foreground-only",
@@ -10645,10 +10664,11 @@
 	  let inputJsx = v$1(UnlabelledInput, {
 	    placeholder: placeholder,
 	    ...useInputLabelInputProps(props)
-	  }); //if (isInInputGrid) {
+	  });
+	  const isEmpty = props.value !== 0 && props.value == ""; //if (isInInputGrid) {
 
 	  inputJsx = v$1("div", {
-	    class: clsx("form-control faux-form-control-outer elevation-depressed-2", "elevation-body-surface", "focusable-within", props.value !== 0 && props.value == "" && "focus-within-only", props.disabled && "disabled"),
+	    class: clsx("form-control faux-form-control-outer elevation-depressed-2", "elevation-body-surface", "focusable-within", !isEmpty && "focus-within-only", props.disabled && "disabled"),
 	    style: width !== null && width !== void 0 && width.endsWith("ch") ? {
 	      "--form-control-width": width !== null && width !== void 0 ? width : "20ch"
 	    } : width ? {
@@ -10768,7 +10788,13 @@
 	  const {
 	    useRefElementProps,
 	    getElement
-	  } = useRefElement({});
+	  } = useRefElement({
+	    onElementChange: element => {
+	      var _element$innerText;
+
+	      return setText((_element$innerText = element === null || element === void 0 ? void 0 : element.innerText) !== null && _element$innerText !== void 0 ? _element$innerText : "");
+	    }
+	  });
 	  useMutationObserver(getElement, {
 	    subtree: true,
 	    onCharacterData: info => {
@@ -13354,7 +13380,13 @@
 	  const {
 	    useRefElementProps,
 	    getElement
-	  } = useRefElement({});
+	  } = useRefElement({
+	    onElementChange: element => {
+	      var _element$innerText;
+
+	      return setText((_element$innerText = element === null || element === void 0 ? void 0 : element.innerText) !== null && _element$innerText !== void 0 ? _element$innerText : "");
+	    }
+	  });
 	  useMutationObserver(getElement, {
 	    subtree: true,
 	    onCharacterData: info => {

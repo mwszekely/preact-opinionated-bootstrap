@@ -275,7 +275,7 @@ const Component = () => {
             document.documentElement.classList.remove("switching-theme");
         }}>Switch theme to <strong>{theme === "theme-dark" ? "light" : "dark"}</strong></Button>
         <GridResponsive minWidth="35em">
-            <DebugUtilContext.Provider value={useMemo(() => ({ logRender: new Set<LogRenderType>(["Menu", "MenuItem"]) }), [])}>
+            <DebugUtilContext.Provider value={useMemo(() => ({ logRender: new Set<LogRenderType>(["Table", "TableHead", "TableBody", "TableRow", "TableCell"]) }), [])}>
                 <ToastsProvider>
 
                     <DemoTable />

@@ -31,10 +31,11 @@ export const Switch = memo(forwardElementRef(function Switch({ checked, disabled
     disabled ||= pending;
 
     const onInput = getSyncHandler(onInputAsync);
-    const { useCheckboxInputElement: useSwitchInputElement, useCheckboxLabelElement: useSwitchLabelElement } = useAriaCheckbox<HTMLInputElement, HTMLLabelElement>({ checked: pending ? currentCapture : checked, disabled: disabled ?? false, onInput, labelPosition: "separate" });
+    const { useCheckboxInputElement: useSwitchInputElement, useCheckboxLabelElement: useSwitchLabelElement } = useAriaCheckbox<HTMLInputElement, HTMLLabelElement | HTMLDivElement>({ checked: pending ? currentCapture : checked, disabled: disabled ?? false, onInput, labelPosition: "separate" });
 
     const { useCheckboxInputElementProps: useSwitchInputElementProps } = useSwitchInputElement({ tag: "input" });
     const { useCheckboxLabelElementProps: useSwitchLabelElementProps } = useSwitchLabelElement({ tag: "label" });
+    const { useCheckboxLabelElementProps: useWrapperLabelProps } = useSwitchLabelElement({ tag: "div" });
 
     const inInputGroup = useContext(InInputGroupContext);
 
@@ -43,7 +44,7 @@ export const Switch = memo(forwardElementRef(function Switch({ checked, disabled
         console.error(`Hidden labels require a string-based label for the aria-label attribute.`);
     }
 
-    const inputElement = <OptionallyInputGroup tag={inInputGroup ? "div" : null} disabled={disabled} tabIndex={-1} isInput={true}>
+    const inputElement = <OptionallyInputGroup tag={inInputGroup ? "div" : null} isInput={true} {...useWrapperLabelProps({ disabled, tabIndex: -1 })}>
         <ProgressCircular childrenPosition="after" colorFill="foreground-only" mode={currentType === "async" ? asyncState : null} colorVariant="info">
             <input {...useSwitchInputElementProps({ ref, type: "checkbox", className: clsx(pending && "pending", "form-check-input", disabled && "disabled"), "aria-label": labelPosition === "hidden" ? stringLabel : undefined })} />
         </ProgressCircular>

@@ -102,7 +102,7 @@ export function MenuItem({ children, disabled, onPress: onPressAsync, index, ...
 
     const isInteractive = (onPressAsync != null);
     const [text, setText] = useState<string | null>(null);
-    const { useRefElementProps, getElement } = useRefElement<HTMLButtonElement>({});
+    const { useRefElementProps, getElement } = useRefElement<HTMLButtonElement>({ onElementChange: element => setText(element?.innerText ?? "") });
     useMutationObserver(getElement, { subtree: true, onCharacterData: (info) => setText(getElement()?.innerText ?? "") });
 
     const { useMenuItemProps } = useMenuItem({ index, text });

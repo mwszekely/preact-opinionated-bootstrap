@@ -35,10 +35,11 @@ export const Checkbox = memo(forwardElementRef(function Checkbox({ checked, disa
     disabled ||= pending;
 
     const onChecked = getSyncHandler(onCheckedAsync) as unknown as I;
-    const { useCheckboxInputElement, useCheckboxLabelElement } = useAriaCheckbox<HTMLInputElement, HTMLLabelElement>({ checked: pending ? currentCapture! : ((checked as string) === "indeterminate" ? "mixed" : checked), disabled: disabled ?? false, onInput: onChecked, labelPosition: "separate" });
+    const { useCheckboxInputElement, useCheckboxLabelElement } = useAriaCheckbox<HTMLInputElement, HTMLLabelElement | HTMLDivElement>({ checked: pending ? currentCapture! : ((checked as string) === "indeterminate" ? "mixed" : checked), disabled: disabled ?? false, onInput: onChecked, labelPosition: "separate" });
 
     const { useCheckboxInputElementProps } = useCheckboxInputElement({ tag: "input" });
     const { useCheckboxLabelElementProps } = useCheckboxLabelElement({ tag: "label" });
+    const { useCheckboxLabelElementProps: useWrapperLabelProps } = useCheckboxLabelElement({ tag: "div" });
 
     const inInputGroup = useContext(InInputGroupContext);
 
@@ -51,7 +52,7 @@ export const Checkbox = memo(forwardElementRef(function Checkbox({ checked, disa
 
     const propsForInput = useMergedProps<HTMLInputElement>()(props, useCheckboxInputElementProps({ ref, type: "checkbox", className: clsx("form-check-input", pending && "pending", disabled && "disabled", inInputGroup && "mt-0"), "aria-label": labelPosition === "hidden" ? stringLabel : undefined }));
     const inputElement =
-        <OptionallyInputGroup isInput tag={inInputGroup ? "div" : null} tabIndex={-1} disabled={disabled}>
+        <OptionallyInputGroup isInput tag={inInputGroup ? "div" : null} {...useWrapperLabelProps({disabled, tabIndex: -1})}>
             <ProgressCircular childrenPosition="after" colorFill="foreground-only" mode={currentType === "async" ? asyncState : null} colorVariant="info">
                 <input {...propsForInput} />
             </ProgressCircular>
