@@ -6549,21 +6549,21 @@
 	  const [scrollbarWidth, setScrollbarWidth, getScrollbarWidth] = useState(null);
 	  y(() => {
 	    if (hideScroll) {
-	      let widthWithScrollBar = document.documentElement.scrollWidth;
-	      document.documentElement.classList.add("document-scroll-hidden");
-	      document.documentElement.dataset["scrollHiders"] = (+(document.documentElement.dataset["scrollHiders"] || "0") + 1).toString();
-	      let widthWithoutScrollBar = document.documentElement.scrollWidth;
+	      let widthWithScrollBar = document.body.scrollWidth;
+	      document.body.classList.add("document-scroll-hidden");
+	      document.body.dataset["scrollHiders"] = (+(document.body.dataset["scrollHiders"] || "0") + 1).toString();
+	      let widthWithoutScrollBar = document.body.scrollWidth;
 	      let scrollbarWidth = widthWithoutScrollBar - widthWithScrollBar; // Failsafe -- if this measuring trick does something unexpected, just ignore it
 
 	      if (scrollbarWidth > 80) scrollbarWidth = 0;
-	      document.documentElement.style.setProperty("--scrollbar-width", `${scrollbarWidth}px`);
+	      document.body.style.setProperty("--scrollbar-width", `${scrollbarWidth}px`);
 	      setScrollbarWidth(scrollbarWidth);
 	      return () => {
-	        document.documentElement.dataset["scrollHiders"] = (+(document.documentElement.dataset["scrollHiders"] || "0") - 1).toString();
+	        document.body.dataset["scrollHiders"] = (+(document.body.dataset["scrollHiders"] || "0") - 1).toString();
 
-	        if (document.documentElement.dataset["scrollHiders"] == "0") {
-	          document.documentElement.removeAttribute("data-scroll-hiders");
-	          document.documentElement.classList.remove("document-scroll-hidden");
+	        if (document.body.dataset["scrollHiders"] == "0") {
+	          document.body.removeAttribute("data-scroll-hiders");
+	          document.body.classList.remove("document-scroll-hidden");
 	        }
 	      };
 	    }
@@ -7181,8 +7181,8 @@
 	      prefix: "aria-tab-panel-"
 	    });
 	    const {
-	      element,
-	      useManagedChildProps
+	      useManagedChildProps,
+	      getElement
 	    } = useManagedTabPanel({ ...info,
 	      tabPanelId,
 	      setTabId,
@@ -7198,13 +7198,15 @@
 	    }
 
 	    y(() => {
-	      if (shouldFocus) {
+	      const element = getElement();
+
+	      if (element && shouldFocus) {
 	        element === null || element === void 0 ? void 0 : element.focus({
 	          preventScroll: true
 	        });
 	        setShouldFocus(false);
 	      }
-	    }, [element, shouldFocus]);
+	    }, [shouldFocus]);
 	    y(() => {
 	      var _managedTabs$info$ind;
 
@@ -7608,7 +7610,6 @@
 	      }
 	    }, []);
 	    const {
-	      element,
 	      useManagedChildProps,
 	      getElement
 	    } = useManagedChild({
@@ -7753,7 +7754,6 @@
 	    // added on top of that afterwards. 
 	    const [hasUnsortedRows, setHasUnsortedRows] = useState(false);
 	    const {
-	      element,
 	      useManagedChildProps
 	    } = useManagedTableSection({
 	      index: location,
@@ -7889,7 +7889,6 @@
 	        const [isTheSortedColumn, setIsTheSortedColumn] = useState(false);
 	        const random = s(generateRandomId());
 	        const {
-	          element,
 	          getElement,
 	          useManagedChildProps
 	        } = useManagedHeaderCellChild({

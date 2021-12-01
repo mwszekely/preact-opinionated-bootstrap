@@ -77,13 +77,13 @@ $dialog-shake-3: math.div(0.0175, 2);
   }
 }
 
-html.document-scroll-hidden {
+body.document-scroll-hidden {
   overflow: hidden;
-  margin-inline-end: var(--scrollbar-width, 0px);
+  padding-inline-end: var(--scrollbar-width, 0px);
   position: relative;
 }
 
-html:not(.document-scroll-hidden) .modal-content {
+body:not(.document-scroll-hidden) .modal-content {
   inset-inline-start: calc(var(--scrollbar-width, 0px) / 2);
 }
 
