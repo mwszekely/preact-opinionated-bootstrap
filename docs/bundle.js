@@ -5662,23 +5662,27 @@
 	  return false;
 	}
 	/**
-	 * Easy way to "polyfill" button-like interactions onto, e.g., a div.
+	 * Adds the necessary event handlers to create a "press"-like event for
+	 * buttons and anything else that's "click/tap/press/touch"-able.
 	 *
-	 * Adds click, space on keyDown, and enter on keyUp, as well as haptic
-	 * feedback via a momentary vibration pulse when there's an onClick handler provided
-	 * (this can be disabled app-wide with `setButtonVibrate`).
+	 * Notably, the following cases are covered:
+	 * * The target element is properly focused, even on iOS Safari (*especially* on iOS Safari)
+	 * * Double-clicks won't select text.
+	 * * Conversely, manually selecting text won't invoke a press.
+	 * * Keyboard events &mdash; `enter` immediately invokes the handler, while `space` invokes it on keyup.
+	 * * Haptic feedback (on, like, the one browser combination that supports it &mdash; this can be disabled app-wide with `setButtonVibrate`)
 	 *
 	 * In addition, when the CSS `:active` pseudo-class would apply to a normal button
 	 * (i.e. when holding the spacebar or during mousedown), `{ "data-pseudo-active": "true" }`
 	 * is added to the props.  You can either let it pass through and style it through new CSS,
 	 * or inspect the returned props for it and add e.g. an `.active` class for existing CSS
 	 *
-	 * @param onClick
-	 * @param exclude Whether the polyfill should apply (can specify for specific interactions)
+	 * @param onClickSync
+	 * @param exclude Whether the polyfill shouldn't apply (can specify for specific interactions)
 	 */
 
 
-	function useButtonLikeEventHandlers(onClickSync, exclude) {
+	function usePressEventHandlers(onClickSync, exclude) {
 	  const {
 	    useRefElementProps,
 	    getElement
@@ -5741,9 +5745,18 @@
 	      // For iOS Safari.
 	      //
 	      const element = getElement();
-	      if (element && "focus" in element) element === null || element === void 0 ? void 0 : element.focus();
-	      e.preventDefault();
-	      pulse();
+	      if (element && "focus" in element) element === null || element === void 0 ? void 0 : element.focus(); // Whatever the browser was going to do with this event,
+	      // forget it. We're turning it into a "press" event.
+
+	      e.preventDefault(); // Also stop anyone else from listening to this event,
+	      // since we're explicitly handling it.
+	      // (Notably, this allows labels to wrap inputs, with them
+	      // both having press event handlers, without double-firing)
+
+	      e.stopPropagation(); // Haptic feedback for this press event
+
+	      pulse(); // Actually call our handler.
+
 	      onClickSync(e);
 	    }
 	  });
@@ -5814,7 +5827,7 @@
 	    role,
 	    ...p
 	  }) {
-	    const props = useButtonLikeEventHandlers(e => onPress === null || onPress === void 0 ? void 0 : onPress(enhanceEvent(e, {
+	    const props = usePressEventHandlers(e => onPress === null || onPress === void 0 ? void 0 : onPress(enhanceEvent(e, {
 	      pressed: pressed == null ? null : !pressed
 	    })), undefined)(p);
 	    const buttonProps = {
@@ -5957,7 +5970,7 @@
 
 	        let retB = useMergedProps()({
 	          tabIndex: 0
-	        }, useButtonLikeEventHandlers(onClick, undefined)(props));
+	        }, usePressEventHandlers(onClick, undefined)(props));
 	        let ret3 = useMergedProps()(useHeadRandomIdProps(useReferencedBodyIdProps("aria-controls")({
 	          "aria-expanded": ariaExpanded !== null && ariaExpanded !== void 0 ? ariaExpanded : (!!open).toString(),
 	          "aria-disabled": ariaDisabled !== null && ariaDisabled !== void 0 ? ariaDisabled : open ? "true" : undefined,
@@ -6217,7 +6230,7 @@
 	      // For some reason, Chrome won't fire onInput events for radio buttons that are tabIndex=-1??
 	      // Needs investigating, but onInput works fine in Firefox
 	      // TODO
-	      let props = useButtonLikeEventHandlers(disabled || !handlesInput(tag, labelPosition, "input-element") ? undefined : stableOnInput, undefined)({});
+	      let props = usePressEventHandlers(disabled || !handlesInput(tag, labelPosition, "input-element") ? undefined : stableOnInput, undefined)({});
 	      if (tag == "input") props.onInput = e => e.preventDefault();
 	      props = useRefElementProps(useILInputProps(props));
 
@@ -6259,7 +6272,7 @@
 
 	    function useCheckboxLikeLabelElementProps({ ...p0
 	    }) {
-	      let newProps = useButtonLikeEventHandlers(disabled || !handlesInput(tag, labelPosition, "label-element") ? undefined : stableOnInput, undefined)({});
+	      let newProps = usePressEventHandlers(disabled || !handlesInput(tag, labelPosition, "label-element") ? undefined : stableOnInput, undefined)({});
 
 	      if (labelPosition == "wrapping") {
 	        newProps.tabIndex = 0;
@@ -6760,7 +6773,7 @@
 	    };
 
 	    function useListboxSingleItemProps(props) {
-	      const newProps = useButtonLikeEventHandlers(e => {
+	      const newProps = usePressEventHandlers(e => {
 	        navigateToIndex(info.index);
 	        const element = getElement();
 	        if (element) stableOnSelect === null || stableOnSelect === void 0 ? void 0 : stableOnSelect({
@@ -7138,7 +7151,7 @@
 
 	    function useTabProps({ ...props
 	    }) {
-	      const newProps = useButtonLikeEventHandlers(e => {
+	      const newProps = usePressEventHandlers(e => {
 	        navigateToIndex(info.index);
 	        onSelect === null || onSelect === void 0 ? void 0 : onSelect(enhanceEvent(e, {
 	          selectedIndex: getIndex()
@@ -7286,9 +7299,6 @@
 	      setTriggerHasMouseover(false);
 	    }
 
-	    function onClick(e) {
-	      e.target.focus();
-	    }
 	    const {
 	      useHasFocusProps
 	    } = useHasFocus({
@@ -7303,11 +7313,12 @@
 	      // it's perfectly reasonable that a child element will be the one that's focused,
 	      // not this one, so we don't set tabIndex=0
 	      (_props$tabIndex = props.tabIndex) !== null && _props$tabIndex !== void 0 ? _props$tabIndex : props.tabIndex = -1;
-	      return useTooltipIdReferencingProps("aria-describedby")(useHasFocusProps(useMergedProps()({
+	      return useTooltipIdReferencingProps("aria-describedby")(useHasFocusProps(usePressEventHandlers(e => {
+	        e.target.focus();
+	      }, undefined)(useMergedProps()({
 	        onPointerEnter,
-	        onPointerLeave,
-	        onClick
-	      }, props)));
+	        onPointerLeave
+	      }, props))));
 	    }
 
 	    return {
@@ -7898,7 +7909,7 @@
 	        }, []);
 
 	        const useTableHeadCellProps = props => {
-	          const m = useTableCellProps(useButtonLikeEventHandlers(unsortable ? null : onSortClick, undefined)(useMergedProps()({
+	          const m = useTableCellProps(usePressEventHandlers(unsortable ? null : onSortClick, undefined)(useMergedProps()({
 	            role: "columnheader"
 	          }, props)));
 	          return useManagedChildProps(m);
@@ -8700,7 +8711,7 @@
 	  });
 	});
 
-	const ClipFade = forwardElementRef$1(function ClipFade({
+	forwardElementRef$1(function ClipFade({
 	  classBase,
 	  fadeMin,
 	  fadeMax,
@@ -9915,6 +9926,12 @@
 	  const {
 	    useDialogTitleProps
 	  } = useDialogTitle();
+
+	  if (!Transition) {
+	    Transition = Clip;
+	    rest.clipOriginBlock = 0;
+	  }
+
 	  return v$1(BodyPortal, null, v$1("div", {
 	    class: "modal-portal-container"
 	  }, v$1(Fade, {
@@ -9930,8 +9947,10 @@
 	  }, v$1("div", { ...useDialogProps({
 	      class: "modal-dialog modal-dialog-scrollable"
 	    })
+	  }, v$1(Fade, {
+	    show: open
 	  }, v$1("div", {
-	    class: "modal-content elevation-raised-6 elevation-body-surface"
+	    class: "modal-content elevation-body-surface elevation-raised-6"
 	  }, title != null && v$1("div", { ...useDialogTitleProps({
 	      class: "modal-header"
 	    })
@@ -9942,7 +9961,7 @@
 	    })
 	  }, children), footer != null && v$1("div", {
 	    class: "modal-footer"
-	  }, footer))))));
+	  }, footer)))))));
 	}));
 
 	const Drawer = g(function Drawer({
@@ -10665,10 +10684,10 @@
 	    placeholder: placeholder,
 	    ...useInputLabelInputProps(props)
 	  });
-	  const isEmpty = props.value !== 0 && props.value == ""; //if (isInInputGrid) {
+	  const isEmpty = true ; //if (isInInputGrid) {
 
 	  inputJsx = v$1("div", {
-	    class: clsx("form-control faux-form-control-outer elevation-depressed-2", "elevation-body-surface", "focusable-within", !isEmpty && "focus-within-only", props.disabled && "disabled"),
+	    class: clsx("form-control faux-form-control-outer elevation-depressed-2", "elevation-body-surface", "focusable-within", !isEmpty , props.disabled && "disabled"),
 	    style: width !== null && width !== void 0 && width.endsWith("ch") ? {
 	      "--form-control-width": width !== null && width !== void 0 ? width : "20ch"
 	    } : width ? {
@@ -13422,7 +13441,7 @@
 	    class: clsx(onPressAsync ? "dropdown-item" : "dropdown-item-text", disabled && "disabled"),
 	    "aria-disabled": disabled ? "true" : undefined
 	  })));
-	  const buttonProps = usePseudoActive(useButtonLikeEventHandlers(disabled ? null : onPress, undefined)(newProps));
+	  const buttonProps = usePseudoActive(usePressEventHandlers(disabled ? null : onPress, undefined)(newProps));
 
 	  if (isInteractive) {
 	    return v$1("li", null, v$1(ProgressCircular, {
@@ -15006,7 +15025,7 @@
 	        v$1(Tooltip, { tooltip: "Open dialog", Transition: ZoomFade, zoomOriginDynamic: 0, zoomMin: 0.85 },
 	            v$1(InputGroup, null,
 	                v$1(Checkbox, { checked: open, onCheck: setOpen }, "Open dialog"))),
-	        v$1(Dialog, { Transition: ClipFade, clipOriginBlock: 0, open: open, onClose: onClose, descriptive: false, title: "Dialog Title", footer: v$1("button", { onClick: onClose }, "Close") },
+	        v$1(Dialog, { open: open, onClose: onClose, descriptive: false, title: "Dialog Title", footer: v$1("button", { onClick: onClose }, "Close") },
 	            v$1("p", { tabIndex: -1 }, "Dialog body content"),
 	            v$1("p", null, RandomWords.join(" ")),
 	            v$1("p", null, RandomWords.join(" ")),

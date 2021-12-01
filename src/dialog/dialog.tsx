@@ -1,12 +1,12 @@
 import "wicg-inert";
 import { ComponentChildren, h, Ref, RenderableProps } from "preact";
 import { useAriaDialog } from "preact-aria-widgets";
-import { Fade } from "preact-transition";
+import { Clip, Fade } from "preact-transition";
 import { memo } from "preact/compat";
 import { BodyPortal } from "../portal";
-import { forwardElementRef, TransitionComponent } from "../props";
+import { forwardElementRef, OptionalTransitionComponent } from "../props";
 
-export type DialogProps<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element> = TransitionComponent<T> & {
+export type DialogProps<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element> = OptionalTransitionComponent<T> & {
     open: boolean;
     onClose(reason: "backdrop" | "escape" | undefined): void;
     descriptive: boolean;
@@ -21,6 +21,11 @@ export const Dialog = memo(forwardElementRef(function Dialog<T extends <E extend
     const { useDialogBodyProps, } = useDialogBody<HTMLDivElement>({ descriptive });
     const { useDialogTitleProps } = useDialogTitle<HTMLDivElement>();
 
+    if (!Transition) {
+        Transition = (Clip! as NonNullable<typeof Transition>);
+        (rest as any).clipOriginBlock = 0;
+    }
+
     return (
         <BodyPortal>
             <div class="modal-portal-container">
@@ -29,20 +34,22 @@ export const Dialog = memo(forwardElementRef(function Dialog<T extends <E extend
                 </Fade>
                 <Transition {...{ ref, show: open, ...rest } as any}>
                     <div {...useDialogProps({ class: "modal-dialog modal-dialog-scrollable" })}>
-                        <div class="modal-content elevation-raised-6 elevation-body-surface">
-                            {title != null && <div {...useDialogTitleProps({ class: "modal-header" })}>
-                                <h1 class="modal-title">{title}</h1>
-                            </div>}
-                            <div {...useDialogBodyProps({ class: "modal-body" })}>
-                                {children}
+                        <Fade show={open}>
+                            <div class="modal-content elevation-body-surface elevation-raised-6">
+                                {title != null && <div {...useDialogTitleProps({ class: "modal-header" })}>
+                                    <h1 class="modal-title">{title}</h1>
+                                </div>}
+                                <div {...useDialogBodyProps({ class: "modal-body" })}>
+                                    {children}
+                                </div>
+                                {footer != null && <div class="modal-footer">
+                                    {footer}
+                                </div>}
                             </div>
-                            {footer != null && <div class="modal-footer">
-                                {footer}
-                            </div>}
-                        </div>
+                        </Fade>
                     </div>
                 </Transition>
             </div>
-        </BodyPortal>
+        </BodyPortal >
     )
 }))

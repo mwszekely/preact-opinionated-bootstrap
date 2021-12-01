@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { cloneElement, ComponentChildren, createContext, Fragment, h, Ref, VNode } from "preact";
-import { useAriaMenu, useButtonLikeEventHandlers, UseMenuItem } from "preact-aria-widgets";
+import { useAriaMenu, usePressEventHandlers, UseMenuItem } from "preact-aria-widgets";
 import { UseMenuItemDefaultInfo } from "preact-aria-widgets/use-menu";
 import { useAsyncHandler, useElementSize, useHasFocus, useMergedProps, useMutationObserver, useRefElement, useState, useTimeout, usePassiveState } from "preact-prop-helpers";
 import { ZoomFade } from "preact-transition";
@@ -116,7 +116,7 @@ export function MenuItem({ children, disabled, onPress: onPressAsync, index, ...
     const onPress = getSyncHandler((disabled || !onPressAsync) ? null : () => onPressAsync?.()?.then(() => onClose?.()));
 
     const newProps = useMenuItemProps(useRefElementProps(useMergedProps<HTMLButtonElement>()(rest, { class: clsx(onPressAsync? "dropdown-item" : "dropdown-item-text", disabled && "disabled"), "aria-disabled": disabled? "true" : undefined })));
-    const buttonProps = usePseudoActive(useButtonLikeEventHandlers<HTMLButtonElement>(disabled? null : onPress, undefined)(newProps));
+    const buttonProps = usePseudoActive(usePressEventHandlers<HTMLButtonElement>(disabled? null : onPress, undefined)(newProps));
 
     if (isInteractive) {
         return (

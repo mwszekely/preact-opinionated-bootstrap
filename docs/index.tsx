@@ -62,7 +62,7 @@ const DemoDialog = memo(() => {
                     <Checkbox checked={open} onCheck={setOpen}>Open dialog</Checkbox>
                 </InputGroup>
             </Tooltip>
-            <Dialog Transition={ClipFade} clipOriginBlock={0} open={open} onClose={onClose} descriptive={false} title="Dialog Title" footer={<button onClick={onClose}>Close</button>}>
+            <Dialog open={open} onClose={onClose} descriptive={false} title="Dialog Title" footer={<button onClick={onClose}>Close</button>}>
                 <p tabIndex={-1}>Dialog body content</p>
                 <p>{RandomWords.join(" ")}</p>
                 <p>{RandomWords.join(" ")}</p>

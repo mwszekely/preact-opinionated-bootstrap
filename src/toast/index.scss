@@ -5,6 +5,8 @@
 @use "sass:string";
 @use "sass:list";
 
+$toast-close-btn-padding: 0.5em;
+
 // Higher than modal, lower than tooltip.
 $zindex-toast: 1060 !default;
 
@@ -27,12 +29,17 @@ $zindex-toast: 1060 !default;
   & > .toast {
     pointer-events: all;
 
-    & .btn-close {
+    & .btn.btn-close {
       width: 1em;
       height: 1em;
       align-self: center;
       /* height: 1em; */
       padding: 0.75rem;
+      &:active, &.active {
+        background-position-y: $toast-close-btn-padding + $toast-close-btn-padding * 0.5;
+        padding-bottom: $toast-close-btn-padding * 0.5;
+        padding-top: $toast-close-btn-padding + $toast-close-btn-padding * 0.5;
+      }
     }
   }
 }
@@ -44,9 +51,4 @@ html.document-scroll-hidden .toasts-container {
 .toast {
   background: $body-bg;
   color: $body-color;
-
-  /*& .btn {
-    // Oh geez.
-    filter: invert(1);
-  }*/
 }

@@ -19,12 +19,24 @@
   padding-left: $form-check-padding-start;
 }
 
+.form-control {
+  border-color: transparent;
+}
+
 .form-control, .input-group {
   contain: content;
 }
 
 .input-group-text {
   position: relative;
+  border-top-color: transparent;
+  border-bottom: transparent;
+  &:first-child {
+    border-inline-start-color: transparent;
+  }
+  &:last-child {
+    border-inline-end-color: transparent;
+  }
 }
 
 // All of this is to allow us to wrap form-control
