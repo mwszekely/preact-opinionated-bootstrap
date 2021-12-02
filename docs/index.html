@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1">
     
 
-    <link href="./index-dark.css" rel="stylesheet">
-    <link href="./index-light.css" rel="stylesheet">
+    <link id="theme-dark" href="./index-dark.css" rel="stylesheet"  media="all">
+    <link id="theme-light" href="./index-light.css" rel="stylesheet" media="screen and (max-width: 1px)">
 
     <style>
         html, body, #root {
@@ -51,12 +51,12 @@ function namedFunction(name, body) {
     return F(body);
 }
 
-        /*window.onerror = function (e) {
+        window.onerror = function (e) {
             debugger;
             for (let p of arguments) {
             alert(p);
             }
-        }*/
+        }
         </script>
 </head>
 

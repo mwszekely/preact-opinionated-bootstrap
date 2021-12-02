@@ -19,6 +19,11 @@
   bottom: 0;
 }
 
+.modal-portal-container>.modal-dialog {
+  // TODO: Does reverting BS's default cause problems? We don't use its close button...
+  pointer-events: auto;
+}
+
 // Add an additional width style to modal dialogs
 .modal-dialog.modal-max {
   max-width: 95vw;
@@ -77,14 +82,26 @@ $dialog-shake-3: math.div(0.0175, 2);
   }
 }
 
-body.document-scroll-hidden {
+:root.document-scroll-hidden {
+  /*
+  position: fixed is awkward because we have to finagle with scrolling
+
+  but it's the ONLY solution that works on iOS Safari
+
+  This would be solved easily with overscroll-behavior
+  but surprise surprise, the only browser needs it doesn't support it :/
+
+  */
+  position: fixed;
   overflow: hidden;
-  padding-inline-end: var(--scrollbar-width, 0px);
-  position: relative;
+  max-width: calc(100% - var(--root-scrollbar-width, 0px));
+  max-height: calc(100% - var(--root-scrollbar-height, 0px));
+  top: calc(-1 * var(--root-scrollstop-top));
+  left: calc(-1 * var(--root-scrollstop-left));
 }
 
-body:not(.document-scroll-hidden) .modal-content {
-  inset-inline-start: calc(var(--scrollbar-width, 0px) / 2);
+:root:not(.document-scroll-hidden) .modal-content {
+  inset-inline-start: calc(var(--root-scrollbar-width, 0px) / 2);
 }
 
 .scroll-container {

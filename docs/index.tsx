@@ -64,6 +64,7 @@ const DemoDialog = memo(() => {
             </Tooltip>
             <Dialog open={open} onClose={onClose} descriptive={false} title="Dialog Title" footer={<button onClick={onClose}>Close</button>}>
                 <p tabIndex={-1}>Dialog body content</p>
+                <DemoMenus />
                 <p>{RandomWords.join(" ")}</p>
                 <p>{RandomWords.join(" ")}</p>
                 <p>{RandomWords.join(" ")}</p>
@@ -268,9 +269,11 @@ const Component = () => {
             let next = prev === "theme-dark" ? "theme-light" : "theme-dark";
             setTheme(next);
             await new Promise<void>(resolve => setTimeout(resolve, 100));
+            (document.getElementById(next) as HTMLLinkElement).media = "all";
+            (document.getElementById(prev) as HTMLLinkElement).media = "screen and (max-width: 1px)";
             document.documentElement.classList.add("switching-theme");
-            document.documentElement.classList.add(next);
-            document.documentElement.classList.remove(prev);
+            /*document.documentElement.classList.add(next);
+            document.documentElement.classList.remove(prev);*/
             await new Promise<void>(resolve => setTimeout(resolve, 2000));
             document.documentElement.classList.remove("switching-theme");
         }}>Switch theme to <strong>{theme === "theme-dark" ? "light" : "dark"}</strong></Button>

@@ -3,10 +3,11 @@ import { useState } from "preact-prop-helpers";
 import { ZoomFade } from "preact-transition";
 import { Button, ButtonGroup, ButtonGroupChild } from "../../button";
 import { Card, CardElement } from "../../card/card";
-import { InputGrid, InputGroup, InputGroupText, Radio, RadioGroup } from "../../input-group";
+import { Checkbox, InputGrid, InputGroup, InputGroupText, Radio, RadioGroup } from "../../input-group";
 import { GridStatic } from "../../layout";
 import { Menu, MenuItem } from "../../menu";
 import { Toast, usePushToast } from "../../toast";
+import { Tooltip } from "../../tooltip";
 
 export function DemoMenus() {
     const [align, setAlign] = useState<"start" | "end">("start");
@@ -18,6 +19,7 @@ export function DemoMenus() {
     const [usesAsync, setUsesAsync] = useState(true);
     const [asyncFails, setAsyncFails] = useState(false);
     const [usesLinkButton, setUsesLinkButton] = useState(true);
+    const [forceOpen, setForceOpen] = useState(true);
 
     const pushToast = usePushToast();
     const onPressSync = () => pushToast(<Toast>Menu item was clicked</Toast>);
@@ -56,7 +58,7 @@ export function DemoMenus() {
 
                 <CardElement>
                     <code>&lt;Menu&gt;</code>s are effectively popup <code>&lt;List&gt;</code>s.
-                    This gives them all the usual list stuff like keyboard navigation (either with the arrow keys or by typing the text content of the <code>&lt;MenuItem&gt;</code>), with the popup logic handled by <a href="https://popper.js.org/">Popper</a>.
+                    This gives them all the usual list stuff like keyboard navigation (either with the arrow keys or by typing the text content of the <code>&lt;MenuItem&gt;</code>), <Tooltip side="block-end" mouseoverDelay={0} tooltip="Just like this tooltip">with the popup logic handled by <a href="https://popper.js.org/">Popper</a></Tooltip>.
                 </CardElement>
 
                 <CardElement><code>{`<Menu anchor={<Button>I'm a menu</Button>}>
@@ -92,6 +94,7 @@ export function DemoMenus() {
                         </InputGrid>
                     </RadioGroup>
 
+                    <InputGroup><Checkbox checked={forceOpen} onCheck={setForceOpen}>Keep menu open</Checkbox></InputGroup>
                 </CardElement>
 
                 <CardElement>
@@ -102,7 +105,7 @@ export function DemoMenus() {
                         <div />
 
                         <Button colorVariant="secondary" pressed={side === "inline-start"} onPressToggle={(pressed) => void (pressed && setSide("inline-start"))}>Inline start</Button>
-                        <Menu anchor={<Button dropdownVariant="combined">Anchored menu</Button>} side={side} align={align}>
+                        <Menu anchor={<Button dropdownVariant="combined">Anchored menu</Button>} side={side} align={align} forceOpen={forceOpen}>
                             <MenuItem index={0} onPress={onPressAsync}>A: Item 1</MenuItem>
                             <MenuItem index={1} onPress={onPressAsync}>B: Item 2</MenuItem>
                             <MenuItem index={2} onPress={onPressAsync}>C: Item 3</MenuItem>

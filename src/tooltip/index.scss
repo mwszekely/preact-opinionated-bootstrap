@@ -8,6 +8,10 @@
 
 .tooltip {
     position: relative;
+
+    // Used by the popper arrow, which relies on knowing the body background color
+    // (which black in a light theme and white in a dark theme)
+    --bs-body-bg: #{$tooltip-bg};
 }
 
 .tooltip-wrapper {

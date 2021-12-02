@@ -5,9 +5,9 @@
 // just @use "index.scss" instead.
 @use "sass:meta";
 
-html.theme-light, .set-theme.theme-light {
+//html.theme-light, .set-theme.theme-light {
     @include meta.load-css("./index-light-helper.scss");
-}
+//}
 
 html.switching-theme {
     * {

@@ -16,12 +16,12 @@ export type TooltipProps<T extends <E extends HTMLElement>(...args: any[]) => h.
         children: ComponentChild;
         tooltip: ComponentChildren;
         side?: "block-start" | "block-end" | "inline-start" | "inline-end";
-        positionBlock?: "start" | "end";
+        positionBlock?: "start" | "end" | "center";
     }
 
 export function Tooltip<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element>({ children, side, align, tooltip, Transition, mouseoverDelay, ...rest }: TooltipProps<T>) {
-    side ??= "block-end";
-    align ??= "start";
+    side ??= "block-start";
+    align ??= "center";
 
     const { getIsOpen, isOpen, useTooltip, useTooltipTrigger } = useAriaTooltip({ mouseoverDelay });
 
@@ -40,7 +40,7 @@ export function Tooltip<T extends <E extends HTMLElement>(...args: any[]) => h.J
     const { useTooltipTriggerProps } = useTooltipTrigger();
     const { shouldUpdate, onInteraction } = useShouldUpdatePopper(isOpen);
     const { useElementSizeProps } = useElementSize<any>({ onSizeChange: onInteraction ?? (() => {}) });
-    const { logicalDirection, usePopperArrow, usePopperPopup, usePopperSource, usedPlacement } = usePopperApi({ updating: shouldUpdate, side, align });
+    const { logicalDirection, usePopperArrow, usePopperPopup, usePopperSource, usedPlacement } = usePopperApi({ updating: shouldUpdate, side, align, useArrow: true, followMouse: true });
 
     const { usePopperPopupProps } = usePopperPopup<HTMLDivElement>({ open: isOpen });
     const { usePopperArrowProps } = usePopperArrow<HTMLDivElement>();
@@ -64,7 +64,7 @@ export function Tooltip<T extends <E extends HTMLElement>(...args: any[]) => h.J
             <div {...usePopperPopupProps({ class: "tooltip-wrapper" })} >
                 <Transition {...rest as any} show={isOpen} onTransitionUpdate={onInteraction} exitVisibility="hidden">
                     <div {...(useTooltipProps(useMergedProps<HTMLDivElement>()({ class: "tooltip show", role: "tooltip" }, {})) as any)}>
-                        <div {...usePopperArrowProps({ class: "tooltip-arrow" })}></div>
+                        <div {...usePopperArrowProps({ class: "popper-arrow" })}></div>
                         <div class="tooltip-inner">{tooltip}</div>
                     </div>
                 </Transition>

@@ -1,18 +1,34 @@
 import "./popper-config";
 import { BasePlacement, createPopper, Instance, Modifier, Placement, PositioningStrategy, State, StrictModifiers } from "@popperjs/core";
 import { h } from "preact";
-import { LogicalDirectionInfo, useGlobalHandler, useLogicalDirection, useMergedProps, useRefElement, useState, useTimeout } from "preact-prop-helpers";
+import { LogicalDirectionInfo, useActiveElement, useGlobalHandler, useLogicalDirection, useMergedProps, usePassiveState, useRefElement, useState, useTimeout } from "preact-prop-helpers";
 import { useCallback, useEffect, useMemo } from "preact/hooks";
 
-export function usePopperApi({ updating, align, side, followMouse, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight }: UsePopperParameters) {
+export function usePopperApi({ updating, align, side, useArrow, followMouse, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight }: UsePopperParameters) {
 
     const [popperInstance, setPopperInstance, getPopperInstance] = useState<Instance | null>(null);
     const [usedPlacement, setUsedPlacement] = useState<BasePlacement | null>(null);
     const [logicalDirection, setLogicalDirection] = useState<LogicalDirectionInfo | null>(null);
     const { convertElementSize, getLogicalDirectionInfo, useLogicalDirectionProps } = useLogicalDirection<any>({ onLogicalDirectionChange: setLogicalDirection });
-    useEffect(() => { resetPopperInstance(getSourceElement() as any, getPopperElement() as any); }, [logicalDirection])
+    useEffect(() => { resetPopperInstance(getSourceElement() as any, getPopperElement() as any); }, [side, align, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight, logicalDirection])
 
+    useArrow ??= false;
 
+    const [getFocusedElement, setFocusedElement] = usePassiveState<Element | null>(null, () => null);
+    const { } = useActiveElement({
+        onLastActiveElementChange: activeElement => {
+            if (getSourceElement()?.contains(activeElement)) {
+                setFocusedElement(activeElement);
+            }
+            else {
+                setFocusedElement(null);
+            }
+        }
+    });
+
+    const [getHasMouseover, setHasMouseover] = usePassiveState(null, () => false);
+    const [getMouseX, setMouseX] = usePassiveState(() => void (popperInstance?.update()), () => 0);
+    const [getMouseY, setMouseY] = usePassiveState(() => void (popperInstance?.update()), () => 0);
 
     const resetPopperInstance = useCallback((sourceElement: Element | null, popperElement: HTMLElement | null) => {
         if (sourceElement && popperElement) {
@@ -40,11 +56,48 @@ export function usePopperApi({ updating, align, side, followMouse, skidding, dis
                     break;
                 }
             }
-            placement = `${placement}-${align}`;
+            if (align === "center")
+                placement = `${placement}`;
+            else
+                placement = `${placement}-${align}`;
 
-            setPopperInstance(createPopper<StrictModifiers>(sourceElement, popperElement, {
+
+            const virtualElement = {
+                getBoundingClientRect: () => {
+                    const focusedElement = getFocusedElement();
+
+                    let baseRect = focusedElement ? focusedElement.getBoundingClientRect() : getSourceElement()?.getBoundingClientRect();
+                    let x = baseRect?.x ?? 0;
+                    let y = baseRect?.y ?? 0;
+                    let width = baseRect?.width ?? 0;
+                    let height = baseRect?.height ?? 0;
+
+                    if (followMouse && (getHasMouseover() || !focusedElement)) {
+                        if (side === "block-start" || side === "block-end") {
+                            width = 0;
+                            x = getMouseX();
+                        }
+                        else if (side === "inline-start" || side === "inline-end") {
+                            height = 0;
+                            y = getMouseX();
+                        }
+
+                        // Clamp
+                        x = Math.max(baseRect?.x ?? 0, x);
+                        y = Math.max(baseRect?.y ?? 0, y);
+
+                        x = Math.min((baseRect?.x ?? 0) + (baseRect?.width ?? 0), x);
+                        y = Math.min((baseRect?.y ?? 0) + (baseRect?.height ?? 0), y);
+                    }
+                    return DOMRectReadOnly.fromRect({ x, y, width, height });
+                }
+            }
+
+            setPopperInstance(createPopper<StrictModifiers>(virtualElement, popperElement, {
                 modifiers: [
                     { name: "flip", options: {} },
+                    { name: 'arrow', options: { element: getArrowElement(), padding: 8 } },
+                    { name: 'offset', options: { offset: [skidding ?? 0, distance ?? (useArrow ? 10 : 0)] } },
                     { name: "preventOverflow", options: { padding: { bottom: (paddingBottom ?? 0), top: (paddingTop ?? 0), left: (paddingLeft ?? 0), right: (paddingRight ?? 0) } } },
                     updateStateModifier as any,
                     { name: 'eventListeners', enabled: false },
@@ -55,7 +108,7 @@ export function usePopperApi({ updating, align, side, followMouse, skidding, dis
                 strategy
             }));
         }
-    }, [side, align, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight, logicalDirection]);
+    }, [followMouse, useArrow, side, align, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight, logicalDirection]);
 
     const { getElement: getSourceElement, useRefElementProps: useSourceElementRefProps } = useRefElement<Element>({ onElementChange: (e: any) => resetPopperInstance(e, (getPopperElement as any)()!) } as any);
     const { getElement: getPopperElement, useRefElementProps: usePopperElementRefProps } = useRefElement<HTMLElement>({ onElementChange: e => resetPopperInstance((getSourceElement as any)()!, e) });
@@ -137,7 +190,16 @@ export function usePopperApi({ updating, align, side, followMouse, skidding, dis
     function usePopperSource<E extends Element>() {
         function usePopperSourceProps<P extends h.JSX.HTMLAttributes<E>>(props: P) {
             let style = { ...(sourceStyle as h.JSX.CSSProperties) };
-            return useSourceElementRefProps(useMergedProps<E>()(sourceAttributes as any, useMergedProps<E>()({ style }, ((useLogicalDirectionProps(props) as any) as h.JSX.HTMLAttributes<E>))));
+            return useSourceElementRefProps(useMergedProps<E>()(sourceAttributes as any, useMergedProps<E>()({
+                style,
+                onMouseMove: (e) => {
+                    const { clientX, clientY } = e;
+                    setMouseX(clientX);
+                    setMouseY(clientY);
+                    setHasMouseover(true);
+                },
+                onMouseLeave: e => { setHasMouseover(false); }
+            }, ((useLogicalDirectionProps(props) as any) as h.JSX.HTMLAttributes<E>))));
         }
 
         return { usePopperSourceProps };
@@ -175,13 +237,16 @@ export interface UsePopperParameters {
     // Is this a dropdown, dropleft, etc.
     side: "block-start" | "block-end" | "inline-start" | "inline-end";
 
-    // (If a dropdown) are we left- or right-aligned?
-    align: "start" | "end";
+    // (If a dropdown) are we left-, right-, or center-aligned?
+    align: "start" | "end" | "center";
 
     // If true, the popper will adjust its alignment based on the mouse position.
     // It will still appear against the edge of the specified side; 
     // that axis' position will not be affected.
     followMouse?: boolean;
+
+    // If true, the "arrow" modifier will be used and a default `distance` will be provided if none was already.
+    useArrow?: boolean;
 
     skidding?: number;
     distance?: number;

@@ -17,7 +17,8 @@ export type MenuProps<E extends Element, T extends <E extends HTMLElement>(...ar
     anchorTag?: (keyof HTMLElementTagNameMap);
     children: ComponentChildren;
     side?: "block-start" | "block-end" | "inline-start" | "inline-end";
-    align?: "start" | "end";
+    align?: "start" | "end" | "center";
+    forceOpen?: boolean;
 }
 
 export interface MenuItemProps {
@@ -29,13 +30,15 @@ export interface MenuItemProps {
 
 const OnCloseContext = createContext<(() => void) | undefined>(undefined);
 const UseMenuItemContext = createContext<UseMenuItem<HTMLButtonElement, UseMenuItemDefaultInfo<HTMLButtonElement>>>(null!);
-export function Menu<E extends Element, T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element>({ anchor, anchorEventName, anchorTag, children, tag, side, align, Transition, ...rest }: MenuProps<E, T>) {
+export function Menu<E extends Element, T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element>({ anchor, anchorEventName, anchorTag, children, tag, side, align, Transition, forceOpen, ...rest }: MenuProps<E, T>) {
     useLogRender("Menu", `Rendering Menu`);
     side ??= "block-end";
     align ??= "start";
 
 
-    const [open, setOpen] = useState(false);
+    let [open, setOpen] = useState(!!forceOpen);
+    open ||= !!forceOpen;
+
     const onClose = useCallback(() => setOpen(false), []);
     const onOpen = () => setOpen(true);
     const { shouldUpdate: updatingForABit, onInteraction } = useShouldUpdatePopper(open);
@@ -81,7 +84,7 @@ export function Menu<E extends Element, T extends <E extends HTMLElement>(...arg
                             <Transition {...(useMenuProps(rest) as any)} show={open} onTransitionUpdate={onInteraction} exitVisibility="hidden" >
                                 <div {...useHasFocusProps({})}>
 
-                                    <div {...usePopperArrowProps({})} />
+                                    {/*<div {...usePopperArrowProps({ className: "popper-arrow elevation-raised-4 elevation-body-surface" })} />*/}
                                     <button className={"visually-hidden"} onFocus={!firstSentinelIsActive ? () => focusMenu?.() : () => onClose()} onClick={onClose}>Close menu</button>
                                     {h(tag ?? "ul", { children, className: "dropdown-menu elevation-raised-4 elevation-body-surface" })}
                                     {/*

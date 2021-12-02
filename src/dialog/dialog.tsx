@@ -3,7 +3,7 @@ import { ComponentChildren, h, Ref, RenderableProps } from "preact";
 import { useAriaDialog } from "preact-aria-widgets";
 import { Clip, Fade } from "preact-transition";
 import { memo } from "preact/compat";
-import { BodyPortal } from "../portal";
+import { BodyPortal, BodyPortalRoot } from "../portal";
 import { forwardElementRef, OptionalTransitionComponent } from "../props";
 
 export type DialogProps<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element> = OptionalTransitionComponent<T> & {
@@ -34,19 +34,21 @@ export const Dialog = memo(forwardElementRef(function Dialog<T extends <E extend
                 </Fade>
                 <Transition {...{ ref, show: open, ...rest } as any}>
                     <div {...useDialogProps({ class: "modal-dialog modal-dialog-scrollable" })}>
-                        <Fade show={open}>
-                            <div class="modal-content elevation-body-surface elevation-raised-6">
-                                {title != null && <div {...useDialogTitleProps({ class: "modal-header" })}>
-                                    <h1 class="modal-title">{title}</h1>
-                                </div>}
-                                <div {...useDialogBodyProps({ class: "modal-body" })}>
-                                    {children}
+                        <BodyPortalRoot>
+                            <Fade show={open}>
+                                <div class="modal-content elevation-body-surface elevation-raised-6">
+                                    {title != null && <div {...useDialogTitleProps({ class: "modal-header" })}>
+                                        <h1 class="modal-title">{title}</h1>
+                                    </div>}
+                                    <div {...useDialogBodyProps({ class: "modal-body" })}>
+                                        {children}
+                                    </div>
+                                    {footer != null && <div class="modal-footer">
+                                        {footer}
+                                    </div>}
                                 </div>
-                                {footer != null && <div class="modal-footer">
-                                    {footer}
-                                </div>}
-                            </div>
-                        </Fade>
+                            </Fade>
+                        </BodyPortalRoot>
                     </div>
                 </Transition>
             </div>
