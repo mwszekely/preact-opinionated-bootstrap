@@ -1,12 +1,12 @@
 import clsx from "clsx";
-import { ComponentChild, h, Ref } from "preact";
+import { ComponentChild, Fragment, h, Ref } from "preact";
 import { useAriaButton } from "preact-aria-widgets";
 import { useAsyncHandler, UseAsyncHandlerParameters, useMergedProps, useStableGetter } from "preact-prop-helpers";
 import { useCallback, useContext } from "preact/hooks";
 import { ProgressCircular } from "../progress";
 import { forwardElementRef, usePseudoActive } from "../props";
-import { UseButtonGroupChild, useButtonStyles } from "./defaults";
-import { ButtonPropsBase } from "./types";
+import { useButtonDropdownDirection, UseButtonGroupChild, useButtonStyles } from "./defaults";
+import { ButtonPropsBase, ButtonDropdownDirection, ButtonDropdownVariant } from "./types";
 
 export type LiteralUnion<T extends U, U = string> = T | (U & Record<never, never>);
 
@@ -49,7 +49,8 @@ export interface ToggleButtonProps extends Omit<ButtonPropsBase<HTMLButtonElemen
 export interface ButtonButtonProps extends ButtonPropsBase<HTMLButtonElement>, Omit<UseAsyncHandlerParameters<HTMLButtonElement, h.JSX.TargetedEvent<HTMLButtonElement>, never>, "capture"> {
     tag?: "button";
     onPress?: (never: never, event: h.JSX.TargetedEvent<HTMLButtonElement>) => (void | Promise<void>);
-    dropdownVariant?: null | undefined | "separate" | "combined";
+    dropdownVariant?: null | undefined | ButtonDropdownVariant;
+    dropdownDirection?: null | undefined | ButtonDropdownDirection;
     spinnerTimeout?: number;
 }
 
@@ -94,7 +95,15 @@ const AnchorButton = forwardElementRef(function AnchorButton(p: Omit<AnchorButto
 });
 
 const ButtonButton = forwardElementRef(function ButtonButton(p: Omit<ButtonButtonProps, "tag">, ref?: Ref<HTMLButtonElement>) {
-    let { dropdownVariant, colorVariant, size, fillVariant, disabled, debounce, spinnerTimeout, onPress: onPressAsync, ...props } = p;
+    let { dropdownVariant, dropdownDirection, colorVariant, size, fillVariant, disabled, debounce, spinnerTimeout, onPress: onPressAsync, children, ...props } = p;
+    dropdownDirection = useButtonDropdownDirection(dropdownDirection);
+    if (dropdownDirection) {
+        if (children)
+            dropdownVariant ??= "combined";
+        else
+            dropdownVariant = "separate";
+    }
+
     const { getSyncHandler, pending, settleCount, hasError } = useAsyncHandler<HTMLButtonElement>()({ debounce, capture: useCallback(() => { return undefined!; }, []) });
     disabled ||= pending;
 
@@ -108,6 +117,9 @@ const ButtonButton = forwardElementRef(function ButtonButton(p: Omit<ButtonButto
     fillVariant = buttonStyleInfo.fillVariant;
     const useButtonStylesProps = buttonStyleInfo.useButtonStylesProps;
 
+    // Bootstrap why are you like this?
+    if (dropdownVariant == "combined")
+        children = <>{" "}{children}{" "}</>
 
     return (
         <ProgressCircular spinnerTimeout={spinnerTimeout} mode={hasError ? "failed" : pending ? "pending" : (settleCount) ? "succeeded" : null} childrenPosition="child" colorFill={fillVariant == "fill" ? "foreground" : "background"}>
@@ -117,9 +129,13 @@ const ButtonButton = forwardElementRef(function ButtonButton(p: Omit<ButtonButto
                     pending && "pending active",
                     disabled && "disabled",
                     dropdownVariant && `dropdown-toggle`,
+                    dropdownDirection == "inline-start" && "dropstart",
+                    dropdownDirection == "inline-end" && "dropend",
+                    dropdownDirection == "block-start" && "dropup", // TODO, don't really want to add logical direction testing for *every* button :/
+                    dropdownDirection == "block-end" && "dropdown",
                     dropdownVariant === "separate" && `dropdown-toggle-split`
                 )
-            }, useAriaButtonProps({ ...props, onPress, ref }))))} />
+            }, useAriaButtonProps({ ...props, children, onPress, ref }))))} />
         </ProgressCircular>
     )
 });

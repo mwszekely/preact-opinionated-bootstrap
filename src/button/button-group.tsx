@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { ComponentChild, h, Ref } from "preact";
-import { useHasFocus, useListNavigation, UseListNavigationChildInfo, useMergedProps, usePassiveState, useState } from "preact-prop-helpers";
+import { useHasFocus, useListNavigation, UseListNavigationChildInfo, useLogicalDirection, useMergedProps, usePassiveState, useState } from "preact-prop-helpers";
 import { memo } from "preact/compat";
 import { useContext, useEffect } from "preact/hooks";
 import { forwardElementRef, GlobalAttributes, useLogRender } from "../props";
@@ -19,16 +19,23 @@ export interface ButtonGroupStyleProps {
 
 export interface ButtonGroupProps extends ButtonGroupStyleProps, GlobalAttributes<HTMLDivElement> {
     children?: ComponentChild;
+    orientation?: "inline" | "block" | undefined;
 }
 
 export const ButtonGroup = memo(forwardElementRef(function ButtonGroup(p: ButtonGroupProps, ref: Ref<HTMLDivElement>) {
     useLogRender("ButtonGroup", `Rendering ButtonGroup`);
 
-    const { useHasFocusProps, getFocusedInner  } = useHasFocus<HTMLDivElement>({  });
-    const { indicesByElement, managedChildren, useListNavigationChild, navigateToIndex, childCount } = useListNavigation<HTMLButtonElement, UseListNavigationChildInfo>({ shouldFocusOnChange: getFocusedInner });
-
     // Styling props
-    let { colorVariant, fillVariant, size, disabled, selectedIndex, wrap, children, ...p3 } = p;
+    let { colorVariant, fillVariant, size, disabled, selectedIndex, wrap, orientation: logicalOrientation, children, ...p3 } = p;
+
+    logicalOrientation ??= "inline";
+
+    const { useHasFocusProps, getFocusedInner  } = useHasFocus<HTMLDivElement>({  });
+    const { indicesByElement, managedChildren, useListNavigationChild, navigateToIndex, childCount } = useListNavigation<HTMLButtonElement, UseListNavigationChildInfo>({ shouldFocusOnChange: getFocusedInner, keyNavigation: logicalOrientation });
+
+    const [physicalOrientation, setPhysicalOrientation] = useState<"horizontal" | "vertical">("horizontal");
+    const { getLogicalDirectionInfo, convertToPhysicalOrientation, useLogicalDirectionProps } = useLogicalDirection<HTMLDivElement>({ onLogicalDirectionChange: logicalDirectionInfo => setPhysicalOrientation(convertToPhysicalOrientation(logicalOrientation!, logicalDirectionInfo)) });
+
 
     useEffect(() => {
         if (selectedIndex != null)
@@ -40,8 +47,8 @@ export const ButtonGroup = memo(forwardElementRef(function ButtonGroup(p: Button
     size = useButtonSize(size);
     fillVariant = useButtonFillVariant(fillVariant);
     disabled = useButtonDisabled(disabled);
-    const outerDomProps: h.JSX.HTMLAttributes<any> = useHasFocusProps(useMergedProps<any>()({ ref, class: "btn-group-aria-gridrow" }, p3));
-    const innerDomProps: h.JSX.HTMLAttributes<any> = { role: "toolbar", disabled, className: clsx("btn-group", wrap && "wrap") };
+    const outerDomProps: h.JSX.HTMLAttributes<any> = useLogicalDirectionProps(useHasFocusProps(useMergedProps<any>()({ ref, class: "btn-group-aria-gridrow" }, p3)));
+    const innerDomProps: h.JSX.HTMLAttributes<any> = { role: "toolbar", disabled, className: clsx("btn-group", wrap && "wrap", physicalOrientation == "vertical" && "btn-group-vertical") };
 
     // Remaining props, forwarded onto the DOM
     //const domProps =newDomProps, p3));

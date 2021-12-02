@@ -81,12 +81,12 @@ export const RadioGroup = memo(forwardElementRef(function RadioGroup<V extends s
     // useChildFlag(pending ? capturedIndex : null, managedChildren.length, useCallback((index, isCaptured) => managedChildren[index].setPending(isCaptured? "in" : false), []));
 
 
-    const { useGenericLabelLabel, useGenericLabelInput } = useGenericLabel({ inputPrefix: "aria-radiogroup", labelPrefix: "aria-radiogroup-label", backupText: stringLabel });
+    const { useGenericLabelLabel, useGenericLabelInput, useReferencedInputIdProps } = useGenericLabel({ inputPrefix: "aria-radiogroup", labelPrefix: "aria-radiogroup-label", backupText: stringLabel });
 
     const { useGenericLabelInputProps } = useGenericLabelInput<HTMLDivElement>();
-    const { useGenericLabelLabelProps } = useGenericLabelLabel<HTMLInputElement>();
+    const { useGenericLabelLabelProps } = useGenericLabelLabel<HTMLLabelElement>();
 
-    let labelJsx = <div {...useGenericLabelLabelProps({})} />
+    let labelJsx = <label {...useGenericLabelLabelProps(useReferencedInputIdProps("for")({ children: label }))} />
     let groupJsx = (
         <div {...useGenericLabelInputProps(useRadioGroupProps({ ref, "aria-label": labelPosition === "hidden" ? stringLabel : undefined }))}>
             {children}

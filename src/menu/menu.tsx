@@ -1,3 +1,4 @@
+import { ProvideDefaultButtonDropdownDirection } from "../button/defaults";
 import clsx from "clsx";
 import { cloneElement, ComponentChildren, createContext, Fragment, h, Ref, VNode } from "preact";
 import { useAriaMenu, usePressEventHandlers, UseMenuItem } from "preact-aria-widgets";
@@ -15,8 +16,8 @@ export type MenuProps<E extends Element, T extends <E extends HTMLElement>(...ar
     anchorEventName?: string;
     anchorTag?: (keyof HTMLElementTagNameMap);
     children: ComponentChildren;
-    positionInline?: "start" | "end";
-    positionBlock?: "start" | "end";
+    side?: "block-start" | "block-end" | "inline-start" | "inline-end";
+    align?: "start" | "end";
 }
 
 export interface MenuItemProps {
@@ -28,8 +29,10 @@ export interface MenuItemProps {
 
 const OnCloseContext = createContext<(() => void) | undefined>(undefined);
 const UseMenuItemContext = createContext<UseMenuItem<HTMLButtonElement, UseMenuItemDefaultInfo<HTMLButtonElement>>>(null!);
-export function Menu<E extends Element, T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element>({ anchor, anchorEventName, anchorTag, children, tag, positionInline, positionBlock, Transition, ...rest }: MenuProps<E, T>) {
+export function Menu<E extends Element, T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element>({ anchor, anchorEventName, anchorTag, children, tag, side, align, Transition, ...rest }: MenuProps<E, T>) {
     useLogRender("Menu", `Rendering Menu`);
+    side ??= "block-end";
+    align ??= "start";
 
 
     const [open, setOpen] = useState(false);
@@ -37,10 +40,10 @@ export function Menu<E extends Element, T extends <E extends HTMLElement>(...arg
     const onOpen = () => setOpen(true);
     const { shouldUpdate: updatingForABit, onInteraction } = useShouldUpdatePopper(open);
 
-    const { useElementSizeProps } = useElementSize<any>({ onSizeChange: onInteraction ?? (() => {}) });
+    const { useElementSizeProps } = useElementSize<any>({ onSizeChange: onInteraction ?? (() => { }) });
 
-    const { useHasFocusProps, getFocusedInner: getMenuHasFocusInner } = useHasFocus<HTMLDivElement>({  });
-    const { usePopperArrow, usePopperPopup, usePopperSource, usedPlacement, logicalDirection } = usePopperApi({ positionInline: positionInline ?? "start", positionBlock: positionBlock ?? "end", updating: updatingForABit });
+    const { useHasFocusProps, getFocusedInner: getMenuHasFocusInner } = useHasFocus<HTMLDivElement>({});
+    const { usePopperArrow, usePopperPopup, usePopperSource, usedPlacement, logicalDirection } = usePopperApi({ align, side, updating: updatingForABit });
     const { useMenuButton, useMenuItem, useMenuProps, useMenuSubmenuItem, focusMenu } = useAriaMenu<HTMLDivElement, HTMLButtonElement, UseMenuItemDefaultInfo<HTMLButtonElement>>({ shouldFocusOnChange: getMenuHasFocusInner, open, onClose, onOpen });
     const { useMenuButtonProps } = useMenuButton<Element>({ tag: anchorTag ?? "button" });
     const { usePopperSourceProps } = usePopperSource<any>();
@@ -59,9 +62,9 @@ export function Menu<E extends Element, T extends <E extends HTMLElement>(...arg
         (rest as any).zoomOriginDynamic = 0;
         (rest as any).zoomMin = 0.85;
     }
-    
+
     if (logicalDirection && usedPlacement)
-        rest = fixProps(logicalDirection, "block-end", usedPlacement, rest) as typeof rest;
+        rest = fixProps(logicalDirection, side, usedPlacement, rest) as typeof rest;
 
     const onAnchorClick = () => setOpen(open => !open);
 
@@ -70,11 +73,13 @@ export function Menu<E extends Element, T extends <E extends HTMLElement>(...arg
         <>
             <OnCloseContext.Provider value={onClose}>
                 <UseMenuItemContext.Provider value={useMenuItem}>
-                    {cloneElement(anchor, useMergedProps<any>()({ [anchorEventName ?? "onPress"]: onAnchorClick, ref: anchor.ref as Ref<Element>, class: `${open ? "active" : ""}` }, useElementSizeProps(usePopperSourceProps(useMenuButtonProps(anchor.props)))))}
+                    <ProvideDefaultButtonDropdownDirection value={side}>
+                        {cloneElement(anchor, useMergedProps<any>()({ [anchorEventName ?? "onPress"]: onAnchorClick, ref: anchor.ref as Ref<Element>, class: `${open ? "active" : ""}` }, useElementSizeProps(usePopperSourceProps(useMenuButtonProps(anchor.props)))))}
+                    </ProvideDefaultButtonDropdownDirection>
                     <BodyPortal>
                         <div {...usePopperPopupProps({ class: "dropdown-menu-popper" })}>
                             <Transition {...(useMenuProps(rest) as any)} show={open} onTransitionUpdate={onInteraction} exitVisibility="hidden" >
-                                <div {...useHasFocusProps({ })}>
+                                <div {...useHasFocusProps({})}>
 
                                     <div {...usePopperArrowProps({})} />
                                     <button className={"visually-hidden"} onFocus={!firstSentinelIsActive ? () => focusMenu?.() : () => onClose()} onClick={onClose}>Close menu</button>
@@ -115,8 +120,8 @@ export function MenuItem({ children, disabled, onPress: onPressAsync, index, ...
 
     const onPress = getSyncHandler((disabled || !onPressAsync) ? null : () => onPressAsync?.()?.then(() => onClose?.()));
 
-    const newProps = useMenuItemProps(useRefElementProps(useMergedProps<HTMLButtonElement>()(rest, { class: clsx(onPressAsync? "dropdown-item" : "dropdown-item-text", disabled && "disabled"), "aria-disabled": disabled? "true" : undefined })));
-    const buttonProps = usePseudoActive(usePressEventHandlers<HTMLButtonElement>(disabled? null : onPress, undefined)(newProps));
+    const newProps = useMenuItemProps(useRefElementProps(useMergedProps<HTMLButtonElement>()(rest, { class: clsx(onPressAsync ? "dropdown-item" : "dropdown-item-text", disabled && "disabled"), "aria-disabled": disabled ? "true" : undefined })));
+    const buttonProps = usePseudoActive(usePressEventHandlers<HTMLButtonElement>(disabled ? null : onPress, undefined)(newProps));
 
     if (isInteractive) {
         return (

@@ -5,7 +5,8 @@ export type ButtonColorVariant = "primary" | "secondary" | "success" | "danger" 
 
 export type ButtonFillVariant = "fill" | "outline";
 export type ButtonSize = "lg" | "md" | "sm";
-
+export type ButtonDropdownVariant =  "separate" | "combined"
+export type ButtonDropdownDirection = "block-end" | "block-start" | "inline-start" | "inline-end" | null;
 
 export interface ButtonPropsBase<E extends Element> extends Omit<UseAriaButtonParameters<E>, "pressed" | "tag" | "onPress">, GlobalAttributes<E> {
     colorVariant?: ButtonColorVariant;

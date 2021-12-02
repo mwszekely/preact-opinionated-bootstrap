@@ -1,6 +1,32 @@
 @use "../variables.scss" as *;
 @forward "../variables";
 
+// We need these features without using a parent class
+.dropdown-toggle {
+  &.dropup {
+    @include caret(up);
+  }
+
+  &.dropdown {
+    @include caret(down);
+  }
+
+  &.dropstart {
+    @include caret(start);
+    &::before {
+      vertical-align: 0;
+      margin-inline-end: 0.75em;  // ??? Not in Bootstrap
+    }
+  }
+
+  &.dropend {
+    @include caret(end);
+    &::after {
+      vertical-align: 0;
+    }
+  }
+}
+
 .dropdown-menu {
   display: revert;
   position: relative;

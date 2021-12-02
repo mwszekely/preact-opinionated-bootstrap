@@ -4,13 +4,13 @@ import { h } from "preact";
 import { LogicalDirectionInfo, useGlobalHandler, useLogicalDirection, useMergedProps, useRefElement, useState, useTimeout } from "preact-prop-helpers";
 import { useCallback, useEffect, useMemo } from "preact/hooks";
 
-export function usePopperApi({ updating, positionInline, positionBlock, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight }: UsePopperParameters) {
+export function usePopperApi({ updating, align, side, followMouse, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight }: UsePopperParameters) {
 
     const [popperInstance, setPopperInstance, getPopperInstance] = useState<Instance | null>(null);
     const [usedPlacement, setUsedPlacement] = useState<BasePlacement | null>(null);
     const [logicalDirection, setLogicalDirection] = useState<LogicalDirectionInfo | null>(null);
     const { convertElementSize, getLogicalDirectionInfo, useLogicalDirectionProps } = useLogicalDirection<any>({ onLogicalDirectionChange: setLogicalDirection });
-    useEffect(() => {resetPopperInstance(getSourceElement() as any, getPopperElement() as any);  }, [logicalDirection])
+    useEffect(() => { resetPopperInstance(getSourceElement() as any, getPopperElement() as any); }, [logicalDirection])
 
 
 
@@ -18,7 +18,29 @@ export function usePopperApi({ updating, positionInline, positionBlock, skidding
         if (sourceElement && popperElement) {
             const onFirstUpdate: (arg0: Partial<State>) => void = () => { };
             const strategy: PositioningStrategy | undefined = "absolute";
-            let placement: Placement = logicalToPlacement(logicalDirection!, positionInline, positionBlock);
+
+            let placement: Placement// = logicalToPlacement(logicalDirection!, inlinePosition, blockPosition, positionBlock);
+
+            // TODO: There's probably a better way to do this...
+            switch (side) {
+                case "block-start": {
+                    placement = `${logicalDirection?.blockOrientation === "vertical" ? logicalDirection.blockDirection === "ttb" ? "top" : "bottom" : logicalDirection?.blockDirection === "ltr" ? "left" : "right"}` as const;
+                    break;
+                }
+                case "block-end": {
+                    placement = `${logicalDirection?.blockOrientation === "vertical" ? logicalDirection.blockDirection === "ttb" ? "bottom" : "top" : logicalDirection?.blockDirection === "ltr" ? "right" : "left"}` as const;
+                    break;
+                }
+                case "inline-start": {
+                    placement = `${logicalDirection?.inlineOrientation === "horizontal" ? logicalDirection.inlineDirection === "ltr" ? "left" : "right" : logicalDirection?.inlineDirection === "ttb" ? "top" : "bottom"}` as const;
+                    break;
+                }
+                case "inline-end": {
+                    placement = `${logicalDirection?.inlineOrientation === "horizontal" ? logicalDirection.inlineDirection === "ltr" ? "right" : "left" : logicalDirection?.inlineDirection === "ttb" ? "bottom" : "top"}` as const;
+                    break;
+                }
+            }
+            placement = `${placement}-${align}`;
 
             setPopperInstance(createPopper<StrictModifiers>(sourceElement, popperElement, {
                 modifiers: [
@@ -33,7 +55,7 @@ export function usePopperApi({ updating, positionInline, positionBlock, skidding
                 strategy
             }));
         }
-    }, [positionInline, positionBlock, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight, logicalDirection]);
+    }, [side, align, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight, logicalDirection]);
 
     const { getElement: getSourceElement, useRefElementProps: useSourceElementRefProps } = useRefElement<Element>({ onElementChange: (e: any) => resetPopperInstance(e, (getPopperElement as any)()!) } as any);
     const { getElement: getPopperElement, useRefElementProps: usePopperElementRefProps } = useRefElement<HTMLElement>({ onElementChange: e => resetPopperInstance((getSourceElement as any)()!, e) });
@@ -109,7 +131,7 @@ export function usePopperApi({ updating, positionInline, positionBlock, skidding
         return modifier;
     }, []);
 
-    
+
 
 
     function usePopperSource<E extends Element>() {
@@ -147,9 +169,20 @@ export function usePopperApi({ updating, positionInline, positionBlock, skidding
 
 
 export interface UsePopperParameters {
-    positionBlock: "start" | "end";
-    positionInline: "start" | "end";
-    //position: "block-start" | "block-end" | "inline-start" | "inline-end";
+
+
+
+    // Is this a dropdown, dropleft, etc.
+    side: "block-start" | "block-end" | "inline-start" | "inline-end";
+
+    // (If a dropdown) are we left- or right-aligned?
+    align: "start" | "end";
+
+    // If true, the popper will adjust its alignment based on the mouse position.
+    // It will still appear against the edge of the specified side; 
+    // that axis' position will not be affected.
+    followMouse?: boolean;
+
     skidding?: number;
     distance?: number;
 
@@ -167,7 +200,7 @@ export interface UsePopperParameters {
 type T = HTMLDivElement["style"];
 
 
-export function placementToLogical(logicalDirection: LogicalDirectionInfo, placement: BasePlacement) {
+function placementToLogical(logicalDirection: LogicalDirectionInfo, placement: BasePlacement) {
     const { blockDirection, blockOrientation, inlineDirection, inlineOrientation } = logicalDirection;
 
     let logical: `${"block" | "inline"}-${"start" | "end"}`;
@@ -233,24 +266,6 @@ export function placementToLogical(logicalDirection: LogicalDirectionInfo, place
     return logical;
 }
 
-export function logicalToPlacement(logicalDirection: LogicalDirectionInfo, inlinePosition: `${"start" | "end"}`, blockPosition: `${"start" | "end"}`): Placement {
-    let placementInline: "start" | "end";
-    let placementBlock: "top" | "bottom" | "left" | "right";
-
-    const { blockDirection, blockOrientation, inlineDirection, inlineOrientation } = logicalDirection;
-
-    placementInline = inlinePosition;
-
-    switch (blockDirection) {
-        case "ttb": placementBlock = (blockPosition === "start" ? "top" : "bottom"); break;
-        case "btt": placementBlock = (blockPosition === "end" ? "top" : "bottom"); break;
-        case "ltr": placementBlock = (blockPosition === "start" ? "left" : "right"); break;
-        case "rtl": placementBlock = (blockPosition === "end" ? "left" : "right"); break;
-    }
-
-    return `${placementBlock}-${placementInline}`;
-
-}
 
 export function useShouldUpdatePopper(open: boolean) {
     // Since scroll events are asynchronous, especially on iOS devices,

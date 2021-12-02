@@ -1,15 +1,16 @@
 import { h } from "preact";
 import { useState } from "preact-prop-helpers";
 import { ZoomFade } from "preact-transition";
-import { Button } from "../../button";
+import { Button, ButtonGroup, ButtonGroupChild } from "../../button";
 import { Card, CardElement } from "../../card/card";
+import { InputGrid, InputGroup, InputGroupText, Radio, RadioGroup } from "../../input-group";
 import { GridStatic } from "../../layout";
 import { Menu, MenuItem } from "../../menu";
 import { Toast, usePushToast } from "../../toast";
 
 export function DemoMenus() {
-    const [positionInline, setPositionInline] = useState<"start" | "end">("start");
-    const [positionBlock, setPositionBlock] = useState<"start" | "end">("end");
+    const [align, setAlign] = useState<"start" | "end">("start");
+    const [side, setSide] = useState<"inline-start" | "inline-end" | "block-start" | "block-end">("block-end");
 
     const [toggleOn, setToggleOn] = useState(false);
 
@@ -37,6 +38,7 @@ export function DemoMenus() {
             setToggleOn(b);
     }
     const onToggleInput = usesAsync ? onToggleInputAsync : setToggleOn;
+
 
     return (
         <div class="demo">
@@ -75,32 +77,48 @@ export function DemoMenus() {
 
                 <CardElement type="paragraph">
                     A menu's position is, by default, at the start of the line and the bottom of the block (the bottom left corner for this writing mode).
-                    You can manipulate this with the <code>inlinePosition</code> and <code>blockPosition</code> props.
+                    You can manipulate this with the <code>side</code> and <code>align</code> props.
                 </CardElement>
                 <CardElement type="paragraph">
                     The menu will also automatically flip when reaching the edge of the viewport.
                 </CardElement>
 
                 <CardElement>
+
+                    <RadioGroup label="Alignment" labelPosition="start" name="menu-demo-1-align" selectedValue={align} onValueChange={setAlign as any}>
+                        <InputGrid>
+                            <InputGroup><Radio index={0} value="start">Start</Radio></InputGroup>
+                            <InputGroup><Radio index={1} value="end">End</Radio></InputGroup>
+                        </InputGrid>
+                    </RadioGroup>
+
+                </CardElement>
+
+                <CardElement>
+
                     <GridStatic columns={3}>
                         <div />
-                        <Button colorVariant="secondary" pressed={positionBlock === "start"} onPressToggle={(pressed) => void (pressed && setPositionBlock("start"))}>Block start</Button>
+                        <Button colorVariant="secondary" pressed={side === "block-start"} onPressToggle={(pressed) => void (pressed && setSide("block-start"))}>Block start</Button>
                         <div />
 
-                        <Button colorVariant="secondary" pressed={positionInline === "start"} onPressToggle={(pressed) => void (pressed && setPositionInline("start"))}>Inline start</Button>
-                        <Menu anchor={<Button>Anchored menu</Button>} positionBlock={positionBlock} positionInline={positionInline}>
+                        <Button colorVariant="secondary" pressed={side === "inline-start"} onPressToggle={(pressed) => void (pressed && setSide("inline-start"))}>Inline start</Button>
+                        <Menu anchor={<Button dropdownVariant="combined">Anchored menu</Button>} side={side} align={align}>
                             <MenuItem index={0} onPress={onPressAsync}>A: Item 1</MenuItem>
                             <MenuItem index={1} onPress={onPressAsync}>B: Item 2</MenuItem>
                             <MenuItem index={2} onPress={onPressAsync}>C: Item 3</MenuItem>
                             <MenuItem index={3}>I'm static</MenuItem>
                         </Menu>
-                        <Button colorVariant="secondary" pressed={positionInline === "end"} onPressToggle={(pressed) => void (pressed && setPositionInline("end"))}>Inline end</Button>
-
+                        <Button colorVariant="secondary" pressed={side === "inline-end"} onPressToggle={(pressed) => void (pressed && setSide("inline-end"))}>Inline end</Button>
                         <div />
-                        <Button colorVariant="secondary" pressed={positionBlock === "end"} onPressToggle={(pressed) => void (pressed && setPositionBlock("end"))}>Block end</Button>
+                        <Button colorVariant="secondary" pressed={side === "block-end"} onPressToggle={(pressed) => void (pressed && setSide("block-end"))}>Block end</Button>
                         <div />
 
                     </GridStatic>
+                </CardElement>
+                <CardElement>
+                    <code>{`<Menu anchor={<Button>Menu</Button>} side="${side}" align="${align}">
+    {...}
+</Menu>`}</code>
                 </CardElement>
 
                 <hr />

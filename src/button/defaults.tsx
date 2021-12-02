@@ -4,13 +4,14 @@ import { ElementToTag } from "preact-aria-widgets/props";
 import { UseListNavigationChild, UseListNavigationChildInfo, useMergedProps } from "preact-prop-helpers";
 import { memo } from "preact/compat";
 import { useContext } from "preact/hooks";
-import { ButtonColorVariant, ButtonFillVariant, ButtonPropsBase, ButtonSize } from "./types";
+import { ButtonColorVariant, ButtonFillVariant, ButtonPropsBase, ButtonSize, ButtonDropdownDirection, ButtonDropdownVariant } from "./types";
 
 
 export const UseButtonGroupChild = createContext<UseListNavigationChild<HTMLButtonElement, UseListNavigationChildInfo> | null>(null);
 
 const DefaultFillStyleContext = createContext<ButtonFillVariant>("fill");
 const DefaultColorStyleContext = createContext<ButtonColorVariant>("primary");
+const DefaultDropdownDirectionContext = createContext<ButtonDropdownDirection>(null);
 const DefaultSizeContext = createContext<ButtonSize>("md");
 const DefaultDisabledContext = createContext(false);
 
@@ -18,6 +19,7 @@ export const ProvideDefaultButtonFill = memo(function ProvideDefaultButtonFill({
 export const ProvideDefaultButtonColor = memo(function ProvideDefaultButtonColor({ value, children }: RenderableProps<{ value: ButtonColorVariant }>) { return <DefaultColorStyleContext.Provider value={value}>{children}</DefaultColorStyleContext.Provider>; });
 export const ProvideDefaultButtonSize = memo(function ProvideDefaultButtonSize({ value, children }: RenderableProps<{ value: ButtonSize }>) { return <DefaultSizeContext.Provider value={value}>{children}</DefaultSizeContext.Provider>; });
 export const ProvideDefaultButtonDisabled = memo(function ProvideDefaultButtonDisabled({ value, children }: RenderableProps<{ value: boolean }>) { return <DefaultDisabledContext.Provider value={value}>{children}</DefaultDisabledContext.Provider>; });
+export const ProvideDefaultButtonDropdownDirection = memo(function ProvideDefaultButtonDropdownDirection({value, children}: RenderableProps<{ value: ButtonDropdownDirection }>) { return <DefaultDropdownDirectionContext.Provider value={value}>{children}</DefaultDropdownDirectionContext.Provider> })
 
 export function useButtonFillVariant(providedValue?: ButtonFillVariant) {
     const defaultFill = useContext(DefaultFillStyleContext);
@@ -37,6 +39,11 @@ export function useButtonSize(providedValue?: ButtonSize) {
 export function useButtonDisabled(providedValue?: boolean) {
     const defaultDisabled = useContext(DefaultDisabledContext);
     return providedValue ?? defaultDisabled;
+}
+
+export function useButtonDropdownDirection(providedValue?: ButtonDropdownDirection) {
+    const defaultDirection = useContext(DefaultDropdownDirectionContext);
+    return providedValue ?? defaultDirection;
 }
 
 
