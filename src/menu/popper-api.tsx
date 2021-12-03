@@ -19,16 +19,21 @@ export function usePopperApi({ updating, align, side, useArrow, followMouse, ski
         onLastActiveElementChange: activeElement => {
             if (getSourceElement()?.contains(activeElement)) {
                 setFocusedElement(activeElement);
+                setMouseX(null);
+                setMouseY(null);
             }
             else {
                 setFocusedElement(null);
+                if (followMouse)
+                    setPositionPreference("mouse");
             }
         }
     });
 
-    const [getHasMouseover, setHasMouseover] = usePassiveState(null, () => false);
-    const [getMouseX, setMouseX] = usePassiveState(() => void (popperInstance?.update()), () => 0);
-    const [getMouseY, setMouseY] = usePassiveState(() => void (popperInstance?.update()), () => 0);
+    const [getPositionPreference, setPositionPreference] = usePassiveState(null, () => "element" as ("element" | "mouse"))
+    //const [getHasMouseover, setHasMouseover] = usePassiveState(null, () => false);
+    const [getMouseX, setMouseX] = usePassiveState<number | null>(() => void (popperInstance?.update()), () => null);
+    const [getMouseY, setMouseY] = usePassiveState<number | null>(() => void (popperInstance?.update()), () => null);
 
     const resetPopperInstance = useCallback((sourceElement: Element | null, popperElement: HTMLElement | null) => {
         if (sourceElement && popperElement) {
@@ -72,22 +77,57 @@ export function usePopperApi({ updating, align, side, useArrow, followMouse, ski
                     let width = baseRect?.width ?? 0;
                     let height = baseRect?.height ?? 0;
 
-                    if (followMouse && (getHasMouseover() || !focusedElement)) {
-                        if (side === "block-start" || side === "block-end") {
-                            width = 0;
-                            x = getMouseX();
-                        }
-                        else if (side === "inline-start" || side === "inline-end") {
-                            height = 0;
-                            y = getMouseX();
-                        }
+                    let mouseX = getMouseX();
+                    let mouseY = getMouseY();
 
-                        // Clamp
-                        x = Math.max(baseRect?.x ?? 0, x);
-                        y = Math.max(baseRect?.y ?? 0, y);
+                    
 
-                        x = Math.min((baseRect?.x ?? 0) + (baseRect?.width ?? 0), x);
-                        y = Math.min((baseRect?.y ?? 0) + (baseRect?.height ?? 0), y);
+                    if (followMouse && getPositionPreference() == "mouse") {
+
+                            if (mouseX == null || mouseY == null) {
+                                switch (align) {
+                                    case "start":
+                                        mouseX = x;
+                                        mouseY = y;
+                                        break;
+                                    case "center":
+                                        mouseX = (x + (width / 2));
+                                        mouseY = (y + (height / 2));
+                                        break;
+                                    case "end":
+                                        mouseX = (x + width);
+                                        mouseY = (y + height);
+                                        break;
+                                }
+                            }
+
+                            if (side === "block-start" || side === "block-end") {
+                                width = 0;
+                                x = mouseX;
+                            }
+                            else if (side === "inline-start" || side === "inline-end") {
+                                height = 0;
+                                y = mouseY;
+                            }
+
+                            // Clamp
+                            x = Math.max(baseRect?.x ?? 0, x);
+                            y = Math.max(baseRect?.y ?? 0, y);
+
+                            x = Math.min((baseRect?.x ?? 0) + (baseRect?.width ?? 0), x);
+                            y = Math.min((baseRect?.y ?? 0) + (baseRect?.height ?? 0), y);
+                    }
+                    else {
+                        if (align === "center" && focusedElement) {
+                            if (side === "block-start" || side === "block-end") {
+                                x = (x + width / 2);
+                                width = 0;
+                            }
+                            else if (side === "inline-start" || side === "inline-end") {
+                                y = y + (height / 2);
+                                height = 0;
+                            }
+                        }
                     }
                     return DOMRectReadOnly.fromRect({ x, y, width, height });
                 }
@@ -192,13 +232,12 @@ export function usePopperApi({ updating, align, side, useArrow, followMouse, ski
             let style = { ...(sourceStyle as h.JSX.CSSProperties) };
             return useSourceElementRefProps(useMergedProps<E>()(sourceAttributes as any, useMergedProps<E>()({
                 style,
-                onMouseMove: (e) => {
+                onMouseMove: !followMouse ? undefined : (e) => {
                     const { clientX, clientY } = e;
                     setMouseX(clientX);
                     setMouseY(clientY);
-                    setHasMouseover(true);
-                },
-                onMouseLeave: e => { setHasMouseover(false); }
+                    setPositionPreference("mouse")
+                }
             }, ((useLogicalDirectionProps(props) as any) as h.JSX.HTMLAttributes<E>))));
         }
 

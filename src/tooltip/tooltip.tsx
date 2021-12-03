@@ -2,7 +2,7 @@ import { cloneElement, ComponentChild, ComponentChildren, Fragment, h, VNode } f
 import { useAriaTooltip } from "preact-aria-widgets";
 import { useElementSize, useMergedProps, useState } from "preact-prop-helpers";
 import { ZoomFade } from "preact-transition";
-import { useEffect } from "preact/hooks";
+import { useEffect, useRef } from "preact/hooks";
 import { fixProps, usePopperApi, useShouldUpdatePopper } from "../menu/popper-api";
 import { BodyPortal } from "../portal";
 import { FlippableTransitionComponent } from "../props";
@@ -23,7 +23,14 @@ export function Tooltip<T extends <E extends HTMLElement>(...args: any[]) => h.J
     side ??= "block-start";
     align ??= "center";
 
-    const { getIsOpen, isOpen, useTooltip, useTooltipTrigger } = useAriaTooltip({ mouseoverDelay });
+    let { getIsOpen, isOpen, useTooltip, useTooltipTrigger } = useAriaTooltip({ mouseoverDelay });
+
+    // TODO: This is probably the most benign mutation during render issue ever
+    // It's just used to preserve the last shown value when the tooltip is fading out because `tooltip` is null.
+    const lastUsedTooltipRef = useRef(tooltip);
+    lastUsedTooltipRef.current = (tooltip || lastUsedTooltipRef.current);
+
+    isOpen&&=!!tooltip;
 
     let cloneable: VNode;
     if (typeof children === "string" || typeof children === "number" || typeof children == "boolean" || typeof children === "bigint") {
@@ -65,7 +72,7 @@ export function Tooltip<T extends <E extends HTMLElement>(...args: any[]) => h.J
                 <Transition {...rest as any} show={isOpen} onTransitionUpdate={onInteraction} exitVisibility="hidden">
                     <div {...(useTooltipProps(useMergedProps<HTMLDivElement>()({ class: "tooltip show", role: "tooltip" }, {})) as any)}>
                         <div {...usePopperArrowProps({ class: "popper-arrow" })}></div>
-                        <div class="tooltip-inner">{tooltip}</div>
+                        <div class="tooltip-inner">{tooltip || lastUsedTooltipRef.current}</div>
                     </div>
                 </Transition>
             </div>

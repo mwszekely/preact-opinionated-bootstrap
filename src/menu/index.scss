@@ -27,13 +27,13 @@
   }
 }
 
-.popper-arrow {
-  --popper-arrow-size: 0.5em;
-}
-
 // With a border, the popper arrow is off by that width in pixels.
 .dropdown-menu.elevation-body-surface {
   border: none;
+}
+
+.typeahead-tooltip {
+  white-space: pre-wrap;
 }
 
 .popper-arrow,

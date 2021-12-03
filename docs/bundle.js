@@ -1422,9 +1422,9 @@
 	function mergeFunctions(lhs, rhs) {
 	  if (!lhs) return rhs;
 	  if (!rhs) return lhs;
-	  return (...args) => {
-	    let lv = lhs(...args);
-	    let rv = rhs(...args);
+	  return function () {
+	    let lv = lhs(...arguments);
+	    let rv = rhs(...arguments);
 	    if (lv instanceof Promise || rv instanceof Promise) return Promise.all([lv, rv]);
 	  };
 	}
@@ -1674,9 +1674,10 @@
 	 * Unlike most other `use*Props` hooks, these are mostly stable.
 	 */
 
-	function useRandomId({
-	  prefix
-	} = {}) {
+	function useRandomId() {
+	  let {
+	    prefix
+	  } = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 	  const [randomId, setRandomId] = useState(() => generateRandomId(prefix));
 	  const [watchPrefixUpdates, setWatchPrefixUpdates, getWatchPrefixUpdates] = useState(false);
 	  h(() => {
@@ -1692,13 +1693,14 @@
 
 	  const [usedId, setUsedId, getUsedId] = useState(undefined);
 	  const useReferencedIdProps = A$1(function useReferencedIdProps(idPropName) {
-	    const ret = function ({
-	      [idPropName]: givenId,
-	      ...props
-	    }) {
-	      var _ref, _ref2;
+	    const ret = function (_ref) {
+	      var _ref2, _ref3;
 
-	      const usedId2 = (_ref = (_ref2 = givenId !== null && givenId !== void 0 ? givenId : usedId) !== null && _ref2 !== void 0 ? _ref2 : randomId) !== null && _ref !== void 0 ? _ref : undefined;
+	      let {
+	        [idPropName]: givenId,
+	        ...props
+	      } = _ref;
+	      const usedId2 = (_ref2 = (_ref3 = givenId !== null && givenId !== void 0 ? givenId : usedId) !== null && _ref3 !== void 0 ? _ref3 : randomId) !== null && _ref2 !== void 0 ? _ref2 : undefined;
 	      if (idPropName === "id") setUsedId(usedId2);
 	      return useMergedProps()({
 	        [idPropName]: usedId2
@@ -1730,7 +1732,7 @@
 
 	const originalDiffed = l$1.diffed;
 
-	l$1.diffed = (vnode, ...args) => {
+	l$1.diffed = function (vnode) {
 	  for (let [id, {
 	    effect,
 	    inputs
@@ -1744,6 +1746,11 @@
 	  }
 
 	  toRun.clear();
+
+	  for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+	    args[_key - 1] = arguments[_key];
+	  }
+
 	  originalDiffed === null || originalDiffed === void 0 ? void 0 : originalDiffed(vnode, ...args);
 	};
 	/**
@@ -1810,8 +1817,8 @@
 
 	function useStableCallback(fn) {
 	  const currentCallbackGetter = useStableGetter(fn);
-	  return A$1((...args) => {
-	    return currentCallbackGetter()(...args);
+	  return A$1(function () {
+	    return currentCallbackGetter()(...arguments);
 	  }, []);
 	}
 
@@ -1904,9 +1911,10 @@
 	 * @returns The element, and the sub-hook that makes it retrievable.
 	 */
 
-	function useRefElement({
-	  onElementChange
-	}) {
+	function useRefElement(_ref) {
+	  let {
+	    onElementChange
+	  } = _ref;
 	  // Let us store the actual (reference to) the element we capture
 	  const [getElement, setElement] = usePassiveState(onElementChange, () => null); // Create a RefCallback that's fired when mounted 
 	  // and that notifies us of our element when we have it
@@ -1925,10 +1933,11 @@
 	  };
 	}
 
-	function useElementSize({
-	  observeBox,
-	  onSizeChange
-	}) {
+	function useElementSize(_ref) {
+	  let {
+	    observeBox,
+	    onSizeChange
+	  } = _ref;
 	  const [getSize, setSize] = usePassiveState(onSizeChange, () => null);
 	  const currentObserveBox = s(observeBox);
 
@@ -2023,9 +2032,10 @@
 	 */
 
 
-	function useLogicalDirection({
-	  onLogicalDirectionChange
-	}) {
+	function useLogicalDirection(_ref) {
+	  let {
+	    onLogicalDirectionChange
+	  } = _ref;
 	  const [getComputedStyles, setComputedStyles] = usePassiveState(null);
 	  const {
 	    getElement,
@@ -2251,7 +2261,8 @@
 	 * passing one of them as this argument. By default, it's `useEffect`.
 	 */
 
-	function useEffect(effect, inputs, impl = y) {
+	function useEffect(effect, inputs) {
+	  let impl = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : y;
 	  const prevInputs = s(undefined);
 
 	  const effect2 = () => {
@@ -2287,11 +2298,12 @@
 	  return useEffect(effect, inputs, h);
 	}
 
-	function useTimeout({
-	  timeout,
-	  callback,
-	  triggerIndex
-	}) {
+	function useTimeout(_ref) {
+	  let {
+	    timeout,
+	    callback,
+	    triggerIndex
+	  } = _ref;
 	  const stableCallback = useStableCallback(() => {
 	    startTimeRef.current = null;
 	    callback();
@@ -2389,10 +2401,11 @@
 	 */
 
 	function useAsyncHandler() {
-	  return function ({
-	    capture,
-	    debounce
-	  }) {
+	  return function (_ref) {
+	    let {
+	      capture,
+	      debounce
+	    } = _ref;
 	    // Always represents whatever promise is currently being waited on, or null if none.
 	    const [promise, setPromise, getPromise] = useState(null); // Keep track of how many times we've actually called the async handler
 
@@ -2561,19 +2574,20 @@
 	 * @see useListNavigation, which packages everything up together.
 	 */
 
-	function useLinearNavigation({
-	  index,
-	  navigateToFirst,
-	  navigateToLast,
-	  navigateToNext,
-	  navigateToPrev,
-	  managedChildren,
-	  navigationDirection,
-	  disableArrowKeys,
-	  disableHomeEndKeys
-	}) {
+	function useLinearNavigation(_ref) {
 	  var _navigationDirection;
 
+	  let {
+	    index,
+	    navigateToFirst,
+	    navigateToLast,
+	    navigateToNext,
+	    navigateToPrev,
+	    managedChildren,
+	    navigationDirection,
+	    disableArrowKeys,
+	    disableHomeEndKeys
+	  } = _ref;
 	  (_navigationDirection = navigationDirection) !== null && _navigationDirection !== void 0 ? _navigationDirection : navigationDirection = "either";
 	  const childCount = managedChildren.length; // Make sure the tabbable index never escapes the bounds of all available children
 	  // TODO: Keep track of the original index and keep it, at least until keyboard navigation.
@@ -2594,9 +2608,10 @@
 	  const navigateToStart = useCallback(() => { navigateToIndex(0); }, [navigateToIndex]);
 	  const navigateToEnd = useCallback(() => { navigateToIndex(-1); }, [navigateToIndex]);*/
 
-	  const useLinearNavigationChild = A$1(({
-	    index
-	  }) => {
+	  const useLinearNavigationChild = A$1(_ref2 => {
+	    let {
+	      index
+	    } = _ref2;
 	    const getIndex = useStableGetter(index); // Prefer the parent element's direction so that we're not calling getComputedStyle
 	    // on every single individual child, which is likely redundant.
 
@@ -2733,12 +2748,13 @@
 	 * @see useListNavigation, which packages everything up together.
 	 */
 
-	function useTypeaheadNavigation({
-	  collator,
-	  getIndex,
-	  typeaheadTimeout,
-	  setIndex
-	}) {
+	function useTypeaheadNavigation(_ref3) {
+	  let {
+	    collator,
+	    getIndex,
+	    typeaheadTimeout,
+	    setIndex
+	  } = _ref3;
 	  // For typeahead, keep track of what our current "search" string is (if we have one)
 	  // and also clear it every 1000 ms since the last time it changed.
 	  // Next, keep a mapping of typeahead values to indices for faster searching.
@@ -2800,17 +2816,17 @@
 	          But roughly isn't good enough if there are multiple matches.
 	          To convert our sorted index to the unsorted index we need, we have to find the first
 	          element that matches us *and* (if any such exist) is *after* our current selection.
-	            In other words, the only way typeahead moves backwards relative to our current
+	           In other words, the only way typeahead moves backwards relative to our current
 	          position is if the only other option is behind us.
-	            It's not specified in WAI-ARIA what to do in that case.  I suppose wrap back to the start?
+	           It's not specified in WAI-ARIA what to do in that case.  I suppose wrap back to the start?
 	          Though there's also a case for just going upwards to the nearest to prevent jumpiness.
 	          But if you're already doing typeahead on an unsorted list, like, jumpiness can't be avoided.
 	          I dunno. Going back to the start is the simplist though.
-	            Basically what this does: Starting from where we found ourselves after our binary search,
+	           Basically what this does: Starting from where we found ourselves after our binary search,
 	          scan backwards and forwards through all adjacent entries that also compare equally so that
 	          we can find the one whose `unsortedIndex` is the lowest amongst all other equal strings
 	          (and also the lowest `unsortedIndex` yadda yadda except that it comes after us).
-	            TODO: The binary search starts this off with a solid O(log n), but one-character
+	           TODO: The binary search starts this off with a solid O(log n), but one-character
 	          searches are, thanks to pigeonhole principal, eventually guaranteed to become
 	          O(n*log n). This is annoying but probably not easily solvable? There could be an
 	          exception for one-character strings, but that's just kicking the can down
@@ -2856,10 +2872,11 @@
 	      }
 	    }
 	  }, [currentTypeahead]);
-	  const useTypeaheadNavigationChild = A$1(({
-	    text,
-	    ...i
-	  }) => {
+	  const useTypeaheadNavigationChild = A$1(_ref4 => {
+	    let {
+	      text,
+	      ...i
+	    } = _ref4;
 	    y(() => {
 	      if (text) {
 	        // Find where to insert this item.
@@ -2888,8 +2905,10 @@
 	      }
 	    }, [text]);
 
-	    const useTypeaheadNavigationChildProps = function ({ ...props
-	    }) {
+	    const useTypeaheadNavigationChildProps = function (_ref5) {
+	      let { ...props
+	      } = _ref5;
+
 	      const onCompositionStart = e => {
 	        setImeActive(true);
 	      };
@@ -3122,16 +3141,17 @@
 	 * @param useEffect Which version of useEffect to use. Default is `useLayoutEffect`.
 	 */
 
-	function useChildFlag({
-	  activatedIndex,
-	  closestFit,
-	  managedChildren,
-	  setChildFlag,
-	  getChildFlag,
-	  useEffect
-	}) {
+	function useChildFlag(_ref) {
 	  var _useEffect;
 
+	  let {
+	    activatedIndex,
+	    closestFit,
+	    managedChildren,
+	    setChildFlag,
+	    getChildFlag,
+	    useEffect
+	  } = _ref;
 	  (_useEffect = useEffect) !== null && _useEffect !== void 0 ? _useEffect : useEffect = useLayoutEffect;
 	  if (closestFit) console.assert(typeof activatedIndex == "number" || activatedIndex == null); // Whenever we re-render, make sure that any children that have mounted
 	  // have their flags properly set.  We know it's unset if it was null,
@@ -3185,7 +3205,8 @@
 	        }
 	      }
 	    } else {
-	      Object.entries(managedChildren).forEach(([i, info]) => {
+	      Object.entries(managedChildren).forEach(_ref2 => {
+	        let [i, info] = _ref2;
 	        let shouldBeSet = i == activatedIndex;
 
 	        if (getChildFlag(i) != shouldBeSet) {
@@ -3238,10 +3259,11 @@
 	 * regardless of if it's the whole app or just a given component.
 	 */
 
-	function useRovingTabIndex({
-	  shouldFocusOnChange: foc,
-	  tabbableIndex
-	}) {
+	function useRovingTabIndex(_ref) {
+	  let {
+	    shouldFocusOnChange: foc,
+	    tabbableIndex
+	  } = _ref;
 	  const getShouldFocusOnChange = useStableGetter(foc);
 	  const getTabbableIndex = useStableGetter(tabbableIndex);
 	  s(-Infinity); // Call the hook that allows us to collect information from children who provide it
@@ -3307,10 +3329,12 @@
 	      }
 	    }, [tabbable, rrafIndex]);
 
-	    function useRovingTabIndexSiblingProps({
-	      tabIndex,
-	      ...props
-	    }) {
+	    function useRovingTabIndexSiblingProps(_ref2) {
+	      let {
+	        tabIndex,
+	        ...props
+	      } = _ref2;
+
 	      if (tabIndex == null) {
 	        if (tabbable) tabIndex = 0;else tabIndex = -1;
 	      }
@@ -3320,10 +3344,12 @@
 	      }, props);
 	    }
 
-	    function useRovingTabIndexChildProps({
-	      tabIndex,
-	      ...props
-	    }) {
+	    function useRovingTabIndexChildProps(_ref3) {
+	      let {
+	        tabIndex,
+	        ...props
+	      } = _ref3;
+
 	      if (tabIndex == null) {
 	        if (tabbable) tabIndex = 0;else tabIndex = -1;
 	      }
@@ -3422,13 +3448,14 @@
 	  return helper();
 	}
 
-	function useGridNavigation({
-	  shouldFocusOnChange,
-	  indexMangler,
-	  indexDemangler
-	}) {
+	function useGridNavigation(_ref) {
 	  var _indexMangler, _indexDemangler, _getCurrentRow;
 
+	  let {
+	    shouldFocusOnChange,
+	    indexMangler,
+	    indexDemangler
+	  } = _ref;
 	  (_indexMangler = indexMangler) !== null && _indexMangler !== void 0 ? _indexMangler : indexMangler = identity$1;
 	  (_indexDemangler = indexDemangler) !== null && _indexDemangler !== void 0 ? _indexDemangler : indexDemangler = identity$1;
 	  const getFocusCellOnRowChange = useStableCallback(shouldFocusOnChange); // Keep track of our currently tabbable row and column.
@@ -3502,7 +3529,7 @@
 	   * Optional, but provides typeahead for each column in the table.
 	   */
 
-	  const useGridNavigationColumn = A$1(({}) => {
+	  const useGridNavigationColumn = A$1(_ref2 => {
 	    const {
 	      currentTypeahead,
 	      invalidTypeahead,
@@ -3511,11 +3538,12 @@
 	      getIndex: getCurrentRow,
 	      setIndex: setCurrentRow2
 	    });
-	    const useGridNavigationColumnChild = A$1(({
-	      index: rowIndex,
-	      text,
-	      hidden
-	    }) => {
+	    const useGridNavigationColumnChild = A$1(_ref3 => {
+	      let {
+	        index: rowIndex,
+	        text,
+	        hidden
+	      } = _ref3;
 	      useTypeaheadNavigationChild({
 	        index: rowIndex,
 	        text: hidden ? null : text
@@ -3528,11 +3556,12 @@
 	    };
 	  }, []); // Last thing before we return -- here's the hook for individual rows and their cells.
 
-	  const useGridNavigationRow = A$1(({
-	    index: rowIndex,
-	    hidden,
-	    ...info
-	  }) => {
+	  const useGridNavigationRow = A$1(_ref4 => {
+	    let {
+	      index: rowIndex,
+	      hidden,
+	      ...info
+	    } = _ref4;
 	    // When we change the current column, we send that information
 	    // to the parent via setState, but that doesn't do anything
 	    // for us.  The parent doesn't ever manage rows' cells for them.
@@ -3780,11 +3809,12 @@
 	 */
 
 
-	function useActiveElement({
-	  onActiveElementChange,
-	  onLastActiveElementChange,
-	  onWindowFocusedChange
-	}) {
+	function useActiveElement(_ref) {
+	  let {
+	    onActiveElementChange,
+	    onLastActiveElementChange,
+	    onWindowFocusedChange
+	  } = _ref;
 	  const [getActiveElement, setActiveElement] = usePassiveState(onActiveElementChange, undefined);
 	  const [getLastActiveElement, setLastActiveElement] = usePassiveState(onLastActiveElementChange, undefined);
 	  const [getWindowFocused, setWindowFocused] = usePassiveState(onWindowFocusedChange, () => windowFocused);
@@ -3829,15 +3859,16 @@
 	  };
 	}
 
-	function useHasFocus({
-	  onFocusedChanged,
-	  onFocusedInnerChanged,
-	  onLastFocusedChanged,
-	  onLastFocusedInnerChanged,
-	  onLastActiveElementChange,
-	  onActiveElementChange,
-	  onWindowFocusedChange
-	}) {
+	function useHasFocus(_ref) {
+	  let {
+	    onFocusedChanged,
+	    onFocusedInnerChanged,
+	    onLastFocusedChanged,
+	    onLastFocusedInnerChanged,
+	    onLastActiveElementChange,
+	    onActiveElementChange,
+	    onWindowFocusedChange
+	  } = _ref;
 	  const {
 	    getElement,
 	    useRefElementProps
@@ -3886,7 +3917,9 @@
 	}
 
 	function getFromLocalStorage() {
-	  return function (key, converter = JSON.parse) {
+	  return function (key) {
+	    let converter = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : JSON.parse;
+
 	    try {
 	      const item = localStorage.getItem(key);
 	      if (!item) return undefined;
@@ -3899,7 +3932,9 @@
 	  };
 	}
 	function storeToLocalStorage() {
-	  return function (key, value, converter = JSON.stringify) {
+	  return function (key, value) {
+	    let converter = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : JSON.stringify;
+
 	    try {
 	      localStorage.setItem(key, converter(value));
 	    } catch (e) {
@@ -3919,16 +3954,17 @@
 	 */
 
 
-	function useListNavigation({
-	  initialIndex,
-	  shouldFocusOnChange,
-	  collator,
-	  keyNavigation,
-	  indexMangler,
-	  indexDemangler
-	}) {
+	function useListNavigation(_ref) {
 	  var _indexMangler, _indexDemangler, _keyNavigation, _getTabbableIndex;
 
+	  let {
+	    initialIndex,
+	    shouldFocusOnChange,
+	    collator,
+	    keyNavigation,
+	    indexMangler,
+	    indexDemangler
+	  } = _ref;
 	  (_indexMangler = indexMangler) !== null && _indexMangler !== void 0 ? _indexMangler : indexMangler = identity;
 	  (_indexDemangler = indexDemangler) !== null && _indexDemangler !== void 0 ? _indexDemangler : indexDemangler = identity;
 	  (_keyNavigation = keyNavigation) !== null && _keyNavigation !== void 0 ? _keyNavigation : keyNavigation = "either"; // Keep track of three things related to the currently tabbable element's index:
@@ -3997,8 +4033,9 @@
 	      tabbable
 	    } = useRovingTabIndexChild(info);
 
-	    const useListNavigationChildProps = function ({ ...props
-	    }) {
+	    const useListNavigationChildProps = function (_ref2) {
+	      let { ...props
+	      } = _ref2;
 	      return useMergedProps()(useRovingTabIndexChildProps(useTypeaheadNavigationChildProps(useLinearNavigationChildProps({
 	        onClick: roveToSelf
 	      }))), props);
@@ -5531,9 +5568,10 @@
 	}
 
 	const elementsToRestoreFocusTo = new Map();
-	function useFocusTrap({
-	  trapActive
-	}) {
+	function useFocusTrap(_ref) {
+	  let {
+	    trapActive
+	  } = _ref;
 	  const [element, setElement] = useState(null);
 	  const {
 	    useRefElementProps,
@@ -5623,9 +5661,10 @@
 	  return firstFocusable;
 	}
 
-	function useMutationObserver(getElement, options = {}) {
+	function useMutationObserver(getElement) {
 	  var _attributeFilter;
 
+	  let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 	  let {
 	    attributeFilter,
 	    subtree,
@@ -5866,17 +5905,20 @@
 	    }
 	  }, props));
 	}
-	function useAriaButton({
-	  tag,
-	  pressed,
-	  onPress
-	}) {
-	  function useAriaButtonProps({
-	    "aria-pressed": ariaPressed,
-	    tabIndex,
-	    role,
-	    ...p
-	  }) {
+	function useAriaButton(_ref) {
+	  let {
+	    tag,
+	    pressed,
+	    onPress
+	  } = _ref;
+
+	  function useAriaButtonProps(_ref2) {
+	    let {
+	      "aria-pressed": ariaPressed,
+	      tabIndex,
+	      role,
+	      ...p
+	    } = _ref2;
 	    const props = usePressEventHandlers(e => onPress === null || onPress === void 0 ? void 0 : onPress(enhanceEvent(e, {
 	      pressed: pressed == null ? null : !pressed
 	    })), undefined)(p);
@@ -5909,10 +5951,11 @@
 	  };
 	}
 
-	function useAriaAccordion({
-	  expandedIndex,
-	  setExpandedIndex
-	}) {
+	function useAriaAccordion(_ref) {
+	  let {
+	    expandedIndex,
+	    setExpandedIndex
+	  } = _ref;
 	  const [lastFocusedIndex, setLastFocusedIndex, getLastFocusedIndex] = useState(0);
 	  const stableSetExpandedIndex = useStableCallback(setExpandedIndex !== null && setExpandedIndex !== void 0 ? setExpandedIndex : () => {});
 	  const {
@@ -5957,7 +6000,7 @@
 	    }
 	  });
 	  const useAriaAccordionSection = A$1(args => {
-	    var _ref, _args$open;
+	    var _ref2, _args$open;
 
 	    const index = args.index;
 	    const [openFromParent, setOpenFromParent, getOpenFromParent] = useState(null);
@@ -5975,12 +6018,10 @@
 	    } = useRandomId({
 	      prefix: "aria-accordion-section-header-"
 	    });
-	    let open = (_ref = (_args$open = args.open) !== null && _args$open !== void 0 ? _args$open : openFromParent) !== null && _ref !== void 0 ? _ref : null; // TODO: Convert to use useManagedChild so that this hook 
+	    let open = (_ref2 = (_args$open = args.open) !== null && _args$open !== void 0 ? _args$open : openFromParent) !== null && _ref2 !== void 0 ? _ref2 : null; // TODO: Convert to use useManagedChild so that this hook 
 	    // is stable without (directly) depending on the open state.
 
-	    const useAriaAccordionSectionHeader = A$1(function useAriaAccordionSectionHeader({
-	      tag
-	    }) {
+	    const useAriaAccordionSectionHeader = A$1(function useAriaAccordionSectionHeader(_ref3) {
 	      const {
 	        useRefElementProps,
 	        getElement
@@ -6005,11 +6046,13 @@
 	        index
 	      });
 
-	      function useAriaAccordionSectionHeaderProps({
-	        ["aria-expanded"]: ariaExpanded,
-	        ["aria-disabled"]: ariaDisabled,
-	        ...props
-	      }) {
+	      function useAriaAccordionSectionHeaderProps(_ref4) {
+	        let {
+	          ["aria-expanded"]: ariaExpanded,
+	          ["aria-disabled"]: ariaDisabled,
+	          ...props
+	        } = _ref4;
+
 	        const onFocus = () => {
 	          setLastFocusedIndex(args.index);
 	        };
@@ -6035,10 +6078,11 @@
 	      };
 	    }, [index, open]);
 	    const useAriaAccordionSectionBody = A$1(function useAriaAccordionSectionBody() {
-	      function useAriaAccordionSectionBodyProps({
-	        role,
-	        ...props
-	      }) {
+	      function useAriaAccordionSectionBodyProps(_ref5) {
+	        let {
+	          role,
+	          ...props
+	        } = _ref5;
 	        let ret1 = useReferencedHeadIdProps("aria-labelledby")({
 	          role: role !== null && role !== void 0 ? role : "region",
 	          ...props
@@ -6069,14 +6113,15 @@
 	 * @see useInputLabel
 	 */
 
-	function useGenericLabel({
-	  labelPrefix,
-	  inputPrefix,
-	  backupText
-	} = {
-	  labelPrefix: "label-",
-	  inputPrefix: "input-"
-	}) {
+	function useGenericLabel() {
+	  let {
+	    labelPrefix,
+	    inputPrefix,
+	    backupText
+	  } = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {
+	    labelPrefix: "label-",
+	    inputPrefix: "input-"
+	  };
 	  const [labelElement, setLabelElement] = l(null);
 	  const [inputElement, setInputElement] = l(null);
 	  const {
@@ -6117,15 +6162,16 @@
 	  }, []);
 	  const useGenericLabelInput = A$1(function useGenericLabelInput() {
 	    return {
-	      useGenericLabelInputProps: ({
-	        "aria-labelledby": ariaLabelledby,
-	        "aria-label": ariaLabel,
-	        ...props
-	      }) => {
-	        var _ref;
+	      useGenericLabelInputProps: _ref => {
+	        var _ref2;
 
+	        let {
+	          "aria-labelledby": ariaLabelledby,
+	          "aria-label": ariaLabel,
+	          ...props
+	        } = _ref;
 	        return useInputRandomIdProps(useReferencedLabelIdProps("aria-labelledby")(useInputRefElementProps(useMergedProps()({
-	          "aria-label": (_ref = !labelHasMounted ? backupText : ariaLabel) !== null && _ref !== void 0 ? _ref : ariaLabel
+	          "aria-label": (_ref2 = !labelHasMounted ? backupText : ariaLabel) !== null && _ref2 !== void 0 ? _ref2 : ariaLabel
 	        }, props))));
 	      }
 	    };
@@ -6151,13 +6197,14 @@
 	 *
 	 */
 
-	function useInputLabel({
-	  labelPrefix,
-	  inputPrefix
-	} = {
-	  labelPrefix: "label-",
-	  inputPrefix: "input-"
-	}) {
+	function useInputLabel() {
+	  let {
+	    labelPrefix,
+	    inputPrefix
+	  } = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {
+	    labelPrefix: "label-",
+	    inputPrefix: "input-"
+	  };
 	  const {
 	    useGenericLabelInput,
 	    useGenericLabelLabel,
@@ -6173,9 +6220,10 @@
 	    labelPrefix,
 	    inputPrefix
 	  });
-	  const useInputLabelLabel = A$1(function useInputLabelLabel({
-	    tag
-	  }) {
+	  const useInputLabelLabel = A$1(function useInputLabelLabel(_ref3) {
+	    let {
+	      tag
+	    } = _ref3;
 	    const {
 	      useGenericLabelLabelProps
 	    } = useGenericLabelLabel();
@@ -6226,13 +6274,14 @@
 	 */
 
 
-	function useCheckboxLike({
-	  checked,
-	  disabled,
-	  labelPosition,
-	  onInput,
-	  role
-	}) {
+	function useCheckboxLike(_ref4) {
+	  let {
+	    checked,
+	    disabled,
+	    labelPosition,
+	    onInput,
+	    role
+	  } = _ref4;
 	  const stableOnInput = useStableCallback(e => {
 	    e.preventDefault();
 	    onInput === null || onInput === void 0 ? void 0 : onInput(e);
@@ -6248,9 +6297,10 @@
 	    labelPrefix: "aria-checkbox-label-",
 	    inputPrefix: "aria-checkbox-input-"
 	  });
-	  const useCheckboxLikeInputElement = A$1(function useCheckboxInputElement({
-	    tag
-	  }) {
+	  const useCheckboxLikeInputElement = A$1(function useCheckboxInputElement(_ref5) {
+	    let {
+	      tag
+	    } = _ref5;
 	    const {
 	      useInputLabelInputProps: useILInputProps
 	    } = useILInput();
@@ -6275,8 +6325,9 @@
 	      useCheckboxLikeInputElementProps
 	    };
 
-	    function useCheckboxLikeInputElementProps({ ...p0
-	    }) {
+	    function useCheckboxLikeInputElementProps(_ref6) {
+	      let { ...p0
+	      } = _ref6;
 	      // For some reason, Chrome won't fire onInput events for radio buttons that are tabIndex=-1??
 	      // Needs investigating, but onInput works fine in Firefox
 	      // TODO
@@ -6311,17 +6362,19 @@
 	      return useMergedProps()(p0, props);
 	    }
 	  }, [useILInput, role, labelPosition, disabled, checked]);
-	  const useCheckboxLikeLabelElement = A$1(function useCheckboxLabelElement({
-	    tag
-	  }) {
+	  const useCheckboxLikeLabelElement = A$1(function useCheckboxLabelElement(_ref7) {
+	    let {
+	      tag
+	    } = _ref7;
 	    const {
 	      useInputLabelLabelProps: useILLabelProps
 	    } = useILLabel({
 	      tag
 	    });
 
-	    function useCheckboxLikeLabelElementProps({ ...p0
-	    }) {
+	    function useCheckboxLikeLabelElementProps(_ref8) {
+	      let { ...p0
+	      } = _ref8;
 	      let newProps = usePressEventHandlers(disabled || !handlesInput(tag, labelPosition, "label-element") ? undefined : stableOnInput, undefined)({});
 
 	      if (labelPosition == "wrapping") {
@@ -6350,12 +6403,14 @@
 	  };
 	}
 
-	function useAriaCheckbox({
-	  labelPosition,
-	  checked,
-	  onInput,
-	  disabled
-	}) {
+	function useAriaCheckbox(_ref) {
+	  let {
+	    labelPosition,
+	    checked,
+	    onInput,
+	    disabled
+	  } = _ref;
+
 	  const onInputEnhanced = e => onInput === null || onInput === void 0 ? void 0 : onInput(enhanceEvent(e, {
 	    checked: !checked
 	  }));
@@ -6372,9 +6427,10 @@
 	    disabled,
 	    onInput: onInputEnhanced
 	  });
-	  const useCheckboxInputElement = A$1(function useCheckboxInputElement({
-	    tag
-	  }) {
+	  const useCheckboxInputElement = A$1(function useCheckboxInputElement(_ref2) {
+	    let {
+	      tag
+	    } = _ref2;
 	    const {
 	      getInputElement,
 	      useCheckboxLikeInputElementProps
@@ -6393,27 +6449,30 @@
 	      useCheckboxInputElementProps
 	    };
 
-	    function useCheckboxInputElementProps({ ...p0
-	    }) {
+	    function useCheckboxInputElementProps(_ref3) {
 	      var _props$checked;
 
+	      let { ...p0
+	      } = _ref3;
 	      let props = useCheckboxLikeInputElementProps(p0);
 	      (_props$checked = props.checked) !== null && _props$checked !== void 0 ? _props$checked : props.checked = !!checked;
 	      if (tag == "input") props.type = "checkbox";
 	      return props;
 	    }
 	  }, [useCheckboxLikeInputElement, checked, labelPosition, disabled]);
-	  const useCheckboxLabelElement = A$1(function useCheckboxLabelElement({
-	    tag
-	  }) {
+	  const useCheckboxLabelElement = A$1(function useCheckboxLabelElement(_ref4) {
+	    let {
+	      tag
+	    } = _ref4;
 	    const {
 	      useCheckboxLikeLabelElementProps
 	    } = useCheckboxLikeLabelElement({
 	      tag
 	    });
 
-	    function useCheckboxLabelElementProps({ ...props
-	    }) {
+	    function useCheckboxLabelElementProps(_ref5) {
+	      let { ...props
+	      } = _ref5;
 	      return useCheckboxLikeLabelElementProps(props);
 	    }
 	    return {
@@ -6441,10 +6500,12 @@
 	 * @returns
 	 */
 
-	function useSoftDismiss({
-	  onClose,
-	  getElements
-	}) {
+	function useSoftDismiss(_ref) {
+	  let {
+	    onClose,
+	    getElements
+	  } = _ref;
+
 	  function onBackdropClick(e) {
 	    // Basically, "was this event fired on the root-most element, or at least an element not contained by the modal?"
 	    // Either could be how the browser handles these sorts of "interacting with nothing" events.
@@ -6493,10 +6554,11 @@
 	 * @returns
 	 */
 
-	function useModal({
-	  open,
-	  onClose
-	}) {
+	function useModal(_ref2) {
+	  let {
+	    open,
+	    onClose
+	  } = _ref2;
 	  const stableOnClose = useStableCallback(onClose);
 	  const [modalDescribedByBody, setModalDescribedByBody] = useState(false);
 	  useHideScroll(open);
@@ -6541,11 +6603,12 @@
 	    };
 	  }, []);
 
-	  const useModalProps = function ({
-	    "aria-modal": ariaModal,
-	    role,
-	    ...p0
-	  }) {
+	  const useModalProps = function (_ref3) {
+	    let {
+	      "aria-modal": ariaModal,
+	      role,
+	      ...p0
+	    } = _ref3;
 	    const {
 	      useFocusTrapProps
 	    } = useFocusTrap({
@@ -6568,9 +6631,10 @@
 	      useModalTitleProps
 	    };
 	  }, []);
-	  const useModalBody = A$1(function useModalBody({
-	    descriptive
-	  }) {
+	  const useModalBody = A$1(function useModalBody(_ref4) {
+	    let {
+	      descriptive
+	    } = _ref4;
 	    setModalDescribedByBody(descriptive);
 
 	    const useModalBodyProps = function (props) {
@@ -6659,10 +6723,11 @@
 	  };
 	}
 
-	function useAriaDialog({
-	  open,
-	  onClose
-	}) {
+	function useAriaDialog(_ref) {
+	  let {
+	    open,
+	    onClose
+	  } = _ref;
 	  // TODO: Differences between dialog and modal go here, presumably.
 	  // Non-modal dialogs need to be able to be repositioned, etc.
 	  const {
@@ -6682,9 +6747,10 @@
 	      useDialogBackdropProps: useModalBackdropProps
 	    };
 	  }, [useModalBackdrop]);
-	  const useDialogBody = A$1(({
-	    descriptive
-	  }) => {
+	  const useDialogBody = A$1(_ref2 => {
+	    let {
+	      descriptive
+	    } = _ref2;
 	    const {
 	      useModalBodyProps
 	    } = useModalBody({
@@ -6711,10 +6777,11 @@
 	  };
 	}
 
-	function useDrawer({
-	  open,
-	  onClose
-	}) {
+	function useDrawer(_ref) {
+	  let {
+	    open,
+	    onClose
+	  } = _ref;
 	  // TODO: Drawers are not always modal.
 	  const {
 	    useModalBackdrop,
@@ -6733,9 +6800,10 @@
 	      useDrawerBackdropProps: useModalBackdropProps
 	    };
 	  }, [useModalBackdrop]);
-	  const useDrawerBody = A$1(({
-	    descriptive
-	  }) => {
+	  const useDrawerBody = A$1(_ref2 => {
+	    let {
+	      descriptive
+	    } = _ref2;
 	    const {
 	      useModalBodyProps
 	    } = useModalBody({
@@ -6762,12 +6830,13 @@
 	  };
 	}
 
-	function useAriaListboxSingle({
-	  selectedIndex,
-	  onSelect,
-	  selectionMode,
-	  ...args
-	}) {
+	function useAriaListboxSingle(_ref) {
+	  let {
+	    selectedIndex,
+	    onSelect,
+	    selectionMode,
+	    ...args
+	  } = _ref;
 	  const [anyItemsFocused, setAnyItemsFocused, getAnyItemsFocused] = useState(false);
 	  const {
 	    useGenericLabelInput,
@@ -6905,14 +6974,15 @@
 	  }
 	}
 
-	function useAriaMenu({
-	  collator,
-	  keyNavigation,
-	  noTypeahead,
-	  noWrap,
-	  typeaheadTimeout,
-	  ...args
-	}) {
+	function useAriaMenu(_ref) {
+	  let {
+	    collator,
+	    keyNavigation,
+	    noTypeahead,
+	    noWrap,
+	    typeaheadTimeout,
+	    ...args
+	  } = _ref;
 	  const [focusTrapActive, setFocusTrapActive] = useState(null);
 	  let onClose = args.onClose;
 	  let onOpen = args.onOpen;
@@ -6939,7 +7009,9 @@
 	    managedChildren,
 	    useListNavigationChild,
 	    tabbableIndex,
-	    focusCurrent: focusMenu
+	    focusCurrent: focusMenu,
+	    currentTypeahead,
+	    invalidTypeahead
 	  } = useListNavigation({
 	    collator,
 	    keyNavigation,
@@ -7026,7 +7098,7 @@
 	      }
 	    };
 	  }, [focusMenu, open]);
-	  const useMenuButton = A$1(({}) => {
+	  const useMenuButton = A$1(_ref2 => {
 	    return {
 	      useMenuButtonProps: function (p) {
 	        let props = useButtonRefElementProps(useMergedProps()({}, useMenuIdReferencingProps("aria-controls")(useButtonHasFocusProps(p))));
@@ -7055,8 +7127,9 @@
 	    return {
 	      getElement,
 	      useMenuProps,
-	      useMenuSubmenuItemProps: function ({ ...props
-	      }) {
+	      useMenuSubmenuItemProps: function (_ref3) {
+	        let { ...props
+	        } = _ref3;
 	        props.role = "menuitem";
 	        return useRefElementProps(useMenuButtonProps(useMenuIdReferencingProps("aria-controls")(props)));
 	      }
@@ -7067,8 +7140,9 @@
 	      useListNavigationChildProps
 	    } = useListNavigationChild(args);
 
-	    function useMenuItemProps({ ...props
-	    }) {
+	    function useMenuItemProps(_ref4) {
+	      let { ...props
+	      } = _ref4;
 	      props.role = "menuitem";
 	      return useMergedProps()({}, useListNavigationChildProps(props));
 	    }
@@ -7078,8 +7152,9 @@
 	    };
 	  }, []);
 
-	  function useMenuProps({ ...props
-	  }) {
+	  function useMenuProps(_ref5) {
+	    let { ...props
+	    } = _ref5;
 	    props.role = "menu";
 
 	    function onKeyDown(e) {
@@ -7099,17 +7174,20 @@
 	    useMenuItem,
 	    useMenuSentinel,
 	    useMenuSubmenuItem,
-	    focusMenu
+	    focusMenu,
+	    currentTypeahead,
+	    invalidTypeahead
 	  };
 	}
 
-	function useAriaTabs({
-	  selectionMode,
-	  selectedIndex,
-	  onSelect,
-	  orientation: logicalOrientation,
-	  ...args
-	}) {
+	function useAriaTabs(_ref) {
+	  let {
+	    selectionMode,
+	    selectedIndex,
+	    onSelect,
+	    orientation: logicalOrientation,
+	    ...args
+	  } = _ref;
 	  const {
 	    useHasFocusProps: useTabListHasFocusProps,
 	    getFocusedInner: getTabListFocusedInner
@@ -7234,8 +7312,9 @@
 	      (_managedPanels$info$i = managedPanels[info.index]) === null || _managedPanels$info$i === void 0 ? void 0 : _managedPanels$info$i.setTabId(tabId);
 	    }, [tabId, info.index]);
 
-	    function useTabProps({ ...props
-	    }) {
+	    function useTabProps(_ref2) {
+	      let { ...props
+	      } = _ref2;
 	      const newProps = usePressEventHandlers(e => {
 	        navigateToIndex(info.index);
 	        onSelect === null || onSelect === void 0 ? void 0 : onSelect(enhanceEvent(e, {
@@ -7298,10 +7377,11 @@
 	      (_managedTabs$info$ind = managedTabs[info.index]) === null || _managedTabs$info$ind === void 0 ? void 0 : _managedTabs$info$ind.setTabPanelId(tabPanelId);
 	    }, [tabPanelId, info.index]);
 
-	    function useTabPanelProps({ ...props
-	    }) {
+	    function useTabPanelProps(_ref3) {
 	      var _managedTabs$info$ind2, _props$tabIndex;
 
+	      let { ...props
+	      } = _ref3;
 	      props["aria-labelledby"] = (_managedTabs$info$ind2 = managedTabs[info.index]) === null || _managedTabs$info$ind2 === void 0 ? void 0 : _managedTabs$info$ind2.tabId;
 	      props.role = "tabpanel";
 	      (_props$tabIndex = props.tabIndex) !== null && _props$tabIndex !== void 0 ? _props$tabIndex : props.tabIndex = -1; // Make sure the tab panel is tabbable.
@@ -7315,8 +7395,9 @@
 	    };
 	  }, []);
 	  const useTabsList = A$1(function useTabList() {
-	    function useTabListProps({ ...props
-	    }) {
+	    function useTabListProps(_ref4) {
+	      let { ...props
+	      } = _ref4;
 	      props.role = "tablist";
 	      props["aria-orientation"] = physicalOrientation;
 	      return useReferencedTabLabelId("aria-labelledby")(useTabListHasFocusProps(useLogicalDirectionProps(props)));
@@ -7327,8 +7408,9 @@
 	    };
 	  }, [physicalOrientation]);
 	  const useTabsLabel = A$1(function useTabsLabel() {
-	    function useTabsLabelProps({ ...props
-	    }) {
+	    function useTabsLabelProps(_ref5) {
+	      let { ...props
+	      } = _ref5;
 	      return useTabLabelIdProps(props);
 	    }
 
@@ -7348,12 +7430,13 @@
 	  };
 	}
 
-	function useAriaTooltip({
-	  mouseoverDelay,
-	  mouseoutDelay
-	}) {
+	function useAriaTooltip(_ref) {
 	  var _mouseoverDelay, _mouseoutDelay;
 
+	  let {
+	    mouseoverDelay,
+	    mouseoutDelay
+	  } = _ref;
 	  (_mouseoverDelay = mouseoverDelay) !== null && _mouseoverDelay !== void 0 ? _mouseoverDelay : mouseoverDelay = 400;
 	  (_mouseoutDelay = mouseoutDelay) !== null && _mouseoutDelay !== void 0 ? _mouseoutDelay : mouseoutDelay = 40;
 	  const [open, setOpen, getOpen] = useState(false); // Used to keep track of if we're hoving over the trigger when correcting for the given delays.
@@ -7401,26 +7484,30 @@
 	      setTriggerHasMouseover(false);
 	    }
 
+	    function onTouchEnd(e) {
+	      e.target.focus();
+	    }
+
 	    const {
 	      useHasFocusProps
 	    } = useHasFocus({
 	      onFocusedInnerChanged: setTriggerFocusedInner
 	    });
 
-	    function useTooltipTriggerProps({ ...props
-	    }) {
+	    function useTooltipTriggerProps(_ref2) {
 	      var _props$tabIndex;
 
+	      let { ...props
+	      } = _ref2;
 	      // Note: Though it's important to make sure that focusing activates a tooltip,
 	      // it's perfectly reasonable that a child element will be the one that's focused,
 	      // not this one, so we don't set tabIndex=0
 	      (_props$tabIndex = props.tabIndex) !== null && _props$tabIndex !== void 0 ? _props$tabIndex : props.tabIndex = -1;
-	      return useTooltipIdReferencingProps("aria-describedby")(useHasFocusProps(usePressEventHandlers(e => {
-	        e.target.focus();
-	      }, undefined)(useMergedProps()({
+	      return useTooltipIdReferencingProps("aria-describedby")(useHasFocusProps(useMergedProps()({
 	        onPointerEnter,
-	        onPointerLeave
-	      }, props))));
+	        onPointerLeave,
+	        onTouchEnd
+	      }, props)));
 	    }
 
 	    return {
@@ -7436,8 +7523,9 @@
 	      setTooltipHasMouseover(false);
 	    }
 
-	    function useTooltipProps({ ...props
-	    }) {
+	    function useTooltipProps(_ref3) {
+	      let { ...props
+	      } = _ref3;
 	      const {
 	        useHasFocusProps
 	      } = useHasFocus({
@@ -7461,11 +7549,12 @@
 	  };
 	}
 
-	function useAriaRadioGroup({
-	  name,
-	  selectedValue,
-	  onInput
-	}) {
+	function useAriaRadioGroup(_ref) {
+	  let {
+	    name,
+	    selectedValue,
+	    onInput
+	  } = _ref;
 	  const {
 	    getElement: getRadioGroupParentElement,
 	    useRefElementProps
@@ -7499,8 +7588,9 @@
 	  y(() => {
 	    if (!anyRadiosFocused) setTabbableIndex(selectedIndex !== null && selectedIndex !== void 0 ? selectedIndex : 0);
 	  }, [anyRadiosFocused, selectedIndex, setTabbableIndex]);
-	  const useRadioGroupProps = A$1(({ ...props
-	  }) => {
+	  const useRadioGroupProps = A$1(_ref2 => {
+	    let { ...props
+	    } = _ref2;
 	    props.role = "radiogroup";
 	    return useRefElementProps(props);
 	  }, [useRefElementProps]);
@@ -7523,14 +7613,15 @@
 	    let selectedIndex = byName.current.get(selectedValue);
 	    setSelectedIndex(selectedIndex !== null && selectedIndex !== void 0 ? selectedIndex : null);
 	  }, [byName, selectedValue]);
-	  const useRadio = A$1(function useAriaRadio({
-	    value,
-	    index,
-	    text,
-	    disabled,
-	    labelPosition,
-	    ...rest
-	  }) {
+	  const useRadio = A$1(function useAriaRadio(_ref3) {
+	    let {
+	      value,
+	      index,
+	      text,
+	      disabled,
+	      labelPosition,
+	      ...rest
+	    } = _ref3;
 	    const [checked, setChecked, getChecked] = useState(null);
 	    const onInput = A$1(e => {
 	      stableOnInput(enhanceEvent(e, {
@@ -7567,9 +7658,11 @@
 	      ...rest
 	    });
 
-	    const useRadioInput = ({
-	      tag
-	    }) => {
+	    const useRadioInput = _ref4 => {
+	      let {
+	        tag
+	      } = _ref4;
+
 	      const useRadioInputProps = props => {
 	        if (tag == "input") {
 	          props.name = name;
@@ -7591,9 +7684,11 @@
 	      };
 	    };
 
-	    const useRadioLabel = A$1(({
-	      tag
-	    }) => {
+	    const useRadioLabel = A$1(_ref5 => {
+	      let {
+	        tag
+	      } = _ref5;
+
 	      const useRadioLabelProps = props => {
 	        const {
 	          useCheckboxLikeLabelElementProps
@@ -7624,7 +7719,7 @@
 	  };
 	}
 
-	function useToasts({}) {
+	function useToasts(_ref) {
 	  // "Pointer" to whatever index toast is currently being shown.
 	  // E.g. it's 0 when the first toast is shown, then when dismissed, it becomes 1.
 	  // When the second toast is shown, it stays at 1 until dismissed, when it then becomes 2, etc.
@@ -7688,10 +7783,11 @@
 	      return ((_toastQueue$i2 = toastQueue[i]) === null || _toastQueue$i2 === void 0 ? void 0 : _toastQueue$i2.getStatus()) === "active";
 	    }
 	  });
-	  const useToast = A$1(({
-	    politeness,
-	    timeout
-	  }) => {
+	  const useToast = A$1(_ref2 => {
+	    let {
+	      politeness,
+	      timeout
+	    } = _ref2;
 	    const [status, setStatus, getStatus] = useState("pending");
 	    const dismissed = status === "dismissed";
 	    const dismiss = A$1(() => {
@@ -7742,25 +7838,27 @@
 	      status,
 	      getStatus,
 	      dismiss,
-	      useToastProps: function ({ ...props
-	      }) {
+	      useToastProps: function (_ref3) {
+	        let { ...props
+	        } = _ref3;
 	        return useMergedProps()(useManagedChildProps({}), props);
 	      }
 	    };
 	  }, []);
 
-	  function useToastContainerProps({
-	    role,
-	    "aria-live": ariaLive,
-	    "aria-relevant": ariaRelevant,
-	    ...props
-	  }) {
-	    var _ref;
+	  function useToastContainerProps(_ref4) {
+	    var _ref5;
 
+	    let {
+	      role,
+	      "aria-live": ariaLive,
+	      "aria-relevant": ariaRelevant,
+	      ...props
+	    } = _ref4;
 	    return useMergedProps()(useRefElementProps({
 	      class: "toasts-container",
 	      role: "status",
-	      "aria-live": (_ref = politeness !== null && politeness !== void 0 ? politeness : ariaLive) !== null && _ref !== void 0 ? _ref : "polite",
+	      "aria-live": (_ref5 = politeness !== null && politeness !== void 0 ? politeness : ariaLive) !== null && _ref5 !== void 0 ? _ref5 : "polite",
 	      "aria-relevant": ariaRelevant !== null && ariaRelevant !== void 0 ? ariaRelevant : "additions"
 	    }), props);
 	  }
@@ -7782,7 +7880,7 @@
 	// corresponds to its row amongst ALL children, even those
 	// in a different table section)
 
-	function useTable({}) {
+	function useTable(_ref) {
 	  // This is the index of the currently sorted column('s header cell that was clicked to sort it).
 	  // This is used by all the header cells to know when to reset their "sort mode" back to its initial state.
 	  const [sortedColumn, setSortedColumn, getSortedColumn] = useState(null);
@@ -7849,9 +7947,10 @@
 	  }, [
 	    /* Must remain stable */
 	  ]);
-	  const useTableSection = A$1(({
-	    location
-	  }) => {
+	  const useTableSection = A$1(_ref2 => {
+	    let {
+	      location
+	    } = _ref2;
 	    // Used to track if we tried to render any rows before they've been
 	    // given their "true" index to display (their sorted index).
 	    // This is true for all rows initially on mount, but especially true
@@ -7864,10 +7963,11 @@
 	      index: location,
 	      forceUpdate: useForceUpdate()
 	    });
-	    const useTableSectionProps = A$1(({
-	      children,
-	      ...props
-	    }) => {
+	    const useTableSectionProps = A$1(_ref3 => {
+	      let {
+	        children,
+	        ...props
+	      } = _ref3;
 	      return useManagedChildProps(useMergedProps()({
 	        role: "rowgroup",
 	        children: location !== "body" ? children : // For rows in the body, sort them by the criteria we set
@@ -7918,11 +8018,12 @@
 	     *
 	     */
 
-	    const useTableRow = A$1(({
-	      rowIndex: rowIndexAsUnsorted,
-	      location,
-	      hidden
-	    }) => {
+	    const useTableRow = A$1(_ref4 => {
+	      let {
+	        rowIndex: rowIndexAsUnsorted,
+	        location,
+	        hidden
+	      } = _ref4;
 	      // This is used by the sort function to update this row when everything's shuffled.
 	      const [rowIndexAsSorted, setRowIndexAsSorted, getRowIndexAsSorted] = useState(null);
 	      const getManagedCells = useStableCallback(() => managedCells);
@@ -7944,10 +8045,11 @@
 	        location
 	      }); // Not public -- just the shared code between header cells and body cells
 
-	      const useTableCellShared = A$1(({
-	        columnIndex,
-	        value
-	      }) => {
+	      const useTableCellShared = A$1(_ref5 => {
+	        let {
+	          columnIndex,
+	          value
+	        } = _ref5;
 	        const {
 	          useGridNavigationCellProps
 	        } = useGridNavigationCell({
@@ -7955,19 +8057,21 @@
 	          value
 	        });
 
-	        function useTableCellProps({
-	          role,
-	          ...props
-	        }) {
+	        function useTableCellProps(_ref6) {
+	          let {
+	            role,
+	            ...props
+	          } = _ref6;
 	          return useMergedProps()({
 	            role: "gridcell"
 	          }, props);
 	        }
 
-	        function useTableCellDelegateProps({
-	          role,
-	          ...props
-	        }) {
+	        function useTableCellDelegateProps(_ref7) {
+	          let {
+	            role,
+	            ...props
+	          } = _ref7;
 	          return useGridNavigationCellProps(props);
 	        }
 
@@ -7976,11 +8080,12 @@
 	          useTableCellDelegateProps
 	        };
 	      }, []);
-	      const useTableHeadCell = A$1(({
-	        columnIndex,
-	        unsortable,
-	        tag
-	      }) => {
+	      const useTableHeadCell = A$1(_ref8 => {
+	        let {
+	          columnIndex,
+	          unsortable,
+	          tag
+	        } = _ref8;
 	        const {
 	          useTableCellDelegateProps,
 	          useTableCellProps
@@ -8025,10 +8130,11 @@
 	          sortDirection
 	        };
 	      }, []);
-	      const useTableCell = A$1(({
-	        columnIndex,
-	        value
-	      }) => {
+	      const useTableCell = A$1(_ref9 => {
+	        let {
+	          columnIndex,
+	          value
+	        } = _ref9;
 	        const {
 	          useTableCellDelegateProps,
 	          useTableCellProps
@@ -8042,10 +8148,11 @@
 	        };
 	      }, []);
 
-	      function useTableRowProps({
-	        role,
-	        ...props
-	      }) {
+	      function useTableRowProps(_ref10) {
+	        let {
+	          role,
+	          ...props
+	        } = _ref10;
 	        return useGridNavigationRowProps(useMergedProps()({
 	          role: "row"
 	        }, props));
@@ -8069,7 +8176,8 @@
 
 	  y(() => {
 	    if (sortedColumn != null) {
-	      Object.entries(managedHeaderCells).forEach(([index, cell]) => {
+	      Object.entries(managedHeaderCells).forEach(_ref11 => {
+	        let [index, cell] = _ref11;
 	        cell.setSortedColumn(sortedColumn);
 	      });
 	    }
@@ -8077,10 +8185,11 @@
 	  // "interactive content" like a text box that passes through
 	  // keyboard inputs.
 
-	  function useTableProps({
-	    role,
-	    ...props
-	  }) {
+	  function useTableProps(_ref12) {
+	    let {
+	      role,
+	      ...props
+	    } = _ref12;
 	    return useHasFocusProps(useMergedProps()({
 	      role: "grid"
 	    }, props));
@@ -8441,18 +8550,19 @@
 	 */
 
 
-	function useCreateTransitionableProps({
-	  measure,
-	  animateOnMount,
-	  classBase,
-	  onTransitionUpdate,
-	  exitVisibility,
-	  duration,
-	  show,
-	  ref
-	}, otherProps) {
+	function useCreateTransitionableProps(_ref, otherProps) {
 	  var _classBase;
 
+	  let {
+	    measure,
+	    animateOnMount,
+	    classBase,
+	    onTransitionUpdate,
+	    exitVisibility,
+	    duration,
+	    show,
+	    ref
+	  } = _ref;
 	  (_classBase = classBase) !== null && _classBase !== void 0 ? _classBase : classBase = "transition";
 	  const {
 	    getElement,
@@ -8640,7 +8750,10 @@
 	}
 
 	function removeEmpty(obj) {
-	  return Object.fromEntries(Object.entries(obj).filter(([_, v]) => v != null));
+	  return Object.fromEntries(Object.entries(obj).filter(_ref2 => {
+	    let [_, v] = _ref2;
+	    return v != null;
+	  }));
 	}
 	/**
 	 * A component that *wraps an HTMLElement or other ref-forwarding component* and allows it to use CSS to transition in/out.
@@ -8657,18 +8770,19 @@
 	 */
 
 
-	const Transitionable = forwardElementRef$1(function Transition({
-	  children: child,
-	  duration,
-	  classBase,
-	  measure,
-	  exitVisibility,
-	  show,
-	  onTransitionUpdate,
-	  animateOnMount,
-	  childMountBehavior,
-	  ...props
-	}, r) {
+	const Transitionable = forwardElementRef$1(function Transition(_ref3, r) {
+	  let {
+	    children: child,
+	    duration,
+	    classBase,
+	    measure,
+	    exitVisibility,
+	    show,
+	    onTransitionUpdate,
+	    animateOnMount,
+	    childMountBehavior,
+	    ...props
+	  } = _ref3;
 	  const [hasShownOnce, setHasShownOnce] = l(false);
 	  const shouldSetHasShownOnce = hasShownOnce === false && childMountBehavior === "mount-on-show" && show === true;
 	  y(() => {
@@ -8713,40 +8827,42 @@
 	 * Be sure to merge these returned props with whatever the user passed in.
 	 */
 
-	function useCreateClipProps({
-	  classBase,
-	  clipOrigin,
-	  clipOriginInline,
-	  clipOriginBlock,
-	  clipMin,
-	  clipMinInline,
-	  clipMinBlock
-	}, otherProps) {
-	  var _classBase, _ref, _ref2, _ref3, _ref4;
+	function useCreateClipProps(_ref, otherProps) {
+	  var _classBase, _ref2, _ref3, _ref4, _ref5;
 
+	  let {
+	    classBase,
+	    clipOrigin,
+	    clipOriginInline,
+	    clipOriginBlock,
+	    clipMin,
+	    clipMinInline,
+	    clipMinBlock
+	  } = _ref;
 	  (_classBase = classBase) !== null && _classBase !== void 0 ? _classBase : classBase = "transition";
 	  return useMergedProps()({
 	    className: clsx(`${classBase}-clip`),
 	    classBase,
 	    style: {
-	      [`--${classBase}-clip-origin-inline`]: (_ref = clipOriginInline !== null && clipOriginInline !== void 0 ? clipOriginInline : clipOrigin) !== null && _ref !== void 0 ? _ref : 0.5,
-	      [`--${classBase}-clip-origin-block`]: (_ref2 = clipOriginBlock !== null && clipOriginBlock !== void 0 ? clipOriginBlock : clipOrigin) !== null && _ref2 !== void 0 ? _ref2 : 0,
-	      [`--${classBase}-clip-min-inline`]: (_ref3 = clipMinInline !== null && clipMinInline !== void 0 ? clipMinInline : clipMin) !== null && _ref3 !== void 0 ? _ref3 : 1,
-	      [`--${classBase}-clip-min-block`]: (_ref4 = clipMinBlock !== null && clipMinBlock !== void 0 ? clipMinBlock : clipMin) !== null && _ref4 !== void 0 ? _ref4 : 0
+	      [`--${classBase}-clip-origin-inline`]: (_ref2 = clipOriginInline !== null && clipOriginInline !== void 0 ? clipOriginInline : clipOrigin) !== null && _ref2 !== void 0 ? _ref2 : 0.5,
+	      [`--${classBase}-clip-origin-block`]: (_ref3 = clipOriginBlock !== null && clipOriginBlock !== void 0 ? clipOriginBlock : clipOrigin) !== null && _ref3 !== void 0 ? _ref3 : 0,
+	      [`--${classBase}-clip-min-inline`]: (_ref4 = clipMinInline !== null && clipMinInline !== void 0 ? clipMinInline : clipMin) !== null && _ref4 !== void 0 ? _ref4 : 1,
+	      [`--${classBase}-clip-min-block`]: (_ref5 = clipMinBlock !== null && clipMinBlock !== void 0 ? clipMinBlock : clipMin) !== null && _ref5 !== void 0 ? _ref5 : 0
 	    }
 	  }, otherProps);
 	}
-	const Clip = forwardElementRef$1(function Clip({
-	  classBase,
-	  clipOrigin,
-	  clipOriginInline,
-	  clipOriginBlock,
-	  clipMin,
-	  clipMinInline,
-	  clipMinBlock,
-	  show,
-	  ...rest
-	}, ref) {
+	const Clip = forwardElementRef$1(function Clip(_ref6, ref) {
+	  let {
+	    classBase,
+	    clipOrigin,
+	    clipOriginInline,
+	    clipOriginBlock,
+	    clipMin,
+	    clipMinInline,
+	    clipMinBlock,
+	    show,
+	    ...rest
+	  } = _ref6;
 	  return v$1(Transitionable, {
 	    show: show,
 	    ...useCreateClipProps({
@@ -8768,13 +8884,14 @@
 	 * Be sure to merge these returned props with whatever the user passed in.
 	 */
 
-	function useCreateFadeProps({
-	  classBase,
-	  fadeMin,
-	  fadeMax
-	}, otherProps) {
+	function useCreateFadeProps(_ref, otherProps) {
 	  var _classBase;
 
+	  let {
+	    classBase,
+	    fadeMin,
+	    fadeMax
+	  } = _ref;
 	  (_classBase = classBase) !== null && _classBase !== void 0 ? _classBase : classBase = "transition";
 	  return useMergedProps()({
 	    className: `${classBase}-fade`,
@@ -8796,13 +8913,14 @@
 	 * @see `Transitionable`
 	 */
 
-	const Fade = forwardElementRef$1(function Fade({
-	  classBase,
-	  fadeMin,
-	  fadeMax,
-	  show,
-	  ...rest
-	}, ref) {
+	const Fade = forwardElementRef$1(function Fade(_ref2, ref) {
+	  let {
+	    classBase,
+	    fadeMin,
+	    fadeMax,
+	    show,
+	    ...rest
+	  } = _ref2;
 	  return v$1(Transitionable, {
 	    show: show,
 	    ...useCreateFadeProps({
@@ -8815,13 +8933,14 @@
 	  });
 	});
 
-	forwardElementRef$1(function ClipFade({
-	  classBase,
-	  fadeMin,
-	  fadeMax,
-	  show,
-	  ...rest
-	}, ref) {
+	forwardElementRef$1(function ClipFade(_ref, ref) {
+	  let {
+	    classBase,
+	    fadeMin,
+	    fadeMax,
+	    show,
+	    ...rest
+	  } = _ref;
 	  return v$1(Clip, {
 	    show: show,
 	    ...useCreateFadeProps({
@@ -8843,12 +8962,13 @@
 	 * @example <Transitionable measure {...useCreateCollapseProps(...)} />
 	 */
 
-	function useCreateCollapseProps({
-	  classBase,
-	  minBlockSize
-	}, otherProps) {
+	function useCreateCollapseProps(_ref, otherProps) {
 	  var _classBase;
 
+	  let {
+	    classBase,
+	    minBlockSize
+	  } = _ref;
 	  (_classBase = classBase) !== null && _classBase !== void 0 ? _classBase : classBase = "transition";
 	  return useMergedProps()({
 	    classBase,
@@ -8869,12 +8989,13 @@
 	 * @see `Transitionable`
 	 */
 
-	const Collapse = forwardElementRef$1(function Collapse({
-	  classBase,
-	  show,
-	  minBlockSize,
-	  ...rest
-	}, ref) {
+	const Collapse = forwardElementRef$1(function Collapse(_ref2, ref) {
+	  let {
+	    classBase,
+	    show,
+	    minBlockSize,
+	    ...rest
+	  } = _ref2;
 	  return v$1(Transitionable, {
 	    show: show,
 	    ...useCreateCollapseProps({
@@ -8892,13 +9013,14 @@
 	 * @see `Transitionable` `Collapse` `Fade`
 	 */
 
-	forwardElementRef$1(function CollapseFade({
-	  classBase,
-	  fadeMin,
-	  fadeMax,
-	  show,
-	  ...rest
-	}, ref) {
+	forwardElementRef$1(function CollapseFade(_ref, ref) {
+	  let {
+	    classBase,
+	    fadeMin,
+	    fadeMax,
+	    show,
+	    ...rest
+	  } = _ref;
 	  return v$1(Collapse, {
 	    show: show,
 	    ...useCreateFadeProps({
@@ -8915,13 +9037,14 @@
 	 * Creates a set of props that implement a Slide transition. Like all `useCreate*Props` hooks, must be used in tamdem with a `Transitionable` component (or `useCreateTransitionableProps`).
 	 */
 
-	function useCreateSlideProps({
-	  classBase,
-	  slideTargetInline,
-	  slideTargetBlock
-	}, otherProps) {
+	function useCreateSlideProps(_ref, otherProps) {
 	  var _classBase, _slideTargetInline, _slideTargetBlock, _slideTargetInline2, _slideTargetBlock2;
 
+	  let {
+	    classBase,
+	    slideTargetInline,
+	    slideTargetBlock
+	  } = _ref;
 	  (_classBase = classBase) !== null && _classBase !== void 0 ? _classBase : classBase = "transition";
 	  const lastValidTargetInline = s((_slideTargetInline = slideTargetInline) !== null && _slideTargetInline !== void 0 ? _slideTargetInline : 1);
 	  const lastValidTargetBlock = s((_slideTargetBlock = slideTargetBlock) !== null && _slideTargetBlock !== void 0 ? _slideTargetBlock : 0);
@@ -8955,13 +9078,14 @@
 	 * @see `Transitionable`
 	 */
 
-	const Slide = forwardElementRef$1(function Slide({
-	  classBase,
-	  slideTargetInline,
-	  slideTargetBlock,
-	  show,
-	  ...rest
-	}, ref) {
+	const Slide = forwardElementRef$1(function Slide(_ref2, ref) {
+	  let {
+	    classBase,
+	    slideTargetInline,
+	    slideTargetBlock,
+	    show,
+	    ...rest
+	  } = _ref2;
 	  return v$1(Transitionable, {
 	    show: show,
 	    ...useCreateSlideProps({
@@ -8982,13 +9106,14 @@
 	 * @see `Transitionable` `Zoom`
 	 */
 
-	const SlideFade = forwardElementRef$1(function SlideFade({
-	  classBase,
-	  fadeMin,
-	  fadeMax,
-	  show,
-	  ...rest
-	}, ref) {
+	const SlideFade = forwardElementRef$1(function SlideFade(_ref, ref) {
+	  let {
+	    classBase,
+	    fadeMin,
+	    fadeMax,
+	    show,
+	    ...rest
+	  } = _ref;
 	  return v$1(Slide, {
 	    show: show,
 	    ...useCreateFadeProps({
@@ -9005,26 +9130,27 @@
 	 * Creates a set of props that implement a Zoom transition. Like all `useCreate*Props` hooks, must be used in tamdem with a `Transitionable` component (or `useCreateTransitionableProps`).
 	 */
 
-	function useCreateZoomProps({
-	  classBase,
-	  zoomOrigin,
-	  zoomOriginInline,
-	  zoomOriginBlock,
-	  zoomMin,
-	  zoomMinInline,
-	  zoomMinBlock
-	}, otherProps) {
-	  var _classBase, _ref, _ref2, _ref3, _ref4;
+	function useCreateZoomProps(_ref, otherProps) {
+	  var _classBase, _ref2, _ref3, _ref4, _ref5;
 
+	  let {
+	    classBase,
+	    zoomOrigin,
+	    zoomOriginInline,
+	    zoomOriginBlock,
+	    zoomMin,
+	    zoomMinInline,
+	    zoomMinBlock
+	  } = _ref;
 	  (_classBase = classBase) !== null && _classBase !== void 0 ? _classBase : classBase = "transition";
 	  return useMergedProps()({
 	    className: `${classBase}-zoom`,
 	    classBase,
 	    style: {
-	      [`--${classBase}-zoom-origin-inline`]: `${(_ref = zoomOriginInline !== null && zoomOriginInline !== void 0 ? zoomOriginInline : zoomOrigin) !== null && _ref !== void 0 ? _ref : 0.5}`,
-	      [`--${classBase}-zoom-origin-block`]: `${(_ref2 = zoomOriginBlock !== null && zoomOriginBlock !== void 0 ? zoomOriginBlock : zoomOrigin) !== null && _ref2 !== void 0 ? _ref2 : 0.5}`,
-	      [`--${classBase}-zoom-min-inline`]: `${(_ref3 = zoomMinInline !== null && zoomMinInline !== void 0 ? zoomMinInline : zoomMin) !== null && _ref3 !== void 0 ? _ref3 : 0}`,
-	      [`--${classBase}-zoom-min-block`]: `${(_ref4 = zoomMinBlock !== null && zoomMinBlock !== void 0 ? zoomMinBlock : zoomMin) !== null && _ref4 !== void 0 ? _ref4 : 0}`
+	      [`--${classBase}-zoom-origin-inline`]: `${(_ref2 = zoomOriginInline !== null && zoomOriginInline !== void 0 ? zoomOriginInline : zoomOrigin) !== null && _ref2 !== void 0 ? _ref2 : 0.5}`,
+	      [`--${classBase}-zoom-origin-block`]: `${(_ref3 = zoomOriginBlock !== null && zoomOriginBlock !== void 0 ? zoomOriginBlock : zoomOrigin) !== null && _ref3 !== void 0 ? _ref3 : 0.5}`,
+	      [`--${classBase}-zoom-min-inline`]: `${(_ref4 = zoomMinInline !== null && zoomMinInline !== void 0 ? zoomMinInline : zoomMin) !== null && _ref4 !== void 0 ? _ref4 : 0}`,
+	      [`--${classBase}-zoom-min-block`]: `${(_ref5 = zoomMinBlock !== null && zoomMinBlock !== void 0 ? zoomMinBlock : zoomMin) !== null && _ref5 !== void 0 ? _ref5 : 0}`
 	    }
 	  }, otherProps);
 	}
@@ -9033,17 +9159,18 @@
 	 * @see `Transitionable` `ZoomFade`
 	 */
 
-	const Zoom = forwardElementRef$1(function Zoom({
-	  classBase,
-	  zoomOrigin,
-	  zoomOriginInline,
-	  zoomOriginBlock,
-	  zoomMin,
-	  zoomMinInline,
-	  zoomMinBlock,
-	  show,
-	  ...rest
-	}, ref) {
+	const Zoom = forwardElementRef$1(function Zoom(_ref6, ref) {
+	  let {
+	    classBase,
+	    zoomOrigin,
+	    zoomOriginInline,
+	    zoomOriginBlock,
+	    zoomMin,
+	    zoomMinInline,
+	    zoomMinBlock,
+	    show,
+	    ...rest
+	  } = _ref6;
 	  return v$1(Transitionable, {
 	    show: show,
 	    ...useCreateZoomProps({
@@ -9068,13 +9195,14 @@
 	 * @see `Transitionable` `Zoom`
 	 */
 
-	const ZoomFade = forwardElementRef$1(function ZoomFade({
-	  classBase,
-	  fadeMin,
-	  fadeMax,
-	  show,
-	  ...rest
-	}, ref) {
+	const ZoomFade = forwardElementRef$1(function ZoomFade(_ref, ref) {
+	  let {
+	    classBase,
+	    fadeMin,
+	    fadeMax,
+	    show,
+	    ...rest
+	  } = _ref;
 	  return v$1(Zoom, {
 	    show: show,
 	    ...useCreateFadeProps({
@@ -9095,17 +9223,18 @@
 	 * @see `Transitionable` `SlideFadeZoom` `Zoom` `Fade`
 	 */
 
-	const SlideZoom = forwardElementRef$1(function SlideZoom({
-	  classBase,
-	  zoomMin,
-	  zoomMinInline,
-	  zoomMinBlock,
-	  zoomOrigin,
-	  zoomOriginInline,
-	  zoomOriginBlock,
-	  show,
-	  ...rest
-	}, ref) {
+	const SlideZoom = forwardElementRef$1(function SlideZoom(_ref, ref) {
+	  let {
+	    classBase,
+	    zoomMin,
+	    zoomMinInline,
+	    zoomMinBlock,
+	    zoomOrigin,
+	    zoomOriginInline,
+	    zoomOriginBlock,
+	    show,
+	    ...rest
+	  } = _ref;
 	  return v$1(Slide, {
 	    show: show,
 	    ...useCreateZoomProps({
@@ -9130,13 +9259,14 @@
 	 * @see `Transitionable` `Slide` `Zoom` `Fade`
 	 */
 
-	forwardElementRef$1(function SlideZoomFade({
-	  classBase,
-	  fadeMin,
-	  fadeMax,
-	  show,
-	  ...rest
-	}, ref) {
+	forwardElementRef$1(function SlideZoomFade(_ref, ref) {
+	  let {
+	    classBase,
+	    fadeMin,
+	    fadeMax,
+	    show,
+	    ...rest
+	  } = _ref;
 	  return v$1(SlideZoom, {
 	    show: show,
 	    ...useCreateFadeProps({
@@ -9153,14 +9283,15 @@
 	 * Creates a set of props that implement a Flip transition. Like all `useCreate*Props` hooks, must be used in tamdem with a `Transitionable` component (or `useCreateTransitionableProps`).
 	 */
 
-	function useCreateFlipProps({
-	  classBase,
-	  flipAngleInline,
-	  flipAngleBlock,
-	  perspective
-	}, otherProps) {
+	function useCreateFlipProps(_ref, otherProps) {
 	  var _classBase, _flipAngleInline, _flipAngleBlock, _flipAngleInline2, _flipAngleBlock2;
 
+	  let {
+	    classBase,
+	    flipAngleInline,
+	    flipAngleBlock,
+	    perspective
+	  } = _ref;
 	  (_classBase = classBase) !== null && _classBase !== void 0 ? _classBase : classBase = "transition";
 	  const lastValidTargetInline = s((_flipAngleInline = flipAngleInline) !== null && _flipAngleInline !== void 0 ? _flipAngleInline : 180);
 	  const lastValidTargetBlock = s((_flipAngleBlock = flipAngleBlock) !== null && _flipAngleBlock !== void 0 ? _flipAngleBlock : 0);
@@ -9195,14 +9326,15 @@
 	 * @see `Transitionable`
 	 */
 
-	const Flip = forwardElementRef$1(function Flip({
-	  classBase,
-	  flipAngleInline,
-	  flipAngleBlock,
-	  perspective,
-	  show,
-	  ...rest
-	}, ref) {
+	const Flip = forwardElementRef$1(function Flip(_ref2, ref) {
+	  let {
+	    classBase,
+	    flipAngleInline,
+	    flipAngleBlock,
+	    perspective,
+	    show,
+	    ...rest
+	  } = _ref2;
 	  return v$1(Transitionable, {
 	    show: show,
 	    ...useCreateFlipProps({
@@ -9221,10 +9353,11 @@
 	 * Be sure to merge these returned props with whatever the user passed in.
 	 */
 
-	function useCreateSwappableProps({
-	  inline,
-	  classBase
-	}, otherProps) {
+	function useCreateSwappableProps(_ref, otherProps) {
+	  let {
+	    inline,
+	    classBase
+	  } = _ref;
 	  return useMergedProps()({
 	    className: clsx(`${classBase !== null && classBase !== void 0 ? classBase : "transition"}-swap-container`, inline && `${classBase !== null && classBase !== void 0 ? classBase : "transition"}-swap-container-inline`)
 	  }, otherProps);
@@ -9241,14 +9374,15 @@
 	 * @returns
 	 */
 
-	const Swappable = forwardElementRef$1(function Swappable({
-	  children,
-	  classBase,
-	  inline,
-	  ...p
-	}, ref) {
+	const Swappable = forwardElementRef$1(function Swappable(_ref2, ref) {
 	  var _inline;
 
+	  let {
+	    children,
+	    classBase,
+	    inline,
+	    ...p
+	  } = _ref2;
 	  (_inline = inline) !== null && _inline !== void 0 ? _inline : inline = typeof children.type === "string" && inlineElements.has(children.type);
 	  const transitionProps = useCreateSwappableProps({
 	    classBase,
@@ -9266,17 +9400,18 @@
 	function forwardElementRef(component) {
 	  return x(component);
 	}
-	function usePseudoActive({
-	  "data-pseudo-active": active,
-	  ...props
-	}) {
+	function usePseudoActive(_ref) {
+	  let {
+	    "data-pseudo-active": active,
+	    ...props
+	  } = _ref;
 	  return useMergedProps()({
 	    className: clsx((active == true || active == "true") && "active")
 	  }, props);
 	}
 	const SpinnerDelayContext = D$1(1000);
 	function useSpinnerDelay(pending, timeout) {
-	  var _ref;
+	  var _ref3;
 
 	  const [showSpinner, setShowSpinner] = useState(false);
 	  y(() => {
@@ -9286,7 +9421,7 @@
 	  }, [pending]);
 	  const defaultDelay = F(SpinnerDelayContext);
 	  useTimeout({
-	    timeout: (_ref = timeout !== null && timeout !== void 0 ? timeout : defaultDelay) !== null && _ref !== void 0 ? _ref : 1000,
+	    timeout: (_ref3 = timeout !== null && timeout !== void 0 ? timeout : defaultDelay) !== null && _ref3 !== void 0 ? _ref3 : 1000,
 	    callback: () => {
 	      setShowSpinner(pending);
 	    },
@@ -9295,21 +9430,26 @@
 	  return showSpinner;
 	}
 	const DebugUtilContext = D$1(null);
-	function useLogRender(type, ...args) {
+	function useLogRender(type) {
 	  var _useContext;
 
 	  if ((_useContext = F(DebugUtilContext)) !== null && _useContext !== void 0 && _useContext.logRender.has(type)) {
+	    for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+	      args[_key - 1] = arguments[_key];
+	    }
+
 	    console.log(...args);
 	  }
 	}
 
 	const UseAriaAccordionSectionContext = D$1(null);
-	const Accordion = g(forwardElementRef(function Accordion({
-	  expandedIndex,
-	  setExpandedIndex,
-	  children,
-	  ...props
-	}, ref) {
+	const Accordion = g(forwardElementRef(function Accordion(_ref, ref) {
+	  let {
+	    expandedIndex,
+	    setExpandedIndex,
+	    children,
+	    ...props
+	  } = _ref;
 	  useLogRender("Accordion", `Rendering Accordion`);
 	  const {
 	    useAriaAccordionSection
@@ -9325,17 +9465,18 @@
 	    value: useAriaAccordionSection
 	  }, children));
 	}));
-	const AccordionSection = g(forwardElementRef(function AccordionSection({
-	  index,
-	  open,
-	  header,
-	  headerLevel,
-	  children,
-	  Transition,
-	  ...props
-	}, ref) {
+	const AccordionSection = g(forwardElementRef(function AccordionSection(_ref2, ref) {
 	  var _Transition, _headerLevel;
 
+	  let {
+	    index,
+	    open,
+	    header,
+	    headerLevel,
+	    children,
+	    Transition,
+	    ...props
+	  } = _ref2;
 	  useLogRender("AccordionSection", `Rendering AccordionSection #${index}`);
 	  const useAriaAccordionSection = F(UseAriaAccordionSectionContext);
 	  const {
@@ -9407,12 +9548,13 @@
 	  }
 	})();
 
-	function useAriaProgressBar({
-	  tag,
-	  max,
-	  value,
-	  valueText
-	}) {
+	function useAriaProgressBar(_ref) {
+	  let {
+	    tag,
+	    max,
+	    value,
+	    valueText
+	  } = _ref;
 	  //const { inputId, labelId, useGenericLabelInput, useGenericLabelLabel, useReferencedInputIdProps, useReferencedLabelIdProps } = useGenericLabel({ inputPrefix: "progressbar-", labelPrefix: "progressbar-reference-" });
 	  const {
 	    id: progressBarId,
@@ -9423,13 +9565,14 @@
 	    prefix: "progressbar-"
 	  });
 
-	  function useProgressProps({
-	    "aria-valuemax": ariaValueMax,
-	    "aria-valuenow": ariaValueNow,
-	    "aria-valuetext": ariaValueText,
-	    role,
-	    ...p
-	  }) {
+	  function useProgressProps(_ref2) {
+	    let {
+	      "aria-valuemax": ariaValueMax,
+	      "aria-valuenow": ariaValueNow,
+	      "aria-valuetext": ariaValueText,
+	      role,
+	      ...p
+	    } = _ref2;
 	    const extraProps = tag === "progress" ? {
 	      max,
 	      value: value !== null && value !== void 0 ? value : undefined,
@@ -9472,15 +9615,16 @@
 	 * @returns
 	 */
 
-	g(forwardElementRef(function ProgressLinear({
-	  colorVariant,
-	  max: maxProp,
-	  value: valueProp,
-	  valueText: valueTextProp,
-	  striped,
-	  variant,
-	  ...rest
-	}, ref) {
+	g(forwardElementRef(function ProgressLinear(_ref3, ref) {
+	  let {
+	    colorVariant,
+	    max: maxProp,
+	    value: valueProp,
+	    valueText: valueTextProp,
+	    striped,
+	    variant,
+	    ...rest
+	  } = _ref3;
 	  let value = F(ProgressValueContext);
 	  let max = F(ProgressMaxContext);
 	  let valueText = F(ProgressValueTextContext);
@@ -9524,18 +9668,19 @@
 	  });
 	}
 
-	const ProgressCircular = forwardElementRef(function ({
-	  loadingLabel,
-	  spinnerTimeout,
-	  mode,
-	  colorFill,
-	  childrenPosition,
-	  children,
-	  colorVariant,
-	  ...p
-	}, ref) {
+	const ProgressCircular = forwardElementRef(function (_ref4, ref) {
 	  var _loadingLabel, _childrenPosition;
 
+	  let {
+	    loadingLabel,
+	    spinnerTimeout,
+	    mode,
+	    colorFill,
+	    childrenPosition,
+	    children,
+	    colorVariant,
+	    ...p
+	  } = _ref4;
 	  (_loadingLabel = loadingLabel) !== null && _loadingLabel !== void 0 ? _loadingLabel : loadingLabel = "Operation pending";
 	  const {
 	    useProgressProps,
@@ -9632,42 +9777,47 @@
 	const DefaultDropdownDirectionContext = D$1(null);
 	const DefaultSizeContext = D$1("md");
 	const DefaultDisabledContext = D$1(false);
-	const ProvideDefaultButtonFill = g(function ProvideDefaultButtonFill({
-	  value,
-	  children
-	}) {
+	const ProvideDefaultButtonFill = g(function ProvideDefaultButtonFill(_ref) {
+	  let {
+	    value,
+	    children
+	  } = _ref;
 	  return v$1(DefaultFillStyleContext.Provider, {
 	    value: value
 	  }, children);
 	});
-	const ProvideDefaultButtonColor = g(function ProvideDefaultButtonColor({
-	  value,
-	  children
-	}) {
+	const ProvideDefaultButtonColor = g(function ProvideDefaultButtonColor(_ref2) {
+	  let {
+	    value,
+	    children
+	  } = _ref2;
 	  return v$1(DefaultColorStyleContext.Provider, {
 	    value: value
 	  }, children);
 	});
-	const ProvideDefaultButtonSize = g(function ProvideDefaultButtonSize({
-	  value,
-	  children
-	}) {
+	const ProvideDefaultButtonSize = g(function ProvideDefaultButtonSize(_ref3) {
+	  let {
+	    value,
+	    children
+	  } = _ref3;
 	  return v$1(DefaultSizeContext.Provider, {
 	    value: value
 	  }, children);
 	});
-	const ProvideDefaultButtonDisabled = g(function ProvideDefaultButtonDisabled({
-	  value,
-	  children
-	}) {
+	const ProvideDefaultButtonDisabled = g(function ProvideDefaultButtonDisabled(_ref4) {
+	  let {
+	    value,
+	    children
+	  } = _ref4;
 	  return v$1(DefaultDisabledContext.Provider, {
 	    value: value
 	  }, children);
 	});
-	const ProvideDefaultButtonDropdownDirection = g(function ProvideDefaultButtonDropdownDirection({
-	  value,
-	  children
-	}) {
+	const ProvideDefaultButtonDropdownDirection = g(function ProvideDefaultButtonDropdownDirection(_ref5) {
+	  let {
+	    value,
+	    children
+	  } = _ref5;
 	  return v$1(DefaultDropdownDirectionContext.Provider, {
 	    value: value
 	  }, children);
@@ -9961,10 +10111,11 @@
 	  }, v$1("div", { ...innerDomProps
 	  }, children)))))));
 	}));
-	const ButtonGroupChild = g(forwardElementRef(function ButtonGroupChild1({
-	  index,
-	  ...buttonProps
-	}, ref) {
+	const ButtonGroupChild = g(forwardElementRef(function ButtonGroupChild1(_ref, ref) {
+	  let {
+	    index,
+	    ...buttonProps
+	  } = _ref;
 	  useLogRender("ButtonGroupChild", `Rendering ButtonGroupChild #${index}`); // This is more-or-less forced to be a separate component because of the index prop.
 	  // It would be really nice to find a way to make that implicit based on DOM location,
 	  // specifically for small things like button groups...
@@ -9994,10 +10145,11 @@
 	const baseId = generateRandomId("render-portal-container-");
 	const BodyPortalClassContext = D$1("");
 	const BodyPortalRootContext = D$1(() => document.getElementById(baseId));
-	g(function SetBodyPortalClass({
-	  className,
-	  children
-	}) {
+	g(function SetBodyPortalClass(_ref) {
+	  let {
+	    className,
+	    children
+	  } = _ref;
 	  return v$1(BodyPortalClassContext.Provider, {
 	    value: className
 	  }, children);
@@ -10021,9 +10173,10 @@
 	  return container;
 	}
 
-	function BodyPortalRoot({
-	  children
-	}) {
+	function BodyPortalRoot(_ref2) {
+	  let {
+	    children
+	  } = _ref2;
 	  const [element, setElement, getElement] = useState(null);
 	  const {
 	    useRefElementProps
@@ -10035,9 +10188,10 @@
 	  }, children, v$1("div", { ...useRefElementProps({})
 	  }));
 	}
-	function BodyPortal({
-	  children
-	}) {
+	function BodyPortal(_ref3) {
+	  let {
+	    children
+	  } = _ref3;
 	  const id = s(null);
 	  const [portalElement, setPortalElement] = useState(null);
 	  const bodyPortalClass = F(BodyPortalClassContext);
@@ -10066,16 +10220,17 @@
 	  if (portalElement) return W(children, portalElement);else return null;
 	}
 
-	const Dialog = g(forwardElementRef(function Dialog({
-	  onClose,
-	  open,
-	  descriptive,
-	  title,
-	  footer,
-	  Transition,
-	  children,
-	  ...rest
-	}, ref) {
+	const Dialog = g(forwardElementRef(function Dialog(_ref, ref) {
+	  let {
+	    onClose,
+	    open,
+	    descriptive,
+	    title,
+	    footer,
+	    Transition,
+	    children,
+	    ...rest
+	  } = _ref;
 	  const {
 	    useDialogBackdrop,
 	    useDialogBody,
@@ -10134,17 +10289,18 @@
 	  }, footer))))))));
 	}));
 
-	const Drawer = g(function Drawer({
-	  onClose,
-	  open,
-	  descriptive,
-	  title,
-	  footer,
-	  closeButton,
-	  Transition,
-	  children,
-	  ...rest
-	}) {
+	const Drawer = g(function Drawer(_ref) {
+	  let {
+	    onClose,
+	    open,
+	    descriptive,
+	    title,
+	    footer,
+	    closeButton,
+	    Transition,
+	    children,
+	    ...rest
+	  } = _ref;
 	  const {
 	    useDrawerBackdrop,
 	    useDrawerBody,
@@ -10247,11 +10403,12 @@
 	  };
 	}
 
-	const InputGrid = g(forwardElementRef(function InputGrid({
-	  tag,
-	  children,
-	  ...props
-	}, ref) {
+	const InputGrid = g(forwardElementRef(function InputGrid(_ref, ref) {
+	  let {
+	    tag,
+	    children,
+	    ...props
+	  } = _ref;
 	  return v$1(tag !== null && tag !== void 0 ? tag : "div", useMergedProps()({
 	    class: "input-grid",
 	    ref
@@ -10265,12 +10422,13 @@
 	 * All Input-type components automatically detect when they're in an InputGroup and render different accordingly.
 	 */
 
-	const InputGroup = g(forwardElementRef(function InputGroup({
-	  children,
-	  size,
-	  tag,
-	  ...props
-	}, ref) {
+	const InputGroup = g(forwardElementRef(function InputGroup(_ref2, ref) {
+	  let {
+	    children,
+	    size,
+	    tag,
+	    ...props
+	  } = _ref2;
 	  return v$1(tag !== null && tag !== void 0 ? tag : "div", useMergedProps()({
 	    class: clsx("input-group", size && size != "md" && `input-group-${size}`),
 	    ref
@@ -10284,12 +10442,13 @@
 	 * That being said, if you just need a static block of text not hooked up to any input element, this is your component.
 	 */
 
-	const InputGroupText = forwardElementRef(function InputGroupText({
-	  tag,
-	  children,
-	  disabled,
-	  ...props
-	}, ref) {
+	const InputGroupText = forwardElementRef(function InputGroupText(_ref3, ref) {
+	  let {
+	    tag,
+	    children,
+	    disabled,
+	    ...props
+	  } = _ref3;
 	  return v$1(tag !== null && tag !== void 0 ? tag : "div", useMergedProps()({
 	    class: clsx(disabled && "disabled", "input-group-text"),
 	    ref
@@ -10307,16 +10466,17 @@
 	 */
 
 
-	const Checkbox = g(forwardElementRef(function Checkbox({
-	  checked,
-	  disabled,
-	  onCheck: onCheckedAsync,
-	  labelPosition,
-	  children: label,
-	  ...props
-	}, ref) {
+	const Checkbox = g(forwardElementRef(function Checkbox(_ref, ref) {
 	  var _labelPosition, _disabled;
 
+	  let {
+	    checked,
+	    disabled,
+	    onCheck: onCheckedAsync,
+	    labelPosition,
+	    children: label,
+	    ...props
+	  } = _ref;
 	  (_labelPosition = labelPosition) !== null && _labelPosition !== void 0 ? _labelPosition : labelPosition = "end";
 	  const {
 	    getSyncHandler,
@@ -10400,12 +10560,13 @@
 	  }, ret);
 	  return ret;
 	}));
-	const OptionallyInputGroup$1 = forwardElementRef(function OptionallyInputGroup({
-	  tag,
-	  children,
-	  isInput,
-	  ...props
-	}, ref) {
+	const OptionallyInputGroup$1 = forwardElementRef(function OptionallyInputGroup(_ref2, ref) {
+	  let {
+	    tag,
+	    children,
+	    isInput,
+	    ...props
+	  } = _ref2;
 	  const inInputGroup = F(InInputGroupContext);
 	  const inInputGrid = !!F(InInputGridContext);
 	  props = { ...props,
@@ -10433,14 +10594,15 @@
 	const knownNames = new Set();
 	const CurrentHandlerTypeContext = D$1("sync");
 	const RadioGroupContext = D$1(null);
-	const RadioGroup = g(forwardElementRef(function RadioGroup({
-	  children,
-	  name,
-	  selectedValue,
-	  label,
-	  labelPosition,
-	  onValueChange: onInputAsync
-	}, ref) {
+	const RadioGroup = g(forwardElementRef(function RadioGroup(_ref, ref) {
+	  let {
+	    children,
+	    name,
+	    selectedValue,
+	    label,
+	    labelPosition,
+	    onValueChange: onInputAsync
+	  } = _ref;
 	  const {
 	    getSyncHandler,
 	    pending,
@@ -10528,15 +10690,16 @@
 	    value: useRadio
 	  }, labelPosition == "start" && labelJsx, groupJsx, labelPosition == "end" && labelJsx));
 	}));
-	const Radio = g(forwardElementRef(function Radio({
-	  disabled,
-	  children: label,
-	  index,
-	  value,
-	  labelPosition
-	}, ref) {
+	const Radio = g(forwardElementRef(function Radio(_ref2, ref) {
 	  var _labelPosition, _disabled, _label;
 
+	  let {
+	    disabled,
+	    children: label,
+	    index,
+	    value,
+	    labelPosition
+	  } = _ref2;
 	  const useAriaRadio = F(RadioGroupContext);
 	  (_labelPosition = labelPosition) !== null && _labelPosition !== void 0 ? _labelPosition : labelPosition = "end";
 	  const text = null;
@@ -10615,16 +10778,17 @@
 	 * @returns
 	 */
 
-	const Switch = g(forwardElementRef(function Switch({
-	  checked,
-	  disabled,
-	  onCheck: onInputAsync,
-	  children: label,
-	  labelPosition,
-	  ...rest
-	}, ref) {
+	const Switch = g(forwardElementRef(function Switch(_ref, ref) {
 	  var _labelPosition, _disabled;
 
+	  let {
+	    checked,
+	    disabled,
+	    onCheck: onInputAsync,
+	    children: label,
+	    labelPosition,
+	    ...rest
+	  } = _ref;
 	  (_labelPosition = labelPosition) !== null && _labelPosition !== void 0 ? _labelPosition : labelPosition = "end";
 	  const {
 	    getSyncHandler,
@@ -10708,12 +10872,13 @@
 	})); // Note: Slightly different from the others
 	// (^^^^ I'm really glad I left that there)
 
-	const OptionallyInputGroup = forwardElementRef(function OptionallyInputGroup({
-	  tag,
-	  isInput,
-	  children,
-	  ...props
-	}, ref) {
+	const OptionallyInputGroup = forwardElementRef(function OptionallyInputGroup(_ref2, ref) {
+	  let {
+	    tag,
+	    isInput,
+	    children,
+	    ...props
+	  } = _ref2;
 	  const inInputGroup = F(InInputGroupContext);
 	  const inInputGrid = F(InInputGridContext);
 	  props = { ...props,
@@ -10731,13 +10896,14 @@
 	  }, children);
 	});
 
-	function UnlabelledInput({
-	  type,
-	  disabled,
-	  value,
-	  onValueChange: onInputAsync,
-	  ...props
-	}) {
+	function UnlabelledInput(_ref) {
+	  let {
+	    type,
+	    disabled,
+	    value,
+	    onValueChange: onInputAsync,
+	    ...props
+	  } = _ref;
 	  const [focusedInner, setFocusedInner, getFocusedInner] = useState(false);
 	  const {
 	    capture,
@@ -10811,15 +10977,16 @@
 	  }));
 	}
 
-	const Input = g(function Input({
-	  children,
-	  width,
-	  labelPosition,
-	  placeholder,
-	  ...props
-	}) {
+	const Input = g(function Input(_ref2) {
 	  var _labelPosition;
 
+	  let {
+	    children,
+	    width,
+	    labelPosition,
+	    placeholder,
+	    ...props
+	  } = _ref2;
 	  (_labelPosition = labelPosition) !== null && _labelPosition !== void 0 ? _labelPosition : labelPosition = "start";
 	  const {
 	    inputId,
@@ -10880,14 +11047,15 @@
 	 * Easy one-liners all around here!
 	 */
 
-	const GridResponsive = g(forwardElementRef(function ResponsiveGrid({
-	  tag,
-	  minWidth,
-	  children,
-	  ...props
-	}, ref) {
+	const GridResponsive = g(forwardElementRef(function ResponsiveGrid(_ref, ref) {
 	  var _children$props$child, _children$props;
 
+	  let {
+	    tag,
+	    minWidth,
+	    children,
+	    ...props
+	  } = _ref;
 	  const mergedProps = useMergedProps()({
 	    className: "responsive-grid",
 	    style: minWidth ? {
@@ -10903,14 +11071,15 @@
 	 * no matter how janky it looks.
 	 */
 
-	const GridStatic = g(forwardElementRef(function ResponsiveGrid({
-	  tag,
-	  columns,
-	  children,
-	  ...props
-	}, ref) {
+	const GridStatic = g(forwardElementRef(function ResponsiveGrid(_ref2, ref) {
 	  var _children$props$child2, _children$props2;
 
+	  let {
+	    tag,
+	    columns,
+	    children,
+	    ...props
+	  } = _ref2;
 	  const mergedProps = useMergedProps()({
 	    className: "static-grid",
 	    style: typeof columns === "string" ? {
@@ -12957,21 +13126,22 @@
 	  defaultModifiers: defaultModifiers
 	}); // eslint-disable-next-line import/no-unused-modules
 
-	function usePopperApi({
-	  updating,
-	  align,
-	  side,
-	  useArrow,
-	  followMouse,
-	  skidding,
-	  distance,
-	  paddingTop,
-	  paddingBottom,
-	  paddingLeft,
-	  paddingRight
-	}) {
+	function usePopperApi(_ref) {
 	  var _useArrow;
 
+	  let {
+	    updating,
+	    align,
+	    side,
+	    useArrow,
+	    followMouse,
+	    skidding,
+	    distance,
+	    paddingTop,
+	    paddingBottom,
+	    paddingLeft,
+	    paddingRight
+	  } = _ref;
 	  const [popperInstance, setPopperInstance, getPopperInstance] = useState(null);
 	  const [usedPlacement, setUsedPlacement] = useState(null);
 	  const [logicalDirection, setLogicalDirection] = useState(null);
@@ -12993,14 +13163,18 @@
 
 	      if ((_getSourceElement = getSourceElement()) !== null && _getSourceElement !== void 0 && _getSourceElement.contains(activeElement)) {
 	        setFocusedElement(activeElement);
+	        setMouseX(null);
+	        setMouseY(null);
 	      } else {
 	        setFocusedElement(null);
+	        if (followMouse) setPositionPreference("mouse");
 	      }
 	    }
 	  });
-	  const [getHasMouseover, setHasMouseover] = usePassiveState(null, () => false);
-	  const [getMouseX, setMouseX] = usePassiveState(() => void (popperInstance === null || popperInstance === void 0 ? void 0 : popperInstance.update()), () => 0);
-	  const [getMouseY, setMouseY] = usePassiveState(() => void (popperInstance === null || popperInstance === void 0 ? void 0 : popperInstance.update()), () => 0);
+	  const [getPositionPreference, setPositionPreference] = usePassiveState(null, () => "element"); //const [getHasMouseover, setHasMouseover] = usePassiveState(null, () => false);
+
+	  const [getMouseX, setMouseX] = usePassiveState(() => void (popperInstance === null || popperInstance === void 0 ? void 0 : popperInstance.update()), () => null);
+	  const [getMouseY, setMouseY] = usePassiveState(() => void (popperInstance === null || popperInstance === void 0 ? void 0 : popperInstance.update()), () => null);
 	  const resetPopperInstance = A$1((sourceElement, popperElement) => {
 	    if (sourceElement && popperElement) {
 	      const onFirstUpdate = () => {};
@@ -13046,16 +13220,37 @@
 	          let y = (_baseRect$y = baseRect === null || baseRect === void 0 ? void 0 : baseRect.y) !== null && _baseRect$y !== void 0 ? _baseRect$y : 0;
 	          let width = (_baseRect$width = baseRect === null || baseRect === void 0 ? void 0 : baseRect.width) !== null && _baseRect$width !== void 0 ? _baseRect$width : 0;
 	          let height = (_baseRect$height = baseRect === null || baseRect === void 0 ? void 0 : baseRect.height) !== null && _baseRect$height !== void 0 ? _baseRect$height : 0;
+	          let mouseX = getMouseX();
+	          let mouseY = getMouseY();
 
-	          if (followMouse && (getHasMouseover() || !focusedElement)) {
+	          if (followMouse && getPositionPreference() == "mouse") {
 	            var _baseRect$x2, _baseRect$y2, _baseRect$x3, _baseRect$width2, _baseRect$y3, _baseRect$height2;
+
+	            if (mouseX == null || mouseY == null) {
+	              switch (align) {
+	                case "start":
+	                  mouseX = x;
+	                  mouseY = y;
+	                  break;
+
+	                case "center":
+	                  mouseX = x + width / 2;
+	                  mouseY = y + height / 2;
+	                  break;
+
+	                case "end":
+	                  mouseX = x + width;
+	                  mouseY = y + height;
+	                  break;
+	              }
+	            }
 
 	            if (side === "block-start" || side === "block-end") {
 	              width = 0;
-	              x = getMouseX();
+	              x = mouseX;
 	            } else if (side === "inline-start" || side === "inline-end") {
 	              height = 0;
-	              y = getMouseX();
+	              y = mouseY;
 	            } // Clamp
 
 
@@ -13063,6 +13258,16 @@
 	            y = Math.max((_baseRect$y2 = baseRect === null || baseRect === void 0 ? void 0 : baseRect.y) !== null && _baseRect$y2 !== void 0 ? _baseRect$y2 : 0, y);
 	            x = Math.min(((_baseRect$x3 = baseRect === null || baseRect === void 0 ? void 0 : baseRect.x) !== null && _baseRect$x3 !== void 0 ? _baseRect$x3 : 0) + ((_baseRect$width2 = baseRect === null || baseRect === void 0 ? void 0 : baseRect.width) !== null && _baseRect$width2 !== void 0 ? _baseRect$width2 : 0), x);
 	            y = Math.min(((_baseRect$y3 = baseRect === null || baseRect === void 0 ? void 0 : baseRect.y) !== null && _baseRect$y3 !== void 0 ? _baseRect$y3 : 0) + ((_baseRect$height2 = baseRect === null || baseRect === void 0 ? void 0 : baseRect.height) !== null && _baseRect$height2 !== void 0 ? _baseRect$height2 : 0), y);
+	          } else {
+	            if (align === "center" && focusedElement) {
+	              if (side === "block-start" || side === "block-end") {
+	                x = x + width / 2;
+	                width = 0;
+	              } else if (side === "inline-start" || side === "inline-end") {
+	                y = y + height / 2;
+	                height = 0;
+	              }
+	            }
 	          }
 
 	          return DOMRectReadOnly.fromRect({
@@ -13138,9 +13343,9 @@
 	      let rafHandle = 0;
 
 	      function raf() {
-	        var _ref, _getPopperInstance;
+	        var _ref2, _getPopperInstance;
 
-	        let p = (_ref = closed ? Promise.resolve() : (_getPopperInstance = getPopperInstance()) === null || _getPopperInstance === void 0 ? void 0 : _getPopperInstance.update()) !== null && _ref !== void 0 ? _ref : Promise.resolve();
+	        let p = (_ref2 = closed ? Promise.resolve() : (_getPopperInstance = getPopperInstance()) === null || _getPopperInstance === void 0 ? void 0 : _getPopperInstance.update()) !== null && _ref2 !== void 0 ? _ref2 : Promise.resolve();
 	        p.then(_ => {
 	          if (rafHandle != 0) {
 	            rafHandle = requestAnimationFrame(raf);
@@ -13161,12 +13366,13 @@
 	      name: "updateState",
 	      enabled: true,
 	      phase: "write",
-	      fn: ({
-	        state,
-	        options,
-	        name,
-	        instance
-	      }) => {
+	      fn: _ref3 => {
+	        let {
+	          state,
+	          options,
+	          name,
+	          instance
+	        } = _ref3;
 	        let usedPlacement = state.placement;
 	        if (usedPlacement.includes("-")) usedPlacement = usedPlacement.substr(0, usedPlacement.indexOf("-"));
 	        setUsedPlacement(usedPlacement);
@@ -13188,17 +13394,14 @@
 	      };
 	      return useSourceElementRefProps(useMergedProps()(sourceAttributes, useMergedProps()({
 	        style,
-	        onMouseMove: e => {
+	        onMouseMove: !followMouse ? undefined : e => {
 	          const {
 	            clientX,
 	            clientY
 	          } = e;
 	          setMouseX(clientX);
 	          setMouseY(clientY);
-	          setHasMouseover(true);
-	        },
-	        onMouseLeave: e => {
-	          setHasMouseover(false);
+	          setPositionPreference("mouse");
 	        }
 	      }, useLogicalDirectionProps(props))));
 	    }
@@ -13208,9 +13411,11 @@
 	    };
 	  }
 
-	  function usePopperPopup({
-	    open
-	  }) {
+	  function usePopperPopup(_ref4) {
+	    let {
+	      open
+	    } = _ref4;
+
 	    function usePopperPopupProps(props) {
 	      let style = { ...popperStyle,
 	        pointerEvents: open ? undefined : "none"
@@ -13515,479 +13720,33 @@
 	  return newProps;
 	}
 
-	const OnCloseContext = D$1(undefined);
-	const UseMenuItemContext = D$1(null);
-	function Menu({
-	  anchor,
-	  anchorEventName,
-	  anchorTag,
-	  children,
-	  tag,
-	  side,
-	  align,
-	  Transition,
-	  forceOpen,
-	  ...rest
-	}) {
+	function Tooltip(_ref) {
 	  var _side, _align;
 
-	  useLogRender("Menu", `Rendering Menu`);
-	  (_side = side) !== null && _side !== void 0 ? _side : side = "block-end";
-	  (_align = align) !== null && _align !== void 0 ? _align : align = "start";
-	  let [open, setOpen] = useState(!!forceOpen);
-	  open || (open = !!forceOpen);
-	  const onClose = A$1(() => setOpen(false), []);
-
-	  const onOpen = () => setOpen(true);
-
-	  const {
-	    shouldUpdate: updatingForABit,
-	    onInteraction
-	  } = useShouldUpdatePopper(open);
-	  const {
-	    useElementSizeProps
-	  } = useElementSize({
-	    onSizeChange: onInteraction !== null && onInteraction !== void 0 ? onInteraction : () => {}
-	  });
-	  const {
-	    useHasFocusProps,
-	    getFocusedInner: getMenuHasFocusInner
-	  } = useHasFocus({});
-	  const {
-	    usePopperArrow,
-	    usePopperPopup,
-	    usePopperSource,
-	    usedPlacement,
-	    logicalDirection
-	  } = usePopperApi({
-	    align,
+	  let {
+	    children,
 	    side,
-	    updating: updatingForABit
-	  });
-	  const {
-	    useMenuButton,
-	    useMenuItem,
-	    useMenuProps,
-	    useMenuSubmenuItem,
-	    focusMenu
-	  } = useAriaMenu({
-	    shouldFocusOnChange: getMenuHasFocusInner,
-	    open,
-	    onClose,
-	    onOpen
-	  });
-	  const {
-	    useMenuButtonProps
-	  } = useMenuButton({
-	    tag: anchorTag !== null && anchorTag !== void 0 ? anchorTag : "button"
-	  });
-	  const {
-	    usePopperSourceProps
-	  } = usePopperSource();
-	  const {
-	    usePopperPopupProps
-	  } = usePopperPopup({
-	    open
-	  });
-	  usePopperArrow();
-	  /*const [sentinelFocused, setSentinelFocused] = useState(false);
-	  useTimeout({ callback: () => { if (sentinelFocused) onClose(); setSentinelFocused(false); }, timeout: 1000, triggerIndex: sentinelFocused.toString() })*/
-
-	  const [firstSentinelIsActive, setFirstSentinelIsActive] = useState(false);
-	  useTimeout({
-	    callback: () => {
-	      setFirstSentinelIsActive(open);
-	    },
-	    timeout: 100,
-	    triggerIndex: `${firstSentinelIsActive}`
-	  });
-
-	  if (Transition == undefined) {
-	    Transition = ZoomFade;
-	    rest.zoomOriginDynamic = 0;
-	    rest.zoomMin = 0.85;
-	  }
-
-	  if (logicalDirection && usedPlacement) rest = fixProps(logicalDirection, side, usedPlacement, rest);
-
-	  const onAnchorClick = () => setOpen(open => !open);
-
-	  return v$1(d$1, null, v$1(OnCloseContext.Provider, {
-	    value: onClose
-	  }, v$1(UseMenuItemContext.Provider, {
-	    value: useMenuItem
-	  }, v$1(ProvideDefaultButtonDropdownDirection, {
-	    value: side
-	  }, B(anchor, useMergedProps()({
-	    [anchorEventName !== null && anchorEventName !== void 0 ? anchorEventName : "onPress"]: onAnchorClick,
-	    ref: anchor.ref,
-	    class: `${open ? "active" : ""}`
-	  }, useElementSizeProps(usePopperSourceProps(useMenuButtonProps(anchor.props)))))), v$1(BodyPortal, null, v$1("div", { ...usePopperPopupProps({
-	      class: "dropdown-menu-popper"
-	    })
-	  }, v$1(Transition, { ...useMenuProps(rest),
-	    show: open,
-	    onTransitionUpdate: onInteraction,
-	    exitVisibility: "hidden"
-	  }, v$1("div", { ...useHasFocusProps({})
-	  }, v$1("button", {
-	    className: "visually-hidden",
-	    onFocus: !firstSentinelIsActive ? () => focusMenu === null || focusMenu === void 0 ? void 0 : focusMenu() : () => onClose(),
-	    onClick: onClose
-	  }, "Close menu"), v$1(tag !== null && tag !== void 0 ? tag : "ul", {
-	    children,
-	    className: "dropdown-menu elevation-raised-4 elevation-body-surface"
-	  }), v$1("button", {
-	    className: "visually-hidden",
-	    onFocus: onClose,
-	    onClick: onClose
-	  }, "Close menu"))))))));
-	}
-	function MenuItem({
-	  children,
-	  disabled,
-	  onPress: onPressAsync,
-	  index,
-	  ...rest
-	}) {
-	  useLogRender("MenuItem", `Rendering MenuItem`);
-	  const useMenuItem = F(UseMenuItemContext);
-	  const isInteractive = onPressAsync != null;
-	  const [text, setText] = useState(null);
-	  const {
-	    useRefElementProps,
-	    getElement
-	  } = useRefElement({
-	    onElementChange: element => {
-	      var _element$innerText;
-
-	      return setText((_element$innerText = element === null || element === void 0 ? void 0 : element.innerText) !== null && _element$innerText !== void 0 ? _element$innerText : "");
-	    }
-	  });
-	  useMutationObserver(getElement, {
-	    subtree: true,
-	    onCharacterData: info => {
-	      var _getElement$innerText, _getElement;
-
-	      return setText((_getElement$innerText = (_getElement = getElement()) === null || _getElement === void 0 ? void 0 : _getElement.innerText) !== null && _getElement$innerText !== void 0 ? _getElement$innerText : "");
-	    }
-	  });
-	  const {
-	    useMenuItemProps
-	  } = useMenuItem({
-	    index,
-	    text
-	  });
-	  const onClose = F(OnCloseContext);
-	  const {
-	    getSyncHandler,
-	    pending,
-	    settleCount,
-	    hasError
-	  } = useAsyncHandler()({
-	    capture: A$1(() => {
-	      return undefined;
-	    }, [])
-	  });
-	  disabled || (disabled = pending);
-	  const onPress = getSyncHandler(disabled || !onPressAsync ? null : () => {
-	    var _onPressAsync;
-
-	    return onPressAsync === null || onPressAsync === void 0 ? void 0 : (_onPressAsync = onPressAsync()) === null || _onPressAsync === void 0 ? void 0 : _onPressAsync.then(() => onClose === null || onClose === void 0 ? void 0 : onClose());
-	  });
-	  const newProps = useMenuItemProps(useRefElementProps(useMergedProps()(rest, {
-	    class: clsx(onPressAsync ? "dropdown-item" : "dropdown-item-text", disabled && "disabled"),
-	    "aria-disabled": disabled ? "true" : undefined
-	  })));
-	  const buttonProps = usePseudoActive(usePressEventHandlers(disabled ? null : onPress, undefined)(newProps));
-
-	  if (isInteractive) {
-	    return v$1("li", null, v$1(ProgressCircular, {
-	      mode: hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null,
-	      childrenPosition: "child",
-	      colorFill: "foreground-only",
-	      colorVariant: "info"
-	    }, v$1("button", { ...buttonProps
-	    }, children)));
-	  } else {
-	    return v$1("li", { ...newProps
-	    }, children);
-	  }
-	}
-
-	const UseTabContext = D$1(null);
-	const UseTabPanelContext = D$1(null);
-	const Tabs = g(forwardElementRef(function Tabs({
-	  onSelect: onSelectAsync,
-	  orientation,
-	  selectedIndex,
-	  selectionMode,
-	  children,
-	  visualVariant,
-	  ...props
-	}, ref) {
-	  var _orientation;
-
-	  const capture = e => {
-	    return e[EventDetail].selectedIndex;
-	  };
-
-	  (_orientation = orientation) !== null && _orientation !== void 0 ? _orientation : orientation = "inline";
-	  const {
-	    getSyncHandler
-	  } = useAsyncHandler()({
-	    capture: capture
-	  });
-	  const onSelect = getSyncHandler(onSelectAsync);
-	  const {
-	    useTab,
-	    useTabPanel,
-	    useTabsLabel,
-	    useTabsList
-	  } = useAriaTabs({
-	    onSelect,
-	    selectedIndex,
-	    selectionMode,
-	    orientation
-	  });
-	  const {
-	    useTabListProps
-	  } = useTabsList();
-	  return v$1("div", {
-	    class: clsx("tabs-container", `tabs-orientation-${orientation}`)
-	  }, v$1(UseTabContext.Provider, {
-	    value: useTab
-	  }, B(children[0], useTabListProps({
-	    className: clsx("nav", visualVariant == "pills" ? "nav-pills" : "nav-tabs")
-	  }), children[0].props.children)), v$1(UseTabPanelContext.Provider, {
-	    value: useTabPanel
-	  }, v$1(Swappable, null, v$1("div", { ...useMergedProps()({
-	      className: "tab-content elevation-depressed-3 elevation-body-surface"
-	    }, { ...props,
-	      ref
-	    })
-	  }, ...children.slice(1)))));
-	}));
-	const Tab = g(forwardElementRef(function Tab({
-	  index,
-	  children,
-	  ...props
-	}, ref) {
-	  const useTabContext = F(UseTabContext);
-	  const {
-	    useTabProps,
-	    selected
-	  } = useTabContext({
-	    index,
-	    text: null,
-	    tag: "button"
-	  });
-	  return v$1("li", {
-	    className: "nav-item",
-	    role: "presentation"
-	  }, v$1("button", { ...useTabProps(useMergedProps()({
-	      ref,
-	      class: clsx(`nav-link`, selected && `active`)
-	    }, props))
-	  }, children));
-	}));
-	const TabPanel = g(forwardElementRef(function TabPanel({
-	  index,
-	  children,
-	  Transition,
-	  ...rest
-	}, ref) {
-	  const useTabPanel = F(UseTabPanelContext);
-	  const {
-	    useTabPanelProps,
-	    visible
-	  } = useTabPanel({
-	    index
-	  });
-	  return v$1(Transition, useTabPanelProps({
-	    ref,
-	    show: visible,
-	    children,
+	    align,
+	    tooltip,
+	    Transition,
+	    mouseoverDelay,
 	    ...rest
-	  }));
-	}));
-
-	const PushToastContext = D$1(null);
-	const UpdateToastContext = D$1(null);
-	const DefaultToastTimeout = D$1(5000);
-	function ToastsProvider({
-	  children,
-	  defaultTimeout
-	}) {
-	  const [pushToast, setPushToast] = useState(null);
-	  const [updateToast, setUpdateToast] = useState(null);
-	  const pushToastStable = useStableCallback(toast => {
-	    var _pushToast;
-
-	    return (_pushToast = pushToast === null || pushToast === void 0 ? void 0 : pushToast(toast)) !== null && _pushToast !== void 0 ? _pushToast : -1;
-	  });
-	  const updateToastStable = useStableCallback((index, toast) => {
-	    return updateToast === null || updateToast === void 0 ? void 0 : updateToast(index, toast);
-	  });
-	  return v$1(d$1, null, v$1(DefaultToastTimeout.Provider, {
-	    value: defaultTimeout !== null && defaultTimeout !== void 0 ? defaultTimeout : 5000
-	  }, v$1(ToastsProviderHelper, {
-	    setPushToast: setPushToast,
-	    setUpdateToast: setUpdateToast
-	  }), pushToast && updateToast && v$1(PushToastContext.Provider, {
-	    value: pushToastStable
-	  }, v$1(UpdateToastContext.Provider, {
-	    value: updateToastStable
-	  }, children))));
-	}
-	function usePushToast() {
-	  const pushToast = F(PushToastContext);
-	  return pushToast;
-	}
-
-	function ToastsProviderHelper({
-	  setPushToast,
-	  setUpdateToast
-	}) {
-	  const [children, setChildren, getChildren] = useState([]);
-	  const pushToast = A$1(toast => {
-	    const randomKey = generateRandomId();
-	    let index = getChildren().length;
-	    setChildren(prev => [...prev, B(toast, {
-	      key: randomKey
-	    })]);
-	    return index;
-	  }, []);
-	  const updateToast = A$1((index, toast) => {
-	    var _getChildren$index;
-
-	    const key = (_getChildren$index = getChildren()[index]) === null || _getChildren$index === void 0 ? void 0 : _getChildren$index.key;
-	    console.assert(key);
-
-	    if (key) {
-	      setChildren(prev => {
-	        let newChildren = prev.slice();
-	        newChildren.splice(index, 1, B(toast, {
-	          key: key
-	        }));
-	        return newChildren;
-	      });
-	      return index;
-	    }
-	  }, []);
-	  h(() => {
-	    setPushToast(_ => pushToast);
-	  }, [pushToast]);
-	  h(() => {
-	    setUpdateToast(_ => updateToast);
-	  }, [updateToast]);
-	  return v$1(BodyPortal, null, v$1(ToastsContainerChildrenContext.Provider, {
-	    value: children
-	  }, v$1(ToastsContainer, null)));
-	}
-
-	const ToastsContainerChildrenContext = D$1([]);
-	const UseToastContext = D$1(null);
-
-	function ToastsContainer(props) {
-	  const children = F(ToastsContainerChildrenContext);
-	  const {
-	    useToast,
-	    useToastContainerProps
-	  } = useToasts(props);
-	  const [theme, setTheme] = useState(oppositeTheme(document.documentElement.classList));
-	  useMutationObserver(() => document.documentElement, {
-	    attributeFilter: ["class"],
-	    onAttributes: ({
-	      attributeName
-	    }) => {
-	      if (attributeName === "class") {
-	        setTheme(oppositeTheme(document.documentElement.classList));
-	      }
-	    }
-	  });
-	  return v$1(UseToastContext.Provider, {
-	    value: useToast
-	  }, v$1("div", { ...useToastContainerProps(useMergedProps()({
-	      className: `set-theme ${theme}`
-	    }, props))
-	  }, children));
-	}
-
-	function oppositeTheme(classList) {
-	  if (document.documentElement.classList.contains("theme-dark")) return "theme-light";else if (document.documentElement.classList.contains("theme-light")) return "theme-dark";else return "";
-	}
-
-	const ToastDismissContext = D$1(null);
-	function Toast({
-	  timeout,
-	  politeness,
-	  children
-	}) {
-	  const useToast = F(UseToastContext);
-	  const defaultTimeout = F(DefaultToastTimeout);
-	  const {
-	    useToastProps,
-	    dismiss,
-	    status
-	  } = useToast({
-	    timeout: timeout !== null && timeout !== void 0 ? timeout : defaultTimeout,
-	    politeness
-	  });
-	  const show = status != "dismissed";
-	  return v$1(ToastDismissContext.Provider, {
-	    value: dismiss
-	  }, v$1(SlideFade, {
-	    show: show,
-	    slideTargetInline: 1,
-	    animateOnMount: show,
-	    exitVisibility: "removed"
-	  }, v$1("div", { ...useToastProps({
-	      class: "toast show"
-	    })
-	  }, v$1("div", {
-	    class: "d-flex"
-	  }, v$1("div", {
-	    class: "toast-body"
-	  }, children), v$1(Button, {
-	    class: "btn-close me-2 m-auto",
-	    "aria-label": "Dismiss alert",
-	    onPress: dismiss
-	  })))));
-	}
-	/*
-	export function ToastHeader({ children }: { children: ComponentChildren }) {
-	    return (
-	        <div class="toast-header">
-	            <div class="me-auto">
-	                {children}
-	            </div>
-	            <Button class="btn-close" aria-label="Close" />
-	        </div>
-	    )
-	}*/
-
-	function Tooltip({
-	  children,
-	  side,
-	  align,
-	  tooltip,
-	  Transition,
-	  mouseoverDelay,
-	  ...rest
-	}) {
-	  var _side, _align;
-
+	  } = _ref;
 	  (_side = side) !== null && _side !== void 0 ? _side : side = "block-start";
 	  (_align = align) !== null && _align !== void 0 ? _align : align = "center";
-	  const {
+	  let {
 	    getIsOpen,
 	    isOpen,
 	    useTooltip,
 	    useTooltipTrigger
 	  } = useAriaTooltip({
 	    mouseoverDelay
-	  });
+	  }); // TODO: This is probably the most benign mutation during render issue ever
+	  // It's just used to preserve the last shown value when the tooltip is fading out because `tooltip` is null.
+
+	  const lastUsedTooltipRef = s(tooltip);
+	  lastUsedTooltipRef.current = tooltip || lastUsedTooltipRef.current;
+	  isOpen && (isOpen = !!tooltip);
 	  let cloneable;
 
 	  if (typeof children === "string" || typeof children === "number" || typeof children == "boolean" || typeof children === "bigint") {
@@ -14065,8 +13824,490 @@
 	    })
 	  }), v$1("div", {
 	    class: "tooltip-inner"
-	  }, tooltip))))));
+	  }, tooltip || lastUsedTooltipRef.current))))));
 	}
+
+	const HasTypeaheadContext = D$1(false);
+	const OnCloseContext = D$1(undefined);
+	const UseMenuItemContext = D$1(null);
+	function Menu(_ref) {
+	  var _side, _align;
+
+	  let {
+	    anchor,
+	    anchorEventName,
+	    anchorTag,
+	    children,
+	    tag,
+	    side,
+	    align,
+	    Transition,
+	    forceOpen,
+	    ...rest
+	  } = _ref;
+	  useLogRender("Menu", `Rendering Menu`);
+	  (_side = side) !== null && _side !== void 0 ? _side : side = "block-end";
+	  (_align = align) !== null && _align !== void 0 ? _align : align = "start";
+	  let [open, setOpen] = useState(!!forceOpen);
+	  open || (open = !!forceOpen);
+	  const onClose = A$1(() => setOpen(false), []);
+
+	  const onOpen = () => setOpen(true);
+
+	  const {
+	    shouldUpdate: updatingForABit,
+	    onInteraction
+	  } = useShouldUpdatePopper(open);
+	  const {
+	    useElementSizeProps
+	  } = useElementSize({
+	    onSizeChange: onInteraction !== null && onInteraction !== void 0 ? onInteraction : () => {}
+	  });
+	  const {
+	    useHasFocusProps,
+	    getFocusedInner: getMenuHasFocusInner
+	  } = useHasFocus({});
+	  const {
+	    usePopperArrow,
+	    usePopperPopup,
+	    usePopperSource,
+	    usedPlacement,
+	    logicalDirection
+	  } = usePopperApi({
+	    align,
+	    side,
+	    updating: updatingForABit
+	  });
+	  let {
+	    useMenuButton,
+	    useMenuItem,
+	    useMenuProps,
+	    useMenuSubmenuItem,
+	    focusMenu,
+	    useMenuSentinel,
+	    currentTypeahead,
+	    invalidTypeahead
+	  } = useAriaMenu({
+	    shouldFocusOnChange: getMenuHasFocusInner,
+	    open,
+	    onClose,
+	    onOpen
+	  });
+	  const {
+	    useMenuButtonProps
+	  } = useMenuButton({
+	    tag: anchorTag !== null && anchorTag !== void 0 ? anchorTag : "button"
+	  });
+	  const {
+	    usePopperSourceProps
+	  } = usePopperSource();
+	  const {
+	    usePopperPopupProps
+	  } = usePopperPopup({
+	    open
+	  });
+	  usePopperArrow();
+	  const {
+	    useMenuSentinelProps
+	  } = useMenuSentinel();
+	  /*const [sentinelFocused, setSentinelFocused] = useState(false);
+	  useTimeout({ callback: () => { if (sentinelFocused) onClose(); setSentinelFocused(false); }, timeout: 1000, triggerIndex: sentinelFocused.toString() })*/
+
+	  const [firstSentinelIsActive, setFirstSentinelIsActive] = useState(false);
+	  useTimeout({
+	    callback: () => {
+	      setFirstSentinelIsActive(open);
+	    },
+	    timeout: 100,
+	    triggerIndex: `${firstSentinelIsActive}`
+	  });
+
+	  if (Transition == undefined) {
+	    Transition = ZoomFade;
+	    rest.zoomOriginDynamic = 0;
+	    rest.zoomMin = 0.85;
+	  }
+
+	  if (logicalDirection && usedPlacement) rest = fixProps(logicalDirection, side, usedPlacement, rest);
+
+	  const onAnchorClick = () => setOpen(open => !open);
+
+	  if (currentTypeahead && invalidTypeahead) currentTypeahead = v$1(d$1, null, currentTypeahead, " ", v$1("i", {
+	    class: "bi bi-backspace"
+	  }));
+	  return v$1(d$1, null, v$1(HasTypeaheadContext.Provider, {
+	    value: !!currentTypeahead
+	  }, v$1(OnCloseContext.Provider, {
+	    value: onClose
+	  }, v$1(UseMenuItemContext.Provider, {
+	    value: useMenuItem
+	  }, v$1(ProvideDefaultButtonDropdownDirection, {
+	    value: side
+	  }, B(anchor, useMergedProps()({
+	    [anchorEventName !== null && anchorEventName !== void 0 ? anchorEventName : "onPress"]: onAnchorClick,
+	    ref: anchor.ref,
+	    class: `${open ? "active" : ""}`
+	  }, useElementSizeProps(usePopperSourceProps(useMenuButtonProps(anchor.props)))))), v$1(BodyPortal, null, v$1("div", { ...usePopperPopupProps({
+	      class: "dropdown-menu-popper"
+	    })
+	  }, v$1(Tooltip, {
+	    tooltip: currentTypeahead || null,
+	    side: "inline-end",
+	    align: "center",
+	    className: clsx("typeahead-tooltip", invalidTypeahead ? "text-danger" : undefined)
+	  }, v$1(Transition, { ...useMenuProps(rest),
+	    show: open,
+	    onTransitionUpdate: onInteraction,
+	    exitVisibility: "hidden"
+	  }, v$1("div", { ...useHasFocusProps({})
+	  }, v$1("button", {
+	    className: "visually-hidden",
+	    onFocus: !firstSentinelIsActive ? () => focusMenu === null || focusMenu === void 0 ? void 0 : focusMenu() : () => onClose(),
+	    onClick: onClose
+	  }, "Close menu"), v$1(tag !== null && tag !== void 0 ? tag : "ul", {
+	    children,
+	    className: "dropdown-menu elevation-raised-4 elevation-body-surface"
+	  }), v$1("button", { ...useMenuSentinelProps({
+	      className: "visually-hidden"
+	    })
+	  }, "Close menu"))))))))));
+	}
+	function MenuItem(_ref2) {
+	  let {
+	    children,
+	    disabled,
+	    onPress: onPressAsync,
+	    index,
+	    ...rest
+	  } = _ref2;
+	  useLogRender("MenuItem", `Rendering MenuItem`);
+	  const useMenuItem = F(UseMenuItemContext);
+	  const hasTypeahead = F(HasTypeaheadContext);
+	  const isInteractive = onPressAsync != null;
+	  const [text, setText] = useState(null);
+	  const {
+	    useRefElementProps,
+	    getElement
+	  } = useRefElement({
+	    onElementChange: element => {
+	      var _element$innerText;
+
+	      return setText((_element$innerText = element === null || element === void 0 ? void 0 : element.innerText) !== null && _element$innerText !== void 0 ? _element$innerText : "");
+	    }
+	  });
+	  useMutationObserver(getElement, {
+	    subtree: true,
+	    onCharacterData: info => {
+	      var _getElement$innerText, _getElement;
+
+	      return setText((_getElement$innerText = (_getElement = getElement()) === null || _getElement === void 0 ? void 0 : _getElement.innerText) !== null && _getElement$innerText !== void 0 ? _getElement$innerText : "");
+	    }
+	  });
+	  const {
+	    useMenuItemProps
+	  } = useMenuItem({
+	    index,
+	    text
+	  });
+	  const onClose = F(OnCloseContext);
+	  const {
+	    getSyncHandler,
+	    pending,
+	    settleCount,
+	    hasError
+	  } = useAsyncHandler()({
+	    capture: A$1(() => {
+	      return undefined;
+	    }, [])
+	  });
+	  disabled || (disabled = pending);
+	  const onPress = getSyncHandler(disabled || !onPressAsync ? null : () => {
+	    var _onPressAsync;
+
+	    return onPressAsync === null || onPressAsync === void 0 ? void 0 : (_onPressAsync = onPressAsync()) === null || _onPressAsync === void 0 ? void 0 : _onPressAsync.then(() => onClose === null || onClose === void 0 ? void 0 : onClose());
+	  });
+	  const newProps = useMenuItemProps(useRefElementProps(useMergedProps()(rest, {
+	    class: clsx(onPressAsync ? "dropdown-item" : "dropdown-item-text", disabled && "disabled"),
+	    "aria-disabled": disabled ? "true" : undefined
+	  })));
+	  const buttonProps = usePseudoActive(usePressEventHandlers(disabled ? null : onPress, hasTypeahead ? {
+	    space: "exclude"
+	  } : undefined)(newProps));
+
+	  if (isInteractive) {
+	    return v$1("li", null, v$1(ProgressCircular, {
+	      mode: hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null,
+	      childrenPosition: "child",
+	      colorFill: "foreground-only",
+	      colorVariant: "info"
+	    }, v$1("button", { ...buttonProps
+	    }, children)));
+	  } else {
+	    return v$1("li", { ...newProps
+	    }, children);
+	  }
+	}
+
+	const UseTabContext = D$1(null);
+	const UseTabPanelContext = D$1(null);
+	const Tabs = g(forwardElementRef(function Tabs(_ref, ref) {
+	  var _orientation;
+
+	  let {
+	    onSelect: onSelectAsync,
+	    orientation,
+	    selectedIndex,
+	    selectionMode,
+	    children,
+	    visualVariant,
+	    ...props
+	  } = _ref;
+
+	  const capture = e => {
+	    return e[EventDetail].selectedIndex;
+	  };
+
+	  (_orientation = orientation) !== null && _orientation !== void 0 ? _orientation : orientation = "inline";
+	  const {
+	    getSyncHandler
+	  } = useAsyncHandler()({
+	    capture: capture
+	  });
+	  const onSelect = getSyncHandler(onSelectAsync);
+	  const {
+	    useTab,
+	    useTabPanel,
+	    useTabsLabel,
+	    useTabsList
+	  } = useAriaTabs({
+	    onSelect,
+	    selectedIndex,
+	    selectionMode,
+	    orientation
+	  });
+	  const {
+	    useTabListProps
+	  } = useTabsList();
+	  return v$1("div", {
+	    class: clsx("tabs-container", `tabs-orientation-${orientation}`)
+	  }, v$1(UseTabContext.Provider, {
+	    value: useTab
+	  }, B(children[0], useTabListProps({
+	    className: clsx("nav", visualVariant == "pills" ? "nav-pills" : "nav-tabs")
+	  }), children[0].props.children)), v$1(UseTabPanelContext.Provider, {
+	    value: useTabPanel
+	  }, v$1(Swappable, null, v$1("div", { ...useMergedProps()({
+	      className: "tab-content elevation-depressed-3 elevation-body-surface"
+	    }, { ...props,
+	      ref
+	    })
+	  }, ...children.slice(1)))));
+	}));
+	const Tab = g(forwardElementRef(function Tab(_ref2, ref) {
+	  let {
+	    index,
+	    children,
+	    ...props
+	  } = _ref2;
+	  const useTabContext = F(UseTabContext);
+	  const {
+	    useTabProps,
+	    selected
+	  } = useTabContext({
+	    index,
+	    text: null,
+	    tag: "button"
+	  });
+	  return v$1("li", {
+	    className: "nav-item",
+	    role: "presentation"
+	  }, v$1("button", { ...useTabProps(useMergedProps()({
+	      ref,
+	      class: clsx(`nav-link`, selected && `active`)
+	    }, props))
+	  }, children));
+	}));
+	const TabPanel = g(forwardElementRef(function TabPanel(_ref3, ref) {
+	  let {
+	    index,
+	    children,
+	    Transition,
+	    ...rest
+	  } = _ref3;
+	  const useTabPanel = F(UseTabPanelContext);
+	  const {
+	    useTabPanelProps,
+	    visible
+	  } = useTabPanel({
+	    index
+	  });
+	  return v$1(Transition, useTabPanelProps({
+	    ref,
+	    show: visible,
+	    children,
+	    ...rest
+	  }));
+	}));
+
+	const PushToastContext = D$1(null);
+	const UpdateToastContext = D$1(null);
+	const DefaultToastTimeout = D$1(5000);
+	function ToastsProvider(_ref) {
+	  let {
+	    children,
+	    defaultTimeout
+	  } = _ref;
+	  const [pushToast, setPushToast] = useState(null);
+	  const [updateToast, setUpdateToast] = useState(null);
+	  const pushToastStable = useStableCallback(toast => {
+	    var _pushToast;
+
+	    return (_pushToast = pushToast === null || pushToast === void 0 ? void 0 : pushToast(toast)) !== null && _pushToast !== void 0 ? _pushToast : -1;
+	  });
+	  const updateToastStable = useStableCallback((index, toast) => {
+	    return updateToast === null || updateToast === void 0 ? void 0 : updateToast(index, toast);
+	  });
+	  return v$1(d$1, null, v$1(DefaultToastTimeout.Provider, {
+	    value: defaultTimeout !== null && defaultTimeout !== void 0 ? defaultTimeout : 5000
+	  }, v$1(ToastsProviderHelper, {
+	    setPushToast: setPushToast,
+	    setUpdateToast: setUpdateToast
+	  }), pushToast && updateToast && v$1(PushToastContext.Provider, {
+	    value: pushToastStable
+	  }, v$1(UpdateToastContext.Provider, {
+	    value: updateToastStable
+	  }, children))));
+	}
+	function usePushToast() {
+	  const pushToast = F(PushToastContext);
+	  return pushToast;
+	}
+
+	function ToastsProviderHelper(_ref2) {
+	  let {
+	    setPushToast,
+	    setUpdateToast
+	  } = _ref2;
+	  const [children, setChildren, getChildren] = useState([]);
+	  const pushToast = A$1(toast => {
+	    const randomKey = generateRandomId();
+	    let index = getChildren().length;
+	    setChildren(prev => [...prev, B(toast, {
+	      key: randomKey
+	    })]);
+	    return index;
+	  }, []);
+	  const updateToast = A$1((index, toast) => {
+	    var _getChildren$index;
+
+	    const key = (_getChildren$index = getChildren()[index]) === null || _getChildren$index === void 0 ? void 0 : _getChildren$index.key;
+	    console.assert(key);
+
+	    if (key) {
+	      setChildren(prev => {
+	        let newChildren = prev.slice();
+	        newChildren.splice(index, 1, B(toast, {
+	          key: key
+	        }));
+	        return newChildren;
+	      });
+	      return index;
+	    }
+	  }, []);
+	  h(() => {
+	    setPushToast(_ => pushToast);
+	  }, [pushToast]);
+	  h(() => {
+	    setUpdateToast(_ => updateToast);
+	  }, [updateToast]);
+	  return v$1(BodyPortal, null, v$1(ToastsContainerChildrenContext.Provider, {
+	    value: children
+	  }, v$1(ToastsContainer, null)));
+	}
+
+	const ToastsContainerChildrenContext = D$1([]);
+	const UseToastContext = D$1(null);
+
+	function ToastsContainer(props) {
+	  const children = F(ToastsContainerChildrenContext);
+	  const {
+	    useToast,
+	    useToastContainerProps
+	  } = useToasts();
+	  const [theme, setTheme] = useState(oppositeTheme(document.documentElement.classList));
+	  useMutationObserver(() => document.documentElement, {
+	    attributeFilter: ["class"],
+	    onAttributes: _ref3 => {
+	      let {
+	        attributeName
+	      } = _ref3;
+
+	      if (attributeName === "class") {
+	        setTheme(oppositeTheme(document.documentElement.classList));
+	      }
+	    }
+	  });
+	  return v$1(UseToastContext.Provider, {
+	    value: useToast
+	  }, v$1("div", { ...useToastContainerProps(useMergedProps()({
+	      className: `set-theme ${theme}`
+	    }, props))
+	  }, children));
+	}
+
+	function oppositeTheme(classList) {
+	  if (document.documentElement.classList.contains("theme-dark")) return "theme-light";else if (document.documentElement.classList.contains("theme-light")) return "theme-dark";else return "";
+	}
+
+	const ToastDismissContext = D$1(null);
+	function Toast(_ref4) {
+	  let {
+	    timeout,
+	    politeness,
+	    children
+	  } = _ref4;
+	  const useToast = F(UseToastContext);
+	  const defaultTimeout = F(DefaultToastTimeout);
+	  const {
+	    useToastProps,
+	    dismiss,
+	    status
+	  } = useToast({
+	    timeout: timeout !== null && timeout !== void 0 ? timeout : defaultTimeout,
+	    politeness
+	  });
+	  const show = status != "dismissed";
+	  return v$1(ToastDismissContext.Provider, {
+	    value: dismiss
+	  }, v$1(SlideFade, {
+	    show: show,
+	    slideTargetInline: 1,
+	    animateOnMount: show,
+	    exitVisibility: "removed"
+	  }, v$1("div", { ...useToastProps({
+	      class: "toast show"
+	    })
+	  }, v$1("div", {
+	    class: "d-flex"
+	  }, v$1("div", {
+	    class: "toast-body"
+	  }, children), v$1(Button, {
+	    class: "btn-close me-2 m-auto",
+	    "aria-label": "Dismiss alert",
+	    onPress: dismiss
+	  })))));
+	}
+	/*
+	export function ToastHeader({ children }: { children: ComponentChildren }) {
+	    return (
+	        <div class="toast-header">
+	            <div class="me-auto">
+	                {children}
+	            </div>
+	            <Button class="btn-close" aria-label="Close" />
+	        </div>
+	    )
+	}*/
 
 	const Card = g(forwardElementRef(function Card(p, ref) {
 	  let {
@@ -14080,10 +14321,12 @@
 	  }, children);
 	}));
 
-	function CardElement2({
-	  children,
-	  ...p
-	}, ref) {
+	function CardElement2(_ref, ref) {
+	  let {
+	    children,
+	    ...p
+	  } = _ref;
+
 	  switch (p.type) {
 	    default:
 	    case "paragraph":
@@ -14730,22 +14973,23 @@
 	const TableSectionContext = D$1(null);
 	const TableRowContext = D$1(null);
 	D$1([]);
-	const Table = g(forwardElementRef(function Table({
-	  children,
-	  small,
-	  striped,
-	  hoverable,
-	  border,
-	  variant,
-	  borderColor,
-	  ...props
-	}, ref) {
+	const Table = g(forwardElementRef(function Table(_ref, ref) {
+	  let {
+	    children,
+	    small,
+	    striped,
+	    hoverable,
+	    border,
+	    variant,
+	    borderColor,
+	    ...props
+	  } = _ref;
 	  useLogRender("Table", `Rendering Table`);
 	  const {
 	    useTableProps,
 	    useTableSection,
 	    managedTableSections
-	  } = useTable({});
+	  } = useTable();
 	  return v$1("table", { ...useTableProps(useMergedProps()({
 	      ref,
 	      className: clsx("table", small && "table-sm", striped && "table-striped", hoverable && "table-hover", border === "all" && "table-bordered", border === "none" && "table-borderless", variant && `table-${variant}`, borderColor && `border-${borderColor}`)
@@ -14755,21 +14999,23 @@
 	  }, children));
 	}));
 	const CellLocationContext = D$1(null);
-	const TableSectionImpl = g(forwardElementRef(function TableSectionImpl({
-	  tag,
-	  children,
-	  ...props
-	}, ref) {
+	const TableSectionImpl = g(forwardElementRef(function TableSectionImpl(_ref2, ref) {
+	  let {
+	    tag,
+	    children,
+	    ...props
+	  } = _ref2;
 	  return v$1(tag, { ...props,
 	    ref,
 	    children: Array.isArray(children) ? children : [children]
 	  });
 	}));
-	const TableSection = g(forwardElementRef(function TableSection({
-	  location,
-	  tag,
-	  ...props
-	}, ref) {
+	const TableSection = g(forwardElementRef(function TableSection(_ref3, ref) {
+	  let {
+	    location,
+	    tag,
+	    ...props
+	  } = _ref3;
 	  const useTableSection = F(TableSectionContext);
 	  const {
 	    useTableRow,
@@ -14786,10 +15032,11 @@
 	    })
 	  }));
 	}));
-	const TableHead = g(forwardElementRef(function TableHead({
-	  variant,
-	  ...props
-	}, ref) {
+	const TableHead = g(forwardElementRef(function TableHead(_ref4, ref) {
+	  let {
+	    variant,
+	    ...props
+	  } = _ref4;
 	  useLogRender("TableHead", `Rendering TableHead`);
 	  const [showShadow, setShowShadow] = useState(false);
 	  const {
@@ -14815,11 +15062,12 @@
 	    }, props))
 	  }));
 	}));
-	const TableBody = g(forwardElementRef(function TableBody({
-	  children,
-	  variant,
-	  ...props
-	}, ref) {
+	const TableBody = g(forwardElementRef(function TableBody(_ref5, ref) {
+	  let {
+	    children,
+	    variant,
+	    ...props
+	  } = _ref5;
 	  useLogRender("TableBody", `Rendering TableBody`);
 	  return v$1(CellLocationContext.Provider, {
 	    value: "body"
@@ -14833,11 +15081,12 @@
 	    }, props)
 	  }));
 	}));
-	g(forwardElementRef(function TableFoot({
-	  children,
-	  variant,
-	  ...props
-	}, ref) {
+	g(forwardElementRef(function TableFoot(_ref6, ref) {
+	  let {
+	    children,
+	    variant,
+	    ...props
+	  } = _ref6;
 	  useLogRender("TableFoot", `Rendering TableFoot`);
 	  return v$1(CellLocationContext.Provider, {
 	    value: "foot"
@@ -14853,13 +15102,14 @@
 	}));
 	const TableCellContext = D$1(null);
 	const TableHeadCellContext = D$1(null);
-	const TableRow = g(forwardElementRef(function TableRow({
-	  children,
-	  rowIndex: indexAsUnsorted,
-	  variant,
-	  hidden: hiddenAsUnsorted,
-	  ...props
-	}, ref) {
+	const TableRow = g(forwardElementRef(function TableRow(_ref7, ref) {
+	  let {
+	    children,
+	    rowIndex: indexAsUnsorted,
+	    variant,
+	    hidden: hiddenAsUnsorted,
+	    ...props
+	  } = _ref7;
 	  useLogRender("TableRow", `Rendering TableRow #${indexAsUnsorted}, ${hiddenAsUnsorted}`);
 	  const location = F(CellLocationContext);
 	  const useTableRow = F(TableRowContext);
@@ -14885,16 +15135,17 @@
 	  }, v$1("tr", { ...rowProps
 	  })));
 	}));
-	const TableCell = g(forwardElementRef(function TableCell({
-	  value: valueAsUnsorted,
-	  colSpan,
-	  children,
-	  columnIndex,
-	  variant,
-	  focus,
-	  active,
-	  ...props
-	}, ref) {
+	const TableCell = g(forwardElementRef(function TableCell(_ref8, ref) {
+	  let {
+	    value: valueAsUnsorted,
+	    colSpan,
+	    children,
+	    columnIndex,
+	    variant,
+	    focus,
+	    active,
+	    ...props
+	  } = _ref8;
 	  //focus ??= "cell";
 	  const useTableCell = F(TableCellContext);
 	  const {
@@ -14922,15 +15173,16 @@
 	    }, stringify(displayValue));
 	  }
 	}));
-	const TableHeaderCell = g(forwardElementRef(function TableHeaderCell({
-	  columnIndex,
-	  focus,
-	  children,
-	  variant,
-	  active,
-	  unsortable,
-	  ...props
-	}, ref) {
+	const TableHeaderCell = g(forwardElementRef(function TableHeaderCell(_ref9, ref) {
+	  let {
+	    columnIndex,
+	    focus,
+	    children,
+	    variant,
+	    active,
+	    unsortable,
+	    ...props
+	  } = _ref9;
 	  const useTableHeadCell = F(TableHeadCellContext);
 	  const {
 	    useTableHeadCellDelegateProps,
