@@ -87,7 +87,7 @@ export function DemoTable() {
                 </CardElement>
 
                 <CardElement>
-                    <Input type="number" value={rowCount} min={0} max={255} onValueChange={setRowCount}>Row count</Input>
+                    <Input type="number" value={rowCount} min={0} max={999} onValueChange={setRowCount}>Row count</Input>
                     <Checkbox checked={filterEvens} onCheck={setFilterEvens}>Filter out even numbers</Checkbox>
                 </CardElement>
                 <CardElement>

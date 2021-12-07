@@ -74,7 +74,7 @@ export function DemoButtons() {
                                 Buttons can be styled in different colors and fill styles. You can provide a global default with <code>Context</code> objects, like <code>&lt;ProvideDefaultButtonFill&gt;</code>.
                             </CardElement>
                             <CardElement>
-                                All outline styles have extra CSS applied to make them have correct contrast ratios on the default body background, partially because toggle buttons don't allow their <code>fill</code> to be controlled.
+                                All the normal Bootstrap colors are provided, albeit with adjustments to outlined buttons to ensure correct contrast ratios on the theme's body BG color.  Additionally, besides the `light` and `dark` colors, `subtle` and `contrast` are available as colors to use that simply map onto `light` or `dark` depending on the body BG color.
                             </CardElement>
                             <CardElement>
                                 <ButtonGroup>
@@ -113,12 +113,13 @@ export function DemoButtons() {
                                 A <code>&lt;Button&gt;</code> will use an anchor link internally if you provide it with an <code>href</code> prop, or optionally setting the <code>tag</code> prop to <code>a</code>.
                                 <InputGroup><Checkbox onCheck={setUsesLinkButton} checked={usesLinkButton} labelPosition="start">Use link button</Checkbox></InputGroup>
                             </CardElement>
-                            <CardElement >
+                            <CardElement>
                                 {usesLinkButton ? <Button target="_blank" href="https://www.example.com">example.com <i class="bi bi-box-arrow-up-right"></i></Button> : <Button onPress={onPress}>Regular button</Button>}
                             </CardElement>
 
                             <CardElement type="paragraph"><code>{usesLinkButton ? `<Button href="https://www.example.com">Link button</Button>` : `<Button onPress={onPress}>Regular button</Button>`}</code></CardElement>
-
+                            <CardElement>Keep in mind that styling a link as a button can cause confusion even while being completely compliant ("🧑‍💻 click on the link" "😡 what link??"), so be sure to use with some level of consideration.</CardElement>
+                            
 
 
                             <hr />
@@ -128,11 +129,11 @@ export function DemoButtons() {
                             <CardElement>
                                 If given a <code>pressed</code> prop, a button will become a toggle button, with an off/on state.  It will style itself as outlined when unpressed, and filled when pressed, so they are best used in groups.
                             </CardElement>
-                            <CardElement >
+                            <CardElement>
                                 <Button pressed={toggleOn} onPressToggle={onToggleInput}>Toggle button</Button>
                             </CardElement>
 
-                            <CardElement type="paragraph"><code>{`<Button pressed={pressed} onInput={onInput}>Toggle button</Button>`}</code></CardElement>
+                            <CardElement type="paragraph"><code>{`<Button pressed={pressed} onPressToggle={onInput}>Toggle button</Button>`}</code></CardElement>
 
                             <hr />
 

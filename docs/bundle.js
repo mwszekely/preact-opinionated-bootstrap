@@ -2816,17 +2816,17 @@
 	          But roughly isn't good enough if there are multiple matches.
 	          To convert our sorted index to the unsorted index we need, we have to find the first
 	          element that matches us *and* (if any such exist) is *after* our current selection.
-	           In other words, the only way typeahead moves backwards relative to our current
+	            In other words, the only way typeahead moves backwards relative to our current
 	          position is if the only other option is behind us.
-	           It's not specified in WAI-ARIA what to do in that case.  I suppose wrap back to the start?
+	            It's not specified in WAI-ARIA what to do in that case.  I suppose wrap back to the start?
 	          Though there's also a case for just going upwards to the nearest to prevent jumpiness.
 	          But if you're already doing typeahead on an unsorted list, like, jumpiness can't be avoided.
 	          I dunno. Going back to the start is the simplist though.
-	           Basically what this does: Starting from where we found ourselves after our binary search,
+	            Basically what this does: Starting from where we found ourselves after our binary search,
 	          scan backwards and forwards through all adjacent entries that also compare equally so that
 	          we can find the one whose `unsortedIndex` is the lowest amongst all other equal strings
 	          (and also the lowest `unsortedIndex` yadda yadda except that it comes after us).
-	           TODO: The binary search starts this off with a solid O(log n), but one-character
+	            TODO: The binary search starts this off with a solid O(log n), but one-character
 	          searches are, thanks to pigeonhole principal, eventually guaranteed to become
 	          O(n*log n). This is annoying but probably not easily solvable? There could be an
 	          exception for one-character strings, but that's just kicking the can down
@@ -14538,10 +14538,7 @@
 	                            " objects, like ",
 	                            v$1("code", null, "<ProvideDefaultButtonFill>"),
 	                            "."),
-	                        v$1(CardElement, null,
-	                            "All outline styles have extra CSS applied to make them have correct contrast ratios on the default body background, partially because toggle buttons don't allow their ",
-	                            v$1("code", null, "fill"),
-	                            " to be controlled."),
+	                        v$1(CardElement, null, "All the normal Bootstrap colors are provided, albeit with adjustments to outlined buttons to ensure correct contrast ratios on the theme's body BG color.  Additionally, besides the `light` and `dark` colors, `subtle` and `contrast` are available as colors to use that simply map onto `light` or `dark` depending on the body BG color."),
 	                        v$1(CardElement, null,
 	                            v$1(ButtonGroup, null,
 	                                v$1(ButtonGroupChild, { index: 0, onPressToggle: () => setButtonsFill("fill"), pressed: buttonsFill === "fill" }, "Fill"),
@@ -14593,6 +14590,7 @@
 	                            v$1("i", { class: "bi bi-box-arrow-up-right" })) : v$1(Button, { onPress: onPress }, "Regular button")),
 	                        v$1(CardElement, { type: "paragraph" },
 	                            v$1("code", null, usesLinkButton ? `<Button href="https://www.example.com">Link button</Button>` : `<Button onPress={onPress}>Regular button</Button>`)),
+	                        v$1(CardElement, null, "Keep in mind that styling a link as a button can cause confusion even while being completely compliant (\"\uD83E\uDDD1\u200D\uD83D\uDCBB click on the link\" \"\uD83D\uDE21 what link??\"), so be sure to use with some level of consideration."),
 	                        v$1("hr", null),
 	                        v$1(CardElement, { type: "subtitle", tag: "h3" }, "Toggle buttons"),
 	                        v$1(CardElement, null,
@@ -14602,7 +14600,7 @@
 	                        v$1(CardElement, null,
 	                            v$1(Button, { pressed: toggleOn, onPressToggle: onToggleInput }, "Toggle button")),
 	                        v$1(CardElement, { type: "paragraph" },
-	                            v$1("code", null, `<Button pressed={pressed} onInput={onInput}>Toggle button</Button>`)),
+	                            v$1("code", null, `<Button pressed={pressed} onPressToggle={onInput}>Toggle button</Button>`)),
 	                        v$1("hr", null),
 	                        v$1(CardElement, { type: "subtitle", tag: "h3" }, "Button Groups"),
 	                        v$1(CardElement, null,
@@ -14675,9 +14673,9 @@
 	                    v$1("li", null,
 	                        v$1("code", null, "Switch")),
 	                    v$1("li", null,
-	                        v$1("code", null, "Radio")),
+	                        v$1("code", null, "RadioGroup")),
 	                    v$1("li", null,
-	                        v$1("code", null, "Checkbox Group"))),
+	                        v$1("code", null, "CheckboxGroup"))),
 	                v$1("code", null, "Checkbox"),
 	                " and ",
 	                v$1("code", null, "Switch"),
@@ -14702,11 +14700,62 @@
 	                ", and Multi Select lists for an alternative to ",
 	                v$1("code", null, "CheckboxGroup"),
 	                "."),
-	            v$1(CardElement, { type: "subtitle", tag: "h3" }, "Async inputs"),
+	            v$1(CardElement, null, "Like other components, the event handlers can be sync or async, and when disabled, all inputs remain focusable so that they can still be announced by screen readers, have tooltips via mouseover, etc."),
+	            v$1(CardElement, { type: "subtitle", tag: "h3" }, "Checkbox"),
+	            v$1(CardElement, null,
+	                v$1(Checkbox, { disabled: disabled, checked: demoChecked, labelPosition: labelPosition, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Checkbox")),
 	            v$1(CardElement, null,
 	                "The ",
-	                v$1("code", null, "onInput"),
-	                " event handler for all types of inputs can be sync or async.",
+	                v$1("code", null, "checked"),
+	                " prop can be ",
+	                v$1("code", null, "true"),
+	                ", ",
+	                v$1("code", null, "false"),
+	                ", or ",
+	                v$1("code", null, "mixed"),
+	                ". The ",
+	                v$1("code", null, "onCheck"),
+	                " event fires when the user initiates a change."),
+	            v$1(CardElement, { type: "subtitle", tag: "h3" }, "Switch"),
+	            v$1(CardElement, null,
+	                v$1(Switch, { disabled: disabled, checked: demoChecked, labelPosition: labelPosition, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Switch")),
+	            v$1(CardElement, null,
+	                "In terms of props (not use-case), largely identical to a ",
+	                v$1("code", null, "Checkbox"),
+	                ", though it cannot have a ",
+	                v$1("code", null, "mixed"),
+	                " state."),
+	            v$1(CardElement, { type: "subtitle", tag: "h3" }, "Radio group"),
+	            v$1(CardElement, null,
+	                v$1(RadioGroup, { name: "radio-demo-0", selectedValue: demoRadio, onValueChange: usesAsync ? asyncRadioInput : setDemoRadio }, Array.from(function* () {
+	                    for (let i = 0; i < radioCount; ++i) {
+	                        yield v$1(Radio, { disabled: disabled, labelPosition: labelPosition, index: i, value: i, key: i },
+	                            "Radio #",
+	                            i + 1);
+	                    }
+	                }()))),
+	            v$1(CardElement, null,
+	                "The individual ",
+	                v$1("code", null, "RadioButton"),
+	                "s ",
+	                v$1("strong", null, "do not"),
+	                " accept a ",
+	                v$1("code", null, "checked"),
+	                " prop; instead, the parent ",
+	                v$1("code", null, "RadioGroup"),
+	                " accepts a ",
+	                v$1("code", null, "selectedValue"),
+	                ". Similarly, the ",
+	                v$1("code", null, "onValueChange"),
+	                " event handler lives on that parent ",
+	                v$1("code", null, "RadioGroup"),
+	                ". The individual child ",
+	                v$1("code", null, "Radio"),
+	                "s can be, e.g., marked as ",
+	                v$1("code", null, "disabled"),
+	                ", styled, etc. but all the logic happens with the parent."),
+	            v$1(CardElement, { type: "subtitle", tag: "h3" }, "Demos"),
+	            v$1(CardElement, null,
 	                v$1(InputGrid, null,
 	                    v$1(InputGroup, null,
 	                        v$1(Checkbox, { onCheck: setUsesAsync, checked: usesAsync, labelPosition: "start" }, "Async event handler")),
@@ -14715,18 +14764,42 @@
 	                    v$1(InputGroup, null,
 	                        v$1(Input, { disabled: !usesAsync, type: "number", onValueChange: setAsyncTimeout, value: asyncTimeout }, "Async timeout")),
 	                    v$1(InputGroup, null,
-	                        v$1(Input, { type: "number", onValueChange: setRadioCount, value: radioCount }, "# of radio buttons")))),
-	            v$1(CardElement, null,
-	                v$1(Checkbox, { checked: demoChecked, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Checkbox"),
-	                v$1(Switch, { checked: demoChecked, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Switch")),
-	            v$1(CardElement, null,
-	                v$1(RadioGroup, { name: "radio-demo-1", selectedValue: demoRadio, onValueChange: usesAsync ? asyncRadioInput : setDemoRadio }, Array.from(function* () {
-	                    for (let i = 0; i < radioCount; ++i) {
-	                        yield v$1(Radio, { index: i, value: i, key: i },
-	                            "Radio #",
-	                            i + 1);
-	                    }
-	                }()))),
+	                        v$1(Input, { type: "number", onValueChange: setRadioCount, value: radioCount }, "# of radio buttons")),
+	                    v$1(InputGroup, null,
+	                        v$1(Checkbox, { onCheck: setDisabled, checked: disabled, labelPosition: "start" }, "Inputs disabled")),
+	                    v$1(RadioGroup, { name: "radio-demo-6", selectedValue: labelPosition, onValueChange: setLabelPosition },
+	                        v$1(InputGroup, null,
+	                            v$1(Radio, { index: 0, value: "start", labelPosition: "start" }, "Label before")),
+	                        v$1(InputGroup, null,
+	                            v$1(Radio, { index: 1, value: "end", labelPosition: "start" }, "Label after")),
+	                        v$1(InputGroup, null,
+	                            v$1(Radio, { index: 2, value: "hidden", labelPosition: "start" }, "Label hidden (still announced verbally)"))))),
+	            v$1(GridStatic, { columns: 2 },
+	                v$1(CardElement, null,
+	                    v$1(Checkbox, { disabled: disabled, checked: demoChecked, labelPosition: labelPosition, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Checkbox"),
+	                    v$1(Switch, { disabled: disabled, checked: demoChecked, labelPosition: labelPosition, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Switch"),
+	                    v$1(RadioGroup, { name: "radio-demo-1a", selectedValue: demoRadio, onValueChange: usesAsync ? asyncRadioInput : setDemoRadio }, Array.from(function* () {
+	                        for (let i = 0; i < radioCount; ++i) {
+	                            yield v$1(Radio, { disabled: disabled, labelPosition: labelPosition, index: i, value: i, key: i },
+	                                "Radio #",
+	                                i + 1);
+	                        }
+	                    }()))),
+	                v$1(CardElement, null,
+	                    v$1(InputGrid, null,
+	                        v$1(InputGroup, null,
+	                            v$1(Checkbox, { disabled: disabled, checked: demoChecked, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Checkbox")),
+	                        v$1(InputGroup, null,
+	                            v$1(Switch, { disabled: disabled, checked: demoChecked, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Switch")),
+	                        v$1(RadioGroup, { name: "radio-demo-1b", selectedValue: demoRadio, onValueChange: usesAsync ? asyncRadioInput : setDemoRadio }, Array.from(function* () {
+	                            for (let i = 0; i < radioCount; ++i) {
+	                                yield v$1(InputGroup, null,
+	                                    v$1(Radio, { disabled: disabled, labelPosition: labelPosition, index: i, value: i, key: i },
+	                                        "Radio #",
+	                                        i + 1));
+	                            }
+	                        }())))),
+	                v$1(CardElement, null)),
 	            v$1(CardElement, { type: "paragraph" },
 	                v$1("code", null, `<Checkbox checked={checked} onInput={setChecked}>Checkbox</Checkbox>
 <Switch checked={checked} onInput={onInput}>Switch</Switch>
@@ -14734,88 +14807,7 @@
 <Radio index={0} value="value1">Radio #1</Radio>
 <Radio index={1} value="value2">Radio #2</Radio>
 <Radio index={2} value="value3">Radio #3</Radio>
-</RadioGroup>`)),
-	            v$1("hr", null),
-	            v$1(CardElement, { type: "subtitle", tag: "h3" }, "Disabling"),
-	            v$1(CardElement, null,
-	                "When disabled, all inputs remain focusable so that they can still be announced by screen readers, have tooltips via mouseover, etc.",
-	                v$1(InputGroup, null,
-	                    v$1(Checkbox, { onCheck: setDisabled, checked: disabled, labelPosition: "start" }, "Inputs disabled"))),
-	            v$1(CardElement, null,
-	                v$1(Checkbox, { disabled: disabled, checked: demoChecked, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Checkbox"),
-	                v$1(Switch, { disabled: disabled, checked: demoChecked, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Switch")),
-	            v$1(CardElement, null,
-	                v$1(RadioGroup, { name: "radio-demo-2", selectedValue: Math.min(2, demoRadio), onValueChange: usesAsync ? asyncRadioInput : setDemoRadio },
-	                    v$1(Radio, { disabled: disabled, index: 0, value: 0 }, "Radio #1"),
-	                    v$1(Radio, { disabled: disabled, index: 1, value: 1 }, "Radio #2"),
-	                    v$1(Radio, { disabled: disabled, index: 2, value: 2 }, "Radio #3"))),
-	            v$1("hr", null),
-	            v$1(CardElement, { type: "subtitle", tag: "h3" },
-	                v$1("code", null, "InputGroup"),
-	                " styling"),
-	            v$1(CardElement, { type: "paragraph" },
-	                "An ",
-	                v$1("code", null, "<InputGroup>"),
-	                " can be used to significantly change the styling of input components. The inputs and their labels will style themselves or automatically wrap themselves in ",
-	                v$1("code", null, "<InputGroupText>"),
-	                " as appropriate."),
-	            v$1(CardElement, null,
-	                v$1(InputGrid, null,
-	                    v$1(InputGroup, null,
-	                        v$1(Checkbox, { checked: demoChecked, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Checkbox")),
-	                    v$1(InputGroup, null,
-	                        v$1(Switch, { checked: demoChecked, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Switch")),
-	                    v$1(RadioGroup, { name: "radio-demo-5", selectedValue: Math.min(2, demoRadio), onValueChange: usesAsync ? asyncRadioInput : setDemoRadio },
-	                        v$1(InputGroup, null,
-	                            v$1(Radio, { index: 0, value: 0 }, "Radio #1")),
-	                        v$1(InputGroup, null,
-	                            v$1(Radio, { index: 1, value: 1 }, "Radio #2")),
-	                        v$1(InputGroup, null,
-	                            v$1(Radio, { index: 2, value: 2 }, "Radio #3"))))),
-	            v$1(CardElement, { type: "paragraph" },
-	                v$1("code", null, `<InputGroup>
-    <Checkbox checked={checked} onInput={setChecked}>Checkbox</Checkbox>
-</InputGroup>
-<InputGroup>
-    <Switch checked={checked} onInput={onInput}>Switch</Switch>
-</InputGroup>
-<RadioGroup name="radio-demo-5" selectedValue={value} onInput={setValue}>
-    <InputGroup>
-        <Radio index={0} value="value1" labelPosition="start">Radio #1</Radio>
-        <Radio index={1} value="value2" labelPosition="hidden">Radio #2</Radio>
-        <Radio index={2} value="value3" labelPosition="end">Radio #3</Radio>
-    </InputGroup>
-</RadioGroup>`)),
-	            v$1("hr", null),
-	            v$1(CardElement, { type: "subtitle", tag: "h3" }, "Labels"),
-	            v$1(CardElement, null,
-	                "By default, the label is positioned after the checkbox, radio, or switch.  You can change this with ",
-	                v$1("code", null, "labelPosition"),
-	                "."),
-	            v$1(CardElement, null,
-	                "Note that the ",
-	                v$1("code", null, "start"),
-	                " label position only has any visual effect while in an ",
-	                v$1("code", null, "InputGroup"),
-	                ", as Bootstrap places \"naked\" checkboxes and such in the margin area before the label no matter what order they come in the DOM."),
-	            v$1(CardElement, null,
-	                v$1(RadioGroup, { name: "radio-demo-6", selectedValue: labelPosition, onValueChange: setLabelPosition, labelPosition: labelPosition },
-	                    v$1(Radio, { labelPosition: labelPosition, index: 0, value: "start" }, "Before"),
-	                    v$1(Radio, { labelPosition: labelPosition, index: 1, value: "end" }, "After"),
-	                    v$1(Radio, { labelPosition: labelPosition, index: 2, value: "hidden" }, "Hidden (still announced verbally)"))),
-	            v$1(CardElement, null,
-	                v$1(InputGrid, null,
-	                    v$1(InputGroup, null,
-	                        v$1(Checkbox, { labelPosition: labelPosition, checked: demoChecked, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Checkbox")),
-	                    v$1(InputGroup, null,
-	                        v$1(Switch, { labelPosition: labelPosition, checked: demoChecked, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Switch")),
-	                    v$1(RadioGroup, { name: "radio-demo-7", selectedValue: Math.min(2, demoRadio), onValueChange: usesAsync ? asyncRadioInput : setDemoRadio },
-	                        v$1(InputGroup, null,
-	                            v$1(Radio, { labelPosition: labelPosition, index: 0, value: 0 }, "Radio #1")),
-	                        v$1(InputGroup, null,
-	                            v$1(Radio, { labelPosition: labelPosition, index: 1, value: 1 }, "Radio #2")),
-	                        v$1(InputGroup, null,
-	                            v$1(Radio, { labelPosition: labelPosition, index: 2, value: 2 }, "Radio #3"))))))));
+</RadioGroup>`)))));
 	}
 	async function sleep$4(arg0) {
 	    return new Promise(resolve => setTimeout(resolve, arg0));
@@ -15341,7 +15333,7 @@
 	                v$1("code", null, "TableRow"),
 	                " wrapper component, and the \"direct descendant\" restriction will apply to the wrapper instead."),
 	            v$1(CardElement, null,
-	                v$1(Input, { type: "number", value: rowCount, min: 0, max: 255, onValueChange: setRowCount }, "Row count"),
+	                v$1(Input, { type: "number", value: rowCount, min: 0, max: 999, onValueChange: setRowCount }, "Row count"),
 	                v$1(Checkbox, { checked: filterEvens, onCheck: setFilterEvens }, "Filter out even numbers")),
 	            v$1(CardElement, null,
 	                v$1(Table, null,
