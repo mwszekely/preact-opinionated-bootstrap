@@ -1,7 +1,7 @@
 import { ButtonColorVariant } from "../button";
 import clsx from "clsx";
 import { cloneElement, ComponentChildren, createContext, Fragment, h, Ref, VNode } from "preact";
-import { TableRowInfo, useTable, UseTableCell, UseTableCellParameters, UseTableHeadCell, UseTableHeadCellParameters, UseTableRow, UseTableRowParameters, UseTableSection } from "preact-aria-widgets";
+import { TableRowInfo, useTable, UseTableCell, UseTableCellParameters, UseTableHeadCell, UseTableHeadCellParameters, UseTableRow, UseTableRowParameters, UseTableHead, UseTableBody, UseTableFoot } from "preact-aria-widgets";
 import { useGlobalHandler, useMergedProps, useRefElement, useState } from "preact-prop-helpers";
 import { Flip, Swappable } from "preact-transition";
 import { memo } from "preact/compat";
@@ -59,7 +59,9 @@ export interface TableHeaderCellProps extends OmitStrong<UseTableHeadCellParamet
 }
 
 
-const TableSectionContext = createContext<UseTableSection<HTMLTableSectionElement, HTMLTableRowElement, HTMLTableCellElement>>(null!);
+const TableHeadContext = createContext<UseTableHead<HTMLTableSectionElement, HTMLTableRowElement, HTMLTableCellElement>>(null!);
+const TableBodyContext = createContext<UseTableBody<HTMLTableSectionElement, HTMLTableRowElement, HTMLTableCellElement>>(null!);
+const TableFootContext = createContext<UseTableFoot<HTMLTableSectionElement, HTMLTableRowElement, HTMLTableCellElement>>(null!);
 
 const TableRowContext = createContext<UseTableRow<HTMLTableRowElement, HTMLTableCellElement>>(null!);
 
@@ -69,7 +71,7 @@ const ManagedRowsContext = createContext<TableRowInfo[]>([]);
 export const Table = memo(forwardElementRef(function Table({ children, small, striped, hoverable, border, variant, borderColor, ...props }: TableProps, ref: Ref<HTMLTableElement>) {
     useLogRender("Table", `Rendering Table`);
 
-    const { useTableProps, useTableSection, managedTableSections } = useTable<HTMLTableElement, HTMLTableSectionElement, HTMLTableRowElement, HTMLTableCellElement>({});
+    const { useTableProps, useTableHead, useTableBody, useTableFoot, managedTableSections } = useTable<HTMLTableElement, HTMLTableSectionElement, HTMLTableRowElement, HTMLTableCellElement>({});
 
     return (
         <table {...useTableProps(useMergedProps<HTMLTableElement>()({
@@ -85,9 +87,13 @@ export const Table = memo(forwardElementRef(function Table({ children, small, st
                 borderColor && `border-${borderColor}`,
             )
         }, props))}>
-            <TableSectionContext.Provider value={useTableSection}>
-                {children}
-            </TableSectionContext.Provider>
+            <TableHeadContext.Provider value={useTableHead}>
+                <TableBodyContext.Provider value={useTableBody}>
+                    <TableFootContext.Provider value={useTableFoot}>
+                        {children}
+                    </TableFootContext.Provider>
+                </TableBodyContext.Provider>
+            </TableHeadContext.Provider>
         </table>
 
     );
@@ -98,7 +104,7 @@ const CellLocationContext = createContext<"head" | "body" | "foot">(null!);
 const TableSectionImpl = memo(forwardElementRef(function TableSectionImpl<E extends HTMLTableSectionElement>({ tag, children, ...props }: { children?: any } & OmitStrong<TableSectionProps<E>, "location" | "children">, ref: Ref<E>) {
     return h(tag as any, { ...props, ref, children: Array.isArray(children) ? (children as VNode<any>[]) : [(children as VNode<any>)] });
 }))
-
+/*
 const TableSection = memo(forwardElementRef(function TableSection<E extends HTMLTableSectionElement>({ location, tag, ...props }: TableSectionProps<E>, ref: Ref<E>) {
     const useTableSection = useContext(TableSectionContext);
     const { useTableRow, useTableSectionProps } = useTableSection({ location });
@@ -107,59 +113,62 @@ const TableSection = memo(forwardElementRef(function TableSection<E extends HTML
         <TableRowContext.Provider value={useTableRow}>
             <TableSectionImpl tag={tag} {...useTableSectionProps({ ...props as any, ref: ref as Ref<HTMLTableSectionElement> })} />
         </TableRowContext.Provider>);
-}))
+}))*/
 
 export const TableHead = memo(forwardElementRef(function TableHead({ variant, ...props }: TableHeadProps, ref: Ref<HTMLTableSectionElement>) {
     useLogRender("TableHead", `Rendering TableHead`);
     const [showShadow, setShowShadow] = useState(false);
 
+    const { useTableHeadProps, useTableHeadRow } = useContext(TableHeadContext)();
     const { getElement, useRefElementProps } = useRefElement<HTMLTableSectionElement>({});
 
     useGlobalHandler(window.document, "scroll", e => setShowShadow(!!getElement()?.offsetTop), { passive: true, capture: true });
 
     return (
         <CellLocationContext.Provider value={"head"}>
-            <TableSection location="head" tag="thead" {...useRefElementProps(useMergedProps<HTMLTableSectionElement>()({ ref, className: clsx("elevation-body-surface", showShadow && "floating", variant && `table-${variant}`) }, props))} />
+            <TableRowContext.Provider value={useTableHeadRow}>
+                <TableSectionImpl tag="thead" {...useRefElementProps(useMergedProps<HTMLTableSectionElement>()(useTableHeadProps({ ref, className: clsx("elevation-body-surface", showShadow && "floating", variant && `table-${variant}`) }), props))} />
+            </TableRowContext.Provider>
         </CellLocationContext.Provider>
     )
-
-
 }));
 
 
 
 export const TableBody = memo(forwardElementRef(function TableBody({ children, variant, ...props }: TableBodyProps, ref: Ref<HTMLTableSectionElement>) {
     useLogRender("TableBody", `Rendering TableBody`);
+    const { useTableBodyProps, useTableBodyRow } = useContext(TableBodyContext)();
 
     return (
         <CellLocationContext.Provider value={"body"}>
-            <TableSection location="body" tag="tbody" {...useMergedProps<HTMLTableSectionElement>()({ ref, children, className: clsx(variant && `table-${variant}`) }, props)} />
+            <TableRowContext.Provider value={useTableBodyRow}>
+                <TableSectionImpl tag="tbody" {...useMergedProps<HTMLTableSectionElement>()(useTableBodyProps({ ref, children, className: clsx(variant && `table-${variant}`) }), props)} />
+            </TableRowContext.Provider>
         </CellLocationContext.Provider>
     )
 }))
 
 export const TableFoot = memo(forwardElementRef(function TableFoot({ children, variant, ...props }: TableFootProps, ref: Ref<HTMLTableSectionElement>) {
     useLogRender("TableFoot", `Rendering TableFoot`);
+    const { useTableFootProps, useTableFootRow } = useContext(TableFootContext)();
     return (
         <CellLocationContext.Provider value={"foot"}>
-            <TableSection location="foot" tag="tfoot" {...useMergedProps<HTMLTableSectionElement>()({
-                ref,
-                children: Array.isArray(children) ? children : [children],
-                className: clsx(variant && `table-${variant}`)
-            }, props)} />
+            <TableRowContext.Provider value={useTableFootRow}>
+                <TableSectionImpl tag="tfoot" {...useMergedProps<HTMLTableSectionElement>()(useTableFootProps({ ref, children: Array.isArray(children) ? children : [children], className: clsx(variant && `table-${variant}`) }), props)} />
+            </TableRowContext.Provider>
         </CellLocationContext.Provider>
     )
 }))
 
 const TableCellContext = createContext<UseTableCell<HTMLTableCellElement>>(null!);
 const TableHeadCellContext = createContext<UseTableHeadCell<HTMLTableCellElement>>(null!);
-export const TableRow = memo(forwardElementRef(function TableRow({ children, rowIndex: indexAsUnsorted, variant, hidden: hiddenAsUnsorted, ...props }: TableRowProps, ref: Ref<HTMLTableRowElement>) {
+export const TableRow = memo(forwardElementRef(function TableRow({ children, index: indexAsUnsorted, variant, hidden: hiddenAsUnsorted, ...props }: TableRowProps, ref: Ref<HTMLTableRowElement>) {
     useLogRender("TableRow", `Rendering TableRow #${indexAsUnsorted}, ${hiddenAsUnsorted}`);
 
     const location = useContext(CellLocationContext);
 
     const useTableRow = useContext(TableRowContext);
-    const { useTableCell, useTableHeadCell, useTableRowProps } = useTableRow({ rowIndex: indexAsUnsorted, location, hidden: !!hiddenAsUnsorted });
+    const { useTableCell, useTableHeadCell, useTableRowProps } = useTableRow({ index: indexAsUnsorted, location, hidden: !!hiddenAsUnsorted });
 
 
     const rowProps = useTableRowProps({
@@ -180,11 +189,10 @@ export const TableRow = memo(forwardElementRef(function TableRow({ children, row
 }))
 
 
-export const TableCell = memo(forwardElementRef(function TableCell({ value: valueAsUnsorted, colSpan, children, columnIndex, variant, focus, active, ...props }: TableCellProps, ref: Ref<HTMLTableCellElement>) {
-    //focus ??= "cell";
+export const TableCell = memo(forwardElementRef(function TableCell({ value: valueAsUnsorted, colSpan, children, index: columnIndex, variant, focus, active, ...props }: TableCellProps, ref: Ref<HTMLTableCellElement>) {
 
     const useTableCell = useContext(TableCellContext);
-    const { useTableCellDelegateProps, useTableCellProps } = useTableCell({ columnIndex, value: valueAsUnsorted });
+    const { useTableCellDelegateProps, useTableCellProps } = useTableCell({ index: columnIndex, value: valueAsUnsorted });
 
     const childrenReceiveFocus = (focus != "cell" && (
         !!children &&
@@ -220,10 +228,10 @@ export const TableCell = memo(forwardElementRef(function TableCell({ value: valu
     }
 }));
 
-export const TableHeaderCell = memo(forwardElementRef(function TableHeaderCell({ columnIndex, focus, children, variant, active, unsortable, ...props }: TableHeaderCellProps, ref: Ref<HTMLTableCellElement>) {
+export const TableHeaderCell = memo(forwardElementRef(function TableHeaderCell({ index: columnIndex, focus, children, variant, active, unsortable, ...props }: TableHeaderCellProps, ref: Ref<HTMLTableCellElement>) {
 
     const useTableHeadCell = useContext(TableHeadCellContext);
-    const { useTableHeadCellDelegateProps, useTableHeadCellProps, sortDirection } = useTableHeadCell({ tag: "th", columnIndex });
+    const { useTableHeadCellDelegateProps, useTableHeadCellProps, sortDirection } = useTableHeadCell({ tag: "th", index: columnIndex });
 
     const childrenReceiveFocus = (focus != "cell" && (
         !!children &&

@@ -21,12 +21,12 @@
   appearance: none;
   height: calc(1.5em + (#{$btn-padding-y} * 2) + 2px);
 
-  transition: $btn-transition, text-shadow 0.15s ease-in-out;
+  /*transition: $btn-transition, text-shadow 0.15s ease-in-out;
 
   @include box-shadow(
     0 0 0 0 rgb(0 0 0 / 40%),
     0 0 0 0 $input-btn-focus-color
-  );
+  );*/
 
   &:not(.disabled):not(:disabled):not(.pending) {
     cursor: pointer;

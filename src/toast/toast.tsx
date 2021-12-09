@@ -98,13 +98,13 @@ function ToastsContainer(props: ToastsContainerProps) {
     const children = useContext(ToastsContainerChildrenContext);
     const { useToast, useToastContainerProps } = useToasts<HTMLDivElement>(props);
 
-    const [theme, setTheme] = useState(oppositeTheme(document.documentElement.classList));
+    const [theme, setTheme] = useState(oppositeTheme());
 
     useMutationObserver(() => document.documentElement, {
         attributeFilter: ["class"],
         onAttributes: ({ attributeName }) => {
             if (attributeName === "class") {
-                setTheme(oppositeTheme(document.documentElement.classList));
+                setTheme(oppositeTheme());
             }
         }
     });
@@ -119,7 +119,7 @@ function ToastsContainer(props: ToastsContainerProps) {
 }
 
 
-function oppositeTheme(classList: HTMLElement["classList"]) {
+function oppositeTheme() {
     if (document.documentElement.classList.contains("theme-dark"))
         return "theme-light";
     else if (document.documentElement.classList.contains("theme-light"))

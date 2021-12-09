@@ -1,8 +1,11 @@
 @use "sass:meta";
 
-//html.theme-dark, .set-theme.theme-dark {
-    @include meta.load-css("./index-dark-helper.scss");
-//}
+@include meta.load-css("./index-dark-helper.scss");
+
+.set-theme.theme-light {
+    @include meta.load-css("../index-light.css");
+}
+
 
 html.switching-theme {
     * {

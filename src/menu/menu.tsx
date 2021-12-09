@@ -55,14 +55,8 @@ export function Menu<E extends Element, T extends <E extends HTMLElement>(...arg
     const { usePopperSourceProps } = usePopperSource<any>();
     const { usePopperPopupProps } = usePopperPopup<HTMLDivElement>({ open });
     const { usePopperArrowProps } = usePopperArrow<HTMLDivElement>();
-    const { useMenuSentinelProps } = useMenuSentinel<HTMLButtonElement>();
-
-
-    /*const [sentinelFocused, setSentinelFocused] = useState(false);
-    useTimeout({ callback: () => { if (sentinelFocused) onClose(); setSentinelFocused(false); }, timeout: 1000, triggerIndex: sentinelFocused.toString() })*/
-
-    const [firstSentinelIsActive, setFirstSentinelIsActive] = useState(false);
-    useTimeout({ callback: () => { setFirstSentinelIsActive(open); }, timeout: 100, triggerIndex: `${firstSentinelIsActive}` });
+    const { useMenuSentinelProps: useFirstMenuSentinelProps } = useMenuSentinel<HTMLButtonElement>();
+    const { useMenuSentinelProps: useSecondMenuSentinelProps } = useMenuSentinel<HTMLButtonElement>();
 
     if (Transition == undefined) {
         Transition = ZoomFade as NonNullable<typeof Transition>;
@@ -92,15 +86,14 @@ export function Menu<E extends Element, T extends <E extends HTMLElement>(...arg
                                     <Transition {...(useMenuProps(rest) as any)} show={open} onTransitionUpdate={onInteraction} exitVisibility="hidden" >
                                         <div {...useHasFocusProps({})}>
 
-                                            {/*<div {...usePopperArrowProps({ className: "popper-arrow elevation-raised-4 elevation-body-surface" })} />*/}
-                                            <button className={"visually-hidden"} onFocus={!firstSentinelIsActive ? () => focusMenu?.() : () => onClose()} onClick={onClose}>Close menu</button>
+                                            <button {...useFirstMenuSentinelProps({ className: "visually-hidden" })}>Close menu</button>
                                             {h(tag ?? "ul", { children, className: "dropdown-menu elevation-raised-4 elevation-body-surface" })}
                                             {/*
                                         Add a sentinel to the end that catches attempts to tab out of the menu
                                         (Also a way for assistive technologies to find a way to close the menu)
                                     
                                     */}
-                                            <button {...useMenuSentinelProps({ className: "visually-hidden" })}>Close menu</button>
+                                            <button {...useSecondMenuSentinelProps({ className: "visually-hidden" })}>Close menu</button>
                                         </div>
                                     </Transition>
                                 </Tooltip>

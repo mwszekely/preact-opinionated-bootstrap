@@ -26,7 +26,7 @@
 
 // Add an additional width style to modal dialogs
 .modal-dialog.modal-max {
-  max-width: 95vw;
+  max-width: calc(100vw - 4em);
 }
 
 .modal-backdrop {

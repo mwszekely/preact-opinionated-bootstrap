@@ -367,7 +367,7 @@
 	});
 
 	createCommonjsModule(function (module, exports) {
-	  "undefined" != typeof window && window.__PREACT_DEVTOOLS__ && window.__PREACT_DEVTOOLS__.attachPreact("10.6.2", preact.options, {
+	  "undefined" != typeof window && window.__PREACT_DEVTOOLS__ && window.__PREACT_DEVTOOLS__.attachPreact("10.6.4", preact.options, {
 	    Fragment: preact.Fragment,
 	    Component: preact.Component
 	  }), exports.addHookName = function (e, o) {
@@ -769,22 +769,22 @@
 	function C$1(n, l, u, i, t) {
 	  var r;
 
-	  for (r in u) "children" === r || "key" === r || r in l || H(n, r, null, u[r], i);
+	  for (r in u) "children" === r || "key" === r || r in l || H$1(n, r, null, u[r], i);
 
-	  for (r in l) t && "function" != typeof l[r] || "children" === r || "key" === r || "value" === r || "checked" === r || u[r] === l[r] || H(n, r, l[r], u[r], i);
+	  for (r in l) t && "function" != typeof l[r] || "children" === r || "key" === r || "value" === r || "checked" === r || u[r] === l[r] || H$1(n, r, l[r], u[r], i);
 	}
 
-	function $$1(n, l, u) {
+	function $(n, l, u) {
 	  "-" === l[0] ? n.setProperty(l, u) : n[l] = null == u ? "" : "number" != typeof u || s$1.test(l) ? u : u + "px";
 	}
 
-	function H(n, l, u, i, t) {
+	function H$1(n, l, u, i, t) {
 	  var r;
 
 	  n: if ("style" === l) {
 	    if ("string" == typeof u) n.style.cssText = u;else {
-	      if ("string" == typeof i && (n.style.cssText = i = ""), i) for (l in i) u && l in u || $$1(n.style, l, "");
-	      if (u) for (l in u) i && u[l] === i[l] || $$1(n.style, l, u[l]);
+	      if ("string" == typeof i && (n.style.cssText = i = ""), i) for (l in i) u && l in u || $(n.style, l, "");
+	      if (u) for (l in u) i && u[l] === i[l] || $(n.style, l, u[l]);
 	    }
 	  } else if ("o" === l[0] && "n" === l[1]) r = l !== (l = l.replace(/Capture$/, "")), l = l.toLowerCase() in n ? l.toLowerCase().slice(2) : l.slice(2), n.l || (n.l = {}), n.l[l + r] = u, u ? i || n.addEventListener(l, r ? T$1 : I$1, r) : n.removeEventListener(l, r ? T$1 : I$1, r);else if ("dangerouslySetInnerHTML" !== l) {
 	    if (t) l = l.replace(/xlink[H:h]/, "h").replace(/sName$/, "s");else if ("href" !== l && "list" !== l && "form" !== l && "tabIndex" !== l && "download" !== l && l in n) try {
@@ -879,7 +879,7 @@
 	    }
 
 	    if (C$1(l, p, y, r, c), v) u.__k = [];else if (_ = u.props.children, w$2(l, Array.isArray(_) ? _ : [_], u, i, t, r && "foreignObject" !== d, o, f, o ? o[0] : i.__k && k$1(i, 0), c), null != o) for (_ = o.length; _--;) null != o[_] && h$1(o[_]);
-	    c || ("value" in p && void 0 !== (_ = p.value) && (_ !== y.value || _ !== l.value || "progress" === d && !_) && H(l, "value", _, y.value, !1), "checked" in p && void 0 !== (_ = p.checked) && _ !== l.checked && H(l, "checked", _, y.checked, !1));
+	    c || ("value" in p && void 0 !== (_ = p.value) && (_ !== y.value || _ !== l.value || "progress" === d && !_) && H$1(l, "value", _, y.value, !1), "checked" in p && void 0 !== (_ = p.checked) && _ !== l.checked && H$1(l, "checked", _, y.checked, !1));
 	  }
 	  return l;
 	}
@@ -971,7 +971,7 @@
 	  this.__v && (this.__e = !0, n && this.__h.push(n), m$1(this));
 	}, _.prototype.render = d$1, t$1 = [], r$1 = "function" == typeof Promise ? Promise.prototype.then.bind(Promise.resolve()) : setTimeout, g$2.__r = 0, f$1 = 0;
 
-	"undefined" != typeof window && window.__PREACT_DEVTOOLS__ && window.__PREACT_DEVTOOLS__.attachPreact("10.6.2", l$1, {
+	"undefined" != typeof window && window.__PREACT_DEVTOOLS__ && window.__PREACT_DEVTOOLS__.attachPreact("10.6.4", l$1, {
 	  Fragment: d$1,
 	  Component: _
 	});
@@ -1044,13 +1044,15 @@
 	}
 
 	function x$1() {
-	  i.forEach(function (t) {
-	    if (t.__P) try {
-	      t.__H.__h.forEach(g$1), t.__H.__h.forEach(j$1), t.__H.__h = [];
-	    } catch (u) {
-	      t.__H.__h = [], l$1.__e(u, t.__v);
-	    }
-	  }), i = [];
+	  var t;
+
+	  for (i.sort(function (n, t) {
+	    return n.__v.__b - t.__v.__b;
+	  }); t = i.pop();) if (t.__P) try {
+	    t.__H.__h.forEach(g$1), t.__H.__h.forEach(j$1), t.__H.__h = [];
+	  } catch (u) {
+	    t.__H.__h = [], l$1.__e(u, t.__v);
+	  }
 	}
 
 	l$1.__b = function (n) {
@@ -4068,6 +4070,141 @@
 	  };
 	}
 
+	/**
+	 * Hook that allows for the **direct descendant** children of this component to be re-ordered and sorted.
+	 *
+	 * Besides the prop-modifying hook that's returned, the `sort` function that's returned will
+	 * sort all children according to their value from the `getValue` argument you pass in.
+	 *
+	 * If you want to perform some re-ordering operation that's *not* a sort, you can manually
+	 * re-map each child's position using `mangleMap` and `demangleMap`, which convert between
+	 * sorted and unsorted index positions.
+	 *
+	 * Again, unlike some other hooks, **these children must be direct descendants**. This is because
+	 * the prop-modifying hook inspects the given children, then re-creates them with new `key`s.
+	 * Because keys are given special treatment and a child has no way of modifying its own key
+	 * there's no other time or place this can happen other than exactly within the parent component's render function.
+	 */
+
+	function useSortableChildren(_ref) {
+	  let {
+	    getIndex,
+	    getValue,
+	    compare: userCompare
+	  } = _ref;
+	  const compare = userCompare !== null && userCompare !== void 0 ? userCompare : defaultCompare; // These are used to keep track of a mapping between unsorted index <---> sorted index.
+	  // These are needed for navigation with the arrow keys.
+
+	  const mangleMap = s(new Map());
+	  const demangleMap = s(new Map());
+	  const indexMangler = A$1(n => {
+	    var _mangleMap$current$ge;
+
+	    return (_mangleMap$current$ge = mangleMap.current.get(n)) !== null && _mangleMap$current$ge !== void 0 ? _mangleMap$current$ge : n;
+	  }, []);
+	  const indexDemangler = A$1(n => {
+	    var _demangleMap$current$;
+
+	    return (_demangleMap$current$ = demangleMap.current.get(n)) !== null && _demangleMap$current$ !== void 0 ? _demangleMap$current$ : n;
+	  }, []); // The sort function needs to be able to update whoever has all the sortable children.
+	  // Because that might not be the consumer of *this* hook directly (e.g. a table uses
+	  // this hook, but it's tbody that actually needs updating), we need to remotely
+	  // get and set a forceUpdate function.
+
+	  const [getForceUpdate, setForceUpdate] = usePassiveState(null); // The actual sort function.
+
+	  const sort = A$1(function (managedRows, direction) {
+	    var _getForceUpdate;
+
+	    for (var _len = arguments.length, args = new Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+	      args[_key - 2] = arguments[_key];
+	    }
+
+	    let sortedRows = managedRows.slice().sort((lhsRow, rhsRow) => {
+	      const lhsValue = getValue(lhsRow, ...args);
+	      const rhsValue = getValue(rhsRow, ...args);
+	      let result = compare(lhsValue, rhsValue); // lhsRow.getManagedCells()?.[column]?.value, rhsRow.getManagedCells()?.[column]?.value);
+
+	      if (direction[0] == "d") return -result;
+	      return result;
+	    }); // Update our sorted <--> unsorted indices map 
+	    // and rerender the whole table, basically
+
+	    for (let indexAsSorted = 0; indexAsSorted < sortedRows.length; ++indexAsSorted) {
+	      const indexAsUnsorted = sortedRows[indexAsSorted].index;
+	      mangleMap.current.set(indexAsSorted, indexAsUnsorted);
+	      demangleMap.current.set(indexAsUnsorted, indexAsSorted);
+	    }
+
+	    (_getForceUpdate = getForceUpdate()) === null || _getForceUpdate === void 0 ? void 0 : _getForceUpdate();
+	  }, [
+	    /* Must remain stable */
+	  ]);
+	  const useSortableProps = A$1(_ref2 => {
+	    let {
+	      children,
+	      ...props
+	    } = _ref2;
+	    const forceUpdate = useForceUpdate();
+	    h(() => {
+	      setForceUpdate(prev => forceUpdate);
+	    }, [forceUpdate]);
+	    return useMergedProps()({
+	      role: "rowgroup",
+	      children: children.slice().sort((lhs, rhs) => {
+	        var _ref3, _demangleMap$current$2, _ref4, _demangleMap$current$3;
+
+	        return ((_ref3 = (_demangleMap$current$2 = demangleMap.current.get(getIndex(lhs.props))) !== null && _demangleMap$current$2 !== void 0 ? _demangleMap$current$2 : getIndex(lhs.props)) !== null && _ref3 !== void 0 ? _ref3 : 0) - ((_ref4 = (_demangleMap$current$3 = demangleMap.current.get(getIndex(rhs.props))) !== null && _demangleMap$current$3 !== void 0 ? _demangleMap$current$3 : getIndex(rhs.props)) !== null && _ref4 !== void 0 ? _ref4 : 0);
+	      }).map(child => v$1(child.type, { ...child.props,
+	        key: getIndex(child.props)
+	      }))
+	    }, props);
+	  }, []);
+	  return {
+	    useSortableProps,
+	    sort,
+	    indexMangler,
+	    indexDemangler,
+	    mangleMap,
+	    demangleMap
+	  };
+	}
+
+	function defaultCompare(lhs, rhs) {
+	  return compare1(lhs, rhs);
+
+	  function compare3(lhs, rhs) {
+	    // Coerce strings to numbers if they seem to stay the same when serialized
+	    if (`${+lhs}` === lhs) lhs = +lhs;
+	    if (`${+rhs}` === rhs) rhs = +rhs; // At this point, if either argument is a string, turn the other one into one too
+
+	    if (typeof lhs === "string") rhs = `${rhs}`;
+	    if (typeof rhs === "string") lhs = `${lhs}`;
+	    console.assert(typeof lhs === typeof rhs);
+	    if (typeof lhs === "string") return lhs.localeCompare(rhs);
+	    if (typeof lhs === "number") return +lhs - +rhs;
+	    return 0;
+	  }
+
+	  function compare2(lhs, rhs) {
+	    if (typeof lhs === "boolean" || lhs instanceof Date) lhs = +lhs;
+	    if (typeof rhs === "boolean" || rhs instanceof Date) rhs = +rhs;
+	    return compare3(lhs, rhs);
+	  }
+
+	  function compare1(lhs, rhs) {
+	    if (lhs == null && rhs == null) {
+	      // They're both null
+	      return 0;
+	    } else if (lhs == null || rhs == null) {
+	      // One of the two is null -- easy case
+	      return lhs != null ? 1 : -1;
+	    }
+
+	    return compare2(lhs, rhs);
+	  }
+	}
+
 	/*!
 	* tabbable 5.2.1
 	* @license MIT, https://github.com/focus-trap/tabbable/blob/master/LICENSE
@@ -7083,7 +7220,7 @@
 	        setFirstSentinelIsActive(open);
 	      },
 	      timeout: 100,
-	      triggerIndex: `${firstSentinelIsActive}`
+	      triggerIndex: `${open}-${firstSentinelIsActive}`
 	    });
 	    const onFocus = firstSentinelIsActive ? () => stableOnClose() : () => focusMenu === null || focusMenu === void 0 ? void 0 : focusMenu();
 
@@ -7872,17 +8009,31 @@
 	// so it can be used with, like, lists and junk too
 	// but just getting to this point in the first place was *exhausting*.
 	//
-	// Please be aware of the special conditions between
-	// thead, tbody, tfoot and their respective child rows
-	// (namely each row MUST be a DIRECT descendant of its
-	// corresponding table section, or at the very least,
-	// must have a child that takes a rowIndex prop that
-	// corresponds to its row amongst ALL children, even those
-	// in a different table section)
+	// Please be aware that table rows must be *direct descendants* of
+
 
 	function useTable(_ref) {
-	  // This is the index of the currently sorted column('s header cell that was clicked to sort it).
+	  // Only used by the sorting function, nothing else
+	  const [bodyRows, setBodyRows, getBodyRows] = useState(null);
+	  const {
+	    demangleMap,
+	    indexDemangler,
+	    indexMangler,
+	    mangleMap,
+	    sort: originalSort,
+	    useSortableProps
+	  } = useSortableChildren({
+	    getValue: A$1((row, column) => {
+	      var _row$getManagedCells, _row$getManagedCells$;
+
+	      return (_row$getManagedCells = row.getManagedCells()) === null || _row$getManagedCells === void 0 ? void 0 : (_row$getManagedCells$ = _row$getManagedCells[column]) === null || _row$getManagedCells$ === void 0 ? void 0 : _row$getManagedCells$.value;
+	    }, []),
+	    getIndex: A$1(row => {
+	      return row.index;
+	    }, [])
+	  }); // This is the index of the currently sorted column('s header cell that was clicked to sort it).
 	  // This is used by all the header cells to know when to reset their "sort mode" back to its initial state.
+
 	  const [sortedColumn, setSortedColumn, getSortedColumn] = useState(null);
 	  const [sortedDirection, setSortedDirection, getSortedDirection] = useState(null);
 	  const {
@@ -7899,51 +8050,13 @@
 	  const {
 	    useHasFocusProps,
 	    getFocusedInner
-	  } = useHasFocus({}); // These are used to keep track of a mapping between unsorted index <---> sorted index.
-	  // These are needed for navigation with the arrow keys.
-
-	  const mangleMap = s(new Map());
-	  const demangleMap = s(new Map());
-	  const indexMangler = A$1(n => {
-	    var _mangleMap$current$ge;
-
-	    return (_mangleMap$current$ge = mangleMap.current.get(n)) !== null && _mangleMap$current$ge !== void 0 ? _mangleMap$current$ge : n;
-	  }, []);
-	  const indexDemangler = A$1(n => {
-	    var _demangleMap$current$;
-
-	    return (_demangleMap$current$ = demangleMap.current.get(n)) !== null && _demangleMap$current$ !== void 0 ? _demangleMap$current$ : n;
-	  }, []); // Only used by the sorting function, nothing else
-
-	  const [bodyRowsGetter, setBodyRowsGetter, getBodyRowsGetter] = useState(null); // The actual sort function.
-	  // Note that it DOES look at header and footer cells, but just tiptoes around them.
+	  } = useHasFocus({}); // Wrap the "useSortable" sort function to also set some internal state
+	  // regarding which column is sorted and in what direction.
 
 	  const sort = A$1((column, direction) => {
-	    var _managedTableSections, _managedTableSections2, _managedTableSections3;
-
-	    const managedRows = getBodyRowsGetter()();
-	    let sortedRows = managedRows.slice().sort((lhsRow, rhsRow) => {
-	      var _lhsRow$getManagedCel, _lhsRow$getManagedCel2, _rhsRow$getManagedCel, _rhsRow$getManagedCel2;
-
-	      console.assert(lhsRow.location === rhsRow.location && lhsRow.location === "body");
-	      let result = compare((_lhsRow$getManagedCel = lhsRow.getManagedCells()) === null || _lhsRow$getManagedCel === void 0 ? void 0 : (_lhsRow$getManagedCel2 = _lhsRow$getManagedCel[column]) === null || _lhsRow$getManagedCel2 === void 0 ? void 0 : _lhsRow$getManagedCel2.value, (_rhsRow$getManagedCel = rhsRow.getManagedCells()) === null || _rhsRow$getManagedCel === void 0 ? void 0 : (_rhsRow$getManagedCel2 = _rhsRow$getManagedCel[column]) === null || _rhsRow$getManagedCel2 === void 0 ? void 0 : _rhsRow$getManagedCel2.value);
-	      if (direction[0] == "d") return -result;
-	      return result;
-	    }); // Update our sorted <--> unsorted indices map 
-	    // and rerender the whole table, basically
-
-	    for (let indexAsSorted = 0; indexAsSorted < sortedRows.length; ++indexAsSorted) {
-	      const indexAsUnsorted = sortedRows[indexAsSorted].index;
-	      managedRows[indexAsSorted].setRowIndexAsSorted(indexAsUnsorted);
-	      mangleMap.current.set(indexAsSorted, indexAsUnsorted);
-	      demangleMap.current.set(indexAsUnsorted, indexAsSorted);
-	    }
-
 	    setSortedColumn(column);
 	    setSortedDirection(direction);
-	    (_managedTableSections = managedTableSections["head"]) === null || _managedTableSections === void 0 ? void 0 : _managedTableSections.forceUpdate();
-	    (_managedTableSections2 = managedTableSections["body"]) === null || _managedTableSections2 === void 0 ? void 0 : _managedTableSections2.forceUpdate();
-	    (_managedTableSections3 = managedTableSections["foot"]) === null || _managedTableSections3 === void 0 ? void 0 : _managedTableSections3.forceUpdate();
+	    originalSort(getBodyRows(), direction, column);
 	  }, [
 	    /* Must remain stable */
 	  ]);
@@ -7951,44 +8064,17 @@
 	    let {
 	      location
 	    } = _ref2;
-	    // Used to track if we tried to render any rows before they've been
-	    // given their "true" index to display (their sorted index).
-	    // This is true for all rows initially on mount, but especially true
-	    // when the table has been pre-sorted and then a new row is
-	    // added on top of that afterwards. 
-	    const [hasUnsortedRows, setHasUnsortedRows] = useState(false);
 	    const {
 	      useManagedChildProps
 	    } = useManagedTableSection({
 	      index: location,
 	      forceUpdate: useForceUpdate()
 	    });
-	    const useTableSectionProps = A$1(_ref3 => {
-	      let {
-	        children,
-	        ...props
-	      } = _ref3;
+	    const useTableSectionProps = A$1(props => {
 	      return useManagedChildProps(useMergedProps()({
-	        role: "rowgroup",
-	        children: location !== "body" ? children : // For rows in the body, sort them by the criteria we set
-	        // the last the the sort function ran and set our mangle maps.
-	        children.slice().sort((lhs, rhs) => {
-	          var _demangleMap$current$2, _demangleMap$current$3;
-
-	          return ((_demangleMap$current$2 = demangleMap.current.get(lhs.props.rowIndex)) !== null && _demangleMap$current$2 !== void 0 ? _demangleMap$current$2 : lhs.props.rowIndex) - ((_demangleMap$current$3 = demangleMap.current.get(rhs.props.rowIndex)) !== null && _demangleMap$current$3 !== void 0 ? _demangleMap$current$3 : rhs.props.rowIndex);
-	        }).map(child => v$1(child.type, { ...child.props,
-	          key: child.props.rowIndex
-	        }))
+	        role: "rowgroup"
 	      }, props));
-	    }, [useManagedChildProps]);
-	    y(() => {
-	      if (hasUnsortedRows) {
-	        var _getSortedColumn, _getSortedDirection;
-
-	        sort((_getSortedColumn = getSortedColumn()) !== null && _getSortedColumn !== void 0 ? _getSortedColumn : 0, (_getSortedDirection = getSortedDirection()) !== null && _getSortedDirection !== void 0 ? _getSortedDirection : "ascending");
-	        setHasUnsortedRows(false);
-	      }
-	    }, [hasUnsortedRows]); // Actually implement grid navigation
+	    }, [useManagedChildProps]); // Actually implement grid navigation
 
 	    const {
 	      cellIndex,
@@ -8001,9 +8087,6 @@
 	      indexMangler,
 	      indexDemangler
 	    });
-	    y(() => {
-	      if (location === "body") setBodyRowsGetter(prev => () => managedRows);
-	    }, [location, managedRows]);
 	    /**
 	     *
 	     * IMPORTANT NOTE ABOUT COMPONENTS USING THIS HOOK!!
@@ -8018,12 +8101,12 @@
 	     *
 	     */
 
-	    const useTableRow = A$1(_ref4 => {
+	    const useTableRow = A$1(_ref3 => {
 	      let {
-	        rowIndex: rowIndexAsUnsorted,
+	        index: rowIndexAsUnsorted,
 	        location,
 	        hidden
-	      } = _ref4;
+	      } = _ref3;
 	      // This is used by the sort function to update this row when everything's shuffled.
 	      const [rowIndexAsSorted, setRowIndexAsSorted, getRowIndexAsSorted] = useState(null);
 	      const getManagedCells = useStableCallback(() => managedCells);
@@ -8045,33 +8128,33 @@
 	        location
 	      }); // Not public -- just the shared code between header cells and body cells
 
-	      const useTableCellShared = A$1(_ref5 => {
+	      const useTableCellShared = A$1(_ref4 => {
 	        let {
-	          columnIndex,
+	          index,
 	          value
-	        } = _ref5;
+	        } = _ref4;
 	        const {
 	          useGridNavigationCellProps
 	        } = useGridNavigationCell({
-	          index: columnIndex,
+	          index,
 	          value
 	        });
 
-	        function useTableCellProps(_ref6) {
+	        function useTableCellProps(_ref5) {
 	          let {
 	            role,
 	            ...props
-	          } = _ref6;
+	          } = _ref5;
 	          return useMergedProps()({
 	            role: "gridcell"
 	          }, props);
 	        }
 
-	        function useTableCellDelegateProps(_ref7) {
+	        function useTableCellDelegateProps(_ref6) {
 	          let {
 	            role,
 	            ...props
-	          } = _ref7;
+	          } = _ref6;
 	          return useGridNavigationCellProps(props);
 	        }
 
@@ -8080,17 +8163,17 @@
 	          useTableCellDelegateProps
 	        };
 	      }, []);
-	      const useTableHeadCell = A$1(_ref8 => {
+	      const useTableHeadCell = A$1(_ref7 => {
 	        let {
-	          columnIndex,
+	          index: columnIndex,
 	          unsortable,
 	          tag
-	        } = _ref8;
+	        } = _ref7;
 	        const {
 	          useTableCellDelegateProps,
 	          useTableCellProps
 	        } = useTableCellShared({
-	          columnIndex,
+	          index: columnIndex,
 	          value: ""
 	        }); // This is mostly all just in regards to
 	        // handling the "sort-on-click" interaction.
@@ -8130,16 +8213,16 @@
 	          sortDirection
 	        };
 	      }, []);
-	      const useTableCell = A$1(_ref9 => {
+	      const useTableCell = A$1(_ref8 => {
 	        let {
-	          columnIndex,
+	          index,
 	          value
-	        } = _ref9;
+	        } = _ref8;
 	        const {
 	          useTableCellDelegateProps,
 	          useTableCellProps
 	        } = useTableCellShared({
-	          columnIndex,
+	          index,
 	          value
 	        });
 	        return {
@@ -8148,11 +8231,11 @@
 	        };
 	      }, []);
 
-	      function useTableRowProps(_ref10) {
+	      function useTableRowProps(_ref9) {
 	        let {
 	          role,
 	          ...props
-	        } = _ref10;
+	        } = _ref9;
 	        return useGridNavigationRowProps(useMergedProps()({
 	          role: "row"
 	        }, props));
@@ -8168,9 +8251,74 @@
 	    }, []);
 	    return {
 	      useTableSectionProps,
-	      useTableRow
+	      useTableSectionRow: useTableRow,
+	      managedRows
 	    };
-	  }, []); // Whenever any given header cell requests a sort, it sets itself here, in the table,
+	  }, []);
+	  const useTableHead = A$1(() => {
+	    // Used to track if we tried to render any rows before they've been
+	    // given their "true" index to display (their sorted index).
+	    // This is true for all rows initially on mount, but especially true
+	    // when the table has been pre-sorted and then a new row is
+	    // added on top of that afterwards. 
+	    const [hasUnsortedRows, setHasUnsortedRows] = useState(false);
+	    y(() => {
+	      if (hasUnsortedRows) {
+	        var _getSortedColumn, _getSortedDirection;
+
+	        sort((_getSortedColumn = getSortedColumn()) !== null && _getSortedColumn !== void 0 ? _getSortedColumn : 0, (_getSortedDirection = getSortedDirection()) !== null && _getSortedDirection !== void 0 ? _getSortedDirection : "ascending");
+	        setHasUnsortedRows(false);
+	      }
+	    }, [hasUnsortedRows]);
+	    const {
+	      useTableSectionRow: useTableHeadRow,
+	      useTableSectionProps
+	    } = useTableSection({
+	      location: "head"
+	    });
+	    return {
+	      useTableHeadRow,
+	      useTableHeadProps: useTableSectionProps
+	    };
+	  }, [useTableSection]);
+	  const useTableBody = A$1(() => {
+	    const {
+	      useTableSectionRow: useTableBodyRow,
+	      useTableSectionProps,
+	      managedRows
+	    } = useTableSection({
+	      location: "body"
+	    });
+	    const useTableBodyProps = A$1(_ref10 => {
+	      let {
+	        children,
+	        ...props
+	      } = _ref10;
+	      return useSortableProps(useTableSectionProps(useMergedProps()({
+	        role: "rowgroup",
+	        children: children
+	      }, props)));
+	    }, [useTableSectionProps]);
+	    y(() => {
+	      setBodyRows(prev => managedRows);
+	    }, [managedRows]);
+	    return {
+	      useTableBodyRow: useTableBodyRow,
+	      useTableBodyProps
+	    };
+	  }, []);
+	  const useTableFoot = A$1(() => {
+	    const {
+	      useTableSectionRow: useTableFootRow,
+	      useTableSectionProps
+	    } = useTableSection({
+	      location: "head"
+	    });
+	    return {
+	      useTableFootRow,
+	      useTableFootProps: useTableSectionProps
+	    };
+	  }, [useTableSection]); // Whenever any given header cell requests a sort, it sets itself here, in the table,
 	  // as the "sortedColumn" column.  We then, as the parent table, let all the other
 	  // header rows know who is the "sortedColumn" column so that they can un-style themselves.
 
@@ -8197,44 +8345,11 @@
 
 	  return {
 	    useTableProps,
-	    useTableSection,
+	    useTableHead,
+	    useTableBody,
+	    useTableFoot,
 	    managedTableSections
 	  };
-	}
-
-	function compare(lhs, rhs) {
-	  return compare1(lhs, rhs);
-
-	  function compare3(lhs, rhs) {
-	    // Coerce strings to numbers if they seem to stay the same when serialized
-	    if (`${+lhs}` === lhs) lhs = +lhs;
-	    if (`${+rhs}` === rhs) rhs = +rhs; // At this point, if either argument is a string, turn the other one into one too
-
-	    if (typeof lhs === "string") rhs = `${rhs}`;
-	    if (typeof rhs === "string") lhs = `${lhs}`;
-	    console.assert(typeof lhs === typeof rhs);
-	    if (typeof lhs === "string") return lhs.localeCompare(rhs);
-	    if (typeof lhs === "number") return +lhs - +rhs;
-	    return 0;
-	  }
-
-	  function compare2(lhs, rhs) {
-	    if (typeof lhs === "boolean" || lhs instanceof Date) lhs = +lhs;
-	    if (typeof rhs === "boolean" || rhs instanceof Date) rhs = +rhs;
-	    return compare3(lhs, rhs);
-	  }
-
-	  function compare1(lhs, rhs) {
-	    if (lhs == null && rhs == null) {
-	      // They're both null
-	      return 0;
-	    } else if (lhs == null || rhs == null) {
-	      // One of the two is null -- easy case
-	      return lhs != null ? 1 : -1;
-	    }
-
-	    return compare2(lhs, rhs);
-	  }
 	}
 
 	function S(n, t) {
@@ -8468,11 +8583,11 @@
 	    }
 	  });
 	});
-	var Z = l$1.event;
+	var H = l$1.event;
 
-	function Y() {}
+	function Z() {}
 
-	function $() {
+	function Y() {
 	  return this.cancelBubble;
 	}
 
@@ -8481,7 +8596,7 @@
 	}
 
 	l$1.event = function (n) {
-	  return Z && (n = Z(n)), n.persist = Y, n.isPropagationStopped = $, n.isDefaultPrevented = q, n.nativeEvent = n;
+	  return H && (n = H(n)), n.persist = Z, n.isPropagationStopped = Y, n.isDefaultPrevented = q, n.nativeEvent = n;
 	};
 
 	var J = {
@@ -8502,7 +8617,7 @@
 
 	    for (var o in r = {}, e) {
 	      var i = e[o];
-	      V && "children" === o && "noscript" === t || "value" === o && "defaultValue" in e && null == i || ("defaultValue" === o && "value" in e && null == e.value ? o = "value" : "download" === o && !0 === i ? i = "" : /ondoubleclick/i.test(o) ? o = "ondblclick" : /^onchange(textarea|input)/i.test(o + t) && !z(e.type) ? o = "oninput" : /^on(Ani|Tra|Tou|BeforeInp)/.test(o) ? o = o.toLowerCase() : u && P.test(o) ? o = o.replace(/[A-Z0-9]/, "-$&").toLowerCase() : null === i && (i = void 0), r[o] = i);
+	      V && "children" === o && "noscript" === t || "value" === o && "defaultValue" in e && null == i || ("defaultValue" === o && "value" in e && null == e.value ? o = "value" : "download" === o && !0 === i ? i = "" : /ondoubleclick/i.test(o) ? o = "ondblclick" : /^onchange(textarea|input)/i.test(o + t) && !z(e.type) ? o = "oninput" : /^onfocus$/i.test(o) ? o = "onfocusin" : /^onblur$/i.test(o) ? o = "onfocusout" : /^on(Ani|Tra|Tou|BeforeInp)/.test(o) ? o = o.toLowerCase() : u && P.test(o) ? o = o.replace(/[A-Z0-9]/, "-$&").toLowerCase() : null === i && (i = void 0), r[o] = i);
 	    }
 
 	    "select" == t && r.multiple && Array.isArray(r.value) && (r.value = A$2(e.children).forEach(function (n) {
@@ -10288,6 +10403,101 @@
 	    class: "modal-footer"
 	  }, footer))))))));
 	}));
+	/*
+
+	export type StateUpdater<S> = (value: ((prevState: S) => S)) => void;
+	export type PushDialog = (dialog: h.JSX.Element) => number;
+	export type UpdateDialog = (index: number, dialog: h.JSX.Element) => void;
+
+	const PushDialogContext = createContext<PushDialog>(null!);
+	const UpdateDialogContext = createContext<UpdateDialog>(null!);
+	const DialogsContainerChildrenContext = createContext<h.JSX.Element[]>([]);
+
+	export function DialogsProvider({ children, defaultTimeout }: { children: ComponentChildren, defaultTimeout?: number }) {
+
+	    const [pushDialog, setPushDialog] = useState<PushDialog | null>(null);
+	    const [updateDialog, setUpdateDialog] = useState<UpdateDialog | null>(null);
+
+	    const pushDialogStable = useStableCallback<NonNullable<typeof pushDialog>>((dialog) => {
+	        return pushDialog?.(dialog) ?? -1;
+	    });
+
+	    const updateDialogStable = useStableCallback<NonNullable<typeof updateDialog>>((index, dialog) => {
+	        return updateDialog?.(index, dialog);
+	    });
+
+	    return (
+	        <>
+	                <DialogsProviderHelper setPushDialog={setPushDialog} setUpdateDialog={setUpdateDialog} />
+	                {pushDialog && updateDialog &&
+	                    <PushDialogContext.Provider value={pushDialogStable}>
+	                        <UpdateDialogContext.Provider value={updateDialogStable}>
+	                            {children}
+	                        </UpdateDialogContext.Provider>
+	                    </PushDialogContext.Provider>
+	                }
+	        </>
+	    )
+	}
+
+	export function usePushDialog() {
+	    const pushDialog = useContext(PushDialogContext);
+	    return pushDialog;
+	}
+
+	export function useUpdateDialog() {
+	    const updateDialog = useContext(UpdateDialogContext);
+	    return updateDialog;
+	}
+
+
+	// Extracted to a separate component to avoid rerendering all non-dialog children
+	function DialogsProviderHelper({ setPushDialog, setUpdateDialog }: { setPushDialog: StateUpdater<PushDialog | null>, setUpdateDialog: StateUpdater<UpdateDialog | null> }) {
+
+	    const [children, setChildren, getChildren] = useState<h.JSX.Element[]>([]);
+	    const pushDialog: PushDialog | null = useCallback((dialog: h.JSX.Element) => {
+	        const randomKey = generateRandomId();
+	        let index = getChildren().length;
+	        setChildren(prev => ([...prev, cloneElement(dialog, { key: randomKey })]));
+	        return index;
+	    }, []);
+
+	    const updateDialog: UpdateDialog | null = useCallback((index: number, dialog: h.JSX.Element) => {
+	        const key = getChildren()[index]?.key;
+	        console.assert(key);
+	        if (key) {
+	            setChildren(prev => {
+	                let newChildren = prev.slice();
+	                newChildren.splice(index, 1, cloneElement(dialog, { key: key as string }));
+	                return newChildren;
+	            });
+	            return index;
+	        }
+	    }, []);
+
+	    useLayoutEffect(() => { setPushDialog(_ => pushDialog); }, [pushDialog]);
+	    useLayoutEffect(() => { setUpdateDialog(_ => updateDialog); }, [updateDialog]);
+
+	    return (
+	        <BodyPortal>
+	            <DialogsContainerChildrenContext.Provider value={children}>
+	                <DialogsContainer />
+	            </DialogsContainerChildrenContext.Provider>
+	        </BodyPortal>
+	    )
+	}
+
+	function DialogsContainer(props: DialogsContainerProps) {
+	    const children = useContext(DialogsContainerChildrenContext);
+
+	    return (
+	        <UseDialogContext.Provider value={useDialog}>
+	            <div {...useDialogContainerProps(useMergedProps<HTMLDivElement>()({ className: `set-theme ${theme}` }, props))}>
+	                {children}
+	            </div>
+	        </UseDialogContext.Provider>
+	    )
+	}*/
 
 	const Drawer = g(function Drawer(_ref) {
 	  let {
@@ -13908,19 +14118,11 @@
 	  });
 	  usePopperArrow();
 	  const {
-	    useMenuSentinelProps
+	    useMenuSentinelProps: useFirstMenuSentinelProps
 	  } = useMenuSentinel();
-	  /*const [sentinelFocused, setSentinelFocused] = useState(false);
-	  useTimeout({ callback: () => { if (sentinelFocused) onClose(); setSentinelFocused(false); }, timeout: 1000, triggerIndex: sentinelFocused.toString() })*/
-
-	  const [firstSentinelIsActive, setFirstSentinelIsActive] = useState(false);
-	  useTimeout({
-	    callback: () => {
-	      setFirstSentinelIsActive(open);
-	    },
-	    timeout: 100,
-	    triggerIndex: `${firstSentinelIsActive}`
-	  });
+	  const {
+	    useMenuSentinelProps: useSecondMenuSentinelProps
+	  } = useMenuSentinel();
 
 	  if (Transition == undefined) {
 	    Transition = ZoomFade;
@@ -13960,14 +14162,13 @@
 	    onTransitionUpdate: onInteraction,
 	    exitVisibility: "hidden"
 	  }, v$1("div", { ...useHasFocusProps({})
-	  }, v$1("button", {
-	    className: "visually-hidden",
-	    onFocus: !firstSentinelIsActive ? () => focusMenu === null || focusMenu === void 0 ? void 0 : focusMenu() : () => onClose(),
-	    onClick: onClose
+	  }, v$1("button", { ...useFirstMenuSentinelProps({
+	      className: "visually-hidden"
+	    })
 	  }, "Close menu"), v$1(tag !== null && tag !== void 0 ? tag : "ul", {
 	    children,
 	    className: "dropdown-menu elevation-raised-4 elevation-body-surface"
-	  }), v$1("button", { ...useMenuSentinelProps({
+	  }), v$1("button", { ...useSecondMenuSentinelProps({
 	      className: "visually-hidden"
 	    })
 	  }, "Close menu"))))))))));
@@ -14234,7 +14435,7 @@
 	    useToast,
 	    useToastContainerProps
 	  } = useToasts();
-	  const [theme, setTheme] = useState(oppositeTheme(document.documentElement.classList));
+	  const [theme, setTheme] = useState(oppositeTheme());
 	  useMutationObserver(() => document.documentElement, {
 	    attributeFilter: ["class"],
 	    onAttributes: _ref3 => {
@@ -14243,7 +14444,7 @@
 	      } = _ref3;
 
 	      if (attributeName === "class") {
-	        setTheme(oppositeTheme(document.documentElement.classList));
+	        setTheme(oppositeTheme());
 	      }
 	    }
 	  });
@@ -14255,7 +14456,7 @@
 	  }, children));
 	}
 
-	function oppositeTheme(classList) {
+	function oppositeTheme() {
 	  if (document.documentElement.classList.contains("theme-dark")) return "theme-light";else if (document.documentElement.classList.contains("theme-light")) return "theme-dark";else return "";
 	}
 
@@ -14962,7 +15163,9 @@
 	                    v$1(Input, { disabled: true, onValueChange: () => { }, type: "number", value: 0 }, "Numeric input"))))));
 	}
 
-	const TableSectionContext = D$1(null);
+	const TableHeadContext = D$1(null);
+	const TableBodyContext = D$1(null);
+	const TableFootContext = D$1(null);
 	const TableRowContext = D$1(null);
 	D$1([]);
 	const Table = g(forwardElementRef(function Table(_ref, ref) {
@@ -14979,16 +15182,22 @@
 	  useLogRender("Table", `Rendering Table`);
 	  const {
 	    useTableProps,
-	    useTableSection,
+	    useTableHead,
+	    useTableBody,
+	    useTableFoot,
 	    managedTableSections
 	  } = useTable();
 	  return v$1("table", { ...useTableProps(useMergedProps()({
 	      ref,
 	      className: clsx("table", small && "table-sm", striped && "table-striped", hoverable && "table-hover", border === "all" && "table-bordered", border === "none" && "table-borderless", variant && `table-${variant}`, borderColor && `border-${borderColor}`)
 	    }, props))
-	  }, v$1(TableSectionContext.Provider, {
-	    value: useTableSection
-	  }, children));
+	  }, v$1(TableHeadContext.Provider, {
+	    value: useTableHead
+	  }, v$1(TableBodyContext.Provider, {
+	    value: useTableBody
+	  }, v$1(TableFootContext.Provider, {
+	    value: useTableFoot
+	  }, children))));
 	}));
 	const CellLocationContext = D$1(null);
 	const TableSectionImpl = g(forwardElementRef(function TableSectionImpl(_ref2, ref) {
@@ -15002,35 +15211,28 @@
 	    children: Array.isArray(children) ? children : [children]
 	  });
 	}));
-	const TableSection = g(forwardElementRef(function TableSection(_ref3, ref) {
-	  let {
-	    location,
-	    tag,
-	    ...props
-	  } = _ref3;
-	  const useTableSection = F(TableSectionContext);
-	  const {
-	    useTableRow,
-	    useTableSectionProps
-	  } = useTableSection({
-	    location
-	  });
-	  return v$1(TableRowContext.Provider, {
-	    value: useTableRow
-	  }, v$1(TableSectionImpl, {
-	    tag: tag,
-	    ...useTableSectionProps({ ...props,
-	      ref: ref
-	    })
-	  }));
-	}));
-	const TableHead = g(forwardElementRef(function TableHead(_ref4, ref) {
+	/*
+	const TableSection = memo(forwardElementRef(function TableSection<E extends HTMLTableSectionElement>({ location, tag, ...props }: TableSectionProps<E>, ref: Ref<E>) {
+	    const useTableSection = useContext(TableSectionContext);
+	    const { useTableRow, useTableSectionProps } = useTableSection({ location });
+
+	    return (
+	        <TableRowContext.Provider value={useTableRow}>
+	            <TableSectionImpl tag={tag} {...useTableSectionProps({ ...props as any, ref: ref as Ref<HTMLTableSectionElement> })} />
+	        </TableRowContext.Provider>);
+	}))*/
+
+	const TableHead = g(forwardElementRef(function TableHead(_ref3, ref) {
 	  let {
 	    variant,
 	    ...props
-	  } = _ref4;
+	  } = _ref3;
 	  useLogRender("TableHead", `Rendering TableHead`);
 	  const [showShadow, setShowShadow] = useState(false);
+	  const {
+	    useTableHeadProps,
+	    useTableHeadRow
+	  } = F(TableHeadContext)();
 	  const {
 	    getElement,
 	    useRefElementProps
@@ -15045,63 +15247,74 @@
 	  });
 	  return v$1(CellLocationContext.Provider, {
 	    value: "head"
-	  }, v$1(TableSection, {
-	    location: "head",
+	  }, v$1(TableRowContext.Provider, {
+	    value: useTableHeadRow
+	  }, v$1(TableSectionImpl, {
 	    tag: "thead",
-	    ...useRefElementProps(useMergedProps()({
+	    ...useRefElementProps(useMergedProps()(useTableHeadProps({
 	      ref,
 	      className: clsx("elevation-body-surface", showShadow && "floating", variant && `table-${variant}`)
-	    }, props))
-	  }));
+	    }), props))
+	  })));
 	}));
-	const TableBody = g(forwardElementRef(function TableBody(_ref5, ref) {
+	const TableBody = g(forwardElementRef(function TableBody(_ref4, ref) {
+	  let {
+	    children,
+	    variant,
+	    ...props
+	  } = _ref4;
+	  useLogRender("TableBody", `Rendering TableBody`);
+	  const {
+	    useTableBodyProps,
+	    useTableBodyRow
+	  } = F(TableBodyContext)();
+	  return v$1(CellLocationContext.Provider, {
+	    value: "body"
+	  }, v$1(TableRowContext.Provider, {
+	    value: useTableBodyRow
+	  }, v$1(TableSectionImpl, {
+	    tag: "tbody",
+	    ...useMergedProps()(useTableBodyProps({
+	      ref,
+	      children,
+	      className: clsx(variant && `table-${variant}`)
+	    }), props)
+	  })));
+	}));
+	g(forwardElementRef(function TableFoot(_ref5, ref) {
 	  let {
 	    children,
 	    variant,
 	    ...props
 	  } = _ref5;
-	  useLogRender("TableBody", `Rendering TableBody`);
-	  return v$1(CellLocationContext.Provider, {
-	    value: "body"
-	  }, v$1(TableSection, {
-	    location: "body",
-	    tag: "tbody",
-	    ...useMergedProps()({
-	      ref,
-	      children,
-	      className: clsx(variant && `table-${variant}`)
-	    }, props)
-	  }));
-	}));
-	g(forwardElementRef(function TableFoot(_ref6, ref) {
-	  let {
-	    children,
-	    variant,
-	    ...props
-	  } = _ref6;
 	  useLogRender("TableFoot", `Rendering TableFoot`);
+	  const {
+	    useTableFootProps,
+	    useTableFootRow
+	  } = F(TableFootContext)();
 	  return v$1(CellLocationContext.Provider, {
 	    value: "foot"
-	  }, v$1(TableSection, {
-	    location: "foot",
+	  }, v$1(TableRowContext.Provider, {
+	    value: useTableFootRow
+	  }, v$1(TableSectionImpl, {
 	    tag: "tfoot",
-	    ...useMergedProps()({
+	    ...useMergedProps()(useTableFootProps({
 	      ref,
 	      children: Array.isArray(children) ? children : [children],
 	      className: clsx(variant && `table-${variant}`)
-	    }, props)
-	  }));
+	    }), props)
+	  })));
 	}));
 	const TableCellContext = D$1(null);
 	const TableHeadCellContext = D$1(null);
-	const TableRow = g(forwardElementRef(function TableRow(_ref7, ref) {
+	const TableRow = g(forwardElementRef(function TableRow(_ref6, ref) {
 	  let {
 	    children,
-	    rowIndex: indexAsUnsorted,
+	    index: indexAsUnsorted,
 	    variant,
 	    hidden: hiddenAsUnsorted,
 	    ...props
-	  } = _ref7;
+	  } = _ref6;
 	  useLogRender("TableRow", `Rendering TableRow #${indexAsUnsorted}, ${hiddenAsUnsorted}`);
 	  const location = F(CellLocationContext);
 	  const useTableRow = F(TableRowContext);
@@ -15110,7 +15323,7 @@
 	    useTableHeadCell,
 	    useTableRowProps
 	  } = useTableRow({
-	    rowIndex: indexAsUnsorted,
+	    index: indexAsUnsorted,
 	    location,
 	    hidden: !!hiddenAsUnsorted
 	  });
@@ -15127,24 +15340,23 @@
 	  }, v$1("tr", { ...rowProps
 	  })));
 	}));
-	const TableCell = g(forwardElementRef(function TableCell(_ref8, ref) {
+	const TableCell = g(forwardElementRef(function TableCell(_ref7, ref) {
 	  let {
 	    value: valueAsUnsorted,
 	    colSpan,
 	    children,
-	    columnIndex,
+	    index: columnIndex,
 	    variant,
 	    focus,
 	    active,
 	    ...props
-	  } = _ref8;
-	  //focus ??= "cell";
+	  } = _ref7;
 	  const useTableCell = F(TableCellContext);
 	  const {
 	    useTableCellDelegateProps,
 	    useTableCellProps
 	  } = useTableCell({
-	    columnIndex,
+	    index: columnIndex,
 	    value: valueAsUnsorted
 	  });
 	  const childrenReceiveFocus = focus != "cell" && !!children && typeof children == "object" && "type" in children && children.type !== d$1;
@@ -15165,16 +15377,16 @@
 	    }, stringify(displayValue));
 	  }
 	}));
-	const TableHeaderCell = g(forwardElementRef(function TableHeaderCell(_ref9, ref) {
+	const TableHeaderCell = g(forwardElementRef(function TableHeaderCell(_ref8, ref) {
 	  let {
-	    columnIndex,
+	    index: columnIndex,
 	    focus,
 	    children,
 	    variant,
 	    active,
 	    unsortable,
 	    ...props
-	  } = _ref9;
+	  } = _ref8;
 	  const useTableHeadCell = F(TableHeadCellContext);
 	  const {
 	    useTableHeadCellDelegateProps,
@@ -15182,7 +15394,7 @@
 	    sortDirection
 	  } = useTableHeadCell({
 	    tag: "th",
-	    columnIndex
+	    index: columnIndex
 	  });
 	  const childrenReceiveFocus = focus != "cell" && !!children && typeof children == "object" && "type" in children && children.type !== d$1;
 	  const {
@@ -15250,9 +15462,9 @@
 
 	var RandomWords$1 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.".split(" ");
 	const formatter = new Intl.DateTimeFormat("en-US", { year: "numeric", month: "short", day: "numeric" });
-	const RandomRow = g(function RandomRow({ rowIndex, unsortedRowIndex, hidden }) {
-	    console.log(`RandomRow ${rowIndex}, ${unsortedRowIndex}`);
-	    const i = rowIndex;
+	const RandomRow = g(function RandomRow({ index, unsortedRowIndex, hidden }) {
+	    console.log(`RandomRow ${index}, ${unsortedRowIndex}`);
+	    const i = index;
 	    const w = RandomWords$1[i];
 	    const n = (i + 0) ** 2;
 	    const d = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + n * 7);
@@ -15261,11 +15473,11 @@
 	        await sleep$2(2000);
 	        setChecked(checked);
 	    }, []);
-	    return (v$1(TableRow, { hidden: hidden, rowIndex: rowIndex },
-	        v$1(TableCell, { columnIndex: 0, value: n, colSpan: !w ? 2 : undefined }),
-	        w && v$1(TableCell, { columnIndex: 1, value: w }),
-	        v$1(TableCell, { columnIndex: 2, value: d }, formatter.format(d)),
-	        v$1(TableCell, { columnIndex: 3, value: checked },
+	    return (v$1(TableRow, { hidden: hidden, index: index },
+	        v$1(TableCell, { index: 0, value: n, colSpan: !w ? 2 : undefined }),
+	        w && v$1(TableCell, { index: 1, value: w }),
+	        v$1(TableCell, { index: 2, value: d }, formatter.format(d)),
+	        v$1(TableCell, { index: 3, value: checked },
 	            v$1(Checkbox, { checked: checked, onCheck: onInput, labelPosition: "hidden" }, "Demo table checkbox"))));
 	});
 	function DemoTable() {
@@ -15338,18 +15550,18 @@
 	            v$1(CardElement, null,
 	                v$1(Table, null,
 	                    v$1(TableHead, null,
-	                        v$1(TableRow, { hidden: false, rowIndex: 0 },
-	                            v$1(TableHeaderCell, { columnIndex: 0 }, "Number"),
-	                            v$1(TableHeaderCell, { columnIndex: 1 }, "String"),
-	                            v$1(TableHeaderCell, { columnIndex: 2 }, "Date"),
-	                            v$1(TableHeaderCell, { columnIndex: 3 }, "Checkbox"))),
+	                        v$1(TableRow, { hidden: false, index: 0 },
+	                            v$1(TableHeaderCell, { index: 0 }, "Number"),
+	                            v$1(TableHeaderCell, { index: 1 }, "String"),
+	                            v$1(TableHeaderCell, { index: 2 }, "Date"),
+	                            v$1(TableHeaderCell, { index: 3 }, "Checkbox"))),
 	                    v$1(TableBody, { ...{ "data-test": filterEvens } }, Array.from(function* () {
 	                        for (let i = 0; i < rowCount; ++i) {
-	                            yield v$1(RandomRow, { key: i, rowIndex: i, hidden: filterEvens && i % 2 == 0 });
-	                            /*<TableRow rowIndex={1 + i}>
-	                            <TableCell columnIndex={0} value={i} />
-	                            <TableCell columnIndex={1} value={RandomWords[i]} />
-	                            <TableCell columnIndex={2} value={new Date()} />
+	                            yield v$1(RandomRow, { key: i, index: i, hidden: filterEvens && i % 2 == 0 });
+	                            /*<TableRow index={1 + i}>
+	                            <TableCell index={0} value={i} />
+	                            <TableCell index={1} value={RandomWords[i]} />
+	                            <TableCell index={2} value={new Date()} />
 	                        </TableRow>*/
 	                            //
 	                        }
@@ -15357,31 +15569,31 @@
 	            v$1(CardElement, null,
 	                v$1("code", null, `<Table>
     <TableHead>
-        <TableRow rowIndex={0}>
-            <TableHeaderCell columnIndex={0}>Number</TableHeaderCell>
-            <TableHeaderCell columnIndex={1}>String</TableHeaderCell>
-            <TableHeaderCell columnIndex={2}>Date</TableHeaderCell>
-            <TableHeaderCell columnIndex={3}>Checkbox</TableHeaderCell>
+        <TableRow index={0}>
+            <TableHeaderCell index={0}>Number</TableHeaderCell>
+            <TableHeaderCell index={1}>String</TableHeaderCell>
+            <TableHeaderCell index={2}>Date</TableHeaderCell>
+            <TableHeaderCell index={3}>Checkbox</TableHeaderCell>
         </TableRow>
     </TableHead>
     <TableBody>
-        <TableRow rowIndex={1}>
-            <TableCell columnIndex={0} value={n} />
-            <TableCell columnIndex={1} value={RandomWords[index]} />
-            <TableCell columnIndex={2} value={d}>{d.toLocaleString()}</TableCell>
-            <TableCell columnIndex={3} value={checked}>
+        <TableRow index={1}>
+            <TableCell index={0} value={n} />
+            <TableCell index={1} value={RandomWords[index]} />
+            <TableCell index={2} value={d}>{d.toLocaleString()}</TableCell>
+            <TableCell index={3} value={checked}>
                 <Checkbox checked={checked} onInput={onInput} labelPosition="hidden">Demo table checkbox</Checkbox>
             </TableCell>
         </TableRow>
 
-        <TableRow rowIndex={2} />
-        <TableRow rowIndex={3} hidden />
-        <TableRow rowIndex={4} />
-        <TableRow rowIndex={5} />
+        <TableRow index={2} />
+        <TableRow index={3} hidden />
+        <TableRow index={4} />
+        <TableRow index={5} />
 
     </TableBody>
     <TableFoot>
-        <ACustomTableRow rowIndex={6} />
+        <ACustomTableRow index={6} />
     </TableFoot>
 </Table>`)))));
 	}
