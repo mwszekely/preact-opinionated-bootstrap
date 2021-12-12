@@ -11092,7 +11092,7 @@
 	}
 
 	const UnlabelledInput = forwardElementRef(UnlabelledInputR);
-	const Input = g(forwardElementRef(function Input(_ref2) {
+	const Input = g(forwardElementRef(function Input(_ref2, ref) {
 	  var _labelPosition;
 
 	  let {
@@ -11137,7 +11137,10 @@
 	  }, children);
 	  let inputJsx = v$1(UnlabelledInput, {
 	    placeholder: placeholder,
-	    ...useInputLabelInputProps(props)
+	    ...useInputLabelInputProps(props),
+	    ...{
+	      ref
+	    }
 	  });
 	  const isEmpty = true ; //if (isInInputGrid) {
 

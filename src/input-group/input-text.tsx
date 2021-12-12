@@ -73,7 +73,7 @@ const UnlabelledInput = forwardElementRef(UnlabelledInputR);
 
 
 
-export const Input = memo(forwardElementRef(function Input({ children, width, labelPosition, placeholder, ...props }: InputProps) {
+export const Input = memo(forwardElementRef(function Input({ children, width, labelPosition, placeholder, ...props }: InputProps, ref?: Ref<any>) {
     labelPosition ??= "start";
 
 
@@ -96,7 +96,7 @@ export const Input = memo(forwardElementRef(function Input({ children, width, la
     }
 
     const labelJsx = <label {...useInputLabelLabelProps({ class: clsx(props.disabled && "disabled", isInInputGroup ? "input-group-text" : labelPosition != "floating" ? "form-label" : "") })}>{children}</label>
-    let inputJsx = <UnlabelledInput placeholder={placeholder} {...useInputLabelInputProps(props as any) as any as UnlabelledInputTextProps} />;
+    let inputJsx = <UnlabelledInput placeholder={placeholder} {...useInputLabelInputProps(props as any) as any as UnlabelledInputTextProps} {...{ ref } as never} />;
 
     const isEmpty = true || (((props.value as number) !== 0 && props.value == ""));
 
