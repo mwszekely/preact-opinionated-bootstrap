@@ -11009,7 +11009,7 @@
 	  }, children);
 	});
 
-	function UnlabelledInput(_ref) {
+	function UnlabelledInputR(_ref, ref) {
 	  let {
 	    type,
 	    disabled,
@@ -11080,6 +11080,7 @@
 	    colorVariant: "info"
 	  }, v$1("input", { ...useHasFocusProps(useMergedProps()(props, {
 	      "aria-disabled": disabled ? "true" : undefined,
+	      ref,
 	      readOnly: disabled,
 	      onBlur,
 	      class: clsx("form-control", "faux-form-control-inner", disabled && "disabled", pending && "with-end-icon"),
@@ -11090,7 +11091,8 @@
 	  }));
 	}
 
-	const Input = g(function Input(_ref2) {
+	const UnlabelledInput = forwardElementRef(UnlabelledInputR);
+	const Input = g(forwardElementRef(function Input(_ref2) {
 	  var _labelPosition;
 
 	  let {
@@ -11152,7 +11154,7 @@
 	  if (labelPosition !== "floating") return inputWithLabel;else return v$1("div", {
 	    class: "form-floating"
 	  }, inputJsx);
-	});
+	}));
 
 	/**
 	 * Very simple, easy responsive grid that guarantees each column is the minimum size.

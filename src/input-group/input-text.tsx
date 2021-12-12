@@ -1,17 +1,18 @@
 import clsx from "clsx";
-import { Fragment, h } from "preact";
+import { Fragment, h, Ref } from "preact";
 import { useInputLabel } from "preact-aria-widgets";
 import { useAsyncHandler, useHasFocus, useMergedProps, useState } from "preact-prop-helpers";
 import { memo } from "preact/compat";
 import { useContext } from "preact/hooks";
+import { forwardElementRef } from "../props";
 import { ProgressCircular } from "../progress";
 import { InInputGridContext, InInputGroupContext, InputProps, UnlabelledInputNumberProps, UnlabelledInputProps, UnlabelledInputTextProps, useInputCaptures } from "./props";
 
 
-function UnlabelledInput(props: UnlabelledInputTextProps): h.JSX.Element;
-function UnlabelledInput(props: UnlabelledInputNumberProps): h.JSX.Element;
-function UnlabelledInput(props: UnlabelledInputProps): h.JSX.Element;
-function UnlabelledInput({ type, disabled, value, onValueChange: onInputAsync, ...props }: UnlabelledInputProps): h.JSX.Element {
+function UnlabelledInputR(props: UnlabelledInputTextProps, ref?: Ref<any>): h.JSX.Element;
+function UnlabelledInputR(props: UnlabelledInputNumberProps, ref?: Ref<any>): h.JSX.Element;
+function UnlabelledInputR(props: UnlabelledInputProps, ref?: Ref<any>): h.JSX.Element;
+function UnlabelledInputR({ type, disabled, value, onValueChange: onInputAsync, ...props }: UnlabelledInputProps, ref?: Ref<any>): h.JSX.Element {
 
     const [focusedInner, setFocusedInner, getFocusedInner] = useState(false);
     const { capture, uncapture } = useInputCaptures(type, (props as UnlabelledInputNumberProps).min, (props as UnlabelledInputNumberProps).max!);
@@ -57,6 +58,7 @@ function UnlabelledInput({ type, disabled, value, onValueChange: onInputAsync, .
         <ProgressCircular spinnerTimeout={10} mode={currentType === "async" ? asyncState : null} childrenPosition="after" colorVariant="info">
             <input {...(useHasFocusProps(useMergedProps<HTMLInputElement>()(props, {
                 "aria-disabled": disabled ? "true" : undefined,
+                ref,
                 readOnly: disabled,
                 onBlur,
                 class: clsx("form-control", "faux-form-control-inner", disabled && "disabled", pending && "with-end-icon"),
@@ -67,9 +69,11 @@ function UnlabelledInput({ type, disabled, value, onValueChange: onInputAsync, .
     )
 }
 
+const UnlabelledInput = forwardElementRef(UnlabelledInputR);
 
 
-export const Input = memo(function Input({ children, width, labelPosition, placeholder, ...props }: InputProps) {
+
+export const Input = memo(forwardElementRef(function Input({ children, width, labelPosition, placeholder, ...props }: InputProps) {
     labelPosition ??= "start";
 
 
@@ -112,5 +116,5 @@ export const Input = memo(function Input({ children, width, labelPosition, place
         return inputWithLabel;
     else
         return <div class="form-floating">{inputJsx}</div>
-});
+}));
 

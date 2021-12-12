@@ -40,7 +40,7 @@ export interface TableFootProps extends OmitStrong<TableSectionProps<HTMLTableSe
 
 type T2 = number | string | Date | null | undefined | boolean;
 
-export interface TableRowProps extends OmitStrong<UseTableRowParameters, "hidden" | "location"> { variant?: TableCellVariant; children?: ComponentChildren; hidden?: boolean; }
+export interface TableRowProps extends OmitStrong<UseTableRowParameters, "hidden" | "location"> { variant?: TableCellVariant; children?: ComponentChildren; hidden?: boolean; ref?: Ref<HTMLTableRowElement> }
 
 interface TableCellSharedProps extends GlobalAttributes<HTMLTableCellElement> {
     focus?: "cell" | "child";
@@ -132,7 +132,6 @@ export const TableHead = memo(forwardElementRef(function TableHead({ variant, ..
         </CellLocationContext.Provider>
     )
 }));
-
 
 
 export const TableBody = memo(forwardElementRef(function TableBody({ children, variant, ...props }: TableBodyProps, ref: Ref<HTMLTableSectionElement>) {
