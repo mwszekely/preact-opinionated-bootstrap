@@ -73,8 +73,9 @@ const UnlabelledInput = forwardElementRef(UnlabelledInputR);
 
 
 
-export const Input = memo(forwardElementRef(function Input({ children, width, labelPosition, placeholder, ...props }: InputProps, ref?: Ref<any>) {
+export const Input = memo(forwardElementRef(function Input({ children, width, labelPosition, placeholder, size, ...props }: InputProps, ref?: Ref<any>) {
     labelPosition ??= "start";
+    size ??= "md";
 
 
     const { inputId, labelId, useInputLabelInput, useInputLabelLabel } = useInputLabel({ inputPrefix: "input-", labelPrefix: "input-label-" });
@@ -101,7 +102,16 @@ export const Input = memo(forwardElementRef(function Input({ children, width, la
     const isEmpty = true || (((props.value as number) !== 0 && props.value == ""));
 
     //if (isInInputGrid) {
-    inputJsx = <div class={clsx("form-control faux-form-control-outer elevation-depressed-2", "elevation-body-surface", "focusable-within", !isEmpty && "focus-within-only", props.disabled && "disabled")} style={width?.endsWith("ch") ? { "--form-control-width": (width ?? "20ch") } as any : width ? { width } : undefined}>{inputJsx}</div>
+    inputJsx = <div class={clsx(
+        "form-control",
+        "faux-form-control-outer",
+        "elevation-depressed-2",
+        "elevation-body-surface",
+        "focusable-within",
+        !isEmpty && "focus-within-only",
+        props.disabled && "disabled",
+        size != "md" && `form-control-${size}`,
+    )} style={width?.endsWith("ch") ? { "--form-control-width": (width ?? "20ch") } as any : width ? { width } : undefined}>{inputJsx}</div>
     // }
 
     const inputWithLabel = (

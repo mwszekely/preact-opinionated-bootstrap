@@ -11093,16 +11093,18 @@
 
 	const UnlabelledInput = forwardElementRef(UnlabelledInputR);
 	const Input = g(forwardElementRef(function Input(_ref2, ref) {
-	  var _labelPosition;
+	  var _labelPosition, _size;
 
 	  let {
 	    children,
 	    width,
 	    labelPosition,
 	    placeholder,
+	    size,
 	    ...props
 	  } = _ref2;
 	  (_labelPosition = labelPosition) !== null && _labelPosition !== void 0 ? _labelPosition : labelPosition = "start";
+	  (_size = size) !== null && _size !== void 0 ? _size : size = "md";
 	  const {
 	    inputId,
 	    labelId,
@@ -11145,7 +11147,7 @@
 	  const isEmpty = true ; //if (isInInputGrid) {
 
 	  inputJsx = v$1("div", {
-	    class: clsx("form-control faux-form-control-outer elevation-depressed-2", "elevation-body-surface", "focusable-within", !isEmpty , props.disabled && "disabled"),
+	    class: clsx("form-control", "faux-form-control-outer", "elevation-depressed-2", "elevation-body-surface", "focusable-within", !isEmpty , props.disabled && "disabled", size != "md" && `form-control-${size}`),
 	    style: width !== null && width !== void 0 && width.endsWith("ch") ? {
 	      "--form-control-width": width !== null && width !== void 0 ? width : "20ch"
 	    } : width ? {

@@ -20,6 +20,7 @@ export type UnlabelledInputProps = UnlabelledInputTextProps | UnlabelledInputNum
 export type InputProps = UnlabelledInputProps & {
     children: ComponentChildren,
     labelPosition?: "start" | "end" | "floating" | "hidden" | "placeholder";
+    size?: "sm" | "md" | "lg";
     
     width?: `${number}ch` | `100%`;
 }
