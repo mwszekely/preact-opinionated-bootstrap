@@ -367,7 +367,7 @@
 	});
 
 	createCommonjsModule(function (module, exports) {
-	  "undefined" != typeof window && window.__PREACT_DEVTOOLS__ && window.__PREACT_DEVTOOLS__.attachPreact("10.6.2", preact.options, {
+	  "undefined" != typeof window && window.__PREACT_DEVTOOLS__ && window.__PREACT_DEVTOOLS__.attachPreact("10.6.4", preact.options, {
 	    Fragment: preact.Fragment,
 	    Component: preact.Component
 	  }), exports.addHookName = function (e, o) {
@@ -769,22 +769,22 @@
 	function C$1(n, l, u, i, t) {
 	  var r;
 
-	  for (r in u) "children" === r || "key" === r || r in l || H(n, r, null, u[r], i);
+	  for (r in u) "children" === r || "key" === r || r in l || H$1(n, r, null, u[r], i);
 
-	  for (r in l) t && "function" != typeof l[r] || "children" === r || "key" === r || "value" === r || "checked" === r || u[r] === l[r] || H(n, r, l[r], u[r], i);
+	  for (r in l) t && "function" != typeof l[r] || "children" === r || "key" === r || "value" === r || "checked" === r || u[r] === l[r] || H$1(n, r, l[r], u[r], i);
 	}
 
-	function $$1(n, l, u) {
+	function $(n, l, u) {
 	  "-" === l[0] ? n.setProperty(l, u) : n[l] = null == u ? "" : "number" != typeof u || s$1.test(l) ? u : u + "px";
 	}
 
-	function H(n, l, u, i, t) {
+	function H$1(n, l, u, i, t) {
 	  var r;
 
 	  n: if ("style" === l) {
 	    if ("string" == typeof u) n.style.cssText = u;else {
-	      if ("string" == typeof i && (n.style.cssText = i = ""), i) for (l in i) u && l in u || $$1(n.style, l, "");
-	      if (u) for (l in u) i && u[l] === i[l] || $$1(n.style, l, u[l]);
+	      if ("string" == typeof i && (n.style.cssText = i = ""), i) for (l in i) u && l in u || $(n.style, l, "");
+	      if (u) for (l in u) i && u[l] === i[l] || $(n.style, l, u[l]);
 	    }
 	  } else if ("o" === l[0] && "n" === l[1]) r = l !== (l = l.replace(/Capture$/, "")), l = l.toLowerCase() in n ? l.toLowerCase().slice(2) : l.slice(2), n.l || (n.l = {}), n.l[l + r] = u, u ? i || n.addEventListener(l, r ? T$1 : I$1, r) : n.removeEventListener(l, r ? T$1 : I$1, r);else if ("dangerouslySetInnerHTML" !== l) {
 	    if (t) l = l.replace(/xlink[H:h]/, "h").replace(/sName$/, "s");else if ("href" !== l && "list" !== l && "form" !== l && "tabIndex" !== l && "download" !== l && l in n) try {
@@ -879,7 +879,7 @@
 	    }
 
 	    if (C$1(l, p, y, r, c), v) u.__k = [];else if (_ = u.props.children, w$2(l, Array.isArray(_) ? _ : [_], u, i, t, r && "foreignObject" !== d, o, f, o ? o[0] : i.__k && k$1(i, 0), c), null != o) for (_ = o.length; _--;) null != o[_] && h$1(o[_]);
-	    c || ("value" in p && void 0 !== (_ = p.value) && (_ !== y.value || _ !== l.value || "progress" === d && !_) && H(l, "value", _, y.value, !1), "checked" in p && void 0 !== (_ = p.checked) && _ !== l.checked && H(l, "checked", _, y.checked, !1));
+	    c || ("value" in p && void 0 !== (_ = p.value) && (_ !== y.value || _ !== l.value || "progress" === d && !_) && H$1(l, "value", _, y.value, !1), "checked" in p && void 0 !== (_ = p.checked) && _ !== l.checked && H$1(l, "checked", _, y.checked, !1));
 	  }
 	  return l;
 	}
@@ -971,7 +971,7 @@
 	  this.__v && (this.__e = !0, n && this.__h.push(n), m$1(this));
 	}, _.prototype.render = d$1, t$1 = [], r$1 = "function" == typeof Promise ? Promise.prototype.then.bind(Promise.resolve()) : setTimeout, g$2.__r = 0, f$1 = 0;
 
-	"undefined" != typeof window && window.__PREACT_DEVTOOLS__ && window.__PREACT_DEVTOOLS__.attachPreact("10.6.2", l$1, {
+	"undefined" != typeof window && window.__PREACT_DEVTOOLS__ && window.__PREACT_DEVTOOLS__.attachPreact("10.6.4", l$1, {
 	  Fragment: d$1,
 	  Component: _
 	});
@@ -1044,13 +1044,15 @@
 	}
 
 	function x$1() {
-	  i.forEach(function (t) {
-	    if (t.__P) try {
-	      t.__H.__h.forEach(g$1), t.__H.__h.forEach(j$1), t.__H.__h = [];
-	    } catch (u) {
-	      t.__H.__h = [], l$1.__e(u, t.__v);
-	    }
-	  }), i = [];
+	  var t;
+
+	  for (i.sort(function (n, t) {
+	    return n.__v.__b - t.__v.__b;
+	  }); t = i.pop();) if (t.__P) try {
+	    t.__H.__h.forEach(g$1), t.__H.__h.forEach(j$1), t.__H.__h = [];
+	  } catch (u) {
+	    t.__H.__h = [], l$1.__e(u, t.__v);
+	  }
 	}
 
 	l$1.__b = function (n) {
@@ -2608,138 +2610,126 @@
 	  const navigateToStart = useCallback(() => { navigateToIndex(0); }, [navigateToIndex]);
 	  const navigateToEnd = useCallback(() => { navigateToIndex(-1); }, [navigateToIndex]);*/
 
-	  const useLinearNavigationChild = A$1(_ref2 => {
-	    let {
-	      index
-	    } = _ref2;
-	    const getIndex = useStableGetter(index); // Prefer the parent element's direction so that we're not calling getComputedStyle
-	    // on every single individual child, which is likely redundant.
+	  const getIndex = useStableGetter(index);
+	  const {
+	    convertElementSize,
+	    getLogicalDirectionInfo,
+	    useLogicalDirectionProps
+	  } = useLogicalDirection({});
 
-	    const {
-	      convertElementSize,
-	      getLogicalDirectionInfo,
-	      useLogicalDirectionProps
-	    } = useLogicalDirection({});
+	  const onKeyDown = e => {
+	    // Not handled by typeahead (i.e. assume this is a keyboard shortcut)
+	    if (e.ctrlKey || e.metaKey) return;
+	    getIndex();
+	    const info = getLogicalDirectionInfo();
+	    let allowsBlockNavigation = navigationDirection == "block" || navigationDirection == "either";
+	    let allowsInlineNavigation = navigationDirection == "inline" || navigationDirection == "either";
 
-	    const useLinearNavigationChildProps = props => {
-	      const onKeyDown = e => {
-	        // Not handled by typeahead (i.e. assume this is a keyboard shortcut)
-	        if (e.ctrlKey || e.metaKey) return;
-	        getIndex();
-	        const info = getLogicalDirectionInfo();
-	        let allowsBlockNavigation = navigationDirection == "block" || navigationDirection == "either";
-	        let allowsInlineNavigation = navigationDirection == "inline" || navigationDirection == "either";
+	    switch (e.key) {
+	      case "ArrowUp":
+	        {
+	          const propName = (info === null || info === void 0 ? void 0 : info.blockOrientation) === "vertical" ? "blockDirection" : "inlineDirection";
+	          const directionAllowed = !disableArrowKeys && ((info === null || info === void 0 ? void 0 : info.blockOrientation) === "vertical" ? allowsBlockNavigation : allowsInlineNavigation);
 
-	        switch (e.key) {
-	          case "ArrowUp":
-	            {
-	              const propName = (info === null || info === void 0 ? void 0 : info.blockOrientation) === "vertical" ? "blockDirection" : "inlineDirection";
-	              const directionAllowed = !disableArrowKeys && ((info === null || info === void 0 ? void 0 : info.blockOrientation) === "vertical" ? allowsBlockNavigation : allowsInlineNavigation);
-
-	              if (directionAllowed) {
-	                if ((info === null || info === void 0 ? void 0 : info[propName]) === "btt") {
-	                  navigateToNext();
-	                } else {
-	                  navigateToPrev();
-	                }
-
-	                e.preventDefault();
-	                e.stopPropagation();
-	              }
-
-	              break;
+	          if (directionAllowed) {
+	            if ((info === null || info === void 0 ? void 0 : info[propName]) === "btt") {
+	              navigateToNext();
+	            } else {
+	              navigateToPrev();
 	            }
 
-	          case "ArrowDown":
-	            {
-	              const propName = (info === null || info === void 0 ? void 0 : info.blockOrientation) === "vertical" ? "blockDirection" : "inlineDirection";
-	              const directionAllowed = !disableArrowKeys && ((info === null || info === void 0 ? void 0 : info.blockOrientation) === "vertical" ? allowsBlockNavigation : allowsInlineNavigation);
+	            e.preventDefault();
+	            e.stopPropagation();
+	          }
 
-	              if (directionAllowed) {
-	                if ((info === null || info === void 0 ? void 0 : info[propName]) === "btt") {
-	                  navigateToPrev();
-	                } else {
-	                  navigateToNext();
-	                }
-
-	                e.preventDefault();
-	                e.stopPropagation();
-	              }
-
-	              break;
-	            }
-
-	          case "ArrowLeft":
-	            {
-	              const propName = (info === null || info === void 0 ? void 0 : info.inlineOrientation) === "horizontal" ? "inlineDirection" : "blockDirection";
-	              const directionAllowed = !disableArrowKeys && ((info === null || info === void 0 ? void 0 : info.inlineOrientation) === "horizontal" ? allowsInlineNavigation : allowsBlockNavigation);
-
-	              if (directionAllowed) {
-	                if ((info === null || info === void 0 ? void 0 : info[propName]) === "rtl") {
-	                  navigateToNext();
-	                } else {
-	                  navigateToPrev();
-	                }
-
-	                e.preventDefault();
-	                e.stopPropagation();
-	              }
-
-	              break;
-	            }
-
-	          case "ArrowRight":
-	            {
-	              const propName = (info === null || info === void 0 ? void 0 : info.inlineOrientation) === "horizontal" ? "inlineDirection" : "blockDirection";
-	              const directionAllowed = !disableArrowKeys && ((info === null || info === void 0 ? void 0 : info.inlineOrientation) === "horizontal" ? allowsInlineNavigation : allowsBlockNavigation);
-
-	              if (directionAllowed) {
-	                if ((info === null || info === void 0 ? void 0 : info[propName]) === "rtl") {
-	                  navigateToPrev();
-	                } else {
-	                  navigateToNext();
-	                }
-
-	                e.preventDefault();
-	                e.stopPropagation();
-	              }
-
-	              e.preventDefault();
-	              e.stopPropagation();
-	              break;
-	            }
-
-	          case "Home":
-	            if (!disableHomeEndKeys) {
-	              navigateToFirst();
-	              e.preventDefault();
-	              e.stopPropagation();
-	            }
-
-	            break;
-
-	          case "End":
-	            if (!disableHomeEndKeys) {
-	              navigateToLast();
-	              e.preventDefault();
-	              e.stopPropagation();
-	            }
-
-	            break;
+	          break;
 	        }
-	      };
 
+	      case "ArrowDown":
+	        {
+	          const propName = (info === null || info === void 0 ? void 0 : info.blockOrientation) === "vertical" ? "blockDirection" : "inlineDirection";
+	          const directionAllowed = !disableArrowKeys && ((info === null || info === void 0 ? void 0 : info.blockOrientation) === "vertical" ? allowsBlockNavigation : allowsInlineNavigation);
+
+	          if (directionAllowed) {
+	            if ((info === null || info === void 0 ? void 0 : info[propName]) === "btt") {
+	              navigateToPrev();
+	            } else {
+	              navigateToNext();
+	            }
+
+	            e.preventDefault();
+	            e.stopPropagation();
+	          }
+
+	          break;
+	        }
+
+	      case "ArrowLeft":
+	        {
+	          const propName = (info === null || info === void 0 ? void 0 : info.inlineOrientation) === "horizontal" ? "inlineDirection" : "blockDirection";
+	          const directionAllowed = !disableArrowKeys && ((info === null || info === void 0 ? void 0 : info.inlineOrientation) === "horizontal" ? allowsInlineNavigation : allowsBlockNavigation);
+
+	          if (directionAllowed) {
+	            if ((info === null || info === void 0 ? void 0 : info[propName]) === "rtl") {
+	              navigateToNext();
+	            } else {
+	              navigateToPrev();
+	            }
+
+	            e.preventDefault();
+	            e.stopPropagation();
+	          }
+
+	          break;
+	        }
+
+	      case "ArrowRight":
+	        {
+	          const propName = (info === null || info === void 0 ? void 0 : info.inlineOrientation) === "horizontal" ? "inlineDirection" : "blockDirection";
+	          const directionAllowed = !disableArrowKeys && ((info === null || info === void 0 ? void 0 : info.inlineOrientation) === "horizontal" ? allowsInlineNavigation : allowsBlockNavigation);
+
+	          if (directionAllowed) {
+	            if ((info === null || info === void 0 ? void 0 : info[propName]) === "rtl") {
+	              navigateToPrev();
+	            } else {
+	              navigateToNext();
+	            }
+
+	            e.preventDefault();
+	            e.stopPropagation();
+	          }
+
+	          e.preventDefault();
+	          e.stopPropagation();
+	          break;
+	        }
+
+	      case "Home":
+	        if (!disableHomeEndKeys) {
+	          navigateToFirst();
+	          e.preventDefault();
+	          e.stopPropagation();
+	        }
+
+	        break;
+
+	      case "End":
+	        if (!disableHomeEndKeys) {
+	          navigateToLast();
+	          e.preventDefault();
+	          e.stopPropagation();
+	        }
+
+	        break;
+	    }
+	  };
+
+	  return {
+	    useLinearNavigationProps: A$1(props => {
 	      return useLogicalDirectionProps(useMergedProps()({
 	        onKeyDown
 	      }, props));
-	    };
-
-	    return {
-	      useLinearNavigationChildProps
-	    };
-	  }, [navigationDirection, navigateToNext, navigateToPrev, navigateToFirst, navigateToLast, !!disableArrowKeys, !!disableHomeEndKeys]);
-	  return {
-	    useLinearNavigationChild
+	    }, [])
 	  };
 	}
 	/**
@@ -2748,13 +2738,13 @@
 	 * @see useListNavigation, which packages everything up together.
 	 */
 
-	function useTypeaheadNavigation(_ref3) {
+	function useTypeaheadNavigation(_ref2) {
 	  let {
 	    collator,
 	    getIndex,
 	    typeaheadTimeout,
 	    setIndex
-	  } = _ref3;
+	  } = _ref2;
 	  // For typeahead, keep track of what our current "search" string is (if we have one)
 	  // and also clear it every 1000 ms since the last time it changed.
 	  // Next, keep a mapping of typeahead values to indices for faster searching.
@@ -2799,7 +2789,60 @@
 	    }
 
 	    return lhs - rhs;
-	  }); // Handle changes in typeahead that cause changes to the tabbable index
+	  });
+	  const useTypeaheadNavigationProps = A$1(function (_ref3) {
+	    let { ...props
+	    } = _ref3;
+
+	    const onCompositionStart = e => {
+	      setImeActive(true);
+	    };
+
+	    const onCompositionEnd = e => {
+	      setNextTypeaheadChar(e.data);
+	      setImeActive(false);
+	    };
+
+	    const onKeyDown = e => {
+	      const imeActive = getImeActive();
+	      let key = e.key; // Not handled by typeahead (i.e. assume this is a keyboard shortcut)
+
+	      if (e.ctrlKey || e.metaKey) return;
+
+	      if (!imeActive && e.key === "Backspace") {
+	        // Remove the last character in a way that doesn't split UTF-16 surrogates.
+	        setCurrentTypeahead(t => t === null ? null : [...t].reverse().slice(1).reverse().join(""));
+	        e.preventDefault();
+	        e.stopPropagation();
+	        return;
+	      } // The key property represents the typed character OR the "named key attribute" of the key pressed.
+	      // There's no definite way to tell the difference, but for all intents and purposes
+	      // there are no one-character names, and there are no non-ASCII-alpha names.
+	      // Thus, any one-character or non-ASCII value for `key` is *almost certainly* a typed character.
+
+
+	      const isCharacterKey = key.length === 1 || !/^[A-Za-z]/.test(key);
+
+	      if (isCharacterKey) {
+	        var _getCurrentTypeahead;
+
+	        if (key == " " && ((_getCurrentTypeahead = getCurrentTypeahead()) !== null && _getCurrentTypeahead !== void 0 ? _getCurrentTypeahead : "").trim().length == 0) ; else {
+	          e.preventDefault();
+	          e.stopPropagation(); // Note: Won't be true for the first keydown
+	          // but will be overwritten before useLayoutEffect is called
+	          // to actually apply the change
+
+	          if (!imeActive) setNextTypeaheadChar(key);
+	        }
+	      }
+	    };
+
+	    return useMergedProps()({
+	      onKeyDown,
+	      onCompositionStart,
+	      onCompositionEnd
+	    }, props);
+	  }, []); // Handle changes in typeahead that cause changes to the tabbable index
 
 	  y(() => {
 	    if (currentTypeahead && sortedTypeaheadInfo.current.length) {
@@ -2816,17 +2859,17 @@
 	          But roughly isn't good enough if there are multiple matches.
 	          To convert our sorted index to the unsorted index we need, we have to find the first
 	          element that matches us *and* (if any such exist) is *after* our current selection.
-	           In other words, the only way typeahead moves backwards relative to our current
+	            In other words, the only way typeahead moves backwards relative to our current
 	          position is if the only other option is behind us.
-	           It's not specified in WAI-ARIA what to do in that case.  I suppose wrap back to the start?
+	            It's not specified in WAI-ARIA what to do in that case.  I suppose wrap back to the start?
 	          Though there's also a case for just going upwards to the nearest to prevent jumpiness.
 	          But if you're already doing typeahead on an unsorted list, like, jumpiness can't be avoided.
 	          I dunno. Going back to the start is the simplist though.
-	           Basically what this does: Starting from where we found ourselves after our binary search,
+	            Basically what this does: Starting from where we found ourselves after our binary search,
 	          scan backwards and forwards through all adjacent entries that also compare equally so that
 	          we can find the one whose `unsortedIndex` is the lowest amongst all other equal strings
 	          (and also the lowest `unsortedIndex` yadda yadda except that it comes after us).
-	           TODO: The binary search starts this off with a solid O(log n), but one-character
+	            TODO: The binary search starts this off with a solid O(log n), but one-character
 	          searches are, thanks to pigeonhole principal, eventually guaranteed to become
 	          O(n*log n). This is annoying but probably not easily solvable? There could be an
 	          exception for one-character strings, but that's just kicking the can down
@@ -2904,67 +2947,11 @@
 	        };
 	      }
 	    }, [text]);
-
-	    const useTypeaheadNavigationChildProps = function (_ref5) {
-	      let { ...props
-	      } = _ref5;
-
-	      const onCompositionStart = e => {
-	        setImeActive(true);
-	      };
-
-	      const onCompositionEnd = e => {
-	        setNextTypeaheadChar(e.data);
-	        setImeActive(false);
-	      };
-
-	      const onKeyDown = e => {
-	        const imeActive = getImeActive();
-	        let key = e.key; // Not handled by typeahead (i.e. assume this is a keyboard shortcut)
-
-	        if (e.ctrlKey || e.metaKey) return;
-
-	        if (!imeActive && e.key === "Backspace") {
-	          // Remove the last character in a way that doesn't split UTF-16 surrogates.
-	          setCurrentTypeahead(t => t === null ? null : [...t].reverse().slice(1).reverse().join(""));
-	          e.preventDefault();
-	          e.stopPropagation();
-	          return;
-	        } // The key property represents the typed character OR the "named key attribute" of the key pressed.
-	        // There's no definite way to tell the difference, but for all intents and purposes
-	        // there are no one-character names, and there are no non-ASCII-alpha names.
-	        // Thus, any one-character or non-ASCII value for `key` is *almost certainly* a typed character.
-
-
-	        const isCharacterKey = key.length === 1 || !/^[A-Za-z]/.test(key);
-
-	        if (isCharacterKey) {
-	          var _getCurrentTypeahead;
-
-	          if (key == " " && ((_getCurrentTypeahead = getCurrentTypeahead()) !== null && _getCurrentTypeahead !== void 0 ? _getCurrentTypeahead : "").trim().length == 0) ; else {
-	            e.preventDefault();
-	            e.stopPropagation(); // Note: Won't be true for the first keydown
-	            // but will be overwritten before useLayoutEffect is called
-	            // to actually apply the change
-
-	            if (!imeActive) setNextTypeaheadChar(key);
-	          }
-	        }
-	      };
-
-	      return useMergedProps()({
-	        onKeyDown,
-	        onCompositionStart,
-	        onCompositionEnd
-	      }, props);
-	    };
-
-	    return {
-	      useTypeaheadNavigationChildProps
-	    };
+	    return {};
 	  }, []);
 	  return {
 	    useTypeaheadNavigationChild,
+	    useTypeaheadNavigationProps,
 	    currentTypeahead,
 	    invalidTypeahead
 	  };
@@ -3498,7 +3485,7 @@
 	    useManagedChild: useManagedRow
 	  } = useChildManager();
 	  const {
-	    useLinearNavigationChild: useLinearNavigationChildRow
+	    useLinearNavigationProps: useLinearNavigationRowProps
 	  } = useLinearNavigation({
 	    managedChildren: managedRows,
 	    index: indexMangler((_getCurrentRow = getCurrentRow()) !== null && _getCurrentRow !== void 0 ? _getCurrentRow : 0),
@@ -3619,7 +3606,7 @@
 	      forceUpdate();
 	    }, []);
 	    const {
-	      useLinearNavigationChild: useLinearNavigationChildCell
+	      useLinearNavigationProps: useLinearNavigationCellProps
 	    } = useLinearNavigation({
 	      managedChildren: managedCells,
 	      navigationDirection: "inline",
@@ -3635,9 +3622,12 @@
 	      activatedIndex: currentColumn,
 	      managedChildren: managedCells,
 	      setChildFlag: (cellIndex, cellIsTabbable) => {
-	        var _managedCells$cellInd;
+	        if (cellIndex != null) {
+	          var _managedCells$cellInd;
 
-	        if (cellIndex != null) (_managedCells$cellInd = managedCells[cellIndex]) === null || _managedCells$cellInd === void 0 ? void 0 : _managedCells$cellInd.setTabbable(cellIsTabbable);
+	          managedCells[cellIndex].setTabbable(cellIsTabbable);
+	          if (cellIsTabbable) (_managedCells$cellInd = managedCells[cellIndex]) === null || _managedCells$cellInd === void 0 ? void 0 : _managedCells$cellInd.rerenderAndFocus();
+	        }
 	      },
 	      getChildFlag: cellIndex => {
 	        var _managedCells$cellInd2, _managedCells$cellInd3;
@@ -3679,25 +3669,23 @@
 	      getIsTabbableRow: getIsTabbableRow,
 	      hidden,
 	      ...info
-	    });
-	    const {
-	      useLinearNavigationChildProps: useLinearNavigationChildRowProps
-	    } = useLinearNavigationChildRow(info);
-	    const useGridNavigationRowProps = A$1(props => useManagedRowProps(useLinearNavigationChildRowProps(useMergedProps()({
+	    }); //const { useLinearNavigationChildProps: useLinearNavigationChildRowProps } = useLinearNavigationChildRow(info as IR)
+
+	    const useGridNavigationRowProps = A$1(props => useManagedRowProps(useLinearNavigationCellProps(useMergedProps()({
 	      hidden: !!hidden,
 	      "data-index": rowIndex
 	    }, props))), [useManagedRowProps, !!hidden]);
 	    const getRowIndex = useStableGetter(rowIndex);
 	    const useGridNavigationCell = A$1(info => {
-	      const [tabbable, setTabbable] = useState(false);
+	      const getTabbable = useStableCallback(() => tabbable);
 	      const {
+	        tabbable,
+	        useRovingTabIndexSiblingProps,
 	        useRovingTabIndexChildProps
 	      } = useRovingTabIndexCell({ ...info,
-	        setTabbable
-	      });
-	      const {
-	        useLinearNavigationChildProps: useLinearNavigationChildCellProps
-	      } = useLinearNavigationChildCell(info); // Any time we interact with this cell, set it to be
+	        getTabbable
+	      }); //const { useLinearNavigationChildProps: useLinearNavigationChildCellProps } = useLinearNavigationChildCell(info as IC);
+	      // Any time we interact with this cell, set it to be
 	      // our "currently tabbable" cell, regardless of
 	      // any previously selected row/column.
 	      //
@@ -3708,14 +3696,14 @@
 	        setCurrentRow2(getRowIndex());
 	        setCurrentColumn2(info.index);
 	      }, [info.index]);
-	      const useGridNavigationCellProps = A$1(props => useRovingTabIndexChildProps(useLinearNavigationChildCellProps(useMergedProps()({
+	      const useGridNavigationCellProps = A$1(props => useRovingTabIndexChildProps(useMergedProps()({
 	        onClick
-	      }, props))), [useLinearNavigationChildCellProps]);
+	      }, props)), [useRovingTabIndexChildProps]);
 	      return {
 	        tabbable,
 	        useGridNavigationCellProps
 	      };
-	    }, [useLinearNavigationChildCell]);
+	    }, []);
 	    return {
 	      currentColumn,
 	      useGridNavigationRowProps,
@@ -3724,8 +3712,9 @@
 	      isTabbableRow,
 	      managedCells: managedCells
 	    };
-	  }, [useLinearNavigationChildRow, useManagedRow, indexDemangler, indexMangler]);
+	  }, [useManagedRow, indexDemangler, indexMangler]);
 	  return {
+	    useGridNavigationProps: useLinearNavigationRowProps,
 	    useGridNavigationRow,
 	    useGridNavigationColumn,
 	    rowCount: childCount,
@@ -4002,7 +3991,8 @@
 	  const {
 	    currentTypeahead,
 	    invalidTypeahead,
-	    useTypeaheadNavigationChild
+	    useTypeaheadNavigationChild,
+	    useTypeaheadNavigationProps
 	  } = useTypeaheadNavigation({
 	    collator,
 	    getIndex: getTabbableIndex,
@@ -4010,7 +4000,7 @@
 	    typeaheadTimeout: 1000
 	  });
 	  const {
-	    useLinearNavigationChild
+	    useLinearNavigationProps
 	  } = useLinearNavigation({
 	    navigationDirection: keyNavigation,
 	    index: (_getTabbableIndex = getTabbableIndex()) !== null && _getTabbableIndex !== void 0 ? _getTabbableIndex : 0,
@@ -4020,13 +4010,12 @@
 	    navigateToFirst,
 	    navigateToLast
 	  });
+	  const useListNavigationProps = A$1(props => {
+	    return useLinearNavigationProps(useTypeaheadNavigationProps(props));
+	  }, [useLinearNavigationProps, useTypeaheadNavigationProps]);
 	  const useListNavigationChild = A$1(info => {
-	    const {
-	      useTypeaheadNavigationChildProps
-	    } = useTypeaheadNavigationChild(info);
-	    const {
-	      useLinearNavigationChildProps
-	    } = useLinearNavigationChild(info);
+	    useTypeaheadNavigationChild(info); //const { useLinearNavigationChildProps } = useLinearNavigationChild(info as I);
+
 	    const {
 	      useRovingTabIndexChildProps,
 	      useRovingTabIndexSiblingProps,
@@ -4036,9 +4025,9 @@
 	    const useListNavigationChildProps = function (_ref2) {
 	      let { ...props
 	      } = _ref2;
-	      return useMergedProps()(useRovingTabIndexChildProps(useTypeaheadNavigationChildProps(useLinearNavigationChildProps({
+	      return useMergedProps()(useRovingTabIndexChildProps({
 	        onClick: roveToSelf
-	      }))), props);
+	      }), props);
 	    };
 
 	    const roveToSelf = A$1(() => {
@@ -4049,9 +4038,10 @@
 	      useListNavigationSiblingProps: useRovingTabIndexSiblingProps,
 	      tabbable
 	    };
-	  }, [useTypeaheadNavigationChild, useLinearNavigationChild, useRovingTabIndexChild, navigateToIndex]);
+	  }, [useTypeaheadNavigationChild, useRovingTabIndexChild, navigateToIndex]);
 	  return {
 	    useListNavigationChild,
+	    useListNavigationProps,
 	    currentTypeahead,
 	    invalidTypeahead,
 	    tabbableIndex,
@@ -5691,10 +5681,19 @@
 	   */
 	  h(() => {
 	    if (target) {
-	      blockingElements.push(target);
-	      return () => {
-	        blockingElements.remove(target);
-	      };
+	      // Sometimes blockingElements will fail if, for example,
+	      // the target element isn't connected to document.body.
+	      // This is rare, but it's better to fail silently with weird tabbing behavior
+	      // than to crash the entire application.
+	      try {
+	        blockingElements.push(target);
+	        return () => {
+	          blockingElements.remove(target);
+	        };
+	      } catch (ex) {
+	        // Well, semi-silently.
+	        console.error(ex);
+	      }
 	    }
 	  }, [target]);
 	}
@@ -6110,11 +6109,11 @@
 	    setLastFocusedIndex(i => (i !== null && i !== void 0 ? i : 0) + 1);
 	  }, []);
 	  const {
-	    useLinearNavigationChild
+	    useLinearNavigationProps
 	  } = useLinearNavigation({
 	    managedChildren: managedAccordionSections,
 	    navigationDirection: "block",
-	    index: getLastFocusedIndex(),
+	    index: lastFocusedIndex,
 	    navigateToFirst,
 	    navigateToLast,
 	    navigateToPrev,
@@ -6133,6 +6132,12 @@
 
 	      return (_managedAccordionSect2 = (_managedAccordionSect3 = managedAccordionSections[i]) === null || _managedAccordionSect3 === void 0 ? void 0 : _managedAccordionSect3.getOpenFromParent()) !== null && _managedAccordionSect2 !== void 0 ? _managedAccordionSect2 : null;
 	    }
+	  });
+	  useChildFlag({
+	    activatedIndex: lastFocusedIndex,
+	    managedChildren: managedAccordionSections,
+	    setChildFlag: (i, open) => open && managedAccordionSections[i].focus(),
+	    getChildFlag: i => false
 	  });
 	  const useAriaAccordionSection = A$1(args => {
 	    var _ref2, _args$open;
@@ -6175,11 +6180,6 @@
 	        getOpenFromParent,
 	        focus
 	      });
-	      const {
-	        useLinearNavigationChildProps
-	      } = useLinearNavigationChild({
-	        index
-	      });
 
 	      function useAriaAccordionSectionHeaderProps(_ref4) {
 	        let {
@@ -6206,12 +6206,12 @@
 	        })), {
 	          onFocus
 	        });
-	        return useLinearNavigationChildProps(ret3);
+	        return useLinearNavigationProps(ret3);
 	      }
 	      return {
 	        useAriaAccordionSectionHeaderProps
 	      };
-	    }, [index, open]);
+	    }, [useLinearNavigationProps, index, open]);
 	    const useAriaAccordionSectionBody = A$1(function useAriaAccordionSectionBody() {
 	      function useAriaAccordionSectionBodyProps(_ref5) {
 	        let {
@@ -6234,7 +6234,7 @@
 	      useAriaAccordionSectionHeader,
 	      useAriaAccordionSectionBody
 	    };
-	  }, [useLinearNavigationChild]);
+	  }, [useLinearNavigationProps]);
 	  return {
 	    useAriaAccordionSection
 	  };
@@ -6663,12 +6663,27 @@
 
 	      if (!foundInsideClick) onClose("backdrop");
 	    }
-	  } // Since everything else is inert, we listen for captured clicks on the window
+	  }
+
+	  useActiveElement({
+	    onLastActiveElementChange: newElement => {
+	      let validFocusableElements = getElements();
+
+	      if (validFocusableElements) {
+	        if (!Array.isArray(validFocusableElements)) validFocusableElements = [validFocusableElements];
+
+	        for (let focusable of validFocusableElements) {
+	          if (focusable !== null && focusable !== void 0 && focusable.contains(newElement)) return;
+	        }
+	      }
+
+	      onClose("lost-focus");
+	    }
+	  }); // Since everything else is inert, we listen for captured clicks on the window
 	  // (we don't use onClick since that doesn't fire when clicked on empty/inert areas)
 	  // Note: We need a *separate* touch event on mobile Safari, because
 	  // it doesn't let click events bubble or be captured from traditionally non-interactive elements,
 	  // but touch events work as expected.
-
 
 	  useGlobalHandler(window, "mousedown", !open ? null : onBackdropClick, {
 	    capture: true
@@ -6985,6 +7000,7 @@
 	  });
 	  const {
 	    useListNavigationChild,
+	    useListNavigationProps,
 	    navigateToIndex,
 	    managedChildren,
 	    setTabbableIndex,
@@ -7105,7 +7121,7 @@
 
 	  function useListboxSingleProps(props) {
 	    props.role = "listbox";
-	    return useGenericLabelInputProps(props);
+	    return useListNavigationProps(useGenericLabelInputProps(props));
 	  }
 	}
 
@@ -7132,17 +7148,18 @@
 	    useHasFocusProps: useMenuHasFocusProps,
 	    getLastFocusedInner: getMenuLastFocusedInner
 	  } = useHasFocus({
-	    onLastFocusedInnerChanged: onMenuOrButtonLostLastFocus
+	    /*onLastFocusedInnerChanged: onMenuOrButtonLostLastFocus*/
 	  });
 	  const {
 	    useHasFocusProps: useButtonHasFocusProps,
 	    getLastFocusedInner: getButtonLastFocusedInner
 	  } = useHasFocus({
-	    onLastFocusedInnerChanged: onMenuOrButtonLostLastFocus
+	    /*onLastFocusedInnerChanged: onMenuOrButtonLostLastFocus*/
 	  });
 	  const {
 	    managedChildren,
 	    useListNavigationChild,
+	    useListNavigationProps,
 	    tabbableIndex,
 	    focusCurrent: focusMenu,
 	    currentTypeahead,
@@ -7196,20 +7213,20 @@
 	  // any time it's been opened. So any time it *looks* like we should close,
 	  // try waiting 100ms. If it's still true then, then yeah, we should close.
 
-	  function onMenuOrButtonLostLastFocus() {
-	    setTimeout(() => {
-	      if (!getMenuLastFocusedInner() && !getButtonLastFocusedInner()) {
-	        onClose === null || onClose === void 0 ? void 0 : onClose();
-	      }
-	    }, 100);
-	  } // A menu sentinal is a hidden but focusable element that comes at the start or end of the element
+	  /*function onMenuOrButtonLostLastFocus() {
+	      setTimeout(() => {
+	          if (!getMenuLastFocusedInner() && !getButtonLastFocusedInner()) {
+	              onClose?.();
+	          }
+	      }, 100);
+	  }*/
+	  // A menu sentinal is a hidden but focusable element that comes at the start or end of the element
 	  // that, when activated or focused over, closes the menu.
 	  // (if focused within 100ms of the open prop changing, instead of
 	  // closing the menu, focusing the sentinel immediately asks the menu to focus itself).
 	  // This exists because while mouse users can click out of a menu
 	  // and keyboard users can escape to close the menu,
 	  // screen readers and other input methods that don't use those two become stuck.
-
 
 	  const useMenuSentinel = A$1(() => {
 	    const [firstSentinelIsActive, setFirstSentinelIsActive] = useState(false);
@@ -7298,9 +7315,9 @@
 	      }
 	    }
 
-	    return useMenuIdProps(useMenuHasFocusProps(useMergedProps()({
+	    return useListNavigationProps(useMenuIdProps(useMenuHasFocusProps(useMergedProps()({
 	      onKeyDown
-	    }, useMenuRefElementProps(props))));
+	    }, useMenuRefElementProps(props)))));
 	  }
 
 	  return {
@@ -7348,6 +7365,7 @@
 	    managedChildren: managedTabs,
 	    navigateToIndex,
 	    useListNavigationChild,
+	    useListNavigationProps,
 	    tabbableIndex,
 	    invalidTypeahead,
 	    currentTypeahead,
@@ -7395,9 +7413,16 @@
 	  });
 	  useLayoutEffect(prev => {
 	    if (selectedIndex != null && selectionMode == "activate") {
-	      var _managedPanels$select;
+	      // TODO: We need to wait a moment so that the tab panel we want to focus
+	      // is actually visible (i.e. we need to wait for the child to re-render itself).
+	      // We could, alternatively, signal to the child that it should focus itself
+	      // the next time it renders itself as visible,
+	      // which might be better?
+	      queueMicrotask(() => {
+	        var _managedPanels$select;
 
-	      (_managedPanels$select = managedPanels[selectedIndex]) === null || _managedPanels$select === void 0 ? void 0 : _managedPanels$select.focus();
+	        (_managedPanels$select = managedPanels[selectedIndex]) === null || _managedPanels$select === void 0 ? void 0 : _managedPanels$select.focus();
+	      });
 	    }
 	  }, [childCount, selectedIndex, selectionMode]);
 	  const useTab = A$1(function useTab(info) {
@@ -7469,7 +7494,7 @@
 	    };
 	  }, []);
 	  const useTabPanel = A$1(function usePanel(info) {
-	    const [shouldFocus, setShouldFocus] = useState(false);
+	    //const [shouldFocus, setShouldFocus] = useState(false);
 	    const [tabId, setTabId] = useState(undefined);
 	    const [visible, setVisible, getVisible] = useState(null);
 	    const {
@@ -7491,21 +7516,15 @@
 	    });
 
 	    function focus() {
-	      if (getTabListFocusedInner()) {
-	        setShouldFocus(true);
-	      }
-	    }
-
-	    y(() => {
 	      const element = getElement();
 
-	      if (element && shouldFocus) {
+	      if (element && getTabListFocusedInner()) {
 	        element === null || element === void 0 ? void 0 : element.focus({
 	          preventScroll: true
 	        });
-	        setShouldFocus(false);
 	      }
-	    }, [shouldFocus]);
+	    }
+
 	    y(() => {
 	      var _managedTabs$info$ind;
 
@@ -7535,13 +7554,13 @@
 	      } = _ref4;
 	      props.role = "tablist";
 	      props["aria-orientation"] = physicalOrientation;
-	      return useReferencedTabLabelId("aria-labelledby")(useTabListHasFocusProps(useLogicalDirectionProps(props)));
+	      return useReferencedTabLabelId("aria-labelledby")(useTabListHasFocusProps(useLogicalDirectionProps(useListNavigationProps(props))));
 	    }
 
 	    return {
 	      useTabListProps
 	    };
-	  }, [physicalOrientation]);
+	  }, [useListNavigationProps, physicalOrientation]);
 	  const useTabsLabel = A$1(function useTabsLabel() {
 	    function useTabsLabelProps(_ref5) {
 	      let { ...props
@@ -7703,6 +7722,7 @@
 	  const {
 	    managedChildren,
 	    useListNavigationChild,
+	    useListNavigationProps,
 	    setTabbableIndex,
 	    tabbableIndex,
 	    focusCurrent,
@@ -7727,7 +7747,7 @@
 	    let { ...props
 	    } = _ref2;
 	    props.role = "radiogroup";
-	    return useRefElementProps(props);
+	    return useListNavigationProps(useRefElementProps(props));
 	  }, [useRefElementProps]);
 	  let correctedIndex = selectedIndex == null || selectedIndex < 0 || selectedIndex >= managedChildren.length ? null : selectedIndex;
 	  useChildFlag({
@@ -8068,23 +8088,23 @@
 	      index: location,
 	      forceUpdate: useForceUpdate()
 	    });
-	    const useTableSectionProps = A$1(props => {
-	      return useManagedChildProps(useMergedProps()({
-	        role: "rowgroup"
-	      }, props));
-	    }, [useManagedChildProps]); // Actually implement grid navigation
-
 	    const {
 	      cellIndex,
 	      rowIndex,
 	      rowCount,
 	      useGridNavigationRow,
+	      useGridNavigationProps,
 	      managedRows
 	    } = useGridNavigation({
 	      shouldFocusOnChange: getFocusedInner,
 	      indexMangler,
 	      indexDemangler
 	    });
+	    const useTableSectionProps = A$1(props => {
+	      return useGridNavigationProps(useManagedChildProps(useMergedProps()({
+	        role: "rowgroup"
+	      }, props)));
+	    }, [useGridNavigationProps, useManagedChildProps]);
 	    /**
 	     *
 	     * IMPORTANT NOTE ABOUT COMPONENTS USING THIS HOOK!!
@@ -8137,15 +8157,19 @@
 	          index,
 	          value
 	        });
+	        const {
+	          getElement: getCellElement,
+	          useRefElementProps: useCellRefElementProps
+	        } = useRefElement({});
 
 	        function useTableCellProps(_ref5) {
 	          let {
 	            role,
 	            ...props
 	          } = _ref5;
-	          return useMergedProps()({
+	          return useCellRefElementProps(useMergedProps()({
 	            role: "gridcell"
-	          }, props);
+	          }, props));
 	        }
 
 	        function useTableCellDelegateProps(_ref6) {
@@ -8153,7 +8177,30 @@
 	            role,
 	            ...props
 	          } = _ref6;
-	          return useGridNavigationCellProps(props);
+
+	          // Escape hatch for table cells with editable controls, like a text box:
+	          // Any time we're in a table cell's control and we press ESC or F2,
+	          // we eject focus back out to the actual table cell itself, which will
+	          // allow navigation of the grid again.
+	          function onKeyDown(e) {
+	            if (e.key == "Escape" || e.key == "F2") {
+	              const cell = getCellElement();
+
+	              if (document.activeElement != cell) {
+	                e.stopPropagation();
+	                e.preventDefault();
+
+	                if (cell && "focus" in cell) {
+	                  if (cell.tabIndex !== 0) cell.tabIndex = -1;
+	                  cell.focus();
+	                }
+	              }
+	            }
+	          }
+
+	          return useGridNavigationCellProps(useMergedProps()({
+	            onKeyDown
+	          }, props));
 	        }
 
 	        return {
@@ -8581,11 +8628,11 @@
 	    }
 	  });
 	});
-	var Z = l$1.event;
+	var H = l$1.event;
 
-	function Y() {}
+	function Z() {}
 
-	function $() {
+	function Y() {
 	  return this.cancelBubble;
 	}
 
@@ -8594,7 +8641,7 @@
 	}
 
 	l$1.event = function (n) {
-	  return Z && (n = Z(n)), n.persist = Y, n.isPropagationStopped = $, n.isDefaultPrevented = q, n.nativeEvent = n;
+	  return H && (n = H(n)), n.persist = Z, n.isPropagationStopped = Y, n.isDefaultPrevented = q, n.nativeEvent = n;
 	};
 
 	var J = {
@@ -8615,7 +8662,7 @@
 
 	    for (var o in r = {}, e) {
 	      var i = e[o];
-	      V && "children" === o && "noscript" === t || "value" === o && "defaultValue" in e && null == i || ("defaultValue" === o && "value" in e && null == e.value ? o = "value" : "download" === o && !0 === i ? i = "" : /ondoubleclick/i.test(o) ? o = "ondblclick" : /^onchange(textarea|input)/i.test(o + t) && !z(e.type) ? o = "oninput" : /^on(Ani|Tra|Tou|BeforeInp)/.test(o) ? o = o.toLowerCase() : u && P.test(o) ? o = o.replace(/[A-Z0-9]/, "-$&").toLowerCase() : null === i && (i = void 0), r[o] = i);
+	      V && "children" === o && "noscript" === t || "value" === o && "defaultValue" in e && null == i || ("defaultValue" === o && "value" in e && null == e.value ? o = "value" : "download" === o && !0 === i ? i = "" : /ondoubleclick/i.test(o) ? o = "ondblclick" : /^onchange(textarea|input)/i.test(o + t) && !z(e.type) ? o = "oninput" : /^onfocus$/i.test(o) ? o = "onfocusin" : /^onblur$/i.test(o) ? o = "onfocusout" : /^on(Ani|Tra|Tou|BeforeInp)/.test(o) ? o = o.toLowerCase() : u && P.test(o) ? o = o.replace(/[A-Z0-9]/, "-$&").toLowerCase() : null === i && (i = void 0), r[o] = i);
 	    }
 
 	    "select" == t && r.multiple && Array.isArray(r.value) && (r.value = A$2(e.children).forEach(function (n) {
@@ -10175,6 +10222,7 @@
 	  const {
 	    indicesByElement,
 	    managedChildren,
+	    useListNavigationProps,
 	    useListNavigationChild,
 	    navigateToIndex,
 	    childCount
@@ -10198,10 +10246,10 @@
 	  size = useButtonSize(size);
 	  fillVariant = useButtonFillVariant(fillVariant);
 	  disabled = useButtonDisabled(disabled);
-	  const outerDomProps = useLogicalDirectionProps(useHasFocusProps(useMergedProps()({
+	  const outerDomProps = useListNavigationProps(useLogicalDirectionProps(useHasFocusProps(useMergedProps()({
 	    ref,
 	    class: "btn-group-aria-gridrow"
-	  }, p3)));
+	  }, p3))));
 	  const innerDomProps = {
 	    role: "toolbar",
 	    disabled,
@@ -11025,7 +11073,10 @@
 	  const {
 	    useHasFocusProps
 	  } = useHasFocus({
-	    onFocusedInnerChanged: setFocusedInner
+	    onFocusedInnerChanged: setFocusedInner,
+	    onFocusedChanged: focused => {
+	      if (!focused) setLRImpatience(0);
+	    }
 	  });
 	  const {
 	    getSyncHandler,
@@ -11068,6 +11119,86 @@
 	    } else {
 	      return onInputIfValid === null || onInputIfValid === void 0 ? void 0 : onInputIfValid.bind(target)(e);
 	    }
+	  }; // Until a better solution to "can't measure where the cursor is in input type=number" is found
+	  // use this to keep track of if the user is hammering left/right trying to escape the text field 
+	  // within a larger arrowkey-based navigation system. 
+
+
+	  const [getLRImpatience, setLRImpatience] = usePassiveState(null, () => 0);
+	  setInterval(() => {
+	    if (getLRImpatience() == 0) {
+	      setLRImpatience(prev => {
+	        if (prev == null) prev = 0;else if (prev < 0) ++prev;else if (prev > 0) --prev;
+	        return prev;
+	      });
+	    }
+	  }, 1000);
+
+	  const onKeyDown = e => {
+	    if (e.currentTarget.type == "number") {
+	      let prevValue = e.currentTarget.value;
+	      let nextValue = null;
+	      let arrowType = null;
+
+	      switch (e.key) {
+	        case "ArrowUp":
+	          try {
+	            e.currentTarget.stepUp();
+	          } catch (ex) {
+	            debugger;
+	          }
+
+	          nextValue = e.currentTarget.value;
+	          e.currentTarget.value = prevValue;
+	          arrowType = "vert";
+	          break;
+
+	        case "ArrowDown":
+	          try {
+	            e.currentTarget.stepDown();
+	          } catch (ex) {
+	            debugger;
+	          }
+
+	          nextValue = e.currentTarget.value;
+	          e.currentTarget.value = prevValue;
+	          arrowType = "vert";
+	          break;
+
+	        case "ArrowLeft":
+	          setLRImpatience(prev => Math.max(-e.currentTarget.value.length + 1, (prev !== null && prev !== void 0 ? prev : 0) - 1));
+	          arrowType = "horiz";
+	          break;
+
+	        case "ArrowRight":
+	          setLRImpatience(prev => Math.min(e.currentTarget.value.length + 1, (prev !== null && prev !== void 0 ? prev : 0) + 1));
+	          arrowType = "horiz";
+	          break;
+	      }
+
+	      if (arrowType === "vert") {
+	        // Only prevent anyone else from reacting to this event
+	        // if this key press actually changed the value.
+	        if (prevValue != nextValue) {
+	          e.stopPropagation();
+	        }
+	      }
+
+	      if (arrowType === "horiz") {
+	        // No way to detect if we're at the start or end of the input element,
+	        // unfortunately, at least when the type is number....
+	        //
+	        // So instead, we track the number of times the user has
+	        // hammered the Left/Right arrows recently
+	        // and if it's more than it takes to type the current value,
+	        // as an escape we let the event through.
+	        //
+	        // This is mostly to prevent frustration, but
+	        // TODO: really need a proper aria re-implementation of a number
+	        // field as a text field (on non-mobile only??).
+	        if (Math.abs(getLRImpatience()) <= e.currentTarget.value.length) e.stopPropagation();
+	      }
+	    }
 	  };
 
 	  const asyncState = hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null;
@@ -11080,6 +11211,7 @@
 	    colorVariant: "info"
 	  }, v$1("input", { ...useHasFocusProps(useMergedProps()(props, {
 	      "aria-disabled": disabled ? "true" : undefined,
+	      onKeyDown,
 	      ref,
 	      readOnly: disabled,
 	      onBlur,
@@ -15378,7 +15510,7 @@
 	    console.log(`RandomRow ${index}, ${unsortedRowIndex}`);
 	    const i = index;
 	    const w = RandomWords$1[i];
-	    const n = (i + 0) ** 2;
+	    const [n, setN] = useState((i + 0) ** 2);
 	    const d = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + n * 7);
 	    const [checked, setChecked] = useState(false);
 	    const onInput = A$1(async (checked) => {
@@ -15386,7 +15518,8 @@
 	        setChecked(checked);
 	    }, []);
 	    return (v$1(TableRow, { hidden: hidden, index: index },
-	        v$1(TableCell, { index: 0, value: n, colSpan: !w ? 2 : undefined }),
+	        v$1(TableCell, { index: 0, value: n, colSpan: !w ? 2 : undefined },
+	            v$1(Input, { type: "number", value: n, onValueChange: setN, labelPosition: "hidden", min: 0 }, "Numeric input")),
 	        w && v$1(TableCell, { index: 1, value: w }),
 	        v$1(TableCell, { index: 2, value: d }, formatter.format(d)),
 	        v$1(TableCell, { index: 3, value: checked },

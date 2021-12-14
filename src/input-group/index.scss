@@ -209,17 +209,17 @@ designed to allow a "wrapper" that we can position: relative.
   position: relative;
 }
 
-input.form-control[type="number"] {
+input.form-control:not(.show-spin-buttons) {
   -moz-appearance: textfield;
   appearance: textfield;
-  margin: 0;
 }
 
-input.form-control[type="number"]::-webkit-inner-spin-button,
-input.form-control[type="number"]::-webkit-outer-spin-button,
-input.form-control[type="number"]::-moz-inner-spin-button,
-input.form-control[type="number"]::-moz-outer-spin-button {
+input.form-control:not(.show-spin-buttons)::-webkit-inner-spin-button,
+input.form-control:not(.show-spin-buttons)::-webkit-outer-spin-button,
+input.form-control:not(.show-spin-buttons)::-moz-inner-spin-button,
+input.form-control:not(.show-spin-buttons)::-moz-outer-spin-button {
   -webkit-appearance: none;
   -moz-appearance: none;
+  display: none;
   margin: 0;
 }

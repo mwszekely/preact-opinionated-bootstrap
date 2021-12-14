@@ -13,7 +13,7 @@ const RandomRow = memo(function RandomRow({ index, unsortedRowIndex, hidden }: {
     console.log(`RandomRow ${index}, ${unsortedRowIndex}`)
     const i = index;
     const w = RandomWords[i];
-    const n = (i + 0) ** 2;
+    const [n, setN] = useState((i + 0) ** 2);
     const d = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + n * 7);
     const [checked, setChecked] = useState(false);
 
@@ -26,7 +26,7 @@ const RandomRow = memo(function RandomRow({ index, unsortedRowIndex, hidden }: {
 
     return (
         <TableRow hidden={hidden} index={index}>
-            <TableCell index={0} value={n} colSpan={!w ? 2 : undefined} />
+            <TableCell index={0} value={n} colSpan={!w ? 2 : undefined}><Input type="number" value={n} onValueChange={setN} labelPosition="hidden" min={0}>Numeric input</Input></TableCell>
             {w && <TableCell index={1} value={w} />}
             <TableCell index={2} value={d}>{formatter.format(d)}</TableCell>
             <TableCell index={3} value={checked}>

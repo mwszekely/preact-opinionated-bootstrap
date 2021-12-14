@@ -31,7 +31,7 @@ export const ButtonGroup = memo(forwardElementRef(function ButtonGroup(p: Button
     logicalOrientation ??= "inline";
 
     const { useHasFocusProps, getFocusedInner  } = useHasFocus<HTMLDivElement>({  });
-    const { indicesByElement, managedChildren, useListNavigationChild, navigateToIndex, childCount } = useListNavigation<HTMLButtonElement, UseListNavigationChildInfo>({ shouldFocusOnChange: getFocusedInner, keyNavigation: logicalOrientation });
+    const { indicesByElement, managedChildren, useListNavigationProps, useListNavigationChild, navigateToIndex, childCount } = useListNavigation<HTMLButtonElement, UseListNavigationChildInfo>({ shouldFocusOnChange: getFocusedInner, keyNavigation: logicalOrientation });
 
     const [physicalOrientation, setPhysicalOrientation] = useState<"horizontal" | "vertical">("horizontal");
     const { getLogicalDirectionInfo, convertToPhysicalOrientation, useLogicalDirectionProps } = useLogicalDirection<HTMLDivElement>({ onLogicalDirectionChange: logicalDirectionInfo => setPhysicalOrientation(convertToPhysicalOrientation(logicalOrientation!, logicalDirectionInfo)) });
@@ -47,7 +47,7 @@ export const ButtonGroup = memo(forwardElementRef(function ButtonGroup(p: Button
     size = useButtonSize(size);
     fillVariant = useButtonFillVariant(fillVariant);
     disabled = useButtonDisabled(disabled);
-    const outerDomProps: h.JSX.HTMLAttributes<any> = useLogicalDirectionProps(useHasFocusProps(useMergedProps<any>()({ ref, class: "btn-group-aria-gridrow" }, p3)));
+    const outerDomProps: h.JSX.HTMLAttributes<any> = useListNavigationProps(useLogicalDirectionProps(useHasFocusProps(useMergedProps<any>()({ ref, class: "btn-group-aria-gridrow" }, p3))));
     const innerDomProps: h.JSX.HTMLAttributes<any> = { role: "toolbar", disabled, className: clsx("btn-group", wrap && "wrap", physicalOrientation == "vertical" && "btn-group-vertical") };
 
     // Remaining props, forwarded onto the DOM
