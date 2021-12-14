@@ -13840,7 +13840,7 @@
 	  return newProps;
 	}
 
-	function Tooltip(_ref) {
+	const Tooltip = g(forwardElementRef(function Tooltip(_ref, ref) {
 	  var _side, _align;
 
 	  let {
@@ -13927,8 +13927,10 @@
 
 
 	  return v$1(d$1, null, B(cloneable, useMergedProps()({
+	    ref
+	  }, useMergedProps()({
 	    ref: cloneable.ref
-	  }, useTooltipTriggerProps(useElementSizeProps(usePopperSourceProps(cloneable.props))))), v$1(BodyPortal, null, v$1("div", { ...usePopperPopupProps({
+	  }, useTooltipTriggerProps(useElementSizeProps(usePopperSourceProps(cloneable.props)))))), v$1(BodyPortal, null, v$1("div", { ...usePopperPopupProps({
 	      class: "tooltip-wrapper"
 	    })
 	  }, v$1(Transition, { ...rest,
@@ -13945,7 +13947,7 @@
 	  }), v$1("div", {
 	    class: "tooltip-inner"
 	  }, tooltip || lastUsedTooltipRef.current))))));
-	}
+	}));
 
 	const HasTypeaheadContext = D$1(false);
 	const OnCloseContext = D$1(undefined);

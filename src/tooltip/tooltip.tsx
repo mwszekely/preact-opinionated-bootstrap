@@ -1,11 +1,12 @@
-import { cloneElement, ComponentChild, ComponentChildren, Fragment, h, VNode } from "preact";
+import { cloneElement, ComponentChild, ComponentChildren, Fragment, h, Ref, VNode } from "preact";
 import { useAriaTooltip } from "preact-aria-widgets";
 import { useElementSize, useMergedProps, useState } from "preact-prop-helpers";
 import { ZoomFade } from "preact-transition";
+import { memo } from "preact/compat";
 import { useEffect, useRef } from "preact/hooks";
 import { fixProps, usePopperApi, useShouldUpdatePopper } from "../menu/popper-api";
 import { BodyPortal } from "../portal";
-import { FlippableTransitionComponent } from "../props";
+import { FlippableTransitionComponent, forwardElementRef } from "../props";
 
 type UseTooltipProps = Parameters<typeof useAriaTooltip>[0];
 
@@ -19,7 +20,7 @@ export type TooltipProps<T extends <E extends HTMLElement>(...args: any[]) => h.
         positionBlock?: "start" | "end" | "center";
     }
 
-export function Tooltip<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element>({ children, side, align, tooltip, Transition, mouseoverDelay, ...rest }: TooltipProps<T>) {
+export const Tooltip = memo(forwardElementRef(function Tooltip<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element>({ children, side, align, tooltip, Transition, mouseoverDelay, ...rest }: TooltipProps<T>, ref?: Ref<any>) {
     side ??= "block-start";
     align ??= "center";
 
@@ -30,7 +31,7 @@ export function Tooltip<T extends <E extends HTMLElement>(...args: any[]) => h.J
     const lastUsedTooltipRef = useRef(tooltip);
     lastUsedTooltipRef.current = (tooltip || lastUsedTooltipRef.current);
 
-    isOpen&&=!!tooltip;
+    isOpen &&= !!tooltip;
 
     let cloneable: VNode;
     if (typeof children === "string" || typeof children === "number" || typeof children == "boolean" || typeof children === "bigint") {
@@ -46,7 +47,7 @@ export function Tooltip<T extends <E extends HTMLElement>(...args: any[]) => h.J
     const { useTooltipProps } = useTooltip<HTMLDivElement>();
     const { useTooltipTriggerProps } = useTooltipTrigger();
     const { shouldUpdate, onInteraction } = useShouldUpdatePopper(isOpen);
-    const { useElementSizeProps } = useElementSize<any>({ onSizeChange: onInteraction ?? (() => {}) });
+    const { useElementSizeProps } = useElementSize<any>({ onSizeChange: onInteraction ?? (() => { }) });
     const { logicalDirection, usePopperArrow, usePopperPopup, usePopperSource, usedPlacement } = usePopperApi({ updating: shouldUpdate, side, align, useArrow: true, followMouse: true });
 
     const { usePopperPopupProps } = usePopperPopup<HTMLDivElement>({ open: isOpen });
@@ -66,7 +67,7 @@ export function Tooltip<T extends <E extends HTMLElement>(...args: any[]) => h.J
     // TODO: It's required for this to be exitVisibility="hidden" for transforms to work?
     // Probably an issue in the Transition element itself because it's not browser-specific but it's a little weird
     return <>
-        {cloneElement(cloneable, useMergedProps<any>()({ ref: cloneable.ref! }, useTooltipTriggerProps(useElementSizeProps(usePopperSourceProps(cloneable.props)))))}
+        {cloneElement(cloneable, useMergedProps<any>()({ ref }, useMergedProps<any>()({ ref: cloneable.ref! }, useTooltipTriggerProps(useElementSizeProps(usePopperSourceProps(cloneable.props))))))}
         <BodyPortal>
             <div {...usePopperPopupProps({ class: "tooltip-wrapper" })} >
                 <Transition {...rest as any} show={isOpen} onTransitionUpdate={onInteraction} exitVisibility="hidden">
@@ -78,4 +79,4 @@ export function Tooltip<T extends <E extends HTMLElement>(...args: any[]) => h.J
             </div>
         </BodyPortal>
     </>;
-}
+}))
