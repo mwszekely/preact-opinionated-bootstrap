@@ -15,3 +15,6 @@ export { Tab, TabPanel, TabPanelProps, TabProps, Tabs, TabsProps } from "./tabs"
 export { PushToast, Toast, ToastErrorBoundary, ToastProps, ToastsProvider, usePushToast, useUpdateToast } from "./toast";
 export { Tooltip, TooltipProps } from "./tooltip";
 export { SetBodyPortalClass } from "./portal";
+export { BootstrapIcon, FontIcon } from "./icon";
+export { UtilityClasses } from "./classes";
+
