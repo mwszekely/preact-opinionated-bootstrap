@@ -42,8 +42,8 @@ export const ListItemSingle = memo(forwardElementRef(function ListItemSingle(pro
     const { index, ...domProps } = { ...props, ref };
 
     const [text, setText] = useState<string | null>(null);
-    const { useRefElementProps, getElement } = useRefElement<HTMLLIElement>({ onElementChange: element => setText(element?.innerText ?? "") });
-    useMutationObserver(getElement, { subtree: true, onCharacterData: (info) => setText(getElement()?.innerText ?? "") });
+    const { useRefElementProps, getElement } = useRefElement<HTMLLIElement>({ onElementChange: element => setText((element?.innerText ?? "").trim()) });
+    useMutationObserver(getElement, { subtree: true, onCharacterData: (info) => setText((getElement()?.innerText ?? "").trim()) });
 
     const { getSelected, tabbable, selected, useListboxSingleItemProps } = useListItemSingle({ index, text, tag: "li" });
     return <li {...usePseudoActive(useMergedProps<HTMLLIElement>()({ class: clsx("list-group-item", "list-group-item-action", selected && "active") } as any, useListboxSingleItemProps(useRefElementProps(domProps))))} />

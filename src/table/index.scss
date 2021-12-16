@@ -8,6 +8,15 @@
 
 .table {
   contain: content;
+  vertical-align: middle;
+
+  & tr {
+    height: 2.5em;
+  }
+  & td {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
   
   & tr,
   & td {

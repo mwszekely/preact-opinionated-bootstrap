@@ -49,9 +49,9 @@ interface TableCellSharedProps extends GlobalAttributes<HTMLTableCellElement> {
     children?: VNode<any> | string | number | boolean | null;
 }
 
-export interface TableCellProps extends UseTableCellParameters, TableCellSharedProps {
+export interface TableCellProps extends Omit<UseTableCellParameters, "value">, TableCellSharedProps {
     colSpan?: number;
-    value: T2;
+    value?: T2;
 }
 
 export interface TableHeaderCellProps extends OmitStrong<UseTableHeadCellParameters<HTMLTableCellElement>, "tag">, TableCellSharedProps {
@@ -189,6 +189,15 @@ export const TableRow = memo(forwardElementRef(function TableRow({ children, ind
 
 
 export const TableCell = memo(forwardElementRef(function TableCell({ value: valueAsUnsorted, colSpan, children, index: columnIndex, variant, focus, active, ...props }: TableCellProps, ref: Ref<HTMLTableCellElement>) {
+
+    if (valueAsUnsorted == undefined) {
+        if (["string", "number", "bigint"].includes(typeof children)) {
+            valueAsUnsorted = children as string;
+        }
+        else {
+            valueAsUnsorted = "";
+        }
+    }
 
     const useTableCell = useContext(TableCellContext);
     const { useTableCellDelegateProps, useTableCellProps } = useTableCell({ index: columnIndex, value: valueAsUnsorted });

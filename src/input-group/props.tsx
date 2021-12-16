@@ -6,7 +6,7 @@ import { useCallback } from "preact/hooks";
 interface BaseUnlabelledInputProps<T> {
     value: T;
     disabled?: boolean;
-    placeholder?: string; 
+    placeholder?: string;
     onValueChange: (value: T, event: InputEvent) => (Promise<void> | void);
 }
 
@@ -14,14 +14,15 @@ interface BaseUnlabelledInputProps<T> {
 export const UseCheckboxGroupChildContext = createContext<UseCheckboxGroupChild<HTMLInputElement, CheckboxGroupChildInfo> | null>(null);
 
 export interface UnlabelledInputTextProps extends BaseUnlabelledInputProps<string> { type: "text"; maxLength?: number; }
+export interface UnlabelledInputNumericProps extends BaseUnlabelledInputProps<string> { type: "numeric"; maxLength?: number; }
 export interface UnlabelledInputNumberProps extends BaseUnlabelledInputProps<number> { type: "number"; min?: number; max?: number; step?: number; }
-export type UnlabelledInputProps = UnlabelledInputTextProps | UnlabelledInputNumberProps;
+export type UnlabelledInputProps = UnlabelledInputTextProps | UnlabelledInputNumberProps | UnlabelledInputNumericProps;
 
 export type InputProps = UnlabelledInputProps & {
     children: ComponentChildren,
     labelPosition?: "start" | "end" | "floating" | "hidden" | "placeholder";
     size?: "sm" | "md" | "lg";
-    
+
     width?: `${number}ch` | `100%`;
 }
 
@@ -52,11 +53,12 @@ function min<T extends number | string | Date>(value: T, min?: T) {
 export function useInputCaptures<T>(type: "text", min2: string, max2: string):
 export function useInputCaptures<T>(type: "text" | "number", min2: number, max2: number)
 export function useInputCaptures<T>(type: "text" | "number", min2: T, max2: T)*/
-export function useInputCaptures<T>(type: "text" | "number", min2?: T, max2?: T) {
+export function useInputCaptures<T>(type: "text" | "number" | "numeric", min2?: T, max2?: T) {
 
     const capture = useCallback((event: h.JSX.TargetedEvent<HTMLInputElement>): T => {
         switch (type) {
             case "text":
+            case "numeric":
                 return max(min(event.currentTarget.value, min2 as any), max2 as any) as T;
 
             case "number":
@@ -68,6 +70,7 @@ export function useInputCaptures<T>(type: "text" | "number", min2?: T, max2?: T)
     const uncapture = useCallback((value: InputProps["value"]): string => {
         switch (type) {
             case "text":
+            case "numeric":
                 return value as string;
 
             case "number":

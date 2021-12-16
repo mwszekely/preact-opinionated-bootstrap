@@ -104,7 +104,7 @@ export function CheckboxGroupChild({ index, checked, onCheck, id, ...props }: Ch
     const [text, setText] = useState<string | null>(null);
     
     const { useRefElementProps, getElement } = useRefElement<HTMLInputElement>({  });
-    useMutationObserver(getElement, { subtree: true, onCharacterData: (info) => setText(getElement()?.innerText ?? "") });
+    useMutationObserver(getElement, { subtree: true, onCharacterData: (info) => setText((getElement()?.innerText ?? "").trim()) });
 
     const useCheckboxGroupChild = useContext(UseCheckboxGroupChildContext)!;
 

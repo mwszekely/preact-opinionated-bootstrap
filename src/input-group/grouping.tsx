@@ -9,9 +9,15 @@ import { InInputGridContext, InInputGroupContext } from "./props";
 
 export interface InputGroupProps<E extends Element> extends Partial<TagSensitiveProps<E>>, GlobalAttributes<E> {
     size?: "sm" | "md" | "lg";
+    
+    /**
+     * Only within an InputGrid; allows a control to take up more than 1 column.
+     */
+    colSpan?: number | "all";
 }
 
 export interface InputGridProps<E extends Element> extends Partial<TagSensitiveProps<E>>, GlobalAttributes<E> {
+    columns?: number;   // Represents the number of columns reserved for controls (actual # of CSS grid columns will be 2 * this)
 }
 
 export interface InputGroupTextProps<E extends Element> extends Partial<TagSensitiveProps<E>>, Omit<h.JSX.HTMLAttributes<E>, "children"> {
@@ -19,8 +25,8 @@ export interface InputGroupTextProps<E extends Element> extends Partial<TagSensi
     disabled?: boolean;
 }
 
-export const InputGrid = memo(forwardElementRef(function InputGrid<E extends Element>({ tag, children, ...props }: InputGridProps<E>, ref: Ref<E>) {
-    return createElement(tag ?? "div" as any, useMergedProps<E>()({ class: "input-grid", ref }, props),
+export const InputGrid = memo(forwardElementRef(function InputGrid<E extends Element>({ tag, children, columns, ...props }: InputGridProps<E>, ref: Ref<E>) {
+    return createElement(tag ?? "div" as any, useMergedProps<E>()({ class: "input-grid", style: columns? { "--input-grid-columns": columns } as {} : {}, ref }, props),
         <InInputGridContext.Provider value={useContext(InInputGridContext) + 1}>{children}</InInputGridContext.Provider>
     );
 }));
@@ -30,9 +36,9 @@ export const InputGrid = memo(forwardElementRef(function InputGrid<E extends Ele
  * 
  * All Input-type components automatically detect when they're in an InputGroup and render different accordingly.
  */
-export const InputGroup = memo(forwardElementRef(function InputGroup<E extends Element>({ children, size, tag, ...props }: InputGroupProps<E>, ref: Ref<E>) {
+export const InputGroup = memo(forwardElementRef(function InputGroup<E extends Element>({ children, size, colSpan, tag, ...props }: InputGroupProps<E>, ref: Ref<E>) {
     return (
-        createElement(tag ?? "div" as any, useMergedProps<E>()({ class: clsx("input-group", size && size != "md" && `input-group-${size}`), ref }, props),
+        createElement(tag ?? "div" as any, useMergedProps<E>()({ class: clsx("input-group", size && size != "md" && `input-group-${size}`, colSpan && `input-grid-span-${colSpan}`), ref }, props),
             <InInputGroupContext.Provider value={true}>
                 {children}
             </InInputGroupContext.Provider>

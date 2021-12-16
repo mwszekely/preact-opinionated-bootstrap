@@ -367,7 +367,7 @@
 	});
 
 	createCommonjsModule(function (module, exports) {
-	  "undefined" != typeof window && window.__PREACT_DEVTOOLS__ && window.__PREACT_DEVTOOLS__.attachPreact("10.6.2", preact.options, {
+	  "undefined" != typeof window && window.__PREACT_DEVTOOLS__ && window.__PREACT_DEVTOOLS__.attachPreact("10.6.4", preact.options, {
 	    Fragment: preact.Fragment,
 	    Component: preact.Component
 	  }), exports.addHookName = function (e, o) {
@@ -769,22 +769,22 @@
 	function C$1(n, l, u, i, t) {
 	  var r;
 
-	  for (r in u) "children" === r || "key" === r || r in l || H(n, r, null, u[r], i);
+	  for (r in u) "children" === r || "key" === r || r in l || H$1(n, r, null, u[r], i);
 
-	  for (r in l) t && "function" != typeof l[r] || "children" === r || "key" === r || "value" === r || "checked" === r || u[r] === l[r] || H(n, r, l[r], u[r], i);
+	  for (r in l) t && "function" != typeof l[r] || "children" === r || "key" === r || "value" === r || "checked" === r || u[r] === l[r] || H$1(n, r, l[r], u[r], i);
 	}
 
-	function $$1(n, l, u) {
+	function $(n, l, u) {
 	  "-" === l[0] ? n.setProperty(l, u) : n[l] = null == u ? "" : "number" != typeof u || s$1.test(l) ? u : u + "px";
 	}
 
-	function H(n, l, u, i, t) {
+	function H$1(n, l, u, i, t) {
 	  var r;
 
 	  n: if ("style" === l) {
 	    if ("string" == typeof u) n.style.cssText = u;else {
-	      if ("string" == typeof i && (n.style.cssText = i = ""), i) for (l in i) u && l in u || $$1(n.style, l, "");
-	      if (u) for (l in u) i && u[l] === i[l] || $$1(n.style, l, u[l]);
+	      if ("string" == typeof i && (n.style.cssText = i = ""), i) for (l in i) u && l in u || $(n.style, l, "");
+	      if (u) for (l in u) i && u[l] === i[l] || $(n.style, l, u[l]);
 	    }
 	  } else if ("o" === l[0] && "n" === l[1]) r = l !== (l = l.replace(/Capture$/, "")), l = l.toLowerCase() in n ? l.toLowerCase().slice(2) : l.slice(2), n.l || (n.l = {}), n.l[l + r] = u, u ? i || n.addEventListener(l, r ? T$1 : I$1, r) : n.removeEventListener(l, r ? T$1 : I$1, r);else if ("dangerouslySetInnerHTML" !== l) {
 	    if (t) l = l.replace(/xlink[H:h]/, "h").replace(/sName$/, "s");else if ("href" !== l && "list" !== l && "form" !== l && "tabIndex" !== l && "download" !== l && l in n) try {
@@ -879,7 +879,7 @@
 	    }
 
 	    if (C$1(l, p, y, r, c), v) u.__k = [];else if (_ = u.props.children, w$2(l, Array.isArray(_) ? _ : [_], u, i, t, r && "foreignObject" !== d, o, f, o ? o[0] : i.__k && k$1(i, 0), c), null != o) for (_ = o.length; _--;) null != o[_] && h$1(o[_]);
-	    c || ("value" in p && void 0 !== (_ = p.value) && (_ !== y.value || _ !== l.value || "progress" === d && !_) && H(l, "value", _, y.value, !1), "checked" in p && void 0 !== (_ = p.checked) && _ !== l.checked && H(l, "checked", _, y.checked, !1));
+	    c || ("value" in p && void 0 !== (_ = p.value) && (_ !== y.value || _ !== l.value || "progress" === d && !_) && H$1(l, "value", _, y.value, !1), "checked" in p && void 0 !== (_ = p.checked) && _ !== l.checked && H$1(l, "checked", _, y.checked, !1));
 	  }
 	  return l;
 	}
@@ -971,7 +971,7 @@
 	  this.__v && (this.__e = !0, n && this.__h.push(n), m$1(this));
 	}, _.prototype.render = d$1, t$1 = [], r$1 = "function" == typeof Promise ? Promise.prototype.then.bind(Promise.resolve()) : setTimeout, g$2.__r = 0, f$1 = 0;
 
-	"undefined" != typeof window && window.__PREACT_DEVTOOLS__ && window.__PREACT_DEVTOOLS__.attachPreact("10.6.2", l$1, {
+	"undefined" != typeof window && window.__PREACT_DEVTOOLS__ && window.__PREACT_DEVTOOLS__.attachPreact("10.6.4", l$1, {
 	  Fragment: d$1,
 	  Component: _
 	});
@@ -1044,13 +1044,15 @@
 	}
 
 	function x$1() {
-	  i.forEach(function (t) {
-	    if (t.__P) try {
-	      t.__H.__h.forEach(g$1), t.__H.__h.forEach(j$1), t.__H.__h = [];
-	    } catch (u) {
-	      t.__H.__h = [], l$1.__e(u, t.__v);
-	    }
-	  }), i = [];
+	  var t;
+
+	  for (i.sort(function (n, t) {
+	    return n.__v.__b - t.__v.__b;
+	  }); t = i.pop();) if (t.__P) try {
+	    t.__H.__h.forEach(g$1), t.__H.__h.forEach(j$1), t.__H.__h = [];
+	  } catch (u) {
+	    t.__H.__h = [], l$1.__e(u, t.__v);
+	  }
 	}
 
 	l$1.__b = function (n) {
@@ -2857,17 +2859,17 @@
 	          But roughly isn't good enough if there are multiple matches.
 	          To convert our sorted index to the unsorted index we need, we have to find the first
 	          element that matches us *and* (if any such exist) is *after* our current selection.
-	           In other words, the only way typeahead moves backwards relative to our current
+	            In other words, the only way typeahead moves backwards relative to our current
 	          position is if the only other option is behind us.
-	           It's not specified in WAI-ARIA what to do in that case.  I suppose wrap back to the start?
+	            It's not specified in WAI-ARIA what to do in that case.  I suppose wrap back to the start?
 	          Though there's also a case for just going upwards to the nearest to prevent jumpiness.
 	          But if you're already doing typeahead on an unsorted list, like, jumpiness can't be avoided.
 	          I dunno. Going back to the start is the simplist though.
-	           Basically what this does: Starting from where we found ourselves after our binary search,
+	            Basically what this does: Starting from where we found ourselves after our binary search,
 	          scan backwards and forwards through all adjacent entries that also compare equally so that
 	          we can find the one whose `unsortedIndex` is the lowest amongst all other equal strings
 	          (and also the lowest `unsortedIndex` yadda yadda except that it comes after us).
-	           TODO: The binary search starts this off with a solid O(log n), but one-character
+	            TODO: The binary search starts this off with a solid O(log n), but one-character
 	          searches are, thanks to pigeonhole principal, eventually guaranteed to become
 	          O(n*log n). This is annoying but probably not easily solvable? There could be an
 	          exception for one-character strings, but that's just kicking the can down
@@ -3620,15 +3622,17 @@
 	      activatedIndex: currentColumn,
 	      managedChildren: managedCells,
 	      setChildFlag: (cellIndex, cellIsTabbable) => {
-	        if (cellIndex != null && managedCells[cellIndex]) {
+	        if (cellIndex != null) {
+	          var _managedCells$cellInd;
+
 	          managedCells[cellIndex].setTabbable(cellIsTabbable);
-	          if (cellIsTabbable) managedCells[cellIndex].rerenderAndFocus();
+	          if (cellIsTabbable) (_managedCells$cellInd = managedCells[cellIndex]) === null || _managedCells$cellInd === void 0 ? void 0 : _managedCells$cellInd.rerenderAndFocus();
 	        }
 	      },
 	      getChildFlag: cellIndex => {
-	        var _managedCells$cellInd, _managedCells$cellInd2;
+	        var _managedCells$cellInd2, _managedCells$cellInd3;
 
-	        return (_managedCells$cellInd = (_managedCells$cellInd2 = managedCells[cellIndex]) === null || _managedCells$cellInd2 === void 0 ? void 0 : _managedCells$cellInd2.getTabbable()) !== null && _managedCells$cellInd !== void 0 ? _managedCells$cellInd : null;
+	        return (_managedCells$cellInd2 = (_managedCells$cellInd3 = managedCells[cellIndex]) === null || _managedCells$cellInd3 === void 0 ? void 0 : _managedCells$cellInd3.getTabbable()) !== null && _managedCells$cellInd2 !== void 0 ? _managedCells$cellInd2 : null;
 	      },
 	      useEffect
 	    }); // Any time we become the currently tabbable row,
@@ -8153,15 +8157,19 @@
 	          index,
 	          value
 	        });
+	        const {
+	          getElement: getCellElement,
+	          useRefElementProps: useCellRefElementProps
+	        } = useRefElement({});
 
 	        function useTableCellProps(_ref5) {
 	          let {
 	            role,
 	            ...props
 	          } = _ref5;
-	          return useMergedProps()({
+	          return useCellRefElementProps(useMergedProps()({
 	            role: "gridcell"
-	          }, props);
+	          }, props));
 	        }
 
 	        function useTableCellDelegateProps(_ref6) {
@@ -8169,7 +8177,30 @@
 	            role,
 	            ...props
 	          } = _ref6;
-	          return useGridNavigationCellProps(props);
+
+	          // Escape hatch for table cells with editable controls, like a text box:
+	          // Any time we're in a table cell's control and we press ESC or F2,
+	          // we eject focus back out to the actual table cell itself, which will
+	          // allow navigation of the grid again.
+	          function onKeyDown(e) {
+	            if (e.key == "Escape" || e.key == "F2") {
+	              const cell = getCellElement();
+
+	              if (document.activeElement != cell) {
+	                e.stopPropagation();
+	                e.preventDefault();
+
+	                if (cell && "focus" in cell) {
+	                  if (cell.tabIndex !== 0) cell.tabIndex = -1;
+	                  cell.focus();
+	                }
+	              }
+	            }
+	          }
+
+	          return useGridNavigationCellProps(useMergedProps()({
+	            onKeyDown
+	          }, props));
 	        }
 
 	        return {
@@ -8597,11 +8628,11 @@
 	    }
 	  });
 	});
-	var Z = l$1.event;
+	var H = l$1.event;
 
-	function Y() {}
+	function Z() {}
 
-	function $() {
+	function Y() {
 	  return this.cancelBubble;
 	}
 
@@ -8610,7 +8641,7 @@
 	}
 
 	l$1.event = function (n) {
-	  return Z && (n = Z(n)), n.persist = Y, n.isPropagationStopped = $, n.isDefaultPrevented = q, n.nativeEvent = n;
+	  return H && (n = H(n)), n.persist = Z, n.isPropagationStopped = Y, n.isDefaultPrevented = q, n.nativeEvent = n;
 	};
 
 	var J = {
@@ -8631,7 +8662,7 @@
 
 	    for (var o in r = {}, e) {
 	      var i = e[o];
-	      V && "children" === o && "noscript" === t || "value" === o && "defaultValue" in e && null == i || ("defaultValue" === o && "value" in e && null == e.value ? o = "value" : "download" === o && !0 === i ? i = "" : /ondoubleclick/i.test(o) ? o = "ondblclick" : /^onchange(textarea|input)/i.test(o + t) && !z(e.type) ? o = "oninput" : /^on(Ani|Tra|Tou|BeforeInp)/.test(o) ? o = o.toLowerCase() : u && P.test(o) ? o = o.replace(/[A-Z0-9]/, "-$&").toLowerCase() : null === i && (i = void 0), r[o] = i);
+	      V && "children" === o && "noscript" === t || "value" === o && "defaultValue" in e && null == i || ("defaultValue" === o && "value" in e && null == e.value ? o = "value" : "download" === o && !0 === i ? i = "" : /ondoubleclick/i.test(o) ? o = "ondblclick" : /^onchange(textarea|input)/i.test(o + t) && !z(e.type) ? o = "oninput" : /^onfocus$/i.test(o) ? o = "onfocusin" : /^onblur$/i.test(o) ? o = "onfocusout" : /^on(Ani|Tra|Tou|BeforeInp)/.test(o) ? o = o.toLowerCase() : u && P.test(o) ? o = o.replace(/[A-Z0-9]/, "-$&").toLowerCase() : null === i && (i = void 0), r[o] = i);
 	    }
 
 	    "select" == t && r.multiple && Array.isArray(r.value) && (r.value = A$2(e.children).forEach(function (n) {
@@ -10511,6 +10542,7 @@
 	  const capture = A$1(event => {
 	    switch (type) {
 	      case "text":
+	      case "numeric":
 	        return max$1(min$1(event.currentTarget.value, min2), max2);
 
 	      case "number":
@@ -10520,6 +10552,7 @@
 	  const uncapture = A$1(value => {
 	    switch (type) {
 	      case "text":
+	      case "numeric":
 	        return value;
 
 	      case "number":
@@ -10537,10 +10570,14 @@
 	  let {
 	    tag,
 	    children,
+	    columns,
 	    ...props
 	  } = _ref;
 	  return v$1(tag !== null && tag !== void 0 ? tag : "div", useMergedProps()({
 	    class: "input-grid",
+	    style: columns ? {
+	      "--input-grid-columns": columns
+	    } : {},
 	    ref
 	  }, props), v$1(InInputGridContext.Provider, {
 	    value: F(InInputGridContext) + 1
@@ -10556,11 +10593,12 @@
 	  let {
 	    children,
 	    size,
+	    colSpan,
 	    tag,
 	    ...props
 	  } = _ref2;
 	  return v$1(tag !== null && tag !== void 0 ? tag : "div", useMergedProps()({
-	    class: clsx("input-group", size && size != "md" && `input-group-${size}`),
+	    class: clsx("input-group", size && size != "md" && `input-group-${size}`, colSpan && `input-grid-span-${colSpan}`),
 	    ref
 	  }, props), v$1(InInputGroupContext.Provider, {
 	    value: true
@@ -11173,6 +11211,15 @@
 	  const asyncState = hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null;
 	  const onBlur = flushDebouncedPromise;
 	  F(InInputGridContext);
+	  const extraProps = type === "numeric" ? {
+	    inputMode: "numeric",
+	    pattern: "[0-9]*"
+	  } : {};
+
+	  if (type === "numeric") {
+	    type = "text";
+	  }
+
 	  return v$1(ProgressCircular, {
 	    spinnerTimeout: 10,
 	    mode: currentType === "async" ? asyncState : null,
@@ -11187,7 +11234,8 @@
 	      class: clsx("form-control", "faux-form-control-inner", disabled && "disabled", pending && "with-end-icon"),
 	      type,
 	      value: pending || focusedInner ? currentCapture : uncapture(value),
-	      onInput
+	      onInput,
+	      ...extraProps
 	    }))
 	  }));
 	}
@@ -11245,7 +11293,8 @@
 	      ref
 	    }
 	  });
-	  const isEmpty = true ; //if (isInInputGrid) {
+	  const isEmpty = true ;
+	  if (width) debugger; //if (isInInputGrid) {
 
 	  inputJsx = v$1("div", {
 	    class: clsx("form-control", "faux-form-control-outer", "elevation-depressed-2", "elevation-body-surface", "focusable-within", !isEmpty , props.disabled && "disabled", size != "md" && `form-control-${size}`),
@@ -11374,7 +11423,7 @@
 	    onElementChange: element => {
 	      var _element$innerText;
 
-	      return setText((_element$innerText = element === null || element === void 0 ? void 0 : element.innerText) !== null && _element$innerText !== void 0 ? _element$innerText : "");
+	      return setText(((_element$innerText = element === null || element === void 0 ? void 0 : element.innerText) !== null && _element$innerText !== void 0 ? _element$innerText : "").trim());
 	    }
 	  });
 	  useMutationObserver(getElement, {
@@ -11382,7 +11431,7 @@
 	    onCharacterData: info => {
 	      var _getElement$innerText, _getElement;
 
-	      return setText((_getElement$innerText = (_getElement = getElement()) === null || _getElement === void 0 ? void 0 : _getElement.innerText) !== null && _getElement$innerText !== void 0 ? _getElement$innerText : "");
+	      return setText(((_getElement$innerText = (_getElement = getElement()) === null || _getElement === void 0 ? void 0 : _getElement.innerText) !== null && _getElement$innerText !== void 0 ? _getElement$innerText : "").trim());
 	    }
 	  });
 	  const {
@@ -14206,7 +14255,7 @@
 	    onElementChange: element => {
 	      var _element$innerText;
 
-	      return setText((_element$innerText = element === null || element === void 0 ? void 0 : element.innerText) !== null && _element$innerText !== void 0 ? _element$innerText : "");
+	      return setText(((_element$innerText = element === null || element === void 0 ? void 0 : element.innerText) !== null && _element$innerText !== void 0 ? _element$innerText : "").trim());
 	    }
 	  });
 	  useMutationObserver(getElement, {
@@ -14214,7 +14263,7 @@
 	    onCharacterData: info => {
 	      var _getElement$innerText, _getElement;
 
-	      return setText((_getElement$innerText = (_getElement = getElement()) === null || _getElement === void 0 ? void 0 : _getElement.innerText) !== null && _getElement$innerText !== void 0 ? _getElement$innerText : "");
+	      return setText(((_getElement$innerText = (_getElement = getElement()) === null || _getElement === void 0 ? void 0 : _getElement.innerText) !== null && _getElement$innerText !== void 0 ? _getElement$innerText : "").trim());
 	    }
 	  });
 	  const {
@@ -15364,6 +15413,15 @@
 	    active,
 	    ...props
 	  } = _ref7;
+
+	  if (valueAsUnsorted == undefined) {
+	    if (["string", "number", "bigint"].includes(typeof children)) {
+	      valueAsUnsorted = children;
+	    } else {
+	      valueAsUnsorted = "";
+	    }
+	  }
+
 	  const useTableCell = F(TableCellContext);
 	  const {
 	    useTableCellDelegateProps,
@@ -15475,7 +15533,7 @@
 
 	var RandomWords$1 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.".split(" ");
 	const formatter = new Intl.DateTimeFormat("en-US", { year: "numeric", month: "short", day: "numeric" });
-	const RandomRow = g(function RandomRow({ index, unsortedRowIndex, hidden }) {
+	const RandomRow = g(function RandomRow({ index, unsortedRowIndex, filterEvens }) {
 	    console.log(`RandomRow ${index}, ${unsortedRowIndex}`);
 	    const i = index;
 	    const w = RandomWords$1[i];
@@ -15486,9 +15544,9 @@
 	        await sleep$2(2000);
 	        setChecked(checked);
 	    }, []);
-	    return (v$1(TableRow, { hidden: hidden, index: index },
+	    return (v$1(TableRow, { hidden: filterEvens && ((n & 1) == 0), index: index },
 	        v$1(TableCell, { index: 0, value: n, colSpan: !w ? 2 : undefined },
-	            v$1(Input, { type: "number", value: n, onValueChange: setN, labelPosition: "hidden", min: 0 }, "Numeric input")),
+	            v$1(Input, { type: "number", width: "4ch", value: n, onValueChange: setN, labelPosition: "hidden", min: 0 }, "Numeric input")),
 	        w && v$1(TableCell, { index: 1, value: w }),
 	        v$1(TableCell, { index: 2, value: d }, formatter.format(d)),
 	        v$1(TableCell, { index: 3, value: checked },
@@ -15501,49 +15559,53 @@
 	        v$1(Card, null,
 	            v$1(CardElement, { type: "title", tag: "h2" }, "Table"),
 	            v$1(CardElement, null,
-	                "Tables allow for automatic display, navigation, sorting, and filtering of data. All data is provided by the children and you don't need to provide a data structure to the parent ",
+	                "Tables allow for automatic display, navigation, sorting, and filtering of data. All data is provided by the children and you ",
+	                v$1("strong", null, "don't need to provide a data structure"),
+	                " to the parent ",
 	                v$1("code", null, "Table"),
 	                " element, and by default all columns are user-sortable."),
 	            v$1(CardElement, null,
-	                "All ",
+	                "Sorting and filtering are done by examining each ",
 	                v$1("code", null, "TableCell"),
-	                "s must be given a ",
+	                "'s child (or ",
 	                v$1("code", null, "value"),
-	                " prop that represents its data. This can be anything from a string to a number to a Date, and it controls how, when that column is sorted, it is compared against its siblings."),
+	                " prop, with ",
+	                v$1("code", null, "value"),
+	                " taking precidence). If the child of the ",
+	                v$1("code", null, "TableCell"),
+	                " is a simple number or string (and no ",
+	                v$1("code", null, "value"),
+	                " prop is provided), then that value will be used for sorting. If it's not a string (and again, if no ",
+	                v$1("code", null, "value"),
+	                " prop is provided), then it will be sorted as if its contents were just an empty string, so it's almost always beneficial to provide the ",
+	                v$1("code", null, "value"),
+	                " prop just in case."),
 	            v$1(CardElement, null,
 	                "A ",
-	                v$1("code", null, "<TableCell>"),
-	                " will, by default, just display its ",
-	                v$1("code", null, "value"),
-	                ". If you need to show something different, format the value, etc. just pass the value you'd like to show instead as a child. Children will take priority over ",
-	                v$1("code", null, "value"),
-	                " in terms of what to display, but sorting will be entirely unaffected by this, relying solely on the ",
-	                v$1("code", null, "value"),
-	                " prop."),
-	            v$1(CardElement, null,
-	                "However, please note that if you pass a child component to a ",
 	                v$1("code", null, "TableCell"),
-	                ", it will be put in charge of that cell's navigation and focus management, ",
-	                v$1("strong", null, "so it needs to be a component that accepts and forwards onwards all incoming props and refs"),
-	                ". (Fragments as an immediate child are an exception and are fine to use)",
+	                " contain any content, including arbitrary HTML and other components. In terms of focus management (i.e. how using the arrow keys works within a table), a ",
+	                v$1("code", null, "TableCell"),
+	                " that just contains a simple string or number will focus itself when tabbed to, but a ",
+	                v$1("code", null, "TableCell"),
+	                " that contains other components ",
+	                v$1("strong", null, "will delegate focus to its children instead"),
+	                ":",
 	                v$1("code", null, `// The table cell itself will receive focus:
 <TableCell>Text</TableCell>
 <TableCell>0</TableCell>
-<TableCell><>Text</></TableCell>
+<TableCell><>Text</></TableCell> // Fragments are treated as text for these purposes
 
-// The table cell will delegate focus to its contents instead:
-<TableCell><div>Text</div></TableCell>
+// When tabbing to the TableCell, the <p> or <Input> will receive focus:
+<TableCell><p>Text</p></TableCell>
 <TableCell><Input type="..." {...} /></TableCell>
 
 // ❌ The cell will try to focus the child but it'll never receive the message!
-<TableCell>{(props) => "text"}</TableCell>
+<TableCell>{(props) => <p>text</p>}</TableCell>
 
 // ✅ The cell can properly delegate all duties to the child DIV.
-<TableCell>{forwardRef((p, ref) => <div ref={ref} {...p}>"text"</p>)}</TableCell>`)),
+<TableCell>{forwardRef((props, ref) => <p ref={ref} {...props}>text</p>)}</TableCell>`)),
 	            v$1(CardElement, null,
-	                "Finally, due to the way sorting works (by manipulating the ",
-	                v$1("code", null, "key"),
-	                " prop of the table's rows), your rows ",
+	                "Finally, your rows ",
 	                v$1("em", null, "must"),
 	                " be ",
 	                v$1("em", null, "direct descendants"),
@@ -15555,9 +15617,17 @@
 	                v$1("code", null, "TableFoot"),
 	                ") so that it can properly call ",
 	                v$1("code", null, "createElement"),
-	                " with the expected results. You can create your own custom ",
+	                " with the expected results when sorting. It's okay if each row you provide is a wrapper component around a single ",
 	                v$1("code", null, "TableRow"),
-	                " wrapper component, and the \"direct descendant\" restriction will apply to the wrapper instead."),
+	                "\u2014the \"direct descendant\" doesn't need to be specifically a ",
+	                v$1("code", null, "TableRow"),
+	                " component\u2014it's just that the ",
+	                v$1("code", null, "TableBody"),
+	                " (etc.) needs ",
+	                v$1("em", null, "specifically"),
+	                " an array of children whose individual ",
+	                v$1("code", null, "key"),
+	                " props can be manipulated."),
 	            v$1(CardElement, null,
 	                v$1(Input, { type: "number", value: rowCount, min: 0, max: 999, onValueChange: setRowCount }, "Row count"),
 	                v$1(Checkbox, { checked: filterEvens, onCheck: setFilterEvens }, "Filter out even numbers")),
@@ -15571,7 +15641,7 @@
 	                            v$1(TableHeaderCell, { index: 3 }, "Checkbox"))),
 	                    v$1(TableBody, { ...{ "data-test": filterEvens } }, Array.from(function* () {
 	                        for (let i = 0; i < rowCount; ++i) {
-	                            yield v$1(RandomRow, { key: i, index: i, hidden: filterEvens && i % 2 == 0 });
+	                            yield v$1(RandomRow, { key: i, index: i, filterEvens: filterEvens });
 	                            /*<TableRow index={1 + i}>
 	                            <TableCell index={0} value={i} />
 	                            <TableCell index={1} value={RandomWords[i]} />

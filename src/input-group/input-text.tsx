@@ -147,6 +147,14 @@ function UnlabelledInputR({ type, disabled, value, onValueChange: onInputAsync, 
     const onBlur = flushDebouncedPromise;
     const isInInputGrid = useContext(InInputGridContext);
 
+    const extraProps = (type === "numeric" ? {
+        inputMode: "numeric",
+        pattern: "[0-9]*"
+    } : {});
+    if (type === "numeric") {
+        type = "text";
+    }
+
     return (
         <ProgressCircular spinnerTimeout={10} mode={currentType === "async" ? asyncState : null} childrenPosition="after" colorVariant="info">
             <input {...(useHasFocusProps(useMergedProps<HTMLInputElement>()(props, {
@@ -157,7 +165,9 @@ function UnlabelledInputR({ type, disabled, value, onValueChange: onInputAsync, 
                 onBlur,
                 class: clsx("form-control", "faux-form-control-inner", disabled && "disabled", pending && "with-end-icon"),
                 type,
-                value: (pending || focusedInner) ? currentCapture : uncapture(value), onInput
+                value: (pending || focusedInner) ? currentCapture : uncapture(value), 
+                onInput,
+                ...extraProps,
             })))} />
         </ProgressCircular>
     )
@@ -195,6 +205,9 @@ export const Input = memo(forwardElementRef(function Input({ children, width, la
 
     const isEmpty = true || (((props.value as number) !== 0 && props.value == ""));
 
+    if (width)
+        debugger;
+        
     //if (isInInputGrid) {
     inputJsx = <div class={clsx(
         "form-control",
