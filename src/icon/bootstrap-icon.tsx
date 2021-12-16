@@ -1,7 +1,7 @@
 import { ComponentChild, h, Ref } from "preact";
 import { useMergedProps } from "preact-prop-helpers";
 import { memo } from "preact/compat";
-import { forwardElementRef } from "props";
+import { forwardElementRef } from "../props";
 import { FontIcon, FontIconProps } from "./font-icon";
 
 export interface BootstrapIconProps extends Pick<FontIconProps, "label" | "tooltip" | "className" | "class" | "style"> {

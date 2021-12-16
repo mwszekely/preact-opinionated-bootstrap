@@ -1,7 +1,7 @@
 import { ComponentChild, h, Ref } from "preact";
 import { memo } from "preact/compat";
-import { forwardElementRef } from "props";
-import { Tooltip } from "tooltip";
+import { forwardElementRef } from "../props";
+import { Tooltip } from "../tooltip";
 
 export interface FontIconProps extends Omit<h.JSX.HTMLAttributes<HTMLElement>, "label"> { 
     /**

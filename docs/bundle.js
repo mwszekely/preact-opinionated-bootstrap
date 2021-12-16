@@ -367,7 +367,7 @@
 	});
 
 	createCommonjsModule(function (module, exports) {
-	  "undefined" != typeof window && window.__PREACT_DEVTOOLS__ && window.__PREACT_DEVTOOLS__.attachPreact("10.6.4", preact.options, {
+	  "undefined" != typeof window && window.__PREACT_DEVTOOLS__ && window.__PREACT_DEVTOOLS__.attachPreact("10.6.2", preact.options, {
 	    Fragment: preact.Fragment,
 	    Component: preact.Component
 	  }), exports.addHookName = function (e, o) {
@@ -769,22 +769,22 @@
 	function C$1(n, l, u, i, t) {
 	  var r;
 
-	  for (r in u) "children" === r || "key" === r || r in l || H$1(n, r, null, u[r], i);
+	  for (r in u) "children" === r || "key" === r || r in l || H(n, r, null, u[r], i);
 
-	  for (r in l) t && "function" != typeof l[r] || "children" === r || "key" === r || "value" === r || "checked" === r || u[r] === l[r] || H$1(n, r, l[r], u[r], i);
+	  for (r in l) t && "function" != typeof l[r] || "children" === r || "key" === r || "value" === r || "checked" === r || u[r] === l[r] || H(n, r, l[r], u[r], i);
 	}
 
-	function $(n, l, u) {
+	function $$1(n, l, u) {
 	  "-" === l[0] ? n.setProperty(l, u) : n[l] = null == u ? "" : "number" != typeof u || s$1.test(l) ? u : u + "px";
 	}
 
-	function H$1(n, l, u, i, t) {
+	function H(n, l, u, i, t) {
 	  var r;
 
 	  n: if ("style" === l) {
 	    if ("string" == typeof u) n.style.cssText = u;else {
-	      if ("string" == typeof i && (n.style.cssText = i = ""), i) for (l in i) u && l in u || $(n.style, l, "");
-	      if (u) for (l in u) i && u[l] === i[l] || $(n.style, l, u[l]);
+	      if ("string" == typeof i && (n.style.cssText = i = ""), i) for (l in i) u && l in u || $$1(n.style, l, "");
+	      if (u) for (l in u) i && u[l] === i[l] || $$1(n.style, l, u[l]);
 	    }
 	  } else if ("o" === l[0] && "n" === l[1]) r = l !== (l = l.replace(/Capture$/, "")), l = l.toLowerCase() in n ? l.toLowerCase().slice(2) : l.slice(2), n.l || (n.l = {}), n.l[l + r] = u, u ? i || n.addEventListener(l, r ? T$1 : I$1, r) : n.removeEventListener(l, r ? T$1 : I$1, r);else if ("dangerouslySetInnerHTML" !== l) {
 	    if (t) l = l.replace(/xlink[H:h]/, "h").replace(/sName$/, "s");else if ("href" !== l && "list" !== l && "form" !== l && "tabIndex" !== l && "download" !== l && l in n) try {
@@ -879,7 +879,7 @@
 	    }
 
 	    if (C$1(l, p, y, r, c), v) u.__k = [];else if (_ = u.props.children, w$2(l, Array.isArray(_) ? _ : [_], u, i, t, r && "foreignObject" !== d, o, f, o ? o[0] : i.__k && k$1(i, 0), c), null != o) for (_ = o.length; _--;) null != o[_] && h$1(o[_]);
-	    c || ("value" in p && void 0 !== (_ = p.value) && (_ !== y.value || _ !== l.value || "progress" === d && !_) && H$1(l, "value", _, y.value, !1), "checked" in p && void 0 !== (_ = p.checked) && _ !== l.checked && H$1(l, "checked", _, y.checked, !1));
+	    c || ("value" in p && void 0 !== (_ = p.value) && (_ !== y.value || _ !== l.value || "progress" === d && !_) && H(l, "value", _, y.value, !1), "checked" in p && void 0 !== (_ = p.checked) && _ !== l.checked && H(l, "checked", _, y.checked, !1));
 	  }
 	  return l;
 	}
@@ -971,7 +971,7 @@
 	  this.__v && (this.__e = !0, n && this.__h.push(n), m$1(this));
 	}, _.prototype.render = d$1, t$1 = [], r$1 = "function" == typeof Promise ? Promise.prototype.then.bind(Promise.resolve()) : setTimeout, g$2.__r = 0, f$1 = 0;
 
-	"undefined" != typeof window && window.__PREACT_DEVTOOLS__ && window.__PREACT_DEVTOOLS__.attachPreact("10.6.4", l$1, {
+	"undefined" != typeof window && window.__PREACT_DEVTOOLS__ && window.__PREACT_DEVTOOLS__.attachPreact("10.6.2", l$1, {
 	  Fragment: d$1,
 	  Component: _
 	});
@@ -1044,15 +1044,13 @@
 	}
 
 	function x$1() {
-	  var t;
-
-	  for (i.sort(function (n, t) {
-	    return n.__v.__b - t.__v.__b;
-	  }); t = i.pop();) if (t.__P) try {
-	    t.__H.__h.forEach(g$1), t.__H.__h.forEach(j$1), t.__H.__h = [];
-	  } catch (u) {
-	    t.__H.__h = [], l$1.__e(u, t.__v);
-	  }
+	  i.forEach(function (t) {
+	    if (t.__P) try {
+	      t.__H.__h.forEach(g$1), t.__H.__h.forEach(j$1), t.__H.__h = [];
+	    } catch (u) {
+	      t.__H.__h = [], l$1.__e(u, t.__v);
+	    }
+	  }), i = [];
 	}
 
 	l$1.__b = function (n) {
@@ -2859,17 +2857,17 @@
 	          But roughly isn't good enough if there are multiple matches.
 	          To convert our sorted index to the unsorted index we need, we have to find the first
 	          element that matches us *and* (if any such exist) is *after* our current selection.
-	            In other words, the only way typeahead moves backwards relative to our current
+	           In other words, the only way typeahead moves backwards relative to our current
 	          position is if the only other option is behind us.
-	            It's not specified in WAI-ARIA what to do in that case.  I suppose wrap back to the start?
+	           It's not specified in WAI-ARIA what to do in that case.  I suppose wrap back to the start?
 	          Though there's also a case for just going upwards to the nearest to prevent jumpiness.
 	          But if you're already doing typeahead on an unsorted list, like, jumpiness can't be avoided.
 	          I dunno. Going back to the start is the simplist though.
-	            Basically what this does: Starting from where we found ourselves after our binary search,
+	           Basically what this does: Starting from where we found ourselves after our binary search,
 	          scan backwards and forwards through all adjacent entries that also compare equally so that
 	          we can find the one whose `unsortedIndex` is the lowest amongst all other equal strings
 	          (and also the lowest `unsortedIndex` yadda yadda except that it comes after us).
-	            TODO: The binary search starts this off with a solid O(log n), but one-character
+	           TODO: The binary search starts this off with a solid O(log n), but one-character
 	          searches are, thanks to pigeonhole principal, eventually guaranteed to become
 	          O(n*log n). This is annoying but probably not easily solvable? There could be an
 	          exception for one-character strings, but that's just kicking the can down
@@ -3622,17 +3620,15 @@
 	      activatedIndex: currentColumn,
 	      managedChildren: managedCells,
 	      setChildFlag: (cellIndex, cellIsTabbable) => {
-	        if (cellIndex != null) {
-	          var _managedCells$cellInd;
-
+	        if (cellIndex != null && managedCells[cellIndex]) {
 	          managedCells[cellIndex].setTabbable(cellIsTabbable);
-	          if (cellIsTabbable) (_managedCells$cellInd = managedCells[cellIndex]) === null || _managedCells$cellInd === void 0 ? void 0 : _managedCells$cellInd.rerenderAndFocus();
+	          if (cellIsTabbable) managedCells[cellIndex].rerenderAndFocus();
 	        }
 	      },
 	      getChildFlag: cellIndex => {
-	        var _managedCells$cellInd2, _managedCells$cellInd3;
+	        var _managedCells$cellInd, _managedCells$cellInd2;
 
-	        return (_managedCells$cellInd2 = (_managedCells$cellInd3 = managedCells[cellIndex]) === null || _managedCells$cellInd3 === void 0 ? void 0 : _managedCells$cellInd3.getTabbable()) !== null && _managedCells$cellInd2 !== void 0 ? _managedCells$cellInd2 : null;
+	        return (_managedCells$cellInd = (_managedCells$cellInd2 = managedCells[cellIndex]) === null || _managedCells$cellInd2 === void 0 ? void 0 : _managedCells$cellInd2.getTabbable()) !== null && _managedCells$cellInd !== void 0 ? _managedCells$cellInd : null;
 	      },
 	      useEffect
 	    }); // Any time we become the currently tabbable row,
@@ -8157,19 +8153,15 @@
 	          index,
 	          value
 	        });
-	        const {
-	          getElement: getCellElement,
-	          useRefElementProps: useCellRefElementProps
-	        } = useRefElement({});
 
 	        function useTableCellProps(_ref5) {
 	          let {
 	            role,
 	            ...props
 	          } = _ref5;
-	          return useCellRefElementProps(useMergedProps()({
+	          return useMergedProps()({
 	            role: "gridcell"
-	          }, props));
+	          }, props);
 	        }
 
 	        function useTableCellDelegateProps(_ref6) {
@@ -8177,30 +8169,7 @@
 	            role,
 	            ...props
 	          } = _ref6;
-
-	          // Escape hatch for table cells with editable controls, like a text box:
-	          // Any time we're in a table cell's control and we press ESC or F2,
-	          // we eject focus back out to the actual table cell itself, which will
-	          // allow navigation of the grid again.
-	          function onKeyDown(e) {
-	            if (e.key == "Escape" || e.key == "F2") {
-	              const cell = getCellElement();
-
-	              if (document.activeElement != cell) {
-	                e.stopPropagation();
-	                e.preventDefault();
-
-	                if (cell && "focus" in cell) {
-	                  if (cell.tabIndex !== 0) cell.tabIndex = -1;
-	                  cell.focus();
-	                }
-	              }
-	            }
-	          }
-
-	          return useGridNavigationCellProps(useMergedProps()({
-	            onKeyDown
-	          }, props));
+	          return useGridNavigationCellProps(props);
 	        }
 
 	        return {
@@ -8628,11 +8597,11 @@
 	    }
 	  });
 	});
-	var H = l$1.event;
+	var Z = l$1.event;
 
-	function Z() {}
+	function Y() {}
 
-	function Y() {
+	function $() {
 	  return this.cancelBubble;
 	}
 
@@ -8641,7 +8610,7 @@
 	}
 
 	l$1.event = function (n) {
-	  return H && (n = H(n)), n.persist = Z, n.isPropagationStopped = Y, n.isDefaultPrevented = q, n.nativeEvent = n;
+	  return Z && (n = Z(n)), n.persist = Y, n.isPropagationStopped = $, n.isDefaultPrevented = q, n.nativeEvent = n;
 	};
 
 	var J = {
@@ -8662,7 +8631,7 @@
 
 	    for (var o in r = {}, e) {
 	      var i = e[o];
-	      V && "children" === o && "noscript" === t || "value" === o && "defaultValue" in e && null == i || ("defaultValue" === o && "value" in e && null == e.value ? o = "value" : "download" === o && !0 === i ? i = "" : /ondoubleclick/i.test(o) ? o = "ondblclick" : /^onchange(textarea|input)/i.test(o + t) && !z(e.type) ? o = "oninput" : /^onfocus$/i.test(o) ? o = "onfocusin" : /^onblur$/i.test(o) ? o = "onfocusout" : /^on(Ani|Tra|Tou|BeforeInp)/.test(o) ? o = o.toLowerCase() : u && P.test(o) ? o = o.replace(/[A-Z0-9]/, "-$&").toLowerCase() : null === i && (i = void 0), r[o] = i);
+	      V && "children" === o && "noscript" === t || "value" === o && "defaultValue" in e && null == i || ("defaultValue" === o && "value" in e && null == e.value ? o = "value" : "download" === o && !0 === i ? i = "" : /ondoubleclick/i.test(o) ? o = "ondblclick" : /^onchange(textarea|input)/i.test(o + t) && !z(e.type) ? o = "oninput" : /^on(Ani|Tra|Tou|BeforeInp)/.test(o) ? o = o.toLowerCase() : u && P.test(o) ? o = o.replace(/[A-Z0-9]/, "-$&").toLowerCase() : null === i && (i = void 0), r[o] = i);
 	    }
 
 	    "select" == t && r.multiple && Array.isArray(r.value) && (r.value = A$2(e.children).forEach(function (n) {
