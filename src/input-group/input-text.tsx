@@ -205,9 +205,6 @@ export const Input = memo(forwardElementRef(function Input({ children, width, la
 
     const isEmpty = true || (((props.value as number) !== 0 && props.value == ""));
 
-    if (width)
-        debugger;
-        
     //if (isInInputGrid) {
     inputJsx = <div class={clsx(
         "form-control",

@@ -7125,60 +7125,42 @@
 	  }
 	}
 
-	function useAriaMenu(_ref) {
+	function useMenuBase(_ref) {
 	  let {
-	    collator,
-	    keyNavigation,
-	    noTypeahead,
-	    noWrap,
-	    typeaheadTimeout,
+	    sendFocusWithinMenu,
 	    ...args
 	  } = _ref;
+	  const getSendFocusWithinMenu = useStableGetter(sendFocusWithinMenu);
 	  const [focusTrapActive, setFocusTrapActive] = useState(null);
 	  let onClose = args.onClose;
 	  let onOpen = args.onOpen;
 	  let menubar = args.menubar;
 	  let open = menubar ? true : args.open;
-	  const stableOnClose = useStableCallback(onClose !== null && onClose !== void 0 ? onClose : () => {}); // TODO: It's awkward that the button focus props are out here where we don't have its type,
+	  const stableOnClose = useStableCallback(onClose !== null && onClose !== void 0 ? onClose : () => {});
+	  const getOpen = useStableGetter(open); // TODO: It's awkward that the button focus props are out here where we don't have its type,
 	  // but focus management is super sensitive, and even waiting for a useLayoutEffect to sync state here
 	  // would be too late, so it would look like there's a moment between menu focus lost and button focus gained
 	  // where nothing is focused. 
 
 	  const {
-	    useHasFocusProps: useMenuHasFocusProps,
-	    getLastFocusedInner: getMenuLastFocusedInner
+	    useHasFocusProps: useMenuBaseHasFocusProps,
+	    getLastFocusedInner: getMenuBaseLastFocusedInner
 	  } = useHasFocus({
 	    /*onLastFocusedInnerChanged: onMenuOrButtonLostLastFocus*/
 	  });
 	  const {
 	    useHasFocusProps: useButtonHasFocusProps,
-	    getLastFocusedInner: getButtonLastFocusedInner
+	    getLastFocusedInner: getMenuBaseButtonLastFocusedInner
 	  } = useHasFocus({
 	    /*onLastFocusedInnerChanged: onMenuOrButtonLostLastFocus*/
 	  });
+	  const [openerElement, setOpenerElement, getOpenerElement] = useState(null);
 	  const {
-	    managedChildren,
-	    useListNavigationChild,
-	    useListNavigationProps,
-	    tabbableIndex,
-	    focusCurrent: focusMenu,
-	    currentTypeahead,
-	    invalidTypeahead
-	  } = useListNavigation({
-	    collator,
-	    keyNavigation,
-	    noTypeahead,
-	    noWrap,
-	    typeaheadTimeout,
-	    shouldFocusOnChange: A$1(() => getMenuLastFocusedInner() || getButtonLastFocusedInner(), [])
-	  });
-	  const {
-	    useRandomIdProps: useMenuIdProps,
-	    useReferencedIdProps: useMenuIdReferencingProps
+	    useRandomIdProps: useMenuBaseIdProps,
+	    useReferencedIdProps: useMenuBaseIdReferencingProps
 	  } = useRandomId({
 	    prefix: "aria-menu-"
 	  });
-	  const [openerElement, setOpenerElement, getOpenerElement] = useState(null);
 	  const {
 	    getElement: getButtonElement,
 	    useRefElementProps: useButtonRefElementProps
@@ -7187,7 +7169,7 @@
 	  });
 	  const {
 	    getElement: getMenuElement,
-	    useRefElementProps: useMenuRefElementProps
+	    useRefElementProps: useMenuBaseRefElementProps
 	  } = useRefElement({});
 	  useSoftDismiss({
 	    onClose: stableOnClose,
@@ -7195,32 +7177,7 @@
 	  });
 	  y(() => {
 	    setFocusTrapActive(open);
-	  }, [open]);
-	  const focusMenuStable = useStableCallback(focusMenu !== null && focusMenu !== void 0 ? focusMenu : () => {});
-	  y(() => {
-	    if (focusTrapActive) {
-	      focusMenuStable === null || focusMenuStable === void 0 ? void 0 : focusMenuStable();
-	    } else if (focusTrapActive === false) {
-	      var _getOpenerElement;
-
-	      if (getMenuLastFocusedInner()) (_getOpenerElement = getOpenerElement()) === null || _getOpenerElement === void 0 ? void 0 : _getOpenerElement.focus({
-	        preventScroll: true
-	      });
-	    } else ;
-	  }, [focusTrapActive]); // Focus management is really finicky, and there's always going to be 
-	  // an edge case where nothing's focused for two consecutive frames 
-	  // on iOS or whatever, which would immediately close the menu 
-	  // any time it's been opened. So any time it *looks* like we should close,
-	  // try waiting 100ms. If it's still true then, then yeah, we should close.
-
-	  /*function onMenuOrButtonLostLastFocus() {
-	      setTimeout(() => {
-	          if (!getMenuLastFocusedInner() && !getButtonLastFocusedInner()) {
-	              onClose?.();
-	          }
-	      }, 100);
-	  }*/
-	  // A menu sentinal is a hidden but focusable element that comes at the start or end of the element
+	  }, [open]); // A menu sentinal is a hidden but focusable element that comes at the start or end of the element
 	  // that, when activated or focused over, closes the menu.
 	  // (if focused within 100ms of the open prop changing, instead of
 	  // closing the menu, focusing the sentinel immediately asks the menu to focus itself).
@@ -7237,7 +7194,11 @@
 	      timeout: 100,
 	      triggerIndex: `${open}-${firstSentinelIsActive}`
 	    });
-	    const onFocus = firstSentinelIsActive ? () => stableOnClose() : () => focusMenu === null || focusMenu === void 0 ? void 0 : focusMenu();
+	    const onFocus = firstSentinelIsActive ? () => stableOnClose() : () => {
+	      var _getSendFocusWithinMe;
+
+	      return (_getSendFocusWithinMe = getSendFocusWithinMenu()) === null || _getSendFocusWithinMe === void 0 ? void 0 : _getSendFocusWithinMe();
+	    };
 
 	    const onClick = () => stableOnClose();
 
@@ -7249,44 +7210,111 @@
 	        }, p);
 	      }
 	    };
-	  }, [focusMenu, open]);
-	  const useMenuButton = A$1(_ref2 => {
+	  }, [open]);
+	  const useMenuBaseProps = A$1(props => {
+	    function onKeyDown(e) {
+	      if (e.key == "Escape" && getOpen()) {
+	        stableOnClose();
+	        e.stopPropagation();
+	        e.stopImmediatePropagation();
+	        e.preventDefault();
+	      }
+	    }
+
+	    return useMenuBaseHasFocusProps(useMenuBaseRefElementProps(useMenuBaseIdProps(useMergedProps()({
+	      onKeyDown
+	    }, props))));
+	  }, [useMenuBaseHasFocusProps, useMenuBaseRefElementProps, useMenuBaseIdProps]);
+	  const useMenuBaseButtonProps = A$1(props => {
+	    return useButtonRefElementProps(useButtonHasFocusProps(useMenuBaseIdReferencingProps("aria-controls")(props)));
+	  }, [useButtonHasFocusProps, useButtonRefElementProps, useMenuBaseIdReferencingProps]);
+	  y(() => {
+	    const sendFocusWithinMenu = getSendFocusWithinMenu();
+
+	    if (focusTrapActive) {
+	      sendFocusWithinMenu === null || sendFocusWithinMenu === void 0 ? void 0 : sendFocusWithinMenu();
+	    } else if (focusTrapActive === false) {
+	      var _getOpenerElement;
+
+	      if (getMenuBaseLastFocusedInner()) (_getOpenerElement = getOpenerElement()) === null || _getOpenerElement === void 0 ? void 0 : _getOpenerElement.focus({
+	        preventScroll: true
+	      });
+	    } else ;
+	  }, [focusTrapActive]);
+	  return {
+	    useMenuSentinel,
+	    focusTrapActive,
+	    useMenuBaseProps,
+	    useMenuBaseButtonProps,
+	    getMenuBaseLastFocusedInner,
+	    getMenuBaseButtonLastFocusedInner,
+	    open,
+	    onOpen,
+	    onClose
+	  };
+	}
+	function useAriaMenu(_ref2) {
+	  let {
+	    collator,
+	    keyNavigation,
+	    noTypeahead,
+	    noWrap,
+	    typeaheadTimeout,
+	    ...args
+	  } = _ref2;
+	  const {
+	    managedChildren,
+	    useListNavigationChild,
+	    useListNavigationProps,
+	    tabbableIndex,
+	    focusCurrent: focusMenu,
+	    currentTypeahead,
+	    invalidTypeahead
+	  } = useListNavigation({
+	    collator,
+	    keyNavigation,
+	    noTypeahead,
+	    noWrap,
+	    typeaheadTimeout,
+	    shouldFocusOnChange: A$1(() => getMenuBaseLastFocusedInner() || getMenuBaseButtonLastFocusedInner(), [])
+	  });
+	  const {
+	    useMenuSentinel,
+	    focusTrapActive,
+	    useMenuBaseButtonProps,
+	    useMenuBaseProps,
+	    getMenuBaseButtonLastFocusedInner,
+	    getMenuBaseLastFocusedInner,
+	    open,
+	    onOpen,
+	    onClose
+	  } = useMenuBase({ ...args,
+	    sendFocusWithinMenu: focusMenu !== null && focusMenu !== void 0 ? focusMenu : () => {}
+	  });
+	  const useMenuButton = A$1(_ref3 => {
 	    return {
 	      useMenuButtonProps: function (p) {
-	        let props = useButtonRefElementProps(useMergedProps()({}, useMenuIdReferencingProps("aria-controls")(useButtonHasFocusProps(p))));
+	        let props = useMenuBaseButtonProps(p);
 	        props["aria-haspopup"] = "menu";
 	        props["aria-expanded"] = open ? "true" : undefined;
 	        return props;
 	      }
 	    };
-	  }, [open, onClose, onOpen, useMenuIdReferencingProps]);
-	  const useMenuSubmenuItem = A$1(args => {
-	    const {
-	      useMenuProps,
-	      useMenuButton
-	    } = useAriaMenu(args);
-	    const {
-	      useMenuButtonProps
-	    } = useMenuButton({
-	      tag: "li"
-	    });
-	    const {
-	      getElement,
-	      useRefElementProps
-	    } = useRefElement({
-	      onElementChange: setOpenerElement
-	    });
-	    return {
-	      getElement,
-	      useMenuProps,
-	      useMenuSubmenuItemProps: function (_ref3) {
-	        let { ...props
-	        } = _ref3;
-	        props.role = "menuitem";
-	        return useRefElementProps(useMenuButtonProps(useMenuIdReferencingProps("aria-controls")(props)));
+	  }, [open, onClose, onOpen, useMenuBaseButtonProps]);
+	  /*const useMenuSubmenuItem = useCallback((args: UseMenuSubmenuItemParameters) => {
+	      const { useMenuProps, useMenuButton } = useAriaMenu<HTMLElement, ChildElement, I>(args);
+	      const { useMenuButtonProps } = useMenuButton<E>({ tag: "li" as any });
+	        const { getElement, useRefElementProps } = useRefElement<any>({ onElementChange: setOpenerElement as OnPassiveStateChange<any> });
+	        return {
+	          getElement,
+	          useMenuProps,
+	          useMenuSubmenuItemProps: function <P extends h.JSX.HTMLAttributes<E>>({ ...props }: P) {
+	              props.role = "menuitem";
+	              return useRefElementProps(useMenuButtonProps(useMenuIdReferencingProps("aria-controls")(props)));
+	          }
 	      }
-	    };
-	  }, []);
+	  }, []);*/
+
 	  const useMenuItem = A$1(args => {
 	    const {
 	      useListNavigationChildProps
@@ -7308,16 +7336,7 @@
 	    let { ...props
 	    } = _ref5;
 	    props.role = "menu";
-
-	    function onKeyDown(e) {
-	      if (e.key == "Escape" && onClose) {
-	        onClose();
-	      }
-	    }
-
-	    return useListNavigationProps(useMenuIdProps(useMenuHasFocusProps(useMergedProps()({
-	      onKeyDown
-	    }, useMenuRefElementProps(props)))));
+	    return useMenuBaseProps(useListNavigationProps(props));
 	  }
 
 	  return {
@@ -7325,7 +7344,7 @@
 	    useMenuButton,
 	    useMenuItem,
 	    useMenuSentinel,
-	    useMenuSubmenuItem,
+	    //useMenuSubmenuItem,
 	    focusMenu,
 	    currentTypeahead,
 	    invalidTypeahead
@@ -11293,8 +11312,7 @@
 	      ref
 	    }
 	  });
-	  const isEmpty = true ;
-	  if (width) debugger; //if (isInInputGrid) {
+	  const isEmpty = true ; //if (isInInputGrid) {
 
 	  inputJsx = v$1("div", {
 	    class: clsx("form-control", "faux-form-control-outer", "elevation-depressed-2", "elevation-body-surface", "focusable-within", !isEmpty , props.disabled && "disabled", size != "md" && `form-control-${size}`),
@@ -14154,7 +14172,6 @@
 	    useMenuButton,
 	    useMenuItem,
 	    useMenuProps,
-	    useMenuSubmenuItem,
 	    focusMenu,
 	    useMenuSentinel,
 	    currentTypeahead,

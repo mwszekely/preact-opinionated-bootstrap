@@ -3,6 +3,7 @@
 @include meta.load-css("./index-dark-helper.scss");
 
 .set-theme.theme-light {
+    color-scheme: light dark;
     @include meta.load-css("../index-light.css");
 }
 

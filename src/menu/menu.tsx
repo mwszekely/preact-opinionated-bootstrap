@@ -12,7 +12,7 @@ import { FlippableTransitionComponent, TagSensitiveProps, TransitionComponent, u
 import { fixProps, usePopperApi, useShouldUpdatePopper } from "./popper-api";
 import { Tooltip } from "../tooltip/tooltip";
 
-export type MenuProps<E extends Element, T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element> = FlippableTransitionComponent<T> & Partial<TagSensitiveProps<E>> & {
+export type MenuBaseProps<E extends Element, T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element> = FlippableTransitionComponent<T> & Partial<TagSensitiveProps<E>> & {
     anchor: VNode<{}>;
     anchorEventName?: string;
     anchorTag?: (keyof HTMLElementTagNameMap);
@@ -20,6 +20,10 @@ export type MenuProps<E extends Element, T extends <E extends HTMLElement>(...ar
     side?: "block-start" | "block-end" | "inline-start" | "inline-end";
     align?: "start" | "end" | "center";
     forceOpen?: boolean;
+}
+
+export type MenuProps<E extends Element, T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element> = MenuBaseProps<E, T> & {
+
 }
 
 export interface MenuItemProps {
@@ -50,7 +54,7 @@ export function Menu<E extends Element, T extends <E extends HTMLElement>(...arg
 
     const { useHasFocusProps, getFocusedInner: getMenuHasFocusInner } = useHasFocus<HTMLDivElement>({});
     const { usePopperArrow, usePopperPopup, usePopperSource, usedPlacement, logicalDirection } = usePopperApi({ align, side, updating: updatingForABit });
-    let { useMenuButton, useMenuItem, useMenuProps, useMenuSubmenuItem, focusMenu, useMenuSentinel, currentTypeahead, invalidTypeahead } = useAriaMenu<HTMLDivElement, HTMLButtonElement, UseMenuItemDefaultInfo<HTMLButtonElement>>({ shouldFocusOnChange: getMenuHasFocusInner, open, onClose, onOpen });
+    let { useMenuButton, useMenuItem, useMenuProps, focusMenu, useMenuSentinel, currentTypeahead, invalidTypeahead } = useAriaMenu<HTMLDivElement, HTMLButtonElement, UseMenuItemDefaultInfo<HTMLButtonElement>>({ shouldFocusOnChange: getMenuHasFocusInner, open, onClose, onOpen });
     const { useMenuButtonProps } = useMenuButton<Element>({ tag: anchorTag ?? "button" });
     const { usePopperSourceProps } = usePopperSource<any>();
     const { usePopperPopupProps } = usePopperPopup<HTMLDivElement>({ open });
