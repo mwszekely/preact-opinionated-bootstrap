@@ -3,16 +3,18 @@ import clsx from "clsx";
 import { cloneElement, ComponentChildren, createContext, Fragment, h, Ref, VNode } from "preact";
 import { useAriaMenu, usePressEventHandlers, UseMenuItem } from "preact-aria-widgets";
 import { UseMenuItemDefaultInfo } from "preact-aria-widgets/use-menu";
-import { useAsyncHandler, useElementSize, useHasFocus, useMergedProps, useMutationObserver, useRefElement, useState, useTimeout, usePassiveState } from "preact-prop-helpers";
-import { ZoomFade } from "preact-transition";
+import { useAsyncHandler, useElementSize, useHasFocus, useMergedProps, useMutationObserver, useRefElement, useState, useTimeout, usePassiveState, useMergedRefs } from "preact-prop-helpers";
+
 import { useCallback, useContext, useEffect, useLayoutEffect } from "preact/hooks";
 import { BodyPortal } from "../portal";
 import { ProgressCircular } from "../progress";
-import { FlippableTransitionComponent, TagSensitiveProps, TransitionComponent, useLogRender, usePseudoActive } from "../props";
-import { fixProps, usePopperApi, useShouldUpdatePopper } from "./popper-api";
+import { FlippableTransitionComponent, forwardElementRef, TagSensitiveProps, TransitionComponent, useLogRender, usePseudoActive } from "../props";
+import { fixProps, FlippablePropInfo, getDefaultFlips, usePopperApi, useShouldUpdatePopper } from "./popper-api";
 import { Tooltip } from "../tooltip/tooltip";
+import { memo } from "preact/compat";
+import { ZoomFade, ZoomFadeProps } from "preact-transition";
 
-export type MenuBaseProps<E extends Element, T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element> = FlippableTransitionComponent<T> & Partial<TagSensitiveProps<E>> & {
+export interface MenuProps<E extends Element, T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element> extends FlippableTransitionComponent<T>, Partial<TagSensitiveProps<E>> {
     anchor: VNode<{}>;
     anchorEventName?: string;
     anchorTag?: (keyof HTMLElementTagNameMap);
@@ -20,10 +22,6 @@ export type MenuBaseProps<E extends Element, T extends <E extends HTMLElement>(.
     side?: "block-start" | "block-end" | "inline-start" | "inline-end";
     align?: "start" | "end" | "center";
     forceOpen?: boolean;
-}
-
-export type MenuProps<E extends Element, T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element> = MenuBaseProps<E, T> & {
-
 }
 
 export interface MenuItemProps {
@@ -37,7 +35,7 @@ const HasTypeaheadContext = createContext(false);
 
 const OnCloseContext = createContext<(() => void) | undefined>(undefined);
 const UseMenuItemContext = createContext<UseMenuItem<HTMLButtonElement, UseMenuItemDefaultInfo<HTMLButtonElement>>>(null!);
-export function Menu<E extends Element, T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element>({ anchor, anchorEventName, anchorTag, children, tag, side, align, Transition, forceOpen, ...rest }: MenuProps<E, T>) {
+function MenuU<E extends Element, T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element>({ anchor, anchorEventName, anchorTag, children, tag, side, align, Transition, TransitionProps, TransitionPropFlips, forceOpen, ...restAnchorProps }: MenuProps<E, T>, ref?: Ref<any>) {
     useLogRender("Menu", `Rendering Menu`);
     side ??= "block-end";
     align ??= "start";
@@ -53,7 +51,7 @@ export function Menu<E extends Element, T extends <E extends HTMLElement>(...arg
     const { useElementSizeProps } = useElementSize<any>({ onSizeChange: onInteraction ?? (() => { }) });
 
     const { useHasFocusProps, getFocusedInner: getMenuHasFocusInner } = useHasFocus<HTMLDivElement>({});
-    const { usePopperArrow, usePopperPopup, usePopperSource, usedPlacement, logicalDirection } = usePopperApi({ align, side, updating: updatingForABit });
+    const { usePopperArrow, usePopperPopup, usePopperSource, logicalDirection, flipTransformProps } = usePopperApi({ align, side, updating: updatingForABit });
     let { useMenuButton, useMenuItem, useMenuProps, focusMenu, useMenuSentinel, currentTypeahead, invalidTypeahead } = useAriaMenu<HTMLDivElement, HTMLButtonElement, UseMenuItemDefaultInfo<HTMLButtonElement>>({ shouldFocusOnChange: getMenuHasFocusInner, open, onClose, onOpen });
     const { useMenuButtonProps } = useMenuButton<Element>({ tag: anchorTag ?? "button" });
     const { usePopperSourceProps } = usePopperSource<any>();
@@ -62,19 +60,36 @@ export function Menu<E extends Element, T extends <E extends HTMLElement>(...arg
     const { useMenuSentinelProps: useFirstMenuSentinelProps } = useMenuSentinel<HTMLButtonElement>();
     const { useMenuSentinelProps: useSecondMenuSentinelProps } = useMenuSentinel<HTMLButtonElement>();
 
+    // Set up the default transition if none was provided
+    TransitionProps ??= {} as never;
     if (Transition == undefined) {
-        Transition = ZoomFade as NonNullable<typeof Transition>;
-        (rest as any).zoomOriginDynamic = 0;
-        (rest as any).zoomMin = 0.85;
-    }
+        const sideIsBlock = (side.startsWith("block"));
+        const sideIsInline = !sideIsBlock;
 
-    if (logicalDirection && usedPlacement)
-        rest = fixProps(logicalDirection, side, usedPlacement, rest) as typeof rest;
+        const sideIsStart = (side.endsWith("start"));
+        const sideIsEnd = !sideIsStart;
+
+
+        Transition = ZoomFade as NonNullable<typeof Transition>;
+        (TransitionProps as ZoomFadeProps<any>)[`zoomOrigin${sideIsInline ? "Block" : "Inline"}`] = 0.5;
+        (TransitionProps as ZoomFadeProps<any>)[`zoomOrigin${sideIsBlock ? "Block" : "Inline"}`] = (sideIsStart ? 1 : 0);
+        (TransitionProps as any).zoomMin = 0.85;
+    }
+    TransitionPropFlips ??= getDefaultFlips(Transition);
+
+
 
     const onAnchorClick = () => setOpen(open => !open);
 
     if (currentTypeahead && invalidTypeahead)
-        currentTypeahead = <>{currentTypeahead} <i class="bi bi-backspace"></i></> as any
+        currentTypeahead = <>{currentTypeahead} <i class="bi bi-backspace"></i></> as any;
+
+    let anchorProps = anchor.props as any;
+    anchorProps = useMenuButtonProps(useElementSizeProps(usePopperSourceProps(anchorProps)));
+    anchorProps = useMergedProps<any>()(anchorProps, { ref: anchor.ref! });
+    anchorProps = useMergedProps<any>()(anchorProps, { ref });
+    anchorProps = useMergedProps<any>()(anchorProps, { [anchorEventName ?? "onPress"]: onAnchorClick, ref: anchor.ref as Ref<Element>, class: `${open ? "active" : ""}` });
+    anchorProps = useMergedProps<any>()(anchorProps, restAnchorProps);
 
     return (
         <>
@@ -82,13 +97,13 @@ export function Menu<E extends Element, T extends <E extends HTMLElement>(...arg
                 <OnCloseContext.Provider value={onClose}>
                     <UseMenuItemContext.Provider value={useMenuItem}>
                         <ProvideDefaultButtonDropdownDirection value={side}>
-                            {cloneElement(anchor, useMergedProps<any>()({ [anchorEventName ?? "onPress"]: onAnchorClick, ref: anchor.ref as Ref<Element>, class: `${open ? "active" : ""}` }, useElementSizeProps(usePopperSourceProps(useMenuButtonProps(anchor.props)))))}
+                            {cloneElement(anchor, anchorProps)}
                         </ProvideDefaultButtonDropdownDirection>
                         <BodyPortal>
                             <div {...usePopperPopupProps({ class: "dropdown-menu-popper" })}>
-                                <Tooltip tooltip={currentTypeahead || null} side="inline-end" align="center" className={clsx("typeahead-tooltip", invalidTypeahead ? "text-danger" : undefined)}>
-                                    <Transition {...(useMenuProps(rest) as any)} show={open} onTransitionUpdate={onInteraction} exitVisibility="hidden" >
-                                        <div {...useHasFocusProps({})}>
+                                <Tooltip tooltip={currentTypeahead || null} side="inline-end" align="center">
+                                    <Transition {...(useMenuProps(flipTransformProps<T>(TransitionProps ?? ({} as never), TransitionPropFlips)) as any)} show={open} onTransitionUpdate={onInteraction} exitVisibility="hidden">
+                                        <div {...useHasFocusProps({ className: clsx("typeahead-tooltip", invalidTypeahead ? "text-danger" : undefined) })}>
 
                                             <button {...useFirstMenuSentinelProps({ className: "visually-hidden" })}>Close menu</button>
                                             {h(tag ?? "ul", { children, className: "dropdown-menu elevation-raised-4 elevation-body-surface" })}
@@ -111,7 +126,7 @@ export function Menu<E extends Element, T extends <E extends HTMLElement>(...arg
 }
 
 
-export function MenuItem({ children, disabled, onPress: onPressAsync, index, ...rest }: MenuItemProps) {
+function MenuItemU({ children, disabled, onPress: onPressAsync, index, ...rest }: MenuItemProps, ref?: Ref<any>) {
     useLogRender("MenuItem", `Rendering MenuItem`);
     const useMenuItem = useContext(UseMenuItemContext);
     const hasTypeahead = useContext(HasTypeaheadContext);
@@ -131,8 +146,8 @@ export function MenuItem({ children, disabled, onPress: onPressAsync, index, ...
 
     const onPress = getSyncHandler((disabled || !onPressAsync) ? null : () => onPressAsync?.()?.then(() => onClose?.()));
 
-    const newProps = useMenuItemProps(useRefElementProps(useMergedProps<HTMLButtonElement>()(rest, { class: clsx(onPressAsync ? "dropdown-item" : "dropdown-item-text", disabled && "disabled"), "aria-disabled": disabled ? "true" : undefined })));
-    const buttonProps = usePseudoActive(usePressEventHandlers<HTMLButtonElement>(disabled ? null : onPress, hasTypeahead? { space: "exclude" } : undefined)(newProps));
+    const newProps = useMenuItemProps(useRefElementProps(useMergedProps<HTMLButtonElement>()(rest, { ref, class: clsx(onPressAsync ? "dropdown-item" : "dropdown-item-text", disabled && "disabled"), "aria-disabled": disabled ? "true" : undefined })));
+    const buttonProps = usePseudoActive(usePressEventHandlers<HTMLButtonElement>(disabled ? null : onPress, hasTypeahead ? { space: "exclude" } : undefined)(newProps));
 
     if (isInteractive) {
         return (
@@ -155,21 +170,7 @@ export function MenuItem({ children, disabled, onPress: onPressAsync, index, ...
 
 }
 
-function flipTransitionComponent<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element>(input: FlippableTransitionComponent<T>, { inline, block }: { inline: boolean, block: boolean }): TransitionComponent<T> {
-    let output: TransitionComponent<T> = { ...input } as any;
+export const Menu: typeof MenuU = memo(forwardElementRef(MenuU));
+export const MenuItem: typeof MenuItemU = memo(forwardElementRef(MenuItemU));
 
-    for (const propName in output) {
-        if (output[`${propName}Flips`] === true) {
-            let l = propName.toLowerCase();
-            const isInline = l.includes("inline");
-            const isBlock = l.includes("block");
 
-            if ((isInline && inline) || (isBlock && block)) {
-                delete output[`${propName}Flips`];
-                output[propName as keyof typeof output] = -input[propName] as any;
-            }
-        }
-    }
-
-    return output;
-}

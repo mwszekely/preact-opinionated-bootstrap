@@ -1,30 +1,27 @@
 import { cloneElement, ComponentChild, ComponentChildren, Fragment, h, Ref, VNode } from "preact";
 import { useAriaTooltip } from "preact-aria-widgets";
 import { useElementSize, useMergedProps, useState } from "preact-prop-helpers";
-import { ZoomFade } from "preact-transition";
+import { ZoomFade, ZoomFadeProps } from "preact-transition";
 import { memo } from "preact/compat";
 import { useEffect, useRef } from "preact/hooks";
-import { fixProps, usePopperApi, useShouldUpdatePopper } from "../menu/popper-api";
+import { fixProps, getDefaultFlips, usePopperApi, useShouldUpdatePopper } from "../menu/popper-api";
 import { BodyPortal } from "../portal";
 import { FlippableTransitionComponent, forwardElementRef } from "../props";
 
 type UseTooltipProps = Parameters<typeof useAriaTooltip>[0];
 
-export type TooltipProps<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element> =
-    UseTooltipProps &
-    FlippableTransitionComponent<T> &
-    {
-        children: ComponentChild;
-        tooltip: ComponentChildren;
-        side?: "block-start" | "block-end" | "inline-start" | "inline-end";
-        positionBlock?: "start" | "end" | "center";
-    }
+export interface TooltipProps<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element> extends UseTooltipProps, FlippableTransitionComponent<T> {
+    children: ComponentChild;
+    tooltip: ComponentChildren;
+    side?: "block-start" | "block-end" | "inline-start" | "inline-end";
+    align?: "start" | "end" | "center";
+}
 
-export const Tooltip = memo(forwardElementRef(function Tooltip<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element>({ children, side, align, tooltip, Transition, mouseoverDelay, ...rest }: TooltipProps<T>, ref?: Ref<any>) {
+export const Tooltip = memo(forwardElementRef(function Tooltip<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element>({ children, side, align, tooltip, Transition, TransitionProps, TransitionPropFlips, mouseoverDelay, mouseoutDelay, ...restAnchorProps }: TooltipProps<T>, ref?: Ref<any>) {
     side ??= "block-start";
     align ??= "center";
 
-    let { getIsOpen, isOpen, useTooltip, useTooltipTrigger } = useAriaTooltip({ mouseoverDelay });
+    let { getIsOpen, isOpen, useTooltip, useTooltipTrigger } = useAriaTooltip({ mouseoverDelay, mouseoutDelay });
 
     // TODO: This is probably the most benign mutation during render issue ever
     // It's just used to preserve the last shown value when the tooltip is fading out because `tooltip` is null.
@@ -48,29 +45,44 @@ export const Tooltip = memo(forwardElementRef(function Tooltip<T extends <E exte
     const { useTooltipTriggerProps } = useTooltipTrigger();
     const { shouldUpdate, onInteraction } = useShouldUpdatePopper(isOpen);
     const { useElementSizeProps } = useElementSize<any>({ onSizeChange: onInteraction ?? (() => { }) });
-    const { logicalDirection, usePopperArrow, usePopperPopup, usePopperSource, usedPlacement } = usePopperApi({ updating: shouldUpdate, side, align, useArrow: true, followMouse: true });
+    const { logicalDirection, usePopperArrow, usePopperPopup, usePopperSource, flipTransformProps } = usePopperApi({ updating: shouldUpdate, side, align, useArrow: true, followMouse: true });
 
     const { usePopperPopupProps } = usePopperPopup<HTMLDivElement>({ open: isOpen });
     const { usePopperArrowProps } = usePopperArrow<HTMLDivElement>();
     const { usePopperSourceProps } = usePopperSource();
 
 
-    if (logicalDirection && usedPlacement)
-        rest = fixProps(logicalDirection, "block-end", usedPlacement, rest) as typeof rest;
-
+    // Set up the default transition if none was provided
+    TransitionProps ??= {} as never;
     if (Transition == undefined) {
+        const sideIsBlock = (side.startsWith("block"));
+        const sideIsInline = !sideIsBlock;
+
+        const sideIsStart = (side.endsWith("start"));
+        const sideIsEnd = !sideIsStart;
+
+
         Transition = ZoomFade as NonNullable<typeof Transition>;
-        (rest as any).zoomOriginDynamic = 0;
-        (rest as any).zoomMin = 0.85;
+        (TransitionProps as ZoomFadeProps<any>)[`zoomOrigin${sideIsInline ? "Block" : "Inline"}`] = 0.5;
+        (TransitionProps as ZoomFadeProps<any>)[`zoomOrigin${sideIsBlock ? "Block" : "Inline"}`] = (sideIsStart ? 1 : 0);
+        (TransitionProps as any).zoomMin = 0.85;
     }
+    TransitionPropFlips ??= getDefaultFlips(Transition);
+    TransitionProps = flipTransformProps(TransitionProps ?? ({} as never), TransitionPropFlips);
+
+    let anchorProps = cloneable.props as any;
+    anchorProps = useTooltipTriggerProps(useElementSizeProps(usePopperSourceProps(anchorProps)));
+    anchorProps = useMergedProps<any>()(anchorProps, { ref: cloneable.ref! });
+    anchorProps = useMergedProps<any>()(anchorProps, { ref });
+    anchorProps = useMergedProps<any>()(anchorProps, restAnchorProps);
 
     // TODO: It's required for this to be exitVisibility="hidden" for transforms to work?
     // Probably an issue in the Transition element itself because it's not browser-specific but it's a little weird
     return <>
-        {cloneElement(cloneable, useMergedProps<any>()({ ref }, useMergedProps<any>()({ ref: cloneable.ref! }, useTooltipTriggerProps(useElementSizeProps(usePopperSourceProps(cloneable.props))))))}
+        {cloneElement(cloneable, anchorProps)}
         <BodyPortal>
             <div {...usePopperPopupProps({ class: "tooltip-wrapper" })} >
-                <Transition {...rest as any} show={isOpen} onTransitionUpdate={onInteraction} exitVisibility="hidden">
+                <Transition {...TransitionProps as any} show={isOpen} onTransitionUpdate={onInteraction} exitVisibility="hidden">
                     <div {...(useTooltipProps(useMergedProps<HTMLDivElement>()({ class: "tooltip show", role: "tooltip" }, {})) as any)}>
                         <div {...usePopperArrowProps({ class: "popper-arrow" })}></div>
                         <div class="tooltip-inner">{tooltip || lastUsedTooltipRef.current}</div>

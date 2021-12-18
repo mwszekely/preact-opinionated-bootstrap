@@ -41,7 +41,7 @@
 @use "./elevation.scss";
 @use "sass:color";
 
-@import "preact-aria-widgets/src/modal.css";
+@use "preact-aria-widgets/src/modal.css";
 
 $scrollbar-track-background: ensure-contrasting-color($body-bg, $body-bg, 4.5);
 $scrollbar-thumb-background: ensure-contrasting-color(color.mix($body-bg, $scrollbar-track-background), $secondary, 4.5);

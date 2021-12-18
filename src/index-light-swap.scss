@@ -1,0 +1,16 @@
+@use "sass:meta";
+
+@include meta.load-css("./index-light-helper.scss");
+
+.set-theme.theme-dark {
+    color-scheme: dark light;
+
+    // TODO: The worst possible way to do this
+    @include meta.load-css("./_index-dark-helper.css");
+}
+
+html.switching-theme {
+    * {
+        transition: all 2s !important;
+    }
+}

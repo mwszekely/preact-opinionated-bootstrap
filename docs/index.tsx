@@ -57,7 +57,7 @@ const DemoDialog = memo(() => {
 
     return (
         <div class="demo">
-            <Tooltip tooltip="Open dialog" Transition={ZoomFade} zoomOriginDynamic={0} zoomMin={0.85} >
+            <Tooltip tooltip="Open dialog">
                 <InputGroup>
                     <Checkbox checked={open} onCheck={setOpen}>Open dialog</Checkbox>
                 </InputGroup>
@@ -84,7 +84,7 @@ const DemoDrawer = memo(() => {
         <div class="demo">
             <Checkbox checked={open} onCheck={setOpen}>Open Drawer</Checkbox>
             {/*<label><input type="checkbox" checked={open} onInput={e => { e.preventDefault(); setOpen(e.currentTarget.checked) }} /></label>*/}
-            <Drawer Transition={Slide} slideTargetInline={-1} open={open} onClose={onClose} descriptive={false} title="Dialog Title" >
+            <Drawer open={open} onClose={onClose} descriptive={false} title="Dialog Title" >
                 <p tabIndex={-1}>Dialog body content</p>
                 <p>{RandomWords.join(" ")}</p>
                 <p>{RandomWords.join(" ")}</p>
@@ -99,7 +99,7 @@ const DemoMenu = memo(() => {
 
     return (
         <div class="demo">
-            <Menu Transition={ZoomFade} zoomOriginDynamic={0} zoomMin={0.85} tag="ul" anchor={<Button dropdownVariant="combined">Open menu</Button>}>
+            <Menu Transition={ZoomFade} tag="ul" anchor={<Button dropdownVariant="combined">Open menu</Button>}>
                 <MenuItem index={0}>AItem #1</MenuItem>
                 <MenuItem index={1}>BItem #2</MenuItem>
                 <MenuItem index={2}>CItem #3</MenuItem>
@@ -123,9 +123,9 @@ const DemoTabs = memo(() => {
                         <Tab index={1}>Tab #2</Tab>
                         <Tab index={2}>Tab #3</Tab>
                     </ol>
-                    <TabPanel index={0} Transition={ZoomFade} zoomMin={0.8} zoomOriginBlock={0}><div>{RandomWords.slice(0, Math.floor((1 / 3) * RandomWords.length)).join(" ")}</div></TabPanel>
-                    <TabPanel index={1} Transition={ZoomFade} zoomMin={0.8} zoomOriginBlock={0}><div>{RandomWords.slice(0, Math.floor((2 / 3) * RandomWords.length)).join(" ")}</div></TabPanel>
-                    <TabPanel index={2} Transition={ZoomFade} zoomMin={0.8} zoomOriginBlock={0}><div>{RandomWords.slice(0, Math.floor((3 / 3) * RandomWords.length)).join(" ")}</div></TabPanel>
+                    <TabPanel index={0}><div>{RandomWords.slice(0, Math.floor((1 / 3) * RandomWords.length)).join(" ")}</div></TabPanel>
+                    <TabPanel index={1}><div>{RandomWords.slice(0, Math.floor((2 / 3) * RandomWords.length)).join(" ")}</div></TabPanel>
+                    <TabPanel index={2}><div>{RandomWords.slice(0, Math.floor((3 / 3) * RandomWords.length)).join(" ")}</div></TabPanel>
                 </Tabs>
             </div>
         </div>

@@ -741,7 +741,7 @@
 
 	  for (u.__e = m, h = A; h--;) null != w[h] && ("function" == typeof u.type && null != w[h].__e && w[h].__e == u.__d && (u.__d = k$1(i, h + 1)), N(w[h], w[h]));
 
-	  if (g) for (h = 0; h < g.length; h++) M$1(g[h], g[++h], g[++h]);
+	  if (g) for (h = 0; h < g.length; h++) M$2(g[h], g[++h], g[++h]);
 	}
 
 	function x$2(n, l, u) {
@@ -884,7 +884,7 @@
 	  return l;
 	}
 
-	function M$1(n, u, i) {
+	function M$2(n, u, i) {
 	  try {
 	    "function" == typeof n ? n(u) : n.current = u;
 	  } catch (n) {
@@ -895,7 +895,7 @@
 	function N(n, u, i) {
 	  var t, r;
 
-	  if (l$1.unmount && l$1.unmount(n), (t = n.ref) && (t.current && t.current !== n.__e || M$1(t, null, u)), null != (t = n.__c)) {
+	  if (l$1.unmount && l$1.unmount(n), (t = n.ref) && (t.current && t.current !== n.__e || M$2(t, null, u)), null != (t = n.__c)) {
 	    if (t.componentWillUnmount) try {
 	      t.componentWillUnmount();
 	    } catch (n) {
@@ -2094,27 +2094,85 @@
 	    if (((_direction2 = direction) === null || _direction2 === void 0 ? void 0 : _direction2.inlineOrientation) === elementOrientation) return "inline";
 	    return "block";
 	  }, []);
-	  const convertToPhysicalOrientation = A$1((elementOrientation, direction) => {
-	    var _direction3;
+	  const convertToPhysicalSide = A$1((side, direction) => {
+	    var _direction3, _direction$blockDirec, _direction4, _direction$blockDirec2, _direction5, _direction$inlineDire, _direction6, _direction$inlineDire2, _direction7;
 
 	    (_direction3 = direction) !== null && _direction3 !== void 0 ? _direction3 : direction = getLogicalDirectionInfo();
 
-	    if (elementOrientation == "inline") {
-	      var _direction4;
+	    switch (side) {
+	      case "block-start":
+	        return M$1[((_direction$blockDirec = (_direction4 = direction) === null || _direction4 === void 0 ? void 0 : _direction4.blockDirection) !== null && _direction$blockDirec !== void 0 ? _direction$blockDirec : "ttb")[0]];
 
-	      if (((_direction4 = direction) === null || _direction4 === void 0 ? void 0 : _direction4.inlineOrientation) == "horizontal") return "horizontal";
+	      case "block-end":
+	        return M$1[((_direction$blockDirec2 = (_direction5 = direction) === null || _direction5 === void 0 ? void 0 : _direction5.blockDirection) !== null && _direction$blockDirec2 !== void 0 ? _direction$blockDirec2 : "ttb")[2]];
+
+	      case "inline-start":
+	        return M$1[((_direction$inlineDire = (_direction6 = direction) === null || _direction6 === void 0 ? void 0 : _direction6.inlineDirection) !== null && _direction$inlineDire !== void 0 ? _direction$inlineDire : "ltr")[0]];
+
+	      case "inline-end":
+	        return M$1[((_direction$inlineDire2 = (_direction7 = direction) === null || _direction7 === void 0 ? void 0 : _direction7.inlineDirection) !== null && _direction$inlineDire2 !== void 0 ? _direction$inlineDire2 : "ltr")[2]];
+	    }
+	  }, []);
+	  const convertToLogicalSide = A$1((side, direction) => {
+	    var _direction8, _direction9, _direction10;
+
+	    (_direction8 = direction) !== null && _direction8 !== void 0 ? _direction8 : direction = getLogicalDirectionInfo();
+
+	    if (((_direction9 = direction) === null || _direction9 === void 0 ? void 0 : _direction9.inlineOrientation) === "vertical") {
+	      switch (side) {
+	        case "top":
+	          return direction.inlineDirection === "ttb" ? "inline-start" : "inline-end";
+
+	        case "bottom":
+	          return direction.inlineDirection === "btt" ? "inline-start" : "inline-end";
+
+	        case "left":
+	          return direction.blockDirection === "ltr" ? "block-start" : "block-end";
+
+	        case "bottom":
+	          return direction.blockDirection === "rtl" ? "block-start" : "block-end";
+	      }
+	    } else if (((_direction10 = direction) === null || _direction10 === void 0 ? void 0 : _direction10.inlineOrientation) === "horizontal") {
+	      switch (side) {
+	        case "top":
+	          return direction.blockDirection === "ttb" ? "block-start" : "block-end";
+
+	        case "bottom":
+	          return direction.blockDirection === "btt" ? "block-start" : "block-end";
+
+	        case "left":
+	          return direction.inlineDirection === "ltr" ? "inline-start" : "inline-end";
+
+	        case "bottom":
+	          return direction.inlineDirection === "rtl" ? "inline-start" : "inline-end";
+	      }
+	    }
+
+	    debugger;
+	    console.assert(false);
+	    return "inline-start";
+	  }, []);
+	  const convertToPhysicalOrientation = A$1((elementOrientation, direction) => {
+	    var _direction11;
+
+	    (_direction11 = direction) !== null && _direction11 !== void 0 ? _direction11 : direction = getLogicalDirectionInfo();
+
+	    if (elementOrientation == "inline") {
+	      var _direction12;
+
+	      if (((_direction12 = direction) === null || _direction12 === void 0 ? void 0 : _direction12.inlineOrientation) == "horizontal") return "horizontal";
 	      return "vertical";
 	    } else {
-	      var _direction5;
+	      var _direction13;
 
-	      if (((_direction5 = direction) === null || _direction5 === void 0 ? void 0 : _direction5.blockOrientation) == "vertical") return "vertical";
+	      if (((_direction13 = direction) === null || _direction13 === void 0 ? void 0 : _direction13.blockOrientation) == "vertical") return "vertical";
 	      return "horizontal";
 	    }
 	  }, []);
 	  const convertElementSize = A$1((elementSize, direction) => {
-	    var _direction6;
+	    var _direction14;
 
-	    (_direction6 = direction) !== null && _direction6 !== void 0 ? _direction6 : direction = getLogicalDirectionInfo();
+	    (_direction14 = direction) !== null && _direction14 !== void 0 ? _direction14 : direction = getLogicalDirectionInfo();
 
 	    if (direction) {
 	      const {
@@ -2175,11 +2233,20 @@
 	    useLogicalDirectionProps: A$1(props => useRefElementProps(useElementSizeProps(props)), []),
 	    getElement,
 	    getLogicalDirectionInfo,
-	    convertElementSize,
+	    convertToLogicalSize: convertElementSize,
 	    convertToLogicalOrientation,
-	    convertToPhysicalOrientation
+	    convertToPhysicalOrientation,
+	    convertToLogicalSide,
+	    convertToPhysicalSide
 	  };
-	}
+	} // Helper for extracting info from "ltr", "ttb", etc.
+
+	const M$1 = {
+	  t: "top",
+	  b: "bottom",
+	  l: "left",
+	  r: "right"
+	};
 	const HorizontalTbLtr = {
 	  inlineDirection: "ltr",
 	  blockDirection: "ttb",
@@ -2610,9 +2677,8 @@
 	  const navigateToStart = useCallback(() => { navigateToIndex(0); }, [navigateToIndex]);
 	  const navigateToEnd = useCallback(() => { navigateToIndex(-1); }, [navigateToIndex]);*/
 
-	  const getIndex = useStableGetter(index);
+	  useStableGetter(index);
 	  const {
-	    convertElementSize,
 	    getLogicalDirectionInfo,
 	    useLogicalDirectionProps
 	  } = useLogicalDirection({});
@@ -2620,7 +2686,6 @@
 	  const onKeyDown = e => {
 	    // Not handled by typeahead (i.e. assume this is a keyboard shortcut)
 	    if (e.ctrlKey || e.metaKey) return;
-	    getIndex();
 	    const info = getLogicalDirectionInfo();
 	    let allowsBlockNavigation = navigationDirection == "block" || navigationDirection == "either";
 	    let allowsInlineNavigation = navigationDirection == "inline" || navigationDirection == "either";
@@ -2859,17 +2924,17 @@
 	          But roughly isn't good enough if there are multiple matches.
 	          To convert our sorted index to the unsorted index we need, we have to find the first
 	          element that matches us *and* (if any such exist) is *after* our current selection.
-	            In other words, the only way typeahead moves backwards relative to our current
+	           In other words, the only way typeahead moves backwards relative to our current
 	          position is if the only other option is behind us.
-	            It's not specified in WAI-ARIA what to do in that case.  I suppose wrap back to the start?
+	           It's not specified in WAI-ARIA what to do in that case.  I suppose wrap back to the start?
 	          Though there's also a case for just going upwards to the nearest to prevent jumpiness.
 	          But if you're already doing typeahead on an unsorted list, like, jumpiness can't be avoided.
 	          I dunno. Going back to the start is the simplist though.
-	            Basically what this does: Starting from where we found ourselves after our binary search,
+	           Basically what this does: Starting from where we found ourselves after our binary search,
 	          scan backwards and forwards through all adjacent entries that also compare equally so that
 	          we can find the one whose `unsortedIndex` is the lowest amongst all other equal strings
 	          (and also the lowest `unsortedIndex` yadda yadda except that it comes after us).
-	            TODO: The binary search starts this off with a solid O(log n), but one-character
+	           TODO: The binary search starts this off with a solid O(log n), but one-character
 	          searches are, thanks to pigeonhole principal, eventually guaranteed to become
 	          O(n*log n). This is annoying but probably not easily solvable? There could be an
 	          exception for one-character strings, but that's just kicking the can down
@@ -3622,17 +3687,15 @@
 	      activatedIndex: currentColumn,
 	      managedChildren: managedCells,
 	      setChildFlag: (cellIndex, cellIsTabbable) => {
-	        if (cellIndex != null) {
-	          var _managedCells$cellInd;
-
+	        if (cellIndex != null && managedCells[cellIndex]) {
 	          managedCells[cellIndex].setTabbable(cellIsTabbable);
-	          if (cellIsTabbable) (_managedCells$cellInd = managedCells[cellIndex]) === null || _managedCells$cellInd === void 0 ? void 0 : _managedCells$cellInd.rerenderAndFocus();
+	          if (cellIsTabbable) managedCells[cellIndex].rerenderAndFocus();
 	        }
 	      },
 	      getChildFlag: cellIndex => {
-	        var _managedCells$cellInd2, _managedCells$cellInd3;
+	        var _managedCells$cellInd, _managedCells$cellInd2;
 
-	        return (_managedCells$cellInd2 = (_managedCells$cellInd3 = managedCells[cellIndex]) === null || _managedCells$cellInd3 === void 0 ? void 0 : _managedCells$cellInd3.getTabbable()) !== null && _managedCells$cellInd2 !== void 0 ? _managedCells$cellInd2 : null;
+	        return (_managedCells$cellInd = (_managedCells$cellInd2 = managedCells[cellIndex]) === null || _managedCells$cellInd2 === void 0 ? void 0 : _managedCells$cellInd2.getTabbable()) !== null && _managedCells$cellInd !== void 0 ? _managedCells$cellInd : null;
 	      },
 	      useEffect
 	    }); // Any time we become the currently tabbable row,
@@ -7125,6 +7188,18 @@
 	  }
 	}
 
+	/**
+	 * A menu is a popup control that contains a list of menu items, and that's it.
+	 * It has very well-defined logic for managing those items as the menu's state changes.
+	 *
+	 * A MenuBase is just the "popup" part without the "list of menu items" part. It can
+	 * (really, must) have interactive controls, but these controls are allowed to be more
+	 * free-form. This means that, like a dialog, you must tell this hook
+	 * where within the popup to send focus when opened (for a menu it's just the first
+	 * menu item, but with custom content you'll need to provide this).
+	 *
+	 */
+
 	function useMenuBase(_ref) {
 	  let {
 	    sendFocusWithinMenu,
@@ -7304,8 +7379,8 @@
 	  /*const useMenuSubmenuItem = useCallback((args: UseMenuSubmenuItemParameters) => {
 	      const { useMenuProps, useMenuButton } = useAriaMenu<HTMLElement, ChildElement, I>(args);
 	      const { useMenuButtonProps } = useMenuButton<E>({ tag: "li" as any });
-	        const { getElement, useRefElementProps } = useRefElement<any>({ onElementChange: setOpenerElement as OnPassiveStateChange<any> });
-	        return {
+	       const { getElement, useRefElementProps } = useRefElement<any>({ onElementChange: setOpenerElement as OnPassiveStateChange<any> });
+	       return {
 	          getElement,
 	          useMenuProps,
 	          useMenuSubmenuItemProps: function <P extends h.JSX.HTMLAttributes<E>>({ ...props }: P) {
@@ -8210,6 +8285,9 @@
 	                e.preventDefault();
 
 	                if (cell && "focus" in cell) {
+	                  // Make absolutely sure this cell is focusable
+	                  // (tabIndex can't be null, apparently, so what else would it be other than -1?
+	                  // How is "not tabbable" represented in the DOM?)
 	                  if (cell.tabIndex !== 0) cell.tabIndex = -1;
 	                  cell.focus();
 	                }
@@ -9112,7 +9190,7 @@
 	  });
 	});
 
-	forwardElementRef$1(function ClipFade(_ref, ref) {
+	const ClipFade = forwardElementRef$1(function ClipFade(_ref, ref) {
 	  let {
 	    classBase,
 	    fadeMin,
@@ -9438,7 +9516,7 @@
 	 * @see `Transitionable` `Slide` `Zoom` `Fade`
 	 */
 
-	forwardElementRef$1(function SlideZoomFade(_ref, ref) {
+	const SlideZoomFade = forwardElementRef$1(function SlideZoomFade(_ref, ref) {
 	  let {
 	    classBase,
 	    fadeMin,
@@ -10469,15 +10547,17 @@
 	  }, footer))))))));
 	}));
 
-	const Drawer = g(function Drawer(_ref) {
+	const Drawer = g(forwardElementRef(function Drawer(_ref, ref) {
+	  var _TransitionProps;
+
 	  let {
 	    onClose,
 	    open,
 	    descriptive,
 	    title,
-	    footer,
 	    closeButton,
 	    Transition,
+	    TransitionProps,
 	    children,
 	    ...rest
 	  } = _ref;
@@ -10501,20 +10581,23 @@
 	  const {
 	    useDrawerTitleProps
 	  } = useDrawerTitle();
+	  (_TransitionProps = TransitionProps) !== null && _TransitionProps !== void 0 ? _TransitionProps : TransitionProps = {};
 
 	  if (!Transition) {
 	    Transition = Slide;
-	    rest.slideTargetInline = -1;
+	    TransitionProps.slideTargetInline = -1;
 	  }
 
-	  return v$1(BodyPortal, null, v$1("div", null, v$1(Fade, {
+	  return v$1(BodyPortal, null, v$1("div", { ...rest,
+	    ref: ref
+	  }, v$1(Fade, {
 	    show: open
 	  }, v$1("div", { ...useDrawerBackdropProps({
 	      class: "offcanvas-backdrop backdrop-filter-transition"
 	    })
 	  })), v$1(Transition, { ...{
 	      show: open,
-	      ...rest
+	      ...TransitionProps
 	    }
 	  }, v$1("div", { ...useDrawerProps({
 	      class: "offcanvas offcanvas-start elevation-raised-5 elevation-body-surface",
@@ -10534,7 +10617,7 @@
 	      class: "offcanvas-body"
 	    })
 	  }, children)))));
-	});
+	}));
 
 	D$1(null);
 	const InInputGroupContext = D$1(false);
@@ -13431,12 +13514,12 @@
 	    paddingRight
 	  } = _ref;
 	  const [popperInstance, setPopperInstance, getPopperInstance] = useState(null);
-	  const [usedPlacement, setUsedPlacement] = useState(null);
+	  const [usedSide, setUsedSide] = useState(side);
 	  const [logicalDirection, setLogicalDirection] = useState(null);
 	  const {
-	    convertElementSize,
-	    getLogicalDirectionInfo,
-	    useLogicalDirectionProps
+	    useLogicalDirectionProps,
+	    convertToLogicalSide,
+	    convertToPhysicalSide
 	  } = useLogicalDirection({
 	    onLogicalDirectionChange: setLogicalDirection
 	  });
@@ -13663,7 +13746,7 @@
 	        } = _ref3;
 	        let usedPlacement = state.placement;
 	        if (usedPlacement.includes("-")) usedPlacement = usedPlacement.substr(0, usedPlacement.indexOf("-"));
-	        setUsedPlacement(usedPlacement);
+	        setUsedSide(convertToLogicalSide(usedPlacement));
 	        if (state.styles.reference) setSourceStyle(state.styles.reference);
 	        if (state.attributes.reference) setSourceAttributes(state.attributes.reference);
 	        if (state.styles.popper) setPopperStyle(state.styles.popper);
@@ -13732,194 +13815,131 @@
 	    };
 	  }
 
+	  const axis = side.substring(0, side.indexOf('-'));
+	  const axisPosition = side.substring(side.indexOf('-') + 1);
+	  const usedAxis = usedSide.substring(0, side.indexOf('-'));
+	  const usedAxisPosition = usedSide.substring(side.indexOf('-') + 1);
+	  let usedSideSwapsAxes = usedAxis !== axis;
+	  let usedSideFlipsAxis = axisPosition !== usedAxisPosition;
+	  /**
+	   * Given a set of props to pass to a Transition component,
+	   * and a list of prop names that should be adjusted when the Popper flips,
+	   * swaps and flips the original prop names and their values around to match what the Popper is showing.
+	   *
+	   * Not all props need flipping, some just need swapping
+	   * (swapping is when an axis changes like "inline" to "block", flipping is when a position changes like "start" to "end").
+	   * If a property just needs swapping, set `flipFunction` to null. Otherwise,
+	   * it should be a function along the lines of `n => -n`, `n => 1-n`, etc.
+	   *
+	   *
+	   * @param originalProps
+	   * @param affectedProps
+	   * @returns
+	   */
+
+	  const flipTransformProps = (originalProps, affectedProps) => {
+	    const props = { ...originalProps
+	    };
+
+	    for (const {
+	      inline,
+	      block,
+	      flipFunction
+	    } of affectedProps) {
+	      if (flipFunction) flip(props, inline, block, flipFunction);
+	      swap(props, inline, block);
+	    }
+
+	    return props;
+
+	    function flip(props, inlinePropName, blockPropName, flipFunction) {
+	      if (usedSideFlipsAxis) {
+	        if (axis === "inline") {
+	          if (props[inlinePropName] != null) props[inlinePropName] = flipFunction(props[inlinePropName]);
+	        } else {
+	          if (props[blockPropName] != null) props[blockPropName] = flipFunction(props[blockPropName]);
+	        }
+	      }
+	    }
+
+	    function swap(props, inlinePropName, blockPropName) {
+	      if (usedSideSwapsAxes) {
+	        const v1 = props[inlinePropName];
+	        const v2 = props[blockPropName];
+	        props[inlinePropName] = v2;
+	        props[blockPropName] = v1;
+	      }
+	    }
+	  };
+
 	  return {
 	    usePopperSource,
 	    usePopperPopup,
 	    usePopperArrow,
-	    usedPlacement,
+	    flipTransformProps,
+	    usedSide,
+	    usedAxis,
+	    usedAxisPosition,
 	    logicalDirection
 	  };
 	}
+	function getDefaultFlips(Transition) {
+	  const FlipAngle = {
+	    inline: "flipAngleInline",
+	    block: "flipAngleBlock",
+	    flipFunction: n => -n
+	  };
+	  const SlideTarget = {
+	    inline: "slideTargetInline",
+	    block: "slideTargetBlock",
+	    flipFunction: n => -n
+	  };
+	  const ClipOrigin = {
+	    inline: "clipOriginInline",
+	    block: "clipOriginBlock",
+	    flipFunction: n => 1 - n
+	  };
+	  const ClipMin = {
+	    inline: "clipMinInline",
+	    block: "clipMinBlock",
+	    flipFunction: null
+	  };
+	  const ZoomMin = {
+	    inline: "zoomMinInline",
+	    block: "zoomMinBlock",
+	    flipFunction: null
+	  };
+	  const ZoomOrigin = {
+	    inline: "zoomOriginInline",
+	    block: "zoomOriginBlock",
+	    flipFunction: n => 1 - n
+	  };
 
-	function placementToLogical(logicalDirection, placement) {
-	  const {
-	    blockDirection,
-	    blockOrientation,
-	    inlineDirection,
-	    inlineOrientation
-	  } = logicalDirection;
-	  let logical;
+	  switch (Transition) {
+	    case Zoom:
+	    case ZoomFade:
+	      return [ZoomMin, ZoomOrigin];
 
-	  switch (`${inlineDirection}-${blockDirection},${placement}`) {
-	    // There's a pattern, and it could be coded as a pattern
-	    case "ltr-ttb,top":
-	      logical = "block-start";
-	      break;
+	    case Clip:
+	    case ClipFade:
+	      return [ClipMin, ClipOrigin];
 
-	    case "ltr-btt,bottom":
-	      logical = "block-start";
-	      break;
+	    case Slide:
+	    case SlideFade:
+	      return [SlideTarget];
 
-	    case "rtl-ttb,top":
-	      logical = "block-start";
-	      break;
+	    case SlideZoom:
+	    case SlideZoomFade:
+	      return [SlideTarget, ZoomMin, ZoomOrigin];
 
-	    case "rtl-btt,bottom":
-	      logical = "block-start";
-	      break;
+	    case Flip:
+	      return [FlipAngle];
 
-	    case "ttb-ltr,left":
-	      logical = "block-start";
-	      break;
-
-	    case "btt-ltr,right":
-	      logical = "block-start";
-	      break;
-
-	    case "ttb-rtl,left":
-	      logical = "block-start";
-	      break;
-
-	    case "btt-rtl,right":
-	      logical = "block-start";
-	      break;
-
-	    case "ltr-ttb,bottom":
-	      logical = "block-end";
-	      break;
-
-	    case "rtl-ttb,bottom":
-	      logical = "block-end";
-	      break;
-
-	    case "ltr-btt,top":
-	      logical = "block-end";
-	      break;
-
-	    case "rtl-btt,top":
-	      logical = "block-end";
-	      break;
-
-	    case "ttb-ltr,right":
-	      logical = "block-end";
-	      break;
-
-	    case "ttb-rtl,right":
-	      logical = "block-end";
-	      break;
-
-	    case "btt-ltr,left":
-	      logical = "block-end";
-	      break;
-
-	    case "btt-rtl,left":
-	      logical = "block-end";
-	      break;
-
-	    case "ttb-ltr,top":
-	      logical = "inline-start";
-	      break;
-
-	    case "ttb-rtl,top":
-	      logical = "inline-start";
-	      break;
-
-	    case "btt-ltr,bottom":
-	      logical = "inline-start";
-	      break;
-
-	    case "btt-rtl,bottom":
-	      logical = "inline-start";
-	      break;
-
-	    case "ltr-ttb,left":
-	      logical = "inline-start";
-	      break;
-
-	    case "rtl-ttb,left":
-	      logical = "inline-start";
-	      break;
-
-	    case "ltr-btt,right":
-	      logical = "inline-start";
-	      break;
-
-	    case "rtl-btt,right":
-	      logical = "inline-start";
-	      break;
-
-	    case "ttb-ltr,bottom":
-	      logical = "inline-end";
-	      break;
-
-	    case "ttb-rtl,bottom":
-	      logical = "inline-end";
-	      break;
-
-	    case "btt-ltr,top":
-	      logical = "inline-end";
-	      break;
-
-	    case "btt-rtl,top":
-	      logical = "inline-end";
-	      break;
-
-	    case "ltr-ttb,right":
-	      logical = "inline-end";
-	      break;
-
-	    case "rtl-ttb,right":
-	      logical = "inline-end";
-	      break;
-
-	    case "ltr-btt,left":
-	      logical = "inline-end";
-	      break;
-
-	    case "rtl-btt,left":
-	      logical = "inline-end";
-	      break;
-	    // Shouldn't happen, but here for type correctness.
-
-	    case "ttb-ttb,bottom":
-	    case "ttb-ttb,top":
-	    case "btt-btt,bottom":
-	    case "btt-btt,top":
-	    case "ltr-ltr,bottom":
-	    case "ltr-ltr,top":
-	    case "rtl-rtl,bottom":
-	    case "rtl-rtl,top":
-	    case "ttb-btt,bottom":
-	    case "btt-ttb,top":
-	    case "btt-ttb,bottom":
-	    case "ttb-btt,top":
-	    case "ltr-rtl,bottom":
-	    case "rtl-ltr,top":
-	    case "rtl-ltr,bottom":
-	    case "ltr-rtl,top":
-	    case "ttb-ttb,right":
-	    case "ttb-ttb,left":
-	    case "btt-btt,right":
-	    case "btt-btt,left":
-	    case "ltr-ltr,right":
-	    case "ltr-ltr,left":
-	    case "rtl-rtl,right":
-	    case "rtl-rtl,left":
-	    case "ttb-btt,right":
-	    case "btt-ttb,left":
-	    case "btt-ttb,right":
-	    case "ttb-btt,left":
-	    case "ltr-rtl,right":
-	    case "rtl-ltr,left":
-	    case "rtl-ltr,right":
-	    case "ltr-rtl,left":
-	      debugger;
-	      logical = logical;
-	      break;
+	    default:
+	      console.warn(`An unknown Transition was provided without also providing TransitionPropFlips, so this Popper component will not animate its transitions properly when flipped.`);
+	      return [];
 	  }
-
-	  return logical;
-	}
+	} //type T = HTMLDivElement["style"];
 
 	function useShouldUpdatePopper(open) {
 	  // Since scroll events are asynchronous, especially on iOS devices,
@@ -13962,54 +13982,9 @@
 	    onInteraction
 	  };
 	}
-	/**
-	 * Handle the e.g. zoomOriginDynamic props, to turn them into zoomOriginInline or zoomOriginBlock as appropriate.
-	 * TODO: Right now, all *Dynamic props are just handled as 1 - prop. Some probably need to be -1 * prop though.
-	 */
-
-	function fixProps(logicalDirection, requestedPlacement, usedPlacement, props) {
-	  let logicalSnake = placementToLogical(logicalDirection, usedPlacement);
-	  let propAxis;
-	  let reverse;
-
-	  switch (logicalSnake) {
-	    case "block-start":
-	      propAxis = "Block";
-	      reverse = requestedPlacement == "block-end";
-	      break;
-
-	    case "block-end":
-	      propAxis = "Block";
-	      reverse = requestedPlacement == "block-start";
-	      break;
-
-	    case "inline-start":
-	      propAxis = "Inline";
-	      reverse = requestedPlacement == "inline-end";
-	      break;
-
-	    case "inline-end":
-	      propAxis = "Inline";
-	      reverse = requestedPlacement == "inline-start";
-	      break;
-	  }
-
-	  let newProps = { ...props
-	  };
-
-	  for (let propName in props) {
-	    if (propName.endsWith("Dynamic") && typeof props[propName] === "number") {
-	      let newPropName = `${propName.substr(0, propName.indexOf("Dynamic"))}${propAxis}`;
-	      newProps[newPropName] = !reverse ? newProps[propName] : 1 - newProps[propName];
-	      delete newProps[propName];
-	    }
-	  }
-
-	  return newProps;
-	}
 
 	const Tooltip = g(forwardElementRef(function Tooltip(_ref, ref) {
-	  var _side, _align;
+	  var _side, _align, _TransitionProps, _TransitionPropFlips, _TransitionProps2;
 
 	  let {
 	    children,
@@ -14017,8 +13992,11 @@
 	    align,
 	    tooltip,
 	    Transition,
+	    TransitionProps,
+	    TransitionPropFlips,
 	    mouseoverDelay,
-	    ...rest
+	    mouseoutDelay,
+	    ...restAnchorProps
 	  } = _ref;
 	  (_side = side) !== null && _side !== void 0 ? _side : side = "block-start";
 	  (_align = align) !== null && _align !== void 0 ? _align : align = "center";
@@ -14028,7 +14006,8 @@
 	    useTooltip,
 	    useTooltipTrigger
 	  } = useAriaTooltip({
-	    mouseoverDelay
+	    mouseoverDelay,
+	    mouseoutDelay
 	  }); // TODO: This is probably the most benign mutation during render issue ever
 	  // It's just used to preserve the last shown value when the tooltip is fading out because `tooltip` is null.
 
@@ -14065,7 +14044,7 @@
 	    usePopperArrow,
 	    usePopperPopup,
 	    usePopperSource,
-	    usedPlacement
+	    flipTransformProps
 	  } = usePopperApi({
 	    updating: shouldUpdate,
 	    side,
@@ -14083,25 +14062,37 @@
 	  } = usePopperArrow();
 	  const {
 	    usePopperSourceProps
-	  } = usePopperSource();
-	  if (logicalDirection && usedPlacement) rest = fixProps(logicalDirection, "block-end", usedPlacement, rest);
+	  } = usePopperSource(); // Set up the default transition if none was provided
+
+	  (_TransitionProps = TransitionProps) !== null && _TransitionProps !== void 0 ? _TransitionProps : TransitionProps = {};
 
 	  if (Transition == undefined) {
+	    const sideIsBlock = side.startsWith("block");
+	    const sideIsInline = !sideIsBlock;
+	    const sideIsStart = side.endsWith("start");
 	    Transition = ZoomFade;
-	    rest.zoomOriginDynamic = 0;
-	    rest.zoomMin = 0.85;
-	  } // TODO: It's required for this to be exitVisibility="hidden" for transforms to work?
+	    TransitionProps[`zoomOrigin${sideIsInline ? "Block" : "Inline"}`] = 0.5;
+	    TransitionProps[`zoomOrigin${sideIsBlock ? "Block" : "Inline"}`] = sideIsStart ? 1 : 0;
+	    TransitionProps.zoomMin = 0.85;
+	  }
+
+	  (_TransitionPropFlips = TransitionPropFlips) !== null && _TransitionPropFlips !== void 0 ? _TransitionPropFlips : TransitionPropFlips = getDefaultFlips(Transition);
+	  TransitionProps = flipTransformProps((_TransitionProps2 = TransitionProps) !== null && _TransitionProps2 !== void 0 ? _TransitionProps2 : {}, TransitionPropFlips);
+	  let anchorProps = cloneable.props;
+	  anchorProps = useTooltipTriggerProps(useElementSizeProps(usePopperSourceProps(anchorProps)));
+	  anchorProps = useMergedProps()(anchorProps, {
+	    ref: cloneable.ref
+	  });
+	  anchorProps = useMergedProps()(anchorProps, {
+	    ref
+	  });
+	  anchorProps = useMergedProps()(anchorProps, restAnchorProps); // TODO: It's required for this to be exitVisibility="hidden" for transforms to work?
 	  // Probably an issue in the Transition element itself because it's not browser-specific but it's a little weird
 
-
-	  return v$1(d$1, null, B(cloneable, useMergedProps()({
-	    ref
-	  }, useMergedProps()({
-	    ref: cloneable.ref
-	  }, useTooltipTriggerProps(useElementSizeProps(usePopperSourceProps(cloneable.props)))))), v$1(BodyPortal, null, v$1("div", { ...usePopperPopupProps({
+	  return v$1(d$1, null, B(cloneable, anchorProps), v$1(BodyPortal, null, v$1("div", { ...usePopperPopupProps({
 	      class: "tooltip-wrapper"
 	    })
-	  }, v$1(Transition, { ...rest,
+	  }, v$1(Transition, { ...TransitionProps,
 	    show: isOpen,
 	    onTransitionUpdate: onInteraction,
 	    exitVisibility: "hidden"
@@ -14120,8 +14111,9 @@
 	const HasTypeaheadContext = D$1(false);
 	const OnCloseContext = D$1(undefined);
 	const UseMenuItemContext = D$1(null);
-	function Menu(_ref) {
-	  var _side, _align;
+
+	function MenuU(_ref, ref) {
+	  var _side, _align, _TransitionProps, _TransitionPropFlips, _TransitionProps2;
 
 	  let {
 	    anchor,
@@ -14132,8 +14124,10 @@
 	    side,
 	    align,
 	    Transition,
+	    TransitionProps,
+	    TransitionPropFlips,
 	    forceOpen,
-	    ...rest
+	    ...restAnchorProps
 	  } = _ref;
 	  useLogRender("Menu", `Rendering Menu`);
 	  (_side = side) !== null && _side !== void 0 ? _side : side = "block-end";
@@ -14161,8 +14155,8 @@
 	    usePopperArrow,
 	    usePopperPopup,
 	    usePopperSource,
-	    usedPlacement,
-	    logicalDirection
+	    logicalDirection,
+	    flipTransformProps
 	  } = usePopperApi({
 	    align,
 	    side,
@@ -14201,21 +14195,41 @@
 	  } = useMenuSentinel();
 	  const {
 	    useMenuSentinelProps: useSecondMenuSentinelProps
-	  } = useMenuSentinel();
+	  } = useMenuSentinel(); // Set up the default transition if none was provided
+
+	  (_TransitionProps = TransitionProps) !== null && _TransitionProps !== void 0 ? _TransitionProps : TransitionProps = {};
 
 	  if (Transition == undefined) {
+	    const sideIsBlock = side.startsWith("block");
+	    const sideIsInline = !sideIsBlock;
+	    const sideIsStart = side.endsWith("start");
 	    Transition = ZoomFade;
-	    rest.zoomOriginDynamic = 0;
-	    rest.zoomMin = 0.85;
+	    TransitionProps[`zoomOrigin${sideIsInline ? "Block" : "Inline"}`] = 0.5;
+	    TransitionProps[`zoomOrigin${sideIsBlock ? "Block" : "Inline"}`] = sideIsStart ? 1 : 0;
+	    TransitionProps.zoomMin = 0.85;
 	  }
 
-	  if (logicalDirection && usedPlacement) rest = fixProps(logicalDirection, side, usedPlacement, rest);
+	  (_TransitionPropFlips = TransitionPropFlips) !== null && _TransitionPropFlips !== void 0 ? _TransitionPropFlips : TransitionPropFlips = getDefaultFlips(Transition);
 
 	  const onAnchorClick = () => setOpen(open => !open);
 
 	  if (currentTypeahead && invalidTypeahead) currentTypeahead = v$1(d$1, null, currentTypeahead, " ", v$1("i", {
 	    class: "bi bi-backspace"
 	  }));
+	  let anchorProps = anchor.props;
+	  anchorProps = useMenuButtonProps(useElementSizeProps(usePopperSourceProps(anchorProps)));
+	  anchorProps = useMergedProps()(anchorProps, {
+	    ref: anchor.ref
+	  });
+	  anchorProps = useMergedProps()(anchorProps, {
+	    ref
+	  });
+	  anchorProps = useMergedProps()(anchorProps, {
+	    [anchorEventName !== null && anchorEventName !== void 0 ? anchorEventName : "onPress"]: onAnchorClick,
+	    ref: anchor.ref,
+	    class: `${open ? "active" : ""}`
+	  });
+	  anchorProps = useMergedProps()(anchorProps, restAnchorProps);
 	  return v$1(d$1, null, v$1(HasTypeaheadContext.Provider, {
 	    value: !!currentTypeahead
 	  }, v$1(OnCloseContext.Provider, {
@@ -14224,23 +14238,20 @@
 	    value: useMenuItem
 	  }, v$1(ProvideDefaultButtonDropdownDirection, {
 	    value: side
-	  }, B(anchor, useMergedProps()({
-	    [anchorEventName !== null && anchorEventName !== void 0 ? anchorEventName : "onPress"]: onAnchorClick,
-	    ref: anchor.ref,
-	    class: `${open ? "active" : ""}`
-	  }, useElementSizeProps(usePopperSourceProps(useMenuButtonProps(anchor.props)))))), v$1(BodyPortal, null, v$1("div", { ...usePopperPopupProps({
+	  }, B(anchor, anchorProps)), v$1(BodyPortal, null, v$1("div", { ...usePopperPopupProps({
 	      class: "dropdown-menu-popper"
 	    })
 	  }, v$1(Tooltip, {
 	    tooltip: currentTypeahead || null,
 	    side: "inline-end",
-	    align: "center",
-	    className: clsx("typeahead-tooltip", invalidTypeahead ? "text-danger" : undefined)
-	  }, v$1(Transition, { ...useMenuProps(rest),
+	    align: "center"
+	  }, v$1(Transition, { ...useMenuProps(flipTransformProps((_TransitionProps2 = TransitionProps) !== null && _TransitionProps2 !== void 0 ? _TransitionProps2 : {}, TransitionPropFlips)),
 	    show: open,
 	    onTransitionUpdate: onInteraction,
 	    exitVisibility: "hidden"
-	  }, v$1("div", { ...useHasFocusProps({})
+	  }, v$1("div", { ...useHasFocusProps({
+	      className: clsx("typeahead-tooltip", invalidTypeahead ? "text-danger" : undefined)
+	    })
 	  }, v$1("button", { ...useFirstMenuSentinelProps({
 	      className: "visually-hidden"
 	    })
@@ -14252,7 +14263,8 @@
 	    })
 	  }, "Close menu"))))))))));
 	}
-	function MenuItem(_ref2) {
+
+	function MenuItemU(_ref2, ref) {
 	  let {
 	    children,
 	    disabled,
@@ -14307,6 +14319,7 @@
 	    return onPressAsync === null || onPressAsync === void 0 ? void 0 : (_onPressAsync = onPressAsync()) === null || _onPressAsync === void 0 ? void 0 : _onPressAsync.then(() => onClose === null || onClose === void 0 ? void 0 : onClose());
 	  });
 	  const newProps = useMenuItemProps(useRefElementProps(useMergedProps()(rest, {
+	    ref,
 	    class: clsx(onPressAsync ? "dropdown-item" : "dropdown-item-text", disabled && "disabled"),
 	    "aria-disabled": disabled ? "true" : undefined
 	  })));
@@ -14327,6 +14340,9 @@
 	    }, children);
 	  }
 	}
+
+	const Menu = g(forwardElementRef(MenuU));
+	const MenuItem = g(forwardElementRef(MenuItemU));
 
 	const UseTabContext = D$1(null);
 	const UseTabPanelContext = D$1(null);
@@ -14408,10 +14424,13 @@
 	  }, children));
 	}));
 	const TabPanel = g(forwardElementRef(function TabPanel(_ref3, ref) {
+	  var _TransitionProps;
+
 	  let {
 	    index,
 	    children,
 	    Transition,
+	    TransitionProps,
 	    ...rest
 	  } = _ref3;
 	  const useTabPanel = F(UseTabPanelContext);
@@ -14421,12 +14440,20 @@
 	  } = useTabPanel({
 	    index
 	  });
-	  return v$1(Transition, useTabPanelProps({
+	  (_TransitionProps = TransitionProps) !== null && _TransitionProps !== void 0 ? _TransitionProps : TransitionProps = {};
+
+	  if (!Transition) {
+	    Transition = SlideFade;
+	    TransitionProps.slideTargetInline = -1;
+	    TransitionProps.zoomMin = 0.85;
+	  }
+
+	  return v$1(Transition, useMergedProps()(TransitionProps, useTabPanelProps({
 	    ref,
 	    show: visible,
 	    children,
 	    ...rest
-	  }));
+	  })));
 	}));
 
 	const PushToastContext = D$1(null);
@@ -15859,7 +15886,7 @@
 	    const onClose = (() => setOpen(false));
 	    const [open, setOpen] = useState(false);
 	    return (v$1("div", { class: "demo" },
-	        v$1(Tooltip, { tooltip: "Open dialog", Transition: ZoomFade, zoomOriginDynamic: 0, zoomMin: 0.85 },
+	        v$1(Tooltip, { tooltip: "Open dialog" },
 	            v$1(InputGroup, null,
 	                v$1(Checkbox, { checked: open, onCheck: setOpen }, "Open dialog"))),
 	        v$1(Dialog, { open: open, onClose: onClose, descriptive: false, title: "Dialog Title", footer: v$1("button", { onClick: onClose }, "Close") },
@@ -15877,7 +15904,7 @@
 	    //open = true;
 	    return (v$1("div", { class: "demo" },
 	        v$1(Checkbox, { checked: open, onCheck: setOpen }, "Open Drawer"),
-	        v$1(Drawer, { Transition: Slide, slideTargetInline: -1, open: open, onClose: onClose, descriptive: false, title: "Dialog Title" },
+	        v$1(Drawer, { open: open, onClose: onClose, descriptive: false, title: "Dialog Title" },
 	            v$1("p", { tabIndex: -1 }, "Dialog body content"),
 	            v$1("p", null, RandomWords.join(" ")),
 	            v$1("p", null, RandomWords.join(" ")),
@@ -15885,7 +15912,7 @@
 	});
 	const DemoMenu = g(() => {
 	    return (v$1("div", { class: "demo" },
-	        v$1(Menu, { Transition: ZoomFade, zoomOriginDynamic: 0, zoomMin: 0.85, tag: "ul", anchor: v$1(Button, { dropdownVariant: "combined" }, "Open menu") },
+	        v$1(Menu, { Transition: ZoomFade, tag: "ul", anchor: v$1(Button, { dropdownVariant: "combined" }, "Open menu") },
 	            v$1(MenuItem, { index: 0 }, "AItem #1"),
 	            v$1(MenuItem, { index: 1 }, "BItem #2"),
 	            v$1(MenuItem, { index: 2 }, "CItem #3"),
@@ -15901,11 +15928,11 @@
 	                    v$1(Tab, { index: 0 }, "Tab #1"),
 	                    v$1(Tab, { index: 1 }, "Tab #2"),
 	                    v$1(Tab, { index: 2 }, "Tab #3")),
-	                v$1(TabPanel, { index: 0, Transition: ZoomFade, zoomMin: 0.8, zoomOriginBlock: 0 },
+	                v$1(TabPanel, { index: 0 },
 	                    v$1("div", null, RandomWords.slice(0, Math.floor((1 / 3) * RandomWords.length)).join(" "))),
-	                v$1(TabPanel, { index: 1, Transition: ZoomFade, zoomMin: 0.8, zoomOriginBlock: 0 },
+	                v$1(TabPanel, { index: 1 },
 	                    v$1("div", null, RandomWords.slice(0, Math.floor((2 / 3) * RandomWords.length)).join(" "))),
-	                v$1(TabPanel, { index: 2, Transition: ZoomFade, zoomMin: 0.8, zoomOriginBlock: 0 },
+	                v$1(TabPanel, { index: 2 },
 	                    v$1("div", null, RandomWords.slice(0, Math.floor((3 / 3) * RandomWords.length)).join(" ")))))));
 	});
 	g(() => {

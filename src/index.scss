@@ -1,0 +1,11 @@
+@use "sass:meta";
+
+
+@media not all and (prefers-color-scheme: light) {
+    @include meta.load-css("./_index-dark-helper.css");
+}
+@media all and (prefers-color-scheme: light) {
+    @include meta.load-css("./_index-light-helper.css");
+}
+
+@include meta.load-css("./index-swap.scss");

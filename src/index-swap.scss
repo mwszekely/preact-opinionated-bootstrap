@@ -1,0 +1,23 @@
+@use "sass:meta";
+
+
+.set-theme.theme-light {
+    color-scheme: light dark;
+
+    // TODO: This is probably really not a great way to do this
+    // It means we need two SASS builds per overall build :/
+    @include meta.load-css("./_index-light-helper.css");
+}
+
+.set-theme.theme-dark {
+    color-scheme: dark light;
+
+    @include meta.load-css("./_index-dark-helper.css");
+}
+
+
+html.switching-theme {
+    * {
+        transition: all 2s !important;
+    }
+}

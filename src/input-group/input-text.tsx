@@ -204,7 +204,6 @@ export const Input = memo(forwardElementRef(function Input({ children, width, la
     let inputJsx = <UnlabelledInput placeholder={placeholder} {...useInputLabelInputProps(props as any) as any as UnlabelledInputTextProps} {...{ ref } as never} />;
 
     const isEmpty = true || (((props.value as number) !== 0 && props.value == ""));
-
     //if (isInInputGrid) {
     inputJsx = <div class={clsx(
         "form-control",

@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { FlippablePropInfo } from "menu/popper-api";
 import { ComponentChildren, createContext, h, Ref, VNode } from "preact";
 import { useMergedProps, useState, useTimeout } from "preact-prop-helpers";
 import { forwardRef, useContext, useEffect } from "preact/compat";
@@ -37,14 +38,16 @@ export function forwardElementRef<C extends (p: any, ref?: any) => (VNode<any> |
 }
 
 
-export type TransitionComponent<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element> = {
+export interface TransitionComponent<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element> {
     Transition: T;
-} & Omit<Parameters<T>[0], "show">;
+    TransitionProps: Omit<Parameters<T>[0], "show">;
+};
 
 
-export type OptionalTransitionComponent<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element> = {
+export interface OptionalTransitionComponent<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element> {
     Transition?: T;
-} & Omit<Parameters<T>[0], "show">;
+    TransitionProps?: Omit<Parameters<T>[0], "show">;
+};
 
 // Get all transform parameters with both a "block" version and an "inline" version
 type ExtractGenericParameter1<T> = T extends `${infer U}Block` ? U : never
@@ -58,8 +61,10 @@ type MakeDynamicTransitionProps<T> = {
 
 //type T8 = MakeDynamicTransitionProps<SlideZoomFadeProps<HTMLElement>>;
 
-export type FlippableTransitionComponent<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element> = OptionalTransitionComponent<T> & {
-    [K in Exclude<keyof Parameters<T>[0], "show"> as `${K & string}Dynamic`]?: number;
+export interface FlippableTransitionComponent<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element> extends OptionalTransitionComponent<T> {
+    //[K in Exclude<keyof Parameters<T>[0], "show"> as `${K & string}Dynamic`]?: number;
+    //flipTransformProps?: (unflippedProps: Omit<Parameters<T>[0], "show">) => Omit<Parameters<T>[0], "show">;
+    TransitionPropFlips?: FlippablePropInfo<T>[];
 };
 
 

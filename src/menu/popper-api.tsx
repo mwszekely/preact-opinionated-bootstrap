@@ -3,13 +3,14 @@ import { BasePlacement, createPopper, Instance, Modifier, Placement, Positioning
 import { h } from "preact";
 import { LogicalDirectionInfo, useActiveElement, useGlobalHandler, useLogicalDirection, useMergedProps, usePassiveState, useRefElement, useState, useTimeout } from "preact-prop-helpers";
 import { useCallback, useEffect, useMemo } from "preact/hooks";
+import { ZoomFade, Clip, ClipFade, Collapse, Zoom, SlideZoom, Fade, SlideFade, CollapseFade, SlideZoomFade, Flip, Slide } from "preact-transition";
 
 export function usePopperApi({ updating, align, side, useArrow, followMouse, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight }: UsePopperParameters) {
 
     const [popperInstance, setPopperInstance, getPopperInstance] = useState<Instance | null>(null);
-    const [usedPlacement, setUsedPlacement] = useState<BasePlacement | null>(null);
+    const [usedSide, setUsedSide] = useState<typeof side>(side);
     const [logicalDirection, setLogicalDirection] = useState<LogicalDirectionInfo | null>(null);
-    const { convertElementSize, getLogicalDirectionInfo, useLogicalDirectionProps } = useLogicalDirection<any>({ onLogicalDirectionChange: setLogicalDirection });
+    const { useLogicalDirectionProps, convertToLogicalSide, convertToPhysicalSide } = useLogicalDirection<any>({ onLogicalDirectionChange: setLogicalDirection });
     useEffect(() => { resetPopperInstance(getSourceElement() as any, getPopperElement() as any); }, [side, align, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight, logicalDirection])
 
     useArrow ??= false;
@@ -80,42 +81,42 @@ export function usePopperApi({ updating, align, side, useArrow, followMouse, ski
                     let mouseX = getMouseX();
                     let mouseY = getMouseY();
 
-                    
+
 
                     if (followMouse && getPositionPreference() == "mouse") {
 
-                            if (mouseX == null || mouseY == null) {
-                                switch (align) {
-                                    case "start":
-                                        mouseX = x;
-                                        mouseY = y;
-                                        break;
-                                    case "center":
-                                        mouseX = (x + (width / 2));
-                                        mouseY = (y + (height / 2));
-                                        break;
-                                    case "end":
-                                        mouseX = (x + width);
-                                        mouseY = (y + height);
-                                        break;
-                                }
+                        if (mouseX == null || mouseY == null) {
+                            switch (align) {
+                                case "start":
+                                    mouseX = x;
+                                    mouseY = y;
+                                    break;
+                                case "center":
+                                    mouseX = (x + (width / 2));
+                                    mouseY = (y + (height / 2));
+                                    break;
+                                case "end":
+                                    mouseX = (x + width);
+                                    mouseY = (y + height);
+                                    break;
                             }
+                        }
 
-                            if (side === "block-start" || side === "block-end") {
-                                width = 0;
-                                x = mouseX;
-                            }
-                            else if (side === "inline-start" || side === "inline-end") {
-                                height = 0;
-                                y = mouseY;
-                            }
+                        if (side === "block-start" || side === "block-end") {
+                            width = 0;
+                            x = mouseX;
+                        }
+                        else if (side === "inline-start" || side === "inline-end") {
+                            height = 0;
+                            y = mouseY;
+                        }
 
-                            // Clamp
-                            x = Math.max(baseRect?.x ?? 0, x);
-                            y = Math.max(baseRect?.y ?? 0, y);
+                        // Clamp
+                        x = Math.max(baseRect?.x ?? 0, x);
+                        y = Math.max(baseRect?.y ?? 0, y);
 
-                            x = Math.min((baseRect?.x ?? 0) + (baseRect?.width ?? 0), x);
-                            y = Math.min((baseRect?.y ?? 0) + (baseRect?.height ?? 0), y);
+                        x = Math.min((baseRect?.x ?? 0) + (baseRect?.width ?? 0), x);
+                        y = Math.min((baseRect?.y ?? 0) + (baseRect?.height ?? 0), y);
                     }
                     else {
                         if (align === "center" && focusedElement) {
@@ -200,7 +201,9 @@ export function usePopperApi({ updating, align, side, useArrow, followMouse, ski
                 if (usedPlacement.includes("-"))
                     usedPlacement = usedPlacement.substr(0, usedPlacement.indexOf("-")) as BasePlacement;
 
-                setUsedPlacement(usedPlacement as BasePlacement);
+
+
+                setUsedSide(convertToLogicalSide(usedPlacement as BasePlacement));
 
                 if (state.styles.reference)
                     setSourceStyle(state.styles.reference);
@@ -263,10 +266,137 @@ export function usePopperApi({ updating, align, side, useArrow, followMouse, ski
         return { usePopperArrowProps };
     }
 
-    return { usePopperSource, usePopperPopup, usePopperArrow, usedPlacement, logicalDirection };
+    const axis = (side.substring(0, side.indexOf('-')) as "inline" | "block")
+    const axisPosition = (side.substring(side.indexOf('-') + 1) as "start" | "end");
+
+    const usedAxis = (usedSide.substring(0, side.indexOf('-')) as "inline" | "block")
+    const usedAxisPosition = (usedSide.substring(side.indexOf('-') + 1) as "start" | "end");
+
+    let usedSideSwapsAxes = (usedAxis !== axis);
+    let usedSideFlipsAxis = (axisPosition !== usedAxisPosition);
+
+
+
+    /**
+     * Given a set of props to pass to a Transition component,
+     * and a list of prop names that should be adjusted when the Popper flips,
+     * swaps and flips the original prop names and their values around to match what the Popper is showing.
+     * 
+     * Not all props need flipping, some just need swapping
+     * (swapping is when an axis changes like "inline" to "block", flipping is when a position changes like "start" to "end").
+     * If a property just needs swapping, set `flipFunction` to null. Otherwise,
+     * it should be a function along the lines of `n => -n`, `n => 1-n`, etc.
+     * 
+     * 
+     * @param originalProps 
+     * @param affectedProps 
+     * @returns 
+     */
+    const flipTransformProps = <E extends ((...args: any[]) => h.JSX.Element)>(originalProps: Parameters<E>[0], affectedProps: FlippablePropInfo<E>[]): Parameters<E>[0] => {
+
+        type T = Parameters<E>[0];
+
+        const props = { ...originalProps } ;
+
+        for (const { inline, block, flipFunction } of affectedProps) {
+            if (flipFunction)
+                flip(props, inline, block, flipFunction);
+            swap(props, inline, block);
+        }
+
+        return props;
+
+
+
+        function flip(props: T, inlinePropName: keyof T, blockPropName: keyof T, flipFunction: (input: number) => number) {
+            if (usedSideFlipsAxis) {
+                if (axis === "inline") {
+                    if (props[inlinePropName] != null)
+                        (props[inlinePropName] as any as number) = flipFunction(props[inlinePropName] as any as number)
+                }
+                else {
+                    if (props[blockPropName] != null)
+                        (props[blockPropName] as any as number) = flipFunction(props[blockPropName] as any as number)
+                }
+            }
+        }
+
+        function swap(props: T, inlinePropName: keyof T, blockPropName: keyof T) {
+            if (usedSideSwapsAxes) {
+                const v1 = props[inlinePropName];
+                const v2 = props[blockPropName];
+                props[inlinePropName] = v2;
+                props[blockPropName] = v1;
+            }
+        };
+    };
+
+    return {
+        usePopperSource,
+        usePopperPopup,
+        usePopperArrow,
+        flipTransformProps,
+        usedSide,
+        usedAxis,
+        usedAxisPosition,
+        logicalDirection
+    };
 
 }
 
+export interface FlippablePropInfo<T extends <E extends any>(...props: any[]) => h.JSX.Element> { 
+
+    /** The name of the prop to use for inline values */
+    inline: keyof (Parameters<T>[0]);
+    /** The name of the prop to use for block values */
+    block: keyof (Parameters<T>[0]);
+
+    /** 
+     * When flipping along the same axis, how does the value change?
+     * 
+     * Generally `n => -n` or `n => 1-n`, but some props, like
+     * minimum value props, don't get flipped and would just
+     * pass `null` instead.
+     * 
+     */
+    flipFunction: null | ((input: number) => number);
+}
+
+
+
+export function getDefaultFlips<T extends <E extends any>(...props: any[]) => h.JSX.Element>(Transition: T): FlippablePropInfo<T>[] {
+    
+    const FlipAngle = { inline: "flipAngleInline", block: "flipAngleBlock", flipFunction: (n: number) => -n } as const;
+    const SlideTarget = { inline: "slideTargetInline", block: "slideTargetBlock", flipFunction: (n: number) => -n } as const;
+    const ClipOrigin = { inline: "clipOriginInline", block: "clipOriginBlock", flipFunction: (n: number) => 1 - n } as const;
+    const ClipMin = { inline: "clipMinInline", block: "clipMinBlock", flipFunction: null } as const;
+    const ZoomMin = { inline: "zoomMinInline", block: "zoomMinBlock", flipFunction: null } as const;
+    const ZoomOrigin = { inline: "zoomOriginInline", block: "zoomOriginBlock", flipFunction: (n: number) => 1 - n } as const;
+
+    switch (Transition) {
+        case Zoom:
+        case ZoomFade:
+            return [ZoomMin, ZoomOrigin] as FlippablePropInfo<any>[];
+
+        case Clip:
+        case ClipFade:
+            return [ClipMin, ClipOrigin] as FlippablePropInfo<any>[];
+
+        case Slide:
+        case SlideFade:
+            return [SlideTarget] as FlippablePropInfo<any>[];
+
+        case SlideZoom:
+        case SlideZoomFade:
+            return [SlideTarget, ZoomMin, ZoomOrigin] as FlippablePropInfo<any>[];
+        case Flip:
+            return [FlipAngle] as FlippablePropInfo<any>[];
+
+        default:
+            console.warn(`An unknown Transition was provided without also providing TransitionPropFlips, so this Popper component will not animate its transitions properly when flipped.`);
+            return [];
+    }
+}
 
 
 export interface UsePopperParameters {
@@ -301,7 +431,7 @@ export interface UsePopperParameters {
     paddingBottom?: number;
 }
 
-type T = HTMLDivElement["style"];
+//type T = HTMLDivElement["style"];
 
 
 function placementToLogical(logicalDirection: LogicalDirectionInfo, placement: BasePlacement) {

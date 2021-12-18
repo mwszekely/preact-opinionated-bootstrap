@@ -8,10 +8,10 @@
   "types": "index.d.ts",
   "scripts": {
     "build": "npx npm-run-all --npm-path npm -sc build:sass build:ts",
-    "watch": "npx npm-run-all --npm-path npm -pc watch:*",
-    "watch:sass": "sass --load-path=node_modules --watch ./src/index-light.scss:./index-light.css ./src/index-dark.scss:./index-dark.css",
     "watch:ts": "tsc --watch",
-    "build:sass": "sass --load-path=node_modules ./src/index-light.scss:./index-light.css ./src/index-dark.scss:./index-dark.css",
+    "build:sass:themes": "sass --load-path=node_modules ./src/index-light.scss:./index-light.css ./src/index-dark.scss:./index-dark.css",
+    "build:sass:index":  "sass --load-path=node_modules ./src/index-swap.scss:./index-swap.css ./src/index.scss:./index.css",
+    "build:sass": "npx npm-run-all --npm-path npm -sc build:sass:themes build:sass:index",
     "build:ts": "tsc --build",
     "test": "jest",
     "prepare": "npm run build || node ./true",
