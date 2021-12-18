@@ -1,11 +1,16 @@
 @use "sass:meta";
 
+/*
+  The largest possible "all default themes" file.
 
+  Generally, you'll want to just use, e.g., index-dark.scss once instead.
+
+*/
 @media not all and (prefers-color-scheme: light) {
-    @include meta.load-css("./_index-dark-helper.css");
+    @include meta.load-css("../index-dark.css");
 }
 @media all and (prefers-color-scheme: light) {
-    @include meta.load-css("./_index-light-helper.css");
+    @include meta.load-css("../index-light.css");
 }
 
 @include meta.load-css("./index-swap.scss");

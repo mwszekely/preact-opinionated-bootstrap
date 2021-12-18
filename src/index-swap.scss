@@ -1,18 +1,24 @@
 @use "sass:meta";
 
+// Using this file allows you to set specific themes in specific places.
+// Note that due to the janky way this needs to be set up
+// (loading CSS instead of SASS), if you want to customize any
+// SASS variables, you'll need to recreate this file in your
+// own project.  Just copy and paste it, then adjust the paths,
+// and use *.sass instead of *.css.
 
 .set-theme.theme-light {
     color-scheme: light dark;
 
     // TODO: This is probably really not a great way to do this
     // It means we need two SASS builds per overall build :/
-    @include meta.load-css("./_index-light-helper.css");
+    @include meta.load-css("../index-light.css");
 }
 
 .set-theme.theme-dark {
     color-scheme: dark light;
 
-    @include meta.load-css("./_index-dark-helper.css");
+    @include meta.load-css("../index-dark.css");
 }
 
 
