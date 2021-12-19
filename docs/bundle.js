@@ -11430,9 +11430,13 @@
 
 	  let {
 	    children,
+	    value,
 	    width,
+	    readOnly,
 	    labelPosition,
 	    placeholder,
+	    disabled,
+	    disabledVariant,
 	    size,
 	    ...props
 	  } = _ref2;
@@ -11466,29 +11470,39 @@
 	    }
 	  }
 
-	  const IC = props.disabled && props.disabledVariant === "text" ? InputGroupText : UnlabelledInput;
+	  const IC = disabled && disabledVariant === "text" ? InputGroupText : UnlabelledInput;
 	  const labelJsx = v$1("label", { ...useInputLabelLabelProps({
-	      class: clsx(props.disabledVariant !== "text" && props.disabled && "disabled", isInInputGroup ? "input-group-text" : labelPosition != "floating" ? "form-label" : "")
+	      class: clsx(disabledVariant !== "text" && disabled && "disabled", isInInputGroup ? "input-group-text" : labelPosition != "floating" ? "form-label" : "")
 	    })
 	  }, children);
-	  let inputJsx = v$1(IC, {
-	    placeholder: placeholder,
-	    ...useInputLabelInputProps(props),
+	  let inputJsx = v$1(IC, { ...useInputLabelInputProps(useMergedProps()({
+	      children: IC === InputGroupText ? value : undefined,
+	      value: IC === InputGroupText ? undefined : value,
+	      placeholder: IC === InputGroupText ? placeholder : undefined,
+	      readOnly: IC === InputGroupText ? undefined : readOnly,
+	      className: IC === InputGroupText ? "form-control" : undefined
+	    }, props)),
 	    ...{
 	      ref
 	    },
-	    children: IC == InputGroupText ? props.value : undefined
+	    ...{
+	      [IC == InputGroupText ? "children" : "value"]: value
+	    },
+	    children: IC == InputGroupText ? value : undefined
 	  });
 	  const isEmpty = true ; //if (isInInputGrid) {
 
-	  inputJsx = v$1("div", {
-	    class: clsx("form-control", "faux-form-control-outer", "elevation-depressed-2", "elevation-body-surface", "focusable-within", !isEmpty , props.disabled && props.disabledVariant !== "text" && "disabled", size != "md" && `form-control-${size}`),
-	    style: width !== null && width !== void 0 && width.endsWith("ch") ? {
-	      "--form-control-width": width !== null && width !== void 0 ? width : "20ch"
-	    } : width ? {
-	      width
-	    } : undefined
-	  }, inputJsx); // }
+	  if (!(disabled && disabledVariant === "text")) {
+	    inputJsx = v$1("div", {
+	      class: clsx("form-control", "faux-form-control-outer", "elevation-depressed-2", "elevation-body-surface", "focusable-within", !isEmpty , disabled && disabledVariant !== "text" && "disabled", size != "md" && `form-control-${size}`),
+	      style: width !== null && width !== void 0 && width.endsWith("ch") ? {
+	        "--form-control-width": width !== null && width !== void 0 ? width : "20ch"
+	      } : width ? {
+	        width
+	      } : undefined
+	    }, inputJsx);
+	  } // }
+
 
 	  const inputWithLabel = v$1(d$1, null, labelPosition === "start" && labelJsx, inputJsx, (labelPosition === "end" || labelPosition == "floating") && labelJsx);
 	  if (labelPosition !== "floating") return inputWithLabel;else return v$1("div", {

@@ -180,7 +180,7 @@ const UnlabelledInput = forwardElementRef(UnlabelledInputR);
 
 
 
-export const Input = memo(forwardElementRef(function Input({ children, width, labelPosition, placeholder, size, ...props }: InputProps, ref?: Ref<any>) {
+export const Input = memo(forwardElementRef(function Input({ children, value, width, readOnly, labelPosition, placeholder, disabled, disabledVariant, size, ...props }: InputProps, ref?: Ref<any>) {
     labelPosition ??= "start";
     size ??= "md";
 
@@ -203,24 +203,33 @@ export const Input = memo(forwardElementRef(function Input({ children, width, la
         }
     }
 
-    const IC = (props.disabled && props.disabledVariant === "text"? InputGroupText : UnlabelledInput);
+    const IC = (disabled && disabledVariant === "text" ? InputGroupText : UnlabelledInput);
 
-    const labelJsx = <label {...useInputLabelLabelProps({ class: clsx(props.disabledVariant !== "text" && props.disabled && "disabled", isInInputGroup ? "input-group-text" : labelPosition != "floating" ? "form-label" : "") })}>{children}</label>
-    let inputJsx = <IC placeholder={placeholder} {...useInputLabelInputProps(props as any) as any as UnlabelledInputTextProps} {...{ ref } as never} children={IC == InputGroupText? props.value : undefined} />;
+    const labelJsx = <label {...useInputLabelLabelProps({ class: clsx(disabledVariant !== "text" && disabled && "disabled", isInInputGroup ? "input-group-text" : labelPosition != "floating" ? "form-label" : "") })}>{children}</label>
+    let inputJsx = <IC
+        {...useInputLabelInputProps(useMergedProps<any>()({
+            children: IC === InputGroupText ? value : undefined,
+            value: IC === InputGroupText ? undefined : value,
+            placeholder: IC === InputGroupText ? placeholder : undefined,
+            readOnly: (IC === InputGroupText ? undefined : readOnly),
+            className: IC === InputGroupText? "form-control" : undefined,
+        }, props as any)) as any as UnlabelledInputTextProps} {...{ ref } as never} {...{ [IC == InputGroupText ? "children" : "value"]: value }} children={IC == InputGroupText ? value : undefined} />;
 
 
-    const isEmpty = true || (((props.value as number) !== 0 && props.value == ""));
+    const isEmpty = true || (((value as number) !== 0 && value == ""));
     //if (isInInputGrid) {
-    inputJsx = <div class={clsx(
-        "form-control",
-        "faux-form-control-outer",
-        "elevation-depressed-2",
-        "elevation-body-surface",
-        "focusable-within",
-        !isEmpty && "focus-within-only",
-        props.disabled && props.disabledVariant !== "text" && "disabled",
-        size != "md" && `form-control-${size}`,
-    )} style={width?.endsWith("ch") ? { "--form-control-width": (width ?? "20ch") } as any : width ? { width } : undefined}>{inputJsx}</div>
+    if (!(disabled && disabledVariant === "text")) {
+        inputJsx = <div class={clsx(
+            "form-control",
+            "faux-form-control-outer",
+            "elevation-depressed-2",
+            "elevation-body-surface",
+            "focusable-within",
+            !isEmpty && "focus-within-only",
+            disabled && disabledVariant !== "text" && "disabled",
+            size != "md" && `form-control-${size}`,
+        )} style={width?.endsWith("ch") ? { "--form-control-width": (width ?? "20ch") } as any : width ? { width } : undefined}>{inputJsx}</div>
+    }
     // }
 
     const inputWithLabel = (
