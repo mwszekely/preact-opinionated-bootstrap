@@ -11468,7 +11468,7 @@
 
 	  const IC = props.disabled && props.disabledVariant === "text" ? InputGroupText : UnlabelledInput;
 	  const labelJsx = v$1("label", { ...useInputLabelLabelProps({
-	      class: clsx(props.disabled && "disabled", isInInputGroup ? "input-group-text" : labelPosition != "floating" ? "form-label" : "")
+	      class: clsx(props.disabledVariant !== "text" && props.disabled && "disabled", isInInputGroup ? "input-group-text" : labelPosition != "floating" ? "form-label" : "")
 	    })
 	  }, children);
 	  let inputJsx = v$1(IC, {
@@ -11476,12 +11476,13 @@
 	    ...useInputLabelInputProps(props),
 	    ...{
 	      ref
-	    }
+	    },
+	    children: IC == InputGroupText ? props.value : undefined
 	  });
 	  const isEmpty = true ; //if (isInInputGrid) {
 
 	  inputJsx = v$1("div", {
-	    class: clsx("form-control", "faux-form-control-outer", "elevation-depressed-2", "elevation-body-surface", "focusable-within", !isEmpty , props.disabled && "disabled", size != "md" && `form-control-${size}`),
+	    class: clsx("form-control", "faux-form-control-outer", "elevation-depressed-2", "elevation-body-surface", "focusable-within", !isEmpty , props.disabled && props.disabledVariant !== "text" && "disabled", size != "md" && `form-control-${size}`),
 	    style: width !== null && width !== void 0 && width.endsWith("ch") ? {
 	      "--form-control-width": width !== null && width !== void 0 ? width : "20ch"
 	    } : width ? {

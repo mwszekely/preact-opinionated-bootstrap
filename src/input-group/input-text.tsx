@@ -205,8 +205,8 @@ export const Input = memo(forwardElementRef(function Input({ children, width, la
 
     const IC = (props.disabled && props.disabledVariant === "text"? InputGroupText : UnlabelledInput);
 
-    const labelJsx = <label {...useInputLabelLabelProps({ class: clsx(props.disabled && "disabled", isInInputGroup ? "input-group-text" : labelPosition != "floating" ? "form-label" : "") })}>{children}</label>
-    let inputJsx = <IC placeholder={placeholder} {...useInputLabelInputProps(props as any) as any as UnlabelledInputTextProps} {...{ ref } as never} />;
+    const labelJsx = <label {...useInputLabelLabelProps({ class: clsx(props.disabledVariant !== "text" && props.disabled && "disabled", isInInputGroup ? "input-group-text" : labelPosition != "floating" ? "form-label" : "") })}>{children}</label>
+    let inputJsx = <IC placeholder={placeholder} {...useInputLabelInputProps(props as any) as any as UnlabelledInputTextProps} {...{ ref } as never} children={IC == InputGroupText? props.value : undefined} />;
 
 
     const isEmpty = true || (((props.value as number) !== 0 && props.value == ""));
@@ -218,7 +218,7 @@ export const Input = memo(forwardElementRef(function Input({ children, width, la
         "elevation-body-surface",
         "focusable-within",
         !isEmpty && "focus-within-only",
-        props.disabled && "disabled",
+        props.disabled && props.disabledVariant !== "text" && "disabled",
         size != "md" && `form-control-${size}`,
     )} style={width?.endsWith("ch") ? { "--form-control-width": (width ?? "20ch") } as any : width ? { width } : undefined}>{inputJsx}</div>
     // }
