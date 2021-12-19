@@ -11243,13 +11243,18 @@
 	});
 
 	function UnlabelledInputR(_ref, ref) {
+	  var _disabledVariant;
+
 	  let {
 	    type,
 	    disabled,
 	    value,
 	    onValueChange: onInputAsync,
+	    disabledVariant,
+	    readOnly,
 	    ...props
 	  } = _ref;
+	  (_disabledVariant = disabledVariant) !== null && _disabledVariant !== void 0 ? _disabledVariant : disabledVariant = "soft";
 	  const [focusedInner, setFocusedInner, getFocusedInner] = useState(false);
 	  const {
 	    capture,
@@ -11407,7 +11412,8 @@
 	      "aria-disabled": disabled ? "true" : undefined,
 	      onKeyDown,
 	      ref,
-	      readOnly: disabled,
+	      readOnly: readOnly || disabled && disabledVariant === "soft",
+	      disabled: disabled && disabledVariant === "hard",
 	      onBlur,
 	      class: clsx("form-control", "faux-form-control-inner", disabled && "disabled", pending && "with-end-icon"),
 	      type,
@@ -11460,11 +11466,12 @@
 	    }
 	  }
 
+	  const IC = props.disabled && props.disabledVariant === "text" ? InputGroupText : UnlabelledInput;
 	  const labelJsx = v$1("label", { ...useInputLabelLabelProps({
 	      class: clsx(props.disabled && "disabled", isInInputGroup ? "input-group-text" : labelPosition != "floating" ? "form-label" : "")
 	    })
 	  }, children);
-	  let inputJsx = v$1(UnlabelledInput, {
+	  let inputJsx = v$1(IC, {
 	    placeholder: placeholder,
 	    ...useInputLabelInputProps(props),
 	    ...{

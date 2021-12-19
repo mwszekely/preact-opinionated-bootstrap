@@ -7,12 +7,14 @@ import { useContext } from "preact/hooks";
 import { forwardElementRef } from "../props";
 import { ProgressCircular } from "../progress";
 import { InInputGridContext, InInputGroupContext, InputProps, UnlabelledInputNumberProps, UnlabelledInputProps, UnlabelledInputTextProps, useInputCaptures } from "./props";
+import { InputGroupText } from "./grouping";
 
 
 function UnlabelledInputR(props: UnlabelledInputTextProps, ref?: Ref<any>): h.JSX.Element;
 function UnlabelledInputR(props: UnlabelledInputNumberProps, ref?: Ref<any>): h.JSX.Element;
 function UnlabelledInputR(props: UnlabelledInputProps, ref?: Ref<any>): h.JSX.Element;
-function UnlabelledInputR({ type, disabled, value, onValueChange: onInputAsync, ...props }: UnlabelledInputProps, ref?: Ref<any>): h.JSX.Element {
+function UnlabelledInputR({ type, disabled, value, onValueChange: onInputAsync, disabledVariant, readOnly, ...props }: UnlabelledInputProps, ref?: Ref<any>): h.JSX.Element {
+    disabledVariant ??= "soft";
 
     const [focusedInner, setFocusedInner, getFocusedInner] = useState(false);
     const { capture, uncapture } = useInputCaptures(type, (props as UnlabelledInputNumberProps).min, (props as UnlabelledInputNumberProps).max!);
@@ -161,11 +163,12 @@ function UnlabelledInputR({ type, disabled, value, onValueChange: onInputAsync, 
                 "aria-disabled": disabled ? "true" : undefined,
                 onKeyDown,
                 ref,
-                readOnly: disabled,
+                readOnly: readOnly || (disabled && disabledVariant === "soft"),
+                disabled: (disabled && disabledVariant === "hard"),
                 onBlur,
                 class: clsx("form-control", "faux-form-control-inner", disabled && "disabled", pending && "with-end-icon"),
                 type,
-                value: (pending || focusedInner) ? currentCapture : uncapture(value), 
+                value: (pending || focusedInner) ? currentCapture : uncapture(value),
                 onInput,
                 ...extraProps,
             })))} />
@@ -200,8 +203,11 @@ export const Input = memo(forwardElementRef(function Input({ children, width, la
         }
     }
 
+    const IC = (props.disabled && props.disabledVariant === "text"? InputGroupText : UnlabelledInput);
+
     const labelJsx = <label {...useInputLabelLabelProps({ class: clsx(props.disabled && "disabled", isInInputGroup ? "input-group-text" : labelPosition != "floating" ? "form-label" : "") })}>{children}</label>
-    let inputJsx = <UnlabelledInput placeholder={placeholder} {...useInputLabelInputProps(props as any) as any as UnlabelledInputTextProps} {...{ ref } as never} />;
+    let inputJsx = <IC placeholder={placeholder} {...useInputLabelInputProps(props as any) as any as UnlabelledInputTextProps} {...{ ref } as never} />;
+
 
     const isEmpty = true || (((props.value as number) !== 0 && props.value == ""));
     //if (isInInputGrid) {
