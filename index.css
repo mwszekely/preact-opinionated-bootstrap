@@ -12834,7 +12834,7 @@ label.input-group-text:not(.disabled) {
     grid-column: auto/span 1;
   }
 
-  .input-grid.input-grid-span-all > .form-control {
+  .input-grid > .input-grid-span-all > .form-control {
     grid-column: auto/span calc(var(--input-grid-columns, 1) * 2 - 1);
   }
 
@@ -29236,7 +29236,7 @@ label.input-group-text:not(.disabled) {
   }
 }
 @media all and (prefers-color-scheme: light) {
-  .input-grid.input-grid-span-all > .form-control {
+  .input-grid > .input-grid-span-all > .form-control {
     grid-column: auto/span calc(var(--input-grid-columns, 1) * 2 - 1);
   }
 }
@@ -44685,7 +44685,7 @@ body {
   grid-column: auto/span 1;
 }
 
-.set-theme.theme-light .input-grid.input-grid-span-all > .form-control {
+.set-theme.theme-light .input-grid > .input-grid-span-all > .form-control {
   grid-column: auto/span calc(var(--input-grid-columns, 1) * 2 - 1);
 }
 
@@ -59731,7 +59731,7 @@ body {
   grid-column: auto/span 1;
 }
 
-.set-theme.theme-dark .input-grid.input-grid-span-all > .form-control {
+.set-theme.theme-dark .input-grid > .input-grid-span-all > .form-control {
   grid-column: auto/span calc(var(--input-grid-columns, 1) * 2 - 1);
 }
 
