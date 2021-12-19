@@ -40,7 +40,7 @@ export interface TableFootProps extends OmitStrong<TableSectionProps<HTMLTableSe
 
 type T2 = number | string | Date | null | undefined | boolean;
 
-export interface TableRowProps extends OmitStrong<UseTableRowParameters, "hidden" | "location"> { variant?: TableCellVariant; children?: ComponentChildren; hidden?: boolean; ref?: Ref<HTMLTableRowElement> }
+export interface TableRowProps extends OmitStrong<UseTableRowParameters, "hidden" | "location">, Pick<h.JSX.HTMLAttributes<HTMLTableRowElement>, "class" | "className" | "style" | "id"> { variant?: TableCellVariant; children?: ComponentChildren; hidden?: boolean; ref?: Ref<HTMLTableRowElement> }
 
 interface TableCellSharedProps extends GlobalAttributes<HTMLTableCellElement> {
     focus?: "cell" | "child";
