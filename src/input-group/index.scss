@@ -154,7 +154,15 @@ label.input-group-text:not(.disabled) {
   & > [role="radiogroup"] {
     display: contents;
   }
-  
+
+  // For full-width rows, give the input the most space.
+  &>.input-grid-span-all>label {
+    grid-column: auto / span 1;
+  }
+  &.input-grid-span-all>.form-control {
+      grid-column: auto / span calc(var(--input-grid-columns, 1) * 2 - 1);
+  }
+
   &>.input-grid-span-2 > * {grid-column: auto / span 2;}
   &>.input-grid-span-3 > * {grid-column: auto / span 3;}
   &>.input-grid-span-4 > * {grid-column: auto / span 4;}

@@ -10335,6 +10335,12 @@
 .set-theme.theme-light .input-grid > [role=radiogroup] {
   display: contents;
 }
+.set-theme.theme-light .input-grid > .input-grid-span-all > label {
+  grid-column: auto/span 1;
+}
+.set-theme.theme-light .input-grid.input-grid-span-all > .form-control {
+  grid-column: auto/span calc(var(--input-grid-columns, 1) * 2 - 1);
+}
 .set-theme.theme-light .input-grid > .input-grid-span-2 > * {
   grid-column: auto/span 2;
 }
@@ -22465,6 +22471,12 @@
 }
 .set-theme.theme-dark .input-grid > [role=radiogroup] {
   display: contents;
+}
+.set-theme.theme-dark .input-grid > .input-grid-span-all > label {
+  grid-column: auto/span 1;
+}
+.set-theme.theme-dark .input-grid.input-grid-span-all > .form-control {
+  grid-column: auto/span calc(var(--input-grid-columns, 1) * 2 - 1);
 }
 .set-theme.theme-dark .input-grid > .input-grid-span-2 > * {
   grid-column: auto/span 2;
