@@ -12573,6 +12573,11 @@ button.dropdown-item:not(:active):not(.active):focus {
   color: inherit;
 }
 
+.tooltip-anchor.disabled, .tooltip-anchor:disabled {
+  pointer-events: auto;
+  cursor: help;
+}
+
 .tooltip {
   position: relative;
   --bs-body-bg: #000;

@@ -13355,6 +13355,11 @@ label.input-group-text:not(.disabled) {
     color: inherit;
   }
 
+  .tooltip-anchor.disabled, .tooltip-anchor:disabled {
+    pointer-events: auto;
+    cursor: help;
+  }
+
   .tooltip {
     position: relative;
     --bs-body-bg: white;
@@ -29837,6 +29842,12 @@ label.input-group-text:not(.disabled) {
   }
 }
 @media all and (prefers-color-scheme: light) {
+  .tooltip-anchor.disabled, .tooltip-anchor:disabled {
+    pointer-events: auto;
+    cursor: help;
+  }
+}
+@media all and (prefers-color-scheme: light) {
   .tooltip {
     position: relative;
     --bs-body-bg: #000;
@@ -45171,6 +45182,11 @@ body {
   color: inherit;
 }
 
+.set-theme.theme-light .tooltip-anchor.disabled, .set-theme.theme-light .tooltip-anchor:disabled {
+  pointer-events: auto;
+  cursor: help;
+}
+
 .set-theme.theme-light .tooltip {
   position: relative;
   --bs-body-bg: #000;
@@ -60202,6 +60218,11 @@ body {
 
 .set-theme.theme-dark .text-danger > .tooltip-inner {
   color: inherit;
+}
+
+.set-theme.theme-dark .tooltip-anchor.disabled, .set-theme.theme-dark .tooltip-anchor:disabled {
+  pointer-events: auto;
+  cursor: help;
 }
 
 .set-theme.theme-dark .tooltip {

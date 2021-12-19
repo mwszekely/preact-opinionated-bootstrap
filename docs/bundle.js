@@ -14157,7 +14157,8 @@
 	  let anchorProps = cloneable.props;
 	  anchorProps = useTooltipTriggerProps(useElementSizeProps(usePopperSourceProps(anchorProps)));
 	  anchorProps = useMergedProps()(anchorProps, {
-	    ref: cloneable.ref
+	    ref: cloneable.ref,
+	    class: "tooltip-anchor"
 	  });
 	  anchorProps = useMergedProps()(anchorProps, {
 	    ref

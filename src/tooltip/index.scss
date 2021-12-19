@@ -9,6 +9,14 @@
     color: inherit;
 }
 
+.tooltip-anchor {
+    &.disabled, &:disabled {
+        pointer-events: auto;
+        cursor: help;
+
+    }
+}
+
 .tooltip {
     position: relative;
 

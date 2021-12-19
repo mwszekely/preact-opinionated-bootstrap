@@ -72,7 +72,7 @@ export const Tooltip = memo(forwardElementRef(function Tooltip<T extends <E exte
 
     let anchorProps = cloneable.props as any;
     anchorProps = useTooltipTriggerProps(useElementSizeProps(usePopperSourceProps(anchorProps)));
-    anchorProps = useMergedProps<any>()(anchorProps, { ref: cloneable.ref! });
+    anchorProps = useMergedProps<any>()(anchorProps, { ref: cloneable.ref!, class: "tooltip-anchor" });
     anchorProps = useMergedProps<any>()(anchorProps, { ref });
     anchorProps = useMergedProps<any>()(anchorProps, restAnchorProps);
 

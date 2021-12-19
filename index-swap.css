@@ -10758,6 +10758,10 @@
 .set-theme.theme-light .text-danger > .tooltip-inner {
   color: inherit;
 }
+.set-theme.theme-light .tooltip-anchor.disabled, .set-theme.theme-light .tooltip-anchor:disabled {
+  pointer-events: auto;
+  cursor: help;
+}
 .set-theme.theme-light .tooltip {
   position: relative;
   --bs-body-bg: #000;
@@ -22884,6 +22888,10 @@
 }
 .set-theme.theme-dark .text-danger > .tooltip-inner {
   color: inherit;
+}
+.set-theme.theme-dark .tooltip-anchor.disabled, .set-theme.theme-dark .tooltip-anchor:disabled {
+  pointer-events: auto;
+  cursor: help;
 }
 .set-theme.theme-dark .tooltip {
   position: relative;
