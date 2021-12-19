@@ -1945,6 +1945,9 @@
 
 	  const needANewObserver = (element, observeBox) => {
 	    if (element) {
+	      const document = element.ownerDocument;
+	      const window = document.defaultView;
+
 	      const handleUpdate = () => {
 	        if (element.isConnected) {
 	          const {
@@ -1980,7 +1983,7 @@
 
 	      currentObserveBox.current = observeBox;
 
-	      if ("ResizeObserver" in window) {
+	      if (window && "ResizeObserver" in window) {
 	        const observer = new ResizeObserver(entries => {
 	          handleUpdate();
 	        });
@@ -3819,32 +3822,46 @@
 	  }, [target, type, stableHandler]);
 	}
 
-	const activeElementUpdaters = new Set();
-	const lastActiveElementUpdaters = new Set();
-	const windowFocusedUpdaters = new Set();
-	let windowFocused = true;
+	const activeElementUpdaters = new Map();
+	const lastActiveElementUpdaters = new Map();
+	const windowFocusedUpdaters = new Map();
+	let windowsFocused = new Map();
+
+	function forEachUpdater(window, map, value) {
+	  for (let [otherWindow, updaters] of map) {
+	    if (window === otherWindow) {
+	      for (let updater of updaters) {
+	        updater === null || updater === void 0 ? void 0 : updater(value);
+	      }
+	    }
+	  }
+	}
 
 	function focusout(e) {
+	  const window = e.target.ownerDocument.defaultView;
+
 	  if (e.relatedTarget == null) {
-	    for (let f of activeElementUpdaters) f === null || f === void 0 ? void 0 : f(null);
+	    forEachUpdater(window, activeElementUpdaters, null);
 	  }
 	}
 
 	function focusin(e) {
+	  const window = e.target.ownerDocument.defaultView;
 	  let currentlyFocusedElement = e.target;
-	  let lastFocusedElement = e.target;
-	  activeElementUpdaters.forEach(f => f === null || f === void 0 ? void 0 : f(currentlyFocusedElement));
-	  lastActiveElementUpdaters.forEach(f => f === null || f === void 0 ? void 0 : f(lastFocusedElement));
+	  forEachUpdater(window, activeElementUpdaters, currentlyFocusedElement);
+	  forEachUpdater(window, lastActiveElementUpdaters, currentlyFocusedElement);
 	}
 
-	function windowFocus() {
-	  windowFocused = true;
-	  windowFocusedUpdaters.forEach(f => f === null || f === void 0 ? void 0 : f(windowFocused));
+	function windowFocus(e) {
+	  const window = e.target instanceof Window ? e.target : e.currentTarget instanceof Window ? e.currentTarget : e.target.ownerDocument.defaultView;
+	  windowsFocused.set(window, true);
+	  forEachUpdater(window, windowFocusedUpdaters, true);
 	}
 
-	function windowBlur() {
-	  windowFocused = false;
-	  windowFocusedUpdaters.forEach(f => f === null || f === void 0 ? void 0 : f(windowFocused));
+	function windowBlur(e) {
+	  const window = e.target instanceof Window ? e.target : e.currentTarget instanceof Window ? e.currentTarget : e.target.ownerDocument.defaultView;
+	  windowsFocused.set(window, false);
+	  forEachUpdater(window, windowFocusedUpdaters, false);
 	}
 	/**
 	 * Allows you to inspect which element in the `document` currently has focus, which was most recently focused if none are currently, and whether or not the window has focus by returning the following functions:
@@ -3867,44 +3884,64 @@
 	    onLastActiveElementChange,
 	    onWindowFocusedChange
 	  } = _ref;
+	  const {
+	    getElement,
+	    useRefElementProps
+	  } = useRefElement({
+	    onElementChange: A$1(element => {
+	      if (element) {
+	        var _activeElementUpdater, _lastActiveElementUpd, _windowFocusedUpdater;
+
+	        const document = element.ownerDocument;
+	        const window = document === null || document === void 0 ? void 0 : document.defaultView;
+
+	        if (activeElementUpdaters.size === 0) {
+	          document === null || document === void 0 ? void 0 : document.addEventListener("focusin", focusin, {
+	            passive: true
+	          });
+	          document === null || document === void 0 ? void 0 : document.addEventListener("focusout", focusout, {
+	            passive: true
+	          });
+	          window === null || window === void 0 ? void 0 : window.addEventListener("focus", windowFocus, {
+	            passive: true
+	          });
+	          window === null || window === void 0 ? void 0 : window.addEventListener("blur", windowBlur, {
+	            passive: true
+	          });
+	        } // Add them even if they're undefined to more easily
+	        // manage the ">0 means don't add handlers" logic.
+
+
+	        const localActiveElementUpdaters = (_activeElementUpdater = activeElementUpdaters.get(window)) !== null && _activeElementUpdater !== void 0 ? _activeElementUpdater : new Set();
+	        const localLastActiveElementUpdaters = (_lastActiveElementUpd = lastActiveElementUpdaters.get(window)) !== null && _lastActiveElementUpd !== void 0 ? _lastActiveElementUpd : new Set();
+	        const localWindowFocusedUpdaters = (_windowFocusedUpdater = windowFocusedUpdaters.get(window)) !== null && _windowFocusedUpdater !== void 0 ? _windowFocusedUpdater : new Set();
+	        localActiveElementUpdaters.add(setActiveElement);
+	        localLastActiveElementUpdaters.add(setLastActiveElement);
+	        localWindowFocusedUpdaters.add(setWindowFocused);
+	        activeElementUpdaters.set(window, localActiveElementUpdaters);
+	        lastActiveElementUpdaters.set(window, localLastActiveElementUpdaters);
+	        windowFocusedUpdaters.set(window, localWindowFocusedUpdaters);
+	        return () => {
+	          activeElementUpdaters.get(window).delete(setActiveElement);
+	          lastActiveElementUpdaters.get(window).delete(setLastActiveElement);
+	          windowFocusedUpdaters.get(window).delete(setWindowFocused);
+
+	          if (activeElementUpdaters.size === 0) {
+	            document === null || document === void 0 ? void 0 : document.removeEventListener("focusin", focusin);
+	            document === null || document === void 0 ? void 0 : document.removeEventListener("focusout", focusout);
+	            window === null || window === void 0 ? void 0 : window.removeEventListener("focus", windowFocus);
+	            window === null || window === void 0 ? void 0 : window.removeEventListener("blur", windowBlur);
+	          }
+	        };
+	      }
+	    }, [])
+	  });
 	  const [getActiveElement, setActiveElement] = usePassiveState(onActiveElementChange, undefined);
 	  const [getLastActiveElement, setLastActiveElement] = usePassiveState(onLastActiveElementChange, undefined);
-	  const [getWindowFocused, setWindowFocused] = usePassiveState(onWindowFocusedChange, () => windowFocused);
-	  h(() => {
-	    if (activeElementUpdaters.size === 0) {
-	      document.addEventListener("focusin", focusin, {
-	        passive: true
-	      });
-	      document.addEventListener("focusout", focusout, {
-	        passive: true
-	      });
-	      window.addEventListener("focus", windowFocus, {
-	        passive: true
-	      });
-	      window.addEventListener("blur", windowBlur, {
-	        passive: true
-	      });
-	    } // Add them even if they're undefined to more easily
-	    // manage the ">0 means don't add handlers" logic.
-
-
-	    activeElementUpdaters.add(setActiveElement);
-	    lastActiveElementUpdaters.add(setLastActiveElement);
-	    windowFocusedUpdaters.add(setWindowFocused);
-	    return () => {
-	      activeElementUpdaters.delete(setActiveElement);
-	      lastActiveElementUpdaters.delete(setLastActiveElement);
-	      windowFocusedUpdaters.delete(setWindowFocused);
-
-	      if (activeElementUpdaters.size === 0) {
-	        document.removeEventListener("focusin", focusin);
-	        document.removeEventListener("focusout", focusout);
-	        window.removeEventListener("focus", windowFocus);
-	        window.removeEventListener("blur", windowBlur);
-	      }
-	    };
-	  }, []);
+	  const [getWindowFocused, setWindowFocused] = usePassiveState(onWindowFocusedChange, () => true);
 	  return {
+	    getElement,
+	    useActiveElementProps: useRefElementProps,
 	    getActiveElement,
 	    getLastActiveElement,
 	    getWindowFocused
@@ -3921,10 +3958,6 @@
 	    onActiveElementChange,
 	    onWindowFocusedChange
 	  } = _ref;
-	  const {
-	    getElement,
-	    useRefElementProps
-	  } = useRefElement({});
 	  const [getFocused, setFocused] = usePassiveState(onFocusedChanged, () => false);
 	  const [getFocusedInner, setFocusedInner] = usePassiveState(onFocusedInnerChanged, () => false);
 	  const [getLastFocused, setLastFocused] = usePassiveState(onLastFocusedChanged, () => false);
@@ -3932,7 +3965,9 @@
 	  const {
 	    getActiveElement,
 	    getLastActiveElement,
-	    getWindowFocused
+	    getWindowFocused,
+	    useActiveElementProps,
+	    getElement
 	  } = useActiveElement({
 	    onActiveElementChange: (activeElement, prevActiveElement) => {
 	      const selfElement = getElement();
@@ -3953,8 +3988,8 @@
 	    onWindowFocusedChange
 	  });
 	  const useHasFocusProps = A$1(props => {
-	    return useRefElementProps(props);
-	  }, [useRefElementProps]);
+	    return useActiveElementProps(props);
+	  }, [useActiveElementProps]);
 	  return {
 	    useHasFocusProps,
 	    getElement,
@@ -5780,7 +5815,8 @@
 	  const {
 	    getActiveElement,
 	    getLastActiveElement,
-	    getWindowFocused
+	    getWindowFocused,
+	    useActiveElementProps
 	  } = useActiveElement({}); // When the trap becomes active, before we let the blockingElements hook run,
 	  // keep track of whatever's currently focused and save it.
 
@@ -5788,8 +5824,10 @@
 	    if (trapActive && element) {
 	      var _getLastActiveElement;
 
-	      // Save the currently focused element
+	      const document = element.ownerDocument;
+	      document.defaultView; // Save the currently focused element
 	      // to whatever's currently at the top of the stack
+
 	      elementsToRestoreFocusTo.set(getTopElement(), (_getLastActiveElement = getLastActiveElement()) !== null && _getLastActiveElement !== void 0 ? _getLastActiveElement : document.body);
 	    }
 	  }, [trapActive, element]);
@@ -5836,7 +5874,7 @@
 	  const useFocusTrapProps = props => {
 	    return useMergedProps()({
 	      "aria-modal": trapActive ? "true" : undefined
-	    }, useRefElementProps(props));
+	    }, useRefElementProps(useActiveElementProps(props)));
 	  };
 
 	  return {
@@ -6703,15 +6741,21 @@
 	    onClose,
 	    getElements
 	  } = _ref;
+	  const stableOnClose = useStableCallback(onClose);
+	  const stableGetElements = useStableCallback(getElements);
+	  const getOpen = useStableGetter(open);
+	  const onBackdropClick = A$1(function onBackdropClick(e) {
+	    var _getElement;
 
-	  function onBackdropClick(e) {
-	    // Basically, "was this event fired on the root-most element, or at least an element not contained by the modal?"
+	    const document = (_getElement = getElement()) === null || _getElement === void 0 ? void 0 : _getElement.ownerDocument;
+	    document === null || document === void 0 ? void 0 : document.defaultView; // Basically, "was this event fired on the root-most element, or at least an element not contained by the modal?"
 	    // Either could be how the browser handles these sorts of "interacting with nothing" events.
-	    if (e.target == document.documentElement) {
-	      onClose("backdrop");
+
+	    if (e.target == (document === null || document === void 0 ? void 0 : document.documentElement)) {
+	      stableOnClose("backdrop");
 	    }
 
-	    let elements = getElements();
+	    let elements = stableGetElements();
 
 	    if (elements && e.target instanceof Element) {
 	      if (!Array.isArray(elements)) elements = [elements];
@@ -6726,11 +6770,13 @@
 
 	      if (!foundInsideClick) onClose("backdrop");
 	    }
-	  }
-
-	  useActiveElement({
+	  }, []);
+	  const {
+	    useActiveElementProps,
+	    getElement
+	  } = useActiveElement({
 	    onLastActiveElementChange: newElement => {
-	      let validFocusableElements = getElements();
+	      let validFocusableElements = stableGetElements();
 
 	      if (validFocusableElements) {
 	        if (!Array.isArray(validFocusableElements)) validFocusableElements = [validFocusableElements];
@@ -6742,23 +6788,49 @@
 
 	      onClose("lost-focus");
 	    }
-	  }); // Since everything else is inert, we listen for captured clicks on the window
-	  // (we don't use onClick since that doesn't fire when clicked on empty/inert areas)
-	  // Note: We need a *separate* touch event on mobile Safari, because
-	  // it doesn't let click events bubble or be captured from traditionally non-interactive elements,
-	  // but touch events work as expected.
+	  });
+	  const {
+	    useRefElementProps
+	  } = useRefElement({
+	    onElementChange: A$1(e => {
+	      const document = e === null || e === void 0 ? void 0 : e.ownerDocument;
+	      const window = document === null || document === void 0 ? void 0 : document.defaultView; // Since everything else is inert, we listen for captured clicks on the window
+	      // (we don't use onClick since that doesn't fire when clicked on empty/inert areas)
+	      // Note: We need a *separate* touch event on mobile Safari, because
+	      // it doesn't let click events bubble or be captured from traditionally non-interactive elements,
+	      // but touch events work as expected.
 
-	  useGlobalHandler(window, "mousedown", !open ? null : onBackdropClick, {
-	    capture: true
+	      const mouseDown = e => {
+	        if (getOpen()) onBackdropClick(e);
+	      };
+
+	      const touchStart = e => {
+	        if (getOpen()) onBackdropClick(e);
+	      };
+
+	      const keyDown = e => {
+	        if (e.key === "Escape") {
+	          stableOnClose("escape");
+	        }
+	      };
+
+	      window === null || window === void 0 ? void 0 : window.addEventListener("mousedown", mouseDown, {
+	        capture: true
+	      });
+	      window === null || window === void 0 ? void 0 : window.addEventListener("touchstart", touchStart, {
+	        capture: true
+	      });
+	      window === null || window === void 0 ? void 0 : window.addEventListener("keydown", keyDown);
+	      return () => {
+	        window === null || window === void 0 ? void 0 : window.removeEventListener("mousedown", mouseDown);
+	        window === null || window === void 0 ? void 0 : window.removeEventListener("touchstart", touchStart);
+	        window === null || window === void 0 ? void 0 : window.removeEventListener("keydown", keyDown);
+	      };
+	    }, [])
 	  });
-	  useGlobalHandler(window, "touchstart", !open ? null : onBackdropClick, {
-	    capture: true
-	  });
-	  useGlobalHandler(document, "keydown", e => {
-	    if (e.key === "Escape") {
-	      onClose("escape");
-	    }
-	  });
+	  return {
+	    useSoftDismissProps: A$1(props => useActiveElementProps(useRefElementProps(props)), [useActiveElementProps, useRefElementProps])
+	  };
 	}
 	/**
 	 * A generic modal hook, used by modal dialogs, but can also
@@ -7080,7 +7152,9 @@
 	  const stableOnSelect = useStableCallback(onSelect !== null && onSelect !== void 0 ? onSelect : () => {}); // Track whether the currently focused element is a child of the list box parent element.
 	  // When it's not, we reset the tabbable index back to the currently selected element.
 
-	  useActiveElement({
+	  const {
+	    useActiveElementProps
+	  } = useActiveElement({
 	    onActiveElementChange: activeElement => setAnyItemsFocused(!!(inputElement !== null && inputElement !== void 0 && inputElement.contains(activeElement)))
 	  });
 	  y(() => {
@@ -7184,7 +7258,7 @@
 
 	  function useListboxSingleProps(props) {
 	    props.role = "listbox";
-	    return useListNavigationProps(useGenericLabelInputProps(props));
+	    return useListNavigationProps(useGenericLabelInputProps(useActiveElementProps(props)));
 	  }
 	}
 
@@ -7246,7 +7320,9 @@
 	    getElement: getMenuElement,
 	    useRefElementProps: useMenuBaseRefElementProps
 	  } = useRefElement({});
-	  useSoftDismiss({
+	  const {
+	    useSoftDismissProps
+	  } = useSoftDismiss({
 	    onClose: stableOnClose,
 	    getElements: () => [getButtonElement(), getMenuElement()]
 	  });
@@ -7296,10 +7372,10 @@
 	      }
 	    }
 
-	    return useMenuBaseHasFocusProps(useMenuBaseRefElementProps(useMenuBaseIdProps(useMergedProps()({
+	    return useSoftDismissProps(useMenuBaseHasFocusProps(useMenuBaseRefElementProps(useMenuBaseIdProps(useMergedProps()({
 	      onKeyDown
-	    }, props))));
-	  }, [useMenuBaseHasFocusProps, useMenuBaseRefElementProps, useMenuBaseIdProps]);
+	    }, props)))));
+	  }, [useSoftDismissProps, useMenuBaseHasFocusProps, useMenuBaseRefElementProps, useMenuBaseIdProps]);
 	  const useMenuBaseButtonProps = A$1(props => {
 	    return useButtonRefElementProps(useButtonHasFocusProps(useMenuBaseIdReferencingProps("aria-controls")(props)));
 	  }, [useButtonHasFocusProps, useButtonRefElementProps, useMenuBaseIdReferencingProps]);
