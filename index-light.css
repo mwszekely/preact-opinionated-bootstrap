@@ -12110,6 +12110,7 @@ label.input-group-text:not(.disabled) {
   grid-column: auto/span 1;
 }
 .input-grid > .input-grid-span-all > .form-control {
+  width: 100%;
   grid-column: auto/span calc(var(--input-grid-columns, 1) * 2 - 1);
 }
 .input-grid > .input-grid-span-2 > * {

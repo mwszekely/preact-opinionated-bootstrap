@@ -11649,6 +11649,53 @@
 	  });
 	}));
 
+	const UseListboxMultiItemContext = D$1(null);
+	g(forwardElementRef(function ListItemMulti(props, ref) {
+	  useLogRender("ListMulti", `Rendering ListMultiItem #${props.index}`);
+	  const useListItemMulti = F(UseListboxMultiItemContext);
+	  const {
+	    index,
+	    selected,
+	    onSelect,
+	    ...domProps
+	  } = { ...props,
+	    ref
+	  };
+	  const [text, setText] = useState(null);
+	  const {
+	    useRefElementProps,
+	    getElement
+	  } = useRefElement({
+	    onElementChange: element => {
+	      var _element$innerText;
+
+	      return setText(((_element$innerText = element === null || element === void 0 ? void 0 : element.innerText) !== null && _element$innerText !== void 0 ? _element$innerText : "").trim());
+	    }
+	  });
+	  useMutationObserver(getElement, {
+	    subtree: true,
+	    onCharacterData: info => {
+	      var _getElement$innerText, _getElement;
+
+	      return setText(((_getElement$innerText = (_getElement = getElement()) === null || _getElement === void 0 ? void 0 : _getElement.innerText) !== null && _getElement$innerText !== void 0 ? _getElement$innerText : "").trim());
+	    }
+	  });
+	  const {
+	    tabbable,
+	    useListboxMultiItemProps
+	  } = useListItemMulti({
+	    index,
+	    text,
+	    tag: "li",
+	    selected,
+	    onSelect
+	  });
+	  return v$1("li", { ...usePseudoActive(useMergedProps()({
+	      class: clsx("list-group-item", "list-group-item-action", selected && "active")
+	    }, useListboxMultiItemProps(useRefElementProps(domProps))))
+	  });
+	}));
+
 	var _globalThis$process, _globalThis$process2, _globalThis$process2$, _globalThis$process$e, _globalThis$process$e2;
 
 	(_globalThis$process = globalThis.process) !== null && _globalThis$process !== void 0 ? _globalThis$process : globalThis.process = {};

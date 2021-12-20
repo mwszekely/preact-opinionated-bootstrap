@@ -7,7 +7,7 @@ export { Drawer, DrawerProps } from "./drawer";
 export { Figure, FigureProps } from "./figure";
 export { Checkbox, CheckboxGroup, CheckboxGroupChild, CheckboxGroupChildProps, CheckboxGroupParent, CheckboxGroupProps, CheckboxProps, Input, InputGrid, InputGridProps, InputGroup, InputGroupProps, InputGroupText, InputGroupTextProps, InputProps, Radio, RadioGroup, RadioGroupProps, RadioProps, Switch, SwitchProps } from "./input-group";
 export { GridResponsive, GridStatic } from "./layout";
-export { ListItemSingle, ListSingle } from "./list";
+export { ListItemSingle, ListSingle, ListItemMulti, ListMulti } from "./list";
 export { Menu, MenuItem } from "./menu";
 export { ProgressCircular, ProgressLinear } from "./progress";
 export { Table, TableBody, TableBodyProps, TableCell, TableCellProps, TableFootProps, TableHead, TableHeaderCell, TableHeaderCellProps, TableHeadProps, TableProps, TableRow, TableRowProps, TableSectionProps, TableBorderColor, TableCellVariant,TableFoot, TableRowVariant, TableVariant } from "./table";

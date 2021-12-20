@@ -102,6 +102,7 @@ export type LogRenderType =
     "Accordion" | "AccordionSection" |
     "ButtonGroup" | "ButtonGroupChild" |
     "ListSingle" | "ListItemSingle" |
+    "ListMulti" | "ListItemMulti" |
     "Table" | "TableHead" | "TableBody" | "TableFoot" | "TableRow" | "TableCell" | "TableHeadCell" |
     "Menu" | "MenuItem";
 
