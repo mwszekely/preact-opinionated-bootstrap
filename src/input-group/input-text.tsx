@@ -210,7 +210,7 @@ export const Input = memo(forwardElementRef(function Input({ children, value, wi
         {...useInputLabelInputProps(useMergedProps<any>()({
             children: IC === InputGroupText ? value : undefined,
             value: IC === InputGroupText ? undefined : value,
-            placeholder: IC === InputGroupText ? placeholder : undefined,
+            placeholder: IC === InputGroupText ? undefined : placeholder,
             readOnly: (IC === InputGroupText ? undefined : readOnly),
             className: IC === InputGroupText? "form-control" : undefined,
         }, props as any)) as any as UnlabelledInputTextProps} {...{ ref } as never} {...{ [IC == InputGroupText ? "children" : "value"]: value }} children={IC == InputGroupText ? value : undefined} />;

@@ -11478,7 +11478,7 @@
 	  let inputJsx = v$1(IC, { ...useInputLabelInputProps(useMergedProps()({
 	      children: IC === InputGroupText ? value : undefined,
 	      value: IC === InputGroupText ? undefined : value,
-	      placeholder: IC === InputGroupText ? placeholder : undefined,
+	      placeholder: IC === InputGroupText ? undefined : placeholder,
 	      readOnly: IC === InputGroupText ? undefined : readOnly,
 	      className: IC === InputGroupText ? "form-control" : undefined
 	    }, props)),
