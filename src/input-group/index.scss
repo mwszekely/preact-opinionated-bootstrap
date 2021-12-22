@@ -179,7 +179,7 @@ absolutely relative to the input, to be placed there *despite*
 input not allowing children, and the Bootstrap DOM generally not being
 designed to allow a "wrapper" that we can position: relative.
 */
-  & .input-group {
+  &>.input-group {
     & > *:nth-child(2n + 0) {
       justify-self: flex-start;
     }

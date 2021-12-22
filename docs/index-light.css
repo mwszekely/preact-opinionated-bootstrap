@@ -12319,31 +12319,31 @@ label.input-group-text:not(.disabled) {
 .input-grid > .input-grid-span-all > * {
   grid-column: auto/span var(--input-grid-columns, 1);
 }
-.input-grid .input-group {
+.input-grid > .input-group {
   display: contents;
 }
-.input-grid .input-group > *:nth-child(2n+0) {
+.input-grid > .input-group > *:nth-child(2n+0) {
   justify-self: flex-start;
 }
-.input-grid .input-group > *:nth-child(2n+1) {
+.input-grid > .input-group > *:nth-child(2n+1) {
   justify-self: flex-end;
 }
-.input-grid .input-group > input.form-control {
+.input-grid > .input-group > input.form-control {
   width: unset;
 }
-.input-grid .input-group .form-control.faux-form-control-outer {
+.input-grid > .input-group .form-control.faux-form-control-outer {
   justify-self: stretch;
   width: 100%;
 }
-.input-grid .input-group .form-control.faux-form-control-outer, .input-grid .input-group .input-group-text.faux-input-group-text {
+.input-grid > .input-group .form-control.faux-form-control-outer, .input-grid > .input-group .input-group-text.faux-input-group-text {
   position: relative;
   width: unset;
 }
-.input-grid .input-group .form-control.faux-form-control-outer > .form-control, .input-grid .input-group .form-control.faux-form-control-outer > .input-group-text, .input-grid .input-group .input-group-text.faux-input-group-text > .form-control, .input-grid .input-group .input-group-text.faux-input-group-text > .input-group-text {
+.input-grid > .input-group .form-control.faux-form-control-outer > .form-control, .input-grid > .input-group .form-control.faux-form-control-outer > .input-group-text, .input-grid > .input-group .input-group-text.faux-input-group-text > .form-control, .input-grid > .input-group .input-group-text.faux-input-group-text > .input-group-text {
   border: none;
   padding: 0;
 }
-.input-grid .input-group .form-control.faux-form-control-outer > .circular-progress-container, .input-grid .input-group .input-group-text.faux-input-group-text > .circular-progress-container {
+.input-grid > .input-group .form-control.faux-form-control-outer > .circular-progress-container, .input-grid > .input-group .input-group-text.faux-input-group-text > .circular-progress-container {
   position: absolute;
   left: 0;
   right: 0;
