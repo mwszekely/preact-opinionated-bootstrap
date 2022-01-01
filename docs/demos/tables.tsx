@@ -13,8 +13,8 @@ const RandomRow = memo(function RandomRow({ index, unsortedRowIndex, filterEvens
     console.log(`RandomRow ${index}, ${unsortedRowIndex}`)
     const i = index;
     const w = RandomWords[i];
-    const [n, setN] = useState((i + 0) ** 2);
-    const d = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + n * 7);
+    const [n, setN] = useState<number | null>((i + 0) ** 2);
+    const d = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + (n ?? 0) * 7);
     const [checked, setChecked] = useState(false);
 
 
@@ -25,7 +25,7 @@ const RandomRow = memo(function RandomRow({ index, unsortedRowIndex, filterEvens
 
 
     return (
-        <TableRow hidden={filterEvens && ((n & 1) == 0)} index={index}>
+        <TableRow hidden={filterEvens && (((n ?? 0) & 1) == 0)} index={index}>
             <TableCell index={0} value={n} colSpan={!w ? 2 : undefined}><Input type="number" width="4ch" value={n} onValueChange={setN} labelPosition="hidden" min={0}>Numeric input</Input></TableCell>
             {w && <TableCell index={1} value={w} />}
             <TableCell index={2} value={d}>{formatter.format(d)}</TableCell>
@@ -38,7 +38,7 @@ const RandomRow = memo(function RandomRow({ index, unsortedRowIndex, filterEvens
 
 
 export function DemoTable() {
-    const [rowCount, setRowCount] = useState(5);
+    const [rowCount, setRowCount] = useState<number | null>(5);
     const [filterEvens, setFilterEvens] = useState(false);
 
 
@@ -101,7 +101,7 @@ export function DemoTable() {
 
                         <TableBody {...{"data-test": filterEvens}}>
                             {Array.from(function* () {
-                                for (let i = 0; i < rowCount; ++i) {
+                                for (let i = 0; i < (rowCount ?? 0); ++i) {
                                     
                                     yield <RandomRow key={i} index={i} filterEvens={filterEvens} />
                                     /*<TableRow index={1 + i}>

@@ -11,7 +11,7 @@ export function DemoButtons() {
     const [buttonsColor, setButtonsColor] = useState<ButtonColorVariant>("primary");
     const [toggleOn, setToggleOn] = useState(false);
 
-    const [asyncTimeout, setAsyncTimeout] = useState(3000);
+    const [asyncTimeout, setAsyncTimeout] = useState<number | null>(3000);
     const [usesAsync, setUsesAsync] = useState(true);
     const [asyncFails, setAsyncFails] = useState(false);
     const [usesLinkButton, setUsesLinkButton] = useState(true);
@@ -19,7 +19,7 @@ export function DemoButtons() {
     const pushToast = usePushToast();
     const onPressSync = () => void (pushToast(<Toast>Button was clicked</Toast>));
     const onPressAsync = async () => {
-        await sleep(asyncTimeout);
+        await sleep(asyncTimeout ?? 0);
         if (asyncFails)
             throw new Error("Button operation failed.");
         else
@@ -28,7 +28,7 @@ export function DemoButtons() {
     const onPress = usesAsync ? onPressAsync : onPressSync;
 
     const onToggleInputAsync = async (b: boolean) => {
-        await sleep(asyncTimeout);
+        await sleep(asyncTimeout ?? 0);
         if (asyncFails)
             throw new Error("Button operation failed.");
         else

@@ -10718,14 +10718,22 @@
 
 	function useInputCaptures(type, min2, max2) {
 	  const capture = A$1(event => {
+	    let ret;
+
 	    switch (type) {
 	      case "text":
 	      case "numeric":
-	        return max$1(min$1(event.currentTarget.value, min2), max2);
+	        ret = max$1(min$1(event.currentTarget.value, min2), max2);
 
 	      case "number":
-	        return max$1(min$1(event.currentTarget.valueAsNumber, min2), max2);
+	        ret = max$1(min$1(event.currentTarget.valueAsNumber, min2), max2);
 	    }
+
+	    if (typeof ret === "number" && isNaN(ret)) {
+	      ret = null;
+	    }
+
+	    return ret;
 	  }, [type]);
 	  const uncapture = A$1(value => {
 	    switch (type) {
@@ -11285,30 +11293,7 @@
 
 	  const onInput = e => {
 	    const target = e.currentTarget;
-
-	    if (type == "number") {
-	      // When typing numbers, they'll "autocorrect" to their
-	      // most natural represented form when the input re-renders.
-	      //
-	      // This is a problem when typing, e.g., "-5", because
-	      // when the user is typing character-by-character, 
-	      // the closest number to "-" is "NaN", which makes it
-	      // impossible to enter "-5" with the "-" as the first character.
-	      //
-	      // To fix this, we don't do anything if we received an onInput
-	      // event but there's no valid numeric representation for
-	      // whatever was typed.  We just ignore it, and wait until
-	      // an actual number comes in.
-	      //
-	      // NOTE: When valueAsNumber is NaN, value is "".  That means
-	      // that it's *NOT* possible to store the partially typed
-	      // value anywhere -- it's completely hidden away.
-	      if (target !== null && target !== void 0 && target.value || (target === null || target === void 0 ? void 0 : target.valueAsNumber) === 0) {
-	        return onInputIfValid === null || onInputIfValid === void 0 ? void 0 : onInputIfValid.bind(target)(e);
-	      }
-	    } else {
-	      return onInputIfValid === null || onInputIfValid === void 0 ? void 0 : onInputIfValid.bind(target)(e);
-	    }
+	    return onInputIfValid === null || onInputIfValid === void 0 ? void 0 : onInputIfValid.bind(target)(e);
 	  }; // Until a better solution to "can't measure where the cursor is in input type=number" is found
 	  // use this to keep track of if the user is hammering left/right trying to escape the text field 
 	  // within a larger arrowkey-based navigation system. 
@@ -11401,14 +11386,48 @@
 
 	  if (type === "numeric") {
 	    type = "text";
-	  }
+	  } // When typing numbers, they'll "autocorrect" to their
+	  // most natural represented form when the input re-renders.
+	  //
+	  // This is a problem when typing, e.g., "-5", because
+	  // when the user is typing character-by-character, 
+	  // the closest number to "-" is "NaN", which makes it
+	  // impossible to enter "-5" with the "-" as the first character.
+	  //
+	  // To fix this, we render the <input> as completely uncontrolled,
+	  // and manually update the value during useEffect. If the value
+	  // is null, whether it's because of valid or invalid user input,
+	  // we'll just not update the value property on the element. We'll
+	  // just leave it as it was last entered. Any time the value
+	  // is NOT null, then we will take over again.
+	  //
+	  // TODO: Entering extremely large/small numbers is still rough.
+	  //
+	  // NOTE: When valueAsNumber is NaN, value is "".  That means
+	  // that it's *NOT* possible to store the partially typed
+	  // value anywhere -- it's completely hidden away.
 
+
+	  const v = pending || focusedInner ? currentCapture : uncapture(value);
+	  const {
+	    getElement,
+	    useRefElementProps
+	  } = useRefElement({});
+	  y(() => {
+	    const element = getElement();
+
+	    if (element) {
+	      if (v != null) {
+	        element.value = `${v}`;
+	      }
+	    }
+	  }, [v]);
 	  return v$1(ProgressCircular, {
 	    spinnerTimeout: 10,
 	    mode: currentType === "async" ? asyncState : null,
 	    childrenPosition: "after",
 	    colorVariant: "info"
-	  }, v$1("input", { ...useHasFocusProps(useMergedProps()(props, {
+	  }, v$1("input", { ...useRefElementProps(useHasFocusProps(useMergedProps()(props, {
 	      "aria-disabled": disabled ? "true" : undefined,
 	      onKeyDown,
 	      ref,
@@ -11417,10 +11436,9 @@
 	      onBlur,
 	      class: clsx("form-control", "faux-form-control-inner", disabled && "disabled", pending && "with-end-icon"),
 	      type,
-	      value: pending || focusedInner ? currentCapture : uncapture(value),
 	      onInput,
 	      ...extraProps
-	    }))
+	    })))
 	  }));
 	}
 
@@ -11477,7 +11495,7 @@
 	  }, children);
 	  let inputJsx = v$1(IC, { ...useInputLabelInputProps(useMergedProps()({
 	      children: IC === InputGroupText ? value : undefined,
-	      value: IC === InputGroupText ? undefined : value,
+	      value: IC === InputGroupText ? undefined : value !== null && value !== void 0 ? value : undefined,
 	      placeholder: IC === InputGroupText ? undefined : placeholder,
 	      readOnly: IC === InputGroupText ? undefined : readOnly,
 	      className: IC === InputGroupText ? "form-control" : undefined
@@ -14935,7 +14953,7 @@
 	    const pushToast = usePushToast();
 	    const onPressSync = () => void (pushToast(v$1(Toast, null, "Button was clicked")));
 	    const onPressAsync = async () => {
-	        await sleep$5(asyncTimeout);
+	        await sleep$5(asyncTimeout ?? 0);
 	        if (asyncFails)
 	            throw new Error("Button operation failed.");
 	        else
@@ -14943,7 +14961,7 @@
 	    };
 	    const onPress = usesAsync ? onPressAsync : onPressSync;
 	    const onToggleInputAsync = async (b) => {
-	        await sleep$5(asyncTimeout);
+	        await sleep$5(asyncTimeout ?? 0);
 	        if (asyncFails)
 	            throw new Error("Button operation failed.");
 	        else
@@ -15102,13 +15120,13 @@
 	    const [disabled, setDisabled] = useState(false);
 	    const [labelPosition, setLabelPosition] = useState("end");
 	    const asyncCheckboxInput = A$1(async (checked) => {
-	        await sleep$4(asyncTimeout);
+	        await sleep$4(asyncTimeout ?? 0);
 	        if (asyncFails)
 	            throw new Error("Attempt to change checkbox & radio failed");
 	        setDemoChecked(checked);
 	    }, [asyncTimeout, asyncFails]);
 	    const asyncRadioInput = A$1(async (value) => {
-	        await sleep$4(asyncTimeout);
+	        await sleep$4(asyncTimeout ?? 0);
 	        if (asyncFails)
 	            throw new Error("Attempt to change radio failed");
 	        setDemoRadio(value);
@@ -15181,7 +15199,7 @@
 	            v$1(CardElement, { type: "subtitle", tag: "h3" }, "Radio group"),
 	            v$1(CardElement, null,
 	                v$1(RadioGroup, { name: "radio-demo-0", selectedValue: demoRadio, onValueChange: usesAsync ? asyncRadioInput : setDemoRadio }, Array.from(function* () {
-	                    for (let i = 0; i < radioCount; ++i) {
+	                    for (let i = 0; i < (radioCount ?? 0); ++i) {
 	                        yield v$1(Radio, { disabled: disabled, labelPosition: labelPosition, index: i, value: i, key: i },
 	                            "Radio #",
 	                            i + 1);
@@ -15232,7 +15250,7 @@
 	                    v$1(Checkbox, { disabled: disabled, checked: demoChecked, labelPosition: labelPosition, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Checkbox"),
 	                    v$1(Switch, { disabled: disabled, checked: demoChecked, labelPosition: labelPosition, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Switch"),
 	                    v$1(RadioGroup, { name: "radio-demo-1a", selectedValue: demoRadio, onValueChange: usesAsync ? asyncRadioInput : setDemoRadio }, Array.from(function* () {
-	                        for (let i = 0; i < radioCount; ++i) {
+	                        for (let i = 0; i < (radioCount ?? 0); ++i) {
 	                            yield v$1(Radio, { disabled: disabled, labelPosition: labelPosition, index: i, value: i, key: i },
 	                                "Radio #",
 	                                i + 1);
@@ -15245,7 +15263,7 @@
 	                        v$1(InputGroup, null,
 	                            v$1(Switch, { disabled: disabled, checked: demoChecked, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Switch")),
 	                        v$1(RadioGroup, { name: "radio-demo-1b", selectedValue: demoRadio, onValueChange: usesAsync ? asyncRadioInput : setDemoRadio }, Array.from(function* () {
-	                            for (let i = 0; i < radioCount; ++i) {
+	                            for (let i = 0; i < (radioCount ?? 0); ++i) {
 	                                yield v$1(InputGroup, null,
 	                                    v$1(Radio, { disabled: disabled, labelPosition: labelPosition, index: i, value: i, key: i },
 	                                        "Radio #",
@@ -15274,13 +15292,13 @@
 	    const [number, setNumber] = useState(0);
 	    const [size, setSize] = useState("md");
 	    const asyncTextInput = A$1(async (text) => {
-	        await sleep$3(asyncTimeout);
+	        await sleep$3(asyncTimeout ?? 0);
 	        if (asyncFails)
 	            throw new Error("Attempt to change text failed");
 	        setText(text);
 	    }, [asyncTimeout, asyncFails]);
 	    const asyncNumberInput = A$1(async (value) => {
-	        await sleep$3(asyncTimeout);
+	        await sleep$3(asyncTimeout ?? 0);
 	        if (asyncFails)
 	            throw new Error("Attempt to change number failed");
 	        setNumber(value);
@@ -15728,13 +15746,13 @@
 	    const i = index;
 	    const w = RandomWords$1[i];
 	    const [n, setN] = useState((i + 0) ** 2);
-	    const d = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + n * 7);
+	    const d = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + (n ?? 0) * 7);
 	    const [checked, setChecked] = useState(false);
 	    const onInput = A$1(async (checked) => {
 	        await sleep$2(2000);
 	        setChecked(checked);
 	    }, []);
-	    return (v$1(TableRow, { hidden: filterEvens && ((n & 1) == 0), index: index },
+	    return (v$1(TableRow, { hidden: filterEvens && (((n ?? 0) & 1) == 0), index: index },
 	        v$1(TableCell, { index: 0, value: n, colSpan: !w ? 2 : undefined },
 	            v$1(Input, { type: "number", width: "4ch", value: n, onValueChange: setN, labelPosition: "hidden", min: 0 }, "Numeric input")),
 	        w && v$1(TableCell, { index: 1, value: w }),
@@ -15830,7 +15848,7 @@
 	                            v$1(TableHeaderCell, { index: 2 }, "Date"),
 	                            v$1(TableHeaderCell, { index: 3 }, "Checkbox"))),
 	                    v$1(TableBody, { ...{ "data-test": filterEvens } }, Array.from(function* () {
-	                        for (let i = 0; i < rowCount; ++i) {
+	                        for (let i = 0; i < (rowCount ?? 0); ++i) {
 	                            yield v$1(RandomRow, { key: i, index: i, filterEvens: filterEvens });
 	                            /*<TableRow index={1 + i}>
 	                            <TableCell index={0} value={i} />

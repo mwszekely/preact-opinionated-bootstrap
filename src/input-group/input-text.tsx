@@ -1,9 +1,9 @@
 import clsx from "clsx";
 import { Fragment, h, Ref } from "preact";
 import { useInputLabel } from "preact-aria-widgets";
-import { storeToLocalStorage, useAsyncHandler, useHasFocus, useMergedProps, usePassiveState, useState } from "preact-prop-helpers";
+import { storeToLocalStorage, useAsyncHandler, useHasFocus, useMergedProps, usePassiveState, useRefElement, useState } from "preact-prop-helpers";
 import { memo } from "preact/compat";
-import { useContext } from "preact/hooks";
+import { useContext, useEffect } from "preact/hooks";
 import { forwardElementRef } from "../props";
 import { ProgressCircular } from "../progress";
 import { InInputGridContext, InInputGroupContext, InputProps, UnlabelledInputNumberProps, UnlabelledInputProps, UnlabelledInputTextProps, useInputCaptures } from "./props";
@@ -29,31 +29,7 @@ function UnlabelledInputR({ type, disabled, value, onValueChange: onInputAsync, 
     const onInputIfValid = getSyncHandler(disabled ? null : onInputAsync as any);
     const onInput = (e: h.JSX.TargetedEvent<HTMLInputElement>) => {
         const target = (e.currentTarget as HTMLInputElement | undefined);
-        if (type == "number") {
-
-            // When typing numbers, they'll "autocorrect" to their
-            // most natural represented form when the input re-renders.
-            //
-            // This is a problem when typing, e.g., "-5", because
-            // when the user is typing character-by-character, 
-            // the closest number to "-" is "NaN", which makes it
-            // impossible to enter "-5" with the "-" as the first character.
-            //
-            // To fix this, we don't do anything if we received an onInput
-            // event but there's no valid numeric representation for
-            // whatever was typed.  We just ignore it, and wait until
-            // an actual number comes in.
-            //
-            // NOTE: When valueAsNumber is NaN, value is "".  That means
-            // that it's *NOT* possible to store the partially typed
-            // value anywhere -- it's completely hidden away.
-            if (target?.value || target?.valueAsNumber === 0) {
-                return onInputIfValid?.bind(target as never)(e);
-            }
-        }
-        else {
-            return onInputIfValid?.bind(target as never)(e);
-        }
+        return onInputIfValid?.bind(target as never)(e);
 
     }
 
@@ -157,9 +133,41 @@ function UnlabelledInputR({ type, disabled, value, onValueChange: onInputAsync, 
         type = "text";
     }
 
+
+    // When typing numbers, they'll "autocorrect" to their
+    // most natural represented form when the input re-renders.
+    //
+    // This is a problem when typing, e.g., "-5", because
+    // when the user is typing character-by-character, 
+    // the closest number to "-" is "NaN", which makes it
+    // impossible to enter "-5" with the "-" as the first character.
+    //
+    // To fix this, we render the <input> as completely uncontrolled,
+    // and manually update the value during useEffect. If the value
+    // is null, whether it's because of valid or invalid user input,
+    // we'll just not update the value property on the element. We'll
+    // just leave it as it was last entered. Any time the value
+    // is NOT null, then we will take over again.
+    //
+    // TODO: Entering extremely large/small numbers is still rough.
+    //
+    // NOTE: When valueAsNumber is NaN, value is "".  That means
+    // that it's *NOT* possible to store the partially typed
+    // value anywhere -- it's completely hidden away.
+    const v = ((pending || focusedInner) ? currentCapture : uncapture(value));
+    const { getElement, useRefElementProps } = useRefElement<HTMLInputElement>({});
+    useEffect(() => {
+        const element = getElement();
+        if (element) {
+            if (v != null) {
+                element.value = `${v}`;
+            }
+        }
+    }, [v]);
+
     return (
         <ProgressCircular spinnerTimeout={10} mode={currentType === "async" ? asyncState : null} childrenPosition="after" colorVariant="info">
-            <input {...(useHasFocusProps(useMergedProps<HTMLInputElement>()(props, {
+            <input {...useRefElementProps(useHasFocusProps(useMergedProps<HTMLInputElement>()(props, {
                 "aria-disabled": disabled ? "true" : undefined,
                 onKeyDown,
                 ref,
@@ -168,7 +176,6 @@ function UnlabelledInputR({ type, disabled, value, onValueChange: onInputAsync, 
                 onBlur,
                 class: clsx("form-control", "faux-form-control-inner", disabled && "disabled", pending && "with-end-icon"),
                 type,
-                value: (pending || focusedInner) ? currentCapture : uncapture(value),
                 onInput,
                 ...extraProps,
             })))} />
@@ -209,10 +216,10 @@ export const Input = memo(forwardElementRef(function Input({ children, value, wi
     let inputJsx = <IC
         {...useInputLabelInputProps(useMergedProps<any>()({
             children: IC === InputGroupText ? value : undefined,
-            value: IC === InputGroupText ? undefined : value,
+            value: IC === InputGroupText ? undefined : (value ?? undefined),
             placeholder: IC === InputGroupText ? undefined : placeholder,
             readOnly: (IC === InputGroupText ? undefined : readOnly),
-            className: IC === InputGroupText? "form-control" : undefined,
+            className: IC === InputGroupText ? "form-control" : undefined,
         }, props as any)) as any as UnlabelledInputTextProps} {...{ ref } as never} {...{ [IC == InputGroupText ? "children" : "value"]: value }} children={IC == InputGroupText ? value : undefined} />;
 
 

@@ -10,26 +10,26 @@ type LabelPosition = NonNullable<CheckboxProps["labelPosition"]>;
 export function DemoChecks() {
     const [asyncFails, setAsyncFails] = useState(false);
 
-    const [asyncTimeout, setAsyncTimeout] = useState(3000);
+    const [asyncTimeout, setAsyncTimeout] = useState<number | null>(3000);
     const [usesAsync, setUsesAsync] = useState(true);
 
     const [demoChecked, setDemoChecked] = useState(false);
     const [demoRadio, setDemoRadio] = useState(0);
-    const [radioCount, setRadioCount] = useState(3);
+    const [radioCount, setRadioCount] = useState<number | null>(3);
 
     const [disabled, setDisabled] = useState(false);
 
     const [labelPosition, setLabelPosition] = useState<LabelPosition>("end");
 
     const asyncCheckboxInput = useCallback(async (checked: boolean) => {
-        await sleep(asyncTimeout);
+        await sleep(asyncTimeout ?? 0);
         if (asyncFails)
             throw new Error("Attempt to change checkbox & radio failed");
         setDemoChecked(checked);
     }, [asyncTimeout, asyncFails]);
 
     const asyncRadioInput = useCallback(async (value: number) => {
-        await sleep(asyncTimeout);
+        await sleep(asyncTimeout ?? 0);
         if (asyncFails)
             throw new Error("Attempt to change radio failed");
         setDemoRadio(value);
@@ -76,7 +76,7 @@ export function DemoChecks() {
                 <CardElement>
                     <RadioGroup<number> name="radio-demo-0" selectedValue={demoRadio} onValueChange={usesAsync ? asyncRadioInput : setDemoRadio}>
                         {Array.from(function* () {
-                            for (let i = 0; i < radioCount; ++i) {
+                            for (let i = 0; i < (radioCount ?? 0); ++i) {
                                 yield <Radio disabled={disabled} labelPosition={labelPosition} index={i} value={i} key={i}>Radio #{i + 1}</Radio>
                             }
                         }())}
@@ -106,7 +106,7 @@ export function DemoChecks() {
                         <Switch disabled={disabled} checked={demoChecked} labelPosition={labelPosition} onCheck={usesAsync ? asyncCheckboxInput : setDemoChecked}>Switch</Switch>
                         <RadioGroup<number> name="radio-demo-1a" selectedValue={demoRadio} onValueChange={usesAsync ? asyncRadioInput : setDemoRadio}>
                             {Array.from(function* () {
-                                for (let i = 0; i < radioCount; ++i) {
+                                for (let i = 0; i < (radioCount ?? 0); ++i) {
                                     yield <Radio disabled={disabled} labelPosition={labelPosition} index={i} value={i} key={i}>Radio #{i + 1}</Radio>
                                 }
                             }())}
@@ -119,7 +119,7 @@ export function DemoChecks() {
 
                             <RadioGroup<number> name="radio-demo-1b" selectedValue={demoRadio} onValueChange={usesAsync ? asyncRadioInput : setDemoRadio}>
                                 {Array.from(function* () {
-                                    for (let i = 0; i < radioCount; ++i) {
+                                    for (let i = 0; i < (radioCount ?? 0); ++i) {
                                         yield <InputGroup><Radio disabled={disabled} labelPosition={labelPosition} index={i} value={i} key={i}>Radio #{i + 1}</Radio></InputGroup>
                                     }
                                 }())}

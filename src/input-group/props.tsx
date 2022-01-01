@@ -17,7 +17,7 @@ export const UseCheckboxGroupChildContext = createContext<UseCheckboxGroupChild<
 
 export interface UnlabelledInputTextProps extends BaseUnlabelledInputProps<string> { type: "text"; maxLength?: number; }
 export interface UnlabelledInputNumericProps extends BaseUnlabelledInputProps<string> { type: "numeric"; maxLength?: number; }
-export interface UnlabelledInputNumberProps extends BaseUnlabelledInputProps<number> { type: "number"; min?: number; max?: number; step?: number; }
+export interface UnlabelledInputNumberProps extends BaseUnlabelledInputProps<number | null> { type: "number"; min?: number; max?: number; step?: number; }
 export type UnlabelledInputProps = UnlabelledInputTextProps | UnlabelledInputNumberProps | UnlabelledInputNumericProps;
 
 export type InputProps = UnlabelledInputProps & {
@@ -58,15 +58,20 @@ export function useInputCaptures<T>(type: "text" | "number", min2: T, max2: T)*/
 export function useInputCaptures<T>(type: "text" | "number" | "numeric", min2?: T, max2?: T) {
 
     const capture = useCallback((event: h.JSX.TargetedEvent<HTMLInputElement>): T => {
+        let ret: T;
         switch (type) {
             case "text":
             case "numeric":
-                return max(min(event.currentTarget.value, min2 as any), max2 as any) as T;
+                ret = max(min(event.currentTarget.value, min2 as any), max2 as any) as T;
 
             case "number":
-                return max(min(event.currentTarget.valueAsNumber, min2 as any), max2 as any) as T;
+                ret = max(min(event.currentTarget.valueAsNumber, min2 as any), max2 as any) as T;
 
         }
+        if (typeof ret === "number" && isNaN(ret)) {
+            ret = null!;
+        }
+        return ret;
     }, [type]);
 
     const uncapture = useCallback((value: InputProps["value"]): string => {

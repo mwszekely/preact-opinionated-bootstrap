@@ -8,22 +8,22 @@ import { Checkbox, Input, InputGroup, InputGrid } from "../../input-group";
 export function DemoInputs() {
     const [asyncFails, setAsyncFails] = useState(false);
 
-    const [asyncTimeout, setAsyncTimeout] = useState(3000);
+    const [asyncTimeout, setAsyncTimeout] = useState<number | null>(3000);
     const [usesAsync, setUsesAsync] = useState(true);
 
     const [text, setText] = useState("");
-    const [number, setNumber] = useState(0);
+    const [number, setNumber] = useState<number | null>(0);
     const [size, setSize] = useState<"sm" | "md" | "lg">("md");
 
     const asyncTextInput = useCallback(async (text: string) => {
-        await sleep(asyncTimeout);
+        await sleep(asyncTimeout??0);
         if (asyncFails)
             throw new Error("Attempt to change text failed");
         setText(text);
     }, [asyncTimeout, asyncFails]);
 
-    const asyncNumberInput = useCallback(async (value: number) => {
-        await sleep(asyncTimeout);
+    const asyncNumberInput = useCallback(async (value: number | null) => {
+        await sleep(asyncTimeout??0);
         if (asyncFails)
             throw new Error("Attempt to change number failed");
         setNumber(value);
