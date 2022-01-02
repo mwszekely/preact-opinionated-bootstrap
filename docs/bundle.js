@@ -10724,9 +10724,11 @@
 	      case "text":
 	      case "numeric":
 	        ret = max$1(min$1(event.currentTarget.value, min2), max2);
+	        break;
 
 	      case "number":
 	        ret = max$1(min$1(event.currentTarget.valueAsNumber, min2), max2);
+	        break;
 	    }
 
 	    if (typeof ret === "number" && isNaN(ret)) {
@@ -11250,7 +11252,7 @@
 	  }, children);
 	});
 
-	function UnlabelledInputR(_ref, ref) {
+	function UnlabelledInputR(p, ref) {
 	  var _disabledVariant;
 
 	  let {
@@ -11260,8 +11262,13 @@
 	    onValueChange: onInputAsync,
 	    disabledVariant,
 	    readOnly,
-	    ...props
-	  } = _ref;
+	    ...p2
+	  } = p;
+	  let {
+	    nullable,
+	    ...p3
+	  } = p2;
+	  const props = p3;
 	  (_disabledVariant = disabledVariant) !== null && _disabledVariant !== void 0 ? _disabledVariant : disabledVariant = "soft";
 	  const [focusedInner, setFocusedInner, getFocusedInner] = useState(false);
 	  const {
@@ -11286,7 +11293,15 @@
 	    currentType,
 	    ...asyncInfo
 	  } = useAsyncHandler()({
-	    capture,
+	    capture: useStableCallback(e => {
+	      const ret = capture(e);
+
+	      if (ret == null) {
+	        if (nullable) return ret;else return value;
+	      } else {
+	        return ret;
+	      }
+	    }),
 	    debounce: type === "text" ? 1500 : undefined
 	  });
 	  const onInputIfValid = getSyncHandler(disabled ? null : onInputAsync);
@@ -11443,7 +11458,7 @@
 	}
 
 	const UnlabelledInput = forwardElementRef(UnlabelledInputR);
-	const Input = g(forwardElementRef(function Input(_ref2, ref) {
+	const Input = g(forwardElementRef(function Input(_ref, ref) {
 	  var _labelPosition, _size;
 
 	  let {
@@ -11456,8 +11471,10 @@
 	    disabled,
 	    disabledVariant,
 	    size,
+	    className,
+	    class: classs,
 	    ...props
-	  } = _ref2;
+	  } = _ref;
 	  (_labelPosition = labelPosition) !== null && _labelPosition !== void 0 ? _labelPosition : labelPosition = "start";
 	  (_size = size) !== null && _size !== void 0 ? _size : size = "md";
 	  const {
@@ -11498,7 +11515,7 @@
 	      value: IC === InputGroupText ? undefined : value !== null && value !== void 0 ? value : undefined,
 	      placeholder: IC === InputGroupText ? undefined : placeholder,
 	      readOnly: IC === InputGroupText ? undefined : readOnly,
-	      className: IC === InputGroupText ? "form-control" : undefined
+	      className: clsx(IC === InputGroupText ? "form-control" : undefined)
 	    }, props)),
 	    ...{
 	      ref
@@ -11512,7 +11529,7 @@
 
 	  if (!(disabled && disabledVariant === "text")) {
 	    inputJsx = v$1("div", {
-	      class: clsx("form-control", "faux-form-control-outer", "elevation-depressed-2", "elevation-body-surface", "focusable-within", !isEmpty , disabled && disabledVariant !== "text" && "disabled", size != "md" && `form-control-${size}`),
+	      class: clsx(labelPosition != "floating" && classs, labelPosition != "floating" && className, "form-control", "faux-form-control-outer", "elevation-depressed-2", "elevation-body-surface", "focusable-within", !isEmpty , disabled && disabledVariant !== "text" && "disabled", size != "md" && `form-control-${size}`),
 	      style: width !== null && width !== void 0 && width.endsWith("ch") ? {
 	        "--form-control-width": width !== null && width !== void 0 ? width : "20ch"
 	      } : width ? {
@@ -11524,7 +11541,7 @@
 
 	  const inputWithLabel = v$1(d$1, null, labelPosition === "start" && labelJsx, inputJsx, (labelPosition === "end" || labelPosition == "floating") && labelJsx);
 	  if (labelPosition !== "floating") return inputWithLabel;else return v$1("div", {
-	    class: "form-floating"
+	    class: clsx("form-floating", labelPosition == "floating" && classs, labelPosition === "floating" && className)
 	  }, inputJsx);
 	}));
 

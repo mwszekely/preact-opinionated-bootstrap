@@ -4,7 +4,7 @@ import { useCallback } from "preact/hooks";
 
 
 interface BaseUnlabelledInputProps<T> {
-    value: T;
+    value: T | null;
     disabled?: boolean;
     readOnly?: boolean;
     disabledVariant?: "hard" | "soft" | "text";
@@ -17,8 +17,9 @@ export const UseCheckboxGroupChildContext = createContext<UseCheckboxGroupChild<
 
 export interface UnlabelledInputTextProps extends BaseUnlabelledInputProps<string> { type: "text"; maxLength?: number; }
 export interface UnlabelledInputNumericProps extends BaseUnlabelledInputProps<string> { type: "numeric"; maxLength?: number; }
-export interface UnlabelledInputNumberProps extends BaseUnlabelledInputProps<number | null> { type: "number"; min?: number; max?: number; step?: number; }
-export type UnlabelledInputProps = UnlabelledInputTextProps | UnlabelledInputNumberProps | UnlabelledInputNumericProps;
+export interface UnlabelledInputNumberNullableProps extends BaseUnlabelledInputProps<number> { type: "number"; min?: number; max?: number; step?: number; nullable?: false; }
+export interface UnlabelledInputNumberNonNullableProps extends BaseUnlabelledInputProps<number | null> { type: "number"; min?: number; max?: number; step?: number; nullable: true; }
+export type UnlabelledInputProps = UnlabelledInputTextProps | UnlabelledInputNumberNullableProps | UnlabelledInputNumberNonNullableProps | UnlabelledInputNumericProps;
 
 export type InputProps = UnlabelledInputProps & {
     children: ComponentChildren,
@@ -26,6 +27,9 @@ export type InputProps = UnlabelledInputProps & {
     size?: "sm" | "md" | "lg";
 
     width?: `${number}ch` | `100%`;
+
+    className?: string;
+    class?: string;
 }
 
 export const InInputGroupContext = createContext(false);
@@ -63,9 +67,11 @@ export function useInputCaptures<T>(type: "text" | "number" | "numeric", min2?: 
             case "text":
             case "numeric":
                 ret = max(min(event.currentTarget.value, min2 as any), max2 as any) as T;
+                break;
 
             case "number":
                 ret = max(min(event.currentTarget.valueAsNumber, min2 as any), max2 as any) as T;
+                break;
 
         }
         if (typeof ret === "number" && isNaN(ret)) {

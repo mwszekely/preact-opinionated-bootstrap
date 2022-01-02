@@ -1,23 +1,29 @@
 import clsx from "clsx";
 import { Fragment, h, Ref } from "preact";
 import { useInputLabel } from "preact-aria-widgets";
-import { storeToLocalStorage, useAsyncHandler, useHasFocus, useMergedProps, usePassiveState, useRefElement, useState } from "preact-prop-helpers";
+import { storeToLocalStorage, useAsyncHandler, useHasFocus, useMergedProps, usePassiveState, useRefElement, useStableCallback, useStableGetter, useState } from "preact-prop-helpers";
 import { memo } from "preact/compat";
 import { useContext, useEffect } from "preact/hooks";
 import { forwardElementRef } from "../props";
 import { ProgressCircular } from "../progress";
-import { InInputGridContext, InInputGroupContext, InputProps, UnlabelledInputNumberProps, UnlabelledInputProps, UnlabelledInputTextProps, useInputCaptures } from "./props";
+import { InInputGridContext, InInputGroupContext, InputProps, UnlabelledInputNumberNonNullableProps, UnlabelledInputNumberNullableProps, UnlabelledInputProps, UnlabelledInputTextProps, useInputCaptures } from "./props";
 import { InputGroupText } from "./grouping";
 
 
 function UnlabelledInputR(props: UnlabelledInputTextProps, ref?: Ref<any>): h.JSX.Element;
-function UnlabelledInputR(props: UnlabelledInputNumberProps, ref?: Ref<any>): h.JSX.Element;
+function UnlabelledInputR(props: UnlabelledInputNumberNullableProps, ref?: Ref<any>): h.JSX.Element;
+function UnlabelledInputR(props: UnlabelledInputNumberNonNullableProps, ref?: Ref<any>): h.JSX.Element;
 function UnlabelledInputR(props: UnlabelledInputProps, ref?: Ref<any>): h.JSX.Element;
-function UnlabelledInputR({ type, disabled, value, onValueChange: onInputAsync, disabledVariant, readOnly, ...props }: UnlabelledInputProps, ref?: Ref<any>): h.JSX.Element {
+function UnlabelledInputR(p: UnlabelledInputProps, ref?: Ref<any>): h.JSX.Element {
+
+    let { type, disabled, value, onValueChange: onInputAsync, disabledVariant, readOnly, ...p2 } = (p as UnlabelledInputProps);
+    let { nullable, ...p3 } = p2 as (UnlabelledInputNumberNonNullableProps | UnlabelledInputNumberNullableProps);
+    const props = p3 as h.JSX.HTMLAttributes<HTMLInputElement>;
+
     disabledVariant ??= "soft";
 
     const [focusedInner, setFocusedInner, getFocusedInner] = useState(false);
-    const { capture, uncapture } = useInputCaptures(type, (props as UnlabelledInputNumberProps).min, (props as UnlabelledInputNumberProps).max!);
+    const { capture, uncapture } = useInputCaptures(type, (props as UnlabelledInputNumberNonNullableProps).min, (props as UnlabelledInputNumberNonNullableProps).max!);
     const { useHasFocusProps } = useHasFocus<HTMLInputElement>({
         onFocusedInnerChanged: setFocusedInner, onFocusedChanged: focused => {
             if (!focused)
@@ -25,7 +31,21 @@ function UnlabelledInputR({ type, disabled, value, onValueChange: onInputAsync, 
         }
     });
 
-    const { getSyncHandler, currentCapture, pending, hasError, settleCount, flushDebouncedPromise, currentType, ...asyncInfo } = useAsyncHandler<HTMLInputElement>()({ capture, debounce: type === "text" ? 1500 : undefined });
+    const { getSyncHandler, currentCapture, pending, hasError, settleCount, flushDebouncedPromise, currentType, ...asyncInfo } = useAsyncHandler<HTMLInputElement>()({
+        capture: useStableCallback((e: h.JSX.TargetedEvent<HTMLInputElement, Event>) => {
+            const ret = capture(e);
+            if (ret == null) {
+                if (nullable)
+                    return ret;
+                else
+                    return value;
+            }
+            else {
+                return ret;
+            }
+        }),
+        debounce: type === "text" ? 1500 : undefined
+    });
     const onInputIfValid = getSyncHandler(disabled ? null : onInputAsync as any);
     const onInput = (e: h.JSX.TargetedEvent<HTMLInputElement>) => {
         const target = (e.currentTarget as HTMLInputElement | undefined);
@@ -187,7 +207,7 @@ const UnlabelledInput = forwardElementRef(UnlabelledInputR);
 
 
 
-export const Input = memo(forwardElementRef(function Input({ children, value, width, readOnly, labelPosition, placeholder, disabled, disabledVariant, size, ...props }: InputProps, ref?: Ref<any>) {
+export const Input = memo(forwardElementRef(function Input({ children, value, width, readOnly, labelPosition, placeholder, disabled, disabledVariant, size, className, class: classs, ...props }: InputProps, ref?: Ref<any>) {
     labelPosition ??= "start";
     size ??= "md";
 
@@ -219,7 +239,7 @@ export const Input = memo(forwardElementRef(function Input({ children, value, wi
             value: IC === InputGroupText ? undefined : (value ?? undefined),
             placeholder: IC === InputGroupText ? undefined : placeholder,
             readOnly: (IC === InputGroupText ? undefined : readOnly),
-            className: IC === InputGroupText ? "form-control" : undefined,
+            className: clsx(IC === InputGroupText ? "form-control" : undefined),
         }, props as any)) as any as UnlabelledInputTextProps} {...{ ref } as never} {...{ [IC == InputGroupText ? "children" : "value"]: value }} children={IC == InputGroupText ? value : undefined} />;
 
 
@@ -227,6 +247,8 @@ export const Input = memo(forwardElementRef(function Input({ children, value, wi
     //if (isInInputGrid) {
     if (!(disabled && disabledVariant === "text")) {
         inputJsx = <div class={clsx(
+            labelPosition != "floating" && classs, 
+            labelPosition != "floating" && className,
             "form-control",
             "faux-form-control-outer",
             "elevation-depressed-2",
@@ -250,6 +272,6 @@ export const Input = memo(forwardElementRef(function Input({ children, value, wi
     if (labelPosition !== "floating")
         return inputWithLabel;
     else
-        return <div class="form-floating">{inputJsx}</div>
+        return <div class={clsx("form-floating", labelPosition == "floating" && classs, labelPosition === "floating" && className)}>{inputJsx}</div>
 }));
 
