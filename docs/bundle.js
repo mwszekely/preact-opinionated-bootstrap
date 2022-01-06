@@ -2077,13 +2077,11 @@
 	    const computedStyles = getComputedStyles();
 
 	    if (computedStyles) {
-	      var _d;
-
 	      let w = computedStyles.writingMode;
 	      let d = computedStyles.direction;
 	      let t = computedStyles.textOrientation;
 	      if (t == "upright") d = "ltr";
-	      return { ...WritingModes[w !== null && w !== void 0 ? w : "horizontal-tb"][(_d = d) !== null && _d !== void 0 ? _d : "ltr"]
+	      return { ...WritingModes[w || "horizontal-tb"][d || "ltr"]
 	      };
 	    }
 
@@ -2132,7 +2130,7 @@
 	        case "left":
 	          return direction.blockDirection === "ltr" ? "block-start" : "block-end";
 
-	        case "bottom":
+	        case "right":
 	          return direction.blockDirection === "rtl" ? "block-start" : "block-end";
 	      }
 	    } else if (((_direction10 = direction) === null || _direction10 === void 0 ? void 0 : _direction10.inlineOrientation) === "horizontal") {
@@ -2146,7 +2144,7 @@
 	        case "left":
 	          return direction.inlineDirection === "ltr" ? "inline-start" : "inline-end";
 
-	        case "bottom":
+	        case "right":
 	          return direction.inlineDirection === "rtl" ? "inline-start" : "inline-end";
 	      }
 	    }
@@ -2927,17 +2925,17 @@
 	          But roughly isn't good enough if there are multiple matches.
 	          To convert our sorted index to the unsorted index we need, we have to find the first
 	          element that matches us *and* (if any such exist) is *after* our current selection.
-	           In other words, the only way typeahead moves backwards relative to our current
+	            In other words, the only way typeahead moves backwards relative to our current
 	          position is if the only other option is behind us.
-	           It's not specified in WAI-ARIA what to do in that case.  I suppose wrap back to the start?
+	            It's not specified in WAI-ARIA what to do in that case.  I suppose wrap back to the start?
 	          Though there's also a case for just going upwards to the nearest to prevent jumpiness.
 	          But if you're already doing typeahead on an unsorted list, like, jumpiness can't be avoided.
 	          I dunno. Going back to the start is the simplist though.
-	           Basically what this does: Starting from where we found ourselves after our binary search,
+	            Basically what this does: Starting from where we found ourselves after our binary search,
 	          scan backwards and forwards through all adjacent entries that also compare equally so that
 	          we can find the one whose `unsortedIndex` is the lowest amongst all other equal strings
 	          (and also the lowest `unsortedIndex` yadda yadda except that it comes after us).
-	           TODO: The binary search starts this off with a solid O(log n), but one-character
+	            TODO: The binary search starts this off with a solid O(log n), but one-character
 	          searches are, thanks to pigeonhole principal, eventually guaranteed to become
 	          O(n*log n). This is annoying but probably not easily solvable? There could be an
 	          exception for one-character strings, but that's just kicking the can down
@@ -3890,12 +3888,12 @@
 	  } = useRefElement({
 	    onElementChange: A$1(element => {
 	      if (element) {
-	        var _activeElementUpdater, _lastActiveElementUpd, _windowFocusedUpdater;
+	        var _activeElementUpdater, _activeElementUpdater2, _activeElementUpdater3, _lastActiveElementUpd, _windowFocusedUpdater;
 
 	        const document = element.ownerDocument;
 	        const window = document === null || document === void 0 ? void 0 : document.defaultView;
 
-	        if (activeElementUpdaters.size === 0) {
+	        if (((_activeElementUpdater = (_activeElementUpdater2 = activeElementUpdaters.get(window)) === null || _activeElementUpdater2 === void 0 ? void 0 : _activeElementUpdater2.size) !== null && _activeElementUpdater !== void 0 ? _activeElementUpdater : 0) === 0) {
 	          document === null || document === void 0 ? void 0 : document.addEventListener("focusin", focusin, {
 	            passive: true
 	          });
@@ -3912,7 +3910,7 @@
 	        // manage the ">0 means don't add handlers" logic.
 
 
-	        const localActiveElementUpdaters = (_activeElementUpdater = activeElementUpdaters.get(window)) !== null && _activeElementUpdater !== void 0 ? _activeElementUpdater : new Set();
+	        const localActiveElementUpdaters = (_activeElementUpdater3 = activeElementUpdaters.get(window)) !== null && _activeElementUpdater3 !== void 0 ? _activeElementUpdater3 : new Set();
 	        const localLastActiveElementUpdaters = (_lastActiveElementUpd = lastActiveElementUpdaters.get(window)) !== null && _lastActiveElementUpd !== void 0 ? _lastActiveElementUpd : new Set();
 	        const localWindowFocusedUpdaters = (_windowFocusedUpdater = windowFocusedUpdaters.get(window)) !== null && _windowFocusedUpdater !== void 0 ? _windowFocusedUpdater : new Set();
 	        localActiveElementUpdaters.add(setActiveElement);
@@ -7455,8 +7453,8 @@
 	  /*const useMenuSubmenuItem = useCallback((args: UseMenuSubmenuItemParameters) => {
 	      const { useMenuProps, useMenuButton } = useAriaMenu<HTMLElement, ChildElement, I>(args);
 	      const { useMenuButtonProps } = useMenuButton<E>({ tag: "li" as any });
-	       const { getElement, useRefElementProps } = useRefElement<any>({ onElementChange: setOpenerElement as OnPassiveStateChange<any> });
-	       return {
+	        const { getElement, useRefElementProps } = useRefElement<any>({ onElementChange: setOpenerElement as OnPassiveStateChange<any> });
+	        return {
 	          getElement,
 	          useMenuProps,
 	          useMenuSubmenuItemProps: function <P extends h.JSX.HTMLAttributes<E>>({ ...props }: P) {
@@ -12229,13 +12227,21 @@
 	      adaptive = _ref2.adaptive,
 	      roundOffsets = _ref2.roundOffsets,
 	      isFixed = _ref2.isFixed;
+	  var _offsets$x = offsets.x,
+	      x = _offsets$x === void 0 ? 0 : _offsets$x,
+	      _offsets$y = offsets.y,
+	      y = _offsets$y === void 0 ? 0 : _offsets$y;
 
-	  var _ref3 = roundOffsets === true ? roundOffsetsByDPR(offsets) : typeof roundOffsets === 'function' ? roundOffsets(offsets) : offsets,
-	      _ref3$x = _ref3.x,
-	      x = _ref3$x === void 0 ? 0 : _ref3$x,
-	      _ref3$y = _ref3.y,
-	      y = _ref3$y === void 0 ? 0 : _ref3$y;
+	  var _ref3 = typeof roundOffsets === 'function' ? roundOffsets({
+	    x: x,
+	    y: y
+	  }) : {
+	    x: x,
+	    y: y
+	  };
 
+	  x = _ref3.x;
+	  y = _ref3.y;
 	  var hasX = offsets.hasOwnProperty('x');
 	  var hasY = offsets.hasOwnProperty('y');
 	  var sideX = left;
@@ -12280,6 +12286,17 @@
 	    position: position
 	  }, adaptive && unsetSides);
 
+	  var _ref4 = roundOffsets === true ? roundOffsetsByDPR({
+	    x: x,
+	    y: y
+	  }) : {
+	    x: x,
+	    y: y
+	  };
+
+	  x = _ref4.x;
+	  y = _ref4.y;
+
 	  if (gpuAcceleration) {
 	    var _Object$assign;
 
@@ -12289,9 +12306,9 @@
 	  return Object.assign({}, commonStyles, (_Object$assign2 = {}, _Object$assign2[sideY] = hasY ? y + "px" : '', _Object$assign2[sideX] = hasX ? x + "px" : '', _Object$assign2.transform = '', _Object$assign2));
 	}
 
-	function computeStyles(_ref4) {
-	  var state = _ref4.state,
-	      options = _ref4.options;
+	function computeStyles(_ref5) {
+	  var state = _ref5.state,
+	      options = _ref5.options;
 	  var _options$gpuAccelerat = options.gpuAcceleration,
 	      gpuAcceleration = _options$gpuAccelerat === void 0 ? true : _options$gpuAccelerat,
 	      _options$adaptive = options.adaptive,
@@ -12590,7 +12607,7 @@
 
 
 	  return clippingParents.filter(function (clippingParent) {
-	    return isElement(clippingParent) && contains(clippingParent, clipperElement) && getNodeName(clippingParent) !== 'body' && (canEscapeClipping ? getComputedStyle$1(clippingParent).position !== 'static' : true);
+	    return isElement(clippingParent) && contains(clippingParent, clipperElement) && getNodeName(clippingParent) !== 'body';
 	  });
 	} // Gets the maximum area that the element is visible in due to any number of
 	// clipping parents
