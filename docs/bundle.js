@@ -6303,7 +6303,9 @@
         useRefElementProps: useModalRefElement,
         getElement: getModalElement
       } = useRefElement({});
-      useSoftDismiss({
+      const {
+        useSoftDismissProps
+      } = useSoftDismiss({
         onClose: stableOnClose,
         getElements: getModalElement
       });
@@ -6333,9 +6335,9 @@
         const p1 = useTitleReferencingIdProps("aria-labelledby")(p0);
         const p2 = useModalIdProps(p1);
         const pFinal = useBodyReferencingIdProps("aria-describedby")(p2);
-        return useFocusTrapProps(useMergedProps()(useModalRefElement({
+        return useFocusTrapProps(useSoftDismissProps(useMergedProps()(useModalRefElement({
           role: "dialog"
-        }), modalDescribedByBody ? pFinal : p2));
+        }), modalDescribedByBody ? pFinal : p2)));
       };
 
       const useModalTitle = A$1(function useModalTitle() {

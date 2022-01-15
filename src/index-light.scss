@@ -1,2 +1,5 @@
 @use "./bootstrap-light.scss";
 @use "./index-helper.scss" as *;
+
+@forward "./bootstrap-light.scss";
+@forward "./index-helper.scss";
