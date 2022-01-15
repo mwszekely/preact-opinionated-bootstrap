@@ -5,6 +5,8 @@ import { LogicalDirectionInfo, useActiveElement, useGlobalHandler, useLogicalDir
 import { useCallback, useEffect, useMemo } from "preact/hooks";
 import { ZoomFade, Clip, ClipFade, Collapse, Zoom, SlideZoom, Fade, SlideFade, CollapseFade, SlideZoomFade, Flip, Slide } from "preact-transition";
 
+function returnNull() { return null; }
+
 export function usePopperApi({ updating, align, side, useArrow, followMouse, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight }: UsePopperParameters) {
 
     const [popperInstance, setPopperInstance, getPopperInstance] = useState<Instance | null>(null);
@@ -15,9 +17,9 @@ export function usePopperApi({ updating, align, side, useArrow, followMouse, ski
 
     useArrow ??= false;
 
-    const [getFocusedElement, setFocusedElement] = usePassiveState<Element | null>(null, () => null);
+    const [getFocusedElement, setFocusedElement] = usePassiveState<Node | null>(null, returnNull);
     const { } = useActiveElement({
-        onLastActiveElementChange: activeElement => {
+        onLastActiveElementChange: useCallback((activeElement: Node | null) => {
             if (getSourceElement()?.contains(activeElement)) {
                 setFocusedElement(activeElement);
                 setMouseX(null);
@@ -28,13 +30,13 @@ export function usePopperApi({ updating, align, side, useArrow, followMouse, ski
                 if (followMouse)
                     setPositionPreference("mouse");
             }
-        }
+        }, [])
     });
 
-    const [getPositionPreference, setPositionPreference] = usePassiveState(null, () => "element" as ("element" | "mouse"))
+    const [getPositionPreference, setPositionPreference] = usePassiveState(null, useCallback(() => "element" as ("element" | "mouse"), []))
     //const [getHasMouseover, setHasMouseover] = usePassiveState(null, () => false);
-    const [getMouseX, setMouseX] = usePassiveState<number | null>(() => void (popperInstance?.update()), () => null);
-    const [getMouseY, setMouseY] = usePassiveState<number | null>(() => void (popperInstance?.update()), () => null);
+    const [getMouseX, setMouseX] = usePassiveState<number | null>(useCallback(() => void (getPopperInstance()?.update()), []), returnNull);
+    const [getMouseY, setMouseY] = usePassiveState<number | null>(useCallback(() => void (getPopperInstance()?.update()), []), returnNull);
 
     const resetPopperInstance = useCallback((sourceElement: Element | null, popperElement: HTMLElement | null) => {
         if (sourceElement && popperElement) {
@@ -72,7 +74,7 @@ export function usePopperApi({ updating, align, side, useArrow, followMouse, ski
                 getBoundingClientRect: () => {
                     const focusedElement = getFocusedElement();
 
-                    let baseRect = focusedElement ? focusedElement.getBoundingClientRect() : getSourceElement()?.getBoundingClientRect();
+                    let baseRect = focusedElement ? (focusedElement as Element).getBoundingClientRect?.() : getSourceElement()?.getBoundingClientRect();
                     let x = baseRect?.x ?? 0;
                     let y = baseRect?.y ?? 0;
                     let width = baseRect?.width ?? 0;
@@ -151,8 +153,8 @@ export function usePopperApi({ updating, align, side, useArrow, followMouse, ski
         }
     }, [followMouse, useArrow, side, align, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight, logicalDirection]);
 
-    const { getElement: getSourceElement, useRefElementProps: useSourceElementRefProps } = useRefElement<Element>({ onElementChange: (e: any) => resetPopperInstance(e, (getPopperElement as any)()!) } as any);
-    const { getElement: getPopperElement, useRefElementProps: usePopperElementRefProps } = useRefElement<HTMLElement>({ onElementChange: e => resetPopperInstance((getSourceElement as any)()!, e) });
+    const { getElement: getSourceElement, useRefElementProps: useSourceElementRefProps } = useRefElement<Element>({ onElementChange: useCallback((e: any) => resetPopperInstance(e, (getPopperElement as any)()!), []) } as any);
+    const { getElement: getPopperElement, useRefElementProps: usePopperElementRefProps } = useRefElement<HTMLElement>({ onElementChange: useCallback((e: HTMLElement | null) => resetPopperInstance((getSourceElement as any)()!, e), []) });
     const { getElement: getArrowElement, useRefElementProps: useArrowElementRefProps } = useRefElement<Element>({});
 
     const [sourceStyle, setSourceStyle] = useState<Partial<Omit<CSSStyleDeclaration, typeof Symbol["iterator"]>> | null>(null);
@@ -296,7 +298,7 @@ export function usePopperApi({ updating, align, side, useArrow, followMouse, ski
 
         type T = Parameters<E>[0];
 
-        const props = { ...originalProps } ;
+        const props = { ...originalProps };
 
         for (const { inline, block, flipFunction } of affectedProps) {
             if (flipFunction)
@@ -344,7 +346,7 @@ export function usePopperApi({ updating, align, side, useArrow, followMouse, ski
 
 }
 
-export interface FlippablePropInfo<T extends <E extends any>(...props: any[]) => h.JSX.Element> { 
+export interface FlippablePropInfo<T extends <E extends any>(...props: any[]) => h.JSX.Element> {
 
     /** The name of the prop to use for inline values */
     inline: keyof (Parameters<T>[0]);
@@ -365,7 +367,7 @@ export interface FlippablePropInfo<T extends <E extends any>(...props: any[]) =>
 
 
 export function getDefaultFlips<T extends <E extends any>(...props: any[]) => h.JSX.Element>(Transition: T): FlippablePropInfo<T>[] {
-    
+
     const FlipAngle = { inline: "flipAngleInline", block: "flipAngleBlock", flipFunction: (n: number) => -n } as const;
     const SlideTarget = { inline: "slideTargetInline", block: "slideTargetBlock", flipFunction: (n: number) => -n } as const;
     const ClipOrigin = { inline: "clipOriginInline", block: "clipOriginBlock", flipFunction: (n: number) => 1 - n } as const;

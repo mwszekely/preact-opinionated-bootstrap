@@ -1,8 +1,8 @@
 import clsx from "clsx";
 import { ComponentChild, h, Ref } from "preact";
-import { useHasFocus, useListNavigation, UseListNavigationChildInfo, useLogicalDirection, useMergedProps, usePassiveState, useState } from "preact-prop-helpers";
+import { LogicalDirectionInfo, useHasFocus, useListNavigation, UseListNavigationChildInfo, useLogicalDirection, useMergedProps, useState } from "preact-prop-helpers";
 import { memo } from "preact/compat";
-import { useContext, useEffect } from "preact/hooks";
+import { useCallback, useContext, useEffect } from "preact/hooks";
 import { forwardElementRef, GlobalAttributes, useLogRender } from "../props";
 import { AnchorButtonProps, Button, ButtonButtonProps, ToggleButtonProps } from "./button";
 import { ProvideDefaultButtonColor, ProvideDefaultButtonDisabled, ProvideDefaultButtonFill, ProvideDefaultButtonSize, useButtonColorVariant, useButtonDisabled, useButtonFillVariant, UseButtonGroupChild, useButtonSize } from "./defaults";
@@ -34,7 +34,7 @@ export const ButtonGroup = memo(forwardElementRef(function ButtonGroup(p: Button
     const { indicesByElement, managedChildren, useListNavigationProps, useListNavigationChild, navigateToIndex, childCount } = useListNavigation<HTMLButtonElement, UseListNavigationChildInfo>({ shouldFocusOnChange: getFocusedInner, keyNavigation: logicalOrientation });
 
     const [physicalOrientation, setPhysicalOrientation] = useState<"horizontal" | "vertical">("horizontal");
-    const { getLogicalDirectionInfo, convertToPhysicalOrientation, useLogicalDirectionProps } = useLogicalDirection<HTMLDivElement>({ onLogicalDirectionChange: logicalDirectionInfo => setPhysicalOrientation(convertToPhysicalOrientation(logicalOrientation!, logicalDirectionInfo)) });
+    const { getLogicalDirectionInfo, convertToPhysicalOrientation, useLogicalDirectionProps } = useLogicalDirection<HTMLDivElement>({ onLogicalDirectionChange: useCallback((logicalDirectionInfo: LogicalDirectionInfo) => setPhysicalOrientation(convertToPhysicalOrientation(logicalOrientation!, logicalDirectionInfo)),[]) });
 
 
     useEffect(() => {

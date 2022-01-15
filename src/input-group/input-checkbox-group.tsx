@@ -1,7 +1,7 @@
 
 import { ComponentChildren, createContext, h } from "preact";
 import { CheckboxGroupChangeEvent, EventDetail, useCheckboxGroup, UseCheckboxGroupParentProps } from "preact-aria-widgets";
-import { generateRandomId, useAsyncHandler, useHasFocus, useLayoutEffect, useMutationObserver, usePassiveState, useRefElement, useState } from "preact-prop-helpers";
+import { generateRandomId, useAsyncHandler, useHasFocus, useLayoutEffect, useMutationObserver, useRefElement, useState } from "preact-prop-helpers";
 import { useContext } from "preact/hooks";
 import { OmitStrong } from "../props";
 import { Checkbox, CheckboxProps } from "./input-checkbox";

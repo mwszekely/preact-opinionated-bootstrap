@@ -3,12 +3,14 @@ import { Fragment, h, Ref } from "preact";
 import { useInputLabel } from "preact-aria-widgets";
 import { storeToLocalStorage, useAsyncHandler, useHasFocus, useMergedProps, usePassiveState, useRefElement, useStableCallback, useStableGetter, useState } from "preact-prop-helpers";
 import { memo } from "preact/compat";
-import { useContext, useEffect } from "preact/hooks";
+import { useCallback, useContext, useEffect } from "preact/hooks";
 import { forwardElementRef } from "../props";
 import { ProgressCircular } from "../progress";
 import { InInputGridContext, InInputGroupContext, InputProps, UnlabelledInputNumberNonNullableProps, UnlabelledInputNumberNullableProps, UnlabelledInputProps, UnlabelledInputTextProps, useInputCaptures } from "./props";
 import { InputGroupText } from "./grouping";
 
+
+function return0() { return 0; }
 
 function UnlabelledInputR(props: UnlabelledInputTextProps, ref?: Ref<any>): h.JSX.Element;
 function UnlabelledInputR(props: UnlabelledInputNumberNullableProps, ref?: Ref<any>): h.JSX.Element;
@@ -25,10 +27,11 @@ function UnlabelledInputR(p: UnlabelledInputProps, ref?: Ref<any>): h.JSX.Elemen
     const [focusedInner, setFocusedInner, getFocusedInner] = useState(false);
     const { capture, uncapture } = useInputCaptures(type, (props as UnlabelledInputNumberNonNullableProps).min, (props as UnlabelledInputNumberNonNullableProps).max!);
     const { useHasFocusProps } = useHasFocus<HTMLInputElement>({
-        onFocusedInnerChanged: setFocusedInner, onFocusedChanged: focused => {
+        onFocusedInnerChanged: setFocusedInner,
+        onFocusedChanged: useCallback((focused: boolean) => {
             if (!focused)
                 setLRImpatience(0);
-        }
+        }, [])
     });
 
     const { getSyncHandler, currentCapture, pending, hasError, settleCount, flushDebouncedPromise, currentType, ...asyncInfo } = useAsyncHandler<HTMLInputElement>()({
@@ -56,7 +59,7 @@ function UnlabelledInputR(p: UnlabelledInputProps, ref?: Ref<any>): h.JSX.Elemen
     // Until a better solution to "can't measure where the cursor is in input type=number" is found
     // use this to keep track of if the user is hammering left/right trying to escape the text field 
     // within a larger arrowkey-based navigation system. 
-    const [getLRImpatience, setLRImpatience] = usePassiveState(null, () => 0);
+    const [getLRImpatience, setLRImpatience] = usePassiveState(null, return0);
 
     setInterval(() => {
         if (getLRImpatience() == 0) {
@@ -247,7 +250,7 @@ export const Input = memo(forwardElementRef(function Input({ children, value, wi
     //if (isInInputGrid) {
     if (!(disabled && disabledVariant === "text")) {
         inputJsx = <div class={clsx(
-            labelPosition != "floating" && classs, 
+            labelPosition != "floating" && classs,
             labelPosition != "floating" && className,
             "form-control",
             "faux-form-control-outer",

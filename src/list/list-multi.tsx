@@ -6,7 +6,7 @@ import { UseListboxMultiItem, UseListboxMultiParameters } from "preact-aria-widg
 import { UseListboxMultiItemInfo, UseListboxMultiItemParameters } from "preact-aria-widgets/use-listbox-multi";
 import { useAsyncHandler, useMergedProps, useMutationObserver, useRefElement, useState } from "preact-prop-helpers";
 import { memo } from "preact/compat";
-import { useContext, useLayoutEffect } from "preact/hooks";
+import { useCallback, useContext, useLayoutEffect, useRef } from "preact/hooks";
 import { GlobalAttributes, useLogRender, usePseudoActive, forwardElementRef, OmitStrong } from "../props";
 
 interface ListMultiItemInfo<E extends Element> extends UseListboxMultiItemInfo<E> {
@@ -41,7 +41,7 @@ export const ListItemMulti = memo(forwardElementRef(function ListItemMulti(props
     const { index, selected, onSelect, ...domProps } = { ...props, ref };
 
     const [text, setText] = useState<string | null>(null);
-    const { useRefElementProps, getElement } = useRefElement<HTMLLIElement>({ onElementChange: element => setText((element?.innerText ?? "").trim()) });
+    const { useRefElementProps, getElement } = useRefElement<HTMLLIElement>({ onElementChange: useCallback((element: Node | null) => setText(((element as HTMLElement)?.innerText ?? "").trim()),[]) });
     useMutationObserver(getElement, { subtree: true, onCharacterData: (info) => setText((getElement()?.innerText ?? "").trim()) });
 
     const { tabbable, useListboxMultiItemProps } = useListItemMulti({ index, text, tag: "li", selected, onSelect });

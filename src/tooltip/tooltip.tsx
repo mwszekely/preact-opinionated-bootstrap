@@ -1,6 +1,6 @@
 import { cloneElement, ComponentChild, ComponentChildren, Fragment, h, Ref, VNode } from "preact";
 import { useAriaTooltip } from "preact-aria-widgets";
-import { useElementSize, useMergedProps, useState } from "preact-prop-helpers";
+import { useElementSize, useMergedProps, useStableCallback, useState } from "preact-prop-helpers";
 import { ZoomFade, ZoomFadeProps } from "preact-transition";
 import { memo } from "preact/compat";
 import { useEffect, useRef } from "preact/hooks";
@@ -44,7 +44,7 @@ export const Tooltip = memo(forwardElementRef(function Tooltip<T extends <E exte
     const { useTooltipProps } = useTooltip<HTMLDivElement>();
     const { useTooltipTriggerProps } = useTooltipTrigger();
     const { shouldUpdate, onInteraction } = useShouldUpdatePopper(isOpen);
-    const { useElementSizeProps } = useElementSize<any>({ onSizeChange: onInteraction ?? (() => { }) });
+    const { useElementSizeProps } = useElementSize<any>({ onSizeChange: useStableCallback(onInteraction ?? (() => { })) });
     const { logicalDirection, usePopperArrow, usePopperPopup, usePopperSource, flipTransformProps } = usePopperApi({ updating: shouldUpdate, side, align, useArrow: true, followMouse: true });
 
     const { usePopperPopupProps } = usePopperPopup<HTMLDivElement>({ open: isOpen });

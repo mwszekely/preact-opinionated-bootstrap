@@ -57,3 +57,26 @@ const onInput = async (checked, e) => { await sleep(); setChecked(checked); }
 
 No documentation, lots of TODOs!
 
+
+## Theming
+
+By default, light and dark themes are provided.  To make your own theme, do the following:
+
+1. Create `index-${theme}.scss` with the following contents
+2. You can either start by basing off the default themes, or start from scratch. Add one of the following to the file:
+*  * Start from, e.g., a base of the light theme:
+```scss
+@use "~preact-opinionated-bootstrap/src/bootstrap-light.scss" with (REPLACEMENTS HERE);
+@use "~preact-opinionated-bootstrap/src/index-helper.scss" as *;
+```
+*
+  * Or start from scratch:
+```scss
+// You could also copy/paste from the default themes and modify them like this:
+@use "~preact-opinionated-bootstrap/src/bootstrap/bootstrap" with (REPLACEMENTS HERE);
+@use "~preact-opinionated-bootstrap/src/index-helper.scss" as *;
+```
+3. If you want the default font too, include this:
+```scss
+@use "~preact-opinionated-bootstrap/src/fonts.scss" as *;
+```

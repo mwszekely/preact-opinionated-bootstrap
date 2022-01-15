@@ -5,7 +5,7 @@ import { EventDetail } from "preact-aria-widgets";
 import { UseListboxSingleItem, UseListboxSingleItemInfo, UseListboxSingleItemParameters, UseListboxSingleParameters } from "preact-aria-widgets";
 import { useAsyncHandler, useMergedProps, useMutationObserver, useRefElement, useState } from "preact-prop-helpers";
 import { memo } from "preact/compat";
-import { useContext, useLayoutEffect } from "preact/hooks";
+import { useCallback, useContext, useLayoutEffect } from "preact/hooks";
 import { GlobalAttributes, useLogRender, usePseudoActive, forwardElementRef, OmitStrong } from "../props";
 
 interface ListSingleItemInfo<E extends Element> extends UseListboxSingleItemInfo<E> {
@@ -42,7 +42,7 @@ export const ListItemSingle = memo(forwardElementRef(function ListItemSingle(pro
     const { index, ...domProps } = { ...props, ref };
 
     const [text, setText] = useState<string | null>(null);
-    const { useRefElementProps, getElement } = useRefElement<HTMLLIElement>({ onElementChange: element => setText((element?.innerText ?? "").trim()) });
+    const { useRefElementProps, getElement } = useRefElement<HTMLLIElement>({ onElementChange: useCallback((element: Node | null) => setText(((element as HTMLElement)?.innerText ?? "").trim()),[]) });
     useMutationObserver(getElement, { subtree: true, onCharacterData: (info) => setText((getElement()?.innerText ?? "").trim()) });
 
     const { getSelected, tabbable, selected, useListboxSingleItemProps } = useListItemSingle({ index, text, tag: "li" });

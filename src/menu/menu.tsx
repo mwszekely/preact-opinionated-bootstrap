@@ -1,18 +1,18 @@
-import { ProvideDefaultButtonDropdownDirection } from "../button/defaults";
 import clsx from "clsx";
 import { cloneElement, ComponentChildren, createContext, Fragment, h, Ref, VNode } from "preact";
-import { useAriaMenu, usePressEventHandlers, UseMenuItem } from "preact-aria-widgets";
+import { useAriaMenu, UseMenuItem, usePressEventHandlers } from "preact-aria-widgets";
 import { UseMenuItemDefaultInfo } from "preact-aria-widgets/use-menu";
-import { useAsyncHandler, useElementSize, useHasFocus, useMergedProps, useMutationObserver, useRefElement, useState, useTimeout, usePassiveState, useMergedRefs } from "preact-prop-helpers";
-
-import { useCallback, useContext, useEffect, useLayoutEffect } from "preact/hooks";
+import { useAsyncHandler, useElementSize, useHasFocus, useMergedProps, useMutationObserver, useRefElement, useStableCallback, useState } from "preact-prop-helpers";
+import { ZoomFade, ZoomFadeProps } from "preact-transition";
+import { memo } from "preact/compat";
+import { useCallback, useContext } from "preact/hooks";
+import { ProvideDefaultButtonDropdownDirection } from "../button/defaults";
 import { BodyPortal } from "../portal";
 import { ProgressCircular } from "../progress";
-import { FlippableTransitionComponent, forwardElementRef, TagSensitiveProps, TransitionComponent, useLogRender, usePseudoActive } from "../props";
-import { fixProps, FlippablePropInfo, getDefaultFlips, usePopperApi, useShouldUpdatePopper } from "./popper-api";
+import { FlippableTransitionComponent, forwardElementRef, TagSensitiveProps, useLogRender, usePseudoActive } from "../props";
 import { Tooltip } from "../tooltip/tooltip";
-import { memo } from "preact/compat";
-import { ZoomFade, ZoomFadeProps } from "preact-transition";
+import { getDefaultFlips, usePopperApi, useShouldUpdatePopper } from "./popper-api";
+
 
 export interface MenuProps<E extends Element, T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element> extends FlippableTransitionComponent<T>, Partial<TagSensitiveProps<E>> {
     anchor: VNode<{}>;
@@ -48,7 +48,7 @@ function MenuU<E extends Element, T extends <E extends HTMLElement>(...args: any
     const onOpen = () => setOpen(true);
     const { shouldUpdate: updatingForABit, onInteraction } = useShouldUpdatePopper(open);
 
-    const { useElementSizeProps } = useElementSize<any>({ onSizeChange: onInteraction ?? (() => { }) });
+    const { useElementSizeProps } = useElementSize<any>({ onSizeChange: useStableCallback(onInteraction ?? (() => { })) });
 
     const { useHasFocusProps, getFocusedInner: getMenuHasFocusInner } = useHasFocus<HTMLDivElement>({});
     const { usePopperArrow, usePopperPopup, usePopperSource, logicalDirection, flipTransformProps } = usePopperApi({ align, side, updating: updatingForABit });
@@ -133,7 +133,7 @@ function MenuItemU({ children, disabled, onPress: onPressAsync, index, ...rest }
 
     const isInteractive = (onPressAsync != null);
     const [text, setText] = useState<string | null>(null);
-    const { useRefElementProps, getElement } = useRefElement<HTMLButtonElement>({ onElementChange: element => setText((element?.innerText ?? "").trim()) });
+    const { useRefElementProps, getElement } = useRefElement<HTMLLIElement>({ onElementChange: useCallback((element: Node | null) => setText(((element as HTMLElement)?.innerText ?? "").trim()),[]) });
     useMutationObserver(getElement, { subtree: true, onCharacterData: (info) => setText((getElement()?.innerText ?? "").trim()) });
 
     const { useMenuItemProps } = useMenuItem({ index, text });
