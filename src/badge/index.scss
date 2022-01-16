@@ -1,0 +1,10 @@
+@use "../variables.scss" as *;
+@use "../button/ensure-contrast.scss" as *;
+
+.badge {
+  @each $color, $value in $theme-colors {
+    &.bg-#{$color} {
+        color: ensure-contrasting-color($value, #808080, 8);
+    }
+  }
+}

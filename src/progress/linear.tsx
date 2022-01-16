@@ -26,7 +26,7 @@ export interface UseAriaProgressBarParameters<E extends Element> extends TagSens
 export interface CircularProgressProps extends GlobalAttributes<HTMLDivElement> {
     colorVariant?: ProgressColorVariant;
     children?: VNode<any>;
-    childrenPosition?: "child" | "before" | "after";
+    childrenPosition?: "child" | "before" | "after" | "merged";
 
     loadingLabel?: string;
 
@@ -128,7 +128,7 @@ const ProgressValueTextContext = createContext<undefined | string>(undefined);
  * @param param0 
  * @returns 
  */
-export const ProgressLinear = memo(forwardElementRef( function ProgressLinear({ colorVariant, max: maxProp, value: valueProp, valueText: valueTextProp, striped, variant, ...rest }: LinearProgressProps, ref: Ref<HTMLDivElement>) {
+export const ProgressLinear = memo(forwardElementRef(function ProgressLinear({ colorVariant, max: maxProp, value: valueProp, valueText: valueTextProp, striped, variant, ...rest }: LinearProgressProps, ref: Ref<HTMLDivElement>) {
     let value = (useContext(ProgressValueContext));
     let max = useContext(ProgressMaxContext);
     let valueText = useContext(ProgressValueTextContext);
@@ -225,9 +225,19 @@ export const ProgressCircular = forwardElementRef(function ({ loadingLabel, spin
     }, [mode]);
 
 
-    const progressProps = useProgressProps({ "aria-hidden": `${mode != "pending"}` });
+    childrenPosition ??= "after";
+    if (children && (typeof children != "object" || !("type" in (children))))
+        children = <span>{children}</span>;
+
+
+    let progressProps = useMergedProps<HTMLDivElement>()({ ref, className: clsx("circular-progress-container") }, useMergedProps<HTMLDivElement>()(useProgressProps({ "aria-hidden": `${mode != "pending"}` }), p));
+
+    progressProps = useMergedProps<HTMLDivElement>()(progressProps, childrenPosition === "merged" ? { ...children?.props, ref: children?.ref } : {});
+
+    let progressVnodeType = childrenPosition === "merged"? (children?.type ?? "div") : "div";
+
     const progressElement = (
-        <div {...useMergedProps<HTMLDivElement>()({ ref, className: clsx("circular-progress-container") }, useMergedProps<HTMLDivElement>()(progressProps, p))}>
+        h(progressVnodeType as any, progressProps, <>
             {mode === "pending" && !!loadingLabel && <div role="alert" aria-live="assertive" class="visually-hidden">{loadingLabel}</div>}
             {mode !== null && <Swappable>
                 <div className="circular-progress-swappable">
@@ -243,9 +253,8 @@ export const ProgressCircular = forwardElementRef(function ({ loadingLabel, spin
                     <Fade show={!shownStatusLongEnough && mode === "failed"}><div class="circular-progress-failed"><Cross /></div></Fade>
                 </div>
             </Swappable>}
-        </div>);
-
-    childrenPosition ??= "after";
+        </>)
+    );
 
     return (
         <>

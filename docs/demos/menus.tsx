@@ -3,6 +3,7 @@ import { useState } from "preact-prop-helpers";
 import { ZoomFade } from "preact-transition";
 import { Button, ButtonGroup, ButtonGroupChild } from "../../button";
 import { Card, CardElement } from "../../card/card";
+import { BootstrapIcon } from "../../icon";
 import { Checkbox, InputGrid, InputGroup, InputGroupText, Radio, RadioGroup } from "../../input-group";
 import { GridStatic } from "../../layout";
 import { Menu, MenuItem } from "../../menu";
@@ -122,6 +123,20 @@ export function DemoMenus() {
                     <code>{`<Menu anchor={<Button>Menu</Button>} side="${side}" align="${align}">
     {...}
 </Menu>`}</code>
+                </CardElement>
+
+                <hr />
+                <CardElement type="subtitle" tag="h3">List-likes</CardElement>
+                <CardElement tag="div">
+                    Menu items inherit the same <code>iconBefore</code>, <code>iconAfter</code>, <code>badge</code>, and multiple line support from the various list item types.
+                </CardElement>
+                <CardElement>
+                    <Menu anchor={<Button dropdownVariant="combined">Fancy menu items</Button>} side={side} align={align}>
+                        <MenuItem index={0} onPress={onPressAsync} iconStart={<BootstrapIcon icon="pencil" label={null} />}><span class="h5">A: Item 1</span><span>Line #2</span></MenuItem>
+                        <MenuItem index={1} onPress={onPressAsync} iconStart={<BootstrapIcon icon="pencil" label={null} />}><span class="h5">B: Item 2</span><span>Line #2</span></MenuItem>
+                        <MenuItem index={2} onPress={onPressAsync} iconStart={<BootstrapIcon icon="pencil" label={null} />}><span class="h5">C: Item 3</span><span>Line #2</span></MenuItem>
+                        <MenuItem index={3}>I'm still static</MenuItem>
+                    </Menu>
                 </CardElement>
 
                 <hr />

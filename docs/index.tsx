@@ -24,6 +24,7 @@ import { DemoInputs } from "./demos/inputs";
 import { DemoLayout } from "./demos/layout";
 import { DemoMenus } from "./demos/menus";
 import { DemoTable } from "./demos/tables";
+import { DemoLists } from "./demos/lists";
 
 
 
@@ -211,7 +212,7 @@ const DemoList = memo(() => {
 
             Selected: {index}
 
-            <ListSingle select="single" onSelect={setIndex} selectedIndex={index} selectionMode="activate" tag="ul">
+            <ListSingle label="Example list" select="single" onSelect={setIndex} selectedIndex={index} selectionMode="activate" tag="ul">
                 <ListItemSingle index={0}>Primary</ListItemSingle>
                 <ListItemSingle index={1}>Secondary</ListItemSingle>
                 <ListItemSingle index={2}>Success</ListItemSingle>
@@ -280,6 +281,7 @@ const Component = () => {
                 <ToastsProvider>
 
                     <DemoTable />
+                    <DemoLists />
                     <DemoMenus />
                     <DemoButtons />
                     <DemoChecks />

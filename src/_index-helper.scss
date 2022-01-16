@@ -3,6 +3,7 @@
 // `@use "" with ()` by including that configuration before this one.
 @use "./variables.scss" as *;
 @use "./accordion" as *;
+@use "./badge" as *;
 @use "./button" as *;
 @use "./card/" as *;
 @use "./list" as *;
@@ -22,6 +23,7 @@
 
 @forward "./variables.scss";
 @forward "./accordion";
+@forward "./badge";
 @forward "./button";
 @forward "./card/";
 @forward "./list";

@@ -68,13 +68,20 @@ export function DemoButtons() {
 
                             <hr />
 
-                            <CardElement type="subtitle" tag="h3">Color &amp; fill</CardElement>
+                            <CardElement type="subtitle" tag="h3">Color, fill, &amp; size</CardElement>
 
                             <CardElement type="paragraph">
-                                Buttons can be styled in different colors and fill styles. You can provide a global default with <code>Context</code> objects, like <code>&lt;ProvideDefaultButtonFill&gt;</code>.
+                                Buttons can be styled in different sizes, colors, and fill styles. You can provide a global default with <code>Context</code> objects, like <code>&lt;ProvideDefaultButtonFill&gt;</code>.
                             </CardElement>
                             <CardElement>
                                 All the normal Bootstrap colors are provided, albeit with adjustments to outlined buttons to ensure correct contrast ratios on the theme's body BG color.  Additionally, besides the `light` and `dark` colors, `subtle` and `contrast` are available as colors to use that simply map onto `light` or `dark` depending on the body BG color.
+                            </CardElement>
+                            <CardElement>
+                                <ButtonGroup>
+                                    <ButtonGroupChild index={0} onPressToggle={() => setButtonsSize("sm")} pressed={buttonsSize === "sm"}>Small</ButtonGroupChild>
+                                    <ButtonGroupChild index={1} onPressToggle={() => setButtonsSize("md")} pressed={buttonsSize === "md"}>Medium</ButtonGroupChild>
+                                    <ButtonGroupChild index={1} onPressToggle={() => setButtonsSize("lg")} pressed={buttonsSize === "lg"}>Large</ButtonGroupChild>
+                                </ButtonGroup>
                             </CardElement>
                             <CardElement>
                                 <ButtonGroup>

@@ -155,7 +155,8 @@ $popover-bg: $black !default;
 $headings-color: null !default;
 $popover-border-color: rgba($white, 0.2) !default;
 $modal-header-border-color: $border-color !default;
-$list-group-active-bg: $component-active-bg !default;
+$list-group-active-bg: color.adjust($component-active-bg, $alpha: -0.83) !default;
+$list-group-active-border-color:    $list-group-active-bg !default;
 $list-group-bg: $black !default;
 $list-group-action-color: $gray-300 !default;
 $modal-content-border-color: rgba($white, 0.2) !default;
@@ -551,9 +552,9 @@ $accordion-icon-active-color: $accordion-button-active-color !default;
   $list-group-border-color: rgba($white, 0.125),
 
   $list-group-hover-bg: $gray-900,
-  $list-group-active-color: $component-active-color,
+  $list-group-active-color: $body-color,
   $list-group-active-bg: $list-group-active-bg,
-  $list-group-active-border-color: $list-group-active-bg,
+  $list-group-active-border-color: $list-group-active-border-color,
 
   $list-group-disabled-color: $gray-400,
   $list-group-disabled-bg: $list-group-bg,

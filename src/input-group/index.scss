@@ -153,6 +153,17 @@ label.input-group-text:not(.disabled) {
   row-gap: 0.5em;
   & > [role="radiogroup"] {
     display: contents;
+    & > .input-group {
+      display: contents; // Having fun with CSS
+
+      // TODO: This is basically just copy-pasted from the normal "correctly align input groups in input grid" CSS.
+      & > *:nth-child(2n + 0) {
+        justify-self: flex-start;
+      }
+      & > *:nth-child(2n + 1) {
+        justify-self: flex-end;
+      }
+    }
   }
 
   // For full-width rows, give the input the most space.
@@ -173,12 +184,6 @@ label.input-group-text:not(.disabled) {
   &>.input-grid-span-8 > * {grid-column: auto / span 8;}
   &>.input-grid-span-all > * {grid-column: auto / span var(--input-grid-columns, 1); }
 
-  /*
-This is a bunch of hackery to allow spinners, which must be placed
-absolutely relative to the input, to be placed there *despite*
-input not allowing children, and the Bootstrap DOM generally not being
-designed to allow a "wrapper" that we can position: relative.
-*/
   &>.input-group {
     & > *:nth-child(2n + 0) {
       justify-self: flex-start;
@@ -187,6 +192,12 @@ designed to allow a "wrapper" that we can position: relative.
       justify-self: flex-end;
     }
 
+  /*
+This is a bunch of hackery to allow spinners, which must be placed
+absolutely relative to the input, to be placed there *despite*
+input not allowing children, and the Bootstrap DOM generally not being
+designed to allow a "wrapper" that we can position: relative.
+*/
     display: contents;
     > input.form-control {
       width: unset;

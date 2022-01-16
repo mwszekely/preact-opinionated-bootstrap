@@ -9,7 +9,7 @@ import { useCallback, useContext } from "preact/hooks";
 import { ProvideDefaultButtonDropdownDirection } from "../button/defaults";
 import { BodyPortal } from "../portal";
 import { ProgressCircular } from "../progress";
-import { FlippableTransitionComponent, forwardElementRef, TagSensitiveProps, useLogRender, usePseudoActive } from "../props";
+import { FlippableTransitionComponent, forwardElementRef, GlobalAttributes, TagSensitiveProps, useLogRender, usePseudoActive } from "../props";
 import { Tooltip } from "../tooltip/tooltip";
 import { getDefaultFlips, usePopperApi, useShouldUpdatePopper } from "./popper-api";
 
@@ -24,12 +24,17 @@ export interface MenuProps<E extends Element, T extends <E extends HTMLElement>(
     forceOpen?: boolean;
 }
 
-export interface MenuItemProps {
+export interface MenuItemProps extends GlobalAttributes<HTMLButtonElement> {
     children: ComponentChildren;
     index: number;
     onPress?(): (Promise<void> | void);
     disabled?: boolean;
+
+    badge?: ComponentChildren;
+    iconStart?: ComponentChildren;
+    iconEnd?: ComponentChildren;
 }
+
 
 const HasTypeaheadContext = createContext(false);
 
@@ -126,7 +131,7 @@ function MenuU<E extends Element, T extends <E extends HTMLElement>(...args: any
 }
 
 
-function MenuItemU({ children, disabled, onPress: onPressAsync, index, ...rest }: MenuItemProps, ref?: Ref<any>) {
+function MenuItemU({ children, disabled, onPress: onPressAsync, index, iconStart, iconEnd, badge, ...rest }: MenuItemProps, ref?: Ref<any>) {
     useLogRender("MenuItem", `Rendering MenuItem`);
     const useMenuItem = useContext(UseMenuItemContext);
     const hasTypeahead = useContext(HasTypeaheadContext);
@@ -146,15 +151,22 @@ function MenuItemU({ children, disabled, onPress: onPressAsync, index, ...rest }
 
     const onPress = getSyncHandler((disabled || !onPressAsync) ? null : () => onPressAsync?.()?.then(() => onClose?.()));
 
-    const newProps = useMenuItemProps(useRefElementProps(useMergedProps<HTMLButtonElement>()(rest, { ref, class: clsx(onPressAsync ? "dropdown-item" : "dropdown-item-text", disabled && "disabled"), "aria-disabled": disabled ? "true" : undefined })));
+    const newProps = useMenuItemProps(useRefElementProps(useMergedProps<HTMLButtonElement>()(rest, { ref, class: clsx(onPressAsync ? "dropdown-item" : "dropdown-item-text", "dropdown-multiline", !!badge && "with-badge", !!iconStart && "with-start", !!(badge || iconEnd) && "with-end", disabled && "disabled"), "aria-disabled": disabled ? "true" : undefined })));
     const buttonProps = usePseudoActive(usePressEventHandlers<HTMLButtonElement>(disabled ? null : onPress, hasTypeahead ? { space: "exclude" } : undefined)(newProps));
+
+
+
+
+    const childrenWithIcons = <>{iconStart && <span class="dropdown-item-start-icon">{iconStart}</span>}{children}{badge && <span class="dropdown-item-badge">{badge}</span>}{iconEnd && <span className="dropdown-item-end-icon">{iconEnd}</span>}</>
+
+
 
     if (isInteractive) {
         return (
             <li>
                 <ProgressCircular mode={hasError ? "failed" : pending ? "pending" : (settleCount) ? "succeeded" : null} childrenPosition="child" colorFill="foreground-only" colorVariant="info">
                     <button {...buttonProps}>
-                        {children}
+                        {childrenWithIcons}
                     </button>
                 </ProgressCircular>
             </li>
@@ -163,7 +175,7 @@ function MenuItemU({ children, disabled, onPress: onPressAsync, index, ...rest }
     else {
         return (
             <li {...newProps as any}>
-                {children}
+                {childrenWithIcons}
             </li>
         )
     }

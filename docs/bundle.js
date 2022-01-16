@@ -2250,18 +2250,31 @@
           setNextTypeaheadChar(null);
         }
       }, [nextTypeaheadChar]);
-      const comparator = useStableCallback((lhs, rhs) => {
-        let compare;
+      const comparatorShared = useStableCallback((safeLhs, safeRhs) => {
+        var _safeRhs$toLowerCase;
+
+        let compare; // For the purposes of typeahead, only compare a string of the same size as our currently typed string.
+        // By normalizing them first, we ensure this byte-by-byte handling of raw character data works out okay.
+
+        safeLhs = safeLhs.normalize("NFD");
+        safeRhs = safeRhs.normalize("NFD");
+        if (collator) compare = collator.compare(safeLhs, safeRhs);else compare = safeLhs.toLowerCase().localeCompare((_safeRhs$toLowerCase = safeRhs.toLowerCase()) !== null && _safeRhs$toLowerCase !== void 0 ? _safeRhs$toLowerCase : "");
+        return compare;
+      });
+      const insertingComparator = useStableCallback((lhs, rhs) => {
 
         if (typeof lhs === "string" && typeof rhs.text === "string") {
-          var _safeRhs$toLowerCase;
+          return comparatorShared(lhs, rhs.text);
+        }
 
-          // For the purposes of typeahead, only compare a string of the same size as our currently typed string.
-          // By normalizing them first, we ensure this byte-by-byte handling of raw character data works out okay.
-          let safeLhs = lhs.normalize("NFD");
-          let safeRhs = rhs.text.normalize("NFD").substr(0, safeLhs.length);
-          if (collator) compare = collator.compare(safeLhs, safeRhs);else compare = safeLhs.toLowerCase().localeCompare((_safeRhs$toLowerCase = safeRhs.toLowerCase()) !== null && _safeRhs$toLowerCase !== void 0 ? _safeRhs$toLowerCase : "");
-          return compare;
+        return lhs - rhs;
+      });
+      const typeaheadComparator = useStableCallback((lhs, rhs) => {
+
+        if (typeof lhs === "string" && typeof rhs.text === "string") {
+          // During typeahead, all strings longer than ours should be truncated
+          // so that they're all considered equally by that point.
+          return comparatorShared(lhs, rhs.text.substring(0, lhs.length));
         }
 
         return lhs - rhs;
@@ -2322,7 +2335,7 @@
 
       y(() => {
         if (currentTypeahead && sortedTypeaheadInfo.current.length) {
-          let sortedTypeaheadIndex = binarySearch(sortedTypeaheadInfo.current, currentTypeahead, comparator);
+          let sortedTypeaheadIndex = binarySearch(sortedTypeaheadInfo.current, currentTypeahead, typeaheadComparator);
 
           if (sortedTypeaheadIndex < 0) {
             // The user has typed an entry that doesn't exist in the list
@@ -2375,14 +2388,14 @@
 
             let i = sortedTypeaheadIndex;
 
-            while (i >= 0 && comparator(currentTypeahead, sortedTypeaheadInfo.current[i]) == 0) {
+            while (i >= 0 && typeaheadComparator(currentTypeahead, sortedTypeaheadInfo.current[i]) == 0) {
               updateBestFit(sortedTypeaheadInfo.current[i].unsortedIndex);
               --i;
             }
 
             i = sortedTypeaheadIndex;
 
-            while (i < sortedTypeaheadInfo.current.length && comparator(currentTypeahead, sortedTypeaheadInfo.current[i]) == 0) {
+            while (i < sortedTypeaheadInfo.current.length && typeaheadComparator(currentTypeahead, sortedTypeaheadInfo.current[i]) == 0) {
               updateBestFit(sortedTypeaheadInfo.current[i].unsortedIndex);
               ++i;
             }
@@ -2401,11 +2414,16 @@
             // Find where to insert this item.
             // Because all index values should be unique, the returned sortedIndex
             // should always refer to a new location (i.e. be negative)                
-            let sortedIndex = binarySearch(sortedTypeaheadInfo.current, text, comparator);
-            console.assert(sortedIndex < 0);
+            let sortedIndex = binarySearch(sortedTypeaheadInfo.current, text, insertingComparator);
+            console.assert(sortedIndex < 0 || sortedTypeaheadInfo.current[sortedIndex].text == text);
 
             if (sortedIndex < 0) {
               sortedTypeaheadInfo.current.splice(-sortedIndex - 1, 0, {
+                text,
+                unsortedIndex: i.index
+              });
+            } else {
+              sortedTypeaheadInfo.current.splice(sortedIndex, 0, {
                 text,
                 unsortedIndex: i.index
               });
@@ -2414,7 +2432,7 @@
             return () => {
               // When unmounting, find where we were and remove ourselves.
               // Again, we should always find ourselves because there should be no duplicate values if each index is unique.
-              let sortedIndex = binarySearch(sortedTypeaheadInfo.current, text, comparator);
+              let sortedIndex = binarySearch(sortedTypeaheadInfo.current, text, insertingComparator);
               console.assert(sortedIndex >= 0);
 
               if (sortedIndex >= 0) {
@@ -2681,18 +2699,6 @@
     }
 
     /**
-     * Returns a function that will, when called, force the component
-     * that uses this hook to re-render itself.
-     *
-     * It's a bit smelly, so best to use sparingly.
-     */
-
-    function useForceUpdate() {
-      const [, set] = l(0);
-      return s(() => set(i => ++i)).current;
-    }
-
-    /**
      * Implements a roving tabindex system where only one "focusable"
      * component in a set is able to receive a tab focus. *Which*
      * of those elements receives focus is determined by you, but it's
@@ -2884,7 +2890,150 @@
     function identity$1(t) {
       return t;
     }
+    /**
+     * Implements proper keyboard navigation for components like listboxes, button groups, menus, etc.
+     *
+     * In the document order, there will be only one "focused" or "tabbable" element, making it act more like one complete unit in comparison to everything around it.
+     * Navigating forwards/backwards can be done with the arrow keys, Home/End keys, or any any text for typeahead to focus the next item that matches.
+     */
 
+
+    function useListNavigation(_ref) {
+      var _indexMangler, _indexDemangler, _keyNavigation, _getTabbableIndex;
+
+      let {
+        initialIndex,
+        shouldFocusOnChange,
+        collator,
+        keyNavigation,
+        indexMangler,
+        indexDemangler
+      } = _ref;
+      (_indexMangler = indexMangler) !== null && _indexMangler !== void 0 ? _indexMangler : indexMangler = identity$1;
+      (_indexDemangler = indexDemangler) !== null && _indexDemangler !== void 0 ? _indexDemangler : indexDemangler = identity$1;
+      (_keyNavigation = keyNavigation) !== null && _keyNavigation !== void 0 ? _keyNavigation : keyNavigation = "either";
+      useEnsureStability(indexMangler, indexDemangler); // Keep track of three things related to the currently tabbable element's index:
+      // What it is, and whether, when we render this component and it's changed, to also focus the element that was made tabbable.
+
+      const [tabbableIndex, setTabbableIndex, getTabbableIndex] = useState(initialIndex === undefined ? 0 : initialIndex);
+      const {
+        managedChildren,
+        indicesByElement,
+        useRovingTabIndexChild,
+        focusCurrent,
+        ...rest
+      } = useRovingTabIndex({
+        shouldFocusOnChange,
+        tabbableIndex
+      });
+      /*const navigateToIndex = useCallback((i: number | null) => { setTabbableIndex(i); }, []);
+      const navigateToFirst = useCallback(() => { tryNavigateToIndex(managedChildren,) setTabbableIndex(indexMangler!(0)); }, []);
+      const navigateToLast = useCallback(() => { setTabbableIndex(indexMangler!(managedChildren.length - 1)); }, []);
+      const navigateToPrev = useCallback(() => { setTabbableIndex(i => indexMangler!(indexDemangler!(i ?? 0) - 1)) }, [indexDemangler, indexMangler]);
+      const navigateToNext = useCallback(() => { setTabbableIndex(i => indexMangler!(indexDemangler!(i ?? 0) + 1)) }, [indexDemangler, indexMangler]);
+      */
+
+      const navigateToIndex = A$1(i => {
+        var _indexMangler2, _indexDemangler2;
+
+        setTabbableIndex(i == null ? null : tryNavigateToIndex(managedChildren, 0, i, 1, (_indexMangler2 = indexMangler) !== null && _indexMangler2 !== void 0 ? _indexMangler2 : identity$1, (_indexDemangler2 = indexDemangler) !== null && _indexDemangler2 !== void 0 ? _indexDemangler2 : identity$1));
+      }, []);
+      const navigateToFirst = A$1(() => {
+        var _indexMangler3, _indexDemangler3;
+
+        setTabbableIndex(tryNavigateToIndex(managedChildren, 0, 0, 1, (_indexMangler3 = indexMangler) !== null && _indexMangler3 !== void 0 ? _indexMangler3 : identity$1, (_indexDemangler3 = indexDemangler) !== null && _indexDemangler3 !== void 0 ? _indexDemangler3 : identity$1));
+      }, []);
+      const navigateToLast = A$1(() => {
+        var _indexMangler4, _indexDemangler4;
+
+        setTabbableIndex(tryNavigateToIndex(managedChildren, managedChildren.length, managedChildren.length, -1, (_indexMangler4 = indexMangler) !== null && _indexMangler4 !== void 0 ? _indexMangler4 : identity$1, (_indexDemangler4 = indexDemangler) !== null && _indexDemangler4 !== void 0 ? _indexDemangler4 : identity$1));
+      }, []);
+      const navigateToPrev = A$1(() => {
+        setTabbableIndex(c => {
+          var _indexMangler5, _indexDemangler5;
+
+          return tryNavigateToIndex(managedChildren, c !== null && c !== void 0 ? c : 0, (c !== null && c !== void 0 ? c : 0) - 1, -1, (_indexMangler5 = indexMangler) !== null && _indexMangler5 !== void 0 ? _indexMangler5 : identity$1, (_indexDemangler5 = indexDemangler) !== null && _indexDemangler5 !== void 0 ? _indexDemangler5 : identity$1);
+        });
+      }, []);
+      const navigateToNext = A$1(() => {
+        setTabbableIndex(c => {
+          var _indexMangler6, _indexDemangler6;
+
+          return tryNavigateToIndex(managedChildren, c !== null && c !== void 0 ? c : 0, (c !== null && c !== void 0 ? c : 0) + 1, 1, (_indexMangler6 = indexMangler) !== null && _indexMangler6 !== void 0 ? _indexMangler6 : identity$1, (_indexDemangler6 = indexDemangler) !== null && _indexDemangler6 !== void 0 ? _indexDemangler6 : identity$1);
+        });
+      }, []);
+      const setIndex = A$1(index => {
+        setTabbableIndex(index);
+      }, []);
+      const {
+        currentTypeahead,
+        invalidTypeahead,
+        useTypeaheadNavigationChild,
+        useTypeaheadNavigationProps
+      } = useTypeaheadNavigation({
+        collator,
+        getIndex: getTabbableIndex,
+        setIndex,
+        typeaheadTimeout: 1000
+      });
+      const {
+        useLinearNavigationProps
+      } = useLinearNavigation({
+        navigationDirection: keyNavigation,
+        index: (_getTabbableIndex = getTabbableIndex()) !== null && _getTabbableIndex !== void 0 ? _getTabbableIndex : 0,
+        managedChildren,
+        navigateToPrev,
+        navigateToNext,
+        navigateToFirst,
+        navigateToLast
+      });
+      const useListNavigationProps = A$1(props => {
+        return useLinearNavigationProps(useTypeaheadNavigationProps(props));
+      }, [useLinearNavigationProps, useTypeaheadNavigationProps]);
+      const useListNavigationChild = A$1(info => {
+        useTypeaheadNavigationChild(info); //const { useLinearNavigationChildProps } = useLinearNavigationChild(info as I);
+
+        const {
+          useRovingTabIndexChildProps,
+          useRovingTabIndexSiblingProps,
+          tabbable
+        } = useRovingTabIndexChild(info);
+
+        const useListNavigationChildProps = function (_ref2) {
+          let { ...props
+          } = _ref2;
+          return useMergedProps()(useRovingTabIndexChildProps({
+            onClick: roveToSelf,
+            hidden: info.hidden
+          }), props);
+        };
+
+        const roveToSelf = A$1(() => {
+          navigateToIndex(info.index);
+        }, []);
+        return {
+          useListNavigationChildProps,
+          useListNavigationSiblingProps: useRovingTabIndexSiblingProps,
+          tabbable
+        };
+      }, [useTypeaheadNavigationChild, useRovingTabIndexChild, navigateToIndex]);
+      return {
+        useListNavigationChild,
+        useListNavigationProps,
+        currentTypeahead,
+        invalidTypeahead,
+        tabbableIndex,
+        managedChildren,
+        indicesByElement,
+        navigateToIndex,
+        navigateToNext,
+        navigateToPrev,
+        navigateToFirst,
+        navigateToLast,
+        focusCurrent,
+        ...rest
+      };
+    }
     function tryNavigateToIndex(managedCells, initial, target, searchDirection, indexMangler, indexDemangler) {
       function helper() {
         if (searchDirection === -1) {
@@ -2911,6 +3060,22 @@
       return helper();
     }
 
+    /**
+     * Returns a function that will, when called, force the component
+     * that uses this hook to re-render itself.
+     *
+     * It's a bit smelly, so best to use sparingly.
+     */
+
+    function useForceUpdate() {
+      const [, set] = l(0);
+      return s(() => set(i => ++i)).current;
+    }
+
+    function identity(t) {
+      return t;
+    }
+
     function useGridNavigation(_ref) {
       var _indexMangler, _indexDemangler, _getCurrentRow;
 
@@ -2919,8 +3084,8 @@
         indexMangler,
         indexDemangler
       } = _ref;
-      (_indexMangler = indexMangler) !== null && _indexMangler !== void 0 ? _indexMangler : indexMangler = identity$1;
-      (_indexDemangler = indexDemangler) !== null && _indexDemangler !== void 0 ? _indexDemangler : indexDemangler = identity$1;
+      (_indexMangler = indexMangler) !== null && _indexMangler !== void 0 ? _indexMangler : indexMangler = identity;
+      (_indexDemangler = indexDemangler) !== null && _indexDemangler !== void 0 ? _indexDemangler : indexDemangler = identity;
       const getFocusCellOnRowChange = useStableCallback(shouldFocusOnChange); // Keep track of our currently tabbable row and column.
       // These are mangled, and so relative to the DOM order, not component order.
       // Any operations done on these numbers need to be demangled first,
@@ -3062,22 +3227,22 @@
         }); // More navigation stuff
 
         const navigateToFirstColumn = A$1(() => {
-          setCurrentColumn2(tryNavigateToIndex(managedCells, 0, 0, 1, identity$1, identity$1));
+          setCurrentColumn2(tryNavigateToIndex(managedCells, 0, 0, 1, identity, identity));
           forceUpdate();
         }, []);
         const navigateToLastColumn = A$1(() => {
-          setCurrentColumn2(tryNavigateToIndex(managedCells, managedCells.length, managedCells.length, -1, identity$1, identity$1));
+          setCurrentColumn2(tryNavigateToIndex(managedCells, managedCells.length, managedCells.length, -1, identity, identity));
           forceUpdate();
         }, []);
         const navigateToPrevColumn = A$1(() => {
           setCurrentColumn2(c => {
-            return tryNavigateToIndex(managedCells, c, c - 1, -1, identity$1, identity$1);
+            return tryNavigateToIndex(managedCells, c, c - 1, -1, identity, identity);
           });
           forceUpdate();
         }, []);
         const navigateToNextColumn = A$1(() => {
           setCurrentColumn2(c => {
-            return tryNavigateToIndex(managedCells, c, c + 1, 1, identity$1, identity$1);
+            return tryNavigateToIndex(managedCells, c, c + 1, 1, identity, identity);
           });
           forceUpdate();
         }, []);
@@ -3445,132 +3610,6 @@
         } catch (e) {
           debugger; // Intentional
         }
-      };
-    }
-
-    function identity(t) {
-      return t;
-    }
-    /**
-     * Implements proper keyboard navigation for components like listboxes, button groups, menus, etc.
-     *
-     * In the document order, there will be only one "focused" or "tabbable" element, making it act more like one complete unit in comparison to everything around it.
-     * Navigating forwards/backwards can be done with the arrow keys, Home/End keys, or any any text for typeahead to focus the next item that matches.
-     */
-
-
-    function useListNavigation(_ref) {
-      var _indexMangler, _indexDemangler, _keyNavigation, _getTabbableIndex;
-
-      let {
-        initialIndex,
-        shouldFocusOnChange,
-        collator,
-        keyNavigation,
-        indexMangler,
-        indexDemangler
-      } = _ref;
-      (_indexMangler = indexMangler) !== null && _indexMangler !== void 0 ? _indexMangler : indexMangler = identity;
-      (_indexDemangler = indexDemangler) !== null && _indexDemangler !== void 0 ? _indexDemangler : indexDemangler = identity;
-      (_keyNavigation = keyNavigation) !== null && _keyNavigation !== void 0 ? _keyNavigation : keyNavigation = "either"; // Keep track of three things related to the currently tabbable element's index:
-      // What it is, and whether, when we render this component and it's changed, to also focus the element that was made tabbable.
-
-      const [tabbableIndex, setTabbableIndex, getTabbableIndex] = useState(initialIndex === undefined ? 0 : initialIndex);
-      const {
-        managedChildren,
-        indicesByElement,
-        useRovingTabIndexChild,
-        focusCurrent,
-        ...rest
-      } = useRovingTabIndex({
-        shouldFocusOnChange,
-        tabbableIndex
-      });
-      const navigateToIndex = A$1(i => {
-        setTabbableIndex(i);
-      }, []);
-      const navigateToFirst = A$1(() => {
-        setTabbableIndex(indexMangler(0));
-      }, []);
-      const navigateToLast = A$1(() => {
-        setTabbableIndex(indexMangler(managedChildren.length - 1));
-      }, []);
-      const navigateToPrev = A$1(() => {
-        setTabbableIndex(i => indexMangler(indexDemangler(i !== null && i !== void 0 ? i : 0) - 1));
-      }, [indexDemangler, indexMangler]);
-      const navigateToNext = A$1(() => {
-        setTabbableIndex(i => indexMangler(indexDemangler(i !== null && i !== void 0 ? i : 0) + 1));
-      }, [indexDemangler, indexMangler]);
-      const setIndex = A$1(index => {
-        setTabbableIndex(index);
-      }, []);
-      const {
-        currentTypeahead,
-        invalidTypeahead,
-        useTypeaheadNavigationChild,
-        useTypeaheadNavigationProps
-      } = useTypeaheadNavigation({
-        collator,
-        getIndex: getTabbableIndex,
-        setIndex,
-        typeaheadTimeout: 1000
-      });
-      const {
-        useLinearNavigationProps
-      } = useLinearNavigation({
-        navigationDirection: keyNavigation,
-        index: (_getTabbableIndex = getTabbableIndex()) !== null && _getTabbableIndex !== void 0 ? _getTabbableIndex : 0,
-        managedChildren,
-        navigateToPrev,
-        navigateToNext,
-        navigateToFirst,
-        navigateToLast
-      });
-      const useListNavigationProps = A$1(props => {
-        return useLinearNavigationProps(useTypeaheadNavigationProps(props));
-      }, [useLinearNavigationProps, useTypeaheadNavigationProps]);
-      const useListNavigationChild = A$1(info => {
-        useTypeaheadNavigationChild(info); //const { useLinearNavigationChildProps } = useLinearNavigationChild(info as I);
-
-        const {
-          useRovingTabIndexChildProps,
-          useRovingTabIndexSiblingProps,
-          tabbable
-        } = useRovingTabIndexChild(info);
-
-        const useListNavigationChildProps = function (_ref2) {
-          let { ...props
-          } = _ref2;
-          return useMergedProps()(useRovingTabIndexChildProps({
-            onClick: roveToSelf
-          }), props);
-        };
-
-        const roveToSelf = A$1(() => {
-          navigateToIndex(info.index);
-        }, []);
-        return {
-          useListNavigationChildProps,
-          useListNavigationSiblingProps: useRovingTabIndexSiblingProps,
-          tabbable
-        };
-      }, [useTypeaheadNavigationChild, useRovingTabIndexChild, navigateToIndex]);
-      return {
-        useListNavigationChild,
-        useListNavigationProps,
-        currentTypeahead,
-        invalidTypeahead,
-        tabbableIndex,
-        setTabbableIndex,
-        managedChildren,
-        indicesByElement,
-        navigateToIndex,
-        navigateToNext,
-        navigateToPrev,
-        navigateToFirst,
-        navigateToLast,
-        focusCurrent,
-        ...rest
       };
     }
 
@@ -5561,7 +5600,7 @@
         onMouseOut,
         onClick,
         ...{
-          "data-pseudo-active": active ? "true" : undefined
+          "data-pseudo-active": active && !textSelectedDuringActivation ? "true" : undefined
         }
       }, props));
     }
@@ -5768,7 +5807,8 @@
         };
       }, [useLinearNavigationProps]);
       return {
-        useAriaAccordionSection
+        useAriaAccordionSection,
+        managedChildren: managedAccordionSections
       };
     }
 
@@ -6571,7 +6611,6 @@
         useListNavigationProps,
         navigateToIndex,
         managedChildren,
-        setTabbableIndex,
         tabbableIndex,
         focusCurrent,
         currentTypeahead,
@@ -6595,8 +6634,8 @@
         }, [])
       });
       y(() => {
-        if (!anyItemsFocused) setTabbableIndex(selectedIndex);
-      }, [anyItemsFocused, selectedIndex, setTabbableIndex]);
+        if (!anyItemsFocused) navigateToIndex(selectedIndex);
+      }, [anyItemsFocused, selectedIndex, navigateToIndex]);
       useChildFlag({
         activatedIndex: selectedIndex,
         managedChildren,
@@ -6652,7 +6691,7 @@
         };
 
         function useListboxSingleItemProps(props) {
-          const newProps = usePressEventHandlers(e => {
+          const newProps = usePressEventHandlers(info.disabled ? null : e => {
             navigateToIndex(info.index);
             const element = getElement();
             if (element) stableOnSelect === null || stableOnSelect === void 0 ? void 0 : stableOnSelect({
@@ -6668,6 +6707,7 @@
           props["aria-setsize"] = childCount.toString();
           props["aria-posinset"] = (info.index + 1).toString();
           props["aria-selected"] = (selected !== null && selected !== void 0 ? selected : false).toString();
+          if (info.disabled) props["aria-disabled"] = "true";
           return useListNavigationChildProps(useMergedProps()(newProps, useRefElementProps(props)));
         }
       }, [useListNavigationChild, selectionMode, childCount]);
@@ -6690,12 +6730,154 @@
         tabbableIndex,
         focus: focusCurrent,
         currentTypeahead,
-        invalidTypeahead
+        invalidTypeahead,
+        managedChildren
       };
 
       function useListboxSingleProps(props) {
         props.role = "listbox";
         return useListNavigationProps(useGenericLabelInputProps(useActiveElementProps(props)));
+      }
+    }
+
+    function useAriaListboxMulti(_ref) {
+      let { ...args
+      } = _ref;
+      const {
+        useHasFocusProps,
+        getFocusedInner
+      } = useHasFocus({});
+      const {
+        useGenericLabelInput,
+        useGenericLabelLabel,
+        useReferencedInputIdProps,
+        useReferencedLabelIdProps
+      } = useGenericLabel({
+        labelPrefix: "aria-listbox-label-",
+        inputPrefix: "aria-listbox-"
+      });
+      const {
+        useListNavigationChild,
+        useListNavigationProps,
+        navigateToIndex,
+        managedChildren,
+        currentTypeahead,
+        focusCurrent,
+        tabbableIndex,
+        invalidTypeahead
+      } = useListNavigation({ ...args,
+        shouldFocusOnChange: getFocusedInner
+      });
+      const {
+        useGenericLabelInputProps
+      } = useGenericLabelInput();
+      const childCount = managedChildren.length;
+      const [shiftHeld, setShiftHeld, getShiftHeld] = useState(false);
+      const typeaheadInProgress = !!currentTypeahead;
+      y(() => {
+        for (let i = 0; i < childCount; ++i) {
+          managedChildren[i].setTypeaheadInProgress(typeaheadInProgress);
+        }
+      }, [typeaheadInProgress, childCount]);
+      const useListboxMultiItem = A$1(info => {
+        var _info$onSelect;
+
+        const selected = info.selected;
+        const [typeaheadInProgress, setTypeaheadInProgress] = useState(false);
+        const getSelected = useStableGetter(selected);
+        const {
+          useRefElementProps,
+          getElement
+        } = useRefElement({});
+        const stableOnSelect = useStableCallback((_info$onSelect = info.onSelect) !== null && _info$onSelect !== void 0 ? _info$onSelect : () => {});
+        const {
+          tabbable,
+          useListNavigationSiblingProps,
+          useListNavigationChildProps
+        } = useListNavigationChild({ ...info,
+          setTypeaheadInProgress
+        });
+        useLayoutEffect(() => {
+          const element = getElement();
+
+          if (element && getShiftHeld()) {
+            stableOnSelect === null || stableOnSelect === void 0 ? void 0 : stableOnSelect({
+              target: element,
+              currentTarget: element,
+              [EventDetail]: {
+                selected: true
+              }
+            });
+          }
+        }, [tabbable]);
+        return {
+          useListboxMultiItemProps,
+          tabbable
+        };
+
+        function useListboxMultiItemProps(props) {
+          const newProps = usePressEventHandlers(info.disabled ? null : e => {
+            navigateToIndex(info.index);
+            stableOnSelect === null || stableOnSelect === void 0 ? void 0 : stableOnSelect({ ...e,
+              [EventDetail]: {
+                selected: !getSelected()
+              }
+            });
+            e.preventDefault();
+          }, {
+            space: typeaheadInProgress ? "exclude" : undefined
+          })({});
+          props.role = "option";
+          props["aria-setsize"] = childCount.toString();
+          props["aria-posinset"] = (info.index + 1).toString();
+          props["aria-selected"] = (tabbable !== null && tabbable !== void 0 ? tabbable : false).toString();
+          if (info.disabled) props["aria-disabled"] = "true";
+          return useRefElementProps(useListNavigationChildProps(useMergedProps()(newProps, props)));
+        }
+      }, [useListNavigationChild, childCount, typeaheadInProgress]);
+      const useListboxMultiLabel = A$1(function useListboxMultiLabel() {
+        function useListboxMultiLabelProps(props) {
+          const {
+            useGenericLabelLabelProps
+          } = useGenericLabelLabel();
+          return useGenericLabelLabelProps(props);
+        }
+
+        return {
+          useListboxMultiLabelProps
+        };
+      }, [useGenericLabelLabel]);
+      return {
+        useListboxMultiItem,
+        useListboxMultiProps,
+        useListboxMultiLabel,
+        tabbableIndex,
+        currentTypeahead,
+        invalidTypeahead,
+        focus: focusCurrent,
+        managedChildren
+      };
+
+      function useListboxMultiProps(props) {
+        props.role = "listbox";
+        props["aria-multiselectable"] = "true";
+        return useListNavigationProps(useHasFocusProps(useGenericLabelInputProps(useMergedProps()({
+          onKeyDown,
+          onKeyUp,
+          onFocusOut
+        }, props))));
+      }
+
+      function onKeyDown(e) {
+        if (e.key == "Shift") setShiftHeld(true);
+      }
+
+      function onKeyUp(e) {
+        if (e.key == "Shift") setShiftHeld(false);
+      }
+
+      function onFocusOut(e) {
+        setShiftHeld(false);
       }
     }
 
@@ -6935,7 +7117,8 @@
         //useMenuSubmenuItem,
         focusMenu,
         currentTypeahead,
-        invalidTypeahead
+        invalidTypeahead,
+        managedChildren
       };
     }
 
@@ -7187,7 +7370,9 @@
         tabbableIndex,
         focusTabList: focusCurrent,
         currentTypeahead,
-        invalidTypeahead
+        invalidTypeahead,
+        managedPanels,
+        managedTabs
       };
     }
 
@@ -7330,7 +7515,7 @@
         managedChildren,
         useListNavigationChild,
         useListNavigationProps,
-        setTabbableIndex,
+        navigateToIndex,
         tabbableIndex,
         focusCurrent,
         currentTypeahead,
@@ -7348,8 +7533,8 @@
         }, [])
       });
       y(() => {
-        if (!anyRadiosFocused) setTabbableIndex(selectedIndex !== null && selectedIndex !== void 0 ? selectedIndex : 0);
-      }, [anyRadiosFocused, selectedIndex, setTabbableIndex]);
+        if (!anyRadiosFocused) navigateToIndex(selectedIndex !== null && selectedIndex !== void 0 ? selectedIndex : 0);
+      }, [anyRadiosFocused, selectedIndex, navigateToIndex]);
       const useRadioGroupProps = A$1(_ref2 => {
         let { ...props
         } = _ref2;
@@ -10055,7 +10240,7 @@
     }
 
     const ProgressCircular = forwardElementRef(function (_ref4, ref) {
-      var _loadingLabel, _childrenPosition;
+      var _loadingLabel, _childrenPosition, _children, _children2, _children$type, _children3;
 
       let {
         loadingLabel,
@@ -10113,14 +10298,19 @@
           setPreviousSettledMode("failed");
         }
       }, [mode]);
-      const progressProps = useProgressProps({
+      (_childrenPosition = childrenPosition) !== null && _childrenPosition !== void 0 ? _childrenPosition : childrenPosition = "after";
+      if (children && (typeof children != "object" || !("type" in children))) children = v$1("span", null, children);
+      let progressProps = useMergedProps()({
+        ref,
+        className: clsx("circular-progress-container")
+      }, useMergedProps()(useProgressProps({
         "aria-hidden": `${mode != "pending"}`
-      });
-      const progressElement = v$1("div", { ...useMergedProps()({
-          ref,
-          className: clsx("circular-progress-container")
-        }, useMergedProps()(progressProps, p))
-      }, mode === "pending" && !!loadingLabel && v$1("div", {
+      }), p));
+      progressProps = useMergedProps()(progressProps, childrenPosition === "merged" ? { ...((_children = children) === null || _children === void 0 ? void 0 : _children.props),
+        ref: (_children2 = children) === null || _children2 === void 0 ? void 0 : _children2.ref
+      } : {});
+      let progressVnodeType = childrenPosition === "merged" ? (_children$type = (_children3 = children) === null || _children3 === void 0 ? void 0 : _children3.type) !== null && _children$type !== void 0 ? _children$type : "div" : "div";
+      const progressElement = v$1(progressVnodeType, progressProps, v$1(d$1, null, mode === "pending" && !!loadingLabel && v$1("div", {
         role: "alert",
         "aria-live": "assertive",
         class: "visually-hidden"
@@ -10149,8 +10339,7 @@
         show: !shownStatusLongEnough && mode === "failed"
       }, v$1("div", {
         class: "circular-progress-failed"
-      }, v$1(Cross, null))))));
-      (_childrenPosition = childrenPosition) !== null && _childrenPosition !== void 0 ? _childrenPosition : childrenPosition = "after";
+      }, v$1(Cross, null)))))));
       return v$1(d$1, null, childrenPosition == "before" && progressElement, children && v$1(children.type, useMergedProps()({
         children: childrenPosition === "child" ? progressElement : undefined,
         ref: children.ref
@@ -11654,10 +11843,155 @@
       if (tag === "passthrough") return B(children, passthroughProps);else return v$1(tag !== null && tag !== void 0 ? tag : "div", mergedProps, children);
     }));
 
-    const UseListboxSingleItemContext = D$1(null);
-    function ListSingle(props, ref) {
-      useLogRender("ListSingle", `Rendering ListSingle`);
+    /**
+     * Autocomplete access to the most common Bootstrap utility classes.
+     *
+     * Not necessary to use by any means -- just a reminder about what can be used when.
+     */
+    const UtilityClasses = {
+      position: {
+        relative: 'position-relative',
+        static: 'position-static',
+        absolute: 'position-absolute',
+        fixed: 'position-fixed',
+        sticky: 'position-sticky'
+      },
+      display: {
+        none: 'd-none',
+        flex: 'd-flex',
+        inlineFlex: 'd-inline-flex',
+        inline: 'd-inline',
+        inlineBlock: 'd-inline-block',
+        block: 'd-block',
+        grid: 'd-grid',
+        table: 'd-table',
+        tableRow: 'd-table-row',
+        tableCell: 'd-table-cell'
+      },
+      flex: {
+        parent: {
+          direction: {
+            row: 'flex-row',
+            rowReverse: 'flex-row-reverse',
+            column: 'flex-column',
+            columnReverse: 'flex-column-reverse'
+          },
+          justify: {
+            start: 'justify-content-start',
+            end: 'justify-content-end',
+            center: 'justify-content-center',
+            between: 'justify-content-between',
+            around: 'justify-content-around',
+            evenly: 'justify-content-evenly'
+          },
+          align: {
+            start: 'align-items-start',
+            end: 'align-items-end',
+            center: 'align-items-center',
+            baseline: 'align-items-baseline',
+            stretch: 'align-items-stretch '
+          }
+        },
+        children: {
+          align: {
+            start: 'align-self-start',
+            end: 'align-self-end',
+            center: 'align-self-center',
+            baseline: 'align-self-baseline',
+            stretch: 'align-self-stretch '
+          },
+          wrap: {
+            wrap: 'flex-wrap',
+            nowrap: 'flex-nowrap',
+            wrapReverse: 'flex-wrap-reverse'
+          }
+        }
+      },
+      userSelect: {
+        all: 'user-select-all',
+        auto: 'user-select-auto',
+        none: 'user-select-none'
+      },
+      pointerEvents: {
+        none: 'pe-none',
+        auto: 'pe-auto'
+      },
+      overflow: {
+        auto: 'overflow-auto',
+        hidden: 'overflow-hidden',
+        visible: 'overflow-visible',
+        scroll: 'overflow-scroll'
+      },
+      text: {
+        align: {
+          start: 'text-start',
+          center: 'text-center',
+          end: 'text-end'
+        },
+        wrapping: {
+          wrap: 'text-wrap',
+          nowrap: 'text-nowrap',
+          break: 'text-break',
+          truncate: 'text-truncate'
+        },
+        transform: {
+          uppercase: 'text-uppercase',
+          lowercase: 'text-lowercase',
+          capitalize: 'text-capitalize'
+        },
+        decoration: {
+          none: 'text-decoration-none',
+          underline: 'text-decoration-underline',
+          lineThrough: 'text-decoration-line-through'
+        }
+      }
+    };
+
+    const ListStatic = g(forwardElementRef(function ListStatic(props, ref) {
       const {
+        tag,
+        label,
+        inline,
+        flush,
+        labelPosition,
+        ...domProps
+      } = props;
+      let labelVnode = typeof label == "string" ? v$1("label", null, label) : label;
+      return v$1(d$1, null, labelPosition === "start" && labelVnode, v$1(tag !== null && tag !== void 0 ? tag : "ul", useMergedProps()({
+        class: clsx("list-group", flush && "list-group-flush", inline && UtilityClasses.display.inline),
+        ref,
+        "aria-hidden": labelPosition === "hidden" ? label : undefined
+      }, domProps)), labelPosition === "end" && labelVnode);
+    }));
+    const ListItemStatic = g(forwardElementRef(function ListItemStatic(props, ref) {
+      const {
+        children,
+        badge,
+        iconStart,
+        iconEnd,
+        disabled,
+        ...domProps
+      } = { ...props,
+        ref
+      };
+      return v$1("li", { ...usePseudoActive(useMergedProps()({
+          class: clsx("list-group-item list-group-item-multiline", disabled && "disabled text-muted", !!badge && "with-badge", !!iconStart && "with-start", !!(badge || iconEnd) && "with-end")
+        }, domProps))
+      }, iconStart && v$1("span", {
+        class: "list-group-item-start-icon"
+      }, iconStart), children, badge && v$1("span", {
+        class: "list-group-item-badge"
+      }, badge), iconEnd && v$1("span", {
+        className: "list-group-item-end-icon"
+      }, iconEnd));
+    }));
+
+    const UseListboxSingleItemContext = D$1(null);
+    const ListSingle = g(forwardElementRef(function ListSingle(props, ref) {
+      var _labelPosition;
+
+      useLogRender("ListSingle", `Rendering ListSingle`);
+      let {
         onSelect: onSelectAsync,
         selectedIndex,
         selectionMode,
@@ -11668,10 +12002,14 @@
         typeaheadTimeout,
         tag,
         select,
+        labelPosition,
+        label,
         ...domProps
       } = props;
       const {
-        getSyncHandler
+        getSyncHandler,
+        pending,
+        currentCapture
       } = useAsyncHandler()({
         capture: e => e[EventDetail].selectedIndex
       });
@@ -11679,29 +12017,54 @@
       const {
         useListboxSingleItem,
         useListboxSingleLabel,
-        useListboxSingleProps
+        useListboxSingleProps,
+        managedChildren
       } = useAriaListboxSingle({
         onSelect,
-        selectedIndex,
-        selectionMode,
+        selectedIndex: selectedIndex,
+        selectionMode: selectionMode !== null && selectionMode !== void 0 ? selectionMode : "activate",
         typeaheadTimeout,
         noWrap,
         noTypeahead,
         keyNavigation,
         collator
       });
+      const {
+        useListboxSingleLabelProps
+      } = useListboxSingleLabel();
+      useChildFlag({
+        activatedIndex: pending ? currentCapture : null,
+        managedChildren,
+        getChildFlag: A$1(i => managedChildren[i].getPending(), []),
+        setChildFlag: A$1((i, set) => managedChildren[i].setPending(set), [])
+      });
+      (_labelPosition = labelPosition) !== null && _labelPosition !== void 0 ? _labelPosition : labelPosition = "start";
+      let labelProps = typeof label == "string" ? {} : label.props;
+      let clonedLabel = labelPosition != "hidden" ? B(typeof label == "string" ? v$1("label", null, label) : label, useListboxSingleLabelProps(labelProps)) : label;
+      console.assert(!(labelPosition == "hidden" && typeof label != "string"));
       return v$1(UseListboxSingleItemContext.Provider, {
         value: useListboxSingleItem
-      }, v$1(tag, useMergedProps()({
-        class: "list-group",
-        ref
-      }, useListboxSingleProps(domProps))));
-    }
+      }, v$1(ListStatic, {
+        tag: tag,
+        labelPosition: labelPosition,
+        label: clonedLabel,
+        ...useMergedProps()({
+          class: "list-group",
+          ref,
+          "aria-hidden": labelPosition === "hidden" ? label : undefined
+        }, useListboxSingleProps(domProps))
+      }));
+    }));
     const ListItemSingle = g(forwardElementRef(function ListItemSingle(props, ref) {
       useLogRender("ListSingle", `Rendering ListSingleItem #${props.index}`);
+      const [pending, setPending, getPending] = useState(false);
       const useListItemSingle = F(UseListboxSingleItemContext);
+      console.assert(!!useListItemSingle, "ListItemSingle is being used outside of a single-select list. Did you mean to use a different kind of list, or a different kind of list item?");
       const {
         index,
+        hidden,
+        disabled,
+        children,
         ...domProps
       } = { ...props,
         ref
@@ -11733,22 +12096,88 @@
       } = useListItemSingle({
         index,
         text,
-        tag: "li"
+        tag: "li",
+        setPending,
+        getPending,
+        hidden,
+        disabled
       });
-      return v$1("li", { ...usePseudoActive(useMergedProps()({
-          class: clsx("list-group-item", "list-group-item-action", selected && "active")
+      return v$1(ListItemStatic, { ...usePseudoActive(useMergedProps()({
+          disabled,
+          class: clsx("list-group-item-action", selected && "active", pending && "pending")
         }, useListboxSingleItemProps(useRefElementProps(domProps))))
-      });
+      }, v$1(ProgressCircular, {
+        childrenPosition: "after",
+        mode: pending ? "pending" : null,
+        colorVariant: "info"
+      }, children));
     }));
 
     const UseListboxMultiItemContext = D$1(null);
-    g(forwardElementRef(function ListItemMulti(props, ref) {
+    const ListMulti = g(forwardElementRef(function ListMulti(props, ref) {
+      var _labelPosition;
+
+      useLogRender("ListMulti", `Rendering ListMulti`);
+      let {
+        collator,
+        keyNavigation,
+        noTypeahead,
+        noWrap,
+        typeaheadTimeout,
+        tag,
+        select,
+        label,
+        labelPosition,
+        ...domProps
+      } = props;
+      useAsyncHandler()({
+        capture: e => e[EventDetail].selectedIndex
+      });
+      const {
+        useListboxMultiItem,
+        useListboxMultiLabel,
+        useListboxMultiProps,
+        currentTypeahead,
+        focus,
+        invalidTypeahead,
+        tabbableIndex
+      } = useAriaListboxMulti({
+        typeaheadTimeout,
+        noWrap,
+        noTypeahead,
+        keyNavigation,
+        collator
+      });
+      const {
+        useListboxMultiLabelProps
+      } = useListboxMultiLabel();
+      (_labelPosition = labelPosition) !== null && _labelPosition !== void 0 ? _labelPosition : labelPosition = "start";
+      let labelProps = typeof label == "string" ? {} : label.props;
+      let clonedLabel = labelPosition != "hidden" ? B(typeof label == "string" ? v$1("label", null, label) : label, useListboxMultiLabelProps(labelProps)) : label;
+      console.assert(!(labelPosition == "hidden" && typeof label != "string"));
+      return v$1(UseListboxMultiItemContext.Provider, {
+        value: useListboxMultiItem
+      }, v$1(ListStatic, {
+        tag: tag,
+        labelPosition: labelPosition,
+        label: clonedLabel,
+        ...useMergedProps()({
+          class: "list-group",
+          ref,
+          "aria-hidden": labelPosition === "hidden" ? label : undefined
+        }, useListboxMultiProps(domProps))
+      }));
+    }));
+    const ListItemMulti = g(forwardElementRef(function ListItemMulti(props, ref) {
       useLogRender("ListMulti", `Rendering ListMultiItem #${props.index}`);
       const useListItemMulti = F(UseListboxMultiItemContext);
+      console.assert(!!useListItemMulti, "ListItemMulti is being used outside of a multi-select list. Did you mean to use a different kind of list, or a different kind of list item?");
       const {
         index,
         selected,
-        onSelect,
+        disabled,
+        onSelect: onSelectAsync,
+        children,
         ...domProps
       } = { ...props,
         ref
@@ -11773,18 +12202,53 @@
         }
       });
       const {
+        getSyncHandler,
+        pending,
+        currentCapture,
+        hasError,
+        resolveCount
+      } = useAsyncHandler()({
+        capture: e => e[EventDetail].selected
+      });
+      const onSelectSync = getSyncHandler(disabled ? null : onSelectAsync);
+      const {
         tabbable,
         useListboxMultiItemProps
       } = useListItemMulti({
         index,
         text,
         tag: "li",
-        selected,
-        onSelect
+        selected: currentCapture !== null && currentCapture !== void 0 ? currentCapture : selected,
+        onSelect: onSelectSync,
+        disabled
       });
-      return v$1("li", { ...usePseudoActive(useMergedProps()({
-          class: clsx("list-group-item", "list-group-item-action", selected && "active")
+      return v$1(ListItemStatic, { ...usePseudoActive(useMergedProps()({
+          disabled,
+          class: clsx("list-group-item-action", selected && "active", pending && "pending")
         }, useListboxMultiItemProps(useRefElementProps(domProps))))
+      }, v$1(ProgressCircular, {
+        childrenPosition: "after",
+        mode: pending ? "pending" : hasError ? "failed" : resolveCount ? "succeeded" : null,
+        colorVariant: "info"
+      }, children));
+    }));
+
+    function isSingleProps(props) {
+      return props.select == "single" || props.onSelect != null;
+    }
+
+    function isMultiProps(props) {
+      return props.select == "multi";
+    }
+
+    const List = g(forwardElementRef(function List(props, ref) {
+      if (isSingleProps(props)) return v$1(ListSingle, { ...props,
+        ref: ref
+      });else if (isMultiProps(props)) return v$1(ListMulti, { ...props,
+        ref: ref
+      });
+      return v$1(ListStatic, { ...props,
+        ref: ref
       });
     }));
 
@@ -14539,6 +15003,9 @@
         disabled,
         onPress: onPressAsync,
         index,
+        iconStart,
+        iconEnd,
+        badge,
         ...rest
       } = _ref2;
       useLogRender("MenuItem", `Rendering MenuItem`);
@@ -14589,12 +15056,19 @@
       });
       const newProps = useMenuItemProps(useRefElementProps(useMergedProps()(rest, {
         ref,
-        class: clsx(onPressAsync ? "dropdown-item" : "dropdown-item-text", disabled && "disabled"),
+        class: clsx(onPressAsync ? "dropdown-item" : "dropdown-item-text", "dropdown-multiline", !!badge && "with-badge", !!iconStart && "with-start", !!(badge || iconEnd) && "with-end", disabled && "disabled"),
         "aria-disabled": disabled ? "true" : undefined
       })));
       const buttonProps = usePseudoActive(usePressEventHandlers(disabled ? null : onPress, hasTypeahead ? {
         space: "exclude"
       } : undefined)(newProps));
+      const childrenWithIcons = v$1(d$1, null, iconStart && v$1("span", {
+        class: "dropdown-item-start-icon"
+      }, iconStart), children, badge && v$1("span", {
+        class: "dropdown-item-badge"
+      }, badge), iconEnd && v$1("span", {
+        className: "dropdown-item-end-icon"
+      }, iconEnd));
 
       if (isInteractive) {
         return v$1("li", null, v$1(ProgressCircular, {
@@ -14603,10 +15077,10 @@
           colorFill: "foreground-only",
           colorVariant: "info"
         }, v$1("button", { ...buttonProps
-        }, children)));
+        }, childrenWithIcons)));
       } else {
         return v$1("li", { ...newProps
-        }, children);
+        }, childrenWithIcons);
       }
     }
 
@@ -15058,7 +15532,7 @@
         const pushToast = usePushToast();
         const onPressSync = () => void (pushToast(v$1(Toast, null, "Button was clicked")));
         const onPressAsync = async () => {
-            await sleep$5(asyncTimeout ?? 0);
+            await sleep$6(asyncTimeout ?? 0);
             if (asyncFails)
                 throw new Error("Button operation failed.");
             else
@@ -15066,7 +15540,7 @@
         };
         const onPress = usesAsync ? onPressAsync : onPressSync;
         const onToggleInputAsync = async (b) => {
-            await sleep$5(asyncTimeout ?? 0);
+            await sleep$6(asyncTimeout ?? 0);
             if (asyncFails)
                 throw new Error("Button operation failed.");
             else
@@ -15107,14 +15581,19 @@
                                 v$1("code", null, `const onPress = ${usesAsync ? `async ` : ""}() => { ${usesAsync ? `await sleep(${asyncTimeout}); ` : ""}pushToast(<Toast ... />); }
 <Button onPress={onPress}>Click me</Button>`)),
                             v$1("hr", null),
-                            v$1(CardElement, { type: "subtitle", tag: "h3" }, "Color & fill"),
+                            v$1(CardElement, { type: "subtitle", tag: "h3" }, "Color, fill, & size"),
                             v$1(CardElement, { type: "paragraph" },
-                                "Buttons can be styled in different colors and fill styles. You can provide a global default with ",
+                                "Buttons can be styled in different sizes, colors, and fill styles. You can provide a global default with ",
                                 v$1("code", null, "Context"),
                                 " objects, like ",
                                 v$1("code", null, "<ProvideDefaultButtonFill>"),
                                 "."),
                             v$1(CardElement, null, "All the normal Bootstrap colors are provided, albeit with adjustments to outlined buttons to ensure correct contrast ratios on the theme's body BG color.  Additionally, besides the `light` and `dark` colors, `subtle` and `contrast` are available as colors to use that simply map onto `light` or `dark` depending on the body BG color."),
+                            v$1(CardElement, null,
+                                v$1(ButtonGroup, null,
+                                    v$1(ButtonGroupChild, { index: 0, onPressToggle: () => setButtonsSize("sm"), pressed: buttonsSize === "sm" }, "Small"),
+                                    v$1(ButtonGroupChild, { index: 1, onPressToggle: () => setButtonsSize("md"), pressed: buttonsSize === "md" }, "Medium"),
+                                    v$1(ButtonGroupChild, { index: 1, onPressToggle: () => setButtonsSize("lg"), pressed: buttonsSize === "lg" }, "Large"))),
                             v$1(CardElement, null,
                                 v$1(ButtonGroup, null,
                                     v$1(ButtonGroupChild, { index: 0, onPressToggle: () => setButtonsFill("fill"), pressed: buttonsFill === "fill" }, "Fill"),
@@ -15211,7 +15690,7 @@
     <ButtonGroupChild index={7}>Eighth button</ButtonGroupChild>
 </ButtonGroup>`))))))));
     }
-    async function sleep$5(arg0) {
+    async function sleep$6(arg0) {
         return new Promise(resolve => setTimeout(resolve, arg0));
     }
 
@@ -15225,13 +15704,13 @@
         const [disabled, setDisabled] = useState(false);
         const [labelPosition, setLabelPosition] = useState("end");
         const asyncCheckboxInput = A$1(async (checked) => {
-            await sleep$4(asyncTimeout ?? 0);
+            await sleep$5(asyncTimeout ?? 0);
             if (asyncFails)
                 throw new Error("Attempt to change checkbox & radio failed");
             setDemoChecked(checked);
         }, [asyncTimeout, asyncFails]);
         const asyncRadioInput = A$1(async (value) => {
-            await sleep$4(asyncTimeout ?? 0);
+            await sleep$5(asyncTimeout ?? 0);
             if (asyncFails)
                 throw new Error("Attempt to change radio failed");
             setDemoRadio(value);
@@ -15385,7 +15864,7 @@
 <Radio index={2} value="value3">Radio #3</Radio>
 </RadioGroup>`)))));
     }
-    async function sleep$4(arg0) {
+    async function sleep$5(arg0) {
         return new Promise(resolve => setTimeout(resolve, arg0));
     }
 
@@ -15397,13 +15876,13 @@
         const [number, setNumber] = useState(0);
         const [size, setSize] = useState("md");
         const asyncTextInput = A$1(async (text) => {
-            await sleep$3(asyncTimeout ?? 0);
+            await sleep$4(asyncTimeout ?? 0);
             if (asyncFails)
                 throw new Error("Attempt to change text failed");
             setText(text);
         }, [asyncTimeout, asyncFails]);
         const asyncNumberInput = A$1(async (value) => {
-            await sleep$3(asyncTimeout ?? 0);
+            await sleep$4(asyncTimeout ?? 0);
             if (asyncFails)
                 throw new Error("Attempt to change number failed");
             setNumber(value);
@@ -15460,7 +15939,7 @@
     <InputGroup size={size}><Input type="number" value={number} onInput={onNumberInput} min={-5}>Number-based input</Input></InputGroup>
 </InputGrid>`)))));
     }
-    async function sleep$3(arg0) {
+    async function sleep$4(arg0) {
         return new Promise(resolve => setTimeout(resolve, arg0));
     }
 
@@ -15538,6 +16017,54 @@
                         v$1(Input, { disabled: true, onValueChange: () => { }, type: "number", value: 0 }, "Numeric input"))))));
     }
 
+    /**
+     * Generic way to represent any icon that's based on a font using some specific class to choose which icon to display.
+     *
+     *
+     */
+
+    const FontIcon = g(forwardElementRef(function FontIcon(_ref, ref) {
+      let {
+        label,
+        tooltip,
+        role,
+        "aria-label": ariaLabel,
+        ...props
+      } = _ref;
+      const iconElement = v$1("i", { ...props,
+        role: label ? "img" : "presentation",
+        "aria-label": ariaLabel || (label !== null && label !== void 0 ? label : undefined),
+        ref: ref
+      });
+      if (tooltip) return v$1(Tooltip, {
+        tooltip: tooltip
+      }, iconElement);
+      return iconElement;
+    }));
+
+    /**
+     * Specialization of a FontIcon to display any given Bootstrap icon.
+     */
+
+    const BootstrapIcon = g(forwardElementRef(function BootstrapIcon(_ref, ref) {
+      let {
+        icon,
+        label,
+        tooltip,
+        ...props
+      } = _ref;
+      // Merge our custom CSS class with any additional classes that were passed in to this component
+      const mergedProps = useMergedProps()({
+        class: `bi bi-${icon}`
+      }, props); // Render the actual FontIcon
+
+      return v$1(FontIcon, { ...mergedProps,
+        label: label,
+        tooltip: tooltip,
+        ref: ref
+      });
+    })); // Probably a better way to get all these names
+
     function DemoMenus() {
         const [align, setAlign] = useState("start");
         const [side, setSide] = useState("block-end");
@@ -15550,7 +16077,7 @@
         const pushToast = usePushToast();
         const onPressSync = () => pushToast(v$1(Toast, null, "Menu item was clicked"));
         const onPressAsync = async () => {
-            await sleep$2(asyncTimeout);
+            await sleep$3(asyncTimeout);
             if (asyncFails)
                 throw new Error("Button operation failed.");
             else
@@ -15640,6 +16167,28 @@
     {...}
 </Menu>`)),
                 v$1("hr", null),
+                v$1(CardElement, { type: "subtitle", tag: "h3" }, "List-likes"),
+                v$1(CardElement, { tag: "div" },
+                    "Menu items inherit the same ",
+                    v$1("code", null, "iconBefore"),
+                    ", ",
+                    v$1("code", null, "iconAfter"),
+                    ", ",
+                    v$1("code", null, "badge"),
+                    ", and multiple line support from the various list item types."),
+                v$1(CardElement, null,
+                    v$1(Menu, { anchor: v$1(Button, { dropdownVariant: "combined" }, "Fancy menu items"), side: side, align: align },
+                        v$1(MenuItem, { index: 0, onPress: onPressAsync, iconStart: v$1(BootstrapIcon, { icon: "pencil", label: null }) },
+                            v$1("span", { class: "h5" }, "A: Item 1"),
+                            v$1("span", null, "Line #2")),
+                        v$1(MenuItem, { index: 1, onPress: onPressAsync, iconStart: v$1(BootstrapIcon, { icon: "pencil", label: null }) },
+                            v$1("span", { class: "h5" }, "B: Item 2"),
+                            v$1("span", null, "Line #2")),
+                        v$1(MenuItem, { index: 2, onPress: onPressAsync, iconStart: v$1(BootstrapIcon, { icon: "pencil", label: null }) },
+                            v$1("span", { class: "h5" }, "C: Item 3"),
+                            v$1("span", null, "Line #2")),
+                        v$1(MenuItem, { index: 3 }, "I'm still static"))),
+                v$1("hr", null),
                 v$1(CardElement, { type: "subtitle", tag: "h3" }, "Transitions"),
                 v$1(CardElement, { tag: "div" },
                     "By default, ",
@@ -15677,7 +16226,7 @@
                             v$1("code", null, "1 - fooDynamic"),
                             ") if the menu is flipped because it's near the edge of the viewport."))))));
     }
-    async function sleep$2(arg0) {
+    async function sleep$3(arg0) {
         return new Promise(resolve => setTimeout(resolve, arg0));
     }
 
@@ -15997,7 +16546,7 @@
         const d = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + (n ?? 0) * 7);
         const [checked, setChecked] = useState(false);
         const onInput = A$1(async (checked) => {
-            await sleep$1(2000);
+            await sleep$2(2000);
             setChecked(checked);
         }, []);
         return (v$1(TableRow, { hidden: filterEvens && (((n ?? 0) & 1) == 0), index: index },
@@ -16136,6 +16685,142 @@
         <ACustomTableRow index={6} />
     </TableFoot>
 </Table>`)))));
+    }
+    async function sleep$2(arg0) {
+        return new Promise(resolve => setTimeout(resolve, arg0));
+    }
+
+    const Badge = g(forwardElementRef(function Badge(_ref, ref) {
+      let {
+        colorVariant,
+        roundedPill,
+        label,
+        ...props
+      } = _ref;
+      return v$1("span", { ...useMergedProps()({
+          ref,
+          "aria-label": label,
+          className: clsx("badge", roundedPill && "rounded-pill", `bg-${colorVariant !== null && colorVariant !== void 0 ? colorVariant : "secondary"}`)
+        }, props)
+      });
+    }));
+
+    function DemoLists() {
+        const [selectedIndex, setSelectedIndex] = useState(0);
+        useState("outline");
+        useState("md");
+        useState(false);
+        const [lines, setLines] = useState(1);
+        const [selectedMulti, setSelectedMulti] = useState(new Set());
+        useState(3000);
+        useState(true);
+        useState(false);
+        useState(true);
+        usePushToast();
+        function makeListItemLines(index) {
+            if (lines === 1)
+                return v$1("span", null,
+                    "List Item #",
+                    index + 1);
+            return v$1(d$1, null, Array.from((function* () {
+                for (let i = 0; i < lines; ++i) {
+                    if (i == 0)
+                        yield v$1("span", { class: "h4" },
+                            "List Item #",
+                            index + 1);
+                    else
+                        yield v$1("span", null,
+                            "This is line #",
+                            i + 1);
+                }
+            })()));
+        }
+        function makeListItems(maker) {
+            return v$1(d$1, null, Array.from((function* () {
+                for (let i = 0; i < 5; ++i) {
+                    yield maker(i);
+                }
+            })()));
+        }
+        return (v$1("div", { class: "demo" },
+            v$1(Card, null,
+                v$1(CardElement, { type: "title", tag: "h2" }, "Lists"),
+                v$1(CardElement, null,
+                    v$1(List, { label: "Demo list", selectedIndex: selectedIndex, onSelect: setSelectedIndex }, makeListItems(index => v$1(ListItemSingle, { index: index, disabled: index == 2 }, makeListItemLines(index))))),
+                v$1(CardElement, null,
+                    "A list is a way to provide a large number of selectable options in a way that's distinct from, say, a list of checkboxes or radio buttons. Lists can be ",
+                    v$1("strong", null, "single-select"),
+                    ", ",
+                    v$1("strong", null, "multi-select"),
+                    ", or ",
+                    v$1("strong", null, "static"),
+                    " (no selection, display only)."),
+                v$1(CardElement, null,
+                    "All list types can have as many lines as needed; each e.g. ",
+                    v$1("code", null, "<span>"),
+                    " will create a new line. Format them however you like (i.e. making some larger or smaller, tinted different colors, etc.)",
+                    v$1(InputGroup, null,
+                        v$1(Input, { type: "number", value: lines, onValueChange: setLines }, "# of lines"))),
+                v$1(CardElement, { type: "subtitle", tag: "h3" }, "Single select"),
+                v$1(CardElement, null,
+                    "For single-select lists, you provide the parent ",
+                    v$1("code", null, "<List>"),
+                    " with ",
+                    v$1("code", null, "selectedIndex"),
+                    " and ",
+                    v$1("code", null, "onSelect"),
+                    " props that control which ",
+                    v$1("code", null, "<ListItemSingle>"),
+                    " is the selected one."),
+                v$1(CardElement, null,
+                    "As with most components, the ",
+                    v$1("code", null, "onSelect"),
+                    " prop can be an async function."),
+                v$1(CardElement, null,
+                    v$1(List, { label: "Single-select list demo", selectedIndex: selectedIndex, onSelect: async (i) => { await sleep$1(2000); setSelectedIndex(i); } }, makeListItems(index => v$1(ListItemSingle, { index: index, disabled: index == 2 }, makeListItemLines(index))))),
+                v$1(CardElement, { type: "subtitle", tag: "h3" }, "Multi select"),
+                v$1(CardElement, null,
+                    "Multi-select lists have a ",
+                    v$1("code", null, "selected"),
+                    " prop on each individual ",
+                    v$1("code", null, "<ListItemMulti>"),
+                    "."),
+                v$1(CardElement, null,
+                    "As with most components, the ",
+                    v$1("code", null, "onSelect"),
+                    " prop can be an async function."),
+                v$1(CardElement, null,
+                    v$1(List, { label: "Multi-select list demo", select: "multi" }, makeListItems(index => v$1(ListItemMulti, { index: index, selected: selectedMulti.has(index), disabled: index == 2, onSelect: async (selected) => {
+                            await sleep$1(2000);
+                            setSelectedMulti(prev => {
+                                let ret = new Set(Array.from(prev));
+                                if (selected)
+                                    ret.add(index);
+                                else
+                                    ret.delete(index);
+                                return ret;
+                            });
+                        } }, makeListItemLines(index))))),
+                v$1(CardElement, { type: "subtitle", tag: "h3" }, "Static lists"),
+                v$1(CardElement, null, "All lists share the same basic styling of a static list, so all of these options can also be used on single- and multi-select lists."),
+                v$1(CardElement, null,
+                    "You can add an icon at the righthand side with ",
+                    v$1("code", null, "iconEnd"),
+                    ":"),
+                v$1(CardElement, null,
+                    v$1(List, { label: "List with icons at the end" }, makeListItems(index => v$1(ListItemStatic, { iconEnd: v$1(BootstrapIcon, { icon: "star", label: null }) }, makeListItemLines(index))))),
+                v$1(CardElement, null,
+                    "Or an icon on the left with ",
+                    v$1("code", null, "iconStart"),
+                    ", or a badge at the top-right with ",
+                    v$1("code", null, "badge"),
+                    ":"),
+                v$1(CardElement, null,
+                    v$1(List, { label: "List with icons at the start and badges" }, makeListItems(index => v$1(ListItemStatic, { badge: v$1(Badge, { label: `Example value` }, Math.floor(Math.abs(Math.sin((index + 7) * 7) * 20))), iconStart: v$1(BootstrapIcon, { icon: "star", label: null }) }, makeListItemLines(index))))),
+                v$1(CardElement, null,
+                    "All these will properly align themselves no matter how many lines the list item has. Keep in mind that a list's contents are always read out as one long string to screen readers, so not only should they ",
+                    v$1("em", null, "not"),
+                    " contain interactive content (beyond itself being selectable), any additional content, should be kept as terse as possible to avoid repeated content when reading each item one at a time."))));
     }
     async function sleep$1(arg0) {
         return new Promise(resolve => setTimeout(resolve, arg0));
@@ -16287,7 +16972,7 @@
         return (v$1("div", { class: "demo" },
             "Selected: ",
             index,
-            v$1(ListSingle, { select: "single", onSelect: setIndex, selectedIndex: index, selectionMode: "activate", tag: "ul" },
+            v$1(ListSingle, { label: "Example list", select: "single", onSelect: setIndex, selectedIndex: index, selectionMode: "activate", tag: "ul" },
                 v$1(ListItemSingle, { index: 0 }, "Primary"),
                 v$1(ListItemSingle, { index: 1 }, "Secondary"),
                 v$1(ListItemSingle, { index: 2 }, "Success"),
@@ -16342,6 +17027,7 @@
                 v$1(DebugUtilContext.Provider, { value: d(() => ({ logRender: new Set(["Table", "TableHead", "TableBody", "TableRow", "TableCell"]) }), []) },
                     v$1(ToastsProvider, null,
                         v$1(DemoTable, null),
+                        v$1(DemoLists, null),
                         v$1(DemoMenus, null),
                         v$1(DemoButtons, null),
                         v$1(DemoChecks, null),

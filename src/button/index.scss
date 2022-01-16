@@ -59,7 +59,10 @@
         );
       }
       &.btn-outline-#{$color} {
-        @include box-shadow($btn-active-box-shadow, 0 0 0 0 rgba(tint-color($value, 40%), $input-btn-focus-color-opacity));
+        @include box-shadow(
+          $btn-active-box-shadow,
+          0 0 0 0 rgba(tint-color($value, 40%), $input-btn-focus-color-opacity)
+        );
       }
     }
 
@@ -85,13 +88,15 @@
         &.btn-#{$color} {
           @include box-shadow(
             $btn-active-box-shadow,
-            0 0 0 $btn-focus-width rgba(tint-color($value, 40%), $input-btn-focus-color-opacity)
+            0 0 0 $btn-focus-width
+              rgba(tint-color($value, 40%), $input-btn-focus-color-opacity)
           );
         }
         &.btn-outline-#{$color} {
           @include box-shadow(
             $btn-active-box-shadow,
-            0 0 0 $btn-focus-width rgba(tint-color($value, 40%), $input-btn-focus-color-opacity)
+            0 0 0 $btn-focus-width
+              rgba(tint-color($value, 40%), $input-btn-focus-color-opacity)
           );
         }
       }
@@ -102,13 +107,15 @@
         &.btn-#{$color} {
           @include box-shadow(
             $btn-active-box-shadow,
-            0 0 0 0 rgba(tint-color($value, 40%), $input-btn-focus-color-opacity)
+            0 0 0 0
+              rgba(tint-color($value, 40%), $input-btn-focus-color-opacity)
           );
         }
         &.btn-outline-#{$color} {
           @include box-shadow(
             $btn-active-box-shadow,
-            0 0 0 0 rgba(tint-color($value, 40%), $input-btn-focus-color-opacity)
+            0 0 0 0
+              rgba(tint-color($value, 40%), $input-btn-focus-color-opacity)
           );
         }
       }
@@ -128,36 +135,22 @@
 }
 .btn-lg {
   height: calc(1.5em + (#{$btn-padding-y-lg} * 2) + 2px);
-  /*.btn-check:checked + &,.btn-check:active + &,*/
-  &:active,
-  &.active {
-    &:not(.toggle-button),
-    &:focus,
-    &.pending {
-      padding-bottom: $btn-padding-y-lg * 0.5;
-      padding-top: $btn-padding-y-lg + $btn-padding-y-lg * 0.5;
-      //text-shadow: 0 0 0 $black;
-    }
-  }
-  &:not(:focus):not(.active):not(.pending) {
-    //text-shadow: 0em 0.2em 0.25em $black, 0.05em 0.15em 0.25em $black, -0.05em 0.15em 0.25em $black;
+  &:focus,
+  &:active:not(:focus),
+  &.active:not(:focus),
+  &.pending:not(.toggle-button) {
+    padding-bottom: $btn-padding-y-lg * 0.5;
+    padding-top: $btn-padding-y-lg + $btn-padding-y-lg * 0.5;
   }
 }
 .btn-sm {
   height: calc(1.5em + (#{$btn-padding-y-sm} * 2) + 2px);
-  /*.btn-check:checked + &,.btn-check:active + &,*/
-  &:active,
-  &.active {
-    &:not(.toggle-button),
-    &:focus,
-    &.pending {
-      padding-bottom: $btn-padding-y-sm * 0.5;
-      padding-top: $btn-padding-y-sm + $btn-padding-y-sm * 0.5;
-      //text-shadow: 0 0 0 $black;
-    }
-  }
-  &:not(:focus):not(.pending).active {
-    //text-shadow: 0em 0.2em 0.25em $black, 0.05em 0.15em 0.25em $black, -0.05em 0.15em 0.25em $black;
+  &:focus,
+  &:active:not(:focus),
+  &.active:not(:focus),
+  &.pending:not(.toggle-button) {
+    padding-bottom: $btn-padding-y-sm * 0.5;
+    padding-top: $btn-padding-y-sm + $btn-padding-y-sm * 0.5;
   }
 }
 
@@ -176,7 +169,6 @@
     // (Especially a problem for dark themes)
     $contrast-ratio: contrast-ratio($body-bg, $value);
     @if $contrast-ratio <= $min-contrast-ratio {
-      
       $adjusted-color: ensure-contrasting-color($body-bg, $value);
       color: $adjusted-color;
       border-color: $adjusted-color;
@@ -190,7 +182,7 @@
       &:active,
       &:disabled,
       &.disabled {
-          color: ensure-contrasting-color(mix($value, $body-bg), $value);
+        color: ensure-contrasting-color(mix($value, $body-bg), $value);
       }
     }
 

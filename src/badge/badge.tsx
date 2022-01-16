@@ -11,8 +11,9 @@ export interface BadgeProps extends GlobalAttributes<HTMLSpanElement> {
     colorVariant?: BadgeColorVariant;
     roundedPill?: boolean;
     className?: string;
+    label: string;
 }
 
-export const Badge = memo(forwardElementRef(function Badge({ colorVariant, roundedPill, ...props }: BadgeProps, ref: Ref<HTMLSpanElement>) {
-    return <span {...useMergedProps<HTMLSpanElement>()({ ref, className: clsx("badge", roundedPill && "rounded-pill", `bg-${colorVariant ?? "secondary"}`) }, props)} />
+export const Badge = memo(forwardElementRef(function Badge({ colorVariant, roundedPill, label, ...props }: BadgeProps, ref: Ref<HTMLSpanElement>) {
+    return <span {...useMergedProps<HTMLSpanElement>()({ ref, "aria-label": label, className: clsx("badge", roundedPill && "rounded-pill", `bg-${colorVariant ?? "secondary"}`) }, props)} />
 }));

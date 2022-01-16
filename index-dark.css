@@ -5167,9 +5167,9 @@ textarea.form-control-lg {
 }
 .list-group-item.active {
   z-index: 2;
-  color: #d5d7f4;
-  background-color: #2b35CA;
-  border-color: #2b35CA;
+  color: #e6e6e6;
+  background-color: rgba(43, 53, 202, 0.17);
+  border-color: rgba(43, 53, 202, 0.17);
 }
 .list-group-item + .list-group-item {
   border-top-width: 0;
@@ -11364,6 +11364,37 @@ textarea.form-control-lg {
   overflow: hidden;
 }
 
+.badge.bg-primary {
+  color: #f9f9f9;
+}
+.badge.bg-secondary {
+  color: #b8b8b8;
+}
+.badge.bg-success {
+  color: #fefefe;
+}
+.badge.bg-info {
+  color: #010101;
+}
+.badge.bg-warning {
+  color: #292929;
+}
+.badge.bg-danger {
+  color: #fefefe;
+}
+.badge.bg-light {
+  color: #414141;
+}
+.badge.bg-dark {
+  color: #b0b0b0;
+}
+.badge.bg-contrast {
+  color: #414141;
+}
+.badge.bg-subtle {
+  color: #b0b0b0;
+}
+
 .btn-group.wrap {
   flex-wrap: wrap;
 }
@@ -11583,20 +11614,20 @@ textarea.form-control-lg {
 }
 .btn-lg {
   height: calc(1.5em + (0.5rem * 2) + 2px);
-  /*.btn-check:checked + &,.btn-check:active + &,*/
 }
-.btn-lg:active:not(.toggle-button), .btn-lg:active:focus, .btn-lg:active.pending, .btn-lg.active:not(.toggle-button), .btn-lg.active:focus, .btn-lg.active.pending {
+.btn-lg:focus, .btn-lg:active:not(:focus), .btn-lg.active:not(:focus), .btn-lg.pending:not(.toggle-button) {
   padding-bottom: 0.25rem;
   padding-top: 0.75rem;
 }
+
 .btn-sm {
   height: calc(1.5em + (0.25rem * 2) + 2px);
-  /*.btn-check:checked + &,.btn-check:active + &,*/
 }
-.btn-sm:active:not(.toggle-button), .btn-sm:active:focus, .btn-sm:active.pending, .btn-sm.active:not(.toggle-button), .btn-sm.active:focus, .btn-sm.active.pending {
+.btn-sm:focus, .btn-sm:active:not(:focus), .btn-sm.active:not(:focus), .btn-sm.pending:not(.toggle-button) {
   padding-bottom: 0.125rem;
   padding-top: 0.375rem;
 }
+
 .btn-outline-primary {
   color: #2b35CA;
   border-color: #2b35CA;
@@ -11950,39 +11981,130 @@ textarea.form-control-lg {
   font-family: Jost, system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, Liberation Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
 }
 
-.list-group-item-action {
-  user-select: none;
+.list-group-item {
+  --start-icon-width: var(--start-icon-width, auto);
+  --end-icon-width: var(--end-icon-width, auto);
+  background-color: var(--bs-body-bg);
+  color: #e6e6e6;
+  border-color: rgba(255, 255, 255, 0.125);
+}
+.list-group-item > .circular-progress-container {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.list-group-item.list-group-item-multiline, .list-group-item.with-start, .list-group-item.with-end {
+  display: grid;
+  column-gap: 1em;
+  grid-auto-rows: auto;
+}
+.list-group-item.with-start.with-end {
+  grid-template-columns: var(--start-icon-width, auto) 1fr var(--end-icon-width, auto);
+}
+.list-group-item.with-start:not(.with-end) {
+  grid-template-columns: var(--start-icon-width, auto) 1fr;
+}
+.list-group-item.with-end:not(.with-start) {
+  grid-template-columns: 1fr var(--end-icon-width, auto);
+}
+.list-group-item > .list-group-item-start-icon, .list-group-item > .list-group-item-end-icon, .list-group-item > .list-group-item-badge {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+.list-group-item > .list-group-item-start-icon, .list-group-item > .list-group-item-end-icon {
+  align-items: center;
+}
+.list-group-item > .list-group-item-badge {
+  align-items: flex-start;
+}
+.list-group-item > .list-group-item-start-icon {
+  grid-column: 1/span 1;
+  grid-row: 1/9999999999;
+  justify-self: start;
+}
+.list-group-item > .list-group-item-end-icon, .list-group-item > .list-group-item-badge {
+  grid-column: -2/span 1;
+  grid-row: 1/9999999999;
+  justify-self: end;
 }
 
 .list-group-item-action,
 .list-group-item[tabindex="0"] {
   outline: none;
-  transition: box-shadow 0.15s cubic-bezier(0, 1, 0.33, 1), padding 0.15s cubic-bezier(0, 1, 0.33, 1), text-shadow 0.15s cubic-bezier(0, 1, 0.33, 1);
+  transition: box-shadow 0.15s cubic-bezier(0, 1, 0.33, 1), padding 0.1s linear, text-shadow 0.15s cubic-bezier(0, 1, 0.33, 1);
 }
-.list-group-item-action:active:not(:focus), .list-group-item-action.active:not(:focus),
-.list-group-item[tabindex="0"]:active:not(:focus),
-.list-group-item[tabindex="0"].active:not(:focus) {
+.list-group-item-action:not(.disabled):not(.pending),
+.list-group-item[tabindex="0"]:not(.disabled):not(.pending) {
+  cursor: pointer;
+}
+.list-group-item-action.disabled,
+.list-group-item[tabindex="0"].disabled {
+  cursor: default;
+}
+.list-group-item-action.pending,
+.list-group-item[tabindex="0"].pending {
+  cursor: progress;
+}
+.list-group-item-action:active:not(.pending), .list-group-item-action.active:not(.pending), .list-group-item-action:not(:active):not(.active).pending,
+.list-group-item[tabindex="0"]:active:not(.pending),
+.list-group-item[tabindex="0"].active:not(.pending),
+.list-group-item[tabindex="0"]:not(:active):not(.active).pending {
+  color: #e6e6e6;
+  background-color: rgba(43, 53, 202, 0.17);
+  border-color: rgba(43, 53, 202, 0.17);
+}
+.list-group-item-action:not(.active):not(:active):not(.pending), .list-group-item-action:active.pending, .list-group-item-action.active.pending,
+.list-group-item[tabindex="0"]:not(.active):not(:active):not(.pending),
+.list-group-item[tabindex="0"]:active.pending,
+.list-group-item[tabindex="0"].active.pending {
+  background-color: var(--bs-body-bg);
+  border-color: rgba(255, 255, 255, 0.125);
+  color: #e6e6e6;
+}
+.list-group-item-action:active:not(.pending):not(:focus), .list-group-item-action.active:not(.pending):not(:focus), .list-group-item-action:not(:active):not(.active).pending:not(:focus),
+.list-group-item[tabindex="0"]:active:not(.pending):not(:focus),
+.list-group-item[tabindex="0"].active:not(.pending):not(:focus),
+.list-group-item[tabindex="0"]:not(:active):not(.active).pending:not(:focus) {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4);
 }
-.list-group-item-action:active:focus, .list-group-item-action.active:focus,
-.list-group-item[tabindex="0"]:active:focus,
-.list-group-item[tabindex="0"].active:focus {
+.list-group-item-action:focus:not(:active):not(.active):not(.pending), .list-group-item-action:focus:active.pending, .list-group-item-action:focus.active.pending,
+.list-group-item[tabindex="0"]:focus:not(:active):not(.active):not(.pending),
+.list-group-item[tabindex="0"]:focus:active.pending,
+.list-group-item[tabindex="0"]:focus.active.pending {
+  box-shadow: 0 0 0 0.25rem rgba(128, 134, 223, 0.4), inset 0 0 0 rgba(0, 0, 0, 0.4);
+}
+.list-group-item-action:focus:active:not(.pending), .list-group-item-action:focus.active:not(.pending), .list-group-item-action:focus:not(:active).pending, .list-group-item-action:focus:not(.active).pending,
+.list-group-item[tabindex="0"]:focus:active:not(.pending),
+.list-group-item[tabindex="0"]:focus.active:not(.pending),
+.list-group-item[tabindex="0"]:focus:not(:active).pending,
+.list-group-item[tabindex="0"]:focus:not(.active).pending {
   box-shadow: 0 0 0 0.25rem rgba(128, 134, 223, 0.4), inset 0 0 0 rgba(0, 0, 0, 0.4), inset 0 3px 5px rgba(0, 0, 0, 0.4);
+}
+.list-group-item-action:active:not(.pending), .list-group-item-action.active:not(.pending), .list-group-item-action:not(:active):not(.active).pending,
+.list-group-item[tabindex="0"]:active:not(.pending),
+.list-group-item[tabindex="0"].active:not(.pending),
+.list-group-item[tabindex="0"]:not(:active):not(.active).pending {
   padding-bottom: 0.25rem;
   padding-top: 0.75rem;
 }
-.list-group-item-action:not(:active):not(.active):focus,
-.list-group-item[tabindex="0"]:not(:active):not(.active):focus {
-  box-shadow: 0 0 0 0.25rem rgba(128, 134, 223, 0.4), inset 0 0 0 rgba(0, 0, 0, 0.4);
-}
 
 @media (prefers-reduced-motion) {
-  .actionable.list-group-item:active, .actionable.list-group-item.active {
+  .actionable.list-group-item:active, .actionable.list-group-item.active, .actionable.list-group-item.pending,
+.list-group-item[tabindex="0"]:active,
+.list-group-item[tabindex="0"].active,
+.list-group-item[tabindex="0"].pending {
     padding-bottom: 0.5rem;
     padding-top: 0.5rem;
   }
 
-  .nav-link:active, .nav-link.active {
+  .nav-link:active, .nav-link.active, .nav-link.pending {
     padding-bottom: 0.5rem;
     padding-top: 0.5rem;
   }
@@ -12116,15 +12238,18 @@ label.input-group-text:not(.disabled) {
   grid-template-columns: repeat(var(--input-grid-columns, 1), max-content auto);
   grid-auto-rows: auto;
   row-gap: 0.5em;
-  /*
-  This is a bunch of hackery to allow spinners, which must be placed
-  absolutely relative to the input, to be placed there *despite*
-  input not allowing children, and the Bootstrap DOM generally not being
-  designed to allow a "wrapper" that we can position: relative.
-  */
 }
 .input-grid > [role=radiogroup] {
   display: contents;
+}
+.input-grid > [role=radiogroup] > .input-group {
+  display: contents;
+}
+.input-grid > [role=radiogroup] > .input-group > *:nth-child(2n+0) {
+  justify-self: flex-start;
+}
+.input-grid > [role=radiogroup] > .input-group > *:nth-child(2n+1) {
+  justify-self: flex-end;
 }
 .input-grid > .input-grid-span-all > label {
   grid-column: auto/span 1;
@@ -12158,6 +12283,12 @@ label.input-group-text:not(.disabled) {
   grid-column: auto/span var(--input-grid-columns, 1);
 }
 .input-grid > .input-group {
+  /*
+  This is a bunch of hackery to allow spinners, which must be placed
+  absolutely relative to the input, to be placed there *despite*
+  input not allowing children, and the Bootstrap DOM generally not being
+  designed to allow a "wrapper" that we can position: relative.
+  */
   display: contents;
 }
 .input-grid > .input-group > *:nth-child(2n+0) {
@@ -12281,7 +12412,7 @@ input[type=number]:not(.show-spin-buttons)::-webkit-inner-spin-button {
 
 .nav-link {
   outline: none;
-  transition: box-shadow 0.15s cubic-bezier(0, 1, 0.33, 1), padding 0.15s cubic-bezier(0, 1, 0.33, 1), text-shadow 0.15s cubic-bezier(0, 1, 0.33, 1);
+  transition: box-shadow 0.15s cubic-bezier(0, 1, 0.33, 1), padding 0.1s linear, text-shadow 0.15s cubic-bezier(0, 1, 0.33, 1);
 }
 .nav-link:active, .nav-link.active {
   padding-bottom: 0.25rem;
@@ -12541,10 +12672,64 @@ input[type=number]:not(.show-spin-buttons)::-webkit-inner-spin-button {
   z-index: 1070;
 }
 
+.dropdown-item {
+  --start-icon-width: var(--start-icon-width, auto);
+  --end-icon-width: var(--end-icon-width, auto);
+  background-color: var(--bs-body-bg);
+  color: #e6e6e6;
+  border-color: rgba(255, 255, 255, 0.125);
+}
+.dropdown-item > .circular-progress-container {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.dropdown-item.dropdown-item-multiline, .dropdown-item.with-start, .dropdown-item.with-end {
+  display: grid;
+  column-gap: 1em;
+  grid-auto-rows: auto;
+}
+.dropdown-item.with-start.with-end {
+  grid-template-columns: var(--start-icon-width, auto) 1fr var(--end-icon-width, auto);
+}
+.dropdown-item.with-start:not(.with-end) {
+  grid-template-columns: var(--start-icon-width, auto) 1fr;
+}
+.dropdown-item.with-end:not(.with-start) {
+  grid-template-columns: 1fr var(--end-icon-width, auto);
+}
+.dropdown-item > .dropdown-item-start-icon, .dropdown-item > .dropdown-item-end-icon, .dropdown-item > .dropdown-item-badge {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+.dropdown-item > .dropdown-item-start-icon, .dropdown-item > .dropdown-item-end-icon {
+  align-items: center;
+}
+.dropdown-item > .dropdown-item-badge {
+  align-items: flex-start;
+}
+.dropdown-item > .dropdown-item-start-icon {
+  grid-column: 1/span 1;
+  grid-row: 1/9999999999;
+  justify-self: start;
+}
+.dropdown-item > .dropdown-item-end-icon, .dropdown-item > .dropdown-item-badge {
+  grid-column: -2/span 1;
+  grid-row: 1/9999999999;
+  justify-self: end;
+}
+
 button.dropdown-item {
   position: relative;
   outline: none;
-  transition: box-shadow 0.15s cubic-bezier(0, 1, 0.33, 1), padding 0.15s cubic-bezier(0, 1, 0.33, 1), text-shadow 0.15s cubic-bezier(0, 1, 0.33, 1);
+  transition: box-shadow 0.15s cubic-bezier(0, 1, 0.33, 1), padding 0.1s linear, text-shadow 0.15s cubic-bezier(0, 1, 0.33, 1);
 }
 button.dropdown-item.pending {
   cursor: progress;

@@ -25,6 +25,9 @@ type SubType<Base, Condition> = Pick<Base, {
 export interface TagSensitiveProps<E extends EventTarget> {
     tag: ElementToTag<E>;
 }
+export interface OptionalTagSensitiveProps<E extends EventTarget> {
+    tag?: ElementToTag<E>;
+}
 
 
 export interface GlobalAttributes<E extends EventTarget> extends Pick<h.JSX.HTMLAttributes<E>, "class" | "className" | "hidden" | "id" | "style" | "ref" | "children"> {

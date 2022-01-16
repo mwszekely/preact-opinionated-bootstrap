@@ -2,7 +2,7 @@
 @forward "./bootstrap/bootstrap";
 
 $inset-press-transition: box-shadow 0.15s cubic-bezier(0, 1, 0.33, 1),
-  padding 0.15s cubic-bezier(0, 1, 0.33, 1),
+  padding 0.10s linear,
   text-shadow 0.15s cubic-bezier(0, 1, 0.33, 1) !default;
 
 

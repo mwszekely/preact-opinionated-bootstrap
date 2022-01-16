@@ -1,5 +1,8 @@
 @use "../variables.scss" as *;
+@use "../list/mixins.scss" as *;
 @forward "../variables";
+
+
 
 // We need these features without using a parent class
 .dropdown-toggle {
@@ -111,6 +114,9 @@
 .dropdown-menu-popper {
   z-index: $zindex-popover;
 }
+
+
+@include list-group-item-ish($name: dropdown-item);
 
 button.dropdown-item {
   &.pending {
