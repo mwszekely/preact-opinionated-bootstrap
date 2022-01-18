@@ -80,7 +80,7 @@ export function DemoButtons() {
                                 <ButtonGroup>
                                     <ButtonGroupChild index={0} onPressToggle={() => setButtonsSize("sm")} pressed={buttonsSize === "sm"}>Small</ButtonGroupChild>
                                     <ButtonGroupChild index={1} onPressToggle={() => setButtonsSize("md")} pressed={buttonsSize === "md"}>Medium</ButtonGroupChild>
-                                    <ButtonGroupChild index={1} onPressToggle={() => setButtonsSize("lg")} pressed={buttonsSize === "lg"}>Large</ButtonGroupChild>
+                                    <ButtonGroupChild index={2} onPressToggle={() => setButtonsSize("lg")} pressed={buttonsSize === "lg"}>Large</ButtonGroupChild>
                                 </ButtonGroup>
                             </CardElement>
                             <CardElement>

@@ -8,7 +8,7 @@ import "preact/devtools";
 import { useCallback, useMemo } from "preact/hooks";
 import { Accordion, AccordionSection } from "../accordion";
 import { Button } from "../button";
-import { Dialog } from "../dialog";
+import { Dialog, DialogsProvider } from "../dialog";
 import { Drawer } from "../drawer";
 import { Checkbox, Input, InputGroup, Radio, RadioGroup } from "../input-group";
 import { GridResponsive } from "../layout";
@@ -25,6 +25,7 @@ import { DemoLayout } from "./demos/layout";
 import { DemoMenus } from "./demos/menus";
 import { DemoTable } from "./demos/tables";
 import { DemoLists } from "./demos/lists";
+import { DemoDialogs } from "./demos/dialogs";
 
 
 
@@ -263,7 +264,7 @@ const Component = () => {
     const [theme, setTheme] = useState("theme-dark");
 
     return <>
-        <Button colorVariant={theme == "theme-dark"? "light" : "dark"} style={{ position: "fixed", insetBlockStart: "0.5em", insetInlineEnd: "0.5em", zIndex: 9999999 }} spinnerTimeout={999999999} onPress={async () => {
+        <Button colorVariant={theme == "theme-dark" ? "light" : "dark"} style={{ position: "fixed", insetBlockStart: "0.5em", insetInlineEnd: "0.5em", zIndex: 9999999 }} spinnerTimeout={999999999} onPress={async () => {
             let prev = theme;
             let next = prev === "theme-dark" ? "theme-light" : "theme-dark";
             setTheme(next);
@@ -279,27 +280,30 @@ const Component = () => {
         <GridResponsive minWidth="35em">
             <DebugUtilContext.Provider value={useMemo(() => ({ logRender: new Set<LogRenderType>(["Table", "TableHead", "TableBody", "TableRow", "TableCell"]) }), [])}>
                 <ToastsProvider>
+                    <DialogsProvider>
 
-                    <DemoTable />
-                    <DemoLists />
-                    <DemoMenus />
-                    <DemoButtons />
-                    <DemoChecks />
-                    <DemoInputs />
-                    <DemoLayout />
-                    <DemoAccordion />
-                    <DemoDialog />
-                    <DemoDrawer />
-                    <DemoInput />
-                    <DemoList />
-                    <DemoTabs />
-                    <DemoMenu />
-                    {/*<DemoFocus />
+                        <DemoTable />
+                        <DemoLists />
+                        <DemoMenus />
+                        <DemoDialogs />
+                        <DemoButtons />
+                        <DemoChecks />
+                        <DemoInputs />
+                        <DemoLayout />
+                        <DemoAccordion />
+                        <DemoDialog />
+                        <DemoDrawer />
+                        <DemoInput />
+                        <DemoList />
+                        <DemoTabs />
+                        <DemoMenu />
+                        {/*<DemoFocus />
             <DemoUseTimeout />
             <DemoUseInterval />
             <DemoUseFocusTrap />
             <DemoUseFocusTrap />
             <input />*/}
+                    </DialogsProvider>
                 </ToastsProvider>
             </DebugUtilContext.Provider>
         </GridResponsive>

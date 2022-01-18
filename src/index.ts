@@ -2,7 +2,7 @@ export { Accordion, AccordionProps, AccordionSection, AccordionSectionProps } fr
 export { Badge, BadgeColorVariant, BadgeProps } from "./badge";
 export { Button, ButtonGroup, ButtonGroupChild, ProvideDefaultButtonColor, ProvideDefaultButtonDisabled, ProvideDefaultButtonFill, ProvideDefaultButtonSize } from "./button";
 export { Card, CardElement, CardElementProps } from "./card";
-export { Dialog, DialogProps } from "./dialog";
+export { Dialog, DialogProps, DialogsProvider, PushDialog, usePushDialog, UpdateDialog, useUpdateDialog, useCloseDialog, CloseDialog, CloseDialogButton } from "./dialog";
 export { Drawer, DrawerProps } from "./drawer";
 export { Figure, FigureProps } from "./figure";
 export { Checkbox, CheckboxGroup, CheckboxGroupChild, CheckboxGroupChildProps, CheckboxGroupParent, CheckboxGroupProps, CheckboxProps, Input, InputGrid, InputGridProps, InputGroup, InputGroupProps, InputGroupText, InputGroupTextProps, InputProps, Radio, RadioGroup, RadioGroupProps, RadioProps, Switch, SwitchProps } from "./input-group";

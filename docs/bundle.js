@@ -10796,8 +10796,11 @@
       if (portalElement) return W(children, portalElement);else return null;
     }
 
-    const Dialog = g(forwardElementRef(function Dialog(_ref, ref) {
+    const DialogControlled = g(forwardElementRef(function DialogControlled(_ref, ref) {
+      var _onClose, _align;
+
       let {
+        align,
         onClose,
         open,
         descriptive,
@@ -10807,13 +10810,14 @@
         children,
         ...rest
       } = _ref;
+      onClose = (_onClose = onClose) !== null && _onClose !== void 0 ? _onClose : () => {};
       const {
         useDialogBackdrop,
         useDialogBody,
         useDialogProps,
         useDialogTitle
       } = useAriaDialog({
-        open,
+        open: open !== null && open !== void 0 ? open : false,
         onClose
       });
       const {
@@ -10833,7 +10837,14 @@
         rest.clipOriginBlock = 0;
       }
 
-      return v$1(BodyPortal, null, v$1("div", {
+      (_align = align) !== null && _align !== void 0 ? _align : align = "center";
+      return v$1(BodyPortal, null, v$1(CloseDialogContext.Provider, {
+        value: useStableCallback(() => {
+          var _onClose2;
+
+          return (_onClose2 = onClose) === null || _onClose2 === void 0 ? void 0 : _onClose2(undefined);
+        })
+      }, v$1("div", {
         class: "modal-portal-container"
       }, v$1(Fade, {
         show: open
@@ -10846,7 +10857,7 @@
           ...rest
         }
       }, v$1("div", { ...useDialogProps({
-          class: "modal-dialog modal-dialog-scrollable"
+          class: clsx("modal-dialog modal-dialog-scrollable", align == "center" ? "modal-dialog-centered" : "")
         })
       }, v$1(BodyPortalRoot, null, v$1(Fade, {
         show: open
@@ -10862,8 +10873,206 @@
         })
       }, children), footer != null && v$1("div", {
         class: "modal-footer"
-      }, footer))))))));
+      }, footer)))))))));
     }));
+    const DialogUncontrolled = g(forwardElementRef(function DialogUncontrolled(_ref2, ref) {
+      let {
+        provideShow,
+        modal,
+        ...props
+      } = _ref2;
+      const [state, setState, getState] = useState(null);
+      const show = A$1(async () => {
+        const state = getState();
+
+        if (!state) {
+          let resolve;
+          let reject;
+          let promise = new Promise((res, rej) => {
+            resolve = res;
+            reject = rej;
+          }).finally(() => {
+            setState(prev => null);
+          });
+          setState({
+            promise,
+            resolve,
+            reject
+          });
+          return promise;
+        } else {
+          return Promise.reject("This dialog is already being shown");
+        }
+      }, []);
+      const onClose = A$1(reason => {
+        var _getState2;
+
+        if (reason) {
+          if (!modal) {
+            var _getState;
+
+            (_getState = getState()) === null || _getState === void 0 ? void 0 : _getState.resolve(); //getState()?.reject(reason);
+
+            return;
+          }
+        }
+
+        (_getState2 = getState()) === null || _getState2 === void 0 ? void 0 : _getState2.resolve();
+      }, [modal]);
+      y(() => provideShow === null || provideShow === void 0 ? void 0 : provideShow(prev => show), [provideShow, show]);
+      return v$1(DialogControlled, { ...props,
+        open: !!state,
+        onClose: onClose
+      });
+    }));
+    const Dialog = g(forwardElementRef(function Dialog(props, ref) {
+      if (props.provideShow) return v$1(DialogUncontrolled, { ...props,
+        ref: ref
+      });
+      if (props.onClose) return v$1(DialogControlled, { ...props,
+        ref: ref
+      });else return v$1(DialogUncontrolled, { ...props,
+        ref: ref
+      });
+    }));
+    const PushDialogContext = D$1(null);
+    const CloseDialogContext = D$1(null);
+    const UpdateDialogContext = D$1(null);
+    const DefaultDialogTimeout = D$1(5000);
+    function DialogsProvider(_ref3) {
+      let {
+        children,
+        defaultTimeout
+      } = _ref3;
+      const [pushDialog, setPushDialog] = useState(null);
+      const [updateDialog, setUpdateDialog] = useState(null);
+      const pushDialogStable = useStableCallback(dialog => {
+        var _pushDialog;
+
+        return (_pushDialog = pushDialog === null || pushDialog === void 0 ? void 0 : pushDialog(dialog)) !== null && _pushDialog !== void 0 ? _pushDialog : Promise.reject();
+      });
+      const updateDialogStable = useStableCallback((index, dialog) => {
+        return updateDialog === null || updateDialog === void 0 ? void 0 : updateDialog(index, dialog);
+      });
+      return v$1(d$1, null, v$1(DefaultDialogTimeout.Provider, {
+        value: defaultTimeout !== null && defaultTimeout !== void 0 ? defaultTimeout : 5000
+      }, v$1(DialogsProviderHelper, {
+        setPushDialog: setPushDialog,
+        setUpdateDialog: setUpdateDialog
+      }), pushDialog && updateDialog && v$1(PushDialogContext.Provider, {
+        value: pushDialogStable
+      }, v$1(UpdateDialogContext.Provider, {
+        value: updateDialogStable
+      }, children))));
+    }
+    /**
+     * Returns a function that immediately displays the given JSX Dialog element and returns a promise when it closes.
+     *
+     * The `open` and `onClose` props do not need to be supplied; if they are, it's assumed you're using `useCloseDialog` to handle that yourself.
+     */
+
+    function usePushDialog() {
+      const pushDialog = F(PushDialogContext);
+      return pushDialog;
+    }
+    /**
+     * Returns a function that can be used to close whatever dialog the component that uses the hook is in.
+     *
+     * The function is stable across all renders (but cannot be called *during* render).
+     */
+
+    function useCloseDialog() {
+      const closeDialog = F(CloseDialogContext);
+      return closeDialog;
+    }
+    g(forwardElementRef(function CloseDialogButton(props, ref) {
+      return v$1(Button, { ...useMergedProps()(props, {
+          ref,
+          onPress: useCloseDialog()
+        })
+      });
+    })); // Extracted to a separate component to avoid rerendering all non-dialog children
+
+    function DialogsProviderHelper(_ref4) {
+      let {
+        setPushDialog,
+        setUpdateDialog
+      } = _ref4;
+      const [children, setChildren, getChildren] = useState(new Map());
+      const pushDialog = A$1(dialog => {
+        const randomKey = generateRandomId();
+        let resolve;
+        let reject;
+        const promise = new Promise((res, rej) => {
+          resolve = res;
+          reject = rej;
+        });
+        let show;
+
+        const provideShow = s => {
+          show = s(show);
+          show().then(resolve).catch(reject);
+        };
+
+        const clonedDialogProps = {
+          provideShow
+        };
+        setChildren(prev => {
+          let ret = new Map(prev);
+          const clonedDialog = B(dialog, { ...clonedDialogProps,
+            key: randomKey
+          });
+          ret.set(promise, {
+            key: randomKey,
+            promise,
+            resolve,
+            reject,
+            children: clonedDialog
+          });
+          return ret;
+        });
+        return promise;
+      }, []);
+      const updateDialog = A$1((index, dialog) => {
+        const info = getChildren().get(index);
+        console.assert(!!info);
+
+        if (info) {
+          setChildren(prev => {
+            let newChildren = new Map(prev);
+            newChildren.set(index, { ...info,
+              children: B(dialog, {
+                key: info.key
+              })
+            });
+            return newChildren;
+          });
+          return index;
+        }
+      }, []);
+      h(() => {
+        setPushDialog(_ => pushDialog);
+      }, [pushDialog]);
+      h(() => {
+        setUpdateDialog(_ => updateDialog);
+      }, [updateDialog]);
+      return v$1(BodyPortal, null, v$1(DialogsContainerChildrenContext.Provider, {
+        value: children
+      }, v$1(DialogsContainer, null)));
+    }
+
+    const DialogsContainerChildrenContext = D$1(new Map());
+
+    function DialogsContainer(props) {
+      const children = F(DialogsContainerChildrenContext);
+      return v$1("div", { ...useMergedProps()({}, props)
+      }, Array.from(children).map(_ref5 => {
+        let [key, {
+          children
+        }] = _ref5;
+        return children;
+      }));
+    }
 
     const Drawer = g(forwardElementRef(function Drawer(_ref, ref) {
       var _TransitionProps;
@@ -15593,7 +15802,7 @@
                                 v$1(ButtonGroup, null,
                                     v$1(ButtonGroupChild, { index: 0, onPressToggle: () => setButtonsSize("sm"), pressed: buttonsSize === "sm" }, "Small"),
                                     v$1(ButtonGroupChild, { index: 1, onPressToggle: () => setButtonsSize("md"), pressed: buttonsSize === "md" }, "Medium"),
-                                    v$1(ButtonGroupChild, { index: 1, onPressToggle: () => setButtonsSize("lg"), pressed: buttonsSize === "lg" }, "Large"))),
+                                    v$1(ButtonGroupChild, { index: 2, onPressToggle: () => setButtonsSize("lg"), pressed: buttonsSize === "lg" }, "Large"))),
                             v$1(CardElement, null,
                                 v$1(ButtonGroup, null,
                                     v$1(ButtonGroupChild, { index: 0, onPressToggle: () => setButtonsFill("fill"), pressed: buttonsFill === "fill" }, "Fill"),
@@ -16826,6 +17035,71 @@
         return new Promise(resolve => setTimeout(resolve, arg0));
     }
 
+    function DemoDialogs() {
+        const [show, setShow] = useState(null);
+        useState("start");
+        useState("block-end");
+        useState(false);
+        useState(3000);
+        useState(true);
+        useState(false);
+        useState(true);
+        useState(true);
+        const pushDialog = usePushDialog();
+        const onPressAsync = () => pushDialog(v$1(Dialog, { descriptive: false }, "Dialog item was clicked"));
+        return (v$1("div", { class: "demo" },
+            v$1(Card, null,
+                v$1(CardElement, { type: "title", tag: "h2" }, "Dialogs"),
+                v$1(CardElement, null,
+                    v$1(Button, { onPress: () => pushDialog(v$1(Dialog, { descriptive: false }, "This is a dialog!")) }, "Open a dialog")),
+                v$1(CardElement, null,
+                    v$1("code", null, "<Dialog>"),
+                    "s are a way to show the user (read: force the user to at least skim) some amount of information or other content. They can either be controlled or uncontrolled; controlled ",
+                    v$1("code", null, "<Dialog>"),
+                    "s take ",
+                    v$1("code", null, "open"),
+                    " and ",
+                    v$1("code", null, "onClose"),
+                    " props, while uncontrolled ",
+                    v$1("code", null, "<Dialog>"),
+                    "s give you a ",
+                    v$1("code", null, "async show()"),
+                    " function to call, or can be used from ",
+                    v$1("code", null, "useShowDialog"),
+                    "."),
+                v$1(CardElement, null,
+                    v$1(Button, { onPress: onPressAsync },
+                        v$1("code", null, "usePushDialog"))),
+                v$1(CardElement, null,
+                    v$1(Button, { onPress: show ?? undefined },
+                        v$1("code", null,
+                            "<Dialog provideShow=",
+                            "{provideShow}",
+                            " />")),
+                    v$1(Dialog, { descriptive: false, provideShow: setShow }, "This is a dialog")),
+                v$1(CardElement, null,
+                    "The easiest way to use them is via the ",
+                    v$1("code", null, "useShowDialog"),
+                    " hook. Pass the returned ",
+                    v$1("code", null, "showDialog"),
+                    " function a ",
+                    v$1("code", null, "<Dialog>"),
+                    " and it will be shown on the screen, with the function returning a promise that resolves when ",
+                    v$1("code", null, "onClose"),
+                    " would be called (if you pass your own ",
+                    v$1("code", null, "onClose"),
+                    " you will override this behavior which can be used if you need to prevent the dialog from closing when clicking the backdrop; use a ",
+                    v$1("code", null, "<CloseDialogButton>"),
+                    " or within your own component pass ",
+                    v$1("code", null, "useCloseDialog"),
+                    "'s returned function to close the dialog during your own ",
+                    v$1("code", null, "onClose"),
+                    ")."),
+                v$1(CardElement, null, "All components that use Portals to position themselves on the body will reposition themselves with the dialog as their parent instead, ensuring they still work as expected."),
+                v$1(CardElement, null,
+                    v$1(Button, { onPress: () => pushDialog(v$1(Dialog, { descriptive: false }, "This is a dialog!")) }, "Open a dialog")))));
+    }
+
     const RandomWords = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.".split(" ");
     g(({ setActive, active, depth }) => {
         return (v$1(d$1, null,
@@ -17026,20 +17300,22 @@
             v$1(GridResponsive, { minWidth: "35em" },
                 v$1(DebugUtilContext.Provider, { value: d(() => ({ logRender: new Set(["Table", "TableHead", "TableBody", "TableRow", "TableCell"]) }), []) },
                     v$1(ToastsProvider, null,
-                        v$1(DemoTable, null),
-                        v$1(DemoLists, null),
-                        v$1(DemoMenus, null),
-                        v$1(DemoButtons, null),
-                        v$1(DemoChecks, null),
-                        v$1(DemoInputs, null),
-                        v$1(DemoLayout, null),
-                        v$1(DemoAccordion, null),
-                        v$1(DemoDialog, null),
-                        v$1(DemoDrawer, null),
-                        v$1(DemoInput, null),
-                        v$1(DemoList, null),
-                        v$1(DemoTabs, null),
-                        v$1(DemoMenu, null)))));
+                        v$1(DialogsProvider, null,
+                            v$1(DemoTable, null),
+                            v$1(DemoLists, null),
+                            v$1(DemoMenus, null),
+                            v$1(DemoDialogs, null),
+                            v$1(DemoButtons, null),
+                            v$1(DemoChecks, null),
+                            v$1(DemoInputs, null),
+                            v$1(DemoLayout, null),
+                            v$1(DemoAccordion, null),
+                            v$1(DemoDialog, null),
+                            v$1(DemoDrawer, null),
+                            v$1(DemoInput, null),
+                            v$1(DemoList, null),
+                            v$1(DemoTabs, null),
+                            v$1(DemoMenu, null))))));
     };
     requestAnimationFrame(() => {
         S$1(v$1(Component, null), document.getElementById("root"));
