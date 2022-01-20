@@ -12,7 +12,6 @@ export default {
         name: "bundle",
         sourcemap: false
     },
-
     plugins: [
         typescript({ sourceMap: false }),
         commonjs(),

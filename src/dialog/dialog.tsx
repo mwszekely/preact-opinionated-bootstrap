@@ -26,7 +26,20 @@ interface DialogControlledProps<T extends <E extends HTMLElement>(...args: any[]
 
 
 interface DialogUncontrolledProps<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element> extends DialogSharedProps<T> {
+    /**
+     * When using an uncontrolled dialog, you'll need a way to remotely show the dialog, and know when it closes.
+     * 
+     * When the Dialog renders (not shown, it just needs to render), it will pass a `show` function to any `setShow` function you pass here.
+     * 
+     * When the dialog closes for any reason, the promise will resolve.
+     */
     provideShow?: StateUpdater<() => Promise<void>>;
+
+    /**
+     * If true, this uncontrolled dialog cannot be closed by clicking on the backdrop or pressing the escape key.
+     * 
+     * Specifically, if any reason is given for the close, it won't be closed.
+     */
     modal?: boolean;
 };
 
@@ -168,20 +181,25 @@ export function DialogsProvider({ children, defaultTimeout }: { children: Compon
 /**
  * Returns a function that immediately displays the given JSX Dialog element and returns a promise when it closes.
  * 
- * The `open` and `onClose` props do not need to be supplied; if they are, it's assumed you're using `useCloseDialog` to handle that yourself.
+ * In general it's assumed that you're using an uncontrolled dialog, so you do not need to supply `open` or `onClose` props.
  */
 export function usePushDialog() {
     const pushDialog = useContext(PushDialogContext);
     return pushDialog;
 }
 
+/**
+ * Given the promise that's currently associated with an open dialog, allows you to re-render the dialog to update its contents.
+ * 
+ * You could use this to render a controlled dialog, for example, instead of the usual uncontrolled dialog.
+ */
 export function useUpdateDialog() {
     const updateDialog = useContext(UpdateDialogContext);
     return updateDialog;
 }
 
 /**
- * Returns a function that can be used to close whatever dialog the component that uses the hook is in.
+ * Returns a function that can be used to close whatever dialog the component that uses the hook is in. *Primarily for use in uncontrolled dialogs*, but can be used anywhere.
  * 
  * The function is stable across all renders (but cannot be called *during* render).
  */
@@ -190,6 +208,11 @@ export function useCloseDialog() {
     return closeDialog;
 }
 
+/**
+ * A specialized button that closes the dialog it's contained in when clicked. In all other regards, a normal button that does normal button things.
+ * 
+ * This is most useful for uncontrolled dialogs, but can be used anywhere.
+ */
 export const CloseDialogButton = memo(forwardElementRef(function CloseDialogButton(props: ButtonButtonProps, ref?: Ref<any>) {
     return <Button {...(useMergedProps<any>()(props as any, { ref, onPress: useCloseDialog() }) as any)} />
 }))

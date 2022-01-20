@@ -1,6 +1,7 @@
 @use "sass:color";
 @use "sass:math";
-@use "./bootstrap/functions" as *;
+@use "bootstrap/scss/functions" as *;
+@use "./bootstrap-shared" as *;
 
 $white: #fff !default;
 $gray-100: #f8f9fa !default;
@@ -52,31 +53,18 @@ $theme-colors: (
 ) !default;
 
 $component-active-bg: $primary !default;
-$input-btn-focus-color-opacity: 0.4 !default;
-$input-btn-focus-color-opacity: $input-btn-focus-color-opacity !default;
 $input-btn-focus-color: rgba(
   tint-color($component-active-bg, 40%),
   $input-btn-focus-color-opacity
 ) !default;
 
-$primary-font-family: #{"Jost", system-ui, -apple-system, "Segoe UI", Roboto,
-  "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
-  "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"} !default;
 
-$input-btn-focus-width: 0.25rem !default;
 $input-btn-focus-box-shadow: 0 0 0 $input-btn-focus-width $input-btn-focus-color !default;
-$input-focus-box-shadow: #{$input-btn-focus-box-shadow,
-  inset 0 0 0 rgb(0 0 0 / 40%)} !default;
+$input-focus-box-shadow: #{$input-btn-focus-box-shadow, inset 0 0 0 rgb(0 0 0 / 40%)} !default;
 $input-box-shadow: #{0 0 0 $input-btn-focus-color, inset 0 0 0 rgb(0 0 0 / 40%)} !default;
 
-$btn-close-padding-y: 0 !default;
-$btn-close-padding-x: 0 !default;
-$font-family-sans-serif: $primary-font-family !default;
-$progress-bar-transition: #{width, clip-path 0.6s ease} !default;
-$btn-box-shadow: inset 0 -4px 0 0 rgba(0 0 0 / 100%) !default;
-$btn-active-box-shadow: inset 0 3px 5px rgb(0 0 0 / 40%) !default;
+
 $input-focus-box-shadow: $input-focus-box-shadow !default;
-$input-btn-focus-color-opacity: $input-btn-focus-color-opacity !default;
 $input-btn-focus-color: $input-btn-focus-color !default;
 $input-btn-focus-box-shadow: $input-btn-focus-box-shadow !default;
 $input-box-shadow: $input-box-shadow !default;
@@ -88,14 +76,9 @@ $list-group-active-border-color: $list-group-active-bg !default;
 $list-group-active-color: $body-color !default;
 
 
-@use "./bootstrap/bootstrap" with (
+@use "bootstrap/scss/bootstrap" with (
   $enable-shadows: true,
-  $btn-transition: #{box-shadow 0.1s cubic-bezier(0, 1, 0.33, 1),
-  padding 0.1s cubic-bezier(0, 1, 0.33, 1),
-  text-shadow 0.1s cubic-bezier(0, 1, 0.33, 1),
-  color 0.15s ease-in-out,
-  background-color 0.15s ease-in-out,
-  border-color 0.15s ease-in-out},
+  $btn-transition: $btn-transition,
   $body-bg: $body-bg,
   $body-color: $body-color,
   $white: $white,
@@ -131,8 +114,7 @@ $list-group-active-color: $body-color !default;
   $btn-close-padding-y: $btn-close-padding-y,
   $btn-close-padding-x: $btn-close-padding-x,
   $font-family-sans-serif: $font-family-sans-serif,
-  $progress-bar-transition: #{width,
-  clip-path 0.6s ease},
+  $progress-bar-transition: $progress-bar-transition,
   $btn-box-shadow: $btn-box-shadow,
   $btn-active-box-shadow: $btn-active-box-shadow,
   $input-focus-box-shadow: $input-focus-box-shadow,
@@ -145,4 +127,4 @@ $list-group-active-color: $body-color !default;
   $list-group-active-color: $list-group-active-color
 );
 
-@forward "./bootstrap/bootstrap";
+@forward "bootstrap/scss/bootstrap";

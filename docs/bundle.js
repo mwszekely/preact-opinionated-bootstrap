@@ -1,29 +1,29 @@
 (function () {
     'use strict';
 
-    var n,
-        l$1,
-        u$1,
-        t$1,
-        r$1,
-        o$1,
-        f$1,
-        e$1 = {},
-        c$1 = [],
-        s$1 = /acit|ex(?:s|g|n|p|$)|rph|grid|ows|mnc|ntw|ine[ch]|zoo|^ord|itera/i;
+    var n$3,
+        l$3,
+        u$3,
+        t$3,
+        r$3,
+        o$3,
+        f$3,
+        e$3 = {},
+        c$3 = [],
+        s$3 = /acit|ex(?:s|g|n|p|$)|rph|grid|ows|mnc|ntw|ine[ch]|zoo|^ord|itera/i;
 
-    function a$1(n, l) {
+    function a$3(n, l) {
       for (var u in l) n[u] = l[u];
 
       return n;
     }
 
-    function h$1(n) {
+    function h$2(n) {
       var l = n.parentNode;
       l && l.removeChild(n);
     }
 
-    function v$1(l, u, i) {
+    function v$2(l, u, i) {
       var t,
           r,
           o,
@@ -31,11 +31,11 @@
 
       for (o in u) "key" == o ? t = u[o] : "ref" == o ? r = u[o] : f[o] = u[o];
 
-      if (arguments.length > 2 && (f.children = arguments.length > 3 ? n.call(arguments, 2) : i), "function" == typeof l && null != l.defaultProps) for (o in l.defaultProps) void 0 === f[o] && (f[o] = l.defaultProps[o]);
-      return y$1(l, f, t, r, null);
+      if (arguments.length > 2 && (f.children = arguments.length > 3 ? n$3.call(arguments, 2) : i), "function" == typeof l && null != l.defaultProps) for (o in l.defaultProps) void 0 === f[o] && (f[o] = l.defaultProps[o]);
+      return y$2(l, f, t, r, null);
     }
 
-    function y$1(n, i, t, r, o) {
+    function y$2(n, i, t, r, o) {
       var f = {
         type: n,
         props: i,
@@ -49,28 +49,28 @@
         __c: null,
         __h: null,
         constructor: void 0,
-        __v: null == o ? ++u$1 : o
+        __v: null == o ? ++u$3 : o
       };
-      return null == o && null != l$1.vnode && l$1.vnode(f), f;
+      return null == o && null != l$3.vnode && l$3.vnode(f), f;
     }
 
-    function d$1(n) {
+    function d$2(n) {
       return n.children;
     }
 
-    function _(n, l) {
+    function _$1(n, l) {
       this.props = n, this.context = l;
     }
 
-    function k$1(n, l) {
-      if (null == l) return n.__ ? k$1(n.__, n.__.__k.indexOf(n) + 1) : null;
+    function k$2(n, l) {
+      if (null == l) return n.__ ? k$2(n.__, n.__.__k.indexOf(n) + 1) : null;
 
       for (var u; l < n.__k.length; l++) if (null != (u = n.__k[l]) && null != u.__e) return u.__e;
 
-      return "function" == typeof n.type ? k$1(n) : null;
+      return "function" == typeof n.type ? k$2(n) : null;
     }
 
-    function b$1(n) {
+    function b$2(n) {
       var l, u;
 
       if (null != (n = n.__) && null != n.__c) {
@@ -79,24 +79,24 @@
           break;
         }
 
-        return b$1(n);
+        return b$2(n);
       }
     }
 
-    function m$1(n) {
-      (!n.__d && (n.__d = !0) && t$1.push(n) && !g$2.__r++ || o$1 !== l$1.debounceRendering) && ((o$1 = l$1.debounceRendering) || r$1)(g$2);
+    function m$2(n) {
+      (!n.__d && (n.__d = !0) && t$3.push(n) && !g$3.__r++ || o$3 !== l$3.debounceRendering) && ((o$3 = l$3.debounceRendering) || r$3)(g$3);
     }
 
-    function g$2() {
-      for (var n; g$2.__r = t$1.length;) n = t$1.sort(function (n, l) {
+    function g$3() {
+      for (var n; g$3.__r = t$3.length;) n = t$3.sort(function (n, l) {
         return n.__v.__b - l.__v.__b;
-      }), t$1 = [], n.some(function (n) {
+      }), t$3 = [], n.some(function (n) {
         var l, u, i, t, r, o;
-        n.__d && (r = (t = (l = n).__v).__e, (o = l.__P) && (u = [], (i = a$1({}, t)).__v = t.__v + 1, j$2(o, t, i, l.__n, void 0 !== o.ownerSVGElement, null != t.__h ? [r] : null, u, null == r ? k$1(t) : r, t.__h), z$1(u, t), t.__e != r && b$1(t)));
+        n.__d && (r = (t = (l = n).__v).__e, (o = l.__P) && (u = [], (i = a$3({}, t)).__v = t.__v + 1, j$3(o, t, i, l.__n, void 0 !== o.ownerSVGElement, null != t.__h ? [r] : null, u, null == r ? k$2(t) : r, t.__h), z$2(u, t), t.__e != r && b$2(t)));
       });
     }
 
-    function w$2(n, l, u, i, t, r, o, f, s, a) {
+    function w$3(n, l, u, i, t, r, o, f, s, a) {
       var h,
           v,
           p,
@@ -104,12 +104,12 @@
           b,
           m,
           g,
-          w = i && i.__k || c$1,
+          w = i && i.__k || c$3,
           A = w.length;
 
-      for (u.__k = [], h = 0; h < l.length; h++) if (null != (_ = u.__k[h] = null == (_ = l[h]) || "boolean" == typeof _ ? null : "string" == typeof _ || "number" == typeof _ || "bigint" == typeof _ ? y$1(null, _, null, null, _) : Array.isArray(_) ? y$1(d$1, {
+      for (u.__k = [], h = 0; h < l.length; h++) if (null != (_ = u.__k[h] = null == (_ = l[h]) || "boolean" == typeof _ ? null : "string" == typeof _ || "number" == typeof _ || "bigint" == typeof _ ? y$2(null, _, null, null, _) : Array.isArray(_) ? y$2(d$2, {
         children: _
-      }, null, null, null) : _.__b > 0 ? y$1(_.type, _.props, _.key, null, _.__v) : _)) {
+      }, null, null, null) : _.__b > 0 ? y$2(_.type, _.props, _.key, null, _.__v) : _)) {
         if (_.__ = u, _.__b = u.__b + 1, null === (p = w[h]) || p && _.key == p.key && _.type === p.type) w[h] = void 0;else for (v = 0; v < A; v++) {
           if ((p = w[v]) && _.key == p.key && _.type === p.type) {
             w[v] = void 0;
@@ -118,27 +118,27 @@
 
           p = null;
         }
-        j$2(n, _, p = p || e$1, t, r, o, f, s, a), b = _.__e, (v = _.ref) && p.ref != v && (g || (g = []), p.ref && g.push(p.ref, null, _), g.push(v, _.__c || b, _)), null != b ? (null == m && (m = b), "function" == typeof _.type && _.__k === p.__k ? _.__d = s = x$2(_, s, n) : s = P$1(n, _, p, w, b, s), "function" == typeof u.type && (u.__d = s)) : s && p.__e == s && s.parentNode != n && (s = k$1(p));
+        j$3(n, _, p = p || e$3, t, r, o, f, s, a), b = _.__e, (v = _.ref) && p.ref != v && (g || (g = []), p.ref && g.push(p.ref, null, _), g.push(v, _.__c || b, _)), null != b ? (null == m && (m = b), "function" == typeof _.type && _.__k === p.__k ? _.__d = s = x$3(_, s, n) : s = P$2(n, _, p, w, b, s), "function" == typeof u.type && (u.__d = s)) : s && p.__e == s && s.parentNode != n && (s = k$2(p));
       }
 
-      for (u.__e = m, h = A; h--;) null != w[h] && ("function" == typeof u.type && null != w[h].__e && w[h].__e == u.__d && (u.__d = k$1(i, h + 1)), N(w[h], w[h]));
+      for (u.__e = m, h = A; h--;) null != w[h] && ("function" == typeof u.type && null != w[h].__e && w[h].__e == u.__d && (u.__d = k$2(i, h + 1)), N$1(w[h], w[h]));
 
-      if (g) for (h = 0; h < g.length; h++) M$2(g[h], g[++h], g[++h]);
+      if (g) for (h = 0; h < g.length; h++) M$3(g[h], g[++h], g[++h]);
     }
 
-    function x$2(n, l, u) {
-      for (var i, t = n.__k, r = 0; t && r < t.length; r++) (i = t[r]) && (i.__ = n, l = "function" == typeof i.type ? x$2(i, l, u) : P$1(u, i, i, t, i.__e, l));
+    function x$3(n, l, u) {
+      for (var i, t = n.__k, r = 0; t && r < t.length; r++) (i = t[r]) && (i.__ = n, l = "function" == typeof i.type ? x$3(i, l, u) : P$2(u, i, i, t, i.__e, l));
 
       return l;
     }
 
-    function A$2(n, l) {
+    function A$3(n, l) {
       return l = l || [], null == n || "boolean" == typeof n || (Array.isArray(n) ? n.some(function (n) {
-        A$2(n, l);
+        A$3(n, l);
       }) : l.push(n)), l;
     }
 
-    function P$1(n, l, u, i, t, r) {
+    function P$2(n, l, u, i, t, r) {
       var o, f, e;
       if (void 0 !== l.__d) o = l.__d, l.__d = void 0;else if (null == u || t != r || null == t.parentNode) n: if (null == r || r.parentNode !== n) n.appendChild(t), o = null;else {
         for (f = r, e = 0; (f = f.nextSibling) && e < i.length; e += 2) if (f == t) break n;
@@ -148,27 +148,27 @@
       return void 0 !== o ? o : t.nextSibling;
     }
 
-    function C$1(n, l, u, i, t) {
+    function C$2(n, l, u, i, t) {
       var r;
 
-      for (r in u) "children" === r || "key" === r || r in l || H$1(n, r, null, u[r], i);
+      for (r in u) "children" === r || "key" === r || r in l || H$2(n, r, null, u[r], i);
 
-      for (r in l) t && "function" != typeof l[r] || "children" === r || "key" === r || "value" === r || "checked" === r || u[r] === l[r] || H$1(n, r, l[r], u[r], i);
+      for (r in l) t && "function" != typeof l[r] || "children" === r || "key" === r || "value" === r || "checked" === r || u[r] === l[r] || H$2(n, r, l[r], u[r], i);
     }
 
-    function $(n, l, u) {
-      "-" === l[0] ? n.setProperty(l, u) : n[l] = null == u ? "" : "number" != typeof u || s$1.test(l) ? u : u + "px";
+    function $$1(n, l, u) {
+      "-" === l[0] ? n.setProperty(l, u) : n[l] = null == u ? "" : "number" != typeof u || s$3.test(l) ? u : u + "px";
     }
 
-    function H$1(n, l, u, i, t) {
+    function H$2(n, l, u, i, t) {
       var r;
 
       n: if ("style" === l) {
         if ("string" == typeof u) n.style.cssText = u;else {
-          if ("string" == typeof i && (n.style.cssText = i = ""), i) for (l in i) u && l in u || $(n.style, l, "");
-          if (u) for (l in u) i && u[l] === i[l] || $(n.style, l, u[l]);
+          if ("string" == typeof i && (n.style.cssText = i = ""), i) for (l in i) u && l in u || $$1(n.style, l, "");
+          if (u) for (l in u) i && u[l] === i[l] || $$1(n.style, l, u[l]);
         }
-      } else if ("o" === l[0] && "n" === l[1]) r = l !== (l = l.replace(/Capture$/, "")), l = l.toLowerCase() in n ? l.toLowerCase().slice(2) : l.slice(2), n.l || (n.l = {}), n.l[l + r] = u, u ? i || n.addEventListener(l, r ? T$1 : I$1, r) : n.removeEventListener(l, r ? T$1 : I$1, r);else if ("dangerouslySetInnerHTML" !== l) {
+      } else if ("o" === l[0] && "n" === l[1]) r = l !== (l = l.replace(/Capture$/, "")), l = l.toLowerCase() in n ? l.toLowerCase().slice(2) : l.slice(2), n.l || (n.l = {}), n.l[l + r] = u, u ? i || n.addEventListener(l, r ? T$2 : I$2, r) : n.removeEventListener(l, r ? T$2 : I$2, r);else if ("dangerouslySetInnerHTML" !== l) {
         if (t) l = l.replace(/xlink[H:h]/, "h").replace(/sName$/, "s");else if ("href" !== l && "list" !== l && "form" !== l && "tabIndex" !== l && "download" !== l && l in n) try {
           n[l] = null == u ? "" : u;
           break n;
@@ -177,15 +177,15 @@
       }
     }
 
-    function I$1(n) {
-      this.l[n.type + !1](l$1.event ? l$1.event(n) : n);
+    function I$2(n) {
+      this.l[n.type + !1](l$3.event ? l$3.event(n) : n);
     }
 
-    function T$1(n) {
-      this.l[n.type + !0](l$1.event ? l$1.event(n) : n);
+    function T$2(n) {
+      this.l[n.type + !0](l$3.event ? l$3.event(n) : n);
     }
 
-    function j$2(n, u, i, t, r, o, f, e, c) {
+    function j$3(n, u, i, t, r, o, f, e, c) {
       var s,
           h,
           v,
@@ -199,11 +199,11 @@
           A,
           P = u.type;
       if (void 0 !== u.constructor) return null;
-      null != i.__h && (c = i.__h, e = u.__e = i.__e, u.__h = null, o = [e]), (s = l$1.__b) && s(u);
+      null != i.__h && (c = i.__h, e = u.__e = i.__e, u.__h = null, o = [e]), (s = l$3.__b) && s(u);
 
       try {
         n: if ("function" == typeof P) {
-          if (m = u.props, g = (s = P.contextType) && t[s.__c], x = s ? g ? g.props.value : s.__ : t, i.__c ? b = (h = u.__c = i.__c).__ = h.__E : ("prototype" in P && P.prototype.render ? u.__c = h = new P(m, x) : (u.__c = h = new _(m, x), h.constructor = P, h.render = O$1), g && g.sub(h), h.props = m, h.state || (h.state = {}), h.context = x, h.__n = t, v = h.__d = !0, h.__h = []), null == h.__s && (h.__s = h.state), null != P.getDerivedStateFromProps && (h.__s == h.state && (h.__s = a$1({}, h.__s)), a$1(h.__s, P.getDerivedStateFromProps(m, h.__s))), y = h.props, p = h.state, v) null == P.getDerivedStateFromProps && null != h.componentWillMount && h.componentWillMount(), null != h.componentDidMount && h.__h.push(h.componentDidMount);else {
+          if (m = u.props, g = (s = P.contextType) && t[s.__c], x = s ? g ? g.props.value : s.__ : t, i.__c ? b = (h = u.__c = i.__c).__ = h.__E : ("prototype" in P && P.prototype.render ? u.__c = h = new P(m, x) : (u.__c = h = new _$1(m, x), h.constructor = P, h.render = O$1), g && g.sub(h), h.props = m, h.state || (h.state = {}), h.context = x, h.__n = t, v = h.__d = !0, h.__h = []), null == h.__s && (h.__s = h.state), null != P.getDerivedStateFromProps && (h.__s == h.state && (h.__s = a$3({}, h.__s)), a$3(h.__s, P.getDerivedStateFromProps(m, h.__s))), y = h.props, p = h.state, v) null == P.getDerivedStateFromProps && null != h.componentWillMount && h.componentWillMount(), null != h.componentDidMount && h.__h.push(h.componentDidMount);else {
             if (null == P.getDerivedStateFromProps && m !== y && null != h.componentWillReceiveProps && h.componentWillReceiveProps(m, x), !h.__e && null != h.shouldComponentUpdate && !1 === h.shouldComponentUpdate(m, h.__s, x) || u.__v === i.__v) {
               h.props = m, h.state = h.__s, u.__v !== i.__v && (h.__d = !1), h.__v = u, u.__e = i.__e, u.__k = i.__k, u.__k.forEach(function (n) {
                 n && (n.__ = u);
@@ -215,28 +215,28 @@
               h.componentDidUpdate(y, p, k);
             });
           }
-          h.context = x, h.props = m, h.state = h.__s, (s = l$1.__r) && s(u), h.__d = !1, h.__v = u, h.__P = n, s = h.render(h.props, h.state, h.context), h.state = h.__s, null != h.getChildContext && (t = a$1(a$1({}, t), h.getChildContext())), v || null == h.getSnapshotBeforeUpdate || (k = h.getSnapshotBeforeUpdate(y, p)), A = null != s && s.type === d$1 && null == s.key ? s.props.children : s, w$2(n, Array.isArray(A) ? A : [A], u, i, t, r, o, f, e, c), h.base = u.__e, u.__h = null, h.__h.length && f.push(h), b && (h.__E = h.__ = null), h.__e = !1;
-        } else null == o && u.__v === i.__v ? (u.__k = i.__k, u.__e = i.__e) : u.__e = L$1(i.__e, u, i, t, r, o, f, c);
+          h.context = x, h.props = m, h.state = h.__s, (s = l$3.__r) && s(u), h.__d = !1, h.__v = u, h.__P = n, s = h.render(h.props, h.state, h.context), h.state = h.__s, null != h.getChildContext && (t = a$3(a$3({}, t), h.getChildContext())), v || null == h.getSnapshotBeforeUpdate || (k = h.getSnapshotBeforeUpdate(y, p)), A = null != s && s.type === d$2 && null == s.key ? s.props.children : s, w$3(n, Array.isArray(A) ? A : [A], u, i, t, r, o, f, e, c), h.base = u.__e, u.__h = null, h.__h.length && f.push(h), b && (h.__E = h.__ = null), h.__e = !1;
+        } else null == o && u.__v === i.__v ? (u.__k = i.__k, u.__e = i.__e) : u.__e = L$2(i.__e, u, i, t, r, o, f, c);
 
-        (s = l$1.diffed) && s(u);
+        (s = l$3.diffed) && s(u);
       } catch (n) {
-        u.__v = null, (c || null != o) && (u.__e = e, u.__h = !!c, o[o.indexOf(e)] = null), l$1.__e(n, u, i);
+        u.__v = null, (c || null != o) && (u.__e = e, u.__h = !!c, o[o.indexOf(e)] = null), l$3.__e(n, u, i);
       }
     }
 
-    function z$1(n, u) {
-      l$1.__c && l$1.__c(u, n), n.some(function (u) {
+    function z$2(n, u) {
+      l$3.__c && l$3.__c(u, n), n.some(function (u) {
         try {
           n = u.__h, u.__h = [], n.some(function (n) {
             n.call(u);
           });
         } catch (n) {
-          l$1.__e(n, u.__v);
+          l$3.__e(n, u.__v);
         }
       });
     }
 
-    function L$1(l, u, i, t, r, o, f, c) {
+    function L$2(l, u, i, t, r, o, f, c) {
       var s,
           a,
           v,
@@ -255,39 +255,39 @@
       }
 
       if (null === d) y === p || c && l.data === p || (l.data = p);else {
-        if (o = o && n.call(l.childNodes), a = (y = i.props || e$1).dangerouslySetInnerHTML, v = p.dangerouslySetInnerHTML, !c) {
+        if (o = o && n$3.call(l.childNodes), a = (y = i.props || e$3).dangerouslySetInnerHTML, v = p.dangerouslySetInnerHTML, !c) {
           if (null != o) for (y = {}, _ = 0; _ < l.attributes.length; _++) y[l.attributes[_].name] = l.attributes[_].value;
           (v || a) && (v && (a && v.__html == a.__html || v.__html === l.innerHTML) || (l.innerHTML = v && v.__html || ""));
         }
 
-        if (C$1(l, p, y, r, c), v) u.__k = [];else if (_ = u.props.children, w$2(l, Array.isArray(_) ? _ : [_], u, i, t, r && "foreignObject" !== d, o, f, o ? o[0] : i.__k && k$1(i, 0), c), null != o) for (_ = o.length; _--;) null != o[_] && h$1(o[_]);
-        c || ("value" in p && void 0 !== (_ = p.value) && (_ !== y.value || _ !== l.value || "progress" === d && !_) && H$1(l, "value", _, y.value, !1), "checked" in p && void 0 !== (_ = p.checked) && _ !== l.checked && H$1(l, "checked", _, y.checked, !1));
+        if (C$2(l, p, y, r, c), v) u.__k = [];else if (_ = u.props.children, w$3(l, Array.isArray(_) ? _ : [_], u, i, t, r && "foreignObject" !== d, o, f, o ? o[0] : i.__k && k$2(i, 0), c), null != o) for (_ = o.length; _--;) null != o[_] && h$2(o[_]);
+        c || ("value" in p && void 0 !== (_ = p.value) && (_ !== y.value || _ !== l.value || "progress" === d && !_) && H$2(l, "value", _, y.value, !1), "checked" in p && void 0 !== (_ = p.checked) && _ !== l.checked && H$2(l, "checked", _, y.checked, !1));
       }
       return l;
     }
 
-    function M$2(n, u, i) {
+    function M$3(n, u, i) {
       try {
         "function" == typeof n ? n(u) : n.current = u;
       } catch (n) {
-        l$1.__e(n, i);
+        l$3.__e(n, i);
       }
     }
 
-    function N(n, u, i) {
+    function N$1(n, u, i) {
       var t, r;
 
-      if (l$1.unmount && l$1.unmount(n), (t = n.ref) && (t.current && t.current !== n.__e || M$2(t, null, u)), null != (t = n.__c)) {
+      if (l$3.unmount && l$3.unmount(n), (t = n.ref) && (t.current && t.current !== n.__e || M$3(t, null, u)), null != (t = n.__c)) {
         if (t.componentWillUnmount) try {
           t.componentWillUnmount();
         } catch (n) {
-          l$1.__e(n, u);
+          l$3.__e(n, u);
         }
         t.base = t.__P = null;
       }
 
-      if (t = n.__k) for (r = 0; r < t.length; r++) t[r] && N(t[r], u, "function" != typeof n.type);
-      i || null == n.__e || h$1(n.__e), n.__e = n.__d = void 0;
+      if (t = n.__k) for (r = 0; r < t.length; r++) t[r] && N$1(t[r], u, "function" != typeof n.type);
+      i || null == n.__e || h$2(n.__e), n.__e = n.__d = void 0;
     }
 
     function O$1(n, l, u) {
@@ -296,23 +296,23 @@
 
     function S$1(u, i, t) {
       var r, o, f;
-      l$1.__ && l$1.__(u, i), o = (r = "function" == typeof t) ? null : t && t.__k || i.__k, f = [], j$2(i, u = (!r && t || i).__k = v$1(d$1, null, [u]), o || e$1, e$1, void 0 !== i.ownerSVGElement, !r && t ? [t] : o ? null : i.firstChild ? n.call(i.childNodes) : null, f, !r && t ? t : o ? o.__e : i.firstChild, r), z$1(f, u);
+      l$3.__ && l$3.__(u, i), o = (r = "function" == typeof t) ? null : t && t.__k || i.__k, f = [], j$3(i, u = (!r && t || i).__k = v$2(d$2, null, [u]), o || e$3, e$3, void 0 !== i.ownerSVGElement, !r && t ? [t] : o ? null : i.firstChild ? n$3.call(i.childNodes) : null, f, !r && t ? t : o ? o.__e : i.firstChild, r), z$2(f, u);
     }
 
     function B(l, u, i) {
       var t,
           r,
           o,
-          f = a$1({}, l.props);
+          f = a$3({}, l.props);
 
       for (o in u) "key" == o ? t = u[o] : "ref" == o ? r = u[o] : f[o] = u[o];
 
-      return arguments.length > 2 && (f.children = arguments.length > 3 ? n.call(arguments, 2) : i), y$1(l.type, f, t || l.key, r || l.ref, null);
+      return arguments.length > 2 && (f.children = arguments.length > 3 ? n$3.call(arguments, 2) : i), y$2(l.type, f, t || l.key, r || l.ref, null);
     }
 
     function D$1(n, l) {
       var u = {
-        __c: l = "__cC" + f$1++,
+        __c: l = "__cC" + f$3++,
         __: n,
         Consumer: function (n, l) {
           return n.children(l);
@@ -322,7 +322,7 @@
           return this.getChildContext || (u = [], (i = {})[l] = this, this.getChildContext = function () {
             return i;
           }, this.shouldComponentUpdate = function (n) {
-            this.props.value !== n.value && u.some(m$1);
+            this.props.value !== n.value && u.some(m$2);
           }, this.sub = function (n) {
             u.push(n);
             var l = n.componentWillUnmount;
@@ -336,7 +336,7 @@
       return u.Provider.__ = u.Consumer.contextType = u;
     }
 
-    n = c$1.slice, l$1 = {
+    n$3 = c$3.slice, l$3 = {
       __e: function (n, l) {
         for (var u, i, t; l = l.__;) if ((u = l.__c) && !u.__) try {
           if ((i = u.constructor) && null != i.getDerivedStateFromError && (u.setState(i.getDerivedStateFromError(n)), t = u.__d), null != u.componentDidCatch && (u.componentDidCatch(n), t = u.__d), t) return u.__E = u;
@@ -346,154 +346,154 @@
 
         throw n;
       }
-    }, u$1 = 0, _.prototype.setState = function (n, l) {
+    }, u$3 = 0, _$1.prototype.setState = function (n, l) {
       var u;
-      u = null != this.__s && this.__s !== this.state ? this.__s : this.__s = a$1({}, this.state), "function" == typeof n && (n = n(a$1({}, u), this.props)), n && a$1(u, n), null != n && this.__v && (l && this.__h.push(l), m$1(this));
-    }, _.prototype.forceUpdate = function (n) {
-      this.__v && (this.__e = !0, n && this.__h.push(n), m$1(this));
-    }, _.prototype.render = d$1, t$1 = [], r$1 = "function" == typeof Promise ? Promise.prototype.then.bind(Promise.resolve()) : setTimeout, g$2.__r = 0, f$1 = 0;
+      u = null != this.__s && this.__s !== this.state ? this.__s : this.__s = a$3({}, this.state), "function" == typeof n && (n = n(a$3({}, u), this.props)), n && a$3(u, n), null != n && this.__v && (l && this.__h.push(l), m$2(this));
+    }, _$1.prototype.forceUpdate = function (n) {
+      this.__v && (this.__e = !0, n && this.__h.push(n), m$2(this));
+    }, _$1.prototype.render = d$2, t$3 = [], r$3 = "function" == typeof Promise ? Promise.prototype.then.bind(Promise.resolve()) : setTimeout, g$3.__r = 0, f$3 = 0;
 
-    var t,
-        u,
-        r,
-        o = 0,
-        i = [],
-        c = l$1.__b,
-        f = l$1.__r,
-        e = l$1.diffed,
-        a = l$1.__c,
-        v = l$1.unmount;
+    var t$2,
+        u$2,
+        r$2,
+        o$2 = 0,
+        i$2 = [],
+        c$2 = l$3.__b,
+        f$2 = l$3.__r,
+        e$2 = l$3.diffed,
+        a$2 = l$3.__c,
+        v$1 = l$3.unmount;
 
-    function m(t, r) {
-      l$1.__h && l$1.__h(u, t, o || r), o = 0;
-      var i = u.__H || (u.__H = {
+    function m$1(t, r) {
+      l$3.__h && l$3.__h(u$2, t, o$2 || r), o$2 = 0;
+      var i = u$2.__H || (u$2.__H = {
         __: [],
         __h: []
       });
       return t >= i.__.length && i.__.push({}), i.__[t];
     }
 
-    function l(n) {
-      return o = 1, p(w$1, n);
+    function l$2(n) {
+      return o$2 = 1, p$2(w$2, n);
     }
 
-    function p(n, r, o) {
-      var i = m(t++, 2);
-      return i.t = n, i.__c || (i.__ = [o ? o(r) : w$1(void 0, r), function (n) {
+    function p$2(n, r, o) {
+      var i = m$1(t$2++, 2);
+      return i.t = n, i.__c || (i.__ = [o ? o(r) : w$2(void 0, r), function (n) {
         var t = i.t(i.__[0], n);
         i.__[0] !== t && (i.__ = [t, i.__[1]], i.__c.setState({}));
-      }], i.__c = u), i.__;
+      }], i.__c = u$2), i.__;
     }
 
-    function y(r, o) {
-      var i = m(t++, 3);
-      !l$1.__s && k(i.__H, o) && (i.__ = r, i.__H = o, u.__H.__h.push(i));
+    function y$1(r, o) {
+      var i = m$1(t$2++, 3);
+      !l$3.__s && k$1(i.__H, o) && (i.__ = r, i.__H = o, u$2.__H.__h.push(i));
     }
 
-    function h(r, o) {
-      var i = m(t++, 4);
-      !l$1.__s && k(i.__H, o) && (i.__ = r, i.__H = o, u.__h.push(i));
+    function h$1(r, o) {
+      var i = m$1(t$2++, 4);
+      !l$3.__s && k$1(i.__H, o) && (i.__ = r, i.__H = o, u$2.__h.push(i));
     }
 
-    function s(n) {
-      return o = 5, d(function () {
+    function s$2(n) {
+      return o$2 = 5, d$1(function () {
         return {
           current: n
         };
       }, []);
     }
 
-    function d(n, u) {
-      var r = m(t++, 7);
-      return k(r.__H, u) && (r.__ = n(), r.__H = u, r.__h = n), r.__;
+    function d$1(n, u) {
+      var r = m$1(t$2++, 7);
+      return k$1(r.__H, u) && (r.__ = n(), r.__H = u, r.__h = n), r.__;
     }
 
-    function A$1(n, t) {
-      return o = 8, d(function () {
+    function A$2(n, t) {
+      return o$2 = 8, d$1(function () {
         return n;
       }, t);
     }
 
     function F(n) {
-      var r = u.context[n.__c],
-          o = m(t++, 9);
-      return o.c = n, r ? (null == o.__ && (o.__ = !0, r.sub(u)), r.props.value) : n.__;
+      var r = u$2.context[n.__c],
+          o = m$1(t$2++, 9);
+      return o.c = n, r ? (null == o.__ && (o.__ = !0, r.sub(u$2)), r.props.value) : n.__;
     }
 
-    function x$1() {
+    function x$2() {
       var t;
 
-      for (i.sort(function (n, t) {
+      for (i$2.sort(function (n, t) {
         return n.__v.__b - t.__v.__b;
-      }); t = i.pop();) if (t.__P) try {
-        t.__H.__h.forEach(g$1), t.__H.__h.forEach(j$1), t.__H.__h = [];
+      }); t = i$2.pop();) if (t.__P) try {
+        t.__H.__h.forEach(g$2), t.__H.__h.forEach(j$2), t.__H.__h = [];
       } catch (u) {
-        t.__H.__h = [], l$1.__e(u, t.__v);
+        t.__H.__h = [], l$3.__e(u, t.__v);
       }
     }
 
-    l$1.__b = function (n) {
-      u = null, c && c(n);
-    }, l$1.__r = function (n) {
-      f && f(n), t = 0;
-      var r = (u = n.__c).__H;
-      r && (r.__h.forEach(g$1), r.__h.forEach(j$1), r.__h = []);
-    }, l$1.diffed = function (t) {
-      e && e(t);
+    l$3.__b = function (n) {
+      u$2 = null, c$2 && c$2(n);
+    }, l$3.__r = function (n) {
+      f$2 && f$2(n), t$2 = 0;
+      var r = (u$2 = n.__c).__H;
+      r && (r.__h.forEach(g$2), r.__h.forEach(j$2), r.__h = []);
+    }, l$3.diffed = function (t) {
+      e$2 && e$2(t);
       var o = t.__c;
-      o && o.__H && o.__H.__h.length && (1 !== i.push(o) && r === l$1.requestAnimationFrame || ((r = l$1.requestAnimationFrame) || function (n) {
+      o && o.__H && o.__H.__h.length && (1 !== i$2.push(o) && r$2 === l$3.requestAnimationFrame || ((r$2 = l$3.requestAnimationFrame) || function (n) {
         var t,
             u = function () {
-          clearTimeout(r), b && cancelAnimationFrame(t), setTimeout(n);
+          clearTimeout(r), b$1 && cancelAnimationFrame(t), setTimeout(n);
         },
             r = setTimeout(u, 100);
 
-        b && (t = requestAnimationFrame(u));
-      })(x$1)), u = null;
-    }, l$1.__c = function (t, u) {
+        b$1 && (t = requestAnimationFrame(u));
+      })(x$2)), u$2 = null;
+    }, l$3.__c = function (t, u) {
       u.some(function (t) {
         try {
-          t.__h.forEach(g$1), t.__h = t.__h.filter(function (n) {
-            return !n.__ || j$1(n);
+          t.__h.forEach(g$2), t.__h = t.__h.filter(function (n) {
+            return !n.__ || j$2(n);
           });
         } catch (r) {
           u.some(function (n) {
             n.__h && (n.__h = []);
-          }), u = [], l$1.__e(r, t.__v);
+          }), u = [], l$3.__e(r, t.__v);
         }
-      }), a && a(t, u);
-    }, l$1.unmount = function (t) {
-      v && v(t);
+      }), a$2 && a$2(t, u);
+    }, l$3.unmount = function (t) {
+      v$1 && v$1(t);
       var u,
           r = t.__c;
       r && r.__H && (r.__H.__.forEach(function (n) {
         try {
-          g$1(n);
+          g$2(n);
         } catch (n) {
           u = n;
         }
-      }), u && l$1.__e(u, r.__v));
+      }), u && l$3.__e(u, r.__v));
     };
-    var b = "function" == typeof requestAnimationFrame;
+    var b$1 = "function" == typeof requestAnimationFrame;
 
-    function g$1(n) {
-      var t = u,
+    function g$2(n) {
+      var t = u$2,
           r = n.__c;
-      "function" == typeof r && (n.__c = void 0, r()), u = t;
+      "function" == typeof r && (n.__c = void 0, r()), u$2 = t;
     }
 
-    function j$1(n) {
-      var t = u;
-      n.__c = n.__(), u = t;
+    function j$2(n) {
+      var t = u$2;
+      n.__c = n.__(), u$2 = t;
     }
 
-    function k(n, t) {
+    function k$1(n, t) {
       return !n || n.length !== t.length || t.some(function (t, u) {
         return t !== n[u];
       });
     }
 
-    function w$1(n, t) {
+    function w$2(n, t) {
       return "function" == typeof t ? t(n) : t;
     }
 
@@ -514,8 +514,8 @@
 
       function useHelper(value, index) {
         // Make sure that the provided functions are perfectly stable across renders
-        const helperToEnsureStability = s(value);
-        const shownError = s(false);
+        const helperToEnsureStability = s$2(value);
+        const shownError = s$2(false);
 
         if (helperToEnsureStability.current != value) {
           if (!shownError.current) {
@@ -546,13 +546,13 @@
      */
 
     function usePassiveState(onChange, getInitialValue) {
-      const valueRef = s(Unset$1);
-      const warningRef = s(false);
-      const cleanupCallbackRef = s(undefined); // Make sure that the provided functions are perfectly stable across renders
+      const valueRef = s$2(Unset$1);
+      const warningRef = s$2(false);
+      const cleanupCallbackRef = s$2(undefined); // Make sure that the provided functions are perfectly stable across renders
 
       useEnsureStability(onChange, getInitialValue); // Shared between "dependency changed" and "component unmounted".
 
-      const onShouldCleanUp = A$1(() => {
+      const onShouldCleanUp = A$2(() => {
         let cleanupCallback = cleanupCallbackRef.current;
         if (cleanupCallback) cleanupCallback();
       }, []); // There are a couple places where we'd like to use our initial
@@ -560,7 +560,7 @@
       // This is the shared code for that, used on mount and whenever
       // getValue is called.
 
-      const tryEnsureValue = A$1(() => {
+      const tryEnsureValue = A$2(() => {
         if (valueRef.current === Unset$1 && getInitialValue != undefined) {
           try {
             var _onChange;
@@ -574,7 +574,7 @@
       }, [
         /* getInitialValue and onChange intentionally omitted */
       ]);
-      const getValue = A$1(() => {
+      const getValue = A$2(() => {
         if (warningRef.current) console.warn("During onChange, prefer using the (value, prevValue) arguments instead of getValue -- it's ambiguous as to if you're asking for the old or new value at this point in time for this component."); // The first time we call getValue, if we haven't been given a value yet,
         // (and we were given an initial value to use)
         // return the initial value instead of nothing.
@@ -582,13 +582,13 @@
         if (valueRef.current === Unset$1) tryEnsureValue();
         return valueRef.current === Unset$1 ? undefined : valueRef.current;
       }, []);
-      h(() => {
+      h$1(() => {
         // Make sure we've run our effect at least once on mount.
         // (If we have an initial value, of course)
         tryEnsureValue();
       }, []); // The actual code the user calls to (possibly) run a new effect.
 
-      const setValue = A$1(arg => {
+      const setValue = A$2(arg => {
         const prevDep = valueRef.current === Unset$1 ? undefined : getValue();
         const dep = arg instanceof Function ? arg(prevDep) : arg;
 
@@ -620,7 +620,7 @@
       } else if (rhs == null) {
         return lhs;
       } else {
-        let ret = v$1(d$1, {}, lhs, rhs);
+        let ret = v$2(d$2, {}, lhs, rhs);
         return ret;
       }
     }
@@ -727,7 +727,7 @@
       return function (lhsProps, rhsProps) {
         const lhs = lhsProps === null || lhsProps === void 0 ? void 0 : lhsProps.ref;
         const rhs = rhsProps === null || rhsProps === void 0 ? void 0 : rhsProps.ref;
-        let combined = A$1(current => {
+        let combined = A$2(current => {
           processRef(current, lhs);
           processRef(current, rhs);
         }, [lhs, rhs]);
@@ -1116,10 +1116,10 @@
       const [getElement, setElement] = usePassiveState(onElementChange, returnNull$2); // Create a RefCallback that's fired when mounted 
       // and that notifies us of our element when we have it
 
-      const myRef = A$1(e => {
+      const myRef = A$2(e => {
         if (e) setElement(() => e);
       }, []);
-      const useRefElementProps = A$1(props => useMergedProps()({
+      const useRefElementProps = A$2(props => useMergedProps()({
         ref: myRef
       }, props), []); // Return both the element and the hook that modifies 
       // the props and allows us to actually find the element
@@ -1141,8 +1141,8 @@
       } = _ref;
       useEnsureStability(getObserveBox, onSizeChange);
       const [getSize, setSize] = usePassiveState(onSizeChange, returnNull$1);
-      const currentObserveBox = s(undefined);
-      const needANewObserver = A$1((element, observeBox) => {
+      const currentObserveBox = s$2(undefined);
+      const needANewObserver = A$2((element, observeBox) => {
         if (element) {
           const document = element.ownerDocument;
           const window = document.defaultView;
@@ -1200,9 +1200,9 @@
         getElement,
         useRefElementProps
       } = useRefElement({
-        onElementChange: A$1(e => needANewObserver(e, getObserveBox === null || getObserveBox === void 0 ? void 0 : getObserveBox()), [])
+        onElementChange: A$2(e => needANewObserver(e, getObserveBox === null || getObserveBox === void 0 ? void 0 : getObserveBox()), [])
       });
-      y(() => {
+      y$1(() => {
         if (getObserveBox) {
           if (currentObserveBox.current !== getObserveBox()) needANewObserver(getElement(), getObserveBox());
         }
@@ -1245,7 +1245,7 @@
         getElement,
         useRefElementProps
       } = useRefElement({
-        onElementChange: A$1(element => {
+        onElementChange: A$2(element => {
           if (element) {
             setComputedStyles(window.getComputedStyle(element));
           }
@@ -1264,9 +1264,9 @@
       const {
         useElementSizeProps
       } = useElementSize({
-        onSizeChange: A$1(_ => onLogicalDirectionChange === null || onLogicalDirectionChange === void 0 ? void 0 : onLogicalDirectionChange(getLogicalDirectionInfo()), [])
+        onSizeChange: A$2(_ => onLogicalDirectionChange === null || onLogicalDirectionChange === void 0 ? void 0 : onLogicalDirectionChange(getLogicalDirectionInfo()), [])
       });
-      const getLogicalDirectionInfo = A$1(() => {
+      const getLogicalDirectionInfo = A$2(() => {
         const computedStyles = getComputedStyles();
 
         if (computedStyles) {
@@ -1281,33 +1281,33 @@
         return null;
       }, []); //const [getLogicalDirectionInfo, setLogicalDirectionInfo] = usePassiveState<LogicalDirectionInfo>(onLogicalDirectionChange);
 
-      const convertToLogicalOrientation = A$1((elementOrientation, direction) => {
+      const convertToLogicalOrientation = A$2((elementOrientation, direction) => {
         var _direction, _direction2;
 
         (_direction = direction) !== null && _direction !== void 0 ? _direction : direction = getLogicalDirectionInfo();
         if (((_direction2 = direction) === null || _direction2 === void 0 ? void 0 : _direction2.inlineOrientation) === elementOrientation) return "inline";
         return "block";
       }, []);
-      const convertToPhysicalSide = A$1((side, direction) => {
+      const convertToPhysicalSide = A$2((side, direction) => {
         var _direction3, _direction$blockDirec, _direction4, _direction$blockDirec2, _direction5, _direction$inlineDire, _direction6, _direction$inlineDire2, _direction7;
 
         (_direction3 = direction) !== null && _direction3 !== void 0 ? _direction3 : direction = getLogicalDirectionInfo();
 
         switch (side) {
           case "block-start":
-            return M$1[((_direction$blockDirec = (_direction4 = direction) === null || _direction4 === void 0 ? void 0 : _direction4.blockDirection) !== null && _direction$blockDirec !== void 0 ? _direction$blockDirec : "ttb")[0]];
+            return M$2[((_direction$blockDirec = (_direction4 = direction) === null || _direction4 === void 0 ? void 0 : _direction4.blockDirection) !== null && _direction$blockDirec !== void 0 ? _direction$blockDirec : "ttb")[0]];
 
           case "block-end":
-            return M$1[((_direction$blockDirec2 = (_direction5 = direction) === null || _direction5 === void 0 ? void 0 : _direction5.blockDirection) !== null && _direction$blockDirec2 !== void 0 ? _direction$blockDirec2 : "ttb")[2]];
+            return M$2[((_direction$blockDirec2 = (_direction5 = direction) === null || _direction5 === void 0 ? void 0 : _direction5.blockDirection) !== null && _direction$blockDirec2 !== void 0 ? _direction$blockDirec2 : "ttb")[2]];
 
           case "inline-start":
-            return M$1[((_direction$inlineDire = (_direction6 = direction) === null || _direction6 === void 0 ? void 0 : _direction6.inlineDirection) !== null && _direction$inlineDire !== void 0 ? _direction$inlineDire : "ltr")[0]];
+            return M$2[((_direction$inlineDire = (_direction6 = direction) === null || _direction6 === void 0 ? void 0 : _direction6.inlineDirection) !== null && _direction$inlineDire !== void 0 ? _direction$inlineDire : "ltr")[0]];
 
           case "inline-end":
-            return M$1[((_direction$inlineDire2 = (_direction7 = direction) === null || _direction7 === void 0 ? void 0 : _direction7.inlineDirection) !== null && _direction$inlineDire2 !== void 0 ? _direction$inlineDire2 : "ltr")[2]];
+            return M$2[((_direction$inlineDire2 = (_direction7 = direction) === null || _direction7 === void 0 ? void 0 : _direction7.inlineDirection) !== null && _direction$inlineDire2 !== void 0 ? _direction$inlineDire2 : "ltr")[2]];
         }
       }, []);
-      const convertToLogicalSide = A$1((side, direction) => {
+      const convertToLogicalSide = A$2((side, direction) => {
         var _direction8, _direction9, _direction10;
 
         (_direction8 = direction) !== null && _direction8 !== void 0 ? _direction8 : direction = getLogicalDirectionInfo();
@@ -1346,7 +1346,7 @@
         console.assert(false);
         return "inline-start";
       }, []);
-      const convertToPhysicalOrientation = A$1((elementOrientation, direction) => {
+      const convertToPhysicalOrientation = A$2((elementOrientation, direction) => {
         var _direction11;
 
         (_direction11 = direction) !== null && _direction11 !== void 0 ? _direction11 : direction = getLogicalDirectionInfo();
@@ -1363,7 +1363,7 @@
           return "horizontal";
         }
       }, []);
-      const convertElementSize = A$1((elementSize, direction) => {
+      const convertElementSize = A$2((elementSize, direction) => {
         var _direction14;
 
         (_direction14 = direction) !== null && _direction14 !== void 0 ? _direction14 : direction = getLogicalDirectionInfo();
@@ -1424,7 +1424,7 @@
         return null;
       }, []);
       return {
-        useLogicalDirectionProps: A$1(props => useRefElementProps(useElementSizeProps(props)), []),
+        useLogicalDirectionProps: A$2(props => useRefElementProps(useElementSizeProps(props)), []),
         getElement,
         getLogicalDirectionInfo,
         convertToLogicalSize: convertElementSize,
@@ -1435,7 +1435,7 @@
       };
     } // Helper for extracting info from "ltr", "ttb", etc.
 
-    const M$1 = {
+    const M$2 = {
       t: "top",
       b: "bottom",
       l: "left",
@@ -1523,11 +1523,11 @@
 
     function useState(initialState) {
       // We keep both, but overrride the `setState` functionality
-      const [state, setStateP] = l(initialState);
-      const ref = s(state); // Hijack the normal setter function 
+      const [state, setStateP] = l$2(initialState);
+      const ref = s$2(state); // Hijack the normal setter function 
       // to also set our ref to the new value
 
-      const setState = A$1(value => {
+      const setState = A$2(value => {
         if (typeof value === "function") {
           let callback = value;
           setStateP(prevValue => {
@@ -1588,7 +1588,7 @@
       } = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
       const [randomId, setRandomId] = useState(() => generateRandomId(prefix));
       const [watchPrefixUpdates, setWatchPrefixUpdates, getWatchPrefixUpdates] = useState(false);
-      h(() => {
+      h$1(() => {
         const watchPrefixUpdates = getWatchPrefixUpdates();
         if (watchPrefixUpdates) setRandomId(() => generateRandomId(prefix));
         setWatchPrefixUpdates(true);
@@ -1600,7 +1600,7 @@
       // Is this okay?
 
       const [usedId, setUsedId, getUsedId] = useState(undefined);
-      const useReferencedIdProps = A$1(function useReferencedIdProps(idPropName) {
+      const useReferencedIdProps = A$2(function useReferencedIdProps(idPropName) {
         const ret = function (_ref) {
           var _ref2, _ref3;
 
@@ -1617,7 +1617,7 @@
 
         return ret;
       }, [usedId, randomId]);
-      const useRandomIdProps = A$1(function useRandomIdProps(p) {
+      const useRandomIdProps = A$2(function useRandomIdProps(p) {
         return useReferencedIdProps("id")(p);
       }, [useReferencedIdProps]);
       return {
@@ -1631,7 +1631,7 @@
 
     const previousInputs = new Map();
     const toRun = new Map();
-    const commitName = "__c" in l$1 ? "__c" : "commit" in l$1 ? "commit" : "_commit" in l$1 ? "_commit" : "__c"; // TODO: Whether this goes in options.diffed or options._commit
+    const commitName = "__c" in l$3 ? "__c" : "commit" in l$3 ? "commit" : "_commit" in l$3 ? "_commit" : "__c"; // TODO: Whether this goes in options.diffed or options._commit
     // is a post-suspense question.
     // Right now, using options._commit has the problem of running
     // *after* refs are applied, but we need to come before even that
@@ -1639,7 +1639,7 @@
     // 
     // Also it's private.
 
-    const originalCommit = l$1[commitName];
+    const originalCommit = l$3[commitName];
 
     const newCommit = (vnode, commitQueue) => {
       for (let [id, effectInfo] of toRun) {
@@ -1658,7 +1658,7 @@
       originalCommit === null || originalCommit === void 0 ? void 0 : originalCommit(vnode, commitQueue);
     };
 
-    l$1[commitName] = newCommit;
+    l$3[commitName] = newCommit;
     /**
      * Semi-private function to allow stable callbacks even within `useLayoutEffect` and ref assignment.
      *
@@ -1670,13 +1670,13 @@
      */
 
     function useBeforeLayoutEffect(effect, inputs) {
-      const [id] = l(() => generateRandomId());
+      const [id] = l$2(() => generateRandomId());
       toRun.set(id, {
         effect,
         inputs,
         cleanup: null
       });
-      y(() => {
+      y$1(() => {
         return () => {
           toRun.delete(id);
           previousInputs.delete(id);
@@ -1701,11 +1701,11 @@
      */
 
     function useStableGetter(value) {
-      const ref = s(Unset);
+      const ref = s$2(Unset);
       useBeforeLayoutEffect(() => {
         ref.current = value;
       }, [value]);
-      return A$1(() => {
+      return A$2(() => {
         if (ref.current === Unset) {
           throw new Error('Value retrieved from useStableGetter() cannot be called during render.');
         }
@@ -1723,7 +1723,7 @@
 
     function useStableCallback(fn) {
       const currentCallbackGetter = useStableGetter(fn);
-      return A$1(function () {
+      return A$2(function () {
         return currentCallbackGetter()(...arguments);
       }, []);
     }
@@ -1740,8 +1740,8 @@
      */
 
     function useEffect(effect, inputs) {
-      let impl = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : y;
-      const prevInputs = s(undefined);
+      let impl = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : y$1;
+      const prevInputs = s$2(undefined);
 
       const effect2 = () => {
         let changes = [];
@@ -1773,7 +1773,7 @@
      */
 
     function useLayoutEffect(effect, inputs) {
-      return useEffect(effect, inputs, h);
+      return useEffect(effect, inputs, h$1);
     }
 
     function useTimeout(_ref) {
@@ -1789,12 +1789,12 @@
       const getTimeout = useStableGetter(timeout); // Set any time we start timeout.
       // Unset any time the timeout completes
 
-      const startTimeRef = s(null);
+      const startTimeRef = s$2(null);
       const timeoutIsNull = timeout == null; // Any time the triggerIndex changes (including on mount)
       // restart the timeout.  The timeout does NOT reset
       // when the duration or callback changes, only triggerIndex.
 
-      y(() => {
+      y$1(() => {
         if (!timeoutIsNull) {
           let timeout = getTimeout();
           console.assert(timeoutIsNull == (timeout == null));
@@ -1806,12 +1806,12 @@
           }
         }
       }, [triggerIndex, timeoutIsNull]);
-      const getElapsedTime = A$1(() => {
+      const getElapsedTime = A$2(() => {
         var _startTimeRef$current;
 
         return +new Date() - +((_startTimeRef$current = startTimeRef.current) !== null && _startTimeRef$current !== void 0 ? _startTimeRef$current : new Date());
       }, []);
-      const getRemainingTime = A$1(() => {
+      const getRemainingTime = A$2(() => {
         const timeout = getTimeout();
         return timeout == null ? null : Math.max(0, timeout - getElapsedTime());
       }, []);
@@ -1910,7 +1910,7 @@
         // run the normal "please consider running this promise" routine that we would
         // have just run immediately if we weren't debouncing our promises.
 
-        const onDebounceTimeUp = A$1(() => {
+        const onDebounceTimeUp = A$2(() => {
           const debouncedPromiseStarter = getDebouncedPromiseStarter();
           if (debouncedPromiseStarter) wantToStartANewPromise(debouncedPromiseStarter);
           setDebouncedPromiseStarter(null);
@@ -2201,7 +2201,7 @@
       };
 
       return {
-        useLinearNavigationProps: A$1(props => {
+        useLinearNavigationProps: A$2(props => {
           return useLogicalDirectionProps(useMergedProps()({
             onKeyDown
           }, props));
@@ -2234,7 +2234,7 @@
         },
         triggerIndex: currentTypeahead
       });
-      const sortedTypeaheadInfo = s([]);
+      const sortedTypeaheadInfo = s$2([]);
       const [invalidTypeahead, setInvalidTypeahead] = useState(false); // Handle typeahead for input method editors as well
       // Essentially, when active, ignore further keys 
       // because we're waiting for a CompositionEnd event
@@ -2279,7 +2279,7 @@
 
         return lhs - rhs;
       });
-      const useTypeaheadNavigationProps = A$1(function (_ref3) {
+      const useTypeaheadNavigationProps = A$2(function (_ref3) {
         let { ...props
         } = _ref3;
 
@@ -2333,7 +2333,7 @@
         }, props);
       }, []); // Handle changes in typeahead that cause changes to the tabbable index
 
-      y(() => {
+      y$1(() => {
         if (currentTypeahead && sortedTypeaheadInfo.current.length) {
           let sortedTypeaheadIndex = binarySearch(sortedTypeaheadInfo.current, currentTypeahead, typeaheadComparator);
 
@@ -2348,17 +2348,17 @@
               But roughly isn't good enough if there are multiple matches.
               To convert our sorted index to the unsorted index we need, we have to find the first
               element that matches us *and* (if any such exist) is *after* our current selection.
-               In other words, the only way typeahead moves backwards relative to our current
+                In other words, the only way typeahead moves backwards relative to our current
               position is if the only other option is behind us.
-               It's not specified in WAI-ARIA what to do in that case.  I suppose wrap back to the start?
+                It's not specified in WAI-ARIA what to do in that case.  I suppose wrap back to the start?
               Though there's also a case for just going upwards to the nearest to prevent jumpiness.
               But if you're already doing typeahead on an unsorted list, like, jumpiness can't be avoided.
               I dunno. Going back to the start is the simplist though.
-               Basically what this does: Starting from where we found ourselves after our binary search,
+                Basically what this does: Starting from where we found ourselves after our binary search,
               scan backwards and forwards through all adjacent entries that also compare equally so that
               we can find the one whose `unsortedIndex` is the lowest amongst all other equal strings
               (and also the lowest `unsortedIndex` yadda yadda except that it comes after us).
-               TODO: The binary search starts this off with a solid O(log n), but one-character
+                TODO: The binary search starts this off with a solid O(log n), but one-character
               searches are, thanks to pigeonhole principal, eventually guaranteed to become
               O(n*log n). This is annoying but probably not easily solvable? There could be an
               exception for one-character strings, but that's just kicking the can down
@@ -2404,12 +2404,12 @@
           }
         }
       }, [currentTypeahead]);
-      const useTypeaheadNavigationChild = A$1(_ref4 => {
+      const useTypeaheadNavigationChild = A$2(_ref4 => {
         let {
           text,
           ...i
         } = _ref4;
-        y(() => {
+        y$1(() => {
           if (text) {
             // Find where to insert this item.
             // Because all index values should be unique, the returned sortedIndex
@@ -2502,13 +2502,13 @@
       const [totalChildrenMounted, setTotalChildrenMounted, getTotalChildrenMounted] = useState(0);
       const [totalChildrenUnounted, setTotalChildrenUnounted, getTotalChildrenUnounted] = useState(0);
       const childrenCurrentlyMounted = totalChildrenMounted - totalChildrenUnounted;
-      const managedChildren = s([]
+      const managedChildren = s$2([]
       /** TODO: Any problems caused by using an array when it should be an object? */
       );
-      const mountedChildren = s([]);
-      const mountOrder = s(new Map());
-      const indicesByElement = s(new Map());
-      const deletedIndices = s(new Set()); // Used to keep track of indices that have "over-mounted" and by how much.
+      const mountedChildren = s$2([]);
+      const mountOrder = s$2(new Map());
+      const indicesByElement = s$2(new Map());
+      const deletedIndices = s$2(new Set()); // Used to keep track of indices that have "over-mounted" and by how much.
       // We need this so that we don't erase saved information when a component
       // "overmounts" over another which then, correctly, switches *itself* to something else.
       // In general, this should only happen when components are swapping between indices.
@@ -2520,16 +2520,16 @@
       // Namely, is this map all 0s when the parent element re-renders? 
       // Probably not because of setChildUpdateIndex
 
-      const overmountCount = s(new Map());
-      const getMountIndex = A$1(index => {
+      const overmountCount = s$2(new Map());
+      const getMountIndex = A$2(index => {
         return mountOrder.current.get(index);
       }, []);
-      const useManagedChild = A$1(info => {
+      const useManagedChild = A$2(info => {
         const {
           getElement,
           useRefElementProps
         } = useRefElement({
-          onElementChange: A$1(element => {
+          onElementChange: A$2(element => {
             if (element) {
               indicesByElement.current.set(element, info.index);
               deletedIndices.current.delete(info.index);
@@ -2735,7 +2735,7 @@
       } = _ref;
       const getShouldFocusOnChange = useStableGetter(foc);
       const getTabbableIndex = useStableGetter(tabbableIndex);
-      s(-Infinity); // Call the hook that allows us to collect information from children who provide it
+      s$2(-Infinity); // Call the hook that allows us to collect information from children who provide it
 
       const {
         managedChildren,
@@ -2762,18 +2762,18 @@
           return (_managedChildren$inde2 = (_managedChildren$inde3 = managedChildren[index]) === null || _managedChildren$inde3 === void 0 ? void 0 : _managedChildren$inde3.getTabbable()) !== null && _managedChildren$inde2 !== void 0 ? _managedChildren$inde2 : null;
         }
       });
-      A$1(() => {
+      A$2(() => {
         if (tabbableIndex != null) managedChildren[tabbableIndex].setTabbable(true);
       }, [tabbableIndex]);
-      const useRovingTabIndexChild = A$1(info => {
+      const useRovingTabIndexChild = A$2(info => {
         const [rrafIndex, setRrafIndex] = useState(1);
-        const rerenderAndFocus = A$1(() => {
+        const rerenderAndFocus = A$2(() => {
           setRrafIndex(i => ++i);
         }, []);
         const [tabbable, setTabbable, getTabbable] = useState(null);
         let newInfo = { ...info,
           rerenderAndFocus,
-          setTabbable: A$1(tabbable => {
+          setTabbable: A$2(tabbable => {
             setTabbable(tabbable);
           }, []),
           getTabbable
@@ -2782,7 +2782,7 @@
           getElement,
           useManagedChildProps
         } = useManagedChild(newInfo);
-        y(() => {
+        y$1(() => {
           const element = getElement();
 
           if (tabbable) {
@@ -2838,7 +2838,7 @@
         childCount,
         managedChildren,
         indicesByElement,
-        focusCurrent: A$1(() => {
+        focusCurrent: A$2(() => {
           var _getTabbableIndex;
 
           if (managedChildren[(_getTabbableIndex = getTabbableIndex()) !== null && _getTabbableIndex !== void 0 ? _getTabbableIndex : 0].getTabbable()) {
@@ -2933,36 +2933,36 @@
       const navigateToNext = useCallback(() => { setTabbableIndex(i => indexMangler!(indexDemangler!(i ?? 0) + 1)) }, [indexDemangler, indexMangler]);
       */
 
-      const navigateToIndex = A$1(i => {
+      const navigateToIndex = A$2(i => {
         var _indexMangler2, _indexDemangler2;
 
         setTabbableIndex(i == null ? null : tryNavigateToIndex(managedChildren, 0, i, 1, (_indexMangler2 = indexMangler) !== null && _indexMangler2 !== void 0 ? _indexMangler2 : identity$1, (_indexDemangler2 = indexDemangler) !== null && _indexDemangler2 !== void 0 ? _indexDemangler2 : identity$1));
       }, []);
-      const navigateToFirst = A$1(() => {
+      const navigateToFirst = A$2(() => {
         var _indexMangler3, _indexDemangler3;
 
         setTabbableIndex(tryNavigateToIndex(managedChildren, 0, 0, 1, (_indexMangler3 = indexMangler) !== null && _indexMangler3 !== void 0 ? _indexMangler3 : identity$1, (_indexDemangler3 = indexDemangler) !== null && _indexDemangler3 !== void 0 ? _indexDemangler3 : identity$1));
       }, []);
-      const navigateToLast = A$1(() => {
+      const navigateToLast = A$2(() => {
         var _indexMangler4, _indexDemangler4;
 
         setTabbableIndex(tryNavigateToIndex(managedChildren, managedChildren.length, managedChildren.length, -1, (_indexMangler4 = indexMangler) !== null && _indexMangler4 !== void 0 ? _indexMangler4 : identity$1, (_indexDemangler4 = indexDemangler) !== null && _indexDemangler4 !== void 0 ? _indexDemangler4 : identity$1));
       }, []);
-      const navigateToPrev = A$1(() => {
+      const navigateToPrev = A$2(() => {
         setTabbableIndex(c => {
           var _indexMangler5, _indexDemangler5;
 
           return tryNavigateToIndex(managedChildren, c !== null && c !== void 0 ? c : 0, (c !== null && c !== void 0 ? c : 0) - 1, -1, (_indexMangler5 = indexMangler) !== null && _indexMangler5 !== void 0 ? _indexMangler5 : identity$1, (_indexDemangler5 = indexDemangler) !== null && _indexDemangler5 !== void 0 ? _indexDemangler5 : identity$1);
         });
       }, []);
-      const navigateToNext = A$1(() => {
+      const navigateToNext = A$2(() => {
         setTabbableIndex(c => {
           var _indexMangler6, _indexDemangler6;
 
           return tryNavigateToIndex(managedChildren, c !== null && c !== void 0 ? c : 0, (c !== null && c !== void 0 ? c : 0) + 1, 1, (_indexMangler6 = indexMangler) !== null && _indexMangler6 !== void 0 ? _indexMangler6 : identity$1, (_indexDemangler6 = indexDemangler) !== null && _indexDemangler6 !== void 0 ? _indexDemangler6 : identity$1);
         });
       }, []);
-      const setIndex = A$1(index => {
+      const setIndex = A$2(index => {
         setTabbableIndex(index);
       }, []);
       const {
@@ -2987,10 +2987,10 @@
         navigateToFirst,
         navigateToLast
       });
-      const useListNavigationProps = A$1(props => {
+      const useListNavigationProps = A$2(props => {
         return useLinearNavigationProps(useTypeaheadNavigationProps(props));
       }, [useLinearNavigationProps, useTypeaheadNavigationProps]);
-      const useListNavigationChild = A$1(info => {
+      const useListNavigationChild = A$2(info => {
         useTypeaheadNavigationChild(info); //const { useLinearNavigationChildProps } = useLinearNavigationChild(info as I);
 
         const {
@@ -3008,7 +3008,7 @@
           }), props);
         };
 
-        const roveToSelf = A$1(() => {
+        const roveToSelf = A$2(() => {
           navigateToIndex(info.index);
         }, []);
         return {
@@ -3068,8 +3068,8 @@
      */
 
     function useForceUpdate() {
-      const [, set] = l(0);
-      return s(() => set(i => ++i)).current;
+      const [, set] = l$2(0);
+      return s$2(() => set(i => ++i)).current;
     }
 
     function identity(t) {
@@ -3098,18 +3098,18 @@
       // Otherwise, it is tabbable, with the tabbable cell being currentColumn.
       // This happens automatically when these functions are called.
 
-      const navigateToFirstRow = A$1(() => {
+      const navigateToFirstRow = A$2(() => {
         setCurrentRow2(c => tryNavigateToIndex(managedRows, c !== null && c !== void 0 ? c : 0, 0, 1, indexMangler, indexDemangler));
       }, [indexMangler, indexDemangler]);
-      const navigateToLastRow = A$1(() => {
+      const navigateToLastRow = A$2(() => {
         setCurrentRow2(c => tryNavigateToIndex(managedRows, c !== null && c !== void 0 ? c : 0, managedRows.length - 1, -1, indexMangler, indexDemangler));
       }, [indexMangler, indexDemangler]);
-      const navigateToPrevRow = A$1(() => {
+      const navigateToPrevRow = A$2(() => {
         setCurrentRow2(c => {
           return tryNavigateToIndex(managedRows, c !== null && c !== void 0 ? c : 0, indexMangler(Math.max(0, indexDemangler(c !== null && c !== void 0 ? c : 0) - 1)), -1, indexMangler, indexDemangler);
         });
       }, [indexMangler, indexDemangler]);
-      const navigateToNextRow = A$1(() => {
+      const navigateToNextRow = A$2(() => {
         setCurrentRow2(c => {
           return tryNavigateToIndex(managedRows, c !== null && c !== void 0 ? c : 0, indexMangler(Math.min(managedRows.length - 1, indexDemangler(c !== null && c !== void 0 ? c : 0) + 1)), 1, indexMangler, indexDemangler);
         });
@@ -3157,7 +3157,7 @@
        * Optional, but provides typeahead for each column in the table.
        */
 
-      const useGridNavigationColumn = A$1(_ref2 => {
+      const useGridNavigationColumn = A$2(_ref2 => {
         const {
           currentTypeahead,
           invalidTypeahead,
@@ -3166,7 +3166,7 @@
           getIndex: getCurrentRow,
           setIndex: setCurrentRow2
         });
-        const useGridNavigationColumnChild = A$1(_ref3 => {
+        const useGridNavigationColumnChild = A$2(_ref3 => {
           let {
             index: rowIndex,
             text,
@@ -3184,7 +3184,7 @@
         };
       }, []); // Last thing before we return -- here's the hook for individual rows and their cells.
 
-      const useGridNavigationRow = A$1(_ref4 => {
+      const useGridNavigationRow = A$2(_ref4 => {
         let {
           index: rowIndex,
           hidden,
@@ -3220,27 +3220,27 @@
           useRovingTabIndexChild: useRovingTabIndexCell,
           childCount: cellCount
         } = useRovingTabIndex({
-          shouldFocusOnChange: A$1(() => {
+          shouldFocusOnChange: A$2(() => {
             return !!getFocusCellOnRowChange() && !!getIsTabbableRow();
           }, []),
           tabbableIndex: currentColumn
         }); // More navigation stuff
 
-        const navigateToFirstColumn = A$1(() => {
+        const navigateToFirstColumn = A$2(() => {
           setCurrentColumn2(tryNavigateToIndex(managedCells, 0, 0, 1, identity, identity));
           forceUpdate();
         }, []);
-        const navigateToLastColumn = A$1(() => {
+        const navigateToLastColumn = A$2(() => {
           setCurrentColumn2(tryNavigateToIndex(managedCells, managedCells.length, managedCells.length, -1, identity, identity));
           forceUpdate();
         }, []);
-        const navigateToPrevColumn = A$1(() => {
+        const navigateToPrevColumn = A$2(() => {
           setCurrentColumn2(c => {
             return tryNavigateToIndex(managedCells, c, c - 1, -1, identity, identity);
           });
           forceUpdate();
         }, []);
-        const navigateToNextColumn = A$1(() => {
+        const navigateToNextColumn = A$2(() => {
           setCurrentColumn2(c => {
             return tryNavigateToIndex(managedCells, c, c + 1, 1, identity, identity);
           });
@@ -3310,12 +3310,12 @@
           ...info
         }); //const { useLinearNavigationChildProps: useLinearNavigationChildRowProps } = useLinearNavigationChildRow(info as IR)
 
-        const useGridNavigationRowProps = A$1(props => useManagedRowProps(useLinearNavigationCellProps(useMergedProps()({
+        const useGridNavigationRowProps = A$2(props => useManagedRowProps(useLinearNavigationCellProps(useMergedProps()({
           hidden: !!hidden,
           "data-index": rowIndex
         }, props))), [useManagedRowProps, !!hidden]);
         const getRowIndex = useStableGetter(rowIndex);
-        const useGridNavigationCell = A$1(info => {
+        const useGridNavigationCell = A$2(info => {
           const getTabbable = useStableCallback(() => tabbable);
           const {
             tabbable,
@@ -3331,11 +3331,11 @@
           // TODO: Mouseup/down might be preferable,
           // but it doesn't fire on label elements here?????
 
-          const onClick = A$1(() => {
+          const onClick = A$2(() => {
             setCurrentRow2(getRowIndex());
             setCurrentColumn2(info.index);
           }, [info.index]);
-          const useGridNavigationCellProps = A$1(props => useRovingTabIndexChildProps(useMergedProps()({
+          const useGridNavigationCellProps = A$2(props => useRovingTabIndexChildProps(useMergedProps()({
             onClick
           }, props)), [useRovingTabIndexChildProps]);
           return {
@@ -3387,7 +3387,7 @@
       // Again, no matter what combination of sub- or sub-sub-functions used.
       let stableHandler = useStableCallback(handler !== null && handler !== void 0 ? handler : () => {});
       if (handler == null) stableHandler = null;
-      y(() => {
+      y$1(() => {
         if (stableHandler) {
           target.addEventListener(type, stableHandler, options);
           return () => target.removeEventListener(type, stableHandler, options);
@@ -3462,7 +3462,7 @@
         getElement,
         useRefElementProps
       } = useRefElement({
-        onElementChange: A$1(element => {
+        onElementChange: A$2(element => {
           if (element) {
             var _activeElementUpdater, _activeElementUpdater2, _activeElementUpdater3, _lastActiveElementUpd, _windowFocusedUpdater;
 
@@ -3552,7 +3552,7 @@
         useActiveElementProps,
         getElement
       } = useActiveElement({
-        onActiveElementChange: A$1((activeElement, prevActiveElement) => {
+        onActiveElementChange: A$2((activeElement, prevActiveElement) => {
           const selfElement = getElement();
           const focused = selfElement != null && selfElement == activeElement;
           const focusedInner = !!(selfElement !== null && selfElement !== void 0 && selfElement.contains(activeElement));
@@ -3560,7 +3560,7 @@
           setFocusedInner(focusedInner);
           onActiveElementChange === null || onActiveElementChange === void 0 ? void 0 : onActiveElementChange(activeElement, prevActiveElement);
         }, []),
-        onLastActiveElementChange: A$1((lastActiveElement, prevLastActiveElement) => {
+        onLastActiveElementChange: A$2((lastActiveElement, prevLastActiveElement) => {
           const selfElement = getElement();
           const focused = selfElement != null && selfElement == lastActiveElement;
           const focusedInner = !!(selfElement !== null && selfElement !== void 0 && selfElement.contains(lastActiveElement));
@@ -3570,7 +3570,7 @@
         }, []),
         onWindowFocusedChange
       });
-      const useHasFocusProps = A$1(props => {
+      const useHasFocusProps = A$2(props => {
         return useActiveElementProps(props);
       }, [useActiveElementProps]);
       return {
@@ -3638,14 +3638,14 @@
       const compare = userCompare !== null && userCompare !== void 0 ? userCompare : defaultCompare; // These are used to keep track of a mapping between unsorted index <---> sorted index.
       // These are needed for navigation with the arrow keys.
 
-      const mangleMap = s(new Map());
-      const demangleMap = s(new Map());
-      const indexMangler = A$1(n => {
+      const mangleMap = s$2(new Map());
+      const demangleMap = s$2(new Map());
+      const indexMangler = A$2(n => {
         var _mangleMap$current$ge;
 
         return (_mangleMap$current$ge = mangleMap.current.get(n)) !== null && _mangleMap$current$ge !== void 0 ? _mangleMap$current$ge : n;
       }, []);
-      const indexDemangler = A$1(n => {
+      const indexDemangler = A$2(n => {
         var _demangleMap$current$;
 
         return (_demangleMap$current$ = demangleMap.current.get(n)) !== null && _demangleMap$current$ !== void 0 ? _demangleMap$current$ : n;
@@ -3656,7 +3656,7 @@
 
       const [getForceUpdate, setForceUpdate] = usePassiveState(null); // The actual sort function.
 
-      const sort = A$1(function (managedRows, direction) {
+      const sort = A$2(function (managedRows, direction) {
         var _getForceUpdate;
 
         for (var _len = arguments.length, args = new Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
@@ -3683,13 +3683,13 @@
       }, [
         /* Must remain stable */
       ]);
-      const useSortableProps = A$1(_ref2 => {
+      const useSortableProps = A$2(_ref2 => {
         let {
           children,
           ...props
         } = _ref2;
         const forceUpdate = useForceUpdate();
-        h(() => {
+        h$1(() => {
           setForceUpdate(prev => forceUpdate);
         }, [forceUpdate]);
         return useMergedProps()({
@@ -3698,7 +3698,7 @@
             var _ref3, _demangleMap$current$2, _ref4, _demangleMap$current$3;
 
             return ((_ref3 = (_demangleMap$current$2 = demangleMap.current.get(getIndex(lhs.props))) !== null && _demangleMap$current$2 !== void 0 ? _demangleMap$current$2 : getIndex(lhs.props)) !== null && _ref3 !== void 0 ? _ref3 : 0) - ((_ref4 = (_demangleMap$current$3 = demangleMap.current.get(getIndex(rhs.props))) !== null && _demangleMap$current$3 !== void 0 ? _demangleMap$current$3 : getIndex(rhs.props)) !== null && _ref4 !== void 0 ? _ref4 : 0);
-          }).map(child => v$1(child.type, { ...child.props,
+          }).map(child => v$2(child.type, { ...child.props,
             key: getIndex(child.props)
           }))
         }, props);
@@ -3869,12 +3869,7 @@
 
     var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
-    function createCommonjsModule(fn) {
-      var module = { exports: {} };
-    	return fn(module, module.exports), module.exports;
-    }
-
-    createCommonjsModule(function (module, exports) {
+    (function (module, exports) {
       (function (global, factory) {
         factory() ;
       })(commonjsGlobal, function () {
@@ -4801,7 +4796,7 @@
           }
         })();
       });
-    });
+    })();
 
     /**
      * @license
@@ -5241,7 +5236,7 @@
       /**
        * Push/pop the element from the blockingElements stack.
        */
-      h(() => {
+      h$1(() => {
         if (target) {
           // Sometimes blockingElements will fail if, for example,
           // the target element isn't connected to document.body.
@@ -5284,7 +5279,7 @@
       } = useActiveElement({}); // When the trap becomes active, before we let the blockingElements hook run,
       // keep track of whatever's currently focused and save it.
 
-      h(() => {
+      h$1(() => {
         if (trapActive && element) {
           var _getLastActiveElement;
 
@@ -5303,7 +5298,7 @@
        * tracked in elementsToRestoreFocusTo if not)
        */
 
-      h(() => {
+      h$1(() => {
         if (trapActive && element) {
           let rafHandle = requestAnimationFrame(() => {
             // TODO: This extra queueMicrotask is needed for
@@ -5381,7 +5376,7 @@
       const stableOnChildList = useStableCallback(onChildList !== null && onChildList !== void 0 ? onChildList : () => {});
       const stableOnCharacterData = useStableCallback(onCharacterData !== null && onCharacterData !== void 0 ? onCharacterData : () => {});
       const stableOnAttributes = useStableCallback(onAttributes !== null && onAttributes !== void 0 ? onAttributes : () => {});
-      y(() => {
+      y$1(() => {
         const element = getElement();
 
         if (element) {
@@ -5662,16 +5657,16 @@
         managedChildren: managedAccordionSections,
         useManagedChild: useManagedChildSection
       } = useChildManager();
-      const navigateToFirst = A$1(() => {
+      const navigateToFirst = A$2(() => {
         setLastFocusedIndex(0);
       }, []);
-      const navigateToLast = A$1(() => {
+      const navigateToLast = A$2(() => {
         setLastFocusedIndex(managedAccordionSections.length - 1);
       }, []);
-      const navigateToPrev = A$1(() => {
+      const navigateToPrev = A$2(() => {
         setLastFocusedIndex(i => (i !== null && i !== void 0 ? i : 0) - 1);
       }, []);
-      const navigateToNext = A$1(() => {
+      const navigateToNext = A$2(() => {
         setLastFocusedIndex(i => (i !== null && i !== void 0 ? i : 0) + 1);
       }, []);
       const {
@@ -5705,7 +5700,7 @@
         setChildFlag: (i, open) => open && managedAccordionSections[i].focus(),
         getChildFlag: i => false
       });
-      const useAriaAccordionSection = A$1(args => {
+      const useAriaAccordionSection = A$2(args => {
         var _ref2, _args$open;
 
         const index = args.index;
@@ -5727,17 +5722,17 @@
         let open = (_ref2 = (_args$open = args.open) !== null && _args$open !== void 0 ? _args$open : openFromParent) !== null && _ref2 !== void 0 ? _ref2 : null; // TODO: Convert to use useManagedChild so that this hook 
         // is stable without (directly) depending on the open state.
 
-        const useAriaAccordionSectionHeader = A$1(function useAriaAccordionSectionHeader(_ref3) {
+        const useAriaAccordionSectionHeader = A$2(function useAriaAccordionSectionHeader(_ref3) {
           const {
             getElement,
             useHasFocusProps,
             getFocusedInner
           } = useHasFocus({
-            onFocusedChanged: A$1(focused => {
+            onFocusedChanged: A$2(focused => {
               if (focused) setCurrentFocusedIndex(index);else setCurrentFocusedIndex(oldIndex => oldIndex === index ? null : index);
             }, [])
           });
-          const focus = A$1(() => {
+          const focus = A$2(() => {
             var _getElement;
 
             if (getCurrentFocusedIndex() != null) (_getElement = getElement()) === null || _getElement === void 0 ? void 0 : _getElement.focus();
@@ -5783,7 +5778,7 @@
             useAriaAccordionSectionHeaderProps
           };
         }, [useLinearNavigationProps, index, open]);
-        const useAriaAccordionSectionBody = A$1(function useAriaAccordionSectionBody() {
+        const useAriaAccordionSectionBody = A$2(function useAriaAccordionSectionBody() {
           function useAriaAccordionSectionBodyProps(_ref5) {
             let {
               role,
@@ -5829,8 +5824,8 @@
         labelPrefix: "label-",
         inputPrefix: "input-"
       };
-      const [labelElement, setLabelElement] = l(null);
-      const [inputElement, setInputElement] = l(null);
+      const [labelElement, setLabelElement] = l$2(null);
+      const [inputElement, setInputElement] = l$2(null);
       const {
         getElement: getLabelElement,
         useRefElementProps: useLabelRefElementProps
@@ -5860,14 +5855,14 @@
         prefix: inputPrefix
       });
       const labelHasMounted = !!labelElement;
-      const useGenericLabelLabel = A$1(function useGenericLabelLabel() {
+      const useGenericLabelLabel = A$2(function useGenericLabelLabel() {
         return {
           useGenericLabelLabelProps: props => {
             return useLabelRandomIdProps(useLabelRefElementProps(props));
           }
         };
       }, []);
-      const useGenericLabelInput = A$1(function useGenericLabelInput() {
+      const useGenericLabelInput = A$2(function useGenericLabelInput() {
         return {
           useGenericLabelInputProps: _ref => {
             var _ref2;
@@ -5927,7 +5922,7 @@
         labelPrefix,
         inputPrefix
       });
-      const useInputLabelLabel = A$1(function useInputLabelLabel(_ref3) {
+      const useInputLabelLabel = A$2(function useInputLabelLabel(_ref3) {
         let {
           tag
         } = _ref3;
@@ -5943,7 +5938,7 @@
 
         };
       }, [useGenericLabelInput]);
-      const useInputLabelInput = A$1(function useInputLabelInput() {
+      const useInputLabelInput = A$2(function useInputLabelInput() {
         const {
           useGenericLabelInputProps
         } = useGenericLabelInput();
@@ -6004,7 +5999,7 @@
         labelPrefix: "aria-checkbox-label-",
         inputPrefix: "aria-checkbox-input-"
       });
-      const useCheckboxLikeInputElement = A$1(function useCheckboxInputElement(_ref5) {
+      const useCheckboxLikeInputElement = A$2(function useCheckboxInputElement(_ref5) {
         let {
           tag
         } = _ref5;
@@ -6020,7 +6015,7 @@
         // See https://github.com/preactjs/preact/issues/2745,
         // and https://github.com/preactjs/preact/issues/1899#issuecomment-525690194
 
-        y(() => {
+        y$1(() => {
           const element = getElement();
 
           if (element && tag == "input") {
@@ -6069,7 +6064,7 @@
           return useMergedProps()(p0, props);
         }
       }, [useILInput, role, labelPosition, disabled, checked]);
-      const useCheckboxLikeLabelElement = A$1(function useCheckboxLabelElement(_ref7) {
+      const useCheckboxLikeLabelElement = A$2(function useCheckboxLabelElement(_ref7) {
         let {
           tag
         } = _ref7;
@@ -6134,7 +6129,7 @@
         disabled,
         onInput: onInputEnhanced
       });
-      const useCheckboxInputElement = A$1(function useCheckboxInputElement(_ref2) {
+      const useCheckboxInputElement = A$2(function useCheckboxInputElement(_ref2) {
         let {
           tag
         } = _ref2;
@@ -6145,7 +6140,7 @@
           tag
         });
         const isMixed = checked == "mixed";
-        y(() => {
+        y$1(() => {
           const inputElement = getInputElement();
 
           if (inputElement && tag === "input") {
@@ -6167,7 +6162,7 @@
           return props;
         }
       }, [useCheckboxLikeInputElement, checked, labelPosition, disabled]);
-      const useCheckboxLabelElement = A$1(function useCheckboxLabelElement(_ref4) {
+      const useCheckboxLabelElement = A$2(function useCheckboxLabelElement(_ref4) {
         let {
           tag
         } = _ref4;
@@ -6215,7 +6210,7 @@
       const stableOnClose = useStableCallback(onClose);
       const stableGetElements = useStableCallback(getElements);
       const getOpen = useStableGetter(open);
-      const onBackdropClick = A$1(function onBackdropClick(e) {
+      const onBackdropClick = A$2(function onBackdropClick(e) {
         var _getElement;
 
         const document = (_getElement = getElement()) === null || _getElement === void 0 ? void 0 : _getElement.ownerDocument;
@@ -6246,7 +6241,7 @@
         useActiveElementProps,
         getElement
       } = useActiveElement({
-        onLastActiveElementChange: A$1(newElement => {
+        onLastActiveElementChange: A$2(newElement => {
           let validFocusableElements = stableGetElements();
 
           if (validFocusableElements) {
@@ -6263,7 +6258,7 @@
       const {
         useRefElementProps
       } = useRefElement({
-        onElementChange: A$1(e => {
+        onElementChange: A$2(e => {
           const document = e === null || e === void 0 ? void 0 : e.ownerDocument;
           const window = document === null || document === void 0 ? void 0 : document.defaultView; // Since everything else is inert, we listen for captured clicks on the window
           // (we don't use onClick since that doesn't fire when clicked on empty/inert areas)
@@ -6300,7 +6295,7 @@
         }, [])
       });
       return {
-        useSoftDismissProps: A$1(props => useActiveElementProps(useRefElementProps(props)), [useActiveElementProps, useRefElementProps])
+        useSoftDismissProps: A$2(props => useActiveElementProps(useRefElementProps(props)), [useActiveElementProps, useRefElementProps])
       };
     }
     /**
@@ -6349,7 +6344,7 @@
         onClose: stableOnClose,
         getElements: getModalElement
       });
-      const useModalBackdrop = A$1(function useModalBackdrop() {
+      const useModalBackdrop = A$2(function useModalBackdrop() {
         function useModalBackdropProps(props) {
           return useMergedProps()({
             onPointerUp: () => stableOnClose("backdrop")
@@ -6380,7 +6375,7 @@
         }), modalDescribedByBody ? pFinal : p2)));
       };
 
-      const useModalTitle = A$1(function useModalTitle() {
+      const useModalTitle = A$2(function useModalTitle() {
         const useModalTitleProps = function (props) {
           return useTitleIdProps(props);
         };
@@ -6389,7 +6384,7 @@
           useModalTitleProps
         };
       }, []);
-      const useModalBody = A$1(function useModalBody(_ref4) {
+      const useModalBody = A$2(function useModalBody(_ref4) {
         let {
           descriptive
         } = _ref4;
@@ -6420,7 +6415,7 @@
     function useHideScroll(hideScroll) {
       const [getScrollbarWidth, setScrollbarWidth] = usePassiveState(null);
       const [getScrollbarHeight, setScrollbarHeight] = usePassiveState(null);
-      y(() => {
+      y$1(() => {
         if (hideScroll) {
           // When scrolling is resumed, we'll need to restore the original scroll positions
           // so we need to keep this information around
@@ -6497,7 +6492,7 @@
         open,
         onClose
       });
-      const useDialogBackdrop = A$1(() => {
+      const useDialogBackdrop = A$2(() => {
         const {
           useModalBackdropProps
         } = useModalBackdrop();
@@ -6505,7 +6500,7 @@
           useDialogBackdropProps: useModalBackdropProps
         };
       }, [useModalBackdrop]);
-      const useDialogBody = A$1(_ref2 => {
+      const useDialogBody = A$2(_ref2 => {
         let {
           descriptive
         } = _ref2;
@@ -6519,7 +6514,7 @@
         };
       }, [useModalBackdrop]);
       const useDialogProps = useModalProps;
-      const useDialogTitle = A$1(() => {
+      const useDialogTitle = A$2(() => {
         const {
           useModalTitleProps
         } = useModalTitle();
@@ -6550,7 +6545,7 @@
         open,
         onClose
       });
-      const useDrawerBackdrop = A$1(() => {
+      const useDrawerBackdrop = A$2(() => {
         const {
           useModalBackdropProps
         } = useModalBackdrop();
@@ -6558,7 +6553,7 @@
           useDrawerBackdropProps: useModalBackdropProps
         };
       }, [useModalBackdrop]);
-      const useDrawerBody = A$1(_ref2 => {
+      const useDrawerBody = A$2(_ref2 => {
         let {
           descriptive
         } = _ref2;
@@ -6572,7 +6567,7 @@
         };
       }, [useModalBackdrop]);
       const useDrawerProps = useModalProps;
-      const useDrawerTitle = A$1(() => {
+      const useDrawerTitle = A$2(() => {
         const {
           useModalTitleProps
         } = useModalTitle();
@@ -6627,13 +6622,13 @@
       const {
         useActiveElementProps
       } = useActiveElement({
-        onActiveElementChange: A$1(activeElement => {
+        onActiveElementChange: A$2(activeElement => {
           var _getInputElement;
 
           return setAnyItemsFocused(!!((_getInputElement = getInputElement()) !== null && _getInputElement !== void 0 && _getInputElement.contains(activeElement)));
         }, [])
       });
-      y(() => {
+      y$1(() => {
         if (!anyItemsFocused) navigateToIndex(selectedIndex);
       }, [anyItemsFocused, selectedIndex, navigateToIndex]);
       useChildFlag({
@@ -6654,7 +6649,7 @@
         navigateToIndex(selectedIndex);
       }, [selectedIndex, managedChildren.length]);
       const childCount = managedChildren.length;
-      const useListboxSingleItem = A$1(info => {
+      const useListboxSingleItem = A$2(info => {
         const [selected, setSelected, getSelected] = useState(null);
         const {
           tabbable,
@@ -6670,7 +6665,7 @@
           useRefElementProps
         } = useRefElement({});
         const index = info.index;
-        y(() => {
+        y$1(() => {
           const element = getElement();
 
           if (element && tabbable && selectionMode == "focus") {
@@ -6711,7 +6706,7 @@
           return useListNavigationChildProps(useMergedProps()(newProps, useRefElementProps(props)));
         }
       }, [useListNavigationChild, selectionMode, childCount]);
-      const useListboxSingleLabel = A$1(function useListboxSingleLabel() {
+      const useListboxSingleLabel = A$2(function useListboxSingleLabel() {
         function useListboxSingleLabelProps(props) {
           const {
             useGenericLabelLabelProps
@@ -6774,12 +6769,12 @@
       const childCount = managedChildren.length;
       const [shiftHeld, setShiftHeld, getShiftHeld] = useState(false);
       const typeaheadInProgress = !!currentTypeahead;
-      y(() => {
+      y$1(() => {
         for (let i = 0; i < childCount; ++i) {
           managedChildren[i].setTypeaheadInProgress(typeaheadInProgress);
         }
       }, [typeaheadInProgress, childCount]);
-      const useListboxMultiItem = A$1(info => {
+      const useListboxMultiItem = A$2(info => {
         var _info$onSelect;
 
         const selected = info.selected;
@@ -6835,7 +6830,7 @@
           return useRefElementProps(useListNavigationChildProps(useMergedProps()(newProps, props)));
         }
       }, [useListNavigationChild, childCount, typeaheadInProgress]);
-      const useListboxMultiLabel = A$1(function useListboxMultiLabel() {
+      const useListboxMultiLabel = A$2(function useListboxMultiLabel() {
         function useListboxMultiLabelProps(props) {
           const {
             useGenericLabelLabelProps
@@ -6945,7 +6940,7 @@
         onClose: stableOnClose,
         getElements: () => [getButtonElement(), getMenuElement()]
       });
-      y(() => {
+      y$1(() => {
         setFocusTrapActive(open);
       }, [open]); // A menu sentinal is a hidden but focusable element that comes at the start or end of the element
       // that, when activated or focused over, closes the menu.
@@ -6955,7 +6950,7 @@
       // and keyboard users can escape to close the menu,
       // screen readers and other input methods that don't use those two become stuck.
 
-      const useMenuSentinel = A$1(() => {
+      const useMenuSentinel = A$2(() => {
         const [firstSentinelIsActive, setFirstSentinelIsActive] = useState(false);
         useTimeout({
           callback: () => {
@@ -6981,7 +6976,7 @@
           }
         };
       }, [open]);
-      const useMenuBaseProps = A$1(props => {
+      const useMenuBaseProps = A$2(props => {
         function onKeyDown(e) {
           if (e.key == "Escape" && getOpen()) {
             stableOnClose();
@@ -6995,10 +6990,10 @@
           onKeyDown
         }, props)))));
       }, [useSoftDismissProps, useMenuBaseHasFocusProps, useMenuBaseRefElementProps, useMenuBaseIdProps]);
-      const useMenuBaseButtonProps = A$1(props => {
+      const useMenuBaseButtonProps = A$2(props => {
         return useButtonRefElementProps(useButtonHasFocusProps(useMenuBaseIdReferencingProps("aria-controls")(props)));
       }, [useButtonHasFocusProps, useButtonRefElementProps, useMenuBaseIdReferencingProps]);
-      y(() => {
+      y$1(() => {
         const sendFocusWithinMenu = getSendFocusWithinMenu();
 
         if (focusTrapActive) {
@@ -7046,7 +7041,7 @@
         noTypeahead,
         noWrap,
         typeaheadTimeout,
-        shouldFocusOnChange: A$1(() => getMenuBaseLastFocusedInner() || getMenuBaseButtonLastFocusedInner(), [])
+        shouldFocusOnChange: A$2(() => getMenuBaseLastFocusedInner() || getMenuBaseButtonLastFocusedInner(), [])
       });
       const {
         useMenuSentinel,
@@ -7061,7 +7056,7 @@
       } = useMenuBase({ ...args,
         sendFocusWithinMenu: focusMenu !== null && focusMenu !== void 0 ? focusMenu : () => {}
       });
-      const useMenuButton = A$1(_ref3 => {
+      const useMenuButton = A$2(_ref3 => {
         return {
           useMenuButtonProps: function (p) {
             let props = useMenuBaseButtonProps(p);
@@ -7074,8 +7069,8 @@
       /*const useMenuSubmenuItem = useCallback((args: UseMenuSubmenuItemParameters) => {
           const { useMenuProps, useMenuButton } = useAriaMenu<HTMLElement, ChildElement, I>(args);
           const { useMenuButtonProps } = useMenuButton<E>({ tag: "li" as any });
-           const { getElement, useRefElementProps } = useRefElement<any>({ onElementChange: setOpenerElement as OnPassiveStateChange<any> });
-           return {
+            const { getElement, useRefElementProps } = useRefElement<any>({ onElementChange: setOpenerElement as OnPassiveStateChange<any> });
+            return {
               getElement,
               useMenuProps,
               useMenuSubmenuItemProps: function <P extends h.JSX.HTMLAttributes<E>>({ ...props }: P) {
@@ -7085,7 +7080,7 @@
           }
       }, []);*/
 
-      const useMenuItem = A$1(args => {
+      const useMenuItem = A$2(args => {
         const {
           useListNavigationChildProps
         } = useListNavigationChild(args);
@@ -7140,7 +7135,7 @@
         convertToPhysicalOrientation,
         useLogicalDirectionProps
       } = useLogicalDirection({
-        onLogicalDirectionChange: A$1(logicalDirectionInfo => setPhysicalOrientation(convertToPhysicalOrientation(logicalOrientation, logicalDirectionInfo)), [])
+        onLogicalDirectionChange: A$2(logicalDirectionInfo => setPhysicalOrientation(convertToPhysicalOrientation(logicalOrientation, logicalDirectionInfo)), [])
       });
       useRandomId({
         prefix: "aria-tab-list-"
@@ -7215,7 +7210,7 @@
           });
         }
       }, [childCount, selectedIndex, selectionMode]);
-      const useTab = A$1(function useTab(info) {
+      const useTab = A$2(function useTab(info) {
         const [selectionModeL, setSelectionModeL] = useState(selectionMode);
         const {
           useRefElementProps,
@@ -7243,7 +7238,7 @@
           ...info
         });
         const getIndex = useStableGetter(info.index);
-        y(() => {
+        y$1(() => {
           const element = getElement();
 
           if (tabbable && selectionModeL == "focus") {
@@ -7256,7 +7251,7 @@
             });
           }
         }, [tabbable, selectionMode]);
-        y(() => {
+        y$1(() => {
           var _managedPanels$info$i;
 
           (_managedPanels$info$i = managedPanels[info.index]) === null || _managedPanels$info$i === void 0 ? void 0 : _managedPanels$info$i.setTabId(tabId);
@@ -7283,7 +7278,7 @@
           selected
         };
       }, []);
-      const useTabPanel = A$1(function usePanel(info) {
+      const useTabPanel = A$2(function usePanel(info) {
         //const [shouldFocus, setShouldFocus] = useState(false);
         const [tabId, setTabId] = useState(undefined);
         const [visible, setVisible, getVisible] = useState(null);
@@ -7315,7 +7310,7 @@
           }
         }
 
-        y(() => {
+        y$1(() => {
           var _managedTabs$info$ind;
 
           (_managedTabs$info$ind = managedTabs[info.index]) === null || _managedTabs$info$ind === void 0 ? void 0 : _managedTabs$info$ind.setTabPanelId(tabPanelId);
@@ -7338,7 +7333,7 @@
           visible
         };
       }, []);
-      const useTabsList = A$1(function useTabList() {
+      const useTabsList = A$2(function useTabList() {
         function useTabListProps(_ref4) {
           let { ...props
           } = _ref4;
@@ -7351,7 +7346,7 @@
           useTabListProps
         };
       }, [useListNavigationProps, physicalOrientation]);
-      const useTabsLabel = A$1(function useTabsLabel() {
+      const useTabsLabel = A$2(function useTabsLabel() {
         function useTabsLabelProps(_ref5) {
           let { ...props
           } = _ref5;
@@ -7418,10 +7413,10 @@
       }); // If we have a (delay-corrected) mouseover or we're focused,
       // show the tooltip.
 
-      y(() => {
+      y$1(() => {
         setOpen(hasDelayCorrectedMouseover || triggerFocusedInner);
       }, [hasDelayCorrectedMouseover, triggerFocusedInner]);
-      const useTooltipTrigger = A$1(function useTooltipTrigger() {
+      const useTooltipTrigger = A$2(function useTooltipTrigger() {
         function onPointerEnter(e) {
           setTriggerHasMouseover(true);
         }
@@ -7460,7 +7455,7 @@
           useTooltipTriggerProps
         };
       }, [useTooltipIdReferencingProps]);
-      const useTooltip = A$1(function useTooltip() {
+      const useTooltip = A$2(function useTooltip() {
         function onPointerEnter(e) {
           setTooltipHasMouseover(true);
         }
@@ -7508,7 +7503,7 @@
       useStableGetter(name); //const getSelectedIndex = useCallback((selectedValue: V) => { return byName.current.get(selectedValue) ?? 0 }, [])
 
       const [selectedIndex, setSelectedIndex] = useState(0);
-      const byName = s(new Map());
+      const byName = s$2(new Map());
       const stableOnInput = useStableCallback(onInput);
       const [anyRadiosFocused, setAnyRadiosFocused, getAnyRadiosFocused] = useState(false);
       const {
@@ -7526,16 +7521,16 @@
       // When it's not, we reset the tabbable index back to the currently selected element.
 
       useActiveElement({
-        onActiveElementChange: A$1(activeElement => {
+        onActiveElementChange: A$2(activeElement => {
           var _getRadioGroupParentE;
 
           return setAnyRadiosFocused(!!((_getRadioGroupParentE = getRadioGroupParentElement()) !== null && _getRadioGroupParentE !== void 0 && _getRadioGroupParentE.contains(activeElement)));
         }, [])
       });
-      y(() => {
+      y$1(() => {
         if (!anyRadiosFocused) navigateToIndex(selectedIndex !== null && selectedIndex !== void 0 ? selectedIndex : 0);
       }, [anyRadiosFocused, selectedIndex, navigateToIndex]);
-      const useRadioGroupProps = A$1(_ref2 => {
+      const useRadioGroupProps = A$2(_ref2 => {
         let { ...props
         } = _ref2;
         props.role = "radiogroup";
@@ -7556,11 +7551,11 @@
           return (_managedChildren$i$ge = (_managedChildren$i2 = managedChildren[i]) === null || _managedChildren$i2 === void 0 ? void 0 : _managedChildren$i2.getChecked()) !== null && _managedChildren$i$ge !== void 0 ? _managedChildren$i$ge : false;
         }
       });
-      y(() => {
+      y$1(() => {
         let selectedIndex = byName.current.get(selectedValue);
         setSelectedIndex(selectedIndex !== null && selectedIndex !== void 0 ? selectedIndex : null);
       }, [byName, selectedValue]);
-      const useRadio = A$1(function useAriaRadio(_ref3) {
+      const useRadio = A$2(function useAriaRadio(_ref3) {
         let {
           value,
           index,
@@ -7570,7 +7565,7 @@
           ...rest
         } = _ref3;
         const [checked, setChecked, getChecked] = useState(null);
-        const onInput = A$1(e => {
+        const onInput = A$2(e => {
           stableOnInput(enhanceEvent(e, {
             selectedValue: value
           }));
@@ -7587,7 +7582,7 @@
           onInput,
           role: "radio"
         });
-        h(() => {
+        h$1(() => {
           byName.current.set(value, index);
           return () => {
             byName.current.delete(value);
@@ -7631,7 +7626,7 @@
           };
         };
 
-        const useRadioLabel = A$1(_ref5 => {
+        const useRadioLabel = A$2(_ref5 => {
           let {
             tag
           } = _ref5;
@@ -7687,7 +7682,7 @@
       } = useChildManager(); // Any time a new toast mounts, update our bottommostToastIndex to point to it if necessary
       // ("necessary" just meaning if it's the first toast ever or all prior toasts have been dismissed)
 
-      const onAnyToastMounted = A$1(index => {
+      const onAnyToastMounted = A$2(index => {
         let bottom = getActiveToastIndex();
 
         while (bottom < toastQueue.length && (bottom < 0 || (_toastQueue$bottom = toastQueue[bottom]) !== null && _toastQueue$bottom !== void 0 && _toastQueue$bottom.dismissed)) {
@@ -7699,7 +7694,7 @@
         setActiveToastIndex(bottom);
       }, [setActiveToastIndex]); // Any time a toast is dismissed, update our bottommostToastIndex to point to the next toast in the queue, if one exists.
 
-      const onAnyToastDismissed = A$1(index => {
+      const onAnyToastDismissed = A$2(index => {
         var _getElement, _toastQueue$bottom3;
 
         let bottom = getActiveToastIndex();
@@ -7730,14 +7725,14 @@
           return ((_toastQueue$i2 = toastQueue[i]) === null || _toastQueue$i2 === void 0 ? void 0 : _toastQueue$i2.getStatus()) === "active";
         }
       });
-      const useToast = A$1(_ref2 => {
+      const useToast = A$2(_ref2 => {
         let {
           politeness,
           timeout
         } = _ref2;
         const [status, setStatus, getStatus] = useState("pending");
         const dismissed = status === "dismissed";
-        const dismiss = A$1(() => {
+        const dismiss = A$2(() => {
           setStatus("dismissed");
         }, []);
         const {
@@ -7746,10 +7741,10 @@
           prefix: "toast-"
         }); //const [toastId, setToastId] = useState(() => generateRandomId("toast-"));
 
-        h(() => {
+        h$1(() => {
           setPoliteness(politeness !== null && politeness !== void 0 ? politeness : "polite");
         }, [politeness]);
-        const focus = A$1(() => {
+        const focus = A$2(() => {
           const element = getElement();
 
           if (element) {
@@ -7768,10 +7763,10 @@
           focus
         });
         const isActive = status === "active";
-        y(() => {
+        y$1(() => {
           onAnyToastMounted(getMountIndex(toastId));
         }, []);
-        y(() => {
+        y$1(() => {
           if (dismissed) onAnyToastDismissed(getMountIndex(toastId));
         }, [dismissed]);
         useTimeout({
@@ -7833,12 +7828,12 @@
         sort: originalSort,
         useSortableProps
       } = useSortableChildren({
-        getValue: A$1((row, column) => {
+        getValue: A$2((row, column) => {
           var _row$getManagedCells, _row$getManagedCells$;
 
           return (_row$getManagedCells = row.getManagedCells()) === null || _row$getManagedCells === void 0 ? void 0 : (_row$getManagedCells$ = _row$getManagedCells[column]) === null || _row$getManagedCells$ === void 0 ? void 0 : _row$getManagedCells$.value;
         }, []),
-        getIndex: A$1(row => {
+        getIndex: A$2(row => {
           return row.index;
         }, [])
       }); // This is the index of the currently sorted column('s header cell that was clicked to sort it).
@@ -7863,14 +7858,14 @@
       } = useHasFocus({}); // Wrap the "useSortable" sort function to also set some internal state
       // regarding which column is sorted and in what direction.
 
-      const sort = A$1((column, direction) => {
+      const sort = A$2((column, direction) => {
         setSortedColumn(column);
         setSortedDirection(direction);
         originalSort(getBodyRows(), direction, column);
       }, [
         /* Must remain stable */
       ]);
-      const useTableSection = A$1(_ref2 => {
+      const useTableSection = A$2(_ref2 => {
         let {
           location
         } = _ref2;
@@ -7892,7 +7887,7 @@
           indexMangler,
           indexDemangler
         });
-        const useTableSectionProps = A$1(props => {
+        const useTableSectionProps = A$2(props => {
           return useGridNavigationProps(useManagedChildProps(useMergedProps()({
             role: "rowgroup"
           }, props)));
@@ -7911,7 +7906,7 @@
          *
          */
 
-        const useTableRow = A$1(_ref3 => {
+        const useTableRow = A$2(_ref3 => {
           let {
             index: rowIndexAsUnsorted,
             location,
@@ -7938,7 +7933,7 @@
             location
           }); // Not public -- just the shared code between header cells and body cells
 
-          const useTableCellShared = A$1(_ref4 => {
+          const useTableCellShared = A$2(_ref4 => {
             let {
               index,
               value
@@ -8003,7 +7998,7 @@
               useTableCellDelegateProps
             };
           }, []);
-          const useTableHeadCell = A$1(_ref7 => {
+          const useTableHeadCell = A$2(_ref7 => {
             let {
               index: columnIndex,
               unsortable,
@@ -8020,20 +8015,20 @@
 
             const [sortDirection, setSortDirection, getSortDirection] = useState(null);
             const [isTheSortedColumn, setIsTheSortedColumn] = useState(false);
-            const random = s(generateRandomId());
+            const random = s$2(generateRandomId());
             const {
               getElement,
               useManagedChildProps
             } = useManagedHeaderCellChild({
               index: random.current,
-              setSortedColumn: A$1(c => {
+              setSortedColumn: A$2(c => {
                 setIsTheSortedColumn(c === columnIndex);
               }, [columnIndex])
             });
-            y(() => {
+            y$1(() => {
               if (!isTheSortedColumn) setSortDirection(null);
             }, [isTheSortedColumn]);
-            const onSortClick = A$1(() => {
+            const onSortClick = A$2(() => {
               let nextSortDirection = getSortDirection();
               if (nextSortDirection === "ascending") nextSortDirection = "descending";else nextSortDirection = "ascending";
               setSortDirection(nextSortDirection);
@@ -8053,7 +8048,7 @@
               sortDirection
             };
           }, []);
-          const useTableCell = A$1(_ref8 => {
+          const useTableCell = A$2(_ref8 => {
             let {
               index,
               value
@@ -8095,14 +8090,14 @@
           managedRows
         };
       }, []);
-      const useTableHead = A$1(() => {
+      const useTableHead = A$2(() => {
         // Used to track if we tried to render any rows before they've been
         // given their "true" index to display (their sorted index).
         // This is true for all rows initially on mount, but especially true
         // when the table has been pre-sorted and then a new row is
         // added on top of that afterwards. 
         const [hasUnsortedRows, setHasUnsortedRows] = useState(false);
-        y(() => {
+        y$1(() => {
           if (hasUnsortedRows) {
             var _getSortedColumn, _getSortedDirection;
 
@@ -8121,7 +8116,7 @@
           useTableHeadProps: useTableSectionProps
         };
       }, [useTableSection]);
-      const useTableBody = A$1(() => {
+      const useTableBody = A$2(() => {
         const {
           useTableSectionRow: useTableBodyRow,
           useTableSectionProps,
@@ -8129,7 +8124,7 @@
         } = useTableSection({
           location: "body"
         });
-        const useTableBodyProps = A$1(_ref10 => {
+        const useTableBodyProps = A$2(_ref10 => {
           let {
             children,
             ...props
@@ -8139,7 +8134,7 @@
             children: children
           }, props)));
         }, [useTableSectionProps]);
-        y(() => {
+        y$1(() => {
           setBodyRows(prev => managedRows);
         }, [managedRows]);
         return {
@@ -8147,7 +8142,7 @@
           useTableBodyProps
         };
       }, []);
-      const useTableFoot = A$1(() => {
+      const useTableFoot = A$2(() => {
         const {
           useTableSectionRow: useTableFootRow,
           useTableSectionProps
@@ -8162,7 +8157,7 @@
       // as the "sortedColumn" column.  We then, as the parent table, let all the other
       // header rows know who is the "sortedColumn" column so that they can un-style themselves.
 
-      y(() => {
+      y$1(() => {
         if (sortedColumn != null) {
           Object.entries(managedHeaderCells).forEach(_ref11 => {
             let [index, cell] = _ref11;
@@ -8198,7 +8193,7 @@
       return n;
     }
 
-    function C(n, t) {
+    function C$1(n, t) {
       for (var e in n) if ("__source" !== e && !(e in t)) return !0;
 
       for (var r in t) if ("__source" !== r && n[r] !== t[r]) return !0;
@@ -8210,32 +8205,32 @@
       this.props = n;
     }
 
-    function g(n, t) {
+    function g$1(n, t) {
       function e(n) {
         var e = this.props.ref,
             r = e == n.ref;
-        return !r && e && (e.call ? e(null) : e.current = null), t ? !t(this.props, n) || !r : C(this.props, n);
+        return !r && e && (e.call ? e(null) : e.current = null), t ? !t(this.props, n) || !r : C$1(this.props, n);
       }
 
       function r(t) {
-        return this.shouldComponentUpdate = e, v$1(n, t);
+        return this.shouldComponentUpdate = e, v$2(n, t);
       }
 
       return r.displayName = "Memo(" + (n.displayName || n.name) + ")", r.prototype.isReactComponent = !0, r.__f = !0, r;
     }
 
-    (E.prototype = new _()).isPureReactComponent = !0, E.prototype.shouldComponentUpdate = function (n, t) {
-      return C(this.props, n) || C(this.state, t);
+    (E.prototype = new _$1()).isPureReactComponent = !0, E.prototype.shouldComponentUpdate = function (n, t) {
+      return C$1(this.props, n) || C$1(this.state, t);
     };
-    var w = l$1.__b;
+    var w$1 = l$3.__b;
 
-    l$1.__b = function (n) {
-      n.type && n.type.__f && n.ref && (n.props.ref = n.ref, n.ref = null), w && w(n);
+    l$3.__b = function (n) {
+      n.type && n.type.__f && n.ref && (n.props.ref = n.ref, n.ref = null), w$1 && w$1(n);
     };
 
     var R = "undefined" != typeof Symbol && Symbol.for && Symbol.for("react.forward_ref") || 3911;
 
-    function x(n) {
+    function x$1(n) {
       function t(t, e) {
         var r = S({}, t);
         return delete r.ref, n(r, (e = t.ref || e) && ("object" != typeof e || "current" in e) ? e : null);
@@ -8244,16 +8239,16 @@
       return t.$$typeof = R, t.render = t, t.prototype.isReactComponent = t.__f = !0, t.displayName = "ForwardRef(" + (n.displayName || n.name) + ")", t;
     }
 
-    var A = l$1.__e;
+    var A$1 = l$3.__e;
 
-    l$1.__e = function (n, t, e) {
+    l$3.__e = function (n, t, e) {
       if (n.then) for (var r, u = t; u = u.__;) if ((r = u.__c) && r.__c) return null == t.__e && (t.__e = e.__e, t.__k = e.__k), r.__c(n, t);
-      A(n, t, e);
+      A$1(n, t, e);
     };
 
-    var O = l$1.unmount;
+    var O = l$3.unmount;
 
-    function L() {
+    function L$1() {
       this.__u = 0, this.t = null, this.__b = null;
     }
 
@@ -8262,14 +8257,14 @@
       return t && t.__e && t.__e(n);
     }
 
-    function M() {
+    function M$1() {
       this.u = null, this.o = null;
     }
 
-    l$1.unmount = function (n) {
+    l$3.unmount = function (n) {
       var t = n.__c;
       t && t.__R && t.__R(), t && !0 === n.__h && (n.type = null), O && O(n);
-    }, (L.prototype = new _()).__c = function (n, t) {
+    }, (L$1.prototype = new _$1()).__c = function (n, t) {
       var e = t.__c,
           r = this;
       null == r.t && (r.t = []), r.t.push(e);
@@ -8306,9 +8301,9 @@
       r.__u++ || c || r.setState({
         __e: r.__b = r.__v.__k[0]
       }), n.then(i, i);
-    }, L.prototype.componentWillUnmount = function () {
+    }, L$1.prototype.componentWillUnmount = function () {
       this.t = [];
-    }, L.prototype.render = function (n, t) {
+    }, L$1.prototype.render = function (n, t) {
       if (this.__b) {
         if (this.__v.__k) {
           var e = document.createElement("div"),
@@ -8326,11 +8321,11 @@
         this.__b = null;
       }
 
-      var u = t.__e && v$1(d$1, null, n.fallback);
-      return u && (u.__h = null), [v$1(d$1, null, t.__e ? null : n.children), u];
+      var u = t.__e && v$2(d$2, null, n.fallback);
+      return u && (u.__h = null), [v$2(d$2, null, t.__e ? null : n.children), u];
     };
 
-    var T = function (n, t, e) {
+    var T$1 = function (n, t, e) {
       if (++e[1] === e[0] && n.o.delete(t), n.props.revealOrder && ("t" !== n.props.revealOrder[0] || !n.o.size)) for (e = n.u; e;) {
         for (; e.length > 3;) e.pop()();
 
@@ -8345,7 +8340,7 @@
       }, n.children;
     }
 
-    function I(n) {
+    function I$1(n) {
       var t = this,
           e = n.i;
       t.componentWillUnmount = function () {
@@ -8363,53 +8358,53 @@
         removeChild: function (n) {
           this.childNodes.splice(this.childNodes.indexOf(n) >>> 1, 1), t.i.removeChild(n);
         }
-      }), S$1(v$1(D, {
+      }), S$1(v$2(D, {
         context: t.context
       }, n.__v), t.l)) : t.l && t.componentWillUnmount();
     }
 
     function W(n, t) {
-      return v$1(I, {
+      return v$2(I$1, {
         __v: n,
         i: t
       });
     }
 
-    (M.prototype = new _()).__e = function (n) {
+    (M$1.prototype = new _$1()).__e = function (n) {
       var t = this,
           e = U(t.__v),
           r = t.o.get(n);
       return r[0]++, function (u) {
         var o = function () {
-          t.props.revealOrder ? (r.push(u), T(t, n, r)) : u();
+          t.props.revealOrder ? (r.push(u), T$1(t, n, r)) : u();
         };
 
         e ? e(o) : o();
       };
-    }, M.prototype.render = function (n) {
+    }, M$1.prototype.render = function (n) {
       this.u = null, this.o = new Map();
-      var t = A$2(n.children);
+      var t = A$3(n.children);
       n.revealOrder && "b" === n.revealOrder[0] && t.reverse();
 
       for (var e = t.length; e--;) this.o.set(t[e], this.u = [1, 0, this.u]);
 
       return n.children;
-    }, M.prototype.componentDidUpdate = M.prototype.componentDidMount = function () {
+    }, M$1.prototype.componentDidUpdate = M$1.prototype.componentDidMount = function () {
       var n = this;
       this.o.forEach(function (t, e) {
-        T(n, e, t);
+        T$1(n, e, t);
       });
     };
 
-    var j = "undefined" != typeof Symbol && Symbol.for && Symbol.for("react.element") || 60103,
-        P = /^(?:accent|alignment|arabic|baseline|cap|clip(?!PathU)|color|dominant|fill|flood|font|glyph(?!R)|horiz|marker(?!H|W|U)|overline|paint|stop|strikethrough|stroke|text(?!L)|underline|unicode|units|v|vector|vert|word|writing|x(?!C))[A-Z]/,
+    var j$1 = "undefined" != typeof Symbol && Symbol.for && Symbol.for("react.element") || 60103,
+        P$1 = /^(?:accent|alignment|arabic|baseline|cap|clip(?!PathU)|color|dominant|fill|flood|font|glyph(?!R)|horiz|marker(?!H|W|U)|overline|paint|stop|strikethrough|stroke|text(?!L)|underline|unicode|units|v|vector|vert|word|writing|x(?!C))[A-Z]/,
         V = "undefined" != typeof document,
-        z = function (n) {
+        z$1 = function (n) {
       return ("undefined" != typeof Symbol && "symbol" == typeof Symbol() ? /fil|che|rad/i : /fil|che|ra/i).test(n);
     };
 
-    _.prototype.isReactComponent = {}, ["componentWillMount", "componentWillReceiveProps", "componentWillUpdate"].forEach(function (n) {
-      Object.defineProperty(_.prototype, n, {
+    _$1.prototype.isReactComponent = {}, ["componentWillMount", "componentWillReceiveProps", "componentWillUpdate"].forEach(function (n) {
+      Object.defineProperty(_$1.prototype, n, {
         configurable: !0,
         get: function () {
           return this["UNSAFE_" + n];
@@ -8423,7 +8418,7 @@
         }
       });
     });
-    var H = l$1.event;
+    var H$1 = l$3.event;
 
     function Z() {}
 
@@ -8435,8 +8430,8 @@
       return this.defaultPrevented;
     }
 
-    l$1.event = function (n) {
-      return H && (n = H(n)), n.persist = Z, n.isPropagationStopped = Y, n.isDefaultPrevented = q, n.nativeEvent = n;
+    l$3.event = function (n) {
+      return H$1 && (n = H$1(n)), n.persist = Z, n.isPropagationStopped = Y, n.isDefaultPrevented = q, n.nativeEvent = n;
     };
 
     var J = {
@@ -8445,9 +8440,9 @@
         return this.class;
       }
     },
-        K = l$1.vnode;
+        K = l$3.vnode;
 
-    l$1.vnode = function (n) {
+    l$3.vnode = function (n) {
       var t = n.type,
           e = n.props,
           r = e;
@@ -8457,22 +8452,22 @@
 
         for (var o in r = {}, e) {
           var i = e[o];
-          V && "children" === o && "noscript" === t || "value" === o && "defaultValue" in e && null == i || ("defaultValue" === o && "value" in e && null == e.value ? o = "value" : "download" === o && !0 === i ? i = "" : /ondoubleclick/i.test(o) ? o = "ondblclick" : /^onchange(textarea|input)/i.test(o + t) && !z(e.type) ? o = "oninput" : /^onfocus$/i.test(o) ? o = "onfocusin" : /^onblur$/i.test(o) ? o = "onfocusout" : /^on(Ani|Tra|Tou|BeforeInp)/.test(o) ? o = o.toLowerCase() : u && P.test(o) ? o = o.replace(/[A-Z0-9]/, "-$&").toLowerCase() : null === i && (i = void 0), r[o] = i);
+          V && "children" === o && "noscript" === t || "value" === o && "defaultValue" in e && null == i || ("defaultValue" === o && "value" in e && null == e.value ? o = "value" : "download" === o && !0 === i ? i = "" : /ondoubleclick/i.test(o) ? o = "ondblclick" : /^onchange(textarea|input)/i.test(o + t) && !z$1(e.type) ? o = "oninput" : /^onfocus$/i.test(o) ? o = "onfocusin" : /^onblur$/i.test(o) ? o = "onfocusout" : /^on(Ani|Tra|Tou|BeforeInp)/.test(o) ? o = o.toLowerCase() : u && P$1.test(o) ? o = o.replace(/[A-Z0-9]/, "-$&").toLowerCase() : null === i && (i = void 0), r[o] = i);
         }
 
-        "select" == t && r.multiple && Array.isArray(r.value) && (r.value = A$2(e.children).forEach(function (n) {
+        "select" == t && r.multiple && Array.isArray(r.value) && (r.value = A$3(e.children).forEach(function (n) {
           n.props.selected = -1 != r.value.indexOf(n.props.value);
-        })), "select" == t && null != r.defaultValue && (r.value = A$2(e.children).forEach(function (n) {
+        })), "select" == t && null != r.defaultValue && (r.value = A$3(e.children).forEach(function (n) {
           n.props.selected = r.multiple ? -1 != r.defaultValue.indexOf(n.props.value) : r.defaultValue == n.props.value;
         })), n.props = r, e.class != e.className && (J.enumerable = "className" in e, null != e.className && (r.class = e.className), Object.defineProperty(r, "className", J));
       }
 
-      n.$$typeof = j, K && K(n);
+      n.$$typeof = j$1, K && K(n);
     };
 
-    var Q = l$1.__r;
+    var Q = l$3.__r;
 
-    l$1.__r = function (n) {
+    l$3.__r = function (n) {
       Q && Q(n);
     };
 
@@ -8482,7 +8477,7 @@
      */
 
     function forwardElementRef$1(Component) {
-      const ForwardedComponent = x(Component);
+      const ForwardedComponent = x$1(Component);
       return ForwardedComponent;
     }
 
@@ -8523,55 +8518,55 @@
         getElement,
         useRefElementProps
       } = useRefElement({});
-      const [phase, setPhase] = l(animateOnMount ? "init" : null);
-      const [direction, setDirection] = l(show == null ? null : show ? "enter" : "exit");
-      const [surfaceWidth, setSurfaceWidth] = l(null);
-      const [surfaceHeight, setSurfaceHeight] = l(null);
-      const [surfaceX, setSurfaceX] = l(null);
-      const [surfaceY, setSurfaceY] = l(null);
-      const [transitioningWidth, setTransitioningWidth] = l(null);
-      const [transitioningHeight, setTransitioningHeight] = l(null);
-      const [transitioningX, setTransitioningX] = l(null);
-      const [transitioningY, setTransitioningY] = l(null);
-      const [logicalDirectionInfo, setLogicalDirectionInfo] = l(null);
+      const [phase, setPhase] = l$2(animateOnMount ? "init" : null);
+      const [direction, setDirection] = l$2(show == null ? null : show ? "enter" : "exit");
+      const [surfaceWidth, setSurfaceWidth] = l$2(null);
+      const [surfaceHeight, setSurfaceHeight] = l$2(null);
+      const [surfaceX, setSurfaceX] = l$2(null);
+      const [surfaceY, setSurfaceY] = l$2(null);
+      const [transitioningWidth, setTransitioningWidth] = l$2(null);
+      const [transitioningHeight, setTransitioningHeight] = l$2(null);
+      const [transitioningX, setTransitioningX] = l$2(null);
+      const [transitioningY, setTransitioningY] = l$2(null);
+      const [logicalDirectionInfo, setLogicalDirectionInfo] = l$2(null);
       const {
         getLogicalDirectionInfo,
         useLogicalDirectionProps
       } = useLogicalDirection({
         onLogicalDirectionChange: setLogicalDirectionInfo
       });
-      const onTransitionUpdateRef = s(onTransitionUpdate);
-      const phaseRef = s(phase);
-      const directionRef = s(direction);
-      const durationRef = s(duration);
-      const tooEarlyTimeoutRef = s(null);
-      const tooEarlyValueRef = s(true);
-      const tooLateTimeoutRef = s(null);
-      const onTransitionEnd = A$1(e => {
+      const onTransitionUpdateRef = s$2(onTransitionUpdate);
+      const phaseRef = s$2(phase);
+      const directionRef = s$2(direction);
+      const durationRef = s$2(duration);
+      const tooEarlyTimeoutRef = s$2(null);
+      const tooEarlyValueRef = s$2(true);
+      const tooLateTimeoutRef = s$2(null);
+      const onTransitionEnd = A$2(e => {
         if (e.target === getElement() && tooEarlyValueRef.current == false) {
           setPhase("finalize");
         }
       }, []);
-      h(() => {
+      h$1(() => {
         onTransitionUpdateRef.current = onTransitionUpdate;
       }, [onTransitionUpdate]);
-      h(() => {
+      h$1(() => {
         phaseRef.current = phase;
       }, [phase]);
-      h(() => {
+      h$1(() => {
         directionRef.current = direction;
       }, [direction]);
-      h(() => {
+      h$1(() => {
         durationRef.current = duration;
       }, [duration]);
-      h(() => {
+      h$1(() => {
         var _onTransitionUpdateRe;
 
         if (direction && phase) (_onTransitionUpdateRe = onTransitionUpdateRef.current) === null || _onTransitionUpdateRe === void 0 ? void 0 : _onTransitionUpdateRe.call(onTransitionUpdateRef, direction, phase);
       }, [direction, phase]); // Every time the phase changes to "transition", add our transition timeout timeouts
       // to catch any time onTransitionEnd fails to report for whatever reason to be safe
 
-      h(() => {
+      h$1(() => {
         if (phase == "transition") {
           var _durationRef$current;
 
@@ -8594,7 +8589,7 @@
       }, [phase]); // Any time "show" changes, update our direction and phase.
       // In addition, measure the size of the element if requested.
 
-      h(() => {
+      h$1(() => {
         const element = getElement();
 
         if (element && show != null) {
@@ -8644,7 +8639,7 @@
       }, [show, measure, classBase]); // Any time the phase changes to init, immediately before the screen is painted,
       // change the phase to "transition" and re-render ().
 
-      h(() => {
+      h$1(() => {
         const element = getElement();
 
         if (element && directionRef.current != null) {
@@ -8738,13 +8733,13 @@
         childMountBehavior,
         ...props
       } = _ref3;
-      const [hasShownOnce, setHasShownOnce] = l(false);
+      const [hasShownOnce, setHasShownOnce] = l$2(false);
       const shouldSetHasShownOnce = hasShownOnce === false && childMountBehavior === "mount-on-show" && show === true;
-      y(() => {
+      y$1(() => {
         if (shouldSetHasShownOnce) setHasShownOnce(true);
       }, [shouldSetHasShownOnce]);
-      if (childMountBehavior === "mount-when-showing" && !show) child = v$1("div", null);
-      if (childMountBehavior === "mount-on-show" && !show && hasShownOnce === false) child = v$1("div", null);
+      if (childMountBehavior === "mount-when-showing" && !show) child = v$2("div", null);
+      if (childMountBehavior === "mount-on-show" && !show && hasShownOnce === false) child = v$2("div", null);
 
       if (!childIsVNode(child)) {
         throw new Error("A Transitionable component must have exactly one component child (e.g. a <div>, but not \"a string\").");
@@ -8818,7 +8813,7 @@
         show,
         ...rest
       } = _ref6;
-      return v$1(Transitionable, {
+      return v$2(Transitionable, {
         show: show,
         ...useCreateClipProps({
           classBase,
@@ -8876,7 +8871,7 @@
         show,
         ...rest
       } = _ref2;
-      return v$1(Transitionable, {
+      return v$2(Transitionable, {
         show: show,
         ...useCreateFadeProps({
           classBase,
@@ -8896,7 +8891,7 @@
         show,
         ...rest
       } = _ref;
-      return v$1(Clip, {
+      return v$2(Clip, {
         show: show,
         ...useCreateFadeProps({
           classBase,
@@ -8951,7 +8946,7 @@
         minBlockSize,
         ...rest
       } = _ref2;
-      return v$1(Transitionable, {
+      return v$2(Transitionable, {
         show: show,
         ...useCreateCollapseProps({
           classBase,
@@ -8976,7 +8971,7 @@
         show,
         ...rest
       } = _ref;
-      return v$1(Collapse, {
+      return v$2(Collapse, {
         show: show,
         ...useCreateFadeProps({
           classBase,
@@ -9001,12 +8996,12 @@
         slideTargetBlock
       } = _ref;
       (_classBase = classBase) !== null && _classBase !== void 0 ? _classBase : classBase = "transition";
-      const lastValidTargetInline = s((_slideTargetInline = slideTargetInline) !== null && _slideTargetInline !== void 0 ? _slideTargetInline : 1);
-      const lastValidTargetBlock = s((_slideTargetBlock = slideTargetBlock) !== null && _slideTargetBlock !== void 0 ? _slideTargetBlock : 0);
-      y(() => {
+      const lastValidTargetInline = s$2((_slideTargetInline = slideTargetInline) !== null && _slideTargetInline !== void 0 ? _slideTargetInline : 1);
+      const lastValidTargetBlock = s$2((_slideTargetBlock = slideTargetBlock) !== null && _slideTargetBlock !== void 0 ? _slideTargetBlock : 0);
+      y$1(() => {
         if (slideTargetInline) lastValidTargetInline.current = slideTargetInline;
       }, [slideTargetInline]);
-      y(() => {
+      y$1(() => {
         if (slideTargetBlock) lastValidTargetBlock.current = slideTargetBlock;
       }, [slideTargetBlock]);
       if (slideTargetInline == 0) slideTargetInline = lastValidTargetInline.current;
@@ -9041,7 +9036,7 @@
         show,
         ...rest
       } = _ref2;
-      return v$1(Transitionable, {
+      return v$2(Transitionable, {
         show: show,
         ...useCreateSlideProps({
           classBase,
@@ -9069,7 +9064,7 @@
         show,
         ...rest
       } = _ref;
-      return v$1(Slide, {
+      return v$2(Slide, {
         show: show,
         ...useCreateFadeProps({
           classBase,
@@ -9126,7 +9121,7 @@
         show,
         ...rest
       } = _ref6;
-      return v$1(Transitionable, {
+      return v$2(Transitionable, {
         show: show,
         ...useCreateZoomProps({
           classBase,
@@ -9158,7 +9153,7 @@
         show,
         ...rest
       } = _ref;
-      return v$1(Zoom, {
+      return v$2(Zoom, {
         show: show,
         ...useCreateFadeProps({
           classBase,
@@ -9190,7 +9185,7 @@
         show,
         ...rest
       } = _ref;
-      return v$1(Slide, {
+      return v$2(Slide, {
         show: show,
         ...useCreateZoomProps({
           classBase,
@@ -9222,7 +9217,7 @@
         show,
         ...rest
       } = _ref;
-      return v$1(SlideZoom, {
+      return v$2(SlideZoom, {
         show: show,
         ...useCreateFadeProps({
           classBase,
@@ -9248,12 +9243,12 @@
         perspective
       } = _ref;
       (_classBase = classBase) !== null && _classBase !== void 0 ? _classBase : classBase = "transition";
-      const lastValidTargetInline = s((_flipAngleInline = flipAngleInline) !== null && _flipAngleInline !== void 0 ? _flipAngleInline : 180);
-      const lastValidTargetBlock = s((_flipAngleBlock = flipAngleBlock) !== null && _flipAngleBlock !== void 0 ? _flipAngleBlock : 0);
-      y(() => {
+      const lastValidTargetInline = s$2((_flipAngleInline = flipAngleInline) !== null && _flipAngleInline !== void 0 ? _flipAngleInline : 180);
+      const lastValidTargetBlock = s$2((_flipAngleBlock = flipAngleBlock) !== null && _flipAngleBlock !== void 0 ? _flipAngleBlock : 0);
+      y$1(() => {
         if (flipAngleInline) lastValidTargetInline.current = flipAngleInline;
       }, [flipAngleInline]);
-      y(() => {
+      y$1(() => {
         if (flipAngleBlock) lastValidTargetBlock.current = flipAngleBlock;
       }, [flipAngleBlock]);
       if (flipAngleInline == 0) flipAngleInline = lastValidTargetInline.current;
@@ -9290,7 +9285,7 @@
         show,
         ...rest
       } = _ref2;
-      return v$1(Transitionable, {
+      return v$2(Transitionable, {
         show: show,
         ...useCreateFlipProps({
           classBase,
@@ -9352,624 +9347,617 @@
 
     const inlineElements = new Set(["a", "abbr", "acronym", "audio", "b", "bdi", "bdo", "big", "br", "button", "canvas", "cite", "code", "data", "datalist", "del", "dfn", "em", "embed", "i", "iframe", "img", "input", "ins", "kbd", "label", "map", "mark", "meter", "noscript", "object", "output", "picture", "progress", "q", "ruby", "s", "samp", "script", "select", "slot", "small", "span", "strong", "sub", "sup", "svg", "template", "textarea", "time", "u", "tt", "var", "video", "wbr"]);
 
-    var preact = createCommonjsModule(function (module, exports) {
-      var n,
-          l,
-          u,
-          t,
-          i,
+    var preact = {};
+
+    var n$2,
+        l$1,
+        u$1,
+        t$1,
+        i$1,
+        r$1,
+        o$1,
+        f$1,
+        e$1 = {},
+        c$1 = [],
+        s$1 = /acit|ex(?:s|g|n|p|$)|rph|grid|ows|mnc|ntw|ine[ch]|zoo|^ord|itera/i;
+
+    function a$1(n, l) {
+      for (var u in l) n[u] = l[u];
+
+      return n;
+    }
+
+    function v(n) {
+      var l = n.parentNode;
+      l && l.removeChild(n);
+    }
+
+    function h(l, u, t) {
+      var i,
           r,
           o,
-          f,
-          e = {},
-          c = [],
-          s = /acit|ex(?:s|g|n|p|$)|rph|grid|ows|mnc|ntw|ine[ch]|zoo|^ord|itera/i;
+          f = {};
 
-      function a(n, l) {
-        for (var u in l) n[u] = l[u];
+      for (o in u) "key" == o ? i = u[o] : "ref" == o ? r = u[o] : f[o] = u[o];
 
-        return n;
-      }
+      if (arguments.length > 2 && (f.children = arguments.length > 3 ? n$2.call(arguments, 2) : t), "function" == typeof l && null != l.defaultProps) for (o in l.defaultProps) void 0 === f[o] && (f[o] = l.defaultProps[o]);
+      return p$1(l, f, i, r, null);
+    }
 
-      function v(n) {
-        var l = n.parentNode;
-        l && l.removeChild(n);
-      }
+    function p$1(n, t, i, r, o) {
+      var f = {
+        type: n,
+        props: t,
+        key: i,
+        ref: r,
+        __k: null,
+        __: null,
+        __b: 0,
+        __e: null,
+        __d: void 0,
+        __c: null,
+        __h: null,
+        constructor: void 0,
+        __v: null == o ? ++u$1 : o
+      };
+      return null == o && null != l$1.vnode && l$1.vnode(f), f;
+    }
 
-      function h(l, u, t) {
-        var i,
-            r,
-            o,
-            f = {};
+    function y(n) {
+      return n.children;
+    }
 
-        for (o in u) "key" == o ? i = u[o] : "ref" == o ? r = u[o] : f[o] = u[o];
+    function d(n, l) {
+      this.props = n, this.context = l;
+    }
 
-        if (arguments.length > 2 && (f.children = arguments.length > 3 ? n.call(arguments, 2) : t), "function" == typeof l && null != l.defaultProps) for (o in l.defaultProps) void 0 === f[o] && (f[o] = l.defaultProps[o]);
-        return p(l, f, i, r, null);
-      }
+    function _(n, l) {
+      if (null == l) return n.__ ? _(n.__, n.__.__k.indexOf(n) + 1) : null;
 
-      function p(n, t, i, r, o) {
-        var f = {
-          type: n,
-          props: t,
-          key: i,
-          ref: r,
-          __k: null,
-          __: null,
-          __b: 0,
-          __e: null,
-          __d: void 0,
-          __c: null,
-          __h: null,
-          constructor: void 0,
-          __v: null == o ? ++u : o
-        };
-        return null == o && null != l.vnode && l.vnode(f), f;
-      }
+      for (var u; l < n.__k.length; l++) if (null != (u = n.__k[l]) && null != u.__e) return u.__e;
 
-      function y(n) {
-        return n.children;
-      }
+      return "function" == typeof n.type ? _(n) : null;
+    }
 
-      function d(n, l) {
-        this.props = n, this.context = l;
-      }
+    function k(n) {
+      var l, u;
 
-      function _(n, l) {
-        if (null == l) return n.__ ? _(n.__, n.__.__k.indexOf(n) + 1) : null;
-
-        for (var u; l < n.__k.length; l++) if (null != (u = n.__k[l]) && null != u.__e) return u.__e;
-
-        return "function" == typeof n.type ? _(n) : null;
-      }
-
-      function k(n) {
-        var l, u;
-
-        if (null != (n = n.__) && null != n.__c) {
-          for (n.__e = n.__c.base = null, l = 0; l < n.__k.length; l++) if (null != (u = n.__k[l]) && null != u.__e) {
-            n.__e = n.__c.base = u.__e;
-            break;
-          }
-
-          return k(n);
-        }
-      }
-
-      function x(n) {
-        (!n.__d && (n.__d = !0) && i.push(n) && !b.__r++ || o !== l.debounceRendering) && ((o = l.debounceRendering) || r)(b);
-      }
-
-      function b() {
-        for (var n; b.__r = i.length;) n = i.sort(function (n, l) {
-          return n.__v.__b - l.__v.__b;
-        }), i = [], n.some(function (n) {
-          var l, u, t, i, r, o;
-          n.__d && (r = (i = (l = n).__v).__e, (o = l.__P) && (u = [], (t = a({}, i)).__v = i.__v + 1, I(o, i, t, l.__n, void 0 !== o.ownerSVGElement, null != i.__h ? [r] : null, u, null == r ? _(i) : r, i.__h), T(u, i), i.__e != r && k(i)));
-        });
-      }
-
-      function m(n, l, u, t, i, r, o, f, s, a) {
-        var v,
-            h,
-            d,
-            k,
-            x,
-            b,
-            m,
-            A = t && t.__k || c,
-            P = A.length;
-
-        for (u.__k = [], v = 0; v < l.length; v++) if (null != (k = u.__k[v] = null == (k = l[v]) || "boolean" == typeof k ? null : "string" == typeof k || "number" == typeof k || "bigint" == typeof k ? p(null, k, null, null, k) : Array.isArray(k) ? p(y, {
-          children: k
-        }, null, null, null) : k.__b > 0 ? p(k.type, k.props, k.key, null, k.__v) : k)) {
-          if (k.__ = u, k.__b = u.__b + 1, null === (d = A[v]) || d && k.key == d.key && k.type === d.type) A[v] = void 0;else for (h = 0; h < P; h++) {
-            if ((d = A[h]) && k.key == d.key && k.type === d.type) {
-              A[h] = void 0;
-              break;
-            }
-
-            d = null;
-          }
-          I(n, k, d = d || e, i, r, o, f, s, a), x = k.__e, (h = k.ref) && d.ref != h && (m || (m = []), d.ref && m.push(d.ref, null, k), m.push(h, k.__c || x, k)), null != x ? (null == b && (b = x), "function" == typeof k.type && k.__k === d.__k ? k.__d = s = g(k, s, n) : s = w(n, k, d, A, x, s), "function" == typeof u.type && (u.__d = s)) : s && d.__e == s && s.parentNode != n && (s = _(d));
-        }
-
-        for (u.__e = b, v = P; v--;) null != A[v] && ("function" == typeof u.type && null != A[v].__e && A[v].__e == u.__d && (u.__d = _(t, v + 1)), L(A[v], A[v]));
-
-        if (m) for (v = 0; v < m.length; v++) z(m[v], m[++v], m[++v]);
-      }
-
-      function g(n, l, u) {
-        for (var t, i = n.__k, r = 0; i && r < i.length; r++) (t = i[r]) && (t.__ = n, l = "function" == typeof t.type ? g(t, l, u) : w(u, t, t, i, t.__e, l));
-
-        return l;
-      }
-
-      function w(n, l, u, t, i, r) {
-        var o, f, e;
-        if (void 0 !== l.__d) o = l.__d, l.__d = void 0;else if (null == u || i != r || null == i.parentNode) n: if (null == r || r.parentNode !== n) n.appendChild(i), o = null;else {
-          for (f = r, e = 0; (f = f.nextSibling) && e < t.length; e += 2) if (f == i) break n;
-
-          n.insertBefore(i, r), o = r;
-        }
-        return void 0 !== o ? o : i.nextSibling;
-      }
-
-      function A(n, l, u, t, i) {
-        var r;
-
-        for (r in u) "children" === r || "key" === r || r in l || C(n, r, null, u[r], t);
-
-        for (r in l) i && "function" != typeof l[r] || "children" === r || "key" === r || "value" === r || "checked" === r || u[r] === l[r] || C(n, r, l[r], u[r], t);
-      }
-
-      function P(n, l, u) {
-        "-" === l[0] ? n.setProperty(l, u) : n[l] = null == u ? "" : "number" != typeof u || s.test(l) ? u : u + "px";
-      }
-
-      function C(n, l, u, t, i) {
-        var r;
-
-        n: if ("style" === l) {
-          if ("string" == typeof u) n.style.cssText = u;else {
-            if ("string" == typeof t && (n.style.cssText = t = ""), t) for (l in t) u && l in u || P(n.style, l, "");
-            if (u) for (l in u) t && u[l] === t[l] || P(n.style, l, u[l]);
-          }
-        } else if ("o" === l[0] && "n" === l[1]) r = l !== (l = l.replace(/Capture$/, "")), l = l.toLowerCase() in n ? l.toLowerCase().slice(2) : l.slice(2), n.l || (n.l = {}), n.l[l + r] = u, u ? t || n.addEventListener(l, r ? H : $, r) : n.removeEventListener(l, r ? H : $, r);else if ("dangerouslySetInnerHTML" !== l) {
-          if (i) l = l.replace(/xlink[H:h]/, "h").replace(/sName$/, "s");else if ("href" !== l && "list" !== l && "form" !== l && "tabIndex" !== l && "download" !== l && l in n) try {
-            n[l] = null == u ? "" : u;
-            break n;
-          } catch (n) {}
-          "function" == typeof u || (null != u && (!1 !== u || "a" === l[0] && "r" === l[1]) ? n.setAttribute(l, u) : n.removeAttribute(l));
-        }
-      }
-
-      function $(n) {
-        this.l[n.type + !1](l.event ? l.event(n) : n);
-      }
-
-      function H(n) {
-        this.l[n.type + !0](l.event ? l.event(n) : n);
-      }
-
-      function I(n, u, t, i, r, o, f, e, c) {
-        var s,
-            v,
-            h,
-            p,
-            _,
-            k,
-            x,
-            b,
-            g,
-            w,
-            A,
-            P = u.type;
-
-        if (void 0 !== u.constructor) return null;
-        null != t.__h && (c = t.__h, e = u.__e = t.__e, u.__h = null, o = [e]), (s = l.__b) && s(u);
-
-        try {
-          n: if ("function" == typeof P) {
-            if (b = u.props, g = (s = P.contextType) && i[s.__c], w = s ? g ? g.props.value : s.__ : i, t.__c ? x = (v = u.__c = t.__c).__ = v.__E : ("prototype" in P && P.prototype.render ? u.__c = v = new P(b, w) : (u.__c = v = new d(b, w), v.constructor = P, v.render = M), g && g.sub(v), v.props = b, v.state || (v.state = {}), v.context = w, v.__n = i, h = v.__d = !0, v.__h = []), null == v.__s && (v.__s = v.state), null != P.getDerivedStateFromProps && (v.__s == v.state && (v.__s = a({}, v.__s)), a(v.__s, P.getDerivedStateFromProps(b, v.__s))), p = v.props, _ = v.state, h) null == P.getDerivedStateFromProps && null != v.componentWillMount && v.componentWillMount(), null != v.componentDidMount && v.__h.push(v.componentDidMount);else {
-              if (null == P.getDerivedStateFromProps && b !== p && null != v.componentWillReceiveProps && v.componentWillReceiveProps(b, w), !v.__e && null != v.shouldComponentUpdate && !1 === v.shouldComponentUpdate(b, v.__s, w) || u.__v === t.__v) {
-                v.props = b, v.state = v.__s, u.__v !== t.__v && (v.__d = !1), v.__v = u, u.__e = t.__e, u.__k = t.__k, u.__k.forEach(function (n) {
-                  n && (n.__ = u);
-                }), v.__h.length && f.push(v);
-                break n;
-              }
-
-              null != v.componentWillUpdate && v.componentWillUpdate(b, v.__s, w), null != v.componentDidUpdate && v.__h.push(function () {
-                v.componentDidUpdate(p, _, k);
-              });
-            }
-            v.context = w, v.props = b, v.state = v.__s, (s = l.__r) && s(u), v.__d = !1, v.__v = u, v.__P = n, s = v.render(v.props, v.state, v.context), v.state = v.__s, null != v.getChildContext && (i = a(a({}, i), v.getChildContext())), h || null == v.getSnapshotBeforeUpdate || (k = v.getSnapshotBeforeUpdate(p, _)), A = null != s && s.type === y && null == s.key ? s.props.children : s, m(n, Array.isArray(A) ? A : [A], u, t, i, r, o, f, e, c), v.base = u.__e, u.__h = null, v.__h.length && f.push(v), x && (v.__E = v.__ = null), v.__e = !1;
-          } else null == o && u.__v === t.__v ? (u.__k = t.__k, u.__e = t.__e) : u.__e = j(t.__e, u, t, i, r, o, f, c);
-
-          (s = l.diffed) && s(u);
-        } catch (n) {
-          u.__v = null, (c || null != o) && (u.__e = e, u.__h = !!c, o[o.indexOf(e)] = null), l.__e(n, u, t);
-        }
-      }
-
-      function T(n, u) {
-        l.__c && l.__c(u, n), n.some(function (u) {
-          try {
-            n = u.__h, u.__h = [], n.some(function (n) {
-              n.call(u);
-            });
-          } catch (n) {
-            l.__e(n, u.__v);
-          }
-        });
-      }
-
-      function j(l, u, t, i, r, o, f, c) {
-        var s,
-            a,
-            h,
-            p = t.props,
-            y = u.props,
-            d = u.type,
-            k = 0;
-        if ("svg" === d && (r = !0), null != o) for (; k < o.length; k++) if ((s = o[k]) && "setAttribute" in s == !!d && (d ? s.localName === d : 3 === s.nodeType)) {
-          l = s, o[k] = null;
+      if (null != (n = n.__) && null != n.__c) {
+        for (n.__e = n.__c.base = null, l = 0; l < n.__k.length; l++) if (null != (u = n.__k[l]) && null != u.__e) {
+          n.__e = n.__c.base = u.__e;
           break;
         }
 
-        if (null == l) {
-          if (null === d) return document.createTextNode(y);
-          l = r ? document.createElementNS("http://www.w3.org/2000/svg", d) : document.createElement(d, y.is && y), o = null, c = !1;
-        }
+        return k(n);
+      }
+    }
 
-        if (null === d) p === y || c && l.data === y || (l.data = y);else {
-          if (o = o && n.call(l.childNodes), a = (p = t.props || e).dangerouslySetInnerHTML, h = y.dangerouslySetInnerHTML, !c) {
-            if (null != o) for (p = {}, k = 0; k < l.attributes.length; k++) p[l.attributes[k].name] = l.attributes[k].value;
-            (h || a) && (h && (a && h.__html == a.__html || h.__html === l.innerHTML) || (l.innerHTML = h && h.__html || ""));
+    function x(n) {
+      (!n.__d && (n.__d = !0) && i$1.push(n) && !b.__r++ || o$1 !== l$1.debounceRendering) && ((o$1 = l$1.debounceRendering) || r$1)(b);
+    }
+
+    function b() {
+      for (var n; b.__r = i$1.length;) n = i$1.sort(function (n, l) {
+        return n.__v.__b - l.__v.__b;
+      }), i$1 = [], n.some(function (n) {
+        var l, u, t, i, r, o;
+        n.__d && (r = (i = (l = n).__v).__e, (o = l.__P) && (u = [], (t = a$1({}, i)).__v = i.__v + 1, I(o, i, t, l.__n, void 0 !== o.ownerSVGElement, null != i.__h ? [r] : null, u, null == r ? _(i) : r, i.__h), T(u, i), i.__e != r && k(i)));
+      });
+    }
+
+    function m(n, l, u, t, i, r, o, f, s, a) {
+      var v,
+          h,
+          d,
+          k,
+          x,
+          b,
+          m,
+          A = t && t.__k || c$1,
+          P = A.length;
+
+      for (u.__k = [], v = 0; v < l.length; v++) if (null != (k = u.__k[v] = null == (k = l[v]) || "boolean" == typeof k ? null : "string" == typeof k || "number" == typeof k || "bigint" == typeof k ? p$1(null, k, null, null, k) : Array.isArray(k) ? p$1(y, {
+        children: k
+      }, null, null, null) : k.__b > 0 ? p$1(k.type, k.props, k.key, null, k.__v) : k)) {
+        if (k.__ = u, k.__b = u.__b + 1, null === (d = A[v]) || d && k.key == d.key && k.type === d.type) A[v] = void 0;else for (h = 0; h < P; h++) {
+          if ((d = A[h]) && k.key == d.key && k.type === d.type) {
+            A[h] = void 0;
+            break;
           }
 
-          if (A(l, y, p, r, c), h) u.__k = [];else if (k = u.props.children, m(l, Array.isArray(k) ? k : [k], u, t, i, r && "foreignObject" !== d, o, f, o ? o[0] : t.__k && _(t, 0), c), null != o) for (k = o.length; k--;) null != o[k] && v(o[k]);
-          c || ("value" in y && void 0 !== (k = y.value) && (k !== p.value || k !== l.value || "progress" === d && !k) && C(l, "value", k, p.value, !1), "checked" in y && void 0 !== (k = y.checked) && k !== l.checked && C(l, "checked", k, p.checked, !1));
+          d = null;
         }
-        return l;
+        I(n, k, d = d || e$1, i, r, o, f, s, a), x = k.__e, (h = k.ref) && d.ref != h && (m || (m = []), d.ref && m.push(d.ref, null, k), m.push(h, k.__c || x, k)), null != x ? (null == b && (b = x), "function" == typeof k.type && k.__k === d.__k ? k.__d = s = g(k, s, n) : s = w(n, k, d, A, x, s), "function" == typeof u.type && (u.__d = s)) : s && d.__e == s && s.parentNode != n && (s = _(d));
       }
 
-      function z(n, u, t) {
+      for (u.__e = b, v = P; v--;) null != A[v] && ("function" == typeof u.type && null != A[v].__e && A[v].__e == u.__d && (u.__d = _(t, v + 1)), L(A[v], A[v]));
+
+      if (m) for (v = 0; v < m.length; v++) z(m[v], m[++v], m[++v]);
+    }
+
+    function g(n, l, u) {
+      for (var t, i = n.__k, r = 0; i && r < i.length; r++) (t = i[r]) && (t.__ = n, l = "function" == typeof t.type ? g(t, l, u) : w(u, t, t, i, t.__e, l));
+
+      return l;
+    }
+
+    function w(n, l, u, t, i, r) {
+      var o, f, e;
+      if (void 0 !== l.__d) o = l.__d, l.__d = void 0;else if (null == u || i != r || null == i.parentNode) n: if (null == r || r.parentNode !== n) n.appendChild(i), o = null;else {
+        for (f = r, e = 0; (f = f.nextSibling) && e < t.length; e += 2) if (f == i) break n;
+
+        n.insertBefore(i, r), o = r;
+      }
+      return void 0 !== o ? o : i.nextSibling;
+    }
+
+    function A(n, l, u, t, i) {
+      var r;
+
+      for (r in u) "children" === r || "key" === r || r in l || C(n, r, null, u[r], t);
+
+      for (r in l) i && "function" != typeof l[r] || "children" === r || "key" === r || "value" === r || "checked" === r || u[r] === l[r] || C(n, r, l[r], u[r], t);
+    }
+
+    function P(n, l, u) {
+      "-" === l[0] ? n.setProperty(l, u) : n[l] = null == u ? "" : "number" != typeof u || s$1.test(l) ? u : u + "px";
+    }
+
+    function C(n, l, u, t, i) {
+      var r;
+
+      n: if ("style" === l) {
+        if ("string" == typeof u) n.style.cssText = u;else {
+          if ("string" == typeof t && (n.style.cssText = t = ""), t) for (l in t) u && l in u || P(n.style, l, "");
+          if (u) for (l in u) t && u[l] === t[l] || P(n.style, l, u[l]);
+        }
+      } else if ("o" === l[0] && "n" === l[1]) r = l !== (l = l.replace(/Capture$/, "")), l = l.toLowerCase() in n ? l.toLowerCase().slice(2) : l.slice(2), n.l || (n.l = {}), n.l[l + r] = u, u ? t || n.addEventListener(l, r ? H : $, r) : n.removeEventListener(l, r ? H : $, r);else if ("dangerouslySetInnerHTML" !== l) {
+        if (i) l = l.replace(/xlink[H:h]/, "h").replace(/sName$/, "s");else if ("href" !== l && "list" !== l && "form" !== l && "tabIndex" !== l && "download" !== l && l in n) try {
+          n[l] = null == u ? "" : u;
+          break n;
+        } catch (n) {}
+        "function" == typeof u || (null != u && (!1 !== u || "a" === l[0] && "r" === l[1]) ? n.setAttribute(l, u) : n.removeAttribute(l));
+      }
+    }
+
+    function $(n) {
+      this.l[n.type + !1](l$1.event ? l$1.event(n) : n);
+    }
+
+    function H(n) {
+      this.l[n.type + !0](l$1.event ? l$1.event(n) : n);
+    }
+
+    function I(n, u, t, i, r, o, f, e, c) {
+      var s,
+          v,
+          h,
+          p,
+          _,
+          k,
+          x,
+          b,
+          g,
+          w,
+          A,
+          P = u.type;
+
+      if (void 0 !== u.constructor) return null;
+      null != t.__h && (c = t.__h, e = u.__e = t.__e, u.__h = null, o = [e]), (s = l$1.__b) && s(u);
+
+      try {
+        n: if ("function" == typeof P) {
+          if (b = u.props, g = (s = P.contextType) && i[s.__c], w = s ? g ? g.props.value : s.__ : i, t.__c ? x = (v = u.__c = t.__c).__ = v.__E : ("prototype" in P && P.prototype.render ? u.__c = v = new P(b, w) : (u.__c = v = new d(b, w), v.constructor = P, v.render = M), g && g.sub(v), v.props = b, v.state || (v.state = {}), v.context = w, v.__n = i, h = v.__d = !0, v.__h = []), null == v.__s && (v.__s = v.state), null != P.getDerivedStateFromProps && (v.__s == v.state && (v.__s = a$1({}, v.__s)), a$1(v.__s, P.getDerivedStateFromProps(b, v.__s))), p = v.props, _ = v.state, h) null == P.getDerivedStateFromProps && null != v.componentWillMount && v.componentWillMount(), null != v.componentDidMount && v.__h.push(v.componentDidMount);else {
+            if (null == P.getDerivedStateFromProps && b !== p && null != v.componentWillReceiveProps && v.componentWillReceiveProps(b, w), !v.__e && null != v.shouldComponentUpdate && !1 === v.shouldComponentUpdate(b, v.__s, w) || u.__v === t.__v) {
+              v.props = b, v.state = v.__s, u.__v !== t.__v && (v.__d = !1), v.__v = u, u.__e = t.__e, u.__k = t.__k, u.__k.forEach(function (n) {
+                n && (n.__ = u);
+              }), v.__h.length && f.push(v);
+              break n;
+            }
+
+            null != v.componentWillUpdate && v.componentWillUpdate(b, v.__s, w), null != v.componentDidUpdate && v.__h.push(function () {
+              v.componentDidUpdate(p, _, k);
+            });
+          }
+          v.context = w, v.props = b, v.state = v.__s, (s = l$1.__r) && s(u), v.__d = !1, v.__v = u, v.__P = n, s = v.render(v.props, v.state, v.context), v.state = v.__s, null != v.getChildContext && (i = a$1(a$1({}, i), v.getChildContext())), h || null == v.getSnapshotBeforeUpdate || (k = v.getSnapshotBeforeUpdate(p, _)), A = null != s && s.type === y && null == s.key ? s.props.children : s, m(n, Array.isArray(A) ? A : [A], u, t, i, r, o, f, e, c), v.base = u.__e, u.__h = null, v.__h.length && f.push(v), x && (v.__E = v.__ = null), v.__e = !1;
+        } else null == o && u.__v === t.__v ? (u.__k = t.__k, u.__e = t.__e) : u.__e = j(t.__e, u, t, i, r, o, f, c);
+
+        (s = l$1.diffed) && s(u);
+      } catch (n) {
+        u.__v = null, (c || null != o) && (u.__e = e, u.__h = !!c, o[o.indexOf(e)] = null), l$1.__e(n, u, t);
+      }
+    }
+
+    function T(n, u) {
+      l$1.__c && l$1.__c(u, n), n.some(function (u) {
         try {
-          "function" == typeof n ? n(u) : n.current = u;
+          n = u.__h, u.__h = [], n.some(function (n) {
+            n.call(u);
+          });
         } catch (n) {
-          l.__e(n, t);
+          l$1.__e(n, u.__v);
         }
+      });
+    }
+
+    function j(l, u, t, i, r, o, f, c) {
+      var s,
+          a,
+          h,
+          p = t.props,
+          y = u.props,
+          d = u.type,
+          k = 0;
+      if ("svg" === d && (r = !0), null != o) for (; k < o.length; k++) if ((s = o[k]) && "setAttribute" in s == !!d && (d ? s.localName === d : 3 === s.nodeType)) {
+        l = s, o[k] = null;
+        break;
       }
 
-      function L(n, u, t) {
-        var i, r;
+      if (null == l) {
+        if (null === d) return document.createTextNode(y);
+        l = r ? document.createElementNS("http://www.w3.org/2000/svg", d) : document.createElement(d, y.is && y), o = null, c = !1;
+      }
 
-        if (l.unmount && l.unmount(n), (i = n.ref) && (i.current && i.current !== n.__e || z(i, null, u)), null != (i = n.__c)) {
-          if (i.componentWillUnmount) try {
-            i.componentWillUnmount();
-          } catch (n) {
-            l.__e(n, u);
-          }
-          i.base = i.__P = null;
+      if (null === d) p === y || c && l.data === y || (l.data = y);else {
+        if (o = o && n$2.call(l.childNodes), a = (p = t.props || e$1).dangerouslySetInnerHTML, h = y.dangerouslySetInnerHTML, !c) {
+          if (null != o) for (p = {}, k = 0; k < l.attributes.length; k++) p[l.attributes[k].name] = l.attributes[k].value;
+          (h || a) && (h && (a && h.__html == a.__html || h.__html === l.innerHTML) || (l.innerHTML = h && h.__html || ""));
         }
 
-        if (i = n.__k) for (r = 0; r < i.length; r++) i[r] && L(i[r], u, "function" != typeof n.type);
-        t || null == n.__e || v(n.__e), n.__e = n.__d = void 0;
+        if (A(l, y, p, r, c), h) u.__k = [];else if (k = u.props.children, m(l, Array.isArray(k) ? k : [k], u, t, i, r && "foreignObject" !== d, o, f, o ? o[0] : t.__k && _(t, 0), c), null != o) for (k = o.length; k--;) null != o[k] && v(o[k]);
+        c || ("value" in y && void 0 !== (k = y.value) && (k !== p.value || k !== l.value || "progress" === d && !k) && C(l, "value", k, p.value, !1), "checked" in y && void 0 !== (k = y.checked) && k !== l.checked && C(l, "checked", k, p.checked, !1));
+      }
+      return l;
+    }
+
+    function z(n, u, t) {
+      try {
+        "function" == typeof n ? n(u) : n.current = u;
+      } catch (n) {
+        l$1.__e(n, t);
+      }
+    }
+
+    function L(n, u, t) {
+      var i, r;
+
+      if (l$1.unmount && l$1.unmount(n), (i = n.ref) && (i.current && i.current !== n.__e || z(i, null, u)), null != (i = n.__c)) {
+        if (i.componentWillUnmount) try {
+          i.componentWillUnmount();
+        } catch (n) {
+          l$1.__e(n, u);
+        }
+        i.base = i.__P = null;
       }
 
-      function M(n, l, u) {
-        return this.constructor(n, u);
+      if (i = n.__k) for (r = 0; r < i.length; r++) i[r] && L(i[r], u, "function" != typeof n.type);
+      t || null == n.__e || v(n.__e), n.__e = n.__d = void 0;
+    }
+
+    function M(n, l, u) {
+      return this.constructor(n, u);
+    }
+
+    function N(u, t, i) {
+      var r, o, f;
+      l$1.__ && l$1.__(u, t), o = (r = "function" == typeof i) ? null : i && i.__k || t.__k, f = [], I(t, u = (!r && i || t).__k = h(y, null, [u]), o || e$1, e$1, void 0 !== t.ownerSVGElement, !r && i ? [i] : o ? null : t.firstChild ? n$2.call(t.childNodes) : null, f, !r && i ? i : o ? o.__e : t.firstChild, r), T(f, u);
+    }
+
+    n$2 = c$1.slice, l$1 = {
+      __e: function (n, l) {
+        for (var u, t, i; l = l.__;) if ((u = l.__c) && !u.__) try {
+          if ((t = u.constructor) && null != t.getDerivedStateFromError && (u.setState(t.getDerivedStateFromError(n)), i = u.__d), null != u.componentDidCatch && (u.componentDidCatch(n), i = u.__d), i) return u.__E = u;
+        } catch (l) {
+          n = l;
+        }
+
+        throw n;
+      }
+    }, u$1 = 0, t$1 = function (n) {
+      return null != n && void 0 === n.constructor;
+    }, d.prototype.setState = function (n, l) {
+      var u;
+      u = null != this.__s && this.__s !== this.state ? this.__s : this.__s = a$1({}, this.state), "function" == typeof n && (n = n(a$1({}, u), this.props)), n && a$1(u, n), null != n && this.__v && (l && this.__h.push(l), x(this));
+    }, d.prototype.forceUpdate = function (n) {
+      this.__v && (this.__e = !0, n && this.__h.push(n), x(this));
+    }, d.prototype.render = y, i$1 = [], r$1 = "function" == typeof Promise ? Promise.prototype.then.bind(Promise.resolve()) : setTimeout, b.__r = 0, f$1 = 0, preact.render = N, preact.hydrate = function n(l, u) {
+      N(l, u, n);
+    }, preact.createElement = h, preact.h = h, preact.Fragment = y, preact.createRef = function () {
+      return {
+        current: null
+      };
+    }, preact.isValidElement = t$1, preact.Component = d, preact.cloneElement = function (l, u, t) {
+      var i,
+          r,
+          o,
+          f = a$1({}, l.props);
+
+      for (o in u) "key" == o ? i = u[o] : "ref" == o ? r = u[o] : f[o] = u[o];
+
+      return arguments.length > 2 && (f.children = arguments.length > 3 ? n$2.call(arguments, 2) : t), p$1(l.type, f, i || l.key, r || l.ref, null);
+    }, preact.createContext = function (n, l) {
+      var u = {
+        __c: l = "__cC" + f$1++,
+        __: n,
+        Consumer: function (n, l) {
+          return n.children(l);
+        },
+        Provider: function (n) {
+          var u, t;
+          return this.getChildContext || (u = [], (t = {})[l] = this, this.getChildContext = function () {
+            return t;
+          }, this.shouldComponentUpdate = function (n) {
+            this.props.value !== n.value && u.some(x);
+          }, this.sub = function (n) {
+            u.push(n);
+            var l = n.componentWillUnmount;
+
+            n.componentWillUnmount = function () {
+              u.splice(u.indexOf(n), 1), l && l.call(n);
+            };
+          }), n.children;
+        }
+      };
+      return u.Provider.__ = u.Consumer.contextType = u;
+    }, preact.toChildArray = function n(l, u) {
+      return u = u || [], null == l || "boolean" == typeof l || (Array.isArray(l) ? l.some(function (l) {
+        n(l, u);
+      }) : u.push(l)), u;
+    }, preact.options = l$1;
+
+    var n$1 = preact;
+    "undefined" != typeof window && window.__PREACT_DEVTOOLS__ && window.__PREACT_DEVTOOLS__.attachPreact("10.6.4", n$1.options, {
+      Fragment: n$1.Fragment,
+      Component: n$1.Component
+    });
+
+    var n = preact;
+    var e = {};
+
+    function t(e) {
+      return e.type === n.Fragment ? "Fragment" : "function" == typeof e.type ? e.type.displayName || e.type.name : "string" == typeof e.type ? e.type : "#text";
+    }
+
+    var o = [],
+        r = [];
+
+    function a() {
+      return o.length > 0 ? o[o.length - 1] : null;
+    }
+
+    var i = !1;
+
+    function s(e) {
+      return "function" == typeof e.type && e.type != n.Fragment;
+    }
+
+    function c(n) {
+      for (var e = [n], o = n; null != o.__o;) e.push(o.__o), o = o.__o;
+
+      return e.reduce(function (n, e) {
+        n += "  in " + t(e);
+        var o = e.__source;
+        return o ? n += " (at " + o.fileName + ":" + o.lineNumber + ")" : i || (i = !0, console.warn("Add @babel/plugin-transform-react-jsx-source to get a more detailed component stack. Note that you should not add it to production builds of your App for bundle size reasons.")), n + "\n";
+      }, "");
+    }
+
+    var l = "function" == typeof WeakMap,
+        u = n.Component.prototype.setState;
+
+    n.Component.prototype.setState = function (n, e) {
+      return null == this.__v ? null == this.state && console.warn('Calling "this.setState" inside the constructor of a component is a no-op and might be a bug in your application. Instead, set "this.state = {}" directly.\n\n' + c(a())) : null == this.__P && console.warn('Can\'t call "this.setState" on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in the componentWillUnmount method.\n\n' + c(this.__v)), u.call(this, n, e);
+    };
+
+    var f = n.Component.prototype.forceUpdate;
+
+    function p(n) {
+      var e = n.props,
+          o = t(n),
+          r = "";
+
+      for (var a in e) if (e.hasOwnProperty(a) && "children" !== a) {
+        var i = e[a];
+        "function" == typeof i && (i = "function " + (i.displayName || i.name) + "() {}"), i = Object(i) !== i || i.toString ? i + "" : Object.prototype.toString.call(i), r += " " + a + "=" + JSON.stringify(i);
       }
 
-      function N(u, t, i) {
-        var r, o, f;
-        l.__ && l.__(u, t), o = (r = "function" == typeof i) ? null : i && i.__k || t.__k, f = [], I(t, u = (!r && i || t).__k = h(y, null, [u]), o || e, e, void 0 !== t.ownerSVGElement, !r && i ? [i] : o ? null : t.firstChild ? n.call(t.childNodes) : null, f, !r && i ? i : o ? o.__e : t.firstChild, r), T(f, u);
-      }
+      var s = e.children;
+      return "<" + o + r + (s && s.length ? ">..</" + o + ">" : " />");
+    }
 
-      n = c.slice, l = {
-        __e: function (n, l) {
-          for (var u, t, i; l = l.__;) if ((u = l.__c) && !u.__) try {
-            if ((t = u.constructor) && null != t.getDerivedStateFromError && (u.setState(t.getDerivedStateFromError(n)), i = u.__d), null != u.componentDidCatch && (u.componentDidCatch(n), i = u.__d), i) return u.__E = u;
-          } catch (l) {
-            n = l;
+    n.Component.prototype.forceUpdate = function (n) {
+      return null == this.__v ? console.warn('Calling "this.forceUpdate" inside the constructor of a component is a no-op and might be a bug in your application.\n\n' + c(a())) : null == this.__P && console.warn('Can\'t call "this.forceUpdate" on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in the componentWillUnmount method.\n\n' + c(this.__v)), f.call(this, n);
+    }, function () {
+      !function () {
+        var e = n.options.__b,
+            t = n.options.diffed,
+            a = n.options.__,
+            i = n.options.vnode,
+            c = n.options.__r;
+        n.options.diffed = function (n) {
+          s(n) && r.pop(), o.pop(), t && t(n);
+        }, n.options.__b = function (n) {
+          s(n) && o.push(n), e && e(n);
+        }, n.options.__ = function (n, e) {
+          r = [], a && a(n, e);
+        }, n.options.vnode = function (n) {
+          n.__o = r.length > 0 ? r[r.length - 1] : null, i && i(n);
+        }, n.options.__r = function (n) {
+          s(n) && r.push(n), c && c(n);
+        };
+      }();
+      var a = !1,
+          i = n.options.__b,
+          u = n.options.diffed,
+          f = n.options.vnode,
+          d = n.options.__e,
+          h = n.options.__,
+          y = n.options.__h,
+          v = l ? {
+        useEffect: new WeakMap(),
+        useLayoutEffect: new WeakMap(),
+        lazyPropTypes: new WeakMap()
+      } : null,
+          m = [];
+      n.options.__e = function (n, e, o) {
+        if (e && e.__c && "function" == typeof n.then) {
+          var r = n;
+          n = new Error("Missing Suspense. The throwing component was: " + t(e));
+
+          for (var a = e; a; a = a.__) if (a.__c && a.__c.__c) {
+            n = r;
+            break;
           }
 
+          if (n instanceof Error) throw n;
+        }
+
+        try {
+          d(n, e, o), "function" != typeof n.then && setTimeout(function () {
+            throw n;
+          });
+        } catch (n) {
           throw n;
         }
-      }, u = 0, t = function (n) {
-        return null != n && void 0 === n.constructor;
-      }, d.prototype.setState = function (n, l) {
-        var u;
-        u = null != this.__s && this.__s !== this.state ? this.__s : this.__s = a({}, this.state), "function" == typeof n && (n = n(a({}, u), this.props)), n && a(u, n), null != n && this.__v && (l && this.__h.push(l), x(this));
-      }, d.prototype.forceUpdate = function (n) {
-        this.__v && (this.__e = !0, n && this.__h.push(n), x(this));
-      }, d.prototype.render = y, i = [], r = "function" == typeof Promise ? Promise.prototype.then.bind(Promise.resolve()) : setTimeout, b.__r = 0, f = 0, exports.render = N, exports.hydrate = function n(l, u) {
-        N(l, u, n);
-      }, exports.createElement = h, exports.h = h, exports.Fragment = y, exports.createRef = function () {
-        return {
-          current: null
-        };
-      }, exports.isValidElement = t, exports.Component = d, exports.cloneElement = function (l, u, t) {
-        var i,
-            r,
-            o,
-            f = a({}, l.props);
+      }, n.options.__ = function (n, e) {
+        if (!e) throw new Error("Undefined parent passed to render(), this is the second argument.\nCheck if the element is available in the DOM/has the correct id.");
+        var o;
 
-        for (o in u) "key" == o ? i = u[o] : "ref" == o ? r = u[o] : f[o] = u[o];
+        switch (e.nodeType) {
+          case 1:
+          case 11:
+          case 9:
+            o = !0;
+            break;
 
-        return arguments.length > 2 && (f.children = arguments.length > 3 ? n.call(arguments, 2) : t), p(l.type, f, i || l.key, r || l.ref, null);
-      }, exports.createContext = function (n, l) {
-        var u = {
-          __c: l = "__cC" + f++,
-          __: n,
-          Consumer: function (n, l) {
-            return n.children(l);
-          },
-          Provider: function (n) {
-            var u, t;
-            return this.getChildContext || (u = [], (t = {})[l] = this, this.getChildContext = function () {
-              return t;
-            }, this.shouldComponentUpdate = function (n) {
-              this.props.value !== n.value && u.some(x);
-            }, this.sub = function (n) {
-              u.push(n);
-              var l = n.componentWillUnmount;
-
-              n.componentWillUnmount = function () {
-                u.splice(u.indexOf(n), 1), l && l.call(n);
-              };
-            }), n.children;
-          }
-        };
-        return u.Provider.__ = u.Consumer.contextType = u;
-      }, exports.toChildArray = function n(l, u) {
-        return u = u || [], null == l || "boolean" == typeof l || (Array.isArray(l) ? l.some(function (l) {
-          n(l, u);
-        }) : u.push(l)), u;
-      }, exports.options = l;
-    });
-
-    createCommonjsModule(function (module, exports) {
-      "undefined" != typeof window && window.__PREACT_DEVTOOLS__ && window.__PREACT_DEVTOOLS__.attachPreact("10.6.4", preact.options, {
-        Fragment: preact.Fragment,
-        Component: preact.Component
-      }), exports.addHookName = function (e, o) {
-        return preact.options.__a && preact.options.__a(o), e;
-      };
-    });
-
-    createCommonjsModule(function (module, exports) {
-      var n = preact;
-      var e = {};
-
-      function t(e) {
-        return e.type === n.Fragment ? "Fragment" : "function" == typeof e.type ? e.type.displayName || e.type.name : "string" == typeof e.type ? e.type : "#text";
-      }
-
-      var o = [],
-          r = [];
-
-      function a() {
-        return o.length > 0 ? o[o.length - 1] : null;
-      }
-
-      var i = !1;
-
-      function s(e) {
-        return "function" == typeof e.type && e.type != n.Fragment;
-      }
-
-      function c(n) {
-        for (var e = [n], o = n; null != o.__o;) e.push(o.__o), o = o.__o;
-
-        return e.reduce(function (n, e) {
-          n += "  in " + t(e);
-          var o = e.__source;
-          return o ? n += " (at " + o.fileName + ":" + o.lineNumber + ")" : i || (i = !0, console.warn("Add @babel/plugin-transform-react-jsx-source to get a more detailed component stack. Note that you should not add it to production builds of your App for bundle size reasons.")), n + "\n";
-        }, "");
-      }
-
-      var l = "function" == typeof WeakMap,
-          u = n.Component.prototype.setState;
-
-      n.Component.prototype.setState = function (n, e) {
-        return null == this.__v ? null == this.state && console.warn('Calling "this.setState" inside the constructor of a component is a no-op and might be a bug in your application. Instead, set "this.state = {}" directly.\n\n' + c(a())) : null == this.__P && console.warn('Can\'t call "this.setState" on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in the componentWillUnmount method.\n\n' + c(this.__v)), u.call(this, n, e);
-      };
-
-      var f = n.Component.prototype.forceUpdate;
-
-      function p(n) {
-        var e = n.props,
-            o = t(n),
-            r = "";
-
-        for (var a in e) if (e.hasOwnProperty(a) && "children" !== a) {
-          var i = e[a];
-          "function" == typeof i && (i = "function " + (i.displayName || i.name) + "() {}"), i = Object(i) !== i || i.toString ? i + "" : Object.prototype.toString.call(i), r += " " + a + "=" + JSON.stringify(i);
+          default:
+            o = !1;
         }
 
-        var s = e.children;
-        return "<" + o + r + (s && s.length ? ">..</" + o + ">" : " />");
-      }
+        if (!o) {
+          var r = t(n);
+          throw new Error("Expected a valid HTML node as a second argument to render.\tReceived " + e + " instead: render(<" + r + " />, " + e + ");");
+        }
 
-      n.Component.prototype.forceUpdate = function (n) {
-        return null == this.__v ? console.warn('Calling "this.forceUpdate" inside the constructor of a component is a no-op and might be a bug in your application.\n\n' + c(a())) : null == this.__P && console.warn('Can\'t call "this.forceUpdate" on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in the componentWillUnmount method.\n\n' + c(this.__v)), f.call(this, n);
-      }, function () {
-        !function () {
-          var e = n.options.__b,
-              t = n.options.diffed,
-              a = n.options.__,
-              i = n.options.vnode,
-              c = n.options.__r;
-          n.options.diffed = function (n) {
-            s(n) && r.pop(), o.pop(), t && t(n);
-          }, n.options.__b = function (n) {
-            s(n) && o.push(n), e && e(n);
-          }, n.options.__ = function (n, e) {
-            r = [], a && a(n, e);
-          }, n.options.vnode = function (n) {
-            n.__o = r.length > 0 ? r[r.length - 1] : null, i && i(n);
-          }, n.options.__r = function (n) {
-            s(n) && r.push(n), c && c(n);
-          };
-        }();
-        var a = !1,
-            i = n.options.__b,
-            u = n.options.diffed,
-            f = n.options.vnode,
-            d = n.options.__e,
-            h = n.options.__,
-            y = n.options.__h,
-            v = l ? {
-          useEffect: new WeakMap(),
-          useLayoutEffect: new WeakMap(),
-          lazyPropTypes: new WeakMap()
-        } : null,
-            m = [];
-        n.options.__e = function (n, e, o) {
-          if (e && e.__c && "function" == typeof n.then) {
-            var r = n;
-            n = new Error("Missing Suspense. The throwing component was: " + t(e));
+        h && h(n, e);
+      }, n.options.__b = function (n) {
+        var o = n.type,
+            r = function n(e) {
+          return e ? "function" == typeof e.type ? n(e.__) : e : {};
+        }(n.__);
 
-            for (var a = e; a; a = a.__) if (a.__c && a.__c.__c) {
-              n = r;
-              break;
+        if (a = !0, void 0 === o) throw new Error("Undefined component passed to createElement()\n\nYou likely forgot to export your component or might have mixed up default and named imports" + p(n) + "\n\n" + c(n));
+
+        if (null != o && "object" == typeof o) {
+          if (void 0 !== o.__k && void 0 !== o.__e) throw new Error("Invalid type passed to createElement(): " + o + "\n\nDid you accidentally pass a JSX literal as JSX twice?\n\n  let My" + t(n) + " = " + p(o) + ";\n  let vnode = <My" + t(n) + " />;\n\nThis usually happens when you export a JSX literal and not the component.\n\n" + c(n));
+          throw new Error("Invalid type passed to createElement(): " + (Array.isArray(o) ? "array" : o));
+        }
+
+        if ("thead" !== o && "tfoot" !== o && "tbody" !== o || "table" === r.type ? "tr" === o && "thead" !== r.type && "tfoot" !== r.type && "tbody" !== r.type && "table" !== r.type ? console.error("Improper nesting of table. Your <tr> should have a <thead/tbody/tfoot/table> parent." + p(n) + "\n\n" + c(n)) : "td" === o && "tr" !== r.type ? console.error("Improper nesting of table. Your <td> should have a <tr> parent." + p(n) + "\n\n" + c(n)) : "th" === o && "tr" !== r.type && console.error("Improper nesting of table. Your <th> should have a <tr>." + p(n) + "\n\n" + c(n)) : console.error("Improper nesting of table. Your <thead/tbody/tfoot> should have a <table> parent." + p(n) + "\n\n" + c(n)), void 0 !== n.ref && "function" != typeof n.ref && "object" != typeof n.ref && !("$$typeof" in n)) throw new Error('Component\'s "ref" property should be a function, or an object created by createRef(), but got [' + typeof n.ref + "] instead\n" + p(n) + "\n\n" + c(n));
+        if ("string" == typeof n.type) for (var s in n.props) if ("o" === s[0] && "n" === s[1] && "function" != typeof n.props[s] && null != n.props[s]) throw new Error("Component's \"" + s + '" property should be a function, but got [' + typeof n.props[s] + "] instead\n" + p(n) + "\n\n" + c(n));
+
+        if ("function" == typeof n.type && n.type.propTypes) {
+          if ("Lazy" === n.type.displayName && v && !v.lazyPropTypes.has(n.type)) {
+            var l = "PropTypes are not supported on lazy(). Use propTypes on the wrapped component itself. ";
+
+            try {
+              var u = n.type();
+              v.lazyPropTypes.set(n.type, !0), console.warn(l + "Component wrapped in lazy() is " + t(u));
+            } catch (n) {
+              console.warn(l + "We will log the wrapped component's name once it is loaded.");
             }
-
-            if (n instanceof Error) throw n;
           }
 
-          try {
-            d(n, e, o), "function" != typeof n.then && setTimeout(function () {
-              throw n;
-            });
-          } catch (n) {
-            throw n;
-          }
-        }, n.options.__ = function (n, e) {
-          if (!e) throw new Error("Undefined parent passed to render(), this is the second argument.\nCheck if the element is available in the DOM/has the correct id.");
-          var o;
+          var f = n.props;
+          n.type.__f && delete (f = function (n, e) {
+            for (var t in e) n[t] = e[t];
 
-          switch (e.nodeType) {
-            case 1:
-            case 11:
-            case 9:
-              o = !0;
-              break;
-
-            default:
-              o = !1;
-          }
-
-          if (!o) {
-            var r = t(n);
-            throw new Error("Expected a valid HTML node as a second argument to render.\tReceived " + e + " instead: render(<" + r + " />, " + e + ");");
-          }
-
-          h && h(n, e);
-        }, n.options.__b = function (n) {
-          var o = n.type,
-              r = function n(e) {
-            return e ? "function" == typeof e.type ? n(e.__) : e : {};
-          }(n.__);
-
-          if (a = !0, void 0 === o) throw new Error("Undefined component passed to createElement()\n\nYou likely forgot to export your component or might have mixed up default and named imports" + p(n) + "\n\n" + c(n));
-
-          if (null != o && "object" == typeof o) {
-            if (void 0 !== o.__k && void 0 !== o.__e) throw new Error("Invalid type passed to createElement(): " + o + "\n\nDid you accidentally pass a JSX literal as JSX twice?\n\n  let My" + t(n) + " = " + p(o) + ";\n  let vnode = <My" + t(n) + " />;\n\nThis usually happens when you export a JSX literal and not the component.\n\n" + c(n));
-            throw new Error("Invalid type passed to createElement(): " + (Array.isArray(o) ? "array" : o));
-          }
-
-          if ("thead" !== o && "tfoot" !== o && "tbody" !== o || "table" === r.type ? "tr" === o && "thead" !== r.type && "tfoot" !== r.type && "tbody" !== r.type && "table" !== r.type ? console.error("Improper nesting of table. Your <tr> should have a <thead/tbody/tfoot/table> parent." + p(n) + "\n\n" + c(n)) : "td" === o && "tr" !== r.type ? console.error("Improper nesting of table. Your <td> should have a <tr> parent." + p(n) + "\n\n" + c(n)) : "th" === o && "tr" !== r.type && console.error("Improper nesting of table. Your <th> should have a <tr>." + p(n) + "\n\n" + c(n)) : console.error("Improper nesting of table. Your <thead/tbody/tfoot> should have a <table> parent." + p(n) + "\n\n" + c(n)), void 0 !== n.ref && "function" != typeof n.ref && "object" != typeof n.ref && !("$$typeof" in n)) throw new Error('Component\'s "ref" property should be a function, or an object created by createRef(), but got [' + typeof n.ref + "] instead\n" + p(n) + "\n\n" + c(n));
-          if ("string" == typeof n.type) for (var s in n.props) if ("o" === s[0] && "n" === s[1] && "function" != typeof n.props[s] && null != n.props[s]) throw new Error("Component's \"" + s + '" property should be a function, but got [' + typeof n.props[s] + "] instead\n" + p(n) + "\n\n" + c(n));
-
-          if ("function" == typeof n.type && n.type.propTypes) {
-            if ("Lazy" === n.type.displayName && v && !v.lazyPropTypes.has(n.type)) {
-              var l = "PropTypes are not supported on lazy(). Use propTypes on the wrapped component itself. ";
+            return n;
+          }({}, f)).ref, function (n, t, o, r, a) {
+            Object.keys(n).forEach(function (o) {
+              var i;
 
               try {
-                var u = n.type();
-                v.lazyPropTypes.set(n.type, !0), console.warn(l + "Component wrapped in lazy() is " + t(u));
+                i = n[o](t, o, r, "prop", null, "SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED");
               } catch (n) {
-                console.warn(l + "We will log the wrapped component's name once it is loaded.");
+                i = n;
               }
-            }
 
-            var f = n.props;
-            n.type.__f && delete (f = function (n, e) {
-              for (var t in e) n[t] = e[t];
-
-              return n;
-            }({}, f)).ref, function (n, t, o, r, a) {
-              Object.keys(n).forEach(function (o) {
-                var i;
-
-                try {
-                  i = n[o](t, o, r, "prop", null, "SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED");
-                } catch (n) {
-                  i = n;
-                }
-
-                !i || i.message in e || (e[i.message] = !0, console.error("Failed prop type: " + i.message + (a && "\n" + a() || "")));
-              });
-            }(n.type.propTypes, f, 0, t(n), function () {
-              return c(n);
+              !i || i.message in e || (e[i.message] = !0, console.error("Failed prop type: " + i.message + (a && "\n" + a() || "")));
             });
-          }
+          }(n.type.propTypes, f, 0, t(n), function () {
+            return c(n);
+          });
+        }
 
-          i && i(n);
-        }, n.options.__h = function (n, e, t) {
-          if (!n || !a) throw new Error("Hook can only be invoked from render methods.");
-          y && y(n, e, t);
-        };
-
-        var b = function (n, e) {
-          return {
-            get: function () {
-              var t = "get" + n + e;
-              m && m.indexOf(t) < 0 && (m.push(t), console.warn("getting vnode." + n + " is deprecated, " + e));
-            },
-            set: function () {
-              var t = "set" + n + e;
-              m && m.indexOf(t) < 0 && (m.push(t), console.warn("setting vnode." + n + " is not allowed, " + e));
-            }
-          };
-        },
-            w = {
-          nodeName: b("nodeName", "use vnode.type"),
-          attributes: b("attributes", "use vnode.props"),
-          children: b("children", "use vnode.props.children")
-        },
-            g = Object.create({}, w);
-
-        n.options.vnode = function (n) {
-          var e = n.props;
-
-          if (null !== n.type && null != e && ("__source" in e || "__self" in e)) {
-            var t = n.props = {};
-
-            for (var o in e) {
-              var r = e[o];
-              "__source" === o ? n.__source = r : "__self" === o ? n.__self = r : t[o] = r;
-            }
-          }
-
-          n.__proto__ = g, f && f(n);
-        }, n.options.diffed = function (n) {
-          if (n.__k && n.__k.forEach(function (e) {
-            if (e && void 0 === e.type) {
-              delete e.__, delete e.__b;
-              var t = Object.keys(e).join(",");
-              throw new Error("Objects are not valid as a child. Encountered an object with the keys {" + t + "}.\n\n" + c(n));
-            }
-          }), a = !1, u && u(n), null != n.__k) for (var e = [], t = 0; t < n.__k.length; t++) {
-            var o = n.__k[t];
-
-            if (o && null != o.key) {
-              var r = o.key;
-
-              if (-1 !== e.indexOf(r)) {
-                console.error('Following component has two or more children with the same key attribute: "' + r + '". This may cause glitches and misbehavior in rendering process. Component: \n\n' + p(n) + "\n\n" + c(n));
-                break;
-              }
-
-              e.push(r);
-            }
-          }
-        };
-      }(), exports.resetPropWarnings = function () {
-        e = {};
+        i && i(n);
+      }, n.options.__h = function (n, e, t) {
+        if (!n || !a) throw new Error("Hook can only be invoked from render methods.");
+        y && y(n, e, t);
       };
-    });
 
-    "undefined" != typeof window && window.__PREACT_DEVTOOLS__ && window.__PREACT_DEVTOOLS__.attachPreact("10.6.4", l$1, {
-      Fragment: d$1,
-      Component: _
+      var b = function (n, e) {
+        return {
+          get: function () {
+            var t = "get" + n + e;
+            m && m.indexOf(t) < 0 && (m.push(t), console.warn("getting vnode." + n + " is deprecated, " + e));
+          },
+          set: function () {
+            var t = "set" + n + e;
+            m && m.indexOf(t) < 0 && (m.push(t), console.warn("setting vnode." + n + " is not allowed, " + e));
+          }
+        };
+      },
+          w = {
+        nodeName: b("nodeName", "use vnode.type"),
+        attributes: b("attributes", "use vnode.props"),
+        children: b("children", "use vnode.props.children")
+      },
+          g = Object.create({}, w);
+
+      n.options.vnode = function (n) {
+        var e = n.props;
+
+        if (null !== n.type && null != e && ("__source" in e || "__self" in e)) {
+          var t = n.props = {};
+
+          for (var o in e) {
+            var r = e[o];
+            "__source" === o ? n.__source = r : "__self" === o ? n.__self = r : t[o] = r;
+          }
+        }
+
+        n.__proto__ = g, f && f(n);
+      }, n.options.diffed = function (n) {
+        if (n.__k && n.__k.forEach(function (e) {
+          if (e && void 0 === e.type) {
+            delete e.__, delete e.__b;
+            var t = Object.keys(e).join(",");
+            throw new Error("Objects are not valid as a child. Encountered an object with the keys {" + t + "}.\n\n" + c(n));
+          }
+        }), a = !1, u && u(n), null != n.__k) for (var e = [], t = 0; t < n.__k.length; t++) {
+          var o = n.__k[t];
+
+          if (o && null != o.key) {
+            var r = o.key;
+
+            if (-1 !== e.indexOf(r)) {
+              console.error('Following component has two or more children with the same key attribute: "' + r + '". This may cause glitches and misbehavior in rendering process. Component: \n\n' + p(n) + "\n\n" + c(n));
+              break;
+            }
+
+            e.push(r);
+          }
+        }
+      };
+    }();
+
+    "undefined" != typeof window && window.__PREACT_DEVTOOLS__ && window.__PREACT_DEVTOOLS__.attachPreact("10.6.4", l$3, {
+      Fragment: d$2,
+      Component: _$1
     });
 
     function forwardElementRef(component) {
-      return x(component);
+      return x$1(component);
     }
     function usePseudoActive(_ref) {
       let {
@@ -9985,7 +9973,7 @@
       var _ref3;
 
       const [showSpinner, setShowSpinner] = useState(false);
-      y(() => {
+      y$1(() => {
         if (!pending) {
           setShowSpinner(false);
         }
@@ -10014,7 +10002,7 @@
     }
 
     const UseAriaAccordionSectionContext = D$1(null);
-    const Accordion = g(forwardElementRef(function Accordion(_ref, ref) {
+    const Accordion = g$1(forwardElementRef(function Accordion(_ref, ref) {
       let {
         expandedIndex,
         setExpandedIndex,
@@ -10028,15 +10016,15 @@
         expandedIndex,
         setExpandedIndex
       });
-      return v$1("div", { ...useMergedProps()({
+      return v$2("div", { ...useMergedProps()({
           ref,
           className: "accordion elevation-raised-1 elevation-body-surface"
         }, props)
-      }, v$1(UseAriaAccordionSectionContext.Provider, {
+      }, v$2(UseAriaAccordionSectionContext.Provider, {
         value: useAriaAccordionSection
       }, children));
     }));
-    const AccordionSection = g(forwardElementRef(function AccordionSection(_ref2, ref) {
+    const AccordionSection = g$1(forwardElementRef(function AccordionSection(_ref2, ref) {
       var _Transition, _headerLevel;
 
       let {
@@ -10074,23 +10062,23 @@
       });
       const headerProps = {
         class: "accordion-header",
-        children: v$1("button", { ...headerButtonProps
+        children: v$2("button", { ...headerButtonProps
         }, header)
       };
-      const headerJsx = headerLevel >= 1 && headerLevel <= 6 ? v$1(`h${headerLevel}`, headerProps) : v$1("div", useMergedProps()(headerProps, {
+      const headerJsx = headerLevel >= 1 && headerLevel <= 6 ? v$2(`h${headerLevel}`, headerProps) : v$2("div", useMergedProps()(headerProps, {
         role: "heading",
         "aria-level": `${headerLevel}`
       }));
-      return v$1("div", { ...{
+      return v$2("div", { ...{
           ref,
           class: "accordion-item"
         }
-      }, headerJsx, v$1(Transition, {
+      }, headerJsx, v$2(Transition, {
         show: expanded,
         ...useAriaAccordionSectionBodyProps(useMergedProps()(props, {
           class: ""
         }))
-      }, v$1("div", null, v$1("div", {
+      }, v$2("div", null, v$2("div", {
         class: clsx("accordion-body", expanded && "elevation-depressed-2", "elevation-body-surface")
       }, children))));
     }));
@@ -10159,7 +10147,7 @@
         return useRandomIdProps(useMergedProps()(extraProps, p));
       }
 
-      const useReferencedElement = A$1(function useReferencedElement() {
+      const useReferencedElement = A$2(function useReferencedElement() {
         function useReferencedProps(props) {
           return useReferencedIdProps("aria-controls")(props);
         }
@@ -10186,7 +10174,7 @@
      * @returns
      */
 
-    g(forwardElementRef(function ProgressLinear(_ref3, ref) {
+    g$1(forwardElementRef(function ProgressLinear(_ref3, ref) {
       let {
         colorVariant,
         max: maxProp,
@@ -10212,14 +10200,14 @@
         max,
         tag: "progress"
       });
-      h(() => {
+      h$1(() => {
         provideParentWithHook === null || provideParentWithHook === void 0 ? void 0 : provideParentWithHook(useReferencedElement);
       }, [useReferencedElement, provideParentWithHook]);
-      return v$1("div", { ...useMergedProps()({
+      return v$2("div", { ...useMergedProps()({
           ref,
           className: clsx("progress", `bg-${colorVariant !== null && colorVariant !== void 0 ? colorVariant : "primary"}`)
         }, rest)
-      }, v$1("progress", { ...useProgressProps({
+      }, v$2("progress", { ...useProgressProps({
           className: "progress-bar"
         })
       }));
@@ -10228,13 +10216,13 @@
     new Date().getDate() % 2;
 
     function Check() {
-      return v$1("i", {
+      return v$2("i", {
         class: "bi bi-check"
       });
     }
 
     function Cross() {
-      return v$1("i", {
+      return v$2("i", {
         class: "bi bi-x"
       });
     }
@@ -10270,7 +10258,7 @@
       const showSpinner = useSpinnerDelay(mode === "pending", spinnerTimeout); //const [spinnerShowCount, setSpinnerShowCount] = useState(0);
       //useEffect(() => { setSpinnerShowCount(s => ++s) }, [showSpinner]);
 
-      y(() => {
+      y$1(() => {
         setShownStatusLongEnough(false);
       }, [mode]);
       const [shownStatusLongEnough, setShownStatusLongEnough] = useState(false);
@@ -10285,7 +10273,7 @@
 
       const [previousSettledMode, setPreviousSettledMode, getPreviousSettledMode] = useState("pending");
       const [succeededAfterFailure, setSucceededAfterFailure, getSucceededAfterFailure] = useState(false);
-      y(() => {
+      y$1(() => {
         if (getSucceededAfterFailure()) setSucceededAfterFailure(false);
 
         if (mode == "succeeded") {
@@ -10299,7 +10287,7 @@
         }
       }, [mode]);
       (_childrenPosition = childrenPosition) !== null && _childrenPosition !== void 0 ? _childrenPosition : childrenPosition = "after";
-      if (children && (typeof children != "object" || !("type" in children))) children = v$1("span", null, children);
+      if (children && (typeof children != "object" || !("type" in children))) children = v$2("span", null, children);
       let progressProps = useMergedProps()({
         ref,
         className: clsx("circular-progress-container")
@@ -10310,37 +10298,37 @@
         ref: (_children2 = children) === null || _children2 === void 0 ? void 0 : _children2.ref
       } : {});
       let progressVnodeType = childrenPosition === "merged" ? (_children$type = (_children3 = children) === null || _children3 === void 0 ? void 0 : _children3.type) !== null && _children$type !== void 0 ? _children$type : "div" : "div";
-      const progressElement = v$1(progressVnodeType, progressProps, v$1(d$1, null, mode === "pending" && !!loadingLabel && v$1("div", {
+      const progressElement = v$2(progressVnodeType, progressProps, v$2(d$2, null, mode === "pending" && !!loadingLabel && v$2("div", {
         role: "alert",
         "aria-live": "assertive",
         class: "visually-hidden"
-      }, loadingLabel), mode !== null && v$1(Swappable, null, v$1("div", {
+      }, loadingLabel), mode !== null && v$2(Swappable, null, v$2("div", {
         className: "circular-progress-swappable"
-      }, v$1(Fade, {
+      }, v$2(Fade, {
         show: mode === "pending" && showSpinner,
         exitVisibility: "removed"
-      }, v$1("div", {
+      }, v$2("div", {
         style: {
           "--count": gimmickCount,
           "--delay": delay
         },
         className: clsx("circular-progress", colorVariant ? `circular-progress-${colorVariant}` : undefined, colorFill == "foreground" && "inverse-fill", colorFill === "foreground-only" && "no-fill")
       }, Array.from(function* () {
-        for (let i = 0; i < gimmickCount; ++i) yield v$1("div", {
+        for (let i = 0; i < gimmickCount; ++i) yield v$2("div", {
           class: clsx("circular-progress-ball-origin", `circular-progress-ball-origin-${i}`)
-        }, v$1("div", {
+        }, v$2("div", {
           class: "circular-progress-ball"
         }));
-      }()))), v$1(Fade, {
+      }()))), v$2(Fade, {
         show: !shownStatusLongEnough && mode === "succeeded" && succeededAfterFailure
-      }, v$1("div", {
+      }, v$2("div", {
         class: "circular-progress-succeeded"
-      }, v$1(Check, null))), v$1(Fade, {
+      }, v$2(Check, null))), v$2(Fade, {
         show: !shownStatusLongEnough && mode === "failed"
-      }, v$1("div", {
+      }, v$2("div", {
         class: "circular-progress-failed"
-      }, v$1(Cross, null)))))));
-      return v$1(d$1, null, childrenPosition == "before" && progressElement, children && v$1(children.type, useMergedProps()({
+      }, v$2(Cross, null)))))));
+      return v$2(d$2, null, childrenPosition == "before" && progressElement, children && v$2(children.type, useMergedProps()({
         children: childrenPosition === "child" ? progressElement : undefined,
         ref: children.ref
       }, useReferencedProps(children.props))), childrenPosition == "after" && progressElement);
@@ -10352,48 +10340,48 @@
     const DefaultDropdownDirectionContext = D$1(null);
     const DefaultSizeContext = D$1("md");
     const DefaultDisabledContext = D$1(false);
-    const ProvideDefaultButtonFill = g(function ProvideDefaultButtonFill(_ref) {
+    const ProvideDefaultButtonFill = g$1(function ProvideDefaultButtonFill(_ref) {
       let {
         value,
         children
       } = _ref;
-      return v$1(DefaultFillStyleContext.Provider, {
+      return v$2(DefaultFillStyleContext.Provider, {
         value: value
       }, children);
     });
-    const ProvideDefaultButtonColor = g(function ProvideDefaultButtonColor(_ref2) {
+    const ProvideDefaultButtonColor = g$1(function ProvideDefaultButtonColor(_ref2) {
       let {
         value,
         children
       } = _ref2;
-      return v$1(DefaultColorStyleContext.Provider, {
+      return v$2(DefaultColorStyleContext.Provider, {
         value: value
       }, children);
     });
-    const ProvideDefaultButtonSize = g(function ProvideDefaultButtonSize(_ref3) {
+    const ProvideDefaultButtonSize = g$1(function ProvideDefaultButtonSize(_ref3) {
       let {
         value,
         children
       } = _ref3;
-      return v$1(DefaultSizeContext.Provider, {
+      return v$2(DefaultSizeContext.Provider, {
         value: value
       }, children);
     });
-    const ProvideDefaultButtonDisabled = g(function ProvideDefaultButtonDisabled(_ref4) {
+    const ProvideDefaultButtonDisabled = g$1(function ProvideDefaultButtonDisabled(_ref4) {
       let {
         value,
         children
       } = _ref4;
-      return v$1(DefaultDisabledContext.Provider, {
+      return v$2(DefaultDisabledContext.Provider, {
         value: value
       }, children);
     });
-    const ProvideDefaultButtonDropdownDirection = g(function ProvideDefaultButtonDropdownDirection(_ref5) {
+    const ProvideDefaultButtonDropdownDirection = g$1(function ProvideDefaultButtonDropdownDirection(_ref5) {
       let {
         value,
         children
       } = _ref5;
-      return v$1(DefaultDropdownDirectionContext.Provider, {
+      return v$2(DefaultDropdownDirectionContext.Provider, {
         value: value
       }, children);
     });
@@ -10447,13 +10435,13 @@
     function ButtonR(p, ref) {
       var _p$tag;
 
-      if (((_p$tag = p.tag) === null || _p$tag === void 0 ? void 0 : _p$tag.toLowerCase()) === "a" || !!p.href) return v$1(AnchorButton, {
+      if (((_p$tag = p.tag) === null || _p$tag === void 0 ? void 0 : _p$tag.toLowerCase()) === "a" || !!p.href) return v$2(AnchorButton, {
         ref: ref,
         ...p
-      });else if (p.pressed != null) return v$1(ToggleButton, {
+      });else if (p.pressed != null) return v$2(ToggleButton, {
         ref: ref,
         ...p
-      });else return v$1(ButtonButton, {
+      });else return v$2(ButtonButton, {
         ref: ref,
         ...p
       });
@@ -10478,7 +10466,7 @@
       size = buttonStyleInfo.size;
       fillVariant = buttonStyleInfo.fillVariant;
       const useButtonStylesProps = buttonStyleInfo.useButtonStylesProps;
-      return v$1("a", { ...usePseudoActive(useButtonStylesProps({ ...props,
+      return v$2("a", { ...usePseudoActive(useButtonStylesProps({ ...props,
           ref
         }))
       });
@@ -10512,7 +10500,7 @@
         hasError
       } = useAsyncHandler()({
         debounce,
-        capture: A$1(() => {
+        capture: A$2(() => {
           return undefined;
         }, [])
       });
@@ -10536,13 +10524,13 @@
       fillVariant = buttonStyleInfo.fillVariant;
       const useButtonStylesProps = buttonStyleInfo.useButtonStylesProps; // Bootstrap why are you like this?
 
-      if (dropdownVariant == "combined") children = v$1(d$1, null, " ", children, " ");
-      return v$1(ProgressCircular, {
+      if (dropdownVariant == "combined") children = v$2(d$2, null, " ", children, " ");
+      return v$2(ProgressCircular, {
         spinnerTimeout: spinnerTimeout,
         mode: hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null,
         childrenPosition: "child",
         colorFill: fillVariant == "fill" ? "foreground" : "background"
-      }, v$1("button", { ...usePseudoActive(useButtonStylesProps(useMergedProps()({
+      }, v$2("button", { ...usePseudoActive(useButtonStylesProps(useMergedProps()({
           type: "button",
           className: clsx(pending && "pending active", disabled && "disabled", dropdownVariant && `dropdown-toggle`, dropdownDirection == "inline-start" && "dropstart", dropdownDirection == "inline-end" && "dropend", dropdownDirection == "block-start" && "dropup", // TODO, don't really want to add logical direction testing for *every* button :/
           dropdownDirection == "block-end" && "dropdown", dropdownVariant === "separate" && `dropdown-toggle-split`)
@@ -10575,7 +10563,7 @@
         currentCapture
       } = useAsyncHandler()({
         debounce,
-        capture: A$1(() => {
+        capture: A$2(() => {
           return !getPressed();
         }, [])
       });
@@ -10600,11 +10588,11 @@
       colorVariant = buttonStyleInfo.colorVariant;
       size = buttonStyleInfo.size;
       const useButtonStylesProps = buttonStyleInfo.useButtonStylesProps;
-      return v$1(ProgressCircular, {
+      return v$2(ProgressCircular, {
         mode: hasError ? "failed" : pending ? "pending" : settleCount && showAsyncSuccess ? "succeeded" : null,
         childrenPosition: "child",
         colorFill: fillVariant == "fill" ? "foreground" : "background"
-      }, v$1("button", { ...usePseudoActive(useAriaButtonProps(useButtonStylesProps({ ...useMergedProps()({
+      }, v$2("button", { ...usePseudoActive(useAriaButtonProps(useButtonStylesProps({ ...useMergedProps()({
             className: clsx("toggle-button", pressed && "active"),
             ref
           }, props)
@@ -10613,7 +10601,7 @@
     });
     const Button = forwardElementRef(ButtonR);
 
-    const ButtonGroup = g(forwardElementRef(function ButtonGroup(p, ref) {
+    const ButtonGroup = g$1(forwardElementRef(function ButtonGroup(p, ref) {
       var _logicalOrientation;
 
       useLogRender("ButtonGroup", `Rendering ButtonGroup`); // Styling props
@@ -10651,9 +10639,9 @@
         convertToPhysicalOrientation,
         useLogicalDirectionProps
       } = useLogicalDirection({
-        onLogicalDirectionChange: A$1(logicalDirectionInfo => setPhysicalOrientation(convertToPhysicalOrientation(logicalOrientation, logicalDirectionInfo)), [])
+        onLogicalDirectionChange: A$2(logicalDirectionInfo => setPhysicalOrientation(convertToPhysicalOrientation(logicalOrientation, logicalDirectionInfo)), [])
       });
-      y(() => {
+      y$1(() => {
         if (selectedIndex != null) navigateToIndex(selectedIndex);
       }, [selectedIndex]); // Build new DOM props to merge based off the styling props
 
@@ -10673,21 +10661,21 @@
       //const domProps =newDomProps, p3));
 
       outerDomProps["data-child-count"] = `${childCount}`;
-      return v$1(UseButtonGroupChild.Provider, {
+      return v$2(UseButtonGroupChild.Provider, {
         value: useListNavigationChild
-      }, v$1(ProvideDefaultButtonColor, {
+      }, v$2(ProvideDefaultButtonColor, {
         value: colorVariant
-      }, v$1(ProvideDefaultButtonFill, {
+      }, v$2(ProvideDefaultButtonFill, {
         value: fillVariant
-      }, v$1(ProvideDefaultButtonSize, {
+      }, v$2(ProvideDefaultButtonSize, {
         value: size
-      }, v$1(ProvideDefaultButtonDisabled, {
+      }, v$2(ProvideDefaultButtonDisabled, {
         value: disabled
-      }, v$1("div", { ...outerDomProps
-      }, v$1("div", { ...innerDomProps
+      }, v$2("div", { ...outerDomProps
+      }, v$2("div", { ...innerDomProps
       }, children)))))));
     }));
-    const ButtonGroupChild = g(forwardElementRef(function ButtonGroupChild1(_ref, ref) {
+    const ButtonGroupChild = g$1(forwardElementRef(function ButtonGroupChild1(_ref, ref) {
       let {
         index,
         ...buttonProps
@@ -10709,11 +10697,11 @@
         ref
       }, { ...buttonProps
       }));
-      return v$1(Button, { ...p
+      return v$2(Button, { ...p
       });
     }));
 
-    v$1(Button, {
+    v$2(Button, {
       pressed: true,
       onPress: p => console.log(p)
     });
@@ -10721,12 +10709,12 @@
     const baseId = generateRandomId("render-portal-container-");
     const BodyPortalClassContext = D$1("");
     const BodyPortalRootContext = D$1(() => document.getElementById(baseId));
-    g(function SetBodyPortalClass(_ref) {
+    g$1(function SetBodyPortalClass(_ref) {
       let {
         className,
         children
       } = _ref;
-      return v$1(BodyPortalClassContext.Provider, {
+      return v$2(BodyPortalClassContext.Provider, {
         value: className
       }, children);
     });
@@ -10759,20 +10747,20 @@
       } = useRefElement({
         onElementChange: setElement
       });
-      return v$1(BodyPortalRootContext.Provider, {
+      return v$2(BodyPortalRootContext.Provider, {
         value: getElement
-      }, children, v$1("div", { ...useRefElementProps({})
+      }, children, v$2("div", { ...useRefElementProps({})
       }));
     }
     function BodyPortal(_ref3) {
       let {
         children
       } = _ref3;
-      const id = s(null);
+      const id = s$2(null);
       const [portalElement, setPortalElement] = useState(null);
       const bodyPortalClass = F(BodyPortalClassContext);
       const container = useBodyPortalRoot();
-      y(() => {
+      y$1(() => {
         if (id.current == null) {
           id.current = generateRandomId();
         }
@@ -10796,7 +10784,7 @@
       if (portalElement) return W(children, portalElement);else return null;
     }
 
-    const DialogControlled = g(forwardElementRef(function DialogControlled(_ref, ref) {
+    const DialogControlled = g$1(forwardElementRef(function DialogControlled(_ref, ref) {
       var _onClose, _align;
 
       let {
@@ -10838,51 +10826,51 @@
       }
 
       (_align = align) !== null && _align !== void 0 ? _align : align = "center";
-      return v$1(BodyPortal, null, v$1(CloseDialogContext.Provider, {
+      return v$2(BodyPortal, null, v$2(CloseDialogContext.Provider, {
         value: useStableCallback(() => {
           var _onClose2;
 
           return (_onClose2 = onClose) === null || _onClose2 === void 0 ? void 0 : _onClose2(undefined);
         })
-      }, v$1("div", {
+      }, v$2("div", {
         class: "modal-portal-container"
-      }, v$1(Fade, {
+      }, v$2(Fade, {
         show: open
-      }, v$1("div", { ...useDialogBackdropProps({
+      }, v$2("div", { ...useDialogBackdropProps({
           class: "modal-backdrop backdrop-filter-transition"
         })
-      })), v$1(Transition, { ...{
+      })), v$2(Transition, { ...{
           ref,
           show: open,
           ...rest
         }
-      }, v$1("div", { ...useDialogProps({
+      }, v$2("div", { ...useDialogProps({
           class: clsx("modal-dialog modal-dialog-scrollable", align == "center" ? "modal-dialog-centered" : "")
         })
-      }, v$1(BodyPortalRoot, null, v$1(Fade, {
+      }, v$2(BodyPortalRoot, null, v$2(Fade, {
         show: open
-      }, v$1("div", {
+      }, v$2("div", {
         class: "modal-content elevation-body-surface elevation-raised-6"
-      }, title != null && v$1("div", { ...useDialogTitleProps({
+      }, title != null && v$2("div", { ...useDialogTitleProps({
           class: "modal-header"
         })
-      }, v$1("h1", {
+      }, v$2("h1", {
         class: "modal-title"
-      }, title)), v$1("div", { ...useDialogBodyProps({
+      }, title)), v$2("div", { ...useDialogBodyProps({
           class: "modal-body"
         })
-      }, children), footer != null && v$1("div", {
+      }, children), footer != null && v$2("div", {
         class: "modal-footer"
       }, footer)))))))));
     }));
-    const DialogUncontrolled = g(forwardElementRef(function DialogUncontrolled(_ref2, ref) {
+    const DialogUncontrolled = g$1(forwardElementRef(function DialogUncontrolled(_ref2, ref) {
       let {
         provideShow,
         modal,
         ...props
       } = _ref2;
       const [state, setState, getState] = useState(null);
-      const show = A$1(async () => {
+      const show = A$2(async () => {
         const state = getState();
 
         if (!state) {
@@ -10904,7 +10892,7 @@
           return Promise.reject("This dialog is already being shown");
         }
       }, []);
-      const onClose = A$1(reason => {
+      const onClose = A$2(reason => {
         var _getState2;
 
         if (reason) {
@@ -10919,19 +10907,19 @@
 
         (_getState2 = getState()) === null || _getState2 === void 0 ? void 0 : _getState2.resolve();
       }, [modal]);
-      y(() => provideShow === null || provideShow === void 0 ? void 0 : provideShow(prev => show), [provideShow, show]);
-      return v$1(DialogControlled, { ...props,
+      y$1(() => provideShow === null || provideShow === void 0 ? void 0 : provideShow(prev => show), [provideShow, show]);
+      return v$2(DialogControlled, { ...props,
         open: !!state,
         onClose: onClose
       });
     }));
-    const Dialog = g(forwardElementRef(function Dialog(props, ref) {
-      if (props.provideShow) return v$1(DialogUncontrolled, { ...props,
+    const Dialog = g$1(forwardElementRef(function Dialog(props, ref) {
+      if (props.provideShow) return v$2(DialogUncontrolled, { ...props,
         ref: ref
       });
-      if (props.onClose) return v$1(DialogControlled, { ...props,
+      if (props.onClose) return v$2(DialogControlled, { ...props,
         ref: ref
-      });else return v$1(DialogUncontrolled, { ...props,
+      });else return v$2(DialogUncontrolled, { ...props,
         ref: ref
       });
     }));
@@ -10954,21 +10942,21 @@
       const updateDialogStable = useStableCallback((index, dialog) => {
         return updateDialog === null || updateDialog === void 0 ? void 0 : updateDialog(index, dialog);
       });
-      return v$1(d$1, null, v$1(DefaultDialogTimeout.Provider, {
+      return v$2(d$2, null, v$2(DefaultDialogTimeout.Provider, {
         value: defaultTimeout !== null && defaultTimeout !== void 0 ? defaultTimeout : 5000
-      }, v$1(DialogsProviderHelper, {
+      }, v$2(DialogsProviderHelper, {
         setPushDialog: setPushDialog,
         setUpdateDialog: setUpdateDialog
-      }), pushDialog && updateDialog && v$1(PushDialogContext.Provider, {
+      }), pushDialog && updateDialog && v$2(PushDialogContext.Provider, {
         value: pushDialogStable
-      }, v$1(UpdateDialogContext.Provider, {
+      }, v$2(UpdateDialogContext.Provider, {
         value: updateDialogStable
       }, children))));
     }
     /**
      * Returns a function that immediately displays the given JSX Dialog element and returns a promise when it closes.
      *
-     * The `open` and `onClose` props do not need to be supplied; if they are, it's assumed you're using `useCloseDialog` to handle that yourself.
+     * In general it's assumed that you're using an uncontrolled dialog, so you do not need to supply `open` or `onClose` props.
      */
 
     function usePushDialog() {
@@ -10976,7 +10964,7 @@
       return pushDialog;
     }
     /**
-     * Returns a function that can be used to close whatever dialog the component that uses the hook is in.
+     * Returns a function that can be used to close whatever dialog the component that uses the hook is in. *Primarily for use in uncontrolled dialogs*, but can be used anywhere.
      *
      * The function is stable across all renders (but cannot be called *during* render).
      */
@@ -10985,8 +10973,14 @@
       const closeDialog = F(CloseDialogContext);
       return closeDialog;
     }
-    g(forwardElementRef(function CloseDialogButton(props, ref) {
-      return v$1(Button, { ...useMergedProps()(props, {
+    /**
+     * A specialized button that closes the dialog it's contained in when clicked. In all other regards, a normal button that does normal button things.
+     *
+     * This is most useful for uncontrolled dialogs, but can be used anywhere.
+     */
+
+    g$1(forwardElementRef(function CloseDialogButton(props, ref) {
+      return v$2(Button, { ...useMergedProps()(props, {
           ref,
           onPress: useCloseDialog()
         })
@@ -10999,7 +10993,7 @@
         setUpdateDialog
       } = _ref4;
       const [children, setChildren, getChildren] = useState(new Map());
-      const pushDialog = A$1(dialog => {
+      const pushDialog = A$2(dialog => {
         const randomKey = generateRandomId();
         let resolve;
         let reject;
@@ -11033,7 +11027,7 @@
         });
         return promise;
       }, []);
-      const updateDialog = A$1((index, dialog) => {
+      const updateDialog = A$2((index, dialog) => {
         const info = getChildren().get(index);
         console.assert(!!info);
 
@@ -11050,22 +11044,22 @@
           return index;
         }
       }, []);
-      h(() => {
+      h$1(() => {
         setPushDialog(_ => pushDialog);
       }, [pushDialog]);
-      h(() => {
+      h$1(() => {
         setUpdateDialog(_ => updateDialog);
       }, [updateDialog]);
-      return v$1(BodyPortal, null, v$1(DialogsContainerChildrenContext.Provider, {
+      return v$2(BodyPortal, null, v$2(DialogsContainerChildrenContext.Provider, {
         value: children
-      }, v$1(DialogsContainer, null)));
+      }, v$2(DialogsContainer, null)));
     }
 
     const DialogsContainerChildrenContext = D$1(new Map());
 
     function DialogsContainer(props) {
       const children = F(DialogsContainerChildrenContext);
-      return v$1("div", { ...useMergedProps()({}, props)
+      return v$2("div", { ...useMergedProps()({}, props)
       }, Array.from(children).map(_ref5 => {
         let [key, {
           children
@@ -11074,7 +11068,7 @@
       }));
     }
 
-    const Drawer = g(forwardElementRef(function Drawer(_ref, ref) {
+    const Drawer = g$1(forwardElementRef(function Drawer(_ref, ref) {
       var _TransitionProps;
 
       let {
@@ -11115,32 +11109,32 @@
         TransitionProps.slideTargetInline = -1;
       }
 
-      return v$1(BodyPortal, null, v$1("div", { ...rest,
+      return v$2(BodyPortal, null, v$2("div", { ...rest,
         ref: ref
-      }, v$1(Fade, {
+      }, v$2(Fade, {
         show: open
-      }, v$1("div", { ...useDrawerBackdropProps({
+      }, v$2("div", { ...useDrawerBackdropProps({
           class: "offcanvas-backdrop backdrop-filter-transition"
         })
-      })), v$1(Transition, { ...{
+      })), v$2(Transition, { ...{
           show: open,
           ...TransitionProps
         }
-      }, v$1("div", { ...useDrawerProps({
+      }, v$2("div", { ...useDrawerProps({
           class: "offcanvas offcanvas-start elevation-raised-5 elevation-body-surface",
           tabindex: -1
         })
-      }, v$1("div", {
+      }, v$2("div", {
         class: "offcanvas-header"
-      }, v$1("h5", { ...useDrawerTitleProps({
+      }, v$2("h5", { ...useDrawerTitleProps({
           class: "offcanvas-title"
         })
-      }, "Drawer"), closeButton !== null && closeButton !== void 0 ? closeButton : v$1(Button, {
+      }, "Drawer"), closeButton !== null && closeButton !== void 0 ? closeButton : v$2(Button, {
         tag: "button",
         class: "btn-close text-reset",
         "aria-label": "Close",
         onPress: () => onClose("escape")
-      })), v$1("div", { ...useDrawerBodyProps({
+      })), v$2("div", { ...useDrawerBodyProps({
           class: "offcanvas-body"
         })
       }, children)))));
@@ -11168,7 +11162,7 @@
 
 
     function useInputCaptures(type, min2, max2) {
-      const capture = A$1(event => {
+      const capture = A$2(event => {
         let ret;
 
         switch (type) {
@@ -11188,7 +11182,7 @@
 
         return ret;
       }, [type]);
-      const uncapture = A$1(value => {
+      const uncapture = A$2(value => {
         switch (type) {
           case "text":
           case "numeric":
@@ -11205,20 +11199,20 @@
       };
     }
 
-    const InputGrid = g(forwardElementRef(function InputGrid(_ref, ref) {
+    const InputGrid = g$1(forwardElementRef(function InputGrid(_ref, ref) {
       let {
         tag,
         children,
         columns,
         ...props
       } = _ref;
-      return v$1(tag !== null && tag !== void 0 ? tag : "div", useMergedProps()({
+      return v$2(tag !== null && tag !== void 0 ? tag : "div", useMergedProps()({
         class: "input-grid",
         style: columns ? {
           "--input-grid-columns": columns
         } : {},
         ref
-      }, props), v$1(InInputGridContext.Provider, {
+      }, props), v$2(InInputGridContext.Provider, {
         value: F(InInputGridContext) + 1
       }, children));
     }));
@@ -11228,7 +11222,7 @@
      * All Input-type components automatically detect when they're in an InputGroup and render different accordingly.
      */
 
-    const InputGroup = g(forwardElementRef(function InputGroup(_ref2, ref) {
+    const InputGroup = g$1(forwardElementRef(function InputGroup(_ref2, ref) {
       let {
         children,
         size,
@@ -11236,10 +11230,10 @@
         tag,
         ...props
       } = _ref2;
-      return v$1(tag !== null && tag !== void 0 ? tag : "div", useMergedProps()({
+      return v$2(tag !== null && tag !== void 0 ? tag : "div", useMergedProps()({
         class: clsx("input-group", size && size != "md" && `input-group-${size}`, colSpan && `input-grid-span-${colSpan}`),
         ref
-      }, props), v$1(InInputGroupContext.Provider, {
+      }, props), v$2(InInputGroupContext.Provider, {
         value: true
       }, children));
     }));
@@ -11256,7 +11250,7 @@
         disabled,
         ...props
       } = _ref3;
-      return v$1(tag !== null && tag !== void 0 ? tag : "div", useMergedProps()({
+      return v$2(tag !== null && tag !== void 0 ? tag : "div", useMergedProps()({
         class: clsx(disabled && "disabled", "input-group-text"),
         ref
       }, props), children);
@@ -11273,7 +11267,7 @@
      */
 
 
-    const Checkbox = g(forwardElementRef(function Checkbox(_ref, ref) {
+    const Checkbox = g$1(forwardElementRef(function Checkbox(_ref, ref) {
       var _labelPosition, _disabled;
 
       let {
@@ -11336,32 +11330,32 @@
         className: clsx("form-check-input", pending && "pending", disabled && "disabled", inInputGroup && "mt-0"),
         "aria-label": labelPosition === "hidden" ? stringLabel : undefined
       }));
-      const inputElement = v$1(OptionallyInputGroup$1, {
+      const inputElement = v$2(OptionallyInputGroup$1, {
         isInput: true,
         tag: inInputGroup ? "div" : null,
         ...useWrapperLabelProps({
           disabled,
           tabIndex: -1
         })
-      }, v$1(ProgressCircular, {
+      }, v$2(ProgressCircular, {
         childrenPosition: "after",
         colorFill: "foreground-only",
         mode: currentType === "async" ? asyncState : null,
         colorVariant: "info"
-      }, v$1("input", { ...propsForInput
+      }, v$2("input", { ...propsForInput
       })));
       const p2 = { ...useCheckboxLabelElementProps({
           className: clsx(pending && "pending", disabled && "disabled", "form-check-label"),
           "aria-hidden": "true"
         })
       };
-      const labelElement = v$1(d$1, null, label != null && v$1(OptionallyInputGroup$1, {
+      const labelElement = v$2(d$2, null, label != null && v$2(OptionallyInputGroup$1, {
         isInput: false,
         tag: "label",
         ...p2
       }, label));
-      const ret = v$1(d$1, null, labelPosition == "start" && labelElement, inputElement, labelPosition == "end" && labelElement);
-      if (!inInputGroup) return v$1("div", { ...useMergedProps()({}, {
+      const ret = v$2(d$2, null, labelPosition == "start" && labelElement, inputElement, labelPosition == "end" && labelElement);
+      if (!inInputGroup) return v$2("div", { ...useMergedProps()({}, {
           class: "form-check"
         })
       }, ret);
@@ -11379,14 +11373,14 @@
       props = { ...props,
         ref
       };
-      if (!inInputGroup) return v$1(tag !== null && tag !== void 0 ? tag : d$1, props, children); // If we're in an InputGrid's InputGroup, then create a 
+      if (!inInputGroup) return v$2(tag !== null && tag !== void 0 ? tag : d$2, props, children); // If we're in an InputGrid's InputGroup, then create a 
       // new child that's, CSS-wise, the "true" input.
       // The other one is used for its border styles and relative positioning.
 
-      if (inInputGrid && isInput) children = v$1("div", {
+      if (inInputGrid && isInput) children = v$2("div", {
         className: "input-group-text"
       }, children);
-      return v$1(InputGroupText, {
+      return v$2(InputGroupText, {
         tag: tag !== null && tag !== void 0 ? tag : "div",
         ...useMergedProps()({
           className: clsx(isInput && inInputGrid && "faux-input-group-text")
@@ -11401,7 +11395,7 @@
     const knownNames = new Set();
     const CurrentHandlerTypeContext = D$1("sync");
     const RadioGroupContext = D$1(null);
-    const RadioGroup = g(forwardElementRef(function RadioGroup(_ref, ref) {
+    const RadioGroup = g$1(forwardElementRef(function RadioGroup(_ref, ref) {
       let {
         children,
         name,
@@ -11482,22 +11476,22 @@
       const {
         useGenericLabelLabelProps
       } = useGenericLabelLabel();
-      let labelJsx = v$1("label", { ...useGenericLabelLabelProps(useReferencedInputIdProps("for")({
+      let labelJsx = v$2("label", { ...useGenericLabelLabelProps(useReferencedInputIdProps("for")({
           children: label
         }))
       });
-      let groupJsx = v$1("div", { ...useGenericLabelInputProps(useRadioGroupProps({
+      let groupJsx = v$2("div", { ...useGenericLabelInputProps(useRadioGroupProps({
           ref,
           "aria-label": labelPosition === "hidden" ? stringLabel : undefined
         }))
       }, children);
-      return v$1(CurrentHandlerTypeContext.Provider, {
+      return v$2(CurrentHandlerTypeContext.Provider, {
         value: currentType !== null && currentType !== void 0 ? currentType : "sync"
-      }, v$1(RadioGroupContext.Provider, {
+      }, v$2(RadioGroupContext.Provider, {
         value: useRadio
       }, labelPosition == "start" && labelJsx, groupJsx, labelPosition == "end" && labelJsx));
     }));
-    const Radio = g(forwardElementRef(function Radio(_ref2, ref) {
+    const Radio = g$1(forwardElementRef(function Radio(_ref2, ref) {
       var _labelPosition, _disabled, _label;
 
       let {
@@ -11545,26 +11539,26 @@
         console.error(`Hidden labels require a string-based label for the aria-label attribute.`);
       }
 
-      const inputElement = v$1(OptionallyInputGroup$1, {
+      const inputElement = v$2(OptionallyInputGroup$1, {
         isInput: true,
         tag: inInputGroup ? "div" : null,
         ...useRadioLabelProps({
           disabled,
           tabIndex: -1
         })
-      }, v$1(ProgressCircular, {
+      }, v$2(ProgressCircular, {
         childrenPosition: "after",
         colorFill: "foreground-only",
         mode: currentHandlerType == "async" ? asyncState : null,
         colorVariant: "info"
-      }, v$1("input", { ...useRadioInputProps({
+      }, v$2("input", { ...useRadioInputProps({
           ref,
           type: "radio",
           className: clsx(asyncState === "pending" && "pending", disabled && "disabled", "form-check-input"),
           "aria-label": labelPosition === "hidden" ? stringLabel : undefined
         })
       })));
-      const labelElement = v$1(d$1, null, label != null && v$1(OptionallyInputGroup$1, {
+      const labelElement = v$2(d$2, null, label != null && v$2(OptionallyInputGroup$1, {
         isInput: false,
         tag: "label",
         ...useRadioLabelProps({
@@ -11572,8 +11566,8 @@
           "aria-hidden": "true"
         })
       }, label));
-      const ret = v$1(d$1, null, labelPosition == "start" && labelElement, inputElement, labelPosition == "end" && labelElement);
-      if (!inInputGroup) return v$1("div", {
+      const ret = v$2(d$2, null, labelPosition == "start" && labelElement, inputElement, labelPosition == "end" && labelElement);
+      if (!inInputGroup) return v$2("div", {
         class: "form-check"
       }, ret);
       return ret;
@@ -11585,7 +11579,7 @@
      * @returns
      */
 
-    const Switch = g(forwardElementRef(function Switch(_ref, ref) {
+    const Switch = g$1(forwardElementRef(function Switch(_ref, ref) {
       var _labelPosition, _disabled;
 
       let {
@@ -11641,19 +11635,19 @@
         console.error(`Hidden labels require a string-based label for the aria-label attribute.`);
       }
 
-      const inputElement = v$1(OptionallyInputGroup, {
+      const inputElement = v$2(OptionallyInputGroup, {
         tag: inInputGroup ? "div" : null,
         isInput: true,
         ...useWrapperLabelProps({
           disabled,
           tabIndex: -1
         })
-      }, v$1(ProgressCircular, {
+      }, v$2(ProgressCircular, {
         childrenPosition: "after",
         colorFill: "foreground-only",
         mode: currentType === "async" ? asyncState : null,
         colorVariant: "info"
-      }, v$1("input", { ...useSwitchInputElementProps({
+      }, v$2("input", { ...useSwitchInputElementProps({
           ref,
           type: "checkbox",
           className: clsx(pending && "pending", "form-check-input", disabled && "disabled"),
@@ -11665,13 +11659,13 @@
           "aria-hidden": "true"
         })
       };
-      const labelElement = v$1(d$1, null, label != null && v$1(OptionallyInputGroup, {
+      const labelElement = v$2(d$2, null, label != null && v$2(OptionallyInputGroup, {
         tag: "label",
         isInput: false,
         ...p2
       }, label));
-      const ret = v$1(d$1, null, labelPosition == "start" && labelElement, inputElement, labelPosition == "end" && labelElement);
-      if (!inInputGroup) return v$1("div", { ...useMergedProps()(rest, {
+      const ret = v$2(d$2, null, labelPosition == "start" && labelElement, inputElement, labelPosition == "end" && labelElement);
+      if (!inInputGroup) return v$2("div", { ...useMergedProps()(rest, {
           class: "form-check form-switch"
         })
       }, ret);
@@ -11691,11 +11685,11 @@
       props = { ...props,
         ref
       };
-      if (!inInputGroup) return v$1(tag !== null && tag !== void 0 ? tag : d$1, props, children);
-      if (inInputGrid && isInput) children = v$1("div", {
+      if (!inInputGroup) return v$2(tag !== null && tag !== void 0 ? tag : d$2, props, children);
+      if (inInputGrid && isInput) children = v$2("div", {
         className: clsx(isInput && inInputGrid && "form-switch", "input-group-text")
       }, children);
-      return v$1(InputGroupText, {
+      return v$2(InputGroupText, {
         tag: tag !== null && tag !== void 0 ? tag : "div",
         ...useMergedProps()({
           className: clsx("input-group-text", isInput && !inInputGrid && "form-switch", isInput && inInputGrid && "faux-input-group-text")
@@ -11734,7 +11728,7 @@
         useHasFocusProps
       } = useHasFocus({
         onFocusedInnerChanged: setFocusedInner,
-        onFocusedChanged: A$1(focused => {
+        onFocusedChanged: A$2(focused => {
           if (!focused) setLRImpatience(0);
         }, [])
       });
@@ -11883,7 +11877,7 @@
         getElement,
         useRefElementProps
       } = useRefElement({});
-      y(() => {
+      y$1(() => {
         const element = getElement();
 
         if (element) {
@@ -11892,12 +11886,12 @@
           }
         }
       }, [v]);
-      return v$1(ProgressCircular, {
+      return v$2(ProgressCircular, {
         spinnerTimeout: 10,
         mode: currentType === "async" ? asyncState : null,
         childrenPosition: "after",
         colorVariant: "info"
-      }, v$1("input", { ...useRefElementProps(useHasFocusProps(useMergedProps()(props, {
+      }, v$2("input", { ...useRefElementProps(useHasFocusProps(useMergedProps()(props, {
           "aria-disabled": disabled ? "true" : undefined,
           onKeyDown,
           ref,
@@ -11913,7 +11907,7 @@
     }
 
     const UnlabelledInput = forwardElementRef(UnlabelledInputR);
-    const Input = g(forwardElementRef(function Input(_ref, ref) {
+    const Input = g$1(forwardElementRef(function Input(_ref, ref) {
       var _labelPosition, _size;
 
       let {
@@ -11961,11 +11955,11 @@
       }
 
       const IC = disabled && disabledVariant === "text" ? InputGroupText : UnlabelledInput;
-      const labelJsx = v$1("label", { ...useInputLabelLabelProps({
+      const labelJsx = v$2("label", { ...useInputLabelLabelProps({
           class: clsx(disabledVariant !== "text" && disabled && "disabled", isInInputGroup ? "input-group-text" : labelPosition != "floating" ? "form-label" : "")
         })
       }, children);
-      let inputJsx = v$1(IC, { ...useInputLabelInputProps(useMergedProps()({
+      let inputJsx = v$2(IC, { ...useInputLabelInputProps(useMergedProps()({
           children: IC === InputGroupText ? value : undefined,
           value: IC === InputGroupText ? undefined : value !== null && value !== void 0 ? value : undefined,
           placeholder: IC === InputGroupText ? undefined : placeholder,
@@ -11983,7 +11977,7 @@
       const isEmpty = true ; //if (isInInputGrid) {
 
       if (!(disabled && disabledVariant === "text")) {
-        inputJsx = v$1("div", {
+        inputJsx = v$2("div", {
           class: clsx(labelPosition != "floating" && classs, labelPosition != "floating" && className, "form-control", "faux-form-control-outer", "elevation-depressed-2", "elevation-body-surface", "focusable-within", !isEmpty , disabled && disabledVariant !== "text" && "disabled", size != "md" && `form-control-${size}`),
           style: width !== null && width !== void 0 && width.endsWith("ch") ? {
             "--form-control-width": width !== null && width !== void 0 ? width : "20ch"
@@ -11994,8 +11988,8 @@
       } // }
 
 
-      const inputWithLabel = v$1(d$1, null, labelPosition === "start" && labelJsx, inputJsx, (labelPosition === "end" || labelPosition == "floating") && labelJsx);
-      if (labelPosition !== "floating") return inputWithLabel;else return v$1("div", {
+      const inputWithLabel = v$2(d$2, null, labelPosition === "start" && labelJsx, inputJsx, (labelPosition === "end" || labelPosition == "floating") && labelJsx);
+      if (labelPosition !== "floating") return inputWithLabel;else return v$2("div", {
         class: clsx("form-floating", labelPosition == "floating" && classs, labelPosition === "floating" && className)
       }, inputJsx);
     }));
@@ -12006,7 +12000,7 @@
      * Easy one-liners all around here!
      */
 
-    const GridResponsive = g(forwardElementRef(function ResponsiveGrid(_ref, ref) {
+    const GridResponsive = g$1(forwardElementRef(function ResponsiveGrid(_ref, ref) {
       var _children$props$child, _children$props;
 
       let {
@@ -12023,14 +12017,14 @@
         ref
       }, props);
       const passthroughProps = useMergedProps()(mergedProps, (_children$props$child = children === null || children === void 0 ? void 0 : (_children$props = children.props) === null || _children$props === void 0 ? void 0 : _children$props.children) !== null && _children$props$child !== void 0 ? _children$props$child : {});
-      if (tag === "passthrough") return B(children, passthroughProps);else return v$1(tag !== null && tag !== void 0 ? tag : "div", mergedProps, children);
+      if (tag === "passthrough") return B(children, passthroughProps);else return v$2(tag !== null && tag !== void 0 ? tag : "div", mergedProps, children);
     }));
     /**
      * Very simple, easy static grid that guarantees the number of columns is displayed,
      * no matter how janky it looks.
      */
 
-    const GridStatic = g(forwardElementRef(function ResponsiveGrid(_ref2, ref) {
+    const GridStatic = g$1(forwardElementRef(function ResponsiveGrid(_ref2, ref) {
       var _children$props$child2, _children$props2;
 
       let {
@@ -12049,7 +12043,7 @@
         ref
       }, props);
       const passthroughProps = useMergedProps()(mergedProps, (_children$props$child2 = children === null || children === void 0 ? void 0 : (_children$props2 = children.props) === null || _children$props2 === void 0 ? void 0 : _children$props2.children) !== null && _children$props$child2 !== void 0 ? _children$props$child2 : {});
-      if (tag === "passthrough") return B(children, passthroughProps);else return v$1(tag !== null && tag !== void 0 ? tag : "div", mergedProps, children);
+      if (tag === "passthrough") return B(children, passthroughProps);else return v$2(tag !== null && tag !== void 0 ? tag : "div", mergedProps, children);
     }));
 
     /**
@@ -12156,7 +12150,7 @@
       }
     };
 
-    const ListStatic = g(forwardElementRef(function ListStatic(props, ref) {
+    const ListStatic = g$1(forwardElementRef(function ListStatic(props, ref) {
       const {
         tag,
         label,
@@ -12165,14 +12159,14 @@
         labelPosition,
         ...domProps
       } = props;
-      let labelVnode = typeof label == "string" ? v$1("label", null, label) : label;
-      return v$1(d$1, null, labelPosition === "start" && labelVnode, v$1(tag !== null && tag !== void 0 ? tag : "ul", useMergedProps()({
+      let labelVnode = typeof label == "string" ? v$2("label", null, label) : label;
+      return v$2(d$2, null, labelPosition === "start" && labelVnode, v$2(tag !== null && tag !== void 0 ? tag : "ul", useMergedProps()({
         class: clsx("list-group", flush && "list-group-flush", inline && UtilityClasses.display.inline),
         ref,
         "aria-hidden": labelPosition === "hidden" ? label : undefined
       }, domProps)), labelPosition === "end" && labelVnode);
     }));
-    const ListItemStatic = g(forwardElementRef(function ListItemStatic(props, ref) {
+    const ListItemStatic = g$1(forwardElementRef(function ListItemStatic(props, ref) {
       const {
         children,
         badge,
@@ -12183,20 +12177,20 @@
       } = { ...props,
         ref
       };
-      return v$1("li", { ...usePseudoActive(useMergedProps()({
+      return v$2("li", { ...usePseudoActive(useMergedProps()({
           class: clsx("list-group-item list-group-item-multiline", disabled && "disabled text-muted", !!badge && "with-badge", !!iconStart && "with-start", !!(badge || iconEnd) && "with-end")
         }, domProps))
-      }, iconStart && v$1("span", {
+      }, iconStart && v$2("span", {
         class: "list-group-item-start-icon"
-      }, iconStart), children, badge && v$1("span", {
+      }, iconStart), children, badge && v$2("span", {
         class: "list-group-item-badge"
-      }, badge), iconEnd && v$1("span", {
+      }, badge), iconEnd && v$2("span", {
         className: "list-group-item-end-icon"
       }, iconEnd));
     }));
 
     const UseListboxSingleItemContext = D$1(null);
-    const ListSingle = g(forwardElementRef(function ListSingle(props, ref) {
+    const ListSingle = g$1(forwardElementRef(function ListSingle(props, ref) {
       var _labelPosition;
 
       useLogRender("ListSingle", `Rendering ListSingle`);
@@ -12244,16 +12238,16 @@
       useChildFlag({
         activatedIndex: pending ? currentCapture : null,
         managedChildren,
-        getChildFlag: A$1(i => managedChildren[i].getPending(), []),
-        setChildFlag: A$1((i, set) => managedChildren[i].setPending(set), [])
+        getChildFlag: A$2(i => managedChildren[i].getPending(), []),
+        setChildFlag: A$2((i, set) => managedChildren[i].setPending(set), [])
       });
       (_labelPosition = labelPosition) !== null && _labelPosition !== void 0 ? _labelPosition : labelPosition = "start";
       let labelProps = typeof label == "string" ? {} : label.props;
-      let clonedLabel = labelPosition != "hidden" ? B(typeof label == "string" ? v$1("label", null, label) : label, useListboxSingleLabelProps(labelProps)) : label;
+      let clonedLabel = labelPosition != "hidden" ? B(typeof label == "string" ? v$2("label", null, label) : label, useListboxSingleLabelProps(labelProps)) : label;
       console.assert(!(labelPosition == "hidden" && typeof label != "string"));
-      return v$1(UseListboxSingleItemContext.Provider, {
+      return v$2(UseListboxSingleItemContext.Provider, {
         value: useListboxSingleItem
-      }, v$1(ListStatic, {
+      }, v$2(ListStatic, {
         tag: tag,
         labelPosition: labelPosition,
         label: clonedLabel,
@@ -12264,7 +12258,7 @@
         }, useListboxSingleProps(domProps))
       }));
     }));
-    const ListItemSingle = g(forwardElementRef(function ListItemSingle(props, ref) {
+    const ListItemSingle = g$1(forwardElementRef(function ListItemSingle(props, ref) {
       useLogRender("ListSingle", `Rendering ListSingleItem #${props.index}`);
       const [pending, setPending, getPending] = useState(false);
       const useListItemSingle = F(UseListboxSingleItemContext);
@@ -12283,7 +12277,7 @@
         useRefElementProps,
         getElement
       } = useRefElement({
-        onElementChange: A$1(element => {
+        onElementChange: A$2(element => {
           var _element$innerText;
 
           return setText(((_element$innerText = element === null || element === void 0 ? void 0 : element.innerText) !== null && _element$innerText !== void 0 ? _element$innerText : "").trim());
@@ -12311,11 +12305,11 @@
         hidden,
         disabled
       });
-      return v$1(ListItemStatic, { ...usePseudoActive(useMergedProps()({
+      return v$2(ListItemStatic, { ...usePseudoActive(useMergedProps()({
           disabled,
           class: clsx("list-group-item-action", selected && "active", pending && "pending")
         }, useListboxSingleItemProps(useRefElementProps(domProps))))
-      }, v$1(ProgressCircular, {
+      }, v$2(ProgressCircular, {
         childrenPosition: "after",
         mode: pending ? "pending" : null,
         colorVariant: "info"
@@ -12323,7 +12317,7 @@
     }));
 
     const UseListboxMultiItemContext = D$1(null);
-    const ListMulti = g(forwardElementRef(function ListMulti(props, ref) {
+    const ListMulti = g$1(forwardElementRef(function ListMulti(props, ref) {
       var _labelPosition;
 
       useLogRender("ListMulti", `Rendering ListMulti`);
@@ -12362,11 +12356,11 @@
       } = useListboxMultiLabel();
       (_labelPosition = labelPosition) !== null && _labelPosition !== void 0 ? _labelPosition : labelPosition = "start";
       let labelProps = typeof label == "string" ? {} : label.props;
-      let clonedLabel = labelPosition != "hidden" ? B(typeof label == "string" ? v$1("label", null, label) : label, useListboxMultiLabelProps(labelProps)) : label;
+      let clonedLabel = labelPosition != "hidden" ? B(typeof label == "string" ? v$2("label", null, label) : label, useListboxMultiLabelProps(labelProps)) : label;
       console.assert(!(labelPosition == "hidden" && typeof label != "string"));
-      return v$1(UseListboxMultiItemContext.Provider, {
+      return v$2(UseListboxMultiItemContext.Provider, {
         value: useListboxMultiItem
-      }, v$1(ListStatic, {
+      }, v$2(ListStatic, {
         tag: tag,
         labelPosition: labelPosition,
         label: clonedLabel,
@@ -12377,7 +12371,7 @@
         }, useListboxMultiProps(domProps))
       }));
     }));
-    const ListItemMulti = g(forwardElementRef(function ListItemMulti(props, ref) {
+    const ListItemMulti = g$1(forwardElementRef(function ListItemMulti(props, ref) {
       useLogRender("ListMulti", `Rendering ListMultiItem #${props.index}`);
       const useListItemMulti = F(UseListboxMultiItemContext);
       console.assert(!!useListItemMulti, "ListItemMulti is being used outside of a multi-select list. Did you mean to use a different kind of list, or a different kind of list item?");
@@ -12396,7 +12390,7 @@
         useRefElementProps,
         getElement
       } = useRefElement({
-        onElementChange: A$1(element => {
+        onElementChange: A$2(element => {
           var _element$innerText;
 
           return setText(((_element$innerText = element === null || element === void 0 ? void 0 : element.innerText) !== null && _element$innerText !== void 0 ? _element$innerText : "").trim());
@@ -12431,11 +12425,11 @@
         onSelect: onSelectSync,
         disabled
       });
-      return v$1(ListItemStatic, { ...usePseudoActive(useMergedProps()({
+      return v$2(ListItemStatic, { ...usePseudoActive(useMergedProps()({
           disabled,
           class: clsx("list-group-item-action", selected && "active", pending && "pending")
         }, useListboxMultiItemProps(useRefElementProps(domProps))))
-      }, v$1(ProgressCircular, {
+      }, v$2(ProgressCircular, {
         childrenPosition: "after",
         mode: pending ? "pending" : hasError ? "failed" : resolveCount ? "succeeded" : null,
         colorVariant: "info"
@@ -12450,13 +12444,13 @@
       return props.select == "multi";
     }
 
-    const List = g(forwardElementRef(function List(props, ref) {
-      if (isSingleProps(props)) return v$1(ListSingle, { ...props,
+    const List = g$1(forwardElementRef(function List(props, ref) {
+      if (isSingleProps(props)) return v$2(ListSingle, { ...props,
         ref: ref
-      });else if (isMultiProps(props)) return v$1(ListMulti, { ...props,
+      });else if (isMultiProps(props)) return v$2(ListMulti, { ...props,
         ref: ref
       });
-      return v$1(ListStatic, { ...props,
+      return v$2(ListStatic, { ...props,
         ref: ref
       });
     }));
@@ -14456,13 +14450,13 @@
       } = useLogicalDirection({
         onLogicalDirectionChange: setLogicalDirection
       });
-      y(() => {
+      y$1(() => {
         resetPopperInstance(getSourceElement(), getPopperElement());
       }, [side, align, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight, logicalDirection]);
       (_useArrow = useArrow) !== null && _useArrow !== void 0 ? _useArrow : useArrow = false;
       const [getFocusedElement, setFocusedElement] = usePassiveState(null, returnNull);
       useActiveElement({
-        onLastActiveElementChange: A$1(activeElement => {
+        onLastActiveElementChange: A$2(activeElement => {
           var _getSourceElement;
 
           if ((_getSourceElement = getSourceElement()) !== null && _getSourceElement !== void 0 && _getSourceElement.contains(activeElement)) {
@@ -14475,19 +14469,19 @@
           }
         }, [])
       });
-      const [getPositionPreference, setPositionPreference] = usePassiveState(null, A$1(() => "element", [])); //const [getHasMouseover, setHasMouseover] = usePassiveState(null, () => false);
+      const [getPositionPreference, setPositionPreference] = usePassiveState(null, A$2(() => "element", [])); //const [getHasMouseover, setHasMouseover] = usePassiveState(null, () => false);
 
-      const [getMouseX, setMouseX] = usePassiveState(A$1(() => {
+      const [getMouseX, setMouseX] = usePassiveState(A$2(() => {
         var _getPopperInstance;
 
         return void ((_getPopperInstance = getPopperInstance()) === null || _getPopperInstance === void 0 ? void 0 : _getPopperInstance.update());
       }, []), returnNull);
-      const [getMouseY, setMouseY] = usePassiveState(A$1(() => {
+      const [getMouseY, setMouseY] = usePassiveState(A$2(() => {
         var _getPopperInstance2;
 
         return void ((_getPopperInstance2 = getPopperInstance()) === null || _getPopperInstance2 === void 0 ? void 0 : _getPopperInstance2.update());
       }, []), returnNull);
-      const resetPopperInstance = A$1((sourceElement, popperElement) => {
+      const resetPopperInstance = A$2((sourceElement, popperElement) => {
         if (sourceElement && popperElement) {
           const onFirstUpdate = () => {};
 
@@ -14632,13 +14626,13 @@
         getElement: getSourceElement,
         useRefElementProps: useSourceElementRefProps
       } = useRefElement({
-        onElementChange: A$1(e => resetPopperInstance(e, getPopperElement()), [])
+        onElementChange: A$2(e => resetPopperInstance(e, getPopperElement()), [])
       });
       const {
         getElement: getPopperElement,
         useRefElementProps: usePopperElementRefProps
       } = useRefElement({
-        onElementChange: A$1(e => resetPopperInstance(getSourceElement(), e), [])
+        onElementChange: A$2(e => resetPopperInstance(getSourceElement(), e), [])
       });
       const {
         getElement: getArrowElement,
@@ -14650,7 +14644,7 @@
       const [popperAttributes, setPopperAttributes] = useState({});
       const [arrowStyle, setArrowStyle] = useState(null);
       const [arrowAttributes, setArrowAttributes] = useState({});
-      y(() => {
+      y$1(() => {
         if (updating) {
           let rafHandle = 0;
 
@@ -14673,7 +14667,7 @@
           };
         }
       }, [updating]);
-      const updateStateModifier = d(() => {
+      const updateStateModifier = d$1(() => {
         let modifier = {
           name: "updateState",
           enabled: true,
@@ -14894,7 +14888,7 @@
         timeout: 100,
         triggerIndex: updatingForABit
       });
-      let onInteraction = A$1(() => {
+      let onInteraction = A$2(() => {
         setUpdatingForABit(u => ++u);
       }, [closed]);
       if (!open) onInteraction = null;
@@ -14924,7 +14918,7 @@
       };
     }
 
-    const Tooltip = g(forwardElementRef(function Tooltip(_ref, ref) {
+    const Tooltip = g$1(forwardElementRef(function Tooltip(_ref, ref) {
       var _side, _align, _TransitionProps, _TransitionPropFlips, _TransitionProps2;
 
       let {
@@ -14952,15 +14946,15 @@
       }); // TODO: This is probably the most benign mutation during render issue ever
       // It's just used to preserve the last shown value when the tooltip is fading out because `tooltip` is null.
 
-      const lastUsedTooltipRef = s(tooltip);
+      const lastUsedTooltipRef = s$2(tooltip);
       lastUsedTooltipRef.current = tooltip || lastUsedTooltipRef.current;
       isOpen && (isOpen = !!tooltip);
       let cloneable;
 
       if (typeof children === "string" || typeof children === "number" || typeof children == "boolean" || typeof children === "bigint") {
-        cloneable = v$1("span", null, children);
+        cloneable = v$2("span", null, children);
       } else if (Array.isArray(children)) {
-        cloneable = v$1("span", null, children);
+        cloneable = v$2("span", null, children);
       } else {
         cloneable = children;
       }
@@ -15031,21 +15025,21 @@
       anchorProps = useMergedProps()(anchorProps, restAnchorProps); // TODO: It's required for this to be exitVisibility="hidden" for transforms to work?
       // Probably an issue in the Transition element itself because it's not browser-specific but it's a little weird
 
-      return v$1(d$1, null, B(cloneable, anchorProps), v$1(BodyPortal, null, v$1("div", { ...usePopperPopupProps({
+      return v$2(d$2, null, B(cloneable, anchorProps), v$2(BodyPortal, null, v$2("div", { ...usePopperPopupProps({
           class: "tooltip-wrapper"
         })
-      }, v$1(Transition, { ...TransitionProps,
+      }, v$2(Transition, { ...TransitionProps,
         show: isOpen,
         onTransitionUpdate: onInteraction,
         exitVisibility: "hidden"
-      }, v$1("div", { ...useTooltipProps(useMergedProps()({
+      }, v$2("div", { ...useTooltipProps(useMergedProps()({
           class: "tooltip show",
           role: "tooltip"
         }, {}))
-      }, v$1("div", { ...usePopperArrowProps({
+      }, v$2("div", { ...usePopperArrowProps({
           class: "popper-arrow"
         })
-      }), v$1("div", {
+      }), v$2("div", {
         class: "tooltip-inner"
       }, tooltip || lastUsedTooltipRef.current))))));
     }));
@@ -15076,7 +15070,7 @@
       (_align = align) !== null && _align !== void 0 ? _align : align = "start";
       let [open, setOpen] = useState(!!forceOpen);
       open || (open = !!forceOpen);
-      const onClose = A$1(() => setOpen(false), []);
+      const onClose = A$2(() => setOpen(false), []);
 
       const onOpen = () => setOpen(true);
 
@@ -15155,7 +15149,7 @@
 
       const onAnchorClick = () => setOpen(open => !open);
 
-      if (currentTypeahead && invalidTypeahead) currentTypeahead = v$1(d$1, null, currentTypeahead, " ", v$1("i", {
+      if (currentTypeahead && invalidTypeahead) currentTypeahead = v$2(d$2, null, currentTypeahead, " ", v$2("i", {
         class: "bi bi-backspace"
       }));
       let anchorProps = anchor.props;
@@ -15172,35 +15166,35 @@
         class: `${open ? "active" : ""}`
       });
       anchorProps = useMergedProps()(anchorProps, restAnchorProps);
-      return v$1(d$1, null, v$1(HasTypeaheadContext.Provider, {
+      return v$2(d$2, null, v$2(HasTypeaheadContext.Provider, {
         value: !!currentTypeahead
-      }, v$1(OnCloseContext.Provider, {
+      }, v$2(OnCloseContext.Provider, {
         value: onClose
-      }, v$1(UseMenuItemContext.Provider, {
+      }, v$2(UseMenuItemContext.Provider, {
         value: useMenuItem
-      }, v$1(ProvideDefaultButtonDropdownDirection, {
+      }, v$2(ProvideDefaultButtonDropdownDirection, {
         value: side
-      }, B(anchor, anchorProps)), v$1(BodyPortal, null, v$1("div", { ...usePopperPopupProps({
+      }, B(anchor, anchorProps)), v$2(BodyPortal, null, v$2("div", { ...usePopperPopupProps({
           class: "dropdown-menu-popper"
         })
-      }, v$1(Tooltip, {
+      }, v$2(Tooltip, {
         tooltip: currentTypeahead || null,
         side: "inline-end",
         align: "center"
-      }, v$1(Transition, { ...useMenuProps(flipTransformProps((_TransitionProps2 = TransitionProps) !== null && _TransitionProps2 !== void 0 ? _TransitionProps2 : {}, TransitionPropFlips)),
+      }, v$2(Transition, { ...useMenuProps(flipTransformProps((_TransitionProps2 = TransitionProps) !== null && _TransitionProps2 !== void 0 ? _TransitionProps2 : {}, TransitionPropFlips)),
         show: open,
         onTransitionUpdate: onInteraction,
         exitVisibility: "hidden"
-      }, v$1("div", { ...useHasFocusProps({
+      }, v$2("div", { ...useHasFocusProps({
           className: clsx("typeahead-tooltip", invalidTypeahead ? "text-danger" : undefined)
         })
-      }, v$1("button", { ...useFirstMenuSentinelProps({
+      }, v$2("button", { ...useFirstMenuSentinelProps({
           className: "visually-hidden"
         })
-      }, "Close menu"), v$1(tag !== null && tag !== void 0 ? tag : "ul", {
+      }, "Close menu"), v$2(tag !== null && tag !== void 0 ? tag : "ul", {
         children,
         className: "dropdown-menu elevation-raised-4 elevation-body-surface"
-      }), v$1("button", { ...useSecondMenuSentinelProps({
+      }), v$2("button", { ...useSecondMenuSentinelProps({
           className: "visually-hidden"
         })
       }, "Close menu"))))))))));
@@ -15226,7 +15220,7 @@
         useRefElementProps,
         getElement
       } = useRefElement({
-        onElementChange: A$1(element => {
+        onElementChange: A$2(element => {
           var _element$innerText;
 
           return setText(((_element$innerText = element === null || element === void 0 ? void 0 : element.innerText) !== null && _element$innerText !== void 0 ? _element$innerText : "").trim());
@@ -15253,7 +15247,7 @@
         settleCount,
         hasError
       } = useAsyncHandler()({
-        capture: A$1(() => {
+        capture: A$2(() => {
           return undefined;
         }, [])
       });
@@ -15271,34 +15265,34 @@
       const buttonProps = usePseudoActive(usePressEventHandlers(disabled ? null : onPress, hasTypeahead ? {
         space: "exclude"
       } : undefined)(newProps));
-      const childrenWithIcons = v$1(d$1, null, iconStart && v$1("span", {
+      const childrenWithIcons = v$2(d$2, null, iconStart && v$2("span", {
         class: "dropdown-item-start-icon"
-      }, iconStart), children, badge && v$1("span", {
+      }, iconStart), children, badge && v$2("span", {
         class: "dropdown-item-badge"
-      }, badge), iconEnd && v$1("span", {
+      }, badge), iconEnd && v$2("span", {
         className: "dropdown-item-end-icon"
       }, iconEnd));
 
       if (isInteractive) {
-        return v$1("li", null, v$1(ProgressCircular, {
+        return v$2("li", null, v$2(ProgressCircular, {
           mode: hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null,
           childrenPosition: "child",
           colorFill: "foreground-only",
           colorVariant: "info"
-        }, v$1("button", { ...buttonProps
+        }, v$2("button", { ...buttonProps
         }, childrenWithIcons)));
       } else {
-        return v$1("li", { ...newProps
+        return v$2("li", { ...newProps
         }, childrenWithIcons);
       }
     }
 
-    const Menu = g(forwardElementRef(MenuU));
-    const MenuItem = g(forwardElementRef(MenuItemU));
+    const Menu = g$1(forwardElementRef(MenuU));
+    const MenuItem = g$1(forwardElementRef(MenuItemU));
 
     const UseTabContext = D$1(null);
     const UseTabPanelContext = D$1(null);
-    const Tabs = g(forwardElementRef(function Tabs(_ref, ref) {
+    const Tabs = g$1(forwardElementRef(function Tabs(_ref, ref) {
       var _orientation;
 
       let {
@@ -15336,22 +15330,22 @@
       const {
         useTabListProps
       } = useTabsList();
-      return v$1("div", {
+      return v$2("div", {
         class: clsx("tabs-container", `tabs-orientation-${orientation}`)
-      }, v$1(UseTabContext.Provider, {
+      }, v$2(UseTabContext.Provider, {
         value: useTab
       }, B(children[0], useTabListProps({
         className: clsx("nav", visualVariant == "pills" ? "nav-pills" : "nav-tabs")
-      }), children[0].props.children)), v$1(UseTabPanelContext.Provider, {
+      }), children[0].props.children)), v$2(UseTabPanelContext.Provider, {
         value: useTabPanel
-      }, v$1(Swappable, null, v$1("div", { ...useMergedProps()({
+      }, v$2(Swappable, null, v$2("div", { ...useMergedProps()({
           className: "tab-content elevation-depressed-3 elevation-body-surface"
         }, { ...props,
           ref
         })
       }, ...children.slice(1)))));
     }));
-    const Tab = g(forwardElementRef(function Tab(_ref2, ref) {
+    const Tab = g$1(forwardElementRef(function Tab(_ref2, ref) {
       let {
         index,
         children,
@@ -15366,16 +15360,16 @@
         text: null,
         tag: "button"
       });
-      return v$1("li", {
+      return v$2("li", {
         className: "nav-item",
         role: "presentation"
-      }, v$1("button", { ...useTabProps(useMergedProps()({
+      }, v$2("button", { ...useTabProps(useMergedProps()({
           ref,
           class: clsx(`nav-link`, selected && `active`)
         }, props))
       }, children));
     }));
-    const TabPanel = g(forwardElementRef(function TabPanel(_ref3, ref) {
+    const TabPanel = g$1(forwardElementRef(function TabPanel(_ref3, ref) {
       var _TransitionProps;
 
       let {
@@ -15400,7 +15394,7 @@
         TransitionProps.zoomMin = 0.85;
       }
 
-      return v$1(Transition, useMergedProps()(TransitionProps, useTabPanelProps({
+      return v$2(Transition, useMergedProps()(TransitionProps, useTabPanelProps({
         ref,
         show: visible,
         children,
@@ -15426,14 +15420,14 @@
       const updateToastStable = useStableCallback((index, toast) => {
         return updateToast === null || updateToast === void 0 ? void 0 : updateToast(index, toast);
       });
-      return v$1(d$1, null, v$1(DefaultToastTimeout.Provider, {
+      return v$2(d$2, null, v$2(DefaultToastTimeout.Provider, {
         value: defaultTimeout !== null && defaultTimeout !== void 0 ? defaultTimeout : 5000
-      }, v$1(ToastsProviderHelper, {
+      }, v$2(ToastsProviderHelper, {
         setPushToast: setPushToast,
         setUpdateToast: setUpdateToast
-      }), pushToast && updateToast && v$1(PushToastContext.Provider, {
+      }), pushToast && updateToast && v$2(PushToastContext.Provider, {
         value: pushToastStable
-      }, v$1(UpdateToastContext.Provider, {
+      }, v$2(UpdateToastContext.Provider, {
         value: updateToastStable
       }, children))));
     }
@@ -15448,7 +15442,7 @@
         setUpdateToast
       } = _ref2;
       const [children, setChildren, getChildren] = useState([]);
-      const pushToast = A$1(toast => {
+      const pushToast = A$2(toast => {
         const randomKey = generateRandomId();
         let index = getChildren().length;
         setChildren(prev => [...prev, B(toast, {
@@ -15456,7 +15450,7 @@
         })]);
         return index;
       }, []);
-      const updateToast = A$1((index, toast) => {
+      const updateToast = A$2((index, toast) => {
         var _getChildren$index;
 
         const key = (_getChildren$index = getChildren()[index]) === null || _getChildren$index === void 0 ? void 0 : _getChildren$index.key;
@@ -15473,15 +15467,15 @@
           return index;
         }
       }, []);
-      h(() => {
+      h$1(() => {
         setPushToast(_ => pushToast);
       }, [pushToast]);
-      h(() => {
+      h$1(() => {
         setUpdateToast(_ => updateToast);
       }, [updateToast]);
-      return v$1(BodyPortal, null, v$1(ToastsContainerChildrenContext.Provider, {
+      return v$2(BodyPortal, null, v$2(ToastsContainerChildrenContext.Provider, {
         value: children
-      }, v$1(ToastsContainer, null)));
+      }, v$2(ToastsContainer, null)));
     }
 
     const ToastsContainerChildrenContext = D$1([]);
@@ -15506,9 +15500,9 @@
           }
         }
       });
-      return v$1(UseToastContext.Provider, {
+      return v$2(UseToastContext.Provider, {
         value: useToast
-      }, v$1("div", { ...useToastContainerProps(useMergedProps()({
+      }, v$2("div", { ...useToastContainerProps(useMergedProps()({
           className: `set-theme ${theme}`
         }, props))
       }, children));
@@ -15536,21 +15530,21 @@
         politeness
       });
       const show = status != "dismissed";
-      return v$1(ToastDismissContext.Provider, {
+      return v$2(ToastDismissContext.Provider, {
         value: dismiss
-      }, v$1(SlideFade, {
+      }, v$2(SlideFade, {
         show: show,
         slideTargetInline: 1,
         animateOnMount: show,
         exitVisibility: "removed"
-      }, v$1("div", { ...useToastProps({
+      }, v$2("div", { ...useToastProps({
           class: "toast show"
         })
-      }, v$1("div", {
+      }, v$2("div", {
         class: "d-flex"
-      }, v$1("div", {
+      }, v$2("div", {
         class: "toast-body"
-      }, children), v$1(Button, {
+      }, children), v$2(Button, {
         class: "btn-close me-2 m-auto",
         "aria-label": "Dismiss alert",
         onPress: dismiss
@@ -15568,12 +15562,12 @@
         )
     }*/
 
-    const Card = g(forwardElementRef(function Card(p, ref) {
+    const Card = g$1(forwardElementRef(function Card(p, ref) {
       let {
         children,
         ...props
       } = p;
-      return v$1("div", { ...useMergedProps()({
+      return v$2("div", { ...useMergedProps()({
           ref,
           className: "card elevation-raised-1 elevation-body-surface"
         }, props)
@@ -15594,9 +15588,9 @@
               type,
               ...props
             } = p;
-            return v$1(CardBody, { ...props,
+            return v$2(CardBody, { ...props,
               ref: ref
-            }, v$1(CardText, null, children));
+            }, v$2(CardText, null, children));
           }
 
         case "footer":
@@ -15605,7 +15599,7 @@
               type,
               ...props
             } = p;
-            return v$1(CardFooter, { ...props,
+            return v$2(CardFooter, { ...props,
               ref: ref
             }, children);
           }
@@ -15617,7 +15611,7 @@
               tag,
               ...props
             } = p;
-            return v$1(CardSubtitle, {
+            return v$2(CardSubtitle, {
               tag: tag,
               ...useMergedProps()({
                 className: "card-body"
@@ -15633,7 +15627,7 @@
               tag,
               ...props
             } = p;
-            return v$1(CardTitle, {
+            return v$2(CardTitle, {
               tag: tag,
               ...useMergedProps()({
                 className: "card-body"
@@ -15649,7 +15643,7 @@
               src,
               ...props
             } = p;
-            return v$1(CardImage, {
+            return v$2(CardImage, {
               src: src,
               position: "both",
               ...props,
@@ -15663,66 +15657,66 @@
               tag,
               ...props
             } = p;
-            return v$1(tag, props, children);
+            return v$2(tag, props, children);
           }
       }
     }
 
-    const CardElement = g(forwardElementRef(CardElement2));
-    const CardImage = g(forwardElementRef(function CardImage(p, ref) {
+    const CardElement = g$1(forwardElementRef(CardElement2));
+    const CardImage = g$1(forwardElementRef(function CardImage(p, ref) {
       const {
         position,
         ...props
       } = p;
-      return v$1("img", { ...useMergedProps()(props, {
+      return v$2("img", { ...useMergedProps()(props, {
           ref,
           className: `card-img${position == "both" ? "" : `-${position}`}`
         })
       });
     }));
-    const CardBody = g(forwardElementRef(function CardBody(props, ref) {
-      return v$1("div", { ...useMergedProps()(props, {
+    const CardBody = g$1(forwardElementRef(function CardBody(props, ref) {
+      return v$2("div", { ...useMergedProps()(props, {
           ref,
           className: "card-body"
         })
       });
     }));
-    const CardFooter = g(forwardElementRef(function CardHeader(props, ref) {
-      return v$1("div", { ...useMergedProps()(props, {
+    const CardFooter = g$1(forwardElementRef(function CardHeader(props, ref) {
+      return v$2("div", { ...useMergedProps()(props, {
           ref,
           className: "card"
         })
       });
     }));
-    const CardTitle = g(forwardElementRef(function CardTitle(p, ref) {
+    const CardTitle = g$1(forwardElementRef(function CardTitle(p, ref) {
       const {
         tag,
         ...props
       } = p;
-      return v$1(tag !== null && tag !== void 0 ? tag : "h5", useMergedProps()(props, {
+      return v$2(tag !== null && tag !== void 0 ? tag : "h5", useMergedProps()(props, {
         ref,
         className: "card-title"
       }));
     }));
-    const CardSubtitle = g(forwardElementRef(function CardSubtitle(p, ref) {
+    const CardSubtitle = g$1(forwardElementRef(function CardSubtitle(p, ref) {
       const {
         tag,
         ...props
       } = p;
-      return v$1(tag !== null && tag !== void 0 ? tag : "h5", useMergedProps()(props, {
+      return v$2(tag !== null && tag !== void 0 ? tag : "h5", useMergedProps()(props, {
         ref,
         className: clsx("card-subtitle", "mb-2", "text-muted")
       }));
     }));
-    const CardText = g(forwardElementRef(function CardText(props, ref) {
-      return v$1("div", { ...useMergedProps()(props, {
+    const CardText = g$1(forwardElementRef(function CardText(props, ref) {
+      return v$2("div", { ...useMergedProps()(props, {
           ref,
           className: "card-text"
         })
       });
     }));
-    g(forwardElementRef(function CardHeader(props, ref) {
-      return v$1("div", { ...useMergedProps()(props, {
+    g$1(forwardElementRef(function CardHeader(props, ref) {
+      return v$2("div", { ...useMergedProps()(props, {
           ref,
           className: "card-header"
         })
@@ -15739,7 +15733,7 @@
         const [asyncFails, setAsyncFails] = useState(false);
         const [usesLinkButton, setUsesLinkButton] = useState(true);
         const pushToast = usePushToast();
-        const onPressSync = () => void (pushToast(v$1(Toast, null, "Button was clicked")));
+        const onPressSync = () => void (pushToast(v$2(Toast, null, "Button was clicked")));
         const onPressAsync = async () => {
             await sleep$6(asyncTimeout ?? 0);
             if (asyncFails)
@@ -15756,139 +15750,139 @@
                 setToggleOn(b);
         };
         const onToggleInput = usesAsync ? onToggleInputAsync : setToggleOn;
-        return (v$1(ProvideDefaultButtonFill, { value: buttonsFill },
-            v$1(ProvideDefaultButtonSize, { value: buttonsSize },
-                v$1(ProvideDefaultButtonColor, { value: buttonsColor },
-                    v$1("div", { class: "demo" },
-                        v$1(Card, null,
-                            v$1(CardElement, { type: "title", tag: "h2" }, "Buttons"),
-                            v$1(CardElement, null,
-                                v$1(Button, { onPress: onPress }, "I'm a button")),
-                            v$1(CardElement, null,
+        return (v$2(ProvideDefaultButtonFill, { value: buttonsFill },
+            v$2(ProvideDefaultButtonSize, { value: buttonsSize },
+                v$2(ProvideDefaultButtonColor, { value: buttonsColor },
+                    v$2("div", { class: "demo" },
+                        v$2(Card, null,
+                            v$2(CardElement, { type: "title", tag: "h2" }, "Buttons"),
+                            v$2(CardElement, null,
+                                v$2(Button, { onPress: onPress }, "I'm a button")),
+                            v$2(CardElement, null,
                                 "A ",
-                                v$1("code", null, "Button"),
+                                v$2("code", null, "Button"),
                                 " is a ",
-                                v$1("code", null, "Button"),
+                                v$2("code", null, "Button"),
                                 " is a ",
-                                v$1("code", null, "Button"),
+                                v$2("code", null, "Button"),
                                 " \u2013 you can click, tap, or Space-key it to activate it and do something.  If the given action is asynchronous, then the button will disable itself and display a spinner during the operation."),
-                            v$1(CardElement, { type: "subtitle", tag: "h3" }, "Async inputs"),
-                            v$1(CardElement, null,
+                            v$2(CardElement, { type: "subtitle", tag: "h3" }, "Async inputs"),
+                            v$2(CardElement, null,
                                 "The ",
-                                v$1("code", null, "onPress"),
+                                v$2("code", null, "onPress"),
                                 " event handler for buttons can be sync or async, and they will react appropriately if the operation takes long enough.",
-                                v$1(InputGrid, null,
-                                    v$1(InputGroup, null,
-                                        v$1(Checkbox, { onCheck: setUsesAsync, checked: usesAsync, labelPosition: "start" }, "Use async handler")),
-                                    v$1(InputGroup, null,
-                                        v$1(Checkbox, { onCheck: setAsyncFails, checked: asyncFails, labelPosition: "start", disabled: !usesAsync }, "Async handler rejects")),
-                                    v$1(InputGroup, null,
-                                        v$1(Input, { width: "8ch", disabled: !usesAsync, type: "number", onValueChange: setAsyncTimeout, value: asyncTimeout }, "Async timeout")))),
-                            v$1(CardElement, null,
-                                v$1(Button, { onPress: onPress }, "Click me")),
-                            v$1(CardElement, { type: "paragraph" },
-                                v$1("code", null, `const onPress = ${usesAsync ? `async ` : ""}() => { ${usesAsync ? `await sleep(${asyncTimeout}); ` : ""}pushToast(<Toast ... />); }
+                                v$2(InputGrid, null,
+                                    v$2(InputGroup, null,
+                                        v$2(Checkbox, { onCheck: setUsesAsync, checked: usesAsync, labelPosition: "start" }, "Use async handler")),
+                                    v$2(InputGroup, null,
+                                        v$2(Checkbox, { onCheck: setAsyncFails, checked: asyncFails, labelPosition: "start", disabled: !usesAsync }, "Async handler rejects")),
+                                    v$2(InputGroup, null,
+                                        v$2(Input, { width: "8ch", disabled: !usesAsync, type: "number", onValueChange: setAsyncTimeout, value: asyncTimeout }, "Async timeout")))),
+                            v$2(CardElement, null,
+                                v$2(Button, { onPress: onPress }, "Click me")),
+                            v$2(CardElement, { type: "paragraph" },
+                                v$2("code", null, `const onPress = ${usesAsync ? `async ` : ""}() => { ${usesAsync ? `await sleep(${asyncTimeout}); ` : ""}pushToast(<Toast ... />); }
 <Button onPress={onPress}>Click me</Button>`)),
-                            v$1("hr", null),
-                            v$1(CardElement, { type: "subtitle", tag: "h3" }, "Color, fill, & size"),
-                            v$1(CardElement, { type: "paragraph" },
+                            v$2("hr", null),
+                            v$2(CardElement, { type: "subtitle", tag: "h3" }, "Color, fill, & size"),
+                            v$2(CardElement, { type: "paragraph" },
                                 "Buttons can be styled in different sizes, colors, and fill styles. You can provide a global default with ",
-                                v$1("code", null, "Context"),
+                                v$2("code", null, "Context"),
                                 " objects, like ",
-                                v$1("code", null, "<ProvideDefaultButtonFill>"),
+                                v$2("code", null, "<ProvideDefaultButtonFill>"),
                                 "."),
-                            v$1(CardElement, null, "All the normal Bootstrap colors are provided, albeit with adjustments to outlined buttons to ensure correct contrast ratios on the theme's body BG color.  Additionally, besides the `light` and `dark` colors, `subtle` and `contrast` are available as colors to use that simply map onto `light` or `dark` depending on the body BG color."),
-                            v$1(CardElement, null,
-                                v$1(ButtonGroup, null,
-                                    v$1(ButtonGroupChild, { index: 0, onPressToggle: () => setButtonsSize("sm"), pressed: buttonsSize === "sm" }, "Small"),
-                                    v$1(ButtonGroupChild, { index: 1, onPressToggle: () => setButtonsSize("md"), pressed: buttonsSize === "md" }, "Medium"),
-                                    v$1(ButtonGroupChild, { index: 2, onPressToggle: () => setButtonsSize("lg"), pressed: buttonsSize === "lg" }, "Large"))),
-                            v$1(CardElement, null,
-                                v$1(ButtonGroup, null,
-                                    v$1(ButtonGroupChild, { index: 0, onPressToggle: () => setButtonsFill("fill"), pressed: buttonsFill === "fill" }, "Fill"),
-                                    v$1(ButtonGroupChild, { index: 1, onPressToggle: () => setButtonsFill("outline"), pressed: buttonsFill === "outline" }, "Outline"))),
-                            v$1(CardElement, null,
-                                v$1(ButtonGroup, { wrap: true },
-                                    v$1(ButtonGroupChild, { index: 0, colorVariant: "primary", pressed: buttonsColor == "primary", onPressToggle: () => setButtonsColor("primary") }, "Primary"),
-                                    v$1(ButtonGroupChild, { index: 1, colorVariant: "secondary", pressed: buttonsColor == "secondary", onPressToggle: () => setButtonsColor("secondary") }, "Secondary"),
-                                    v$1(ButtonGroupChild, { index: 2, colorVariant: "success", pressed: buttonsColor == "success", onPressToggle: () => setButtonsColor("success") }, "Success"),
-                                    v$1(ButtonGroupChild, { index: 3, colorVariant: "warning", pressed: buttonsColor == "warning", onPressToggle: () => setButtonsColor("warning") }, "Warning"),
-                                    v$1(ButtonGroupChild, { index: 4, colorVariant: "danger", pressed: buttonsColor == "danger", onPressToggle: () => setButtonsColor("danger") }, "Danger"),
-                                    v$1(ButtonGroupChild, { index: 5, colorVariant: "info", pressed: buttonsColor == "info", onPressToggle: () => setButtonsColor("info") }, "Info"),
-                                    v$1(ButtonGroupChild, { index: 6, colorVariant: "light", pressed: buttonsColor == "light", onPressToggle: () => setButtonsColor("light") }, "Light"),
-                                    v$1(ButtonGroupChild, { index: 7, colorVariant: "dark", pressed: buttonsColor == "dark", onPressToggle: () => setButtonsColor("dark") }, "Dark"),
-                                    v$1(ButtonGroupChild, { index: 8, colorVariant: "contrast", pressed: buttonsColor == "contrast", onPressToggle: () => setButtonsColor("contrast") }, "Contrast"),
-                                    v$1(ButtonGroupChild, { index: 9, colorVariant: "subtle", pressed: buttonsColor == "subtle", onPressToggle: () => setButtonsColor("subtle") }, "Subtle"))),
-                            v$1(CardElement, null,
-                                v$1(Button, { onPress: onPress },
+                            v$2(CardElement, null, "All the normal Bootstrap colors are provided, albeit with adjustments to outlined buttons to ensure correct contrast ratios on the theme's body BG color.  Additionally, besides the `light` and `dark` colors, `subtle` and `contrast` are available as colors to use that simply map onto `light` or `dark` depending on the body BG color."),
+                            v$2(CardElement, null,
+                                v$2(ButtonGroup, null,
+                                    v$2(ButtonGroupChild, { index: 0, onPressToggle: () => setButtonsSize("sm"), pressed: buttonsSize === "sm" }, "Small"),
+                                    v$2(ButtonGroupChild, { index: 1, onPressToggle: () => setButtonsSize("md"), pressed: buttonsSize === "md" }, "Medium"),
+                                    v$2(ButtonGroupChild, { index: 2, onPressToggle: () => setButtonsSize("lg"), pressed: buttonsSize === "lg" }, "Large"))),
+                            v$2(CardElement, null,
+                                v$2(ButtonGroup, null,
+                                    v$2(ButtonGroupChild, { index: 0, onPressToggle: () => setButtonsFill("fill"), pressed: buttonsFill === "fill" }, "Fill"),
+                                    v$2(ButtonGroupChild, { index: 1, onPressToggle: () => setButtonsFill("outline"), pressed: buttonsFill === "outline" }, "Outline"))),
+                            v$2(CardElement, null,
+                                v$2(ButtonGroup, { wrap: true },
+                                    v$2(ButtonGroupChild, { index: 0, colorVariant: "primary", pressed: buttonsColor == "primary", onPressToggle: () => setButtonsColor("primary") }, "Primary"),
+                                    v$2(ButtonGroupChild, { index: 1, colorVariant: "secondary", pressed: buttonsColor == "secondary", onPressToggle: () => setButtonsColor("secondary") }, "Secondary"),
+                                    v$2(ButtonGroupChild, { index: 2, colorVariant: "success", pressed: buttonsColor == "success", onPressToggle: () => setButtonsColor("success") }, "Success"),
+                                    v$2(ButtonGroupChild, { index: 3, colorVariant: "warning", pressed: buttonsColor == "warning", onPressToggle: () => setButtonsColor("warning") }, "Warning"),
+                                    v$2(ButtonGroupChild, { index: 4, colorVariant: "danger", pressed: buttonsColor == "danger", onPressToggle: () => setButtonsColor("danger") }, "Danger"),
+                                    v$2(ButtonGroupChild, { index: 5, colorVariant: "info", pressed: buttonsColor == "info", onPressToggle: () => setButtonsColor("info") }, "Info"),
+                                    v$2(ButtonGroupChild, { index: 6, colorVariant: "light", pressed: buttonsColor == "light", onPressToggle: () => setButtonsColor("light") }, "Light"),
+                                    v$2(ButtonGroupChild, { index: 7, colorVariant: "dark", pressed: buttonsColor == "dark", onPressToggle: () => setButtonsColor("dark") }, "Dark"),
+                                    v$2(ButtonGroupChild, { index: 8, colorVariant: "contrast", pressed: buttonsColor == "contrast", onPressToggle: () => setButtonsColor("contrast") }, "Contrast"),
+                                    v$2(ButtonGroupChild, { index: 9, colorVariant: "subtle", pressed: buttonsColor == "subtle", onPressToggle: () => setButtonsColor("subtle") }, "Subtle"))),
+                            v$2(CardElement, null,
+                                v$2(Button, { onPress: onPress },
                                     buttonsFill === "fill" ? "Filled" : "Outlined",
                                     " ",
                                     buttonsColor,
                                     " button")),
-                            v$1(CardElement, null,
-                                v$1("code", null, `<Button fillVariant="${buttonsFill}" colorVariant="${buttonsColor}">Variant button</Button>`)),
-                            v$1("hr", null),
-                            v$1(CardElement, { type: "subtitle", tag: "h3" }, "Link buttons"),
-                            v$1(CardElement, null,
+                            v$2(CardElement, null,
+                                v$2("code", null, `<Button fillVariant="${buttonsFill}" colorVariant="${buttonsColor}">Variant button</Button>`)),
+                            v$2("hr", null),
+                            v$2(CardElement, { type: "subtitle", tag: "h3" }, "Link buttons"),
+                            v$2(CardElement, null,
                                 "A link can be styled as a button while retaining native link functionality (middle clicks, etc.). These buttons have no ",
-                                v$1("code", null, "onPress"),
+                                v$2("code", null, "onPress"),
                                 " handler, instead taking ",
-                                v$1("code", null, "href"),
+                                v$2("code", null, "href"),
                                 " and the other ",
-                                v$1("code", null, "<a>"),
+                                v$2("code", null, "<a>"),
                                 " props."),
-                            v$1(CardElement, null,
+                            v$2(CardElement, null,
                                 "A ",
-                                v$1("code", null, "<Button>"),
+                                v$2("code", null, "<Button>"),
                                 " will use an anchor link internally if you provide it with an ",
-                                v$1("code", null, "href"),
+                                v$2("code", null, "href"),
                                 " prop, or optionally setting the ",
-                                v$1("code", null, "tag"),
+                                v$2("code", null, "tag"),
                                 " prop to ",
-                                v$1("code", null, "a"),
+                                v$2("code", null, "a"),
                                 ".",
-                                v$1(InputGroup, null,
-                                    v$1(Checkbox, { onCheck: setUsesLinkButton, checked: usesLinkButton, labelPosition: "start" }, "Use link button"))),
-                            v$1(CardElement, null, usesLinkButton ? v$1(Button, { target: "_blank", href: "https://www.example.com" },
+                                v$2(InputGroup, null,
+                                    v$2(Checkbox, { onCheck: setUsesLinkButton, checked: usesLinkButton, labelPosition: "start" }, "Use link button"))),
+                            v$2(CardElement, null, usesLinkButton ? v$2(Button, { target: "_blank", href: "https://www.example.com" },
                                 "example.com ",
-                                v$1("i", { class: "bi bi-box-arrow-up-right" })) : v$1(Button, { onPress: onPress }, "Regular button")),
-                            v$1(CardElement, { type: "paragraph" },
-                                v$1("code", null, usesLinkButton ? `<Button href="https://www.example.com">Link button</Button>` : `<Button onPress={onPress}>Regular button</Button>`)),
-                            v$1(CardElement, null, "Keep in mind that styling a link as a button can cause confusion even while being completely compliant (\"\uD83E\uDDD1\u200D\uD83D\uDCBB click on the link\" \"\uD83D\uDE21 what link??\"), so be sure to use with some level of consideration."),
-                            v$1("hr", null),
-                            v$1(CardElement, { type: "subtitle", tag: "h3" }, "Toggle buttons"),
-                            v$1(CardElement, null,
+                                v$2("i", { class: "bi bi-box-arrow-up-right" })) : v$2(Button, { onPress: onPress }, "Regular button")),
+                            v$2(CardElement, { type: "paragraph" },
+                                v$2("code", null, usesLinkButton ? `<Button href="https://www.example.com">Link button</Button>` : `<Button onPress={onPress}>Regular button</Button>`)),
+                            v$2(CardElement, null, "Keep in mind that styling a link as a button can cause confusion even while being completely compliant (\"\uD83E\uDDD1\u200D\uD83D\uDCBB click on the link\" \"\uD83D\uDE21 what link??\"), so be sure to use with some level of consideration."),
+                            v$2("hr", null),
+                            v$2(CardElement, { type: "subtitle", tag: "h3" }, "Toggle buttons"),
+                            v$2(CardElement, null,
                                 "If given a ",
-                                v$1("code", null, "pressed"),
+                                v$2("code", null, "pressed"),
                                 " prop, a button will become a toggle button, with an off/on state.  It will style itself as outlined when unpressed, and filled when pressed, so they are best used in groups."),
-                            v$1(CardElement, null,
-                                v$1(Button, { pressed: toggleOn, onPressToggle: onToggleInput }, "Toggle button")),
-                            v$1(CardElement, { type: "paragraph" },
-                                v$1("code", null, `<Button pressed={pressed} onPressToggle={onInput}>Toggle button</Button>`)),
-                            v$1("hr", null),
-                            v$1(CardElement, { type: "subtitle", tag: "h3" }, "Button Groups"),
-                            v$1(CardElement, null,
+                            v$2(CardElement, null,
+                                v$2(Button, { pressed: toggleOn, onPressToggle: onToggleInput }, "Toggle button")),
+                            v$2(CardElement, { type: "paragraph" },
+                                v$2("code", null, `<Button pressed={pressed} onPressToggle={onInput}>Toggle button</Button>`)),
+                            v$2("hr", null),
+                            v$2(CardElement, { type: "subtitle", tag: "h3" }, "Button Groups"),
+                            v$2(CardElement, null,
                                 "A ",
-                                v$1("code", null, "<ButtonGroup>"),
+                                v$2("code", null, "<ButtonGroup>"),
                                 " can be used to group a set of ",
-                                v$1("code", null, "<ButtonGroupChild>"),
+                                v$2("code", null, "<ButtonGroupChild>"),
                                 " (which is the exact same as a ",
-                                v$1("code", null, "<Button>"),
+                                v$2("code", null, "<Button>"),
                                 ", but with an ",
-                                v$1("code", null, "index"),
+                                v$2("code", null, "index"),
                                 " prop). This gives them keyboard navigation abilities."),
-                            v$1(CardElement, null,
-                                v$1(ButtonGroup, { wrap: true },
-                                    v$1(ButtonGroupChild, { index: 0, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress }, "First button"),
-                                    v$1(ButtonGroupChild, { index: 1, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress }, "Second button"),
-                                    v$1(ButtonGroupChild, { index: 2, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress }, "Third button"),
-                                    v$1(ButtonGroupChild, { index: 3, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress }, "Fourth button"),
-                                    v$1(ButtonGroupChild, { index: 4, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress }, "Fifth button"),
-                                    v$1(ButtonGroupChild, { index: 5, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress }, "Sixth button"),
-                                    v$1(ButtonGroupChild, { index: 6, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress }, "Seventh button"),
-                                    v$1(ButtonGroupChild, { index: 7, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress }, "Eighth button"))),
-                            v$1(CardElement, { type: "paragraph" },
-                                v$1("code", null, `<ButtonGroup wrap>
+                            v$2(CardElement, null,
+                                v$2(ButtonGroup, { wrap: true },
+                                    v$2(ButtonGroupChild, { index: 0, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress }, "First button"),
+                                    v$2(ButtonGroupChild, { index: 1, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress }, "Second button"),
+                                    v$2(ButtonGroupChild, { index: 2, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress }, "Third button"),
+                                    v$2(ButtonGroupChild, { index: 3, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress }, "Fourth button"),
+                                    v$2(ButtonGroupChild, { index: 4, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress }, "Fifth button"),
+                                    v$2(ButtonGroupChild, { index: 5, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress }, "Sixth button"),
+                                    v$2(ButtonGroupChild, { index: 6, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress }, "Seventh button"),
+                                    v$2(ButtonGroupChild, { index: 7, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress }, "Eighth button"))),
+                            v$2(CardElement, { type: "paragraph" },
+                                v$2("code", null, `<ButtonGroup wrap>
     <ButtonGroupChild index={0}>First button</ButtonGroupChild>
     <ButtonGroupChild index={1}>Second button</ButtonGroupChild>
     <ButtonGroupChild index={2}>Third button</ButtonGroupChild>
@@ -15912,160 +15906,160 @@
         const [radioCount, setRadioCount] = useState(3);
         const [disabled, setDisabled] = useState(false);
         const [labelPosition, setLabelPosition] = useState("end");
-        const asyncCheckboxInput = A$1(async (checked) => {
+        const asyncCheckboxInput = A$2(async (checked) => {
             await sleep$5(asyncTimeout ?? 0);
             if (asyncFails)
                 throw new Error("Attempt to change checkbox & radio failed");
             setDemoChecked(checked);
         }, [asyncTimeout, asyncFails]);
-        const asyncRadioInput = A$1(async (value) => {
+        const asyncRadioInput = A$2(async (value) => {
             await sleep$5(asyncTimeout ?? 0);
             if (asyncFails)
                 throw new Error("Attempt to change radio failed");
             setDemoRadio(value);
         }, [asyncTimeout, asyncFails]);
-        return (v$1("div", { class: "demo" },
-            v$1(Card, null,
-                v$1(CardElement, { type: "title", tag: "h2" }, "Checkboxes, switches, & radios"),
-                v$1(CardElement, null,
-                    v$1(Checkbox, { checked: demoChecked, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "I'm a checkbox")),
-                v$1(CardElement, null,
+        return (v$2("div", { class: "demo" },
+            v$2(Card, null,
+                v$2(CardElement, { type: "title", tag: "h2" }, "Checkboxes, switches, & radios"),
+                v$2(CardElement, null,
+                    v$2(Checkbox, { checked: demoChecked, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "I'm a checkbox")),
+                v$2(CardElement, null,
                     "Several components related to on/off togglable form-like selection controls are provided:",
-                    v$1("ul", null,
-                        v$1("li", null,
-                            v$1("code", null, "Checkbox")),
-                        v$1("li", null,
-                            v$1("code", null, "Switch")),
-                        v$1("li", null,
-                            v$1("code", null, "RadioGroup")),
-                        v$1("li", null,
-                            v$1("code", null, "CheckboxGroup"))),
-                    v$1("code", null, "Checkbox"),
+                    v$2("ul", null,
+                        v$2("li", null,
+                            v$2("code", null, "Checkbox")),
+                        v$2("li", null,
+                            v$2("code", null, "Switch")),
+                        v$2("li", null,
+                            v$2("code", null, "RadioGroup")),
+                        v$2("li", null,
+                            v$2("code", null, "CheckboxGroup"))),
+                    v$2("code", null, "Checkbox"),
                     " and ",
-                    v$1("code", null, "Switch"),
+                    v$2("code", null, "Switch"),
                     " work as you'd expect. ",
-                    v$1("code", null, "RadioGroup"),
+                    v$2("code", null, "RadioGroup"),
                     " is a parent around a set of ",
-                    v$1("code", null, "Radio"),
+                    v$2("code", null, "Radio"),
                     " components that communicate with each other. The children ",
-                    v$1("code", null, "Radio"),
+                    v$2("code", null, "Radio"),
                     " components can be any descendant of the parent ",
-                    v$1("code", null, "RadioGroup"),
+                    v$2("code", null, "RadioGroup"),
                     " \u2013 the DOM structure ",
-                    v$1("em", null, "does not"),
+                    v$2("em", null, "does not"),
                     " matter beyond requiring they be somewhere descendant. ",
-                    v$1("code", null, "CheckboxGroup"),
+                    v$2("code", null, "CheckboxGroup"),
                     " works similarly to ",
-                    v$1("code", null, "RadioGroup"),
+                    v$2("code", null, "RadioGroup"),
                     " in that way."),
-                v$1(CardElement, null,
+                v$2(CardElement, null,
                     "See Also: Single Select lists for an alternative to ",
-                    v$1("code", null, "RadioGroup"),
+                    v$2("code", null, "RadioGroup"),
                     ", and Multi Select lists for an alternative to ",
-                    v$1("code", null, "CheckboxGroup"),
+                    v$2("code", null, "CheckboxGroup"),
                     "."),
-                v$1(CardElement, null, "Like other components, the event handlers can be sync or async, and when disabled, all inputs remain focusable so that they can still be announced by screen readers, have tooltips via mouseover, etc."),
-                v$1(CardElement, { type: "subtitle", tag: "h3" }, "Checkbox"),
-                v$1(CardElement, null,
-                    v$1(Checkbox, { disabled: disabled, checked: demoChecked, labelPosition: labelPosition, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Checkbox")),
-                v$1(CardElement, null,
+                v$2(CardElement, null, "Like other components, the event handlers can be sync or async, and when disabled, all inputs remain focusable so that they can still be announced by screen readers, have tooltips via mouseover, etc."),
+                v$2(CardElement, { type: "subtitle", tag: "h3" }, "Checkbox"),
+                v$2(CardElement, null,
+                    v$2(Checkbox, { disabled: disabled, checked: demoChecked, labelPosition: labelPosition, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Checkbox")),
+                v$2(CardElement, null,
                     "The ",
-                    v$1("code", null, "checked"),
+                    v$2("code", null, "checked"),
                     " prop can be ",
-                    v$1("code", null, "true"),
+                    v$2("code", null, "true"),
                     ", ",
-                    v$1("code", null, "false"),
+                    v$2("code", null, "false"),
                     ", or ",
-                    v$1("code", null, "mixed"),
+                    v$2("code", null, "mixed"),
                     ". The ",
-                    v$1("code", null, "onCheck"),
+                    v$2("code", null, "onCheck"),
                     " event fires when the user initiates a change."),
-                v$1(CardElement, { type: "subtitle", tag: "h3" }, "Switch"),
-                v$1(CardElement, null,
-                    v$1(Switch, { disabled: disabled, checked: demoChecked, labelPosition: labelPosition, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Switch")),
-                v$1(CardElement, null,
+                v$2(CardElement, { type: "subtitle", tag: "h3" }, "Switch"),
+                v$2(CardElement, null,
+                    v$2(Switch, { disabled: disabled, checked: demoChecked, labelPosition: labelPosition, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Switch")),
+                v$2(CardElement, null,
                     "In terms of props (not use-case), largely identical to a ",
-                    v$1("code", null, "Checkbox"),
+                    v$2("code", null, "Checkbox"),
                     ", though it cannot have a ",
-                    v$1("code", null, "mixed"),
+                    v$2("code", null, "mixed"),
                     " state."),
-                v$1(CardElement, { type: "subtitle", tag: "h3" }, "Radio group"),
-                v$1(CardElement, null,
-                    v$1(RadioGroup, { name: "radio-demo-0", selectedValue: demoRadio, onValueChange: usesAsync ? asyncRadioInput : setDemoRadio }, Array.from(function* () {
+                v$2(CardElement, { type: "subtitle", tag: "h3" }, "Radio group"),
+                v$2(CardElement, null,
+                    v$2(RadioGroup, { name: "radio-demo-0", selectedValue: demoRadio, onValueChange: usesAsync ? asyncRadioInput : setDemoRadio }, Array.from(function* () {
                         for (let i = 0; i < (radioCount ?? 0); ++i) {
-                            yield v$1(Radio, { disabled: disabled, labelPosition: labelPosition, index: i, value: i, key: i },
+                            yield v$2(Radio, { disabled: disabled, labelPosition: labelPosition, index: i, value: i, key: i },
                                 "Radio #",
                                 i + 1);
                         }
                     }()))),
-                v$1(CardElement, null,
+                v$2(CardElement, null,
                     "The individual ",
-                    v$1("code", null, "RadioButton"),
+                    v$2("code", null, "RadioButton"),
                     "s ",
-                    v$1("strong", null, "do not"),
+                    v$2("strong", null, "do not"),
                     " accept a ",
-                    v$1("code", null, "checked"),
+                    v$2("code", null, "checked"),
                     " prop; instead, the parent ",
-                    v$1("code", null, "RadioGroup"),
+                    v$2("code", null, "RadioGroup"),
                     " accepts a ",
-                    v$1("code", null, "selectedValue"),
+                    v$2("code", null, "selectedValue"),
                     ". Similarly, the ",
-                    v$1("code", null, "onValueChange"),
+                    v$2("code", null, "onValueChange"),
                     " event handler lives on that parent ",
-                    v$1("code", null, "RadioGroup"),
+                    v$2("code", null, "RadioGroup"),
                     ". The individual child ",
-                    v$1("code", null, "Radio"),
+                    v$2("code", null, "Radio"),
                     "s can be, e.g., marked as ",
-                    v$1("code", null, "disabled"),
+                    v$2("code", null, "disabled"),
                     ", styled, etc. but all the logic happens with the parent."),
-                v$1(CardElement, { type: "subtitle", tag: "h3" }, "Demos"),
-                v$1(CardElement, null,
-                    v$1(InputGrid, null,
-                        v$1(InputGroup, null,
-                            v$1(Checkbox, { onCheck: setUsesAsync, checked: usesAsync, labelPosition: "start" }, "Async event handler")),
-                        v$1(InputGroup, null,
-                            v$1(Checkbox, { onCheck: setAsyncFails, checked: asyncFails, labelPosition: "start", disabled: !usesAsync }, "Async handler rejects")),
-                        v$1(InputGroup, null,
-                            v$1(Input, { disabled: !usesAsync, type: "number", onValueChange: setAsyncTimeout, value: asyncTimeout }, "Async timeout")),
-                        v$1(InputGroup, null,
-                            v$1(Input, { type: "number", onValueChange: setRadioCount, value: radioCount }, "# of radio buttons")),
-                        v$1(InputGroup, null,
-                            v$1(Checkbox, { onCheck: setDisabled, checked: disabled, labelPosition: "start" }, "Inputs disabled")),
-                        v$1(RadioGroup, { name: "radio-demo-6", selectedValue: labelPosition, onValueChange: setLabelPosition },
-                            v$1(InputGroup, null,
-                                v$1(Radio, { index: 0, value: "start", labelPosition: "start" }, "Label before")),
-                            v$1(InputGroup, null,
-                                v$1(Radio, { index: 1, value: "end", labelPosition: "start" }, "Label after")),
-                            v$1(InputGroup, null,
-                                v$1(Radio, { index: 2, value: "hidden", labelPosition: "start" }, "Label hidden (still announced verbally)"))))),
-                v$1(GridStatic, { columns: 2 },
-                    v$1(CardElement, null,
-                        v$1(Checkbox, { disabled: disabled, checked: demoChecked, labelPosition: labelPosition, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Checkbox"),
-                        v$1(Switch, { disabled: disabled, checked: demoChecked, labelPosition: labelPosition, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Switch"),
-                        v$1(RadioGroup, { name: "radio-demo-1a", selectedValue: demoRadio, onValueChange: usesAsync ? asyncRadioInput : setDemoRadio }, Array.from(function* () {
+                v$2(CardElement, { type: "subtitle", tag: "h3" }, "Demos"),
+                v$2(CardElement, null,
+                    v$2(InputGrid, null,
+                        v$2(InputGroup, null,
+                            v$2(Checkbox, { onCheck: setUsesAsync, checked: usesAsync, labelPosition: "start" }, "Async event handler")),
+                        v$2(InputGroup, null,
+                            v$2(Checkbox, { onCheck: setAsyncFails, checked: asyncFails, labelPosition: "start", disabled: !usesAsync }, "Async handler rejects")),
+                        v$2(InputGroup, null,
+                            v$2(Input, { disabled: !usesAsync, type: "number", onValueChange: setAsyncTimeout, value: asyncTimeout }, "Async timeout")),
+                        v$2(InputGroup, null,
+                            v$2(Input, { type: "number", onValueChange: setRadioCount, value: radioCount }, "# of radio buttons")),
+                        v$2(InputGroup, null,
+                            v$2(Checkbox, { onCheck: setDisabled, checked: disabled, labelPosition: "start" }, "Inputs disabled")),
+                        v$2(RadioGroup, { name: "radio-demo-6", selectedValue: labelPosition, onValueChange: setLabelPosition },
+                            v$2(InputGroup, null,
+                                v$2(Radio, { index: 0, value: "start", labelPosition: "start" }, "Label before")),
+                            v$2(InputGroup, null,
+                                v$2(Radio, { index: 1, value: "end", labelPosition: "start" }, "Label after")),
+                            v$2(InputGroup, null,
+                                v$2(Radio, { index: 2, value: "hidden", labelPosition: "start" }, "Label hidden (still announced verbally)"))))),
+                v$2(GridStatic, { columns: 2 },
+                    v$2(CardElement, null,
+                        v$2(Checkbox, { disabled: disabled, checked: demoChecked, labelPosition: labelPosition, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Checkbox"),
+                        v$2(Switch, { disabled: disabled, checked: demoChecked, labelPosition: labelPosition, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Switch"),
+                        v$2(RadioGroup, { name: "radio-demo-1a", selectedValue: demoRadio, onValueChange: usesAsync ? asyncRadioInput : setDemoRadio }, Array.from(function* () {
                             for (let i = 0; i < (radioCount ?? 0); ++i) {
-                                yield v$1(Radio, { disabled: disabled, labelPosition: labelPosition, index: i, value: i, key: i },
+                                yield v$2(Radio, { disabled: disabled, labelPosition: labelPosition, index: i, value: i, key: i },
                                     "Radio #",
                                     i + 1);
                             }
                         }()))),
-                    v$1(CardElement, null,
-                        v$1(InputGrid, null,
-                            v$1(InputGroup, null,
-                                v$1(Checkbox, { disabled: disabled, checked: demoChecked, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Checkbox")),
-                            v$1(InputGroup, null,
-                                v$1(Switch, { disabled: disabled, checked: demoChecked, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Switch")),
-                            v$1(RadioGroup, { name: "radio-demo-1b", selectedValue: demoRadio, onValueChange: usesAsync ? asyncRadioInput : setDemoRadio }, Array.from(function* () {
+                    v$2(CardElement, null,
+                        v$2(InputGrid, null,
+                            v$2(InputGroup, null,
+                                v$2(Checkbox, { disabled: disabled, checked: demoChecked, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Checkbox")),
+                            v$2(InputGroup, null,
+                                v$2(Switch, { disabled: disabled, checked: demoChecked, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Switch")),
+                            v$2(RadioGroup, { name: "radio-demo-1b", selectedValue: demoRadio, onValueChange: usesAsync ? asyncRadioInput : setDemoRadio }, Array.from(function* () {
                                 for (let i = 0; i < (radioCount ?? 0); ++i) {
-                                    yield v$1(InputGroup, null,
-                                        v$1(Radio, { disabled: disabled, labelPosition: labelPosition, index: i, value: i, key: i },
+                                    yield v$2(InputGroup, null,
+                                        v$2(Radio, { disabled: disabled, labelPosition: labelPosition, index: i, value: i, key: i },
                                             "Radio #",
                                             i + 1));
                                 }
                             }())))),
-                    v$1(CardElement, null)),
-                v$1(CardElement, { type: "paragraph" },
-                    v$1("code", null, `<Checkbox checked={checked} onInput={setChecked}>Checkbox</Checkbox>
+                    v$2(CardElement, null)),
+                v$2(CardElement, { type: "paragraph" },
+                    v$2("code", null, `<Checkbox checked={checked} onInput={setChecked}>Checkbox</Checkbox>
 <Switch checked={checked} onInput={onInput}>Switch</Switch>
 <RadioGroup name="radio-demo-1" selectedValue={value} onInput={setValue}>
 <Radio index={0} value="value1">Radio #1</Radio>
@@ -16084,13 +16078,13 @@
         const [text, setText] = useState("");
         const [number, setNumber] = useState(0);
         const [size, setSize] = useState("md");
-        const asyncTextInput = A$1(async (text) => {
+        const asyncTextInput = A$2(async (text) => {
             await sleep$4(asyncTimeout ?? 0);
             if (asyncFails)
                 throw new Error("Attempt to change text failed");
             setText(text);
         }, [asyncTimeout, asyncFails]);
-        const asyncNumberInput = A$1(async (value) => {
+        const asyncNumberInput = A$2(async (value) => {
             await sleep$4(asyncTimeout ?? 0);
             if (asyncFails)
                 throw new Error("Attempt to change number failed");
@@ -16098,52 +16092,52 @@
         }, [asyncTimeout, asyncFails]);
         const onTextInput = usesAsync ? asyncTextInput : setText;
         const onNumberInput = usesAsync ? asyncNumberInput : setNumber;
-        return (v$1("div", { class: "demo" },
-            v$1(Card, null,
-                v$1(CardElement, { type: "title", tag: "h2" }, "Text boxes"),
-                v$1(CardElement, null,
-                    v$1("div", { class: "position-relative" },
-                        v$1(Input, { type: "text", value: text, onValueChange: onTextInput }, "I'm a text box"))),
-                v$1(CardElement, null,
-                    v$1("code", null, "<Input>"),
+        return (v$2("div", { class: "demo" },
+            v$2(Card, null,
+                v$2(CardElement, { type: "title", tag: "h2" }, "Text boxes"),
+                v$2(CardElement, null,
+                    v$2("div", { class: "position-relative" },
+                        v$2(Input, { type: "text", value: text, onValueChange: onTextInput }, "I'm a text box"))),
+                v$2(CardElement, null,
+                    v$2("code", null, "<Input>"),
                     " components allow for inputting text, numbers, etc. and asyncronously saving it somewhere else as it's being typed."),
-                v$1(CardElement, { type: "subtitle", tag: "h3" }, "Async inputs"),
-                v$1(CardElement, null,
+                v$2(CardElement, { type: "subtitle", tag: "h3" }, "Async inputs"),
+                v$2(CardElement, null,
                     "The ",
-                    v$1("code", null, "onInput"),
+                    v$2("code", null, "onInput"),
                     " event handler for all types of inputs can be sync or async.",
-                    v$1(InputGrid, null,
-                        v$1(InputGroup, null,
-                            v$1(Checkbox, { onCheck: setUsesAsync, checked: usesAsync, labelPosition: "start" }, "Async event handler")),
-                        v$1(InputGroup, null,
-                            v$1(Checkbox, { onCheck: setAsyncFails, checked: asyncFails, labelPosition: "start", disabled: !usesAsync }, "Async handler rejects")),
-                        v$1(InputGroup, null,
-                            v$1(Input, { disabled: !usesAsync, type: "number", onValueChange: setAsyncTimeout, value: asyncTimeout }, "Async timeout")))),
-                v$1(CardElement, null,
-                    v$1("div", { class: "position-relative" },
-                        v$1(Input, { type: "text", value: text, onValueChange: onTextInput }, "Text-based input")),
-                    v$1("div", { class: "position-relative" },
-                        v$1(Input, { type: "number", value: number, onValueChange: onNumberInput, min: -5 }, "Number-based input"))),
-                v$1(CardElement, { type: "paragraph" },
-                    v$1("code", null, `<Input type="text" value={text} onInput={onTextInput}>Text-based input</Input>
+                    v$2(InputGrid, null,
+                        v$2(InputGroup, null,
+                            v$2(Checkbox, { onCheck: setUsesAsync, checked: usesAsync, labelPosition: "start" }, "Async event handler")),
+                        v$2(InputGroup, null,
+                            v$2(Checkbox, { onCheck: setAsyncFails, checked: asyncFails, labelPosition: "start", disabled: !usesAsync }, "Async handler rejects")),
+                        v$2(InputGroup, null,
+                            v$2(Input, { disabled: !usesAsync, type: "number", onValueChange: setAsyncTimeout, value: asyncTimeout }, "Async timeout")))),
+                v$2(CardElement, null,
+                    v$2("div", { class: "position-relative" },
+                        v$2(Input, { type: "text", value: text, onValueChange: onTextInput }, "Text-based input")),
+                    v$2("div", { class: "position-relative" },
+                        v$2(Input, { type: "number", value: number, onValueChange: onNumberInput, min: -5 }, "Number-based input"))),
+                v$2(CardElement, { type: "paragraph" },
+                    v$2("code", null, `<Input type="text" value={text} onInput={onTextInput}>Text-based input</Input>
 <Input type="number" value={number} onInput={onNumberInput} min={-5}>Number-based input</Input>`)),
-                v$1(CardElement, { type: "paragraph" },
+                v$2(CardElement, { type: "paragraph" },
                     "When placed in an ",
-                    v$1("code", null, "<InputGroup>"),
+                    v$2("code", null, "<InputGroup>"),
                     ", the styling will be significantly different:"),
-                v$1(CardElement, null,
-                    v$1(ButtonGroup, null,
-                        v$1(ButtonGroupChild, { index: 0, pressed: size == "sm", onPressToggle: e => setSize("sm") }, "Small"),
-                        v$1(ButtonGroupChild, { index: 1, pressed: size == "md", onPressToggle: e => setSize("md") }, "Medium"),
-                        v$1(ButtonGroupChild, { index: 2, pressed: size == "lg", onPressToggle: e => setSize("lg") }, "Large"))),
-                v$1(CardElement, null,
-                    v$1(InputGrid, null,
-                        v$1(InputGroup, { size: size },
-                            v$1(Input, { type: "text", value: text, onValueChange: onTextInput }, "Text-based input")),
-                        v$1(InputGroup, { size: size },
-                            v$1(Input, { type: "number", value: number, onValueChange: onNumberInput, min: -5 }, "Number-based input")))),
-                v$1(CardElement, { type: "paragraph" },
-                    v$1("code", null, `<InputGrid>
+                v$2(CardElement, null,
+                    v$2(ButtonGroup, null,
+                        v$2(ButtonGroupChild, { index: 0, pressed: size == "sm", onPressToggle: e => setSize("sm") }, "Small"),
+                        v$2(ButtonGroupChild, { index: 1, pressed: size == "md", onPressToggle: e => setSize("md") }, "Medium"),
+                        v$2(ButtonGroupChild, { index: 2, pressed: size == "lg", onPressToggle: e => setSize("lg") }, "Large"))),
+                v$2(CardElement, null,
+                    v$2(InputGrid, null,
+                        v$2(InputGroup, { size: size },
+                            v$2(Input, { type: "text", value: text, onValueChange: onTextInput }, "Text-based input")),
+                        v$2(InputGroup, { size: size },
+                            v$2(Input, { type: "number", value: number, onValueChange: onNumberInput, min: -5 }, "Number-based input")))),
+                v$2(CardElement, { type: "paragraph" },
+                    v$2("code", null, `<InputGrid>
     <InputGroup size={size}><Input type="text" value={text} onInput={onTextInput}>Text-based input</Input></InputGroup>
     <InputGroup size={size}><Input type="number" value={number} onInput={onNumberInput} min={-5}>Number-based input</Input></InputGroup>
 </InputGrid>`)))));
@@ -16153,77 +16147,77 @@
     }
 
     function DemoLayout() {
-        return (v$1("div", { class: "demo" },
-            v$1(Card, null,
-                v$1(CardElement, { type: "title", tag: "h2" }, "Layout"),
-                v$1(CardElement, null, "A number of utility components and CSS classes are provided to make it easier to create quick and dirty layouts."),
-                v$1(CardElement, { type: "subtitle", tag: "h3" }, "Simple grids"),
-                v$1(CardElement, null,
+        return (v$2("div", { class: "demo" },
+            v$2(Card, null,
+                v$2(CardElement, { type: "title", tag: "h2" }, "Layout"),
+                v$2(CardElement, null, "A number of utility components and CSS classes are provided to make it easier to create quick and dirty layouts."),
+                v$2(CardElement, { type: "subtitle", tag: "h3" }, "Simple grids"),
+                v$2(CardElement, null,
                     "Two different grid components are provided for two separate use cases:",
-                    v$1("ul", null,
-                        v$1("li", null,
+                    v$2("ul", null,
+                        v$2("li", null,
                             "<",
-                            v$1("code", null, "GridResponsive"),
+                            v$2("code", null, "GridResponsive"),
                             ">, which takes a minimum column size and fits as many columns as possible given that constraint"),
-                        v$1("li", null,
+                        v$2("li", null,
                             "<",
-                            v$1("code", null, "GridStatic"),
+                            v$2("code", null, "GridStatic"),
                             ">, which takes a minimum column count and fits that many columns in no matter the resulting size and/or jankiness"))),
-                v$1(CardElement, { type: "subtitle", tag: "h3" },
-                    v$1("code", null, "<InputGroup>"),
+                v$2(CardElement, { type: "subtitle", tag: "h3" },
+                    v$2("code", null, "<InputGroup>"),
                     " & ",
-                    v$1("code", null, "<InputGrid>")),
-                v$1(CardElement, null,
+                    v$2("code", null, "<InputGrid>")),
+                v$2(CardElement, null,
                     "All input types, from checkboxes to number inputs, can be placed within an ",
-                    v$1("code", null, "<InputGrid>"),
+                    v$2("code", null, "<InputGrid>"),
                     " to give an alternate styling to the default \"free floating\" style."),
-                v$1("div", { style: { display: "contents", "--static-grid-columns": "10em auto" } },
-                    v$1(CardElement, null,
+                v$2("div", { style: { display: "contents", "--static-grid-columns": "10em auto" } },
+                    v$2(CardElement, null,
                         "With an ",
-                        v$1("code", null, "<InputGroup>"),
+                        v$2("code", null, "<InputGroup>"),
                         ":",
-                        v$1(GridStatic, { columns: 2 },
-                            v$1(InputGroup, null,
-                                v$1(Checkbox, { disabled: true, checked: true, labelPosition: "start" }, "Checkbox")),
-                            v$1("code", null, `<InputGroup><Checkbox disabled checked={true} labelPosition="start">Checkbox</Checkbox></InputGroup>`))),
-                    v$1(CardElement, null,
+                        v$2(GridStatic, { columns: 2 },
+                            v$2(InputGroup, null,
+                                v$2(Checkbox, { disabled: true, checked: true, labelPosition: "start" }, "Checkbox")),
+                            v$2("code", null, `<InputGroup><Checkbox disabled checked={true} labelPosition="start">Checkbox</Checkbox></InputGroup>`))),
+                    v$2(CardElement, null,
                         "Without an ",
-                        v$1("code", null, "<InputGroup>"),
+                        v$2("code", null, "<InputGroup>"),
                         ":",
-                        v$1(GridStatic, { columns: 2 },
-                            v$1(Checkbox, { disabled: true, checked: true, labelPosition: "start" }, "Checkbox"),
-                            v$1("code", null, `<Checkbox disabled checked={true} labelPosition="start">Checkbox</Checkbox>`)))),
-                v$1(CardElement, null,
+                        v$2(GridStatic, { columns: 2 },
+                            v$2(Checkbox, { disabled: true, checked: true, labelPosition: "start" }, "Checkbox"),
+                            v$2("code", null, `<Checkbox disabled checked={true} labelPosition="start">Checkbox</Checkbox>`)))),
+                v$2(CardElement, null,
                     "In addition, to help with alignment, a set of ",
-                    v$1("code", null, "InputGroup"),
+                    v$2("code", null, "InputGroup"),
                     "s can also be placed within an ",
-                    v$1("code", null, "InputGrid"),
+                    v$2("code", null, "InputGrid"),
                     " to manage simple cases.",
-                    v$1("code", null, `<InputGrid>
+                    v$2("code", null, `<InputGrid>
     <InputGroup><Checkbox disabled checked={true} labelPosition="start">Checkbox</Checkbox></InputGroup>
     {...}
 </InputGrid>`)),
-                v$1(CardElement, null,
+                v$2(CardElement, null,
                     "With an ",
-                    v$1("code", null, "<InputGrid>"),
+                    v$2("code", null, "<InputGrid>"),
                     ":",
-                    v$1(InputGrid, null,
-                        v$1(InputGroup, null,
-                            v$1(Checkbox, { disabled: true, checked: true, labelPosition: "start" }, "Checkbox")),
-                        v$1(InputGroup, null,
-                            v$1(Checkbox, { disabled: true, checked: true, labelPosition: "start" }, "Another checkbox")),
-                        v$1(InputGroup, null,
-                            v$1(Input, { disabled: true, onValueChange: () => { }, type: "number", value: 0 }, "Numeric input")))),
-                v$1(CardElement, null,
+                    v$2(InputGrid, null,
+                        v$2(InputGroup, null,
+                            v$2(Checkbox, { disabled: true, checked: true, labelPosition: "start" }, "Checkbox")),
+                        v$2(InputGroup, null,
+                            v$2(Checkbox, { disabled: true, checked: true, labelPosition: "start" }, "Another checkbox")),
+                        v$2(InputGroup, null,
+                            v$2(Input, { disabled: true, onValueChange: () => { }, type: "number", value: 0 }, "Numeric input")))),
+                v$2(CardElement, null,
                     "Without an ",
-                    v$1("code", null, "<InputGrid>"),
+                    v$2("code", null, "<InputGrid>"),
                     ":",
-                    v$1(InputGroup, null,
-                        v$1(Checkbox, { disabled: true, checked: true, labelPosition: "start" }, "Checkbox")),
-                    v$1(InputGroup, null,
-                        v$1(Checkbox, { disabled: true, checked: true, labelPosition: "start" }, "Another checkbox")),
-                    v$1(InputGroup, null,
-                        v$1(Input, { disabled: true, onValueChange: () => { }, type: "number", value: 0 }, "Numeric input"))))));
+                    v$2(InputGroup, null,
+                        v$2(Checkbox, { disabled: true, checked: true, labelPosition: "start" }, "Checkbox")),
+                    v$2(InputGroup, null,
+                        v$2(Checkbox, { disabled: true, checked: true, labelPosition: "start" }, "Another checkbox")),
+                    v$2(InputGroup, null,
+                        v$2(Input, { disabled: true, onValueChange: () => { }, type: "number", value: 0 }, "Numeric input"))))));
     }
 
     /**
@@ -16232,7 +16226,7 @@
      *
      */
 
-    const FontIcon = g(forwardElementRef(function FontIcon(_ref, ref) {
+    const FontIcon = g$1(forwardElementRef(function FontIcon(_ref, ref) {
       let {
         label,
         tooltip,
@@ -16240,12 +16234,12 @@
         "aria-label": ariaLabel,
         ...props
       } = _ref;
-      const iconElement = v$1("i", { ...props,
+      const iconElement = v$2("i", { ...props,
         role: label ? "img" : "presentation",
         "aria-label": ariaLabel || (label !== null && label !== void 0 ? label : undefined),
         ref: ref
       });
-      if (tooltip) return v$1(Tooltip, {
+      if (tooltip) return v$2(Tooltip, {
         tooltip: tooltip
       }, iconElement);
       return iconElement;
@@ -16255,7 +16249,7 @@
      * Specialization of a FontIcon to display any given Bootstrap icon.
      */
 
-    const BootstrapIcon = g(forwardElementRef(function BootstrapIcon(_ref, ref) {
+    const BootstrapIcon = g$1(forwardElementRef(function BootstrapIcon(_ref, ref) {
       let {
         icon,
         label,
@@ -16267,7 +16261,7 @@
         class: `bi bi-${icon}`
       }, props); // Render the actual FontIcon
 
-      return v$1(FontIcon, { ...mergedProps,
+      return v$2(FontIcon, { ...mergedProps,
         label: label,
         tooltip: tooltip,
         ref: ref
@@ -16284,7 +16278,7 @@
         useState(true);
         const [forceOpen, setForceOpen] = useState(true);
         const pushToast = usePushToast();
-        const onPressSync = () => pushToast(v$1(Toast, null, "Menu item was clicked"));
+        const onPressSync = () => pushToast(v$2(Toast, null, "Menu item was clicked"));
         const onPressAsync = async () => {
             await sleep$3(asyncTimeout);
             if (asyncFails)
@@ -16292,147 +16286,147 @@
             else
                 onPressSync();
         };
-        return (v$1("div", { class: "demo" },
-            v$1(Card, null,
-                v$1(CardElement, { type: "title", tag: "h2" }, "Menus"),
-                v$1(CardElement, null,
-                    v$1(Menu, { anchor: v$1(Button, null, "I'm a menu") },
-                        v$1(MenuItem, { index: 0, onPress: onPressAsync }, "A: Item 1"),
-                        v$1(MenuItem, { index: 1, onPress: onPressAsync }, "B: Item 2"),
-                        v$1(MenuItem, { index: 2, onPress: onPressAsync }, "C: Item 3"),
-                        v$1(MenuItem, { index: 3 }, "I'm static"))),
-                v$1(CardElement, null,
-                    v$1("code", null, "<Menu>"),
+        return (v$2("div", { class: "demo" },
+            v$2(Card, null,
+                v$2(CardElement, { type: "title", tag: "h2" }, "Menus"),
+                v$2(CardElement, null,
+                    v$2(Menu, { anchor: v$2(Button, null, "I'm a menu") },
+                        v$2(MenuItem, { index: 0, onPress: onPressAsync }, "A: Item 1"),
+                        v$2(MenuItem, { index: 1, onPress: onPressAsync }, "B: Item 2"),
+                        v$2(MenuItem, { index: 2, onPress: onPressAsync }, "C: Item 3"),
+                        v$2(MenuItem, { index: 3 }, "I'm static"))),
+                v$2(CardElement, null,
+                    v$2("code", null, "<Menu>"),
                     "s are effectively popup ",
-                    v$1("code", null, "<List>"),
+                    v$2("code", null, "<List>"),
                     "s. This gives them all the usual list stuff like keyboard navigation (either with the arrow keys or by typing the text content of the ",
-                    v$1("code", null, "<MenuItem>"),
+                    v$2("code", null, "<MenuItem>"),
                     "), ",
-                    v$1(Tooltip, { side: "block-end", mouseoverDelay: 0, tooltip: "Just like this tooltip" },
+                    v$2(Tooltip, { side: "block-end", mouseoverDelay: 0, tooltip: "Just like this tooltip" },
                         "with the popup logic handled by ",
-                        v$1("a", { href: "https://popper.js.org/" }, "Popper")),
+                        v$2("a", { href: "https://popper.js.org/" }, "Popper")),
                     "."),
-                v$1(CardElement, null,
-                    v$1("code", null, `<Menu anchor={<Button>I'm a menu</Button>}>
+                v$2(CardElement, null,
+                    v$2("code", null, `<Menu anchor={<Button>I'm a menu</Button>}>
     <MenuItem index={0} onPress={onPress}>A: Item 1</MenuItem>
     <MenuItem index={1} onPress={onPress}>B: Item 2</MenuItem>
     <MenuItem index={2} onPress={onPress}>C: Item 3</MenuItem>
     <MenuItem index={3}>I'm static</MenuItem>
 </Menu>`)),
-                v$1("hr", null),
-                v$1(CardElement, { type: "subtitle", tag: "h3" }, "Structure"),
-                v$1(CardElement, null,
+                v$2("hr", null),
+                v$2(CardElement, { type: "subtitle", tag: "h3" }, "Structure"),
+                v$2(CardElement, null,
                     "A ",
-                    v$1("code", null, "<Menu>"),
+                    v$2("code", null, "<Menu>"),
                     " requires both a selection of ",
-                    v$1("code", null, "<MenuItem>"),
+                    v$2("code", null, "<MenuItem>"),
                     "s and also an ",
-                    v$1("code", null, "anchor"),
+                    v$2("code", null, "anchor"),
                     ", provided by the prop of the same name.  By default, it's assumed that this will be a component that acceps an ",
-                    v$1("code", null, "onPress"),
+                    v$2("code", null, "onPress"),
                     " event handler, like ",
-                    v$1("code", null, "<Button>"),
+                    v$2("code", null, "<Button>"),
                     "s do.  If you need to use a different event handler (such as ",
-                    v$1("code", null, "onClick"),
+                    v$2("code", null, "onClick"),
                     ", if your menu isn't tied to a ",
-                    v$1("code", null, "<Button>"),
+                    v$2("code", null, "<Button>"),
                     "), you can pass the name of the prop to use instead to ",
-                    v$1("code", null, "<anchorEventName>")),
-                v$1("hr", null),
-                v$1(CardElement, { type: "subtitle", tag: "h3" }, "Positioning"),
-                v$1(CardElement, { type: "paragraph" },
+                    v$2("code", null, "<anchorEventName>")),
+                v$2("hr", null),
+                v$2(CardElement, { type: "subtitle", tag: "h3" }, "Positioning"),
+                v$2(CardElement, { type: "paragraph" },
                     "A menu's position is, by default, at the start of the line and the bottom of the block (the bottom left corner for this writing mode). You can manipulate this with the ",
-                    v$1("code", null, "side"),
+                    v$2("code", null, "side"),
                     " and ",
-                    v$1("code", null, "align"),
+                    v$2("code", null, "align"),
                     " props."),
-                v$1(CardElement, { type: "paragraph" }, "The menu will also automatically flip when reaching the edge of the viewport."),
-                v$1(CardElement, null,
-                    v$1(RadioGroup, { label: "Alignment", labelPosition: "start", name: "menu-demo-1-align", selectedValue: align, onValueChange: setAlign },
-                        v$1(InputGrid, null,
-                            v$1(InputGroup, null,
-                                v$1(Radio, { index: 0, value: "start" }, "Start")),
-                            v$1(InputGroup, null,
-                                v$1(Radio, { index: 1, value: "end" }, "End")))),
-                    v$1(InputGroup, null,
-                        v$1(Checkbox, { checked: forceOpen, onCheck: setForceOpen }, "Keep menu open"))),
-                v$1(CardElement, null,
-                    v$1(GridStatic, { columns: 3 },
-                        v$1("div", null),
-                        v$1(Button, { colorVariant: "secondary", pressed: side === "block-start", onPressToggle: (pressed) => void (pressed && setSide("block-start")) }, "Block start"),
-                        v$1("div", null),
-                        v$1(Button, { colorVariant: "secondary", pressed: side === "inline-start", onPressToggle: (pressed) => void (pressed && setSide("inline-start")) }, "Inline start"),
-                        v$1(Menu, { anchor: v$1(Button, { dropdownVariant: "combined" }, "Anchored menu"), side: side, align: align, forceOpen: forceOpen },
-                            v$1(MenuItem, { index: 0, onPress: onPressAsync }, "A: Item 1"),
-                            v$1(MenuItem, { index: 1, onPress: onPressAsync }, "B: Item 2"),
-                            v$1(MenuItem, { index: 2, onPress: onPressAsync }, "C: Item 3"),
-                            v$1(MenuItem, { index: 3 }, "I'm static")),
-                        v$1(Button, { colorVariant: "secondary", pressed: side === "inline-end", onPressToggle: (pressed) => void (pressed && setSide("inline-end")) }, "Inline end"),
-                        v$1("div", null),
-                        v$1(Button, { colorVariant: "secondary", pressed: side === "block-end", onPressToggle: (pressed) => void (pressed && setSide("block-end")) }, "Block end"),
-                        v$1("div", null))),
-                v$1(CardElement, null,
-                    v$1("code", null, `<Menu anchor={<Button>Menu</Button>} side="${side}" align="${align}">
+                v$2(CardElement, { type: "paragraph" }, "The menu will also automatically flip when reaching the edge of the viewport."),
+                v$2(CardElement, null,
+                    v$2(RadioGroup, { label: "Alignment", labelPosition: "start", name: "menu-demo-1-align", selectedValue: align, onValueChange: setAlign },
+                        v$2(InputGrid, null,
+                            v$2(InputGroup, null,
+                                v$2(Radio, { index: 0, value: "start" }, "Start")),
+                            v$2(InputGroup, null,
+                                v$2(Radio, { index: 1, value: "end" }, "End")))),
+                    v$2(InputGroup, null,
+                        v$2(Checkbox, { checked: forceOpen, onCheck: setForceOpen }, "Keep menu open"))),
+                v$2(CardElement, null,
+                    v$2(GridStatic, { columns: 3 },
+                        v$2("div", null),
+                        v$2(Button, { colorVariant: "secondary", pressed: side === "block-start", onPressToggle: (pressed) => void (pressed && setSide("block-start")) }, "Block start"),
+                        v$2("div", null),
+                        v$2(Button, { colorVariant: "secondary", pressed: side === "inline-start", onPressToggle: (pressed) => void (pressed && setSide("inline-start")) }, "Inline start"),
+                        v$2(Menu, { anchor: v$2(Button, { dropdownVariant: "combined" }, "Anchored menu"), side: side, align: align, forceOpen: forceOpen },
+                            v$2(MenuItem, { index: 0, onPress: onPressAsync }, "A: Item 1"),
+                            v$2(MenuItem, { index: 1, onPress: onPressAsync }, "B: Item 2"),
+                            v$2(MenuItem, { index: 2, onPress: onPressAsync }, "C: Item 3"),
+                            v$2(MenuItem, { index: 3 }, "I'm static")),
+                        v$2(Button, { colorVariant: "secondary", pressed: side === "inline-end", onPressToggle: (pressed) => void (pressed && setSide("inline-end")) }, "Inline end"),
+                        v$2("div", null),
+                        v$2(Button, { colorVariant: "secondary", pressed: side === "block-end", onPressToggle: (pressed) => void (pressed && setSide("block-end")) }, "Block end"),
+                        v$2("div", null))),
+                v$2(CardElement, null,
+                    v$2("code", null, `<Menu anchor={<Button>Menu</Button>} side="${side}" align="${align}">
     {...}
 </Menu>`)),
-                v$1("hr", null),
-                v$1(CardElement, { type: "subtitle", tag: "h3" }, "List-likes"),
-                v$1(CardElement, { tag: "div" },
+                v$2("hr", null),
+                v$2(CardElement, { type: "subtitle", tag: "h3" }, "List-likes"),
+                v$2(CardElement, { tag: "div" },
                     "Menu items inherit the same ",
-                    v$1("code", null, "iconBefore"),
+                    v$2("code", null, "iconBefore"),
                     ", ",
-                    v$1("code", null, "iconAfter"),
+                    v$2("code", null, "iconAfter"),
                     ", ",
-                    v$1("code", null, "badge"),
+                    v$2("code", null, "badge"),
                     ", and multiple line support from the various list item types."),
-                v$1(CardElement, null,
-                    v$1(Menu, { anchor: v$1(Button, { dropdownVariant: "combined" }, "Fancy menu items"), side: side, align: align },
-                        v$1(MenuItem, { index: 0, onPress: onPressAsync, iconStart: v$1(BootstrapIcon, { icon: "pencil", label: null }) },
-                            v$1("span", { class: "h5" }, "A: Item 1"),
-                            v$1("span", null, "Line #2")),
-                        v$1(MenuItem, { index: 1, onPress: onPressAsync, iconStart: v$1(BootstrapIcon, { icon: "pencil", label: null }) },
-                            v$1("span", { class: "h5" }, "B: Item 2"),
-                            v$1("span", null, "Line #2")),
-                        v$1(MenuItem, { index: 2, onPress: onPressAsync, iconStart: v$1(BootstrapIcon, { icon: "pencil", label: null }) },
-                            v$1("span", { class: "h5" }, "C: Item 3"),
-                            v$1("span", null, "Line #2")),
-                        v$1(MenuItem, { index: 3 }, "I'm still static"))),
-                v$1("hr", null),
-                v$1(CardElement, { type: "subtitle", tag: "h3" }, "Transitions"),
-                v$1(CardElement, { tag: "div" },
+                v$2(CardElement, null,
+                    v$2(Menu, { anchor: v$2(Button, { dropdownVariant: "combined" }, "Fancy menu items"), side: side, align: align },
+                        v$2(MenuItem, { index: 0, onPress: onPressAsync, iconStart: v$2(BootstrapIcon, { icon: "pencil", label: null }) },
+                            v$2("span", { class: "h5" }, "A: Item 1"),
+                            v$2("span", null, "Line #2")),
+                        v$2(MenuItem, { index: 1, onPress: onPressAsync, iconStart: v$2(BootstrapIcon, { icon: "pencil", label: null }) },
+                            v$2("span", { class: "h5" }, "B: Item 2"),
+                            v$2("span", null, "Line #2")),
+                        v$2(MenuItem, { index: 2, onPress: onPressAsync, iconStart: v$2(BootstrapIcon, { icon: "pencil", label: null }) },
+                            v$2("span", { class: "h5" }, "C: Item 3"),
+                            v$2("span", null, "Line #2")),
+                        v$2(MenuItem, { index: 3 }, "I'm still static"))),
+                v$2("hr", null),
+                v$2(CardElement, { type: "subtitle", tag: "h3" }, "Transitions"),
+                v$2(CardElement, { tag: "div" },
                     "By default, ",
-                    v$1("code", null, "<Menu>"),
+                    v$2("code", null, "<Menu>"),
                     "s use a ",
-                    v$1("code", null, "<ZoomFade>"),
+                    v$2("code", null, "<ZoomFade>"),
                     " as their transition. This can be customized by doing the following:",
-                    v$1("ul", null,
-                        v$1("li", null,
+                    v$2("ul", null,
+                        v$2("li", null,
                             "Provide a ",
-                            v$1("code", null, "Transition"),
+                            v$2("code", null, "Transition"),
                             " prop."),
-                        v$1("li", null,
+                        v$2("li", null,
                             "The ",
-                            v$1("code", null, "<Menu>"),
+                            v$2("code", null, "<Menu>"),
                             " now accepts the same props as the transition component you passed in, with some key differences:"),
-                        v$1("li", null,
+                        v$2("li", null,
                             "Any props that this ",
-                            v$1("code", null, "Transition"),
+                            v$2("code", null, "Transition"),
                             " takes with both inline and block components, like ",
-                            v$1("code", null, "fooInline"),
+                            v$2("code", null, "fooInline"),
                             " and ",
-                            v$1("code", null, "fooBlock"),
+                            v$2("code", null, "fooBlock"),
                             ", are now replaced with ",
-                            v$1("code", null, "fooDynamic"),
+                            v$2("code", null, "fooDynamic"),
                             ", which is relative to the location of the anchor to the menu."),
-                        v$1("li", null,
+                        v$2("li", null,
                             "The menu will, based on the position of the anchor and current position of the menu, turn ",
-                            v$1("code", null, "fooDynamic"),
+                            v$2("code", null, "fooDynamic"),
                             " into ",
-                            v$1("code", null, "fooInline"),
+                            v$2("code", null, "fooInline"),
                             " or ",
-                            v$1("code", null, "fooBlock"),
+                            v$2("code", null, "fooBlock"),
                             ", optionally negated (",
-                            v$1("code", null, "1 - fooDynamic"),
+                            v$2("code", null, "1 - fooDynamic"),
                             ") if the menu is flipped because it's near the edge of the viewport."))))));
     }
     async function sleep$3(arg0) {
@@ -16444,7 +16438,7 @@
     const TableFootContext = D$1(null);
     const TableRowContext = D$1(null);
     D$1([]);
-    const Table = g(forwardElementRef(function Table(_ref, ref) {
+    const Table = g$1(forwardElementRef(function Table(_ref, ref) {
       let {
         children,
         small,
@@ -16463,26 +16457,26 @@
         useTableFoot,
         managedTableSections
       } = useTable();
-      return v$1("table", { ...useTableProps(useMergedProps()({
+      return v$2("table", { ...useTableProps(useMergedProps()({
           ref,
           className: clsx("table", small && "table-sm", striped && "table-striped", hoverable && "table-hover", border === "all" && "table-bordered", border === "none" && "table-borderless", variant && `table-${variant}`, borderColor && `border-${borderColor}`)
         }, props))
-      }, v$1(TableHeadContext.Provider, {
+      }, v$2(TableHeadContext.Provider, {
         value: useTableHead
-      }, v$1(TableBodyContext.Provider, {
+      }, v$2(TableBodyContext.Provider, {
         value: useTableBody
-      }, v$1(TableFootContext.Provider, {
+      }, v$2(TableFootContext.Provider, {
         value: useTableFoot
       }, children))));
     }));
     const CellLocationContext = D$1(null);
-    const TableSectionImpl = g(forwardElementRef(function TableSectionImpl(_ref2, ref) {
+    const TableSectionImpl = g$1(forwardElementRef(function TableSectionImpl(_ref2, ref) {
       let {
         tag,
         children,
         ...props
       } = _ref2;
-      return v$1(tag, { ...props,
+      return v$2(tag, { ...props,
         ref,
         children: Array.isArray(children) ? children : [children]
       });
@@ -16498,7 +16492,7 @@
             </TableRowContext.Provider>);
     }))*/
 
-    const TableHead = g(forwardElementRef(function TableHead(_ref3, ref) {
+    const TableHead = g$1(forwardElementRef(function TableHead(_ref3, ref) {
       let {
         variant,
         ...props
@@ -16521,11 +16515,11 @@
         passive: true,
         capture: true
       });
-      return v$1(CellLocationContext.Provider, {
+      return v$2(CellLocationContext.Provider, {
         value: "head"
-      }, v$1(TableRowContext.Provider, {
+      }, v$2(TableRowContext.Provider, {
         value: useTableHeadRow
-      }, v$1(TableSectionImpl, {
+      }, v$2(TableSectionImpl, {
         tag: "thead",
         ...useRefElementProps(useMergedProps()(useTableHeadProps({
           ref,
@@ -16533,7 +16527,7 @@
         }), props))
       })));
     }));
-    const TableBody = g(forwardElementRef(function TableBody(_ref4, ref) {
+    const TableBody = g$1(forwardElementRef(function TableBody(_ref4, ref) {
       let {
         children,
         variant,
@@ -16544,11 +16538,11 @@
         useTableBodyProps,
         useTableBodyRow
       } = F(TableBodyContext)();
-      return v$1(CellLocationContext.Provider, {
+      return v$2(CellLocationContext.Provider, {
         value: "body"
-      }, v$1(TableRowContext.Provider, {
+      }, v$2(TableRowContext.Provider, {
         value: useTableBodyRow
-      }, v$1(TableSectionImpl, {
+      }, v$2(TableSectionImpl, {
         tag: "tbody",
         ...useMergedProps()(useTableBodyProps({
           ref,
@@ -16557,7 +16551,7 @@
         }), props)
       })));
     }));
-    g(forwardElementRef(function TableFoot(_ref5, ref) {
+    g$1(forwardElementRef(function TableFoot(_ref5, ref) {
       let {
         children,
         variant,
@@ -16568,11 +16562,11 @@
         useTableFootProps,
         useTableFootRow
       } = F(TableFootContext)();
-      return v$1(CellLocationContext.Provider, {
+      return v$2(CellLocationContext.Provider, {
         value: "foot"
-      }, v$1(TableRowContext.Provider, {
+      }, v$2(TableRowContext.Provider, {
         value: useTableFootRow
-      }, v$1(TableSectionImpl, {
+      }, v$2(TableSectionImpl, {
         tag: "tfoot",
         ...useMergedProps()(useTableFootProps({
           ref,
@@ -16583,7 +16577,7 @@
     }));
     const TableCellContext = D$1(null);
     const TableHeadCellContext = D$1(null);
-    const TableRow = g(forwardElementRef(function TableRow(_ref6, ref) {
+    const TableRow = g$1(forwardElementRef(function TableRow(_ref6, ref) {
       let {
         children,
         index: indexAsUnsorted,
@@ -16609,14 +16603,14 @@
           className: clsx(variant && `table-${variant}`)
         }, props)
       });
-      return v$1(TableCellContext.Provider, {
+      return v$2(TableCellContext.Provider, {
         value: useTableCell
-      }, v$1(TableHeadCellContext.Provider, {
+      }, v$2(TableHeadCellContext.Provider, {
         value: useTableHeadCell
-      }, v$1("tr", { ...rowProps
+      }, v$2("tr", { ...rowProps
       })));
     }));
-    const TableCell = g(forwardElementRef(function TableCell(_ref7, ref) {
+    const TableCell = g$1(forwardElementRef(function TableCell(_ref7, ref) {
       let {
         value: valueAsUnsorted,
         colSpan,
@@ -16644,7 +16638,7 @@
         index: columnIndex,
         value: valueAsUnsorted
       });
-      const childrenReceiveFocus = focus != "cell" && !!children && typeof children == "object" && "type" in children && children.type !== d$1;
+      const childrenReceiveFocus = focus != "cell" && !!children && typeof children == "object" && "type" in children && children.type !== d$2;
       const displayValue = children !== null && children !== void 0 ? children : valueAsUnsorted;
       const cellProps = useTableCellProps({
         ref,
@@ -16654,15 +16648,15 @@
 
       if (childrenReceiveFocus) {
         const p1 = useMergedProps()(useTableCellDelegateProps({}), props);
-        return v$1("td", { ...cellProps
+        return v$2("td", { ...cellProps
         }, B(children, useMergedProps()(p1, children.props), children.props.children));
       } else {
         const p2 = useMergedProps()(useTableCellDelegateProps(cellProps), props);
-        return v$1("td", { ...p2
+        return v$2("td", { ...p2
         }, stringify(displayValue));
       }
     }));
-    const TableHeaderCell = g(forwardElementRef(function TableHeaderCell(_ref8, ref) {
+    const TableHeaderCell = g$1(forwardElementRef(function TableHeaderCell(_ref8, ref) {
       let {
         index: columnIndex,
         focus,
@@ -16681,7 +16675,7 @@
         tag: "th",
         index: columnIndex
       });
-      const childrenReceiveFocus = focus != "cell" && !!children && typeof children == "object" && "type" in children && children.type !== d$1;
+      const childrenReceiveFocus = focus != "cell" && !!children && typeof children == "object" && "type" in children && children.type !== d$2;
       const {
         hovering,
         useIsHoveringProps
@@ -16691,31 +16685,31 @@
         role: "columnheader",
         className: clsx(variant && `table-${variant}`, unsortable && "unsortable")
       }, props)));
-      const sortIcon = v$1(Swappable, null, v$1("div", { ...{
+      const sortIcon = v$2(Swappable, null, v$2("div", { ...{
           class: clsx("table-sort-icon-container")
         }
-      }, v$1(Flip, {
+      }, v$2(Flip, {
         flipAngleInline: 180,
         show: sortDirection == "descending"
-      }, v$1("div", {
+      }, v$2("div", {
         class: "bi bi-sort-up"
-      })), v$1(Flip, {
+      })), v$2(Flip, {
         flipAngleInline: 180,
         show: hovering && sortDirection == null || sortDirection == "ascending"
-      }, v$1("div", {
+      }, v$2("div", {
         class: "bi bi-sort-down-alt"
       }))));
 
       if (childrenReceiveFocus) {
         const p1 = useMergedProps()(useTableHeadCellDelegateProps({}), props);
-        return v$1("th", { ...cellProps
-        }, v$1("div", {
+        return v$2("th", { ...cellProps
+        }, v$2("div", {
           class: "th-spacing"
         }, B(children, useMergedProps()(p1, children.props), children.props.children), sortIcon));
       } else {
         const p2 = useMergedProps()(useTableHeadCellDelegateProps(cellProps), props);
-        return v$1("th", { ...p2
-        }, v$1("div", {
+        return v$2("th", { ...p2
+        }, v$2("div", {
           class: "th-spacing"
         }, children, sortIcon));
       }
@@ -16723,10 +16717,10 @@
 
     function useIsHovering() {
       const [hovering, setHovering] = useState(false);
-      const onMouseEnter = A$1(() => {
+      const onMouseEnter = A$2(() => {
         setHovering(true);
       }, []);
-      const onMouseLeave = A$1(() => {
+      const onMouseLeave = A$2(() => {
         setHovering(false);
       }, []);
       useGlobalHandler(window, "blur", onMouseLeave);
@@ -16747,64 +16741,64 @@
 
     var RandomWords$1 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.".split(" ");
     const formatter = new Intl.DateTimeFormat("en-US", { year: "numeric", month: "short", day: "numeric" });
-    const RandomRow = g(function RandomRow({ index, unsortedRowIndex, filterEvens }) {
+    const RandomRow = g$1(function RandomRow({ index, unsortedRowIndex, filterEvens }) {
         console.log(`RandomRow ${index}, ${unsortedRowIndex}`);
         const i = index;
         const w = RandomWords$1[i];
         const [n, setN] = useState((i + 0) ** 2);
         const d = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + (n ?? 0) * 7);
         const [checked, setChecked] = useState(false);
-        const onInput = A$1(async (checked) => {
+        const onInput = A$2(async (checked) => {
             await sleep$2(2000);
             setChecked(checked);
         }, []);
-        return (v$1(TableRow, { hidden: filterEvens && (((n ?? 0) & 1) == 0), index: index },
-            v$1(TableCell, { index: 0, value: n, colSpan: !w ? 2 : undefined },
-                v$1(Input, { type: "number", width: "4ch", value: n, onValueChange: setN, labelPosition: "hidden", min: 0 }, "Numeric input")),
-            w && v$1(TableCell, { index: 1, value: w }),
-            v$1(TableCell, { index: 2, value: d }, formatter.format(d)),
-            v$1(TableCell, { index: 3, value: checked },
-                v$1(Checkbox, { checked: checked, onCheck: onInput, labelPosition: "hidden" }, "Demo table checkbox"))));
+        return (v$2(TableRow, { hidden: filterEvens && (((n ?? 0) & 1) == 0), index: index },
+            v$2(TableCell, { index: 0, value: n, colSpan: !w ? 2 : undefined },
+                v$2(Input, { type: "number", width: "4ch", value: n, onValueChange: setN, labelPosition: "hidden", min: 0 }, "Numeric input")),
+            w && v$2(TableCell, { index: 1, value: w }),
+            v$2(TableCell, { index: 2, value: d }, formatter.format(d)),
+            v$2(TableCell, { index: 3, value: checked },
+                v$2(Checkbox, { checked: checked, onCheck: onInput, labelPosition: "hidden" }, "Demo table checkbox"))));
     });
     function DemoTable() {
         const [rowCount, setRowCount] = useState(5);
         const [filterEvens, setFilterEvens] = useState(false);
-        return (v$1("div", { class: "demo" },
-            v$1(Card, null,
-                v$1(CardElement, { type: "title", tag: "h2" }, "Table"),
-                v$1(CardElement, null,
+        return (v$2("div", { class: "demo" },
+            v$2(Card, null,
+                v$2(CardElement, { type: "title", tag: "h2" }, "Table"),
+                v$2(CardElement, null,
                     "Tables allow for automatic display, navigation, sorting, and filtering of data. All data is provided by the children and you ",
-                    v$1("strong", null, "don't need to provide a data structure"),
+                    v$2("strong", null, "don't need to provide a data structure"),
                     " to the parent ",
-                    v$1("code", null, "Table"),
+                    v$2("code", null, "Table"),
                     " element, and by default all columns are user-sortable."),
-                v$1(CardElement, null,
+                v$2(CardElement, null,
                     "Sorting and filtering are done by examining each ",
-                    v$1("code", null, "TableCell"),
+                    v$2("code", null, "TableCell"),
                     "'s child (or ",
-                    v$1("code", null, "value"),
+                    v$2("code", null, "value"),
                     " prop, with ",
-                    v$1("code", null, "value"),
+                    v$2("code", null, "value"),
                     " taking precidence). If the child of the ",
-                    v$1("code", null, "TableCell"),
+                    v$2("code", null, "TableCell"),
                     " is a simple number or string (and no ",
-                    v$1("code", null, "value"),
+                    v$2("code", null, "value"),
                     " prop is provided), then that value will be used for sorting. If it's not a string (and again, if no ",
-                    v$1("code", null, "value"),
+                    v$2("code", null, "value"),
                     " prop is provided), then it will be sorted as if its contents were just an empty string, so it's almost always beneficial to provide the ",
-                    v$1("code", null, "value"),
+                    v$2("code", null, "value"),
                     " prop just in case."),
-                v$1(CardElement, null,
+                v$2(CardElement, null,
                     "A ",
-                    v$1("code", null, "TableCell"),
+                    v$2("code", null, "TableCell"),
                     " contain any content, including arbitrary HTML and other components. In terms of focus management (i.e. how using the arrow keys works within a table), a ",
-                    v$1("code", null, "TableCell"),
+                    v$2("code", null, "TableCell"),
                     " that just contains a simple string or number will focus itself when tabbed to, but a ",
-                    v$1("code", null, "TableCell"),
+                    v$2("code", null, "TableCell"),
                     " that contains other components ",
-                    v$1("strong", null, "will delegate focus to its children instead"),
+                    v$2("strong", null, "will delegate focus to its children instead"),
                     ":",
-                    v$1("code", null, `// The table cell itself will receive focus:
+                    v$2("code", null, `// The table cell itself will receive focus:
 <TableCell>Text</TableCell>
 <TableCell>0</TableCell>
 <TableCell><>Text</></TableCell> // Fragments are treated as text for these purposes
@@ -16818,44 +16812,44 @@
 
 // ✅ The cell can properly delegate all duties to the child DIV.
 <TableCell>{forwardRef((props, ref) => <p ref={ref} {...props}>text</p>)}</TableCell>`)),
-                v$1(CardElement, null,
+                v$2(CardElement, null,
                     "Finally, your rows ",
-                    v$1("em", null, "must"),
+                    v$2("em", null, "must"),
                     " be ",
-                    v$1("em", null, "direct descendants"),
+                    v$2("em", null, "direct descendants"),
                     " of ",
-                    v$1("code", null, "TableBody"),
+                    v$2("code", null, "TableBody"),
                     " (and ",
-                    v$1("code", null, "TableHead"),
+                    v$2("code", null, "TableHead"),
                     " and ",
-                    v$1("code", null, "TableFoot"),
+                    v$2("code", null, "TableFoot"),
                     ") so that it can properly call ",
-                    v$1("code", null, "createElement"),
+                    v$2("code", null, "createElement"),
                     " with the expected results when sorting. It's okay if each row you provide is a wrapper component around a single ",
-                    v$1("code", null, "TableRow"),
+                    v$2("code", null, "TableRow"),
                     "\u2014the \"direct descendant\" doesn't need to be specifically a ",
-                    v$1("code", null, "TableRow"),
+                    v$2("code", null, "TableRow"),
                     " component\u2014it's just that the ",
-                    v$1("code", null, "TableBody"),
+                    v$2("code", null, "TableBody"),
                     " (etc.) needs ",
-                    v$1("em", null, "specifically"),
+                    v$2("em", null, "specifically"),
                     " an array of children whose individual ",
-                    v$1("code", null, "key"),
+                    v$2("code", null, "key"),
                     " props can be manipulated."),
-                v$1(CardElement, null,
-                    v$1(Input, { type: "number", value: rowCount, min: 0, max: 999, onValueChange: setRowCount }, "Row count"),
-                    v$1(Checkbox, { checked: filterEvens, onCheck: setFilterEvens }, "Filter out even numbers")),
-                v$1(CardElement, null,
-                    v$1(Table, null,
-                        v$1(TableHead, null,
-                            v$1(TableRow, { hidden: false, index: 0 },
-                                v$1(TableHeaderCell, { index: 0 }, "Number"),
-                                v$1(TableHeaderCell, { index: 1 }, "String"),
-                                v$1(TableHeaderCell, { index: 2 }, "Date"),
-                                v$1(TableHeaderCell, { index: 3 }, "Checkbox"))),
-                        v$1(TableBody, { ...{ "data-test": filterEvens } }, Array.from(function* () {
+                v$2(CardElement, null,
+                    v$2(Input, { type: "number", value: rowCount, min: 0, max: 999, onValueChange: setRowCount }, "Row count"),
+                    v$2(Checkbox, { checked: filterEvens, onCheck: setFilterEvens }, "Filter out even numbers")),
+                v$2(CardElement, null,
+                    v$2(Table, null,
+                        v$2(TableHead, null,
+                            v$2(TableRow, { hidden: false, index: 0 },
+                                v$2(TableHeaderCell, { index: 0 }, "Number"),
+                                v$2(TableHeaderCell, { index: 1 }, "String"),
+                                v$2(TableHeaderCell, { index: 2 }, "Date"),
+                                v$2(TableHeaderCell, { index: 3 }, "Checkbox"))),
+                        v$2(TableBody, { ...{ "data-test": filterEvens } }, Array.from(function* () {
                             for (let i = 0; i < (rowCount ?? 0); ++i) {
-                                yield v$1(RandomRow, { key: i, index: i, filterEvens: filterEvens });
+                                yield v$2(RandomRow, { key: i, index: i, filterEvens: filterEvens });
                                 /*<TableRow index={1 + i}>
                                 <TableCell index={0} value={i} />
                                 <TableCell index={1} value={RandomWords[i]} />
@@ -16864,8 +16858,8 @@
                                 //
                             }
                         }())))),
-                v$1(CardElement, null,
-                    v$1("code", null, `<Table>
+                v$2(CardElement, null,
+                    v$2("code", null, `<Table>
     <TableHead>
         <TableRow index={0}>
             <TableHeaderCell index={0}>Number</TableHeaderCell>
@@ -16899,14 +16893,14 @@
         return new Promise(resolve => setTimeout(resolve, arg0));
     }
 
-    const Badge = g(forwardElementRef(function Badge(_ref, ref) {
+    const Badge = g$1(forwardElementRef(function Badge(_ref, ref) {
       let {
         colorVariant,
         roundedPill,
         label,
         ...props
       } = _ref;
-      return v$1("span", { ...useMergedProps()({
+      return v$2("span", { ...useMergedProps()({
           ref,
           "aria-label": label,
           className: clsx("badge", roundedPill && "rounded-pill", `bg-${colorVariant !== null && colorVariant !== void 0 ? colorVariant : "secondary"}`)
@@ -16928,78 +16922,78 @@
         usePushToast();
         function makeListItemLines(index) {
             if (lines === 1)
-                return v$1("span", null,
+                return v$2("span", null,
                     "List Item #",
                     index + 1);
-            return v$1(d$1, null, Array.from((function* () {
+            return v$2(d$2, null, Array.from((function* () {
                 for (let i = 0; i < lines; ++i) {
                     if (i == 0)
-                        yield v$1("span", { class: "h4" },
+                        yield v$2("span", { class: "h4" },
                             "List Item #",
                             index + 1);
                     else
-                        yield v$1("span", null,
+                        yield v$2("span", null,
                             "This is line #",
                             i + 1);
                 }
             })()));
         }
         function makeListItems(maker) {
-            return v$1(d$1, null, Array.from((function* () {
+            return v$2(d$2, null, Array.from((function* () {
                 for (let i = 0; i < 5; ++i) {
                     yield maker(i);
                 }
             })()));
         }
-        return (v$1("div", { class: "demo" },
-            v$1(Card, null,
-                v$1(CardElement, { type: "title", tag: "h2" }, "Lists"),
-                v$1(CardElement, null,
-                    v$1(List, { label: "Demo list", selectedIndex: selectedIndex, onSelect: setSelectedIndex }, makeListItems(index => v$1(ListItemSingle, { index: index, disabled: index == 2 }, makeListItemLines(index))))),
-                v$1(CardElement, null,
+        return (v$2("div", { class: "demo" },
+            v$2(Card, null,
+                v$2(CardElement, { type: "title", tag: "h2" }, "Lists"),
+                v$2(CardElement, null,
+                    v$2(List, { label: "Demo list", selectedIndex: selectedIndex, onSelect: setSelectedIndex }, makeListItems(index => v$2(ListItemSingle, { index: index, disabled: index == 2 }, makeListItemLines(index))))),
+                v$2(CardElement, null,
                     "A list is a way to provide a large number of selectable options in a way that's distinct from, say, a list of checkboxes or radio buttons. Lists can be ",
-                    v$1("strong", null, "single-select"),
+                    v$2("strong", null, "single-select"),
                     ", ",
-                    v$1("strong", null, "multi-select"),
+                    v$2("strong", null, "multi-select"),
                     ", or ",
-                    v$1("strong", null, "static"),
+                    v$2("strong", null, "static"),
                     " (no selection, display only)."),
-                v$1(CardElement, null,
+                v$2(CardElement, null,
                     "All list types can have as many lines as needed; each e.g. ",
-                    v$1("code", null, "<span>"),
+                    v$2("code", null, "<span>"),
                     " will create a new line. Format them however you like (i.e. making some larger or smaller, tinted different colors, etc.)",
-                    v$1(InputGroup, null,
-                        v$1(Input, { type: "number", value: lines, onValueChange: setLines }, "# of lines"))),
-                v$1(CardElement, { type: "subtitle", tag: "h3" }, "Single select"),
-                v$1(CardElement, null,
+                    v$2(InputGroup, null,
+                        v$2(Input, { type: "number", value: lines, onValueChange: setLines }, "# of lines"))),
+                v$2(CardElement, { type: "subtitle", tag: "h3" }, "Single select"),
+                v$2(CardElement, null,
                     "For single-select lists, you provide the parent ",
-                    v$1("code", null, "<List>"),
+                    v$2("code", null, "<List>"),
                     " with ",
-                    v$1("code", null, "selectedIndex"),
+                    v$2("code", null, "selectedIndex"),
                     " and ",
-                    v$1("code", null, "onSelect"),
+                    v$2("code", null, "onSelect"),
                     " props that control which ",
-                    v$1("code", null, "<ListItemSingle>"),
+                    v$2("code", null, "<ListItemSingle>"),
                     " is the selected one."),
-                v$1(CardElement, null,
+                v$2(CardElement, null,
                     "As with most components, the ",
-                    v$1("code", null, "onSelect"),
+                    v$2("code", null, "onSelect"),
                     " prop can be an async function."),
-                v$1(CardElement, null,
-                    v$1(List, { label: "Single-select list demo", selectedIndex: selectedIndex, onSelect: async (i) => { await sleep$1(2000); setSelectedIndex(i); } }, makeListItems(index => v$1(ListItemSingle, { index: index, disabled: index == 2 }, makeListItemLines(index))))),
-                v$1(CardElement, { type: "subtitle", tag: "h3" }, "Multi select"),
-                v$1(CardElement, null,
+                v$2(CardElement, null,
+                    v$2(List, { label: "Single-select list demo", selectedIndex: selectedIndex, onSelect: async (i) => { await sleep$1(2000); setSelectedIndex(i); } }, makeListItems(index => v$2(ListItemSingle, { index: index, disabled: index == 2 }, makeListItemLines(index))))),
+                v$2(CardElement, { type: "subtitle", tag: "h3" }, "Multi select"),
+                v$2(CardElement, null,
                     "Multi-select lists have a ",
-                    v$1("code", null, "selected"),
+                    v$2("code", null, "selected"),
                     " prop on each individual ",
-                    v$1("code", null, "<ListItemMulti>"),
+                    v$2("code", null, "<ListItemMulti>"),
                     "."),
-                v$1(CardElement, null,
+                v$2(CardElement, null,
                     "As with most components, the ",
-                    v$1("code", null, "onSelect"),
+                    v$2("code", null, "onSelect"),
                     " prop can be an async function."),
-                v$1(CardElement, null,
-                    v$1(List, { label: "Multi-select list demo", select: "multi" }, makeListItems(index => v$1(ListItemMulti, { index: index, selected: selectedMulti.has(index), disabled: index == 2, onSelect: async (selected) => {
+                v$2(CardElement, null,
+                    v$2(List, { label: "Multi-select list demo", select: "multi" }, makeListItems(index => v$2(ListItemMulti, { index: index, selected: selectedMulti.has(index), disabled: index == 2, onSelect: async (selected) => {
                             await sleep$1(2000);
                             setSelectedMulti(prev => {
                                 let ret = new Set(Array.from(prev));
@@ -17010,25 +17004,25 @@
                                 return ret;
                             });
                         } }, makeListItemLines(index))))),
-                v$1(CardElement, { type: "subtitle", tag: "h3" }, "Static lists"),
-                v$1(CardElement, null, "All lists share the same basic styling of a static list, so all of these options can also be used on single- and multi-select lists."),
-                v$1(CardElement, null,
+                v$2(CardElement, { type: "subtitle", tag: "h3" }, "Static lists"),
+                v$2(CardElement, null, "All lists share the same basic styling of a static list, so all of these options can also be used on single- and multi-select lists."),
+                v$2(CardElement, null,
                     "You can add an icon at the righthand side with ",
-                    v$1("code", null, "iconEnd"),
+                    v$2("code", null, "iconEnd"),
                     ":"),
-                v$1(CardElement, null,
-                    v$1(List, { label: "List with icons at the end" }, makeListItems(index => v$1(ListItemStatic, { iconEnd: v$1(BootstrapIcon, { icon: "star", label: null }) }, makeListItemLines(index))))),
-                v$1(CardElement, null,
+                v$2(CardElement, null,
+                    v$2(List, { label: "List with icons at the end" }, makeListItems(index => v$2(ListItemStatic, { iconEnd: v$2(BootstrapIcon, { icon: "star", label: null }) }, makeListItemLines(index))))),
+                v$2(CardElement, null,
                     "Or an icon on the left with ",
-                    v$1("code", null, "iconStart"),
+                    v$2("code", null, "iconStart"),
                     ", or a badge at the top-right with ",
-                    v$1("code", null, "badge"),
+                    v$2("code", null, "badge"),
                     ":"),
-                v$1(CardElement, null,
-                    v$1(List, { label: "List with icons at the start and badges" }, makeListItems(index => v$1(ListItemStatic, { badge: v$1(Badge, { label: `Example value` }, Math.floor(Math.abs(Math.sin((index + 7) * 7) * 20))), iconStart: v$1(BootstrapIcon, { icon: "star", label: null }) }, makeListItemLines(index))))),
-                v$1(CardElement, null,
+                v$2(CardElement, null,
+                    v$2(List, { label: "List with icons at the start and badges" }, makeListItems(index => v$2(ListItemStatic, { badge: v$2(Badge, { label: `Example value` }, Math.floor(Math.abs(Math.sin((index + 7) * 7) * 20))), iconStart: v$2(BootstrapIcon, { icon: "star", label: null }) }, makeListItemLines(index))))),
+                v$2(CardElement, null,
                     "All these will properly align themselves no matter how many lines the list item has. Keep in mind that a list's contents are always read out as one long string to screen readers, so not only should they ",
-                    v$1("em", null, "not"),
+                    v$2("em", null, "not"),
                     " contain interactive content (beyond itself being selectable), any additional content, should be kept as terse as possible to avoid repeated content when reading each item one at a time."))));
     }
     async function sleep$1(arg0) {
@@ -17046,132 +17040,132 @@
         useState(true);
         useState(true);
         const pushDialog = usePushDialog();
-        const onPressAsync = () => pushDialog(v$1(Dialog, { descriptive: false }, "Dialog item was clicked"));
-        return (v$1("div", { class: "demo" },
-            v$1(Card, null,
-                v$1(CardElement, { type: "title", tag: "h2" }, "Dialogs"),
-                v$1(CardElement, null,
-                    v$1(Button, { onPress: () => pushDialog(v$1(Dialog, { descriptive: false }, "This is a dialog!")) }, "Open a dialog")),
-                v$1(CardElement, null,
-                    v$1("code", null, "<Dialog>"),
+        const onPressAsync = () => pushDialog(v$2(Dialog, { descriptive: false }, "Dialog item was clicked"));
+        return (v$2("div", { class: "demo" },
+            v$2(Card, null,
+                v$2(CardElement, { type: "title", tag: "h2" }, "Dialogs"),
+                v$2(CardElement, null,
+                    v$2(Button, { onPress: () => pushDialog(v$2(Dialog, { descriptive: false }, "This is a dialog!")) }, "Open a dialog")),
+                v$2(CardElement, null,
+                    v$2("code", null, "<Dialog>"),
                     "s are a way to show the user (read: force the user to at least skim) some amount of information or other content. They can either be controlled or uncontrolled; controlled ",
-                    v$1("code", null, "<Dialog>"),
+                    v$2("code", null, "<Dialog>"),
                     "s take ",
-                    v$1("code", null, "open"),
+                    v$2("code", null, "open"),
                     " and ",
-                    v$1("code", null, "onClose"),
+                    v$2("code", null, "onClose"),
                     " props, while uncontrolled ",
-                    v$1("code", null, "<Dialog>"),
+                    v$2("code", null, "<Dialog>"),
                     "s give you a ",
-                    v$1("code", null, "async show()"),
+                    v$2("code", null, "async show()"),
                     " function to call, or can be used from ",
-                    v$1("code", null, "useShowDialog"),
+                    v$2("code", null, "useShowDialog"),
                     "."),
-                v$1(CardElement, null,
-                    v$1(Button, { onPress: onPressAsync },
-                        v$1("code", null, "usePushDialog"))),
-                v$1(CardElement, null,
-                    v$1(Button, { onPress: show ?? undefined },
-                        v$1("code", null,
+                v$2(CardElement, null,
+                    v$2(Button, { onPress: onPressAsync },
+                        v$2("code", null, "usePushDialog"))),
+                v$2(CardElement, null,
+                    v$2(Button, { onPress: show ?? undefined },
+                        v$2("code", null,
                             "<Dialog provideShow=",
                             "{provideShow}",
                             " />")),
-                    v$1(Dialog, { descriptive: false, provideShow: setShow }, "This is a dialog")),
-                v$1(CardElement, null,
+                    v$2(Dialog, { descriptive: false, provideShow: setShow }, "This is a dialog")),
+                v$2(CardElement, null,
                     "The easiest way to use them is via the ",
-                    v$1("code", null, "useShowDialog"),
+                    v$2("code", null, "useShowDialog"),
                     " hook. Pass the returned ",
-                    v$1("code", null, "showDialog"),
+                    v$2("code", null, "showDialog"),
                     " function a ",
-                    v$1("code", null, "<Dialog>"),
+                    v$2("code", null, "<Dialog>"),
                     " and it will be shown on the screen, with the function returning a promise that resolves when ",
-                    v$1("code", null, "onClose"),
+                    v$2("code", null, "onClose"),
                     " would be called (if you pass your own ",
-                    v$1("code", null, "onClose"),
+                    v$2("code", null, "onClose"),
                     " you will override this behavior which can be used if you need to prevent the dialog from closing when clicking the backdrop; use a ",
-                    v$1("code", null, "<CloseDialogButton>"),
+                    v$2("code", null, "<CloseDialogButton>"),
                     " or within your own component pass ",
-                    v$1("code", null, "useCloseDialog"),
+                    v$2("code", null, "useCloseDialog"),
                     "'s returned function to close the dialog during your own ",
-                    v$1("code", null, "onClose"),
+                    v$2("code", null, "onClose"),
                     ")."),
-                v$1(CardElement, null, "All components that use Portals to position themselves on the body will reposition themselves with the dialog as their parent instead, ensuring they still work as expected."),
-                v$1(CardElement, null,
-                    v$1(Button, { onPress: () => pushDialog(v$1(Dialog, { descriptive: false }, "This is a dialog!")) }, "Open a dialog")))));
+                v$2(CardElement, null, "All components that use Portals to position themselves on the body will reposition themselves with the dialog as their parent instead, ensuring they still work as expected."),
+                v$2(CardElement, null,
+                    v$2(Button, { onPress: () => pushDialog(v$2(Dialog, { descriptive: false }, "This is a dialog!")) }, "Open a dialog")))));
     }
 
     const RandomWords = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.".split(" ");
-    g(({ setActive, active, depth }) => {
-        return (v$1(d$1, null,
-            v$1("button", null, "Button 1"),
-            v$1("button", null, "Button 2"),
-            v$1("button", null, "Button 3"),
-            v$1("label", null,
+    g$1(({ setActive, active, depth }) => {
+        return (v$2(d$2, null,
+            v$2("button", null, "Button 1"),
+            v$2("button", null, "Button 2"),
+            v$2("button", null, "Button 3"),
+            v$2("label", null,
                 "Active: ",
-                v$1("input", { type: "checkbox", checked: active, onInput: e => { e.preventDefault(); setActive(e.currentTarget.checked); } }))));
+                v$2("input", { type: "checkbox", checked: active, onInput: e => { e.preventDefault(); setActive(e.currentTarget.checked); } }))));
     });
-    const DemoDialog = g(() => {
+    const DemoDialog = g$1(() => {
         const onClose = (() => setOpen(false));
         const [open, setOpen] = useState(false);
-        return (v$1("div", { class: "demo" },
-            v$1(Tooltip, { tooltip: "Open dialog" },
-                v$1(InputGroup, null,
-                    v$1(Checkbox, { checked: open, onCheck: setOpen }, "Open dialog"))),
-            v$1(Dialog, { open: open, onClose: onClose, descriptive: false, title: "Dialog Title", footer: v$1("button", { onClick: onClose }, "Close") },
-                v$1("p", { tabIndex: -1 }, "Dialog body content"),
-                v$1(DemoMenus, null),
-                v$1("p", null, RandomWords.join(" ")),
-                v$1("p", null, RandomWords.join(" ")),
-                v$1("p", null, RandomWords.join(" ")),
-                v$1("p", null, RandomWords.join(" ")),
-                v$1("p", null, RandomWords.join(" ")))));
+        return (v$2("div", { class: "demo" },
+            v$2(Tooltip, { tooltip: "Open dialog" },
+                v$2(InputGroup, null,
+                    v$2(Checkbox, { checked: open, onCheck: setOpen }, "Open dialog"))),
+            v$2(Dialog, { open: open, onClose: onClose, descriptive: false, title: "Dialog Title", footer: v$2("button", { onClick: onClose }, "Close") },
+                v$2("p", { tabIndex: -1 }, "Dialog body content"),
+                v$2(DemoMenus, null),
+                v$2("p", null, RandomWords.join(" ")),
+                v$2("p", null, RandomWords.join(" ")),
+                v$2("p", null, RandomWords.join(" ")),
+                v$2("p", null, RandomWords.join(" ")),
+                v$2("p", null, RandomWords.join(" ")))));
     });
-    const DemoDrawer = g(() => {
+    const DemoDrawer = g$1(() => {
         const onClose = (() => setOpen(false));
         let [open, setOpen] = useState(false);
         //open = true;
-        return (v$1("div", { class: "demo" },
-            v$1(Checkbox, { checked: open, onCheck: setOpen }, "Open Drawer"),
-            v$1(Drawer, { open: open, onClose: onClose, descriptive: false, title: "Dialog Title" },
-                v$1("p", { tabIndex: -1 }, "Dialog body content"),
-                v$1("p", null, RandomWords.join(" ")),
-                v$1("p", null, RandomWords.join(" ")),
-                v$1("p", null, RandomWords.join(" ")))));
+        return (v$2("div", { class: "demo" },
+            v$2(Checkbox, { checked: open, onCheck: setOpen }, "Open Drawer"),
+            v$2(Drawer, { open: open, onClose: onClose, descriptive: false, title: "Dialog Title" },
+                v$2("p", { tabIndex: -1 }, "Dialog body content"),
+                v$2("p", null, RandomWords.join(" ")),
+                v$2("p", null, RandomWords.join(" ")),
+                v$2("p", null, RandomWords.join(" ")))));
     });
-    const DemoMenu = g(() => {
-        return (v$1("div", { class: "demo" },
-            v$1(Menu, { Transition: ZoomFade, tag: "ul", anchor: v$1(Button, { dropdownVariant: "combined" }, "Open menu") },
-                v$1(MenuItem, { index: 0 }, "AItem #1"),
-                v$1(MenuItem, { index: 1 }, "BItem #2"),
-                v$1(MenuItem, { index: 2 }, "CItem #3"),
-                v$1(MenuItem, { index: 3 }, "DItem #4"))));
+    const DemoMenu = g$1(() => {
+        return (v$2("div", { class: "demo" },
+            v$2(Menu, { Transition: ZoomFade, tag: "ul", anchor: v$2(Button, { dropdownVariant: "combined" }, "Open menu") },
+                v$2(MenuItem, { index: 0 }, "AItem #1"),
+                v$2(MenuItem, { index: 1 }, "BItem #2"),
+                v$2(MenuItem, { index: 2 }, "CItem #3"),
+                v$2(MenuItem, { index: 3 }, "DItem #4"))));
     });
-    const DemoTabs = g(() => {
+    const DemoTabs = g$1(() => {
         const [selectedIndex, setSelectedIndex] = useState(0);
         const [selectionMode, setSelectionMode] = useState("activate");
-        return (v$1("div", { class: "demo" },
-            v$1("div", null,
-                v$1(Tabs, { orientation: "block", onSelect: setSelectedIndex, selectedIndex: selectedIndex, selectionMode: selectionMode },
-                    v$1("ol", null,
-                        v$1(Tab, { index: 0 }, "Tab #1"),
-                        v$1(Tab, { index: 1 }, "Tab #2"),
-                        v$1(Tab, { index: 2 }, "Tab #3")),
-                    v$1(TabPanel, { index: 0 },
-                        v$1("div", null, RandomWords.slice(0, Math.floor((1 / 3) * RandomWords.length)).join(" "))),
-                    v$1(TabPanel, { index: 1 },
-                        v$1("div", null, RandomWords.slice(0, Math.floor((2 / 3) * RandomWords.length)).join(" "))),
-                    v$1(TabPanel, { index: 2 },
-                        v$1("div", null, RandomWords.slice(0, Math.floor((3 / 3) * RandomWords.length)).join(" ")))))));
+        return (v$2("div", { class: "demo" },
+            v$2("div", null,
+                v$2(Tabs, { orientation: "block", onSelect: setSelectedIndex, selectedIndex: selectedIndex, selectionMode: selectionMode },
+                    v$2("ol", null,
+                        v$2(Tab, { index: 0 }, "Tab #1"),
+                        v$2(Tab, { index: 1 }, "Tab #2"),
+                        v$2(Tab, { index: 2 }, "Tab #3")),
+                    v$2(TabPanel, { index: 0 },
+                        v$2("div", null, RandomWords.slice(0, Math.floor((1 / 3) * RandomWords.length)).join(" "))),
+                    v$2(TabPanel, { index: 1 },
+                        v$2("div", null, RandomWords.slice(0, Math.floor((2 / 3) * RandomWords.length)).join(" "))),
+                    v$2(TabPanel, { index: 2 },
+                        v$2("div", null, RandomWords.slice(0, Math.floor((3 / 3) * RandomWords.length)).join(" ")))))));
     });
-    g(() => {
+    g$1(() => {
         const { useTooltip, useTooltipTrigger, isOpen } = useAriaTooltip({});
         const { useTooltipProps } = useTooltip();
         const { useTooltipTriggerProps } = useTooltipTrigger();
-        return (v$1("div", { class: "demo" },
-            v$1("p", null,
+        return (v$2("div", { class: "demo" },
+            v$2("p", null,
                 "This is a paragraph with a ",
-                v$1("span", { ...useTooltipTriggerProps({}) }, "tooltip right here."),
-                v$1("span", { ...useTooltipProps({ hidden: !isOpen }) }, "This is the tooltip content."))));
+                v$2("span", { ...useTooltipTriggerProps({}) }, "tooltip right here."),
+                v$2("span", { ...useTooltipProps({ hidden: !isOpen }) }, "This is the tooltip content."))));
     });
     async function sleep(ms) {
         await new Promise(resolve => setTimeout(resolve, ms));
@@ -17217,72 +17211,72 @@
             </div>
         )
     });*/
-    const DemoAccordion = g(() => {
+    const DemoAccordion = g$1(() => {
         const [expandedIndex, setExpandedIndex] = useState(-1);
-        return (v$1("div", { class: "demo" },
-            v$1("div", null,
-                v$1(Accordion, { expandedIndex: expandedIndex, setExpandedIndex: setExpandedIndex },
-                    v$1(AccordionSection, { index: 0, header: "Accordion Item #1" },
-                        v$1("div", null,
-                            v$1("strong", null, "This is the 1st item's accordion body."),
+        return (v$2("div", { class: "demo" },
+            v$2("div", null,
+                v$2(Accordion, { expandedIndex: expandedIndex, setExpandedIndex: setExpandedIndex },
+                    v$2(AccordionSection, { index: 0, header: "Accordion Item #1" },
+                        v$2("div", null,
+                            v$2("strong", null, "This is the 1st item's accordion body."),
                             " It is visible by default, You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the ",
-                            v$1("code", null, "AccordionSection"),
+                            v$2("code", null, "AccordionSection"),
                             ".")),
-                    v$1(AccordionSection, { index: 1, header: "Accordion Item #2" },
-                        v$1("div", null,
-                            v$1("strong", null, "This is the 2nd item's accordion body."),
+                    v$2(AccordionSection, { index: 1, header: "Accordion Item #2" },
+                        v$2("div", null,
+                            v$2("strong", null, "This is the 2nd item's accordion body."),
                             " It is hidden by default,  You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the ",
-                            v$1("code", null, "AccordionSection"),
+                            v$2("code", null, "AccordionSection"),
                             ".")),
-                    v$1(AccordionSection, { index: 2, header: "Accordion Item #3" },
-                        v$1("div", null,
-                            v$1("strong", null, "This is the 3rd item's accordion body."),
+                    v$2(AccordionSection, { index: 2, header: "Accordion Item #3" },
+                        v$2("div", null,
+                            v$2("strong", null, "This is the 3rd item's accordion body."),
                             " It is hidden by default,  You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the ",
-                            v$1("code", null, "AccordionSection"),
+                            v$2("code", null, "AccordionSection"),
                             "."))))));
     });
-    const DemoList = g(() => {
+    const DemoList = g$1(() => {
         const [index, setIndex] = useState(0);
-        return (v$1("div", { class: "demo" },
+        return (v$2("div", { class: "demo" },
             "Selected: ",
             index,
-            v$1(ListSingle, { label: "Example list", select: "single", onSelect: setIndex, selectedIndex: index, selectionMode: "activate", tag: "ul" },
-                v$1(ListItemSingle, { index: 0 }, "Primary"),
-                v$1(ListItemSingle, { index: 1 }, "Secondary"),
-                v$1(ListItemSingle, { index: 2 }, "Success"),
-                v$1(ListItemSingle, { index: 3 }, "Warning"),
-                v$1(ListItemSingle, { index: 4 }, "Danger"),
-                v$1(ListItemSingle, { index: 5 }, "Info"),
-                v$1(ListItemSingle, { index: 6 }, "Light"),
-                v$1(ListItemSingle, { index: 7 }, "Dark"),
-                v$1(ListItemSingle, { index: 8 }, "Link"))));
+            v$2(ListSingle, { label: "Example list", select: "single", onSelect: setIndex, selectedIndex: index, selectionMode: "activate", tag: "ul" },
+                v$2(ListItemSingle, { index: 0 }, "Primary"),
+                v$2(ListItemSingle, { index: 1 }, "Secondary"),
+                v$2(ListItemSingle, { index: 2 }, "Success"),
+                v$2(ListItemSingle, { index: 3 }, "Warning"),
+                v$2(ListItemSingle, { index: 4 }, "Danger"),
+                v$2(ListItemSingle, { index: 5 }, "Info"),
+                v$2(ListItemSingle, { index: 6 }, "Light"),
+                v$2(ListItemSingle, { index: 7 }, "Dark"),
+                v$2(ListItemSingle, { index: 8 }, "Link"))));
     });
-    const DemoInput = g(() => {
+    const DemoInput = g$1(() => {
         const [text, setText] = useState("");
         const [radioValue, setRadioValue] = useState("");
-        const onInput1 = A$1(async (value) => {
+        const onInput1 = A$2(async (value) => {
             await sleep(5000);
             setText(value);
         }, [setRadioValue]);
-        const onInput2 = A$1(async (value) => {
+        const onInput2 = A$2(async (value) => {
             await sleep(5000);
             setRadioValue(value);
         }, [setRadioValue]);
-        return (v$1("div", { class: "demo" },
-            v$1(InputGroup, null,
-                v$1(Input, { type: "text", onValueChange: onInput1, value: text, width: "100%" }, "Test input")),
-            v$1(RadioGroup, { selectedValue: radioValue, name: "demo-radio", onValueChange: onInput2 },
-                v$1(InputGroup, null,
-                    v$1(Radio, { index: 0, value: "ARadio" })),
-                v$1(InputGroup, null,
-                    v$1(Radio, { index: 1, value: "BRadio" })),
-                v$1(InputGroup, null,
-                    v$1(Radio, { index: 2, value: "CRadio" })))));
+        return (v$2("div", { class: "demo" },
+            v$2(InputGroup, null,
+                v$2(Input, { type: "text", onValueChange: onInput1, value: text, width: "100%" }, "Test input")),
+            v$2(RadioGroup, { selectedValue: radioValue, name: "demo-radio", onValueChange: onInput2 },
+                v$2(InputGroup, null,
+                    v$2(Radio, { index: 0, value: "ARadio" })),
+                v$2(InputGroup, null,
+                    v$2(Radio, { index: 1, value: "BRadio" })),
+                v$2(InputGroup, null,
+                    v$2(Radio, { index: 2, value: "CRadio" })))));
     });
     const Component = () => {
         const [theme, setTheme] = useState("theme-dark");
-        return v$1(d$1, null,
-            v$1(Button, { colorVariant: theme == "theme-dark" ? "light" : "dark", style: { position: "fixed", insetBlockStart: "0.5em", insetInlineEnd: "0.5em", zIndex: 9999999 }, spinnerTimeout: 999999999, onPress: async () => {
+        return v$2(d$2, null,
+            v$2(Button, { colorVariant: theme == "theme-dark" ? "light" : "dark", style: { position: "fixed", insetBlockStart: "0.5em", insetInlineEnd: "0.5em", zIndex: 9999999 }, spinnerTimeout: 999999999, onPress: async () => {
                     let prev = theme;
                     let next = prev === "theme-dark" ? "theme-light" : "theme-dark";
                     setTheme(next);
@@ -17296,29 +17290,29 @@
                     document.documentElement.classList.remove("switching-theme");
                 } },
                 "Switch theme to ",
-                v$1("strong", null, theme === "theme-dark" ? "light" : "dark")),
-            v$1(GridResponsive, { minWidth: "35em" },
-                v$1(DebugUtilContext.Provider, { value: d(() => ({ logRender: new Set(["Table", "TableHead", "TableBody", "TableRow", "TableCell"]) }), []) },
-                    v$1(ToastsProvider, null,
-                        v$1(DialogsProvider, null,
-                            v$1(DemoTable, null),
-                            v$1(DemoLists, null),
-                            v$1(DemoMenus, null),
-                            v$1(DemoDialogs, null),
-                            v$1(DemoButtons, null),
-                            v$1(DemoChecks, null),
-                            v$1(DemoInputs, null),
-                            v$1(DemoLayout, null),
-                            v$1(DemoAccordion, null),
-                            v$1(DemoDialog, null),
-                            v$1(DemoDrawer, null),
-                            v$1(DemoInput, null),
-                            v$1(DemoList, null),
-                            v$1(DemoTabs, null),
-                            v$1(DemoMenu, null))))));
+                v$2("strong", null, theme === "theme-dark" ? "light" : "dark")),
+            v$2(GridResponsive, { minWidth: "35em" },
+                v$2(DebugUtilContext.Provider, { value: d$1(() => ({ logRender: new Set(["Table", "TableHead", "TableBody", "TableRow", "TableCell"]) }), []) },
+                    v$2(ToastsProvider, null,
+                        v$2(DialogsProvider, null,
+                            v$2(DemoTable, null),
+                            v$2(DemoLists, null),
+                            v$2(DemoMenus, null),
+                            v$2(DemoDialogs, null),
+                            v$2(DemoButtons, null),
+                            v$2(DemoChecks, null),
+                            v$2(DemoInputs, null),
+                            v$2(DemoLayout, null),
+                            v$2(DemoAccordion, null),
+                            v$2(DemoDialog, null),
+                            v$2(DemoDrawer, null),
+                            v$2(DemoInput, null),
+                            v$2(DemoList, null),
+                            v$2(DemoTabs, null),
+                            v$2(DemoMenu, null))))));
     };
     requestAnimationFrame(() => {
-        S$1(v$1(Component, null), document.getElementById("root"));
+        S$1(v$2(Component, null), document.getElementById("root"));
     });
 
 })();

@@ -1,11 +1,7 @@
 @use "sass:color";
 @use "sass:math";
-@use "./bootstrap/functions" as *;
-
-$primary-font-family: #{"Jost", system-ui, -apple-system, "Segoe UI", Roboto,
-  "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
-  "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"} !default;
-
+@use "bootstrap/scss/functions" as *;
+@use "./bootstrap-shared" as *;
 $max-dark: -1 !default;
 
 $blue: #2b35CA !default;
@@ -97,12 +93,11 @@ $input-bg: $black !default;
 $input-color: $body-color !default;
 
 $input-focus-border-color: shade-color($component-active-bg, 50%) !default;
-$input-btn-focus-color-opacity: 0.4 !default;
 $input-btn-focus-color: rgba(
   tint-color($component-active-bg, 40%),
   $input-btn-focus-color-opacity
 ) !default;
-$input-btn-focus-width:         .25rem !default;
+
 $input-btn-focus-box-shadow:    0 0 0 $input-btn-focus-width $input-btn-focus-color !default;
 $input-focus-box-shadow: #{$input-btn-focus-box-shadow, inset 0 0 0 rgb(0 0 0 / 40%)} !default;
 $input-box-shadow: #{0 0 0 $input-btn-focus-color, inset 0 0 0 rgb(0 0 0 / 40%)} !default;
@@ -166,22 +161,17 @@ $modal-content-color: null !default;
 $accordion-icon-color: $accordion-color !default;
 $accordion-icon-active-color: $accordion-button-active-color !default;
 
-@use "./bootstrap/bootstrap" with (
+$mark-bg: #fcf8e3 !default;
+
+@use "bootstrap/scss/bootstrap" with (
   $enable-shadows: true,
-  $btn-transition: #{
-    box-shadow        0.10s cubic-bezier(0, 1, 0.33, 1), 
-    padding           0.10s cubic-bezier(0, 1, 0.33, 1), 
-    text-shadow       0.10s cubic-bezier(0, 1, 0.33, 1), 
-    color             0.15s ease-in-out, 
-    background-color  0.15s ease-in-out, 
-    border-color      0.15s ease-in-out
-  },
-  $btn-close-padding-y: 0,
-  $btn-close-padding-x: 0,
-  $font-family-sans-serif: $primary-font-family,
-  $progress-bar-transition: #{width, clip-path 0.6s ease},
-  $btn-box-shadow: #{inset 0 0 0 rgb(0 0 0 / 40%)},
-  $btn-active-box-shadow: #{inset 0 3px 5px rgb(0 0 0 / 40%)},
+  $btn-transition: $btn-transition,
+  $btn-close-padding-y: $btn-close-padding-y,
+  $btn-close-padding-x: $btn-close-padding-x,
+  $font-family-sans-serif: $font-family-sans-serif,
+  $progress-bar-transition: $progress-bar-transition,
+  $btn-box-shadow: $btn-box-shadow,
+  $btn-active-box-shadow: $btn-active-box-shadow,
 
   $white: $white,
   $gray-100: $gray-100,
@@ -207,16 +197,6 @@ $accordion-icon-active-color: $accordion-button-active-color !default;
   $teal: $teal,
   $cyan: $cyan,
 
-  $blue-100: blue-100,
-  $blue-200: blue-200,
-  $blue-300: blue-300,
-  $blue-400: blue-400,
-  $blue-500: blue-500,
-  $blue-600: blue-600,
-  $blue-700: blue-700,
-  $blue-800: blue-800,
-  $blue-900: blue-900,
-
 
   $primary: $primary,
   $secondary: $secondary,
@@ -239,7 +219,7 @@ $accordion-icon-active-color: $accordion-button-active-color !default;
 
   $body-bg: $body-bg,
   $body-color: $body-color,
-  $body-text-align: body-text-align,
+  $body-text-align: $body-text-align,
 
   // Links
   //
@@ -250,11 +230,6 @@ $accordion-icon-active-color: $accordion-button-active-color !default;
   $link-hover-color: $link-hover-color,
   $border-color: $border-color,
 
-  $box-shadow: 0 0.5rem 1rem rgba($white, 0.15),
-  $box-shadow-sm: 0 0.125rem 0.25rem rgba($white, 0.075),
-  $box-shadow-lg: 0 1rem 3rem rgba($white, 0.175),
-  $box-shadow-inset: inset 0 1px 2px rgba($white, 0.075),
-
   $component-active-color: $component-active-color,
   $component-active-bg: $component-active-bg,
 
@@ -263,7 +238,7 @@ $accordion-icon-active-color: $accordion-button-active-color !default;
   $text-muted: $text-muted,
   $blockquote-footer-color: $gray-400,
 
-  $mark-bg: #fcf8e3,
+  $mark-bg: $mark-bg,
 
   // Tables
   //
@@ -608,4 +583,4 @@ $accordion-icon-active-color: $accordion-button-active-color !default;
 
 );
 
-@forward "./bootstrap/bootstrap";
+@forward "bootstrap/scss/bootstrap";

@@ -1,6 +1,12 @@
-@use "./bootstrap/bootstrap" as *;
-@forward "./bootstrap/bootstrap";
+@use "bootstrap/scss/bootstrap" as *;
+@forward "bootstrap/scss/bootstrap";
 
+// This file imports all Boostrap variables (that have, presumably,
+// already been configured with another use-with), along with
+// other newly-introduced global variables.
+
+// Multiple components make use of an inset-based press effect;
+// this is the transition value for those components.
 $inset-press-transition: box-shadow 0.15s cubic-bezier(0, 1, 0.33, 1),
   padding 0.10s linear,
   text-shadow 0.15s cubic-bezier(0, 1, 0.33, 1) !default;

@@ -1,6 +1,6 @@
 @use "./variables.scss";
 @use "@material/elevation/elevation-theme.scss" as elevation;
-@use "./bootstrap/bootstrap.scss" as *;
+@use "bootstrap/scss/bootstrap.scss" as *;
 @use "sass:color";
 @use "sass:map";
 @use "sass:math";

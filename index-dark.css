@@ -1,6 +1,6 @@
 @charset "UTF-8";
 /*!
- * Bootstrap v5.1.0 (https://getbootstrap.com/)
+ * Bootstrap v5.1.3 (https://getbootstrap.com/)
  * Copyright 2011-2021 The Bootstrap Authors
  * Copyright 2011-2021 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
@@ -50,7 +50,8 @@
   --bs-subtle-rgb: 26, 26, 26;
   --bs-white-rgb: 255, 255, 255;
   --bs-black-rgb: 0, 0, 0;
-  --bs-body-rgb: 230, 230, 230;
+  --bs-body-color-rgb: 230, 230, 230;
+  --bs-body-bg-rgb: 26, 26, 26;
   --bs-font-sans-serif: Jost, system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, Liberation Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
   --bs-font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   --bs-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
@@ -59,7 +60,6 @@
   --bs-body-font-weight: 400;
   --bs-body-line-height: 1.5;
   --bs-body-color: #e6e6e6;
-  --bs-body-text-align: body-text-align;
   --bs-body-bg: #1a1a1a;
 }
 
@@ -601,7 +601,7 @@ progress {
   background-color: #1a1a1a;
   border: 1px solid #4d4d4d;
   border-radius: 0.25rem;
-  box-shadow: 0 0.125rem 0.25rem rgba(255, 255, 255, 0.075);
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
   max-width: 100%;
   height: auto;
 }
@@ -664,9 +664,9 @@ progress {
   --bs-gutter-y: 0;
   display: flex;
   flex-wrap: wrap;
-  margin-top: calc(var(--bs-gutter-y) * -1);
-  margin-right: calc(var(--bs-gutter-x) * -0.5);
-  margin-left: calc(var(--bs-gutter-x) * -0.5);
+  margin-top: calc(-1 * var(--bs-gutter-y));
+  margin-right: calc(-0.5 * var(--bs-gutter-x));
+  margin-left: calc(-0.5 * var(--bs-gutter-x));
 }
 .row > * {
   flex-shrink: 0;
@@ -1977,8 +1977,8 @@ progress {
 .table > thead {
   vertical-align: bottom;
 }
-.table > :not(:last-child) > :last-child > * {
-  border-bottom-color: currentColor;
+.table > :not(:first-child) {
+  border-top: 2px solid currentColor;
 }
 
 .caption-top {
@@ -1999,8 +1999,11 @@ progress {
 .table-borderless > :not(caption) > * > * {
   border-bottom-width: 0;
 }
+.table-borderless > :not(:first-child) {
+  border-top-width: 0;
+}
 
-.table-striped > tbody > tr:nth-of-type(odd) {
+.table-striped > tbody > tr:nth-of-type(odd) > * {
   --bs-table-accent-bg: var(--bs-table-striped-bg);
   color: var(--bs-table-striped-color);
 }
@@ -2010,7 +2013,7 @@ progress {
   color: var(--bs-table-active-color);
 }
 
-.table-hover > tbody > tr:hover {
+.table-hover > tbody > tr:hover > * {
   --bs-table-accent-bg: var(--bs-table-hover-bg);
   color: var(--bs-table-hover-color);
 }
@@ -2359,7 +2362,7 @@ textarea.form-control-lg {
   background-size: 16px 12px;
   border: 1px solid #666666;
   border-radius: 0.25rem;
-  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.075);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075);
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   appearance: none;
 }
@@ -2371,7 +2374,7 @@ textarea.form-control-lg {
 .form-select:focus {
   border-color: #161b65;
   outline: 0;
-  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.075), 0 0 0 0.25rem rgba(128, 134, 223, 0.4);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075), 0 0 0 0.25rem rgba(128, 134, 223, 0.4);
 }
 .form-select[multiple], .form-select[size]:not([size="1"]) {
   padding-right: 0.75rem;
@@ -2390,6 +2393,7 @@ textarea.form-control-lg {
   padding-bottom: 0.25rem;
   padding-left: 0.5rem;
   font-size: 0.875rem;
+  border-radius: 0.2rem;
 }
 
 .form-select-lg {
@@ -2397,6 +2401,7 @@ textarea.form-control-lg {
   padding-bottom: 0.5rem;
   padding-left: 1rem;
   font-size: 1.25rem;
+  border-radius: 0.3rem;
 }
 
 .form-check {
@@ -2547,7 +2552,7 @@ textarea.form-control-lg {
   background-color: #4d4d4d;
   border-color: transparent;
   border-radius: 1rem;
-  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.075);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075);
 }
 .form-range::-moz-range-thumb {
   width: 1rem;
@@ -2575,7 +2580,7 @@ textarea.form-control-lg {
   background-color: #4d4d4d;
   border-color: transparent;
   border-radius: 1rem;
-  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.075);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075);
 }
 .form-range:disabled {
   pointer-events: none;
@@ -2943,7 +2948,7 @@ textarea.form-control-lg {
   color: white;
   background-color: #2b35CA;
   border-color: #2b35CA;
-  box-shadow: inset 0 0 0 rgba(0, 0, 0, 0.4);
+  box-shadow: inset 0 -4px 0 0 black;
 }
 .btn-primary:hover {
   color: white;
@@ -2954,7 +2959,7 @@ textarea.form-control-lg {
   color: white;
   background-color: #252dac;
   border-color: #222aa2;
-  box-shadow: inset 0 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(75, 83, 210, 0.5);
+  box-shadow: inset 0 -4px 0 0 black, 0 0 0 0.25rem rgba(75, 83, 210, 0.5);
 }
 .btn-check:checked + .btn-primary, .btn-check:active + .btn-primary, .btn-primary:active, .btn-primary.active, .show > .btn-primary.dropdown-toggle {
   color: white;
@@ -2974,7 +2979,7 @@ textarea.form-control-lg {
   color: white;
   background-color: #24066a;
   border-color: #24066a;
-  box-shadow: inset 0 0 0 rgba(0, 0, 0, 0.4);
+  box-shadow: inset 0 -4px 0 0 black;
 }
 .btn-secondary:hover {
   color: white;
@@ -2985,7 +2990,7 @@ textarea.form-control-lg {
   color: white;
   background-color: #1f055a;
   border-color: #1d0555;
-  box-shadow: inset 0 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(69, 43, 128, 0.5);
+  box-shadow: inset 0 -4px 0 0 black, 0 0 0 0.25rem rgba(69, 43, 128, 0.5);
 }
 .btn-check:checked + .btn-secondary, .btn-check:active + .btn-secondary, .btn-secondary:active, .btn-secondary.active, .show > .btn-secondary.dropdown-toggle {
   color: white;
@@ -3005,7 +3010,7 @@ textarea.form-control-lg {
   color: white;
   background-color: #0D5E21;
   border-color: #0D5E21;
-  box-shadow: inset 0 0 0 rgba(0, 0, 0, 0.4);
+  box-shadow: inset 0 -4px 0 0 black;
 }
 .btn-success:hover {
   color: white;
@@ -3016,7 +3021,7 @@ textarea.form-control-lg {
   color: white;
   background-color: #0b501c;
   border-color: #0a4b1a;
-  box-shadow: inset 0 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(49, 118, 66, 0.5);
+  box-shadow: inset 0 -4px 0 0 black, 0 0 0 0.25rem rgba(49, 118, 66, 0.5);
 }
 .btn-check:checked + .btn-success, .btn-check:active + .btn-success, .btn-success:active, .btn-success.active, .show > .btn-success.dropdown-toggle {
   color: white;
@@ -3036,7 +3041,7 @@ textarea.form-control-lg {
   color: black;
   background-color: #00AED1;
   border-color: #00AED1;
-  box-shadow: inset 0 0 0 rgba(0, 0, 0, 0.4);
+  box-shadow: inset 0 -4px 0 0 black;
 }
 .btn-info:hover {
   color: black;
@@ -3047,7 +3052,7 @@ textarea.form-control-lg {
   color: black;
   background-color: #26bad8;
   border-color: #1ab6d6;
-  box-shadow: inset 0 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(0, 148, 178, 0.5);
+  box-shadow: inset 0 -4px 0 0 black, 0 0 0 0.25rem rgba(0, 148, 178, 0.5);
 }
 .btn-check:checked + .btn-info, .btn-check:active + .btn-info, .btn-info:active, .btn-info.active, .show > .btn-info.dropdown-toggle {
   color: black;
@@ -3067,7 +3072,7 @@ textarea.form-control-lg {
   color: black;
   background-color: #FFB300;
   border-color: #FFB300;
-  box-shadow: inset 0 0 0 rgba(0, 0, 0, 0.4);
+  box-shadow: inset 0 -4px 0 0 black;
 }
 .btn-warning:hover {
   color: black;
@@ -3078,7 +3083,7 @@ textarea.form-control-lg {
   color: black;
   background-color: #ffbe26;
   border-color: #ffbb1a;
-  box-shadow: inset 0 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(217, 152, 0, 0.5);
+  box-shadow: inset 0 -4px 0 0 black, 0 0 0 0.25rem rgba(217, 152, 0, 0.5);
 }
 .btn-check:checked + .btn-warning, .btn-check:active + .btn-warning, .btn-warning:active, .btn-warning.active, .show > .btn-warning.dropdown-toggle {
   color: black;
@@ -3098,7 +3103,7 @@ textarea.form-control-lg {
   color: white;
   background-color: #9B1C29;
   border-color: #9B1C29;
-  box-shadow: inset 0 0 0 rgba(0, 0, 0, 0.4);
+  box-shadow: inset 0 -4px 0 0 black;
 }
 .btn-danger:hover {
   color: white;
@@ -3109,7 +3114,7 @@ textarea.form-control-lg {
   color: white;
   background-color: #841823;
   border-color: #7c1621;
-  box-shadow: inset 0 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(170, 62, 73, 0.5);
+  box-shadow: inset 0 -4px 0 0 black, 0 0 0 0.25rem rgba(170, 62, 73, 0.5);
 }
 .btn-check:checked + .btn-danger, .btn-check:active + .btn-danger, .btn-danger:active, .btn-danger.active, .show > .btn-danger.dropdown-toggle {
   color: white;
@@ -3129,7 +3134,7 @@ textarea.form-control-lg {
   color: black;
   background-color: #e6e6e6;
   border-color: #e6e6e6;
-  box-shadow: inset 0 0 0 rgba(0, 0, 0, 0.4);
+  box-shadow: inset 0 -4px 0 0 black;
 }
 .btn-light:hover {
   color: black;
@@ -3140,7 +3145,7 @@ textarea.form-control-lg {
   color: black;
   background-color: #eaeaea;
   border-color: #e9e9e9;
-  box-shadow: inset 0 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(196, 196, 196, 0.5);
+  box-shadow: inset 0 -4px 0 0 black, 0 0 0 0.25rem rgba(196, 196, 196, 0.5);
 }
 .btn-check:checked + .btn-light, .btn-check:active + .btn-light, .btn-light:active, .btn-light.active, .show > .btn-light.dropdown-toggle {
   color: black;
@@ -3160,7 +3165,7 @@ textarea.form-control-lg {
   color: white;
   background-color: #1a1a1a;
   border-color: #1a1a1a;
-  box-shadow: inset 0 0 0 rgba(0, 0, 0, 0.4);
+  box-shadow: inset 0 -4px 0 0 black;
 }
 .btn-dark:hover {
   color: white;
@@ -3171,7 +3176,7 @@ textarea.form-control-lg {
   color: white;
   background-color: #161616;
   border-color: #151515;
-  box-shadow: inset 0 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(60, 60, 60, 0.5);
+  box-shadow: inset 0 -4px 0 0 black, 0 0 0 0.25rem rgba(60, 60, 60, 0.5);
 }
 .btn-check:checked + .btn-dark, .btn-check:active + .btn-dark, .btn-dark:active, .btn-dark.active, .show > .btn-dark.dropdown-toggle {
   color: white;
@@ -3191,7 +3196,7 @@ textarea.form-control-lg {
   color: black;
   background-color: #e6e6e6;
   border-color: #e6e6e6;
-  box-shadow: inset 0 0 0 rgba(0, 0, 0, 0.4);
+  box-shadow: inset 0 -4px 0 0 black;
 }
 .btn-contrast:hover {
   color: black;
@@ -3202,7 +3207,7 @@ textarea.form-control-lg {
   color: black;
   background-color: #eaeaea;
   border-color: #e9e9e9;
-  box-shadow: inset 0 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(196, 196, 196, 0.5);
+  box-shadow: inset 0 -4px 0 0 black, 0 0 0 0.25rem rgba(196, 196, 196, 0.5);
 }
 .btn-check:checked + .btn-contrast, .btn-check:active + .btn-contrast, .btn-contrast:active, .btn-contrast.active, .show > .btn-contrast.dropdown-toggle {
   color: black;
@@ -3222,7 +3227,7 @@ textarea.form-control-lg {
   color: white;
   background-color: #1a1a1a;
   border-color: #1a1a1a;
-  box-shadow: inset 0 0 0 rgba(0, 0, 0, 0.4);
+  box-shadow: inset 0 -4px 0 0 black;
 }
 .btn-subtle:hover {
   color: white;
@@ -3233,7 +3238,7 @@ textarea.form-control-lg {
   color: white;
   background-color: #161616;
   border-color: #151515;
-  box-shadow: inset 0 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(60, 60, 60, 0.5);
+  box-shadow: inset 0 -4px 0 0 black, 0 0 0 0.25rem rgba(60, 60, 60, 0.5);
 }
 .btn-check:checked + .btn-subtle, .btn-check:active + .btn-subtle, .btn-subtle:active, .btn-subtle.active, .show > .btn-subtle.dropdown-toggle {
   color: white;
@@ -3599,7 +3604,7 @@ textarea.form-control-lg {
   background-clip: padding-box;
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 0.25rem;
-  box-shadow: 0 0.5rem 1rem rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
 }
 .dropdown-menu[data-bs-popper] {
   top: 100%;
@@ -5076,7 +5081,7 @@ textarea.form-control-lg {
   font-size: 0.75rem;
   background-color: #333333;
   border-radius: 0.25rem;
-  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.075);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075);
 }
 
 .progress-bar {
@@ -5511,7 +5516,7 @@ textarea.form-control-lg {
   background-color: rgba(0, 0, 0, 0.85);
   background-clip: padding-box;
   border: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: 0 0.5rem 1rem rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
   border-radius: 0.25rem;
 }
 .toast.showing {
@@ -5613,7 +5618,7 @@ textarea.form-control-lg {
   background-clip: padding-box;
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 0.3rem;
-  box-shadow: 0 0.125rem 0.25rem rgba(255, 255, 255, 0.075);
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
   outline: 0;
 }
 
@@ -5689,7 +5694,7 @@ textarea.form-control-lg {
   }
 
   .modal-content {
-    box-shadow: 0 0.5rem 1rem rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
   }
 
   .modal-sm {
@@ -5965,7 +5970,7 @@ textarea.form-control-lg {
   background-clip: padding-box;
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 0.3rem;
-  box-shadow: 0 0.5rem 1rem rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
 }
 .popover .popover-arrow {
   position: absolute;
@@ -6339,7 +6344,7 @@ textarea.form-control-lg {
   background-color: black;
   background-clip: padding-box;
   outline: 0;
-  box-shadow: 0 0.125rem 0.25rem rgba(255, 255, 255, 0.075);
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
   transition: transform 0.3s ease-in-out;
 }
 @media (prefers-reduced-motion: reduce) {
@@ -6803,15 +6808,15 @@ textarea.form-control-lg {
 }
 
 .shadow {
-  box-shadow: 0 0.5rem 1rem rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
 }
 
 .shadow-sm {
-  box-shadow: 0 0.125rem 0.25rem rgba(255, 255, 255, 0.075) !important;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
 }
 
 .shadow-lg {
-  box-shadow: 0 1rem 3rem rgba(255, 255, 255, 0.175) !important;
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
 }
 
 .shadow-none {
@@ -7837,7 +7842,7 @@ textarea.form-control-lg {
 
 .text-body {
   --bs-text-opacity: 1;
-  color: rgba(var(--bs-body-rgb), var(--bs-text-opacity)) !important;
+  color: rgba(var(--bs-body-color-rgb), var(--bs-text-opacity)) !important;
 }
 
 .text-muted {
@@ -7938,7 +7943,7 @@ textarea.form-control-lg {
 
 .bg-body {
   --bs-bg-opacity: 1;
-  background-color: rgba(var(--bs-body-rgb), var(--bs-bg-opacity)) !important;
+  background-color: rgba(var(--bs-body-bg-rgb), var(--bs-bg-opacity)) !important;
 }
 
 .bg-transparent {
@@ -14235,7 +14240,6 @@ body {
 body {
   background-color: #1a1a1a;
   color: #e6e6e6;
-  text-align: body-text-align;
 }
 
 /*# sourceMappingURL=index-dark.css.map */

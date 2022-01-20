@@ -10,7 +10,7 @@
     "build": "npx npm-run-all --npm-path npm -sc build:sass build:ts",
     "watch:ts": "tsc --watch",
     "build:sass:themes": "sass --load-path=node_modules ./src/index-light.scss:./index-light.css ./src/index-dark.scss:./index-dark.css",
-    "build:sass:index":  "sass --load-path=node_modules ./src/index-swap.scss:./index-swap.css ./src/index.scss:./index.css",
+    "build:sass:index": "sass --load-path=node_modules ./src/index-swap.scss:./index-swap.css ./src/index.scss:./index.css",
     "build:sass": "npx npm-run-all --npm-path npm -sc build:sass:themes build:sass:index",
     "build:ts": "tsc --build",
     "test": "jest",
@@ -20,39 +20,35 @@
   "author": "",
   "license": "ISC",
   "peerDependencies": {
-    "preact": "^10.5.14"
+    "preact": "^10.6.4"
   },
   "devDependencies": {
-    "@babel/preset-typescript": "^7.14.5",
-    "@types/enzyme": "^3.10.9",
-    "@types/jest": "^26.0.24",
-    "cross-env": "^7.0.3",
+    "@babel/preset-typescript": "^7.16.7",
+    "@types/enzyme": "^3.10.11",
+    "@types/jsdom": "^16.2.14",
     "enzyme": "^3.11.0",
-    "enzyme-adapter-preact-pure": "^3.1.0",
-    "jest": "^27.0.6",
-    "jsdom": "^16.6.0",
+    "enzyme-adapter-preact-pure": "^3.3.0",
+    "jest": "^27.4.7",
+    "jsdom": "^19.0.0",
     "npm-run-all": "^4.1.5",
-    "serve": "^12.0.1",
-    "typescript": "^4.4.3"
-  },
-  "dependencies": {
-    "@material/animation": "^13.0.0",
-    "@material/elevation": "^13.0.0",
-    "@material/mwc-ripple": "^0.22.1",
-    "@popperjs/core": "^2.9.3",
-    "bootstrap": "^5.1.0",
-    "bootstrap-icons": "^1.5.0",
-    "clsx": "^1.1.1",
-    "preact-aria-widgets": "github:mwszekely/preact-aria-widgets",
-    "preact-prop-helpers": "github:mwszekely/preact-prop-helpers",
-    "preact-transition": "github:mwszekely/preact-transition",
-    "sass": "^1.37.5",
-    "sass-migrator": "^1.5.1",
-    "tabbable": "^5.2.0",
-    "wicg-inert": "^3.1.1"
+    "sass": "^1.48.0",
+    "serve": "^13.0.2",
+    "ts-jest": "^27.1.3",
+    "typescript": "^4.5.4"
   },
   "main": "index.js",
   "directories": {
     "test": "tests"
+  },
+  "dependencies": {
+    "@material/animation": "^13.0.0",
+    "@material/elevation": "^13.0.0",
+    "@popperjs/core": "^2.11.2",
+    "bootstrap": "^5.1.3",
+    "bootstrap-icons": "^1.7.2",
+    "clsx": "^1.1.1",
+    "preact-aria-widgets": "github:mwszekely/preact-aria-widgets",
+    "preact-prop-helpers": "github:mwszekely/preact-prop-helpers",
+    "preact-transition": "github:mwszekely/preact-transition"
   }
 }
