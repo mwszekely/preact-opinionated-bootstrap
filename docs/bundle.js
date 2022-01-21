@@ -2348,17 +2348,17 @@
               But roughly isn't good enough if there are multiple matches.
               To convert our sorted index to the unsorted index we need, we have to find the first
               element that matches us *and* (if any such exist) is *after* our current selection.
-                In other words, the only way typeahead moves backwards relative to our current
+               In other words, the only way typeahead moves backwards relative to our current
               position is if the only other option is behind us.
-                It's not specified in WAI-ARIA what to do in that case.  I suppose wrap back to the start?
+               It's not specified in WAI-ARIA what to do in that case.  I suppose wrap back to the start?
               Though there's also a case for just going upwards to the nearest to prevent jumpiness.
               But if you're already doing typeahead on an unsorted list, like, jumpiness can't be avoided.
               I dunno. Going back to the start is the simplist though.
-                Basically what this does: Starting from where we found ourselves after our binary search,
+               Basically what this does: Starting from where we found ourselves after our binary search,
               scan backwards and forwards through all adjacent entries that also compare equally so that
               we can find the one whose `unsortedIndex` is the lowest amongst all other equal strings
               (and also the lowest `unsortedIndex` yadda yadda except that it comes after us).
-                TODO: The binary search starts this off with a solid O(log n), but one-character
+               TODO: The binary search starts this off with a solid O(log n), but one-character
               searches are, thanks to pigeonhole principal, eventually guaranteed to become
               O(n*log n). This is annoying but probably not easily solvable? There could be an
               exception for one-character strings, but that's just kicking the can down
@@ -7069,8 +7069,8 @@
       /*const useMenuSubmenuItem = useCallback((args: UseMenuSubmenuItemParameters) => {
           const { useMenuProps, useMenuButton } = useAriaMenu<HTMLElement, ChildElement, I>(args);
           const { useMenuButtonProps } = useMenuButton<E>({ tag: "li" as any });
-            const { getElement, useRefElementProps } = useRefElement<any>({ onElementChange: setOpenerElement as OnPassiveStateChange<any> });
-            return {
+           const { getElement, useRefElementProps } = useRefElement<any>({ onElementChange: setOpenerElement as OnPassiveStateChange<any> });
+           return {
               getElement,
               useMenuProps,
               useMenuSubmenuItemProps: function <P extends h.JSX.HTMLAttributes<E>>({ ...props }: P) {
@@ -15562,6 +15562,33 @@
         )
     }*/
 
+    function FocusRingVisibilityManager(_ref) {
+      let {
+        children
+      } = _ref;
+      const [hideFocusRing, setHideFocusRing] = useState(false);
+      document.addEventListener("mousemove", ev => setHideFocusRing(true), {
+        passive: true
+      });
+      document.addEventListener("touchstart", ev => setHideFocusRing(true), {
+        passive: true
+      });
+      document.addEventListener("pointermove", ev => setHideFocusRing(true), {
+        passive: true
+      });
+      document.addEventListener("keydown", ev => {
+        if (ev.key == "Tab") {
+          setHideFocusRing(false);
+        }
+      });
+      y$1(() => {
+        document.body.style.setProperty("--input-btn-focus-color-opacity", hideFocusRing ? "0" : "0.25");
+        document.body.style.setProperty("--btn-active-box-shadow-opacity", hideFocusRing ? "0" : "0.4");
+        document.body.style.setProperty("--input-btn-check-focus-color-opacity", hideFocusRing ? "0" : "0.5");
+      }, [hideFocusRing]);
+      return v$2(d$2, {}, children);
+    }
+
     const Card = g$1(forwardElementRef(function Card(p, ref) {
       let {
         children,
@@ -15876,11 +15903,7 @@
                                     v$2(ButtonGroupChild, { index: 0, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress }, "First button"),
                                     v$2(ButtonGroupChild, { index: 1, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress }, "Second button"),
                                     v$2(ButtonGroupChild, { index: 2, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress }, "Third button"),
-                                    v$2(ButtonGroupChild, { index: 3, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress }, "Fourth button"),
-                                    v$2(ButtonGroupChild, { index: 4, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress }, "Fifth button"),
-                                    v$2(ButtonGroupChild, { index: 5, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress }, "Sixth button"),
-                                    v$2(ButtonGroupChild, { index: 6, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress }, "Seventh button"),
-                                    v$2(ButtonGroupChild, { index: 7, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress }, "Eighth button"))),
+                                    v$2(ButtonGroupChild, { index: 3, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress }, "Fourth button"))),
                             v$2(CardElement, { type: "paragraph" },
                                 v$2("code", null, `<ButtonGroup wrap>
     <ButtonGroupChild index={0}>First button</ButtonGroupChild>
@@ -17292,24 +17315,25 @@
                 "Switch theme to ",
                 v$2("strong", null, theme === "theme-dark" ? "light" : "dark")),
             v$2(GridResponsive, { minWidth: "35em" },
-                v$2(DebugUtilContext.Provider, { value: d$1(() => ({ logRender: new Set(["Table", "TableHead", "TableBody", "TableRow", "TableCell"]) }), []) },
-                    v$2(ToastsProvider, null,
-                        v$2(DialogsProvider, null,
-                            v$2(DemoTable, null),
-                            v$2(DemoLists, null),
-                            v$2(DemoMenus, null),
-                            v$2(DemoDialogs, null),
-                            v$2(DemoButtons, null),
-                            v$2(DemoChecks, null),
-                            v$2(DemoInputs, null),
-                            v$2(DemoLayout, null),
-                            v$2(DemoAccordion, null),
-                            v$2(DemoDialog, null),
-                            v$2(DemoDrawer, null),
-                            v$2(DemoInput, null),
-                            v$2(DemoList, null),
-                            v$2(DemoTabs, null),
-                            v$2(DemoMenu, null))))));
+                v$2(FocusRingVisibilityManager, null,
+                    v$2(DebugUtilContext.Provider, { value: d$1(() => ({ logRender: new Set(["Table", "TableHead", "TableBody", "TableRow", "TableCell"]) }), []) },
+                        v$2(ToastsProvider, null,
+                            v$2(DialogsProvider, null,
+                                v$2(DemoTable, null),
+                                v$2(DemoLists, null),
+                                v$2(DemoMenus, null),
+                                v$2(DemoDialogs, null),
+                                v$2(DemoButtons, null),
+                                v$2(DemoChecks, null),
+                                v$2(DemoInputs, null),
+                                v$2(DemoLayout, null),
+                                v$2(DemoAccordion, null),
+                                v$2(DemoDialog, null),
+                                v$2(DemoDrawer, null),
+                                v$2(DemoInput, null),
+                                v$2(DemoList, null),
+                                v$2(DemoTabs, null),
+                                v$2(DemoMenu, null)))))));
     };
     requestAnimationFrame(() => {
         S$1(v$2(Component, null), document.getElementById("root"));

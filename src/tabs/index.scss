@@ -12,13 +12,6 @@ $active-tab-background-color: $body-bg;
   $active-tab-background-color: #{shade-color($body-bg, 30%)};
 }
 
-/*.nav-link {
-    &:not(.active):not(:active) {
-        clip-path: inset(0px 0px -100% 0px);
-        box-shadow: 0 4px 5px rgb(0 0 0 / 40%), 0 0 transparent;
-    }
-}*/
-
 .nav-tabs {
   // Make sure the tabs appear on top of the panels
   // to hide the inset box shadow of the panel for this tab.
@@ -42,7 +35,8 @@ $active-tab-background-color: $body-bg;
     }
 
     & .nav-link {
-      &.active, &:active {
+      &.active,
+      &:active {
         background-color: $active-tab-background-color;
       }
 
@@ -50,20 +44,21 @@ $active-tab-background-color: $body-bg;
       &:not(.active):focus {
         box-shadow: 0px 0px 0px 0px $active-tab-background-color,
           inset 0px 0px 0px 0px $active-tab-background-color,
-          0 0 0 0.25rem rgba(13, 110, 253, 0.25),
+          0 0 0 0.25rem rgba(13, 110, 253, $input-btn-focus-color-opacity),
           inset 0px 0px 0px rgba(0, 0, 0, 0.4);
       }
       &:active:not(:focus),
       &.active:not(:focus) {
         box-shadow: 0px 9px 0px 0px $active-tab-background-color,
           inset 0px -2px 0px 0px $active-tab-background-color,
-          0 0 0 0 rgba(13, 110, 253, 0.25), inset 0px 3px 5px rgba(0, 0, 0, 0.4);
+          0 0 0 0 rgba(13, 110, 253, $input-btn-focus-color-opacity),
+          inset 0px 3px 5px rgba(0, 0, 0, 0.4);
       }
       &:active:focus,
       &.active:focus {
         box-shadow: 0px 9px 0px 0px $active-tab-background-color,
-        inset 0px -2px 0px 0px $active-tab-background-color,
-          0 0 0 0.25rem rgba(13, 110, 253, 0.25),
+          inset 0px -2px 0px 0px $active-tab-background-color,
+          0 0 0 0.25rem rgba(13, 110, 253, $input-btn-focus-color-opacity),
           inset 0px 3px 5px rgba(0, 0, 0, 0.4);
       }
     }
@@ -88,7 +83,8 @@ $active-tab-background-color: $body-bg;
           border-top-left-radius: 0.25rem;
           border-bottom-left-radius: 0.25rem;
           border: none;
-          &.active, &:active {
+          &.active,
+          &:active {
             background-color: $active-tab-background-color;
           }
 
@@ -106,20 +102,21 @@ $active-tab-background-color: $body-bg;
       &:not(.active):focus {
         box-shadow: 0px 0px 0px 0px $active-tab-background-color,
           inset 0px 0px 0px 0px $active-tab-background-color,
-          0 0 0 0.25rem rgba(13, 110, 253, 0.25),
+          0 0 0 0.25rem rgba(13, 110, 253, $input-btn-focus-color-opacity),
           inset 0px 0px 0px rgba(0, 0, 0, 0.4);
       }
       &:active:not(:focus),
       &.active:not(:focus) {
         box-shadow: 9px 0px 0px 0px $active-tab-background-color,
           inset -2px 0px 0px 0px $active-tab-background-color,
-          0 0 0 0 rgba(13, 110, 253, 0.25), inset 3px 0px 5px rgba(0, 0, 0, 0.4);
+          0 0 0 0 rgba(13, 110, 253, $input-btn-focus-color-opacity),
+          inset 3px 0px 5px rgba(0, 0, 0, 0.4);
       }
       &:active:focus,
       &.active:focus {
         box-shadow: 9px 0px 0px 0px $active-tab-background-color,
           inset -2px 0px 0px 0px $active-tab-background-color,
-          0 0 0 0.25rem rgba(13, 110, 253, 0.25),
+          0 0 0 0.25rem rgba(13, 110, 253, $input-btn-focus-color-opacity),
           inset 3px 0px 5px rgba(0, 0, 0, 0.4);
       }
     }

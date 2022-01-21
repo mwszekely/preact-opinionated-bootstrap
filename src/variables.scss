@@ -8,7 +8,12 @@
 // Multiple components make use of an inset-based press effect;
 // this is the transition value for those components.
 $inset-press-transition: box-shadow 0.15s cubic-bezier(0, 1, 0.33, 1),
-  padding 0.10s linear,
-  text-shadow 0.15s cubic-bezier(0, 1, 0.33, 1) !default;
+  padding 0.1s linear, text-shadow 0.15s cubic-bezier(0, 1, 0.33, 1) !default;
 
-
+// Bootstrap doesn't provide this by default.
+// We override the necessary code with CSS, but
+// that requires a custom SASS variable
+$input-btn-check-focus-color-opacity: var(
+  --input-btn-check-focus-color-opacity,
+  0.5
+);

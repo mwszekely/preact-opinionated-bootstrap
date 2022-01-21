@@ -155,10 +155,6 @@ export function DemoButtons() {
                                     <ButtonGroupChild index={1} fillVariant={buttonsFill} colorVariant={buttonsColor} onPress={onPress}>Second button</ButtonGroupChild>
                                     <ButtonGroupChild index={2} fillVariant={buttonsFill} colorVariant={buttonsColor} onPress={onPress}>Third button</ButtonGroupChild>
                                     <ButtonGroupChild index={3} fillVariant={buttonsFill} colorVariant={buttonsColor} onPress={onPress}>Fourth button</ButtonGroupChild>
-                                    <ButtonGroupChild index={4} fillVariant={buttonsFill} colorVariant={buttonsColor} onPress={onPress}>Fifth button</ButtonGroupChild>
-                                    <ButtonGroupChild index={5} fillVariant={buttonsFill} colorVariant={buttonsColor} onPress={onPress}>Sixth button</ButtonGroupChild>
-                                    <ButtonGroupChild index={6} fillVariant={buttonsFill} colorVariant={buttonsColor} onPress={onPress}>Seventh button</ButtonGroupChild>
-                                    <ButtonGroupChild index={7} fillVariant={buttonsFill} colorVariant={buttonsColor} onPress={onPress}>Eighth button</ButtonGroupChild>
                                 </ButtonGroup>
                             </CardElement>
 
