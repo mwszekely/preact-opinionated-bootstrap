@@ -6,9 +6,9 @@
         u$3,
         t$3,
         r$3,
-        o$3,
+        o$4,
         f$3,
-        e$3 = {},
+        e$4 = {},
         c$3 = [],
         s$3 = /acit|ex(?:s|g|n|p|$)|rph|grid|ows|mnc|ntw|ine[ch]|zoo|^ord|itera/i;
 
@@ -84,7 +84,7 @@
     }
 
     function m$2(n) {
-      (!n.__d && (n.__d = !0) && t$3.push(n) && !g$3.__r++ || o$3 !== l$3.debounceRendering) && ((o$3 = l$3.debounceRendering) || r$3)(g$3);
+      (!n.__d && (n.__d = !0) && t$3.push(n) && !g$3.__r++ || o$4 !== l$3.debounceRendering) && ((o$4 = l$3.debounceRendering) || r$3)(g$3);
     }
 
     function g$3() {
@@ -118,7 +118,7 @@
 
           p = null;
         }
-        j$3(n, _, p = p || e$3, t, r, o, f, s, a), b = _.__e, (v = _.ref) && p.ref != v && (g || (g = []), p.ref && g.push(p.ref, null, _), g.push(v, _.__c || b, _)), null != b ? (null == m && (m = b), "function" == typeof _.type && _.__k === p.__k ? _.__d = s = x$3(_, s, n) : s = P$2(n, _, p, w, b, s), "function" == typeof u.type && (u.__d = s)) : s && p.__e == s && s.parentNode != n && (s = k$2(p));
+        j$3(n, _, p = p || e$4, t, r, o, f, s, a), b = _.__e, (v = _.ref) && p.ref != v && (g || (g = []), p.ref && g.push(p.ref, null, _), g.push(v, _.__c || b, _)), null != b ? (null == m && (m = b), "function" == typeof _.type && _.__k === p.__k ? _.__d = s = x$3(_, s, n) : s = P$2(n, _, p, w, b, s), "function" == typeof u.type && (u.__d = s)) : s && p.__e == s && s.parentNode != n && (s = k$2(p));
       }
 
       for (u.__e = m, h = A; h--;) null != w[h] && ("function" == typeof u.type && null != w[h].__e && w[h].__e == u.__d && (u.__d = k$2(i, h + 1)), N$1(w[h], w[h]));
@@ -255,7 +255,7 @@
       }
 
       if (null === d) y === p || c && l.data === p || (l.data = p);else {
-        if (o = o && n$3.call(l.childNodes), a = (y = i.props || e$3).dangerouslySetInnerHTML, v = p.dangerouslySetInnerHTML, !c) {
+        if (o = o && n$3.call(l.childNodes), a = (y = i.props || e$4).dangerouslySetInnerHTML, v = p.dangerouslySetInnerHTML, !c) {
           if (null != o) for (y = {}, _ = 0; _ < l.attributes.length; _++) y[l.attributes[_].name] = l.attributes[_].value;
           (v || a) && (v && (a && v.__html == a.__html || v.__html === l.innerHTML) || (l.innerHTML = v && v.__html || ""));
         }
@@ -296,7 +296,7 @@
 
     function S$1(u, i, t) {
       var r, o, f;
-      l$3.__ && l$3.__(u, i), o = (r = "function" == typeof t) ? null : t && t.__k || i.__k, f = [], j$3(i, u = (!r && t || i).__k = v$2(d$2, null, [u]), o || e$3, e$3, void 0 !== i.ownerSVGElement, !r && t ? [t] : o ? null : i.firstChild ? n$3.call(i.childNodes) : null, f, !r && t ? t : o ? o.__e : i.firstChild, r), z$2(f, u);
+      l$3.__ && l$3.__(u, i), o = (r = "function" == typeof t) ? null : t && t.__k || i.__k, f = [], j$3(i, u = (!r && t || i).__k = v$2(d$2, null, [u]), o || e$4, e$4, void 0 !== i.ownerSVGElement, !r && t ? [t] : o ? null : i.firstChild ? n$3.call(i.childNodes) : null, f, !r && t ? t : o ? o.__e : i.firstChild, r), z$2(f, u);
     }
 
     function B(l, u, i) {
@@ -352,6 +352,36 @@
     }, _$1.prototype.forceUpdate = function (n) {
       this.__v && (this.__e = !0, n && this.__h.push(n), m$2(this));
     }, _$1.prototype.render = d$2, t$3 = [], r$3 = "function" == typeof Promise ? Promise.prototype.then.bind(Promise.resolve()) : setTimeout, g$3.__r = 0, f$3 = 0;
+
+    var o$3 = 0;
+
+    function e$3(_, e, n, t, f) {
+      var l,
+          s,
+          u = {};
+
+      for (s in e) "ref" == s ? l = e[s] : u[s] = e[s];
+
+      var a = {
+        type: _,
+        props: u,
+        key: n,
+        ref: l,
+        __k: null,
+        __: null,
+        __b: 0,
+        __e: null,
+        __d: void 0,
+        __c: null,
+        __h: null,
+        constructor: void 0,
+        __v: --o$3,
+        __source: t,
+        __self: f
+      };
+      if ("function" == typeof _ && (l = _.defaultProps)) for (s in l) void 0 === u[s] && (u[s] = l[s]);
+      return l$3.vnode && l$3.vnode(a), a;
+    }
 
     var t$2,
         u$2,
@@ -2348,17 +2378,17 @@
               But roughly isn't good enough if there are multiple matches.
               To convert our sorted index to the unsorted index we need, we have to find the first
               element that matches us *and* (if any such exist) is *after* our current selection.
-               In other words, the only way typeahead moves backwards relative to our current
+                In other words, the only way typeahead moves backwards relative to our current
               position is if the only other option is behind us.
-               It's not specified in WAI-ARIA what to do in that case.  I suppose wrap back to the start?
+                It's not specified in WAI-ARIA what to do in that case.  I suppose wrap back to the start?
               Though there's also a case for just going upwards to the nearest to prevent jumpiness.
               But if you're already doing typeahead on an unsorted list, like, jumpiness can't be avoided.
               I dunno. Going back to the start is the simplist though.
-               Basically what this does: Starting from where we found ourselves after our binary search,
+                Basically what this does: Starting from where we found ourselves after our binary search,
               scan backwards and forwards through all adjacent entries that also compare equally so that
               we can find the one whose `unsortedIndex` is the lowest amongst all other equal strings
               (and also the lowest `unsortedIndex` yadda yadda except that it comes after us).
-               TODO: The binary search starts this off with a solid O(log n), but one-character
+                TODO: The binary search starts this off with a solid O(log n), but one-character
               searches are, thanks to pigeonhole principal, eventually guaranteed to become
               O(n*log n). This is annoying but probably not easily solvable? There could be an
               exception for one-character strings, but that's just kicking the can down
@@ -3526,7 +3556,7 @@
       return true;
     }
 
-    function returnFalse() {
+    function returnFalse$1() {
       return false;
     }
 
@@ -3541,10 +3571,10 @@
         onWindowFocusedChange
       } = _ref;
       useEnsureStability(onFocusedChanged, onFocusedInnerChanged, onLastFocusedChanged, onLastFocusedInnerChanged, onLastActiveElementChange, onActiveElementChange, onWindowFocusedChange);
-      const [getFocused, setFocused] = usePassiveState(onFocusedChanged, returnFalse);
-      const [getFocusedInner, setFocusedInner] = usePassiveState(onFocusedInnerChanged, returnFalse);
-      const [getLastFocused, setLastFocused] = usePassiveState(onLastFocusedChanged, returnFalse);
-      const [getLastFocusedInner, setLastFocusedInner] = usePassiveState(onLastFocusedInnerChanged, returnFalse);
+      const [getFocused, setFocused] = usePassiveState(onFocusedChanged, returnFalse$1);
+      const [getFocusedInner, setFocusedInner] = usePassiveState(onFocusedInnerChanged, returnFalse$1);
+      const [getLastFocused, setLastFocused] = usePassiveState(onLastFocusedChanged, returnFalse$1);
+      const [getLastFocusedInner, setLastFocusedInner] = usePassiveState(onLastFocusedInnerChanged, returnFalse$1);
       const {
         getActiveElement,
         getLastActiveElement,
@@ -6942,39 +6972,6 @@
       });
       y$1(() => {
         setFocusTrapActive(open);
-      }, [open]); // A menu sentinal is a hidden but focusable element that comes at the start or end of the element
-      // that, when activated or focused over, closes the menu.
-      // (if focused within 100ms of the open prop changing, instead of
-      // closing the menu, focusing the sentinel immediately asks the menu to focus itself).
-      // This exists because while mouse users can click out of a menu
-      // and keyboard users can escape to close the menu,
-      // screen readers and other input methods that don't use those two become stuck.
-
-      const useMenuSentinel = A$2(() => {
-        const [firstSentinelIsActive, setFirstSentinelIsActive] = useState(false);
-        useTimeout({
-          callback: () => {
-            setFirstSentinelIsActive(open);
-          },
-          timeout: 100,
-          triggerIndex: `${open}-${firstSentinelIsActive}`
-        });
-        const onFocus = firstSentinelIsActive ? () => stableOnClose() : () => {
-          var _getSendFocusWithinMe;
-
-          return (_getSendFocusWithinMe = getSendFocusWithinMenu()) === null || _getSendFocusWithinMe === void 0 ? void 0 : _getSendFocusWithinMe();
-        };
-
-        const onClick = () => stableOnClose();
-
-        return {
-          useMenuSentinelProps: function (p) {
-            return useMergedProps()({
-              onFocus,
-              onClick
-            }, p);
-          }
-        };
       }, [open]);
       const useMenuBaseProps = A$2(props => {
         function onKeyDown(e) {
@@ -7007,7 +7004,20 @@
         } else ;
       }, [focusTrapActive]);
       return {
-        useMenuSentinel,
+        useMenuSentinel: A$2(() => {
+          const {
+            useSentinelProps: useMenuSentinelProps,
+            ...rest
+          } = useFocusSentinel({
+            open,
+            onClose: onClose !== null && onClose !== void 0 ? onClose : () => {},
+            sendFocusWithinMenu
+          });
+          return {
+            useMenuSentinelProps,
+            ...rest
+          };
+        }, [open, onClose, sendFocusWithinMenu]),
         focusTrapActive,
         useMenuBaseProps,
         useMenuBaseButtonProps,
@@ -7017,8 +7027,50 @@
         onOpen,
         onClose
       };
+    } // A focus sentinal is a hidden but focusable element that comes at the start or end 
+    // of the out-of-place-focusable component that, when activated or focused over, closes the component
+    // (if focused within 100ms of the open prop changing, instead of
+    // closing, focusing the sentinel immediately asks it to focus itself).
+    // This exists for things like menus which can have focus but also need a way to return
+    // to whatever out-of-place parent they came from when naturally tabbed out of (as opposed
+    // to dialogs which loop back around when tabbed out of). While mouse users can click out of a menu
+    // and keyboard users can escape to close a menu, screen readers and other input methods 
+    // that don't use those two would become stuck.
+
+    function useFocusSentinel(_ref2) {
+      let {
+        open,
+        onClose,
+        sendFocusWithinMenu
+      } = _ref2;
+      const getSendFocusWithinMenu = useStableGetter(sendFocusWithinMenu);
+      const stableOnClose = useStableCallback(onClose);
+      const [firstSentinelIsActive, setFirstSentinelIsActive] = useState(false);
+      useTimeout({
+        callback: () => {
+          setFirstSentinelIsActive(open);
+        },
+        timeout: 100,
+        triggerIndex: `${open}-${firstSentinelIsActive}`
+      });
+      const onFocus = firstSentinelIsActive ? () => stableOnClose() : () => {
+        var _getSendFocusWithinMe;
+
+        return (_getSendFocusWithinMe = getSendFocusWithinMenu()) === null || _getSendFocusWithinMe === void 0 ? void 0 : _getSendFocusWithinMe();
+      };
+
+      const onClick = () => stableOnClose();
+
+      return {
+        useSentinelProps: function (p) {
+          return useMergedProps()({
+            onFocus,
+            onClick
+          }, p);
+        }
+      };
     }
-    function useAriaMenu(_ref2) {
+    function useAriaMenu(_ref3) {
       let {
         collator,
         keyNavigation,
@@ -7026,7 +7078,7 @@
         noWrap,
         typeaheadTimeout,
         ...args
-      } = _ref2;
+      } = _ref3;
       const {
         managedChildren,
         useListNavigationChild,
@@ -7056,7 +7108,7 @@
       } = useMenuBase({ ...args,
         sendFocusWithinMenu: focusMenu !== null && focusMenu !== void 0 ? focusMenu : () => {}
       });
-      const useMenuButton = A$2(_ref3 => {
+      const useMenuButton = A$2(_ref4 => {
         return {
           useMenuButtonProps: function (p) {
             let props = useMenuBaseButtonProps(p);
@@ -7069,8 +7121,8 @@
       /*const useMenuSubmenuItem = useCallback((args: UseMenuSubmenuItemParameters) => {
           const { useMenuProps, useMenuButton } = useAriaMenu<HTMLElement, ChildElement, I>(args);
           const { useMenuButtonProps } = useMenuButton<E>({ tag: "li" as any });
-           const { getElement, useRefElementProps } = useRefElement<any>({ onElementChange: setOpenerElement as OnPassiveStateChange<any> });
-           return {
+            const { getElement, useRefElementProps } = useRefElement<any>({ onElementChange: setOpenerElement as OnPassiveStateChange<any> });
+            return {
               getElement,
               useMenuProps,
               useMenuSubmenuItemProps: function <P extends h.JSX.HTMLAttributes<E>>({ ...props }: P) {
@@ -7085,9 +7137,9 @@
           useListNavigationChildProps
         } = useListNavigationChild(args);
 
-        function useMenuItemProps(_ref4) {
+        function useMenuItemProps(_ref5) {
           let { ...props
-          } = _ref4;
+          } = _ref5;
           props.role = "menuitem";
           return useMergedProps()({}, useListNavigationChildProps(props));
         }
@@ -7097,9 +7149,9 @@
         };
       }, []);
 
-      function useMenuProps(_ref5) {
+      function useMenuProps(_ref6) {
         let { ...props
-        } = _ref5;
+        } = _ref6;
         props.role = "menu";
         return useMenuBaseProps(useListNavigationProps(props));
       }
@@ -7371,58 +7423,93 @@
       };
     }
 
+    function returnFalse() {
+      return false;
+    }
+
     function useAriaTooltip(_ref) {
-      var _mouseoverDelay, _mouseoutDelay;
+      var _mouseoverDelay, _mouseoutDelay, _focusDelay;
 
       let {
         mouseoverDelay,
-        mouseoutDelay
+        mouseoutDelay,
+        focusDelay
       } = _ref;
       (_mouseoverDelay = mouseoverDelay) !== null && _mouseoverDelay !== void 0 ? _mouseoverDelay : mouseoverDelay = 400;
       (_mouseoutDelay = mouseoutDelay) !== null && _mouseoutDelay !== void 0 ? _mouseoutDelay : mouseoutDelay = 40;
-      const [open, setOpen, getOpen] = useState(false); // Used to keep track of if we're hoving over the trigger when correcting for the given delays.
+      (_focusDelay = focusDelay) !== null && _focusDelay !== void 0 ? _focusDelay : focusDelay = 1; // The escape key should close tooltips, but do nothing else.
+      // (i.e. closing a tooltip in a dialog MUST NOT close the dialog too)
+      // TODO: Tooltips are, effectively, always the topmost component,
+      // so we can just have them listen to and swallow all "Escape"
+      // key presses before anyone else. For a more general popup,
+      // or a tooltip in a tooltip (!!) a different solution would be needed.
 
-      const [hasDelayCorrectedMouseover, setHasDelayCorrectedMouseover] = useState(false);
+      useGlobalHandler(document, "keydown", e => {
+        if (getOpen() && e.key === "Escape" && !e.defaultPrevented) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+          setOpen(false);
+          setTriggerHoverDelayCorrected(false);
+          setTooltipHoverDelayCorrected(false);
+          setTriggerFocusedDelayCorrected(false);
+          setTooltipFocusedDelayCorrected(false);
+        }
+      }, {
+        capture: true
+      });
+      const [open, setOpen, getOpen] = useState(false);
       const {
         useRandomIdProps: useTooltipIdProps,
         useReferencedIdProps: useTooltipIdReferencingProps
       } = useRandomId({
         prefix: "aria-tooltip-"
       });
-      const [triggerFocusedInner, setTriggerFocusedInner, getTriggerFocusedInner] = useState(false);
-      const [triggerHasMouseover, setTriggerHasMouseover] = useState(false);
-      const [tooltipHasMouseover, setTooltipHasMouseover] = useState(false);
-      const [tooltipHasFocus, setTooltipHasFocus] = useState(false);
-      const triggerIndex = !!(+triggerHasMouseover + +tooltipHasMouseover + +tooltipHasFocus);
-      const tooltipShouldBeShown = triggerHasMouseover || tooltipHasMouseover || tooltipHasFocus; // Activate on the usual delay for mouseover
+      const [getTriggerFocused, setTriggerFocused] = usePassiveState(useStableCallback(focused => {
+        const delay = focused ? focusDelay : 1;
 
-      useTimeout({
-        timeout: mouseoverDelay,
-        triggerIndex,
-        callback: () => {
-          setHasDelayCorrectedMouseover(tooltipShouldBeShown);
+        if (delay != null && isFinite(delay)) {
+          let handle = setTimeout(() => setTriggerFocusedDelayCorrected(focused), focused ? focusDelay : 1);
+          return () => clearTimeout(handle);
         }
-      }); // Forcibly deactivate almost immediately on mouseout
+      }), returnFalse);
+      const [getTooltipFocused, setTooltipFocused] = usePassiveState(useStableCallback(focused => {
+        const delay = focused ? focusDelay : 1;
 
-      useTimeout({
-        timeout: mouseoutDelay,
-        triggerIndex,
-        callback: () => {
-          if (!tooltipShouldBeShown) setHasDelayCorrectedMouseover(tooltipShouldBeShown);
+        if (delay != null && isFinite(delay)) {
+          let handle = setTimeout(() => setTooltipFocusedDelayCorrected(focused), delay);
+          return () => clearTimeout(handle);
         }
-      }); // If we have a (delay-corrected) mouseover or we're focused,
-      // show the tooltip.
+      }), returnFalse);
+      const [getTriggerHover, setTriggerHover] = usePassiveState(useStableCallback(hovering => {
+        const delay = hovering ? mouseoverDelay : mouseoutDelay;
 
+        if (delay != null && isFinite(delay)) {
+          let handle = setTimeout(() => setTriggerHoverDelayCorrected(hovering), delay);
+          return () => clearTimeout(handle);
+        }
+      }), returnFalse);
+      const [getTooltipHover, setTooltipHover] = usePassiveState(useStableCallback(hovering => {
+        const delay = hovering ? mouseoverDelay : mouseoutDelay;
+
+        if (delay != null && isFinite(delay)) {
+          let handle = setTimeout(() => setTooltipHoverDelayCorrected(hovering), delay);
+          return () => clearTimeout(handle);
+        }
+      }), returnFalse);
+      const [getTriggerFocusedDelayCorrected, setTriggerFocusedDelayCorrected] = useState(false);
+      const [getTriggerHoverDelayCorrected, setTriggerHoverDelayCorrected] = useState(false);
+      const [getTooltipFocusedDelayCorrected, setTooltipFocusedDelayCorrected] = useState(false);
+      const [getTooltipHoverDelayCorrected, setTooltipHoverDelayCorrected] = useState(false);
       y$1(() => {
-        setOpen(hasDelayCorrectedMouseover || triggerFocusedInner);
-      }, [hasDelayCorrectedMouseover, triggerFocusedInner]);
+        setOpen(getTriggerFocusedDelayCorrected || getTriggerHoverDelayCorrected);
+      }, [getTriggerFocusedDelayCorrected || getTriggerHoverDelayCorrected]);
       const useTooltipTrigger = A$2(function useTooltipTrigger() {
         function onPointerEnter(e) {
-          setTriggerHasMouseover(true);
+          setTriggerHover(true);
         }
 
         function onPointerLeave(e) {
-          setTriggerHasMouseover(false);
+          setTriggerHover(false);
         }
 
         function onTouchEnd(e) {
@@ -7432,7 +7519,7 @@
         const {
           useHasFocusProps
         } = useHasFocus({
-          onFocusedInnerChanged: setTriggerFocusedInner
+          onFocusedInnerChanged: setTriggerFocused
         });
 
         function useTooltipTriggerProps(_ref2) {
@@ -7457,11 +7544,11 @@
       }, [useTooltipIdReferencingProps]);
       const useTooltip = A$2(function useTooltip() {
         function onPointerEnter(e) {
-          setTooltipHasMouseover(true);
+          setTooltipHover(true);
         }
 
         function onPointerLeave(e) {
-          setTooltipHasMouseover(false);
+          setTooltipHover(false);
         }
 
         function useTooltipProps(_ref3) {
@@ -7470,7 +7557,7 @@
           const {
             useHasFocusProps
           } = useHasFocus({
-            onFocusedInnerChanged: setTooltipHasFocus
+            onFocusedInnerChanged: setTooltipFocused
           });
           return useTooltipIdProps(useHasFocusProps(useMergedProps()({
             onPointerEnter,
@@ -10016,13 +10103,15 @@
         expandedIndex,
         setExpandedIndex
       });
-      return v$2("div", { ...useMergedProps()({
+      return e$3("div", { ...useMergedProps()({
           ref,
           className: "accordion elevation-raised-1 elevation-body-surface"
-        }, props)
-      }, v$2(UseAriaAccordionSectionContext.Provider, {
-        value: useAriaAccordionSection
-      }, children));
+        }, props),
+        children: e$3(UseAriaAccordionSectionContext.Provider, {
+          value: useAriaAccordionSection,
+          children: children
+        }, void 0)
+      }, void 0);
     }));
     const AccordionSection = g$1(forwardElementRef(function AccordionSection(_ref2, ref) {
       var _Transition, _headerLevel;
@@ -10062,25 +10151,31 @@
       });
       const headerProps = {
         class: "accordion-header",
-        children: v$2("button", { ...headerButtonProps
-        }, header)
+        children: e$3("button", { ...headerButtonProps,
+          children: header
+        }, void 0)
       };
       const headerJsx = headerLevel >= 1 && headerLevel <= 6 ? v$2(`h${headerLevel}`, headerProps) : v$2("div", useMergedProps()(headerProps, {
         role: "heading",
         "aria-level": `${headerLevel}`
       }));
-      return v$2("div", { ...{
+      return e$3("div", { ...{
           ref,
           class: "accordion-item"
-        }
-      }, headerJsx, v$2(Transition, {
-        show: expanded,
-        ...useAriaAccordionSectionBodyProps(useMergedProps()(props, {
-          class: ""
-        }))
-      }, v$2("div", null, v$2("div", {
-        class: clsx("accordion-body", expanded && "elevation-depressed-2", "elevation-body-surface")
-      }, children))));
+        },
+        children: [headerJsx, e$3(Transition, {
+          show: expanded,
+          ...useAriaAccordionSectionBodyProps(useMergedProps()(props, {
+            class: ""
+          })),
+          children: e$3("div", {
+            children: e$3("div", {
+              class: clsx("accordion-body", expanded && "elevation-depressed-2", "elevation-body-surface"),
+              children: children
+            }, void 0)
+          }, void 0)
+        }, void 0)]
+      }, void 0);
     }));
 
     // presumably because the number of elements changes. 
@@ -10203,28 +10298,29 @@
       h$1(() => {
         provideParentWithHook === null || provideParentWithHook === void 0 ? void 0 : provideParentWithHook(useReferencedElement);
       }, [useReferencedElement, provideParentWithHook]);
-      return v$2("div", { ...useMergedProps()({
+      return e$3("div", { ...useMergedProps()({
           ref,
           className: clsx("progress", `bg-${colorVariant !== null && colorVariant !== void 0 ? colorVariant : "primary"}`)
-        }, rest)
-      }, v$2("progress", { ...useProgressProps({
-          className: "progress-bar"
-        })
-      }));
+        }, rest),
+        children: e$3("progress", { ...useProgressProps({
+            className: "progress-bar"
+          })
+        }, void 0)
+      }, void 0);
     })); // :)
 
     new Date().getDate() % 2;
 
     function Check() {
-      return v$2("i", {
+      return e$3("i", {
         class: "bi bi-check"
-      });
+      }, void 0);
     }
 
     function Cross() {
-      return v$2("i", {
+      return e$3("i", {
         class: "bi bi-x"
-      });
+      }, void 0);
     }
 
     const ProgressCircular = forwardElementRef(function (_ref4, ref) {
@@ -10287,7 +10383,9 @@
         }
       }, [mode]);
       (_childrenPosition = childrenPosition) !== null && _childrenPosition !== void 0 ? _childrenPosition : childrenPosition = "after";
-      if (children && (typeof children != "object" || !("type" in children))) children = v$2("span", null, children);
+      if (children && (typeof children != "object" || !("type" in children))) children = e$3("span", {
+        children: children
+      }, void 0);
       let progressProps = useMergedProps()({
         ref,
         className: clsx("circular-progress-container")
@@ -10298,40 +10396,55 @@
         ref: (_children2 = children) === null || _children2 === void 0 ? void 0 : _children2.ref
       } : {});
       let progressVnodeType = childrenPosition === "merged" ? (_children$type = (_children3 = children) === null || _children3 === void 0 ? void 0 : _children3.type) !== null && _children$type !== void 0 ? _children$type : "div" : "div";
-      const progressElement = v$2(progressVnodeType, progressProps, v$2(d$2, null, mode === "pending" && !!loadingLabel && v$2("div", {
-        role: "alert",
-        "aria-live": "assertive",
-        class: "visually-hidden"
-      }, loadingLabel), mode !== null && v$2(Swappable, null, v$2("div", {
-        className: "circular-progress-swappable"
-      }, v$2(Fade, {
-        show: mode === "pending" && showSpinner,
-        exitVisibility: "removed"
-      }, v$2("div", {
-        style: {
-          "--count": gimmickCount,
-          "--delay": delay
-        },
-        className: clsx("circular-progress", colorVariant ? `circular-progress-${colorVariant}` : undefined, colorFill == "foreground" && "inverse-fill", colorFill === "foreground-only" && "no-fill")
-      }, Array.from(function* () {
-        for (let i = 0; i < gimmickCount; ++i) yield v$2("div", {
-          class: clsx("circular-progress-ball-origin", `circular-progress-ball-origin-${i}`)
-        }, v$2("div", {
-          class: "circular-progress-ball"
-        }));
-      }()))), v$2(Fade, {
-        show: !shownStatusLongEnough && mode === "succeeded" && succeededAfterFailure
-      }, v$2("div", {
-        class: "circular-progress-succeeded"
-      }, v$2(Check, null))), v$2(Fade, {
-        show: !shownStatusLongEnough && mode === "failed"
-      }, v$2("div", {
-        class: "circular-progress-failed"
-      }, v$2(Cross, null)))))));
-      return v$2(d$2, null, childrenPosition == "before" && progressElement, children && v$2(children.type, useMergedProps()({
-        children: childrenPosition === "child" ? progressElement : undefined,
-        ref: children.ref
-      }, useReferencedProps(children.props))), childrenPosition == "after" && progressElement);
+      const progressElement = v$2(progressVnodeType, progressProps, e$3(d$2, {
+        children: [mode === "pending" && !!loadingLabel && e$3("div", {
+          role: "alert",
+          "aria-live": "assertive",
+          class: "visually-hidden",
+          children: loadingLabel
+        }, void 0), mode !== null && e$3(Swappable, {
+          children: e$3("div", {
+            className: "circular-progress-swappable",
+            children: [e$3(Fade, {
+              show: mode === "pending" && showSpinner,
+              exitVisibility: "removed",
+              children: e$3("div", {
+                style: {
+                  "--count": gimmickCount,
+                  "--delay": delay
+                },
+                className: clsx("circular-progress", colorVariant ? `circular-progress-${colorVariant}` : undefined, colorFill == "foreground" && "inverse-fill", colorFill === "foreground-only" && "no-fill"),
+                children: Array.from(function* () {
+                  for (let i = 0; i < gimmickCount; ++i) yield e$3("div", {
+                    class: clsx("circular-progress-ball-origin", `circular-progress-ball-origin-${i}`),
+                    children: e$3("div", {
+                      class: "circular-progress-ball"
+                    }, void 0)
+                  }, void 0);
+                }())
+              }, void 0)
+            }, void 0), e$3(Fade, {
+              show: !shownStatusLongEnough && mode === "succeeded" && succeededAfterFailure,
+              children: e$3("div", {
+                class: "circular-progress-succeeded",
+                children: e$3(Check, {}, void 0)
+              }, void 0)
+            }, void 0), e$3(Fade, {
+              show: !shownStatusLongEnough && mode === "failed",
+              children: e$3("div", {
+                class: "circular-progress-failed",
+                children: e$3(Cross, {}, void 0)
+              }, void 0)
+            }, void 0)]
+          }, void 0)
+        }, void 0)]
+      }, void 0));
+      return e$3(d$2, {
+        children: [childrenPosition == "before" && progressElement, children && v$2(children.type, useMergedProps()({
+          children: childrenPosition === "child" ? progressElement : undefined,
+          ref: children.ref
+        }, useReferencedProps(children.props))), childrenPosition == "after" && progressElement]
+      }, void 0);
     });
 
     const UseButtonGroupChild = D$1(null);
@@ -10345,45 +10458,50 @@
         value,
         children
       } = _ref;
-      return v$2(DefaultFillStyleContext.Provider, {
-        value: value
-      }, children);
+      return e$3(DefaultFillStyleContext.Provider, {
+        value: value,
+        children: children
+      }, void 0);
     });
     const ProvideDefaultButtonColor = g$1(function ProvideDefaultButtonColor(_ref2) {
       let {
         value,
         children
       } = _ref2;
-      return v$2(DefaultColorStyleContext.Provider, {
-        value: value
-      }, children);
+      return e$3(DefaultColorStyleContext.Provider, {
+        value: value,
+        children: children
+      }, void 0);
     });
     const ProvideDefaultButtonSize = g$1(function ProvideDefaultButtonSize(_ref3) {
       let {
         value,
         children
       } = _ref3;
-      return v$2(DefaultSizeContext.Provider, {
-        value: value
-      }, children);
+      return e$3(DefaultSizeContext.Provider, {
+        value: value,
+        children: children
+      }, void 0);
     });
     const ProvideDefaultButtonDisabled = g$1(function ProvideDefaultButtonDisabled(_ref4) {
       let {
         value,
         children
       } = _ref4;
-      return v$2(DefaultDisabledContext.Provider, {
-        value: value
-      }, children);
+      return e$3(DefaultDisabledContext.Provider, {
+        value: value,
+        children: children
+      }, void 0);
     });
     const ProvideDefaultButtonDropdownDirection = g$1(function ProvideDefaultButtonDropdownDirection(_ref5) {
       let {
         value,
         children
       } = _ref5;
-      return v$2(DefaultDropdownDirectionContext.Provider, {
-        value: value
-      }, children);
+      return e$3(DefaultDropdownDirectionContext.Provider, {
+        value: value,
+        children: children
+      }, void 0);
     });
     function useButtonFillVariant(providedValue) {
       const defaultFill = F(DefaultFillStyleContext);
@@ -10435,16 +10553,16 @@
     function ButtonR(p, ref) {
       var _p$tag;
 
-      if (((_p$tag = p.tag) === null || _p$tag === void 0 ? void 0 : _p$tag.toLowerCase()) === "a" || !!p.href) return v$2(AnchorButton, {
+      if (((_p$tag = p.tag) === null || _p$tag === void 0 ? void 0 : _p$tag.toLowerCase()) === "a" || !!p.href) return e$3(AnchorButton, {
         ref: ref,
         ...p
-      });else if (p.pressed != null) return v$2(ToggleButton, {
+      }, void 0);else if (p.pressed != null) return e$3(ToggleButton, {
         ref: ref,
         ...p
-      });else return v$2(ButtonButton, {
+      }, void 0);else return e$3(ButtonButton, {
         ref: ref,
         ...p
-      });
+      }, void 0);
     }
 
     const AnchorButton = forwardElementRef(function AnchorButton(p, ref) {
@@ -10466,10 +10584,10 @@
       size = buttonStyleInfo.size;
       fillVariant = buttonStyleInfo.fillVariant;
       const useButtonStylesProps = buttonStyleInfo.useButtonStylesProps;
-      return v$2("a", { ...usePseudoActive(useButtonStylesProps({ ...props,
+      return e$3("a", { ...usePseudoActive(useButtonStylesProps({ ...props,
           ref
         }))
-      });
+      }, void 0);
     });
     const ButtonButton = forwardElementRef(function ButtonButton(p, ref) {
       let {
@@ -10524,22 +10642,25 @@
       fillVariant = buttonStyleInfo.fillVariant;
       const useButtonStylesProps = buttonStyleInfo.useButtonStylesProps; // Bootstrap why are you like this?
 
-      if (dropdownVariant == "combined") children = v$2(d$2, null, " ", children, " ");
-      return v$2(ProgressCircular, {
+      if (dropdownVariant == "combined") children = e$3(d$2, {
+        children: [" ", children, " "]
+      }, void 0);
+      return e$3(ProgressCircular, {
         spinnerTimeout: spinnerTimeout,
         mode: hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null,
         childrenPosition: "child",
-        colorFill: fillVariant == "fill" ? "foreground" : "background"
-      }, v$2("button", { ...usePseudoActive(useButtonStylesProps(useMergedProps()({
-          type: "button",
-          className: clsx(pending && "pending active", disabled && "disabled", dropdownVariant && `dropdown-toggle`, dropdownDirection == "inline-start" && "dropstart", dropdownDirection == "inline-end" && "dropend", dropdownDirection == "block-start" && "dropup", // TODO, don't really want to add logical direction testing for *every* button :/
-          dropdownDirection == "block-end" && "dropdown", dropdownVariant === "separate" && `dropdown-toggle-split`)
-        }, useAriaButtonProps({ ...props,
-          children,
-          onPress,
-          ref
-        }))))
-      }));
+        colorFill: fillVariant == "fill" ? "foreground" : "background",
+        children: e$3("button", { ...usePseudoActive(useButtonStylesProps(useMergedProps()({
+            type: "button",
+            className: clsx(pending && "pending active", disabled && "disabled", dropdownVariant && `dropdown-toggle`, dropdownDirection == "inline-start" && "dropstart", dropdownDirection == "inline-end" && "dropend", dropdownDirection == "block-start" && "dropup", // TODO, don't really want to add logical direction testing for *every* button :/
+            dropdownDirection == "block-end" && "dropdown", dropdownVariant === "separate" && `dropdown-toggle-split`)
+          }, useAriaButtonProps({ ...props,
+            children,
+            onPress,
+            ref
+          }))))
+        }, void 0)
+      }, void 0);
     });
     const ToggleButton = forwardElementRef(function ToggleButton(p, ref) {
       let {
@@ -10588,16 +10709,17 @@
       colorVariant = buttonStyleInfo.colorVariant;
       size = buttonStyleInfo.size;
       const useButtonStylesProps = buttonStyleInfo.useButtonStylesProps;
-      return v$2(ProgressCircular, {
+      return e$3(ProgressCircular, {
         mode: hasError ? "failed" : pending ? "pending" : settleCount && showAsyncSuccess ? "succeeded" : null,
         childrenPosition: "child",
-        colorFill: fillVariant == "fill" ? "foreground" : "background"
-      }, v$2("button", { ...usePseudoActive(useAriaButtonProps(useButtonStylesProps({ ...useMergedProps()({
-            className: clsx("toggle-button", pressed && "active"),
-            ref
-          }, props)
-        })))
-      }));
+        colorFill: fillVariant == "fill" ? "foreground" : "background",
+        children: e$3("button", { ...usePseudoActive(useAriaButtonProps(useButtonStylesProps({ ...useMergedProps()({
+              className: clsx("toggle-button", pressed && "active"),
+              ref
+            }, props)
+          })))
+        }, void 0)
+      }, void 0);
     });
     const Button = forwardElementRef(ButtonR);
 
@@ -10661,19 +10783,26 @@
       //const domProps =newDomProps, p3));
 
       outerDomProps["data-child-count"] = `${childCount}`;
-      return v$2(UseButtonGroupChild.Provider, {
-        value: useListNavigationChild
-      }, v$2(ProvideDefaultButtonColor, {
-        value: colorVariant
-      }, v$2(ProvideDefaultButtonFill, {
-        value: fillVariant
-      }, v$2(ProvideDefaultButtonSize, {
-        value: size
-      }, v$2(ProvideDefaultButtonDisabled, {
-        value: disabled
-      }, v$2("div", { ...outerDomProps
-      }, v$2("div", { ...innerDomProps
-      }, children)))))));
+      return e$3(UseButtonGroupChild.Provider, {
+        value: useListNavigationChild,
+        children: e$3(ProvideDefaultButtonColor, {
+          value: colorVariant,
+          children: e$3(ProvideDefaultButtonFill, {
+            value: fillVariant,
+            children: e$3(ProvideDefaultButtonSize, {
+              value: size,
+              children: e$3(ProvideDefaultButtonDisabled, {
+                value: disabled,
+                children: e$3("div", { ...outerDomProps,
+                  children: e$3("div", { ...innerDomProps,
+                    children: children
+                  }, void 0)
+                }, void 0)
+              }, void 0)
+            }, void 0)
+          }, void 0)
+        }, void 0)
+      }, void 0);
     }));
     const ButtonGroupChild = g$1(forwardElementRef(function ButtonGroupChild1(_ref, ref) {
       let {
@@ -10697,14 +10826,14 @@
         ref
       }, { ...buttonProps
       }));
-      return v$2(Button, { ...p
-      });
+      return e$3(Button, { ...p
+      }, void 0);
     }));
 
-    v$2(Button, {
+    e$3(Button, {
       pressed: true,
       onPress: p => console.log(p)
-    });
+    }, void 0);
 
     const baseId = generateRandomId("render-portal-container-");
     const BodyPortalClassContext = D$1("");
@@ -10714,9 +10843,10 @@
         className,
         children
       } = _ref;
-      return v$2(BodyPortalClassContext.Provider, {
-        value: className
-      }, children);
+      return e$3(BodyPortalClassContext.Provider, {
+        value: className,
+        children: children
+      }, void 0);
     });
 
     function useBodyPortalRoot() {
@@ -10747,10 +10877,11 @@
       } = useRefElement({
         onElementChange: setElement
       });
-      return v$2(BodyPortalRootContext.Provider, {
-        value: getElement
-      }, children, v$2("div", { ...useRefElementProps({})
-      }));
+      return e$3(BodyPortalRootContext.Provider, {
+        value: getElement,
+        children: [children, e$3("div", { ...useRefElementProps({})
+        }, void 0)]
+      }, void 0);
     }
     function BodyPortal(_ref3) {
       let {
@@ -10826,42 +10957,57 @@
       }
 
       (_align = align) !== null && _align !== void 0 ? _align : align = "center";
-      return v$2(BodyPortal, null, v$2(CloseDialogContext.Provider, {
-        value: useStableCallback(() => {
-          var _onClose2;
+      return e$3(BodyPortal, {
+        children: e$3(CloseDialogContext.Provider, {
+          value: useStableCallback(() => {
+            var _onClose2;
 
-          return (_onClose2 = onClose) === null || _onClose2 === void 0 ? void 0 : _onClose2(undefined);
-        })
-      }, v$2("div", {
-        class: "modal-portal-container"
-      }, v$2(Fade, {
-        show: open
-      }, v$2("div", { ...useDialogBackdropProps({
-          class: "modal-backdrop backdrop-filter-transition"
-        })
-      })), v$2(Transition, { ...{
-          ref,
-          show: open,
-          ...rest
-        }
-      }, v$2("div", { ...useDialogProps({
-          class: clsx("modal-dialog modal-dialog-scrollable", align == "center" ? "modal-dialog-centered" : "")
-        })
-      }, v$2(BodyPortalRoot, null, v$2(Fade, {
-        show: open
-      }, v$2("div", {
-        class: "modal-content elevation-body-surface elevation-raised-6"
-      }, title != null && v$2("div", { ...useDialogTitleProps({
-          class: "modal-header"
-        })
-      }, v$2("h1", {
-        class: "modal-title"
-      }, title)), v$2("div", { ...useDialogBodyProps({
-          class: "modal-body"
-        })
-      }, children), footer != null && v$2("div", {
-        class: "modal-footer"
-      }, footer)))))))));
+            return (_onClose2 = onClose) === null || _onClose2 === void 0 ? void 0 : _onClose2(undefined);
+          }),
+          children: e$3("div", {
+            class: "modal-portal-container",
+            children: [e$3(Fade, {
+              show: open,
+              children: e$3("div", { ...useDialogBackdropProps({
+                  class: "modal-backdrop backdrop-filter-transition"
+                })
+              }, void 0)
+            }, void 0), e$3(Transition, { ...{
+                ref,
+                show: open,
+                ...rest
+              },
+              children: e$3("div", { ...useDialogProps({
+                  class: clsx("modal-dialog modal-dialog-scrollable", align == "center" ? "modal-dialog-centered" : "")
+                }),
+                children: e$3(BodyPortalRoot, {
+                  children: e$3(Fade, {
+                    show: open,
+                    children: e$3("div", {
+                      class: "modal-content elevation-body-surface elevation-raised-6",
+                      children: [title != null && e$3("div", { ...useDialogTitleProps({
+                          class: "modal-header"
+                        }),
+                        children: e$3("h1", {
+                          class: "modal-title",
+                          children: title
+                        }, void 0)
+                      }, void 0), e$3("div", { ...useDialogBodyProps({
+                          class: "modal-body"
+                        }),
+                        children: children
+                      }, void 0), footer != null && e$3("div", {
+                        class: "modal-footer",
+                        children: footer
+                      }, void 0)]
+                    }, void 0)
+                  }, void 0)
+                }, void 0)
+              }, void 0)
+            }, void 0)]
+          }, void 0)
+        }, void 0)
+      }, void 0);
     }));
     const DialogUncontrolled = g$1(forwardElementRef(function DialogUncontrolled(_ref2, ref) {
       let {
@@ -10908,20 +11054,20 @@
         (_getState2 = getState()) === null || _getState2 === void 0 ? void 0 : _getState2.resolve();
       }, [modal]);
       y$1(() => provideShow === null || provideShow === void 0 ? void 0 : provideShow(prev => show), [provideShow, show]);
-      return v$2(DialogControlled, { ...props,
+      return e$3(DialogControlled, { ...props,
         open: !!state,
         onClose: onClose
-      });
+      }, void 0);
     }));
     const Dialog = g$1(forwardElementRef(function Dialog(props, ref) {
-      if (props.provideShow) return v$2(DialogUncontrolled, { ...props,
+      if (props.provideShow) return e$3(DialogUncontrolled, { ...props,
         ref: ref
-      });
-      if (props.onClose) return v$2(DialogControlled, { ...props,
+      }, void 0);
+      if (props.onClose) return e$3(DialogControlled, { ...props,
         ref: ref
-      });else return v$2(DialogUncontrolled, { ...props,
+      }, void 0);else return e$3(DialogUncontrolled, { ...props,
         ref: ref
-      });
+      }, void 0);
     }));
     const PushDialogContext = D$1(null);
     const CloseDialogContext = D$1(null);
@@ -10942,16 +11088,21 @@
       const updateDialogStable = useStableCallback((index, dialog) => {
         return updateDialog === null || updateDialog === void 0 ? void 0 : updateDialog(index, dialog);
       });
-      return v$2(d$2, null, v$2(DefaultDialogTimeout.Provider, {
-        value: defaultTimeout !== null && defaultTimeout !== void 0 ? defaultTimeout : 5000
-      }, v$2(DialogsProviderHelper, {
-        setPushDialog: setPushDialog,
-        setUpdateDialog: setUpdateDialog
-      }), pushDialog && updateDialog && v$2(PushDialogContext.Provider, {
-        value: pushDialogStable
-      }, v$2(UpdateDialogContext.Provider, {
-        value: updateDialogStable
-      }, children))));
+      return e$3(d$2, {
+        children: e$3(DefaultDialogTimeout.Provider, {
+          value: defaultTimeout !== null && defaultTimeout !== void 0 ? defaultTimeout : 5000,
+          children: [e$3(DialogsProviderHelper, {
+            setPushDialog: setPushDialog,
+            setUpdateDialog: setUpdateDialog
+          }, void 0), pushDialog && updateDialog && e$3(PushDialogContext.Provider, {
+            value: pushDialogStable,
+            children: e$3(UpdateDialogContext.Provider, {
+              value: updateDialogStable,
+              children: children
+            }, void 0)
+          }, void 0)]
+        }, void 0)
+      }, void 0);
     }
     /**
      * Returns a function that immediately displays the given JSX Dialog element and returns a promise when it closes.
@@ -10980,11 +11131,11 @@
      */
 
     g$1(forwardElementRef(function CloseDialogButton(props, ref) {
-      return v$2(Button, { ...useMergedProps()(props, {
+      return e$3(Button, { ...useMergedProps()(props, {
           ref,
           onPress: useCloseDialog()
         })
-      });
+      }, void 0);
     })); // Extracted to a separate component to avoid rerendering all non-dialog children
 
     function DialogsProviderHelper(_ref4) {
@@ -11050,22 +11201,26 @@
       h$1(() => {
         setUpdateDialog(_ => updateDialog);
       }, [updateDialog]);
-      return v$2(BodyPortal, null, v$2(DialogsContainerChildrenContext.Provider, {
-        value: children
-      }, v$2(DialogsContainer, null)));
+      return e$3(BodyPortal, {
+        children: e$3(DialogsContainerChildrenContext.Provider, {
+          value: children,
+          children: e$3(DialogsContainer, {}, void 0)
+        }, void 0)
+      }, void 0);
     }
 
     const DialogsContainerChildrenContext = D$1(new Map());
 
     function DialogsContainer(props) {
       const children = F(DialogsContainerChildrenContext);
-      return v$2("div", { ...useMergedProps()({}, props)
-      }, Array.from(children).map(_ref5 => {
-        let [key, {
-          children
-        }] = _ref5;
-        return children;
-      }));
+      return e$3("div", { ...useMergedProps()({}, props),
+        children: Array.from(children).map(_ref5 => {
+          let [key, {
+            children
+          }] = _ref5;
+          return children;
+        })
+      }, void 0);
     }
 
     const Drawer = g$1(forwardElementRef(function Drawer(_ref, ref) {
@@ -11109,35 +11264,44 @@
         TransitionProps.slideTargetInline = -1;
       }
 
-      return v$2(BodyPortal, null, v$2("div", { ...rest,
-        ref: ref
-      }, v$2(Fade, {
-        show: open
-      }, v$2("div", { ...useDrawerBackdropProps({
-          class: "offcanvas-backdrop backdrop-filter-transition"
-        })
-      })), v$2(Transition, { ...{
-          show: open,
-          ...TransitionProps
-        }
-      }, v$2("div", { ...useDrawerProps({
-          class: "offcanvas offcanvas-start elevation-raised-5 elevation-body-surface",
-          tabindex: -1
-        })
-      }, v$2("div", {
-        class: "offcanvas-header"
-      }, v$2("h5", { ...useDrawerTitleProps({
-          class: "offcanvas-title"
-        })
-      }, "Drawer"), closeButton !== null && closeButton !== void 0 ? closeButton : v$2(Button, {
-        tag: "button",
-        class: "btn-close text-reset",
-        "aria-label": "Close",
-        onPress: () => onClose("escape")
-      })), v$2("div", { ...useDrawerBodyProps({
-          class: "offcanvas-body"
-        })
-      }, children)))));
+      return e$3(BodyPortal, {
+        children: e$3("div", { ...rest,
+          ref: ref,
+          children: [e$3(Fade, {
+            show: open,
+            children: e$3("div", { ...useDrawerBackdropProps({
+                class: "offcanvas-backdrop backdrop-filter-transition"
+              })
+            }, void 0)
+          }, void 0), e$3(Transition, { ...{
+              show: open,
+              ...TransitionProps
+            },
+            children: e$3("div", { ...useDrawerProps({
+                class: "offcanvas offcanvas-start elevation-raised-5 elevation-body-surface",
+                tabindex: -1
+              }),
+              children: [e$3("div", {
+                class: "offcanvas-header",
+                children: [e$3("h5", { ...useDrawerTitleProps({
+                    class: "offcanvas-title"
+                  }),
+                  children: "Drawer"
+                }, void 0), closeButton !== null && closeButton !== void 0 ? closeButton : e$3(Button, {
+                  tag: "button",
+                  class: "btn-close text-reset",
+                  "aria-label": "Close",
+                  onPress: () => onClose("escape")
+                }, void 0)]
+              }, void 0), e$3("div", { ...useDrawerBodyProps({
+                  class: "offcanvas-body"
+                }),
+                children: children
+              }, void 0)]
+            }, void 0)
+          }, void 0)]
+        }, void 0)
+      }, void 0);
     }));
 
     D$1(null);
@@ -11212,9 +11376,10 @@
           "--input-grid-columns": columns
         } : {},
         ref
-      }, props), v$2(InInputGridContext.Provider, {
-        value: F(InInputGridContext) + 1
-      }, children));
+      }, props), e$3(InInputGridContext.Provider, {
+        value: F(InInputGridContext) + 1,
+        children: children
+      }, void 0));
     }));
     /**
      * An InputGroup, that puts an Input and its Label together, visually, into one component.
@@ -11233,9 +11398,10 @@
       return v$2(tag !== null && tag !== void 0 ? tag : "div", useMergedProps()({
         class: clsx("input-group", size && size != "md" && `input-group-${size}`, colSpan && `input-grid-span-${colSpan}`),
         ref
-      }, props), v$2(InInputGroupContext.Provider, {
-        value: true
-      }, children));
+      }, props), e$3(InInputGroupContext.Provider, {
+        value: true,
+        children: children
+      }, void 0));
     }));
     /**
      * Not generally needed, since most input components come with labels that do this for you.
@@ -11330,35 +11496,48 @@
         className: clsx("form-check-input", pending && "pending", disabled && "disabled", inInputGroup && "mt-0"),
         "aria-label": labelPosition === "hidden" ? stringLabel : undefined
       }));
-      const inputElement = v$2(OptionallyInputGroup$1, {
+
+      const inputElement = e$3(OptionallyInputGroup$1, {
         isInput: true,
         tag: inInputGroup ? "div" : null,
         ...useWrapperLabelProps({
           disabled,
           tabIndex: -1
-        })
-      }, v$2(ProgressCircular, {
-        childrenPosition: "after",
-        colorFill: "foreground-only",
-        mode: currentType === "async" ? asyncState : null,
-        colorVariant: "info"
-      }, v$2("input", { ...propsForInput
-      })));
+        }),
+        children: e$3(ProgressCircular, {
+          childrenPosition: "after",
+          colorFill: "foreground-only",
+          mode: currentType === "async" ? asyncState : null,
+          colorVariant: "info",
+          children: e$3("input", { ...propsForInput
+          }, void 0)
+        }, void 0)
+      }, void 0);
+
       const p2 = { ...useCheckboxLabelElementProps({
           className: clsx(pending && "pending", disabled && "disabled", "form-check-label"),
           "aria-hidden": "true"
         })
       };
-      const labelElement = v$2(d$2, null, label != null && v$2(OptionallyInputGroup$1, {
-        isInput: false,
-        tag: "label",
-        ...p2
-      }, label));
-      const ret = v$2(d$2, null, labelPosition == "start" && labelElement, inputElement, labelPosition == "end" && labelElement);
-      if (!inInputGroup) return v$2("div", { ...useMergedProps()({}, {
+
+      const labelElement = e$3(d$2, {
+        children: label != null && e$3(OptionallyInputGroup$1, {
+          isInput: false,
+          tag: "label",
+          ...p2,
+          children: label
+        }, void 0)
+      }, void 0);
+
+      const ret = e$3(d$2, {
+        children: [labelPosition == "start" && labelElement, inputElement, labelPosition == "end" && labelElement]
+      }, void 0);
+
+      if (!inInputGroup) return e$3("div", { ...useMergedProps()({}, {
           class: "form-check"
-        })
-      }, ret);
+        }),
+        children: ret
+      }, void 0);
       return ret;
     }));
     const OptionallyInputGroup$1 = forwardElementRef(function OptionallyInputGroup(_ref2, ref) {
@@ -11377,15 +11556,17 @@
       // new child that's, CSS-wise, the "true" input.
       // The other one is used for its border styles and relative positioning.
 
-      if (inInputGrid && isInput) children = v$2("div", {
-        className: "input-group-text"
-      }, children);
-      return v$2(InputGroupText, {
+      if (inInputGrid && isInput) children = e$3("div", {
+        className: "input-group-text",
+        children: children
+      }, void 0);
+      return e$3(InputGroupText, {
         tag: tag !== null && tag !== void 0 ? tag : "div",
         ...useMergedProps()({
           className: clsx(isInput && inInputGrid && "faux-input-group-text")
-        }, props)
-      }, children);
+        }, props),
+        children: children
+      }, void 0);
     });
 
     D$1(null);
@@ -11476,20 +11657,26 @@
       const {
         useGenericLabelLabelProps
       } = useGenericLabelLabel();
-      let labelJsx = v$2("label", { ...useGenericLabelLabelProps(useReferencedInputIdProps("for")({
+
+      let labelJsx = e$3("label", { ...useGenericLabelLabelProps(useReferencedInputIdProps("for")({
           children: label
         }))
-      });
-      let groupJsx = v$2("div", { ...useGenericLabelInputProps(useRadioGroupProps({
+      }, void 0);
+
+      let groupJsx = e$3("div", { ...useGenericLabelInputProps(useRadioGroupProps({
           ref,
           "aria-label": labelPosition === "hidden" ? stringLabel : undefined
-        }))
-      }, children);
-      return v$2(CurrentHandlerTypeContext.Provider, {
-        value: currentType !== null && currentType !== void 0 ? currentType : "sync"
-      }, v$2(RadioGroupContext.Provider, {
-        value: useRadio
-      }, labelPosition == "start" && labelJsx, groupJsx, labelPosition == "end" && labelJsx));
+        })),
+        children: children
+      }, void 0);
+
+      return e$3(CurrentHandlerTypeContext.Provider, {
+        value: currentType !== null && currentType !== void 0 ? currentType : "sync",
+        children: e$3(RadioGroupContext.Provider, {
+          value: useRadio,
+          children: [labelPosition == "start" && labelJsx, groupJsx, labelPosition == "end" && labelJsx]
+        }, void 0)
+      }, void 0);
     }));
     const Radio = g$1(forwardElementRef(function Radio(_ref2, ref) {
       var _labelPosition, _disabled, _label;
@@ -11539,37 +11726,48 @@
         console.error(`Hidden labels require a string-based label for the aria-label attribute.`);
       }
 
-      const inputElement = v$2(OptionallyInputGroup$1, {
+      const inputElement = e$3(OptionallyInputGroup$1, {
         isInput: true,
         tag: inInputGroup ? "div" : null,
         ...useRadioLabelProps({
           disabled,
           tabIndex: -1
-        })
-      }, v$2(ProgressCircular, {
-        childrenPosition: "after",
-        colorFill: "foreground-only",
-        mode: currentHandlerType == "async" ? asyncState : null,
-        colorVariant: "info"
-      }, v$2("input", { ...useRadioInputProps({
-          ref,
-          type: "radio",
-          className: clsx(asyncState === "pending" && "pending", disabled && "disabled", "form-check-input"),
-          "aria-label": labelPosition === "hidden" ? stringLabel : undefined
-        })
-      })));
-      const labelElement = v$2(d$2, null, label != null && v$2(OptionallyInputGroup$1, {
-        isInput: false,
-        tag: "label",
-        ...useRadioLabelProps({
-          className: clsx(asyncState === "pending" && "pending", disabled && "disabled", "form-check-label"),
-          "aria-hidden": "true"
-        })
-      }, label));
-      const ret = v$2(d$2, null, labelPosition == "start" && labelElement, inputElement, labelPosition == "end" && labelElement);
-      if (!inInputGroup) return v$2("div", {
-        class: "form-check"
-      }, ret);
+        }),
+        children: e$3(ProgressCircular, {
+          childrenPosition: "after",
+          colorFill: "foreground-only",
+          mode: currentHandlerType == "async" ? asyncState : null,
+          colorVariant: "info",
+          children: e$3("input", { ...useRadioInputProps({
+              ref,
+              type: "radio",
+              className: clsx(asyncState === "pending" && "pending", disabled && "disabled", "form-check-input"),
+              "aria-label": labelPosition === "hidden" ? stringLabel : undefined
+            })
+          }, void 0)
+        }, void 0)
+      }, void 0);
+
+      const labelElement = e$3(d$2, {
+        children: label != null && e$3(OptionallyInputGroup$1, {
+          isInput: false,
+          tag: "label",
+          ...useRadioLabelProps({
+            className: clsx(asyncState === "pending" && "pending", disabled && "disabled", "form-check-label"),
+            "aria-hidden": "true"
+          }),
+          children: label
+        }, void 0)
+      }, void 0);
+
+      const ret = e$3(d$2, {
+        children: [labelPosition == "start" && labelElement, inputElement, labelPosition == "end" && labelElement]
+      }, void 0);
+
+      if (!inInputGroup) return e$3("div", {
+        class: "form-check",
+        children: ret
+      }, void 0);
       return ret;
     }));
 
@@ -11635,40 +11833,52 @@
         console.error(`Hidden labels require a string-based label for the aria-label attribute.`);
       }
 
-      const inputElement = v$2(OptionallyInputGroup, {
+      const inputElement = e$3(OptionallyInputGroup, {
         tag: inInputGroup ? "div" : null,
         isInput: true,
         ...useWrapperLabelProps({
           disabled,
           tabIndex: -1
-        })
-      }, v$2(ProgressCircular, {
-        childrenPosition: "after",
-        colorFill: "foreground-only",
-        mode: currentType === "async" ? asyncState : null,
-        colorVariant: "info"
-      }, v$2("input", { ...useSwitchInputElementProps({
-          ref,
-          type: "checkbox",
-          className: clsx(pending && "pending", "form-check-input", disabled && "disabled"),
-          "aria-label": labelPosition === "hidden" ? stringLabel : undefined
-        })
-      })));
+        }),
+        children: e$3(ProgressCircular, {
+          childrenPosition: "after",
+          colorFill: "foreground-only",
+          mode: currentType === "async" ? asyncState : null,
+          colorVariant: "info",
+          children: e$3("input", { ...useSwitchInputElementProps({
+              ref,
+              type: "checkbox",
+              className: clsx(pending && "pending", "form-check-input", disabled && "disabled"),
+              "aria-label": labelPosition === "hidden" ? stringLabel : undefined
+            })
+          }, void 0)
+        }, void 0)
+      }, void 0);
+
       const p2 = { ...useSwitchLabelElementProps({
           className: clsx(pending && "pending", "form-check-label", disabled && "disabled"),
           "aria-hidden": "true"
         })
       };
-      const labelElement = v$2(d$2, null, label != null && v$2(OptionallyInputGroup, {
-        tag: "label",
-        isInput: false,
-        ...p2
-      }, label));
-      const ret = v$2(d$2, null, labelPosition == "start" && labelElement, inputElement, labelPosition == "end" && labelElement);
-      if (!inInputGroup) return v$2("div", { ...useMergedProps()(rest, {
+
+      const labelElement = e$3(d$2, {
+        children: label != null && e$3(OptionallyInputGroup, {
+          tag: "label",
+          isInput: false,
+          ...p2,
+          children: label
+        }, void 0)
+      }, void 0);
+
+      const ret = e$3(d$2, {
+        children: [labelPosition == "start" && labelElement, inputElement, labelPosition == "end" && labelElement]
+      }, void 0);
+
+      if (!inInputGroup) return e$3("div", { ...useMergedProps()(rest, {
           class: "form-check form-switch"
-        })
-      }, ret);
+        }),
+        children: ret
+      }, void 0);
       return ret;
     })); // Note: Slightly different from the others
     // (^^^^ I'm really glad I left that there)
@@ -11686,15 +11896,17 @@
         ref
       };
       if (!inInputGroup) return v$2(tag !== null && tag !== void 0 ? tag : d$2, props, children);
-      if (inInputGrid && isInput) children = v$2("div", {
-        className: clsx(isInput && inInputGrid && "form-switch", "input-group-text")
-      }, children);
-      return v$2(InputGroupText, {
+      if (inInputGrid && isInput) children = e$3("div", {
+        className: clsx(isInput && inInputGrid && "form-switch", "input-group-text"),
+        children: children
+      }, void 0);
+      return e$3(InputGroupText, {
         tag: tag !== null && tag !== void 0 ? tag : "div",
         ...useMergedProps()({
           className: clsx("input-group-text", isInput && !inInputGrid && "form-switch", isInput && inInputGrid && "faux-input-group-text")
-        }, props)
-      }, children);
+        }, props),
+        children: children
+      }, void 0);
     });
 
     function return0() {
@@ -11886,24 +12098,25 @@
           }
         }
       }, [v]);
-      return v$2(ProgressCircular, {
+      return e$3(ProgressCircular, {
         spinnerTimeout: 10,
         mode: currentType === "async" ? asyncState : null,
         childrenPosition: "after",
-        colorVariant: "info"
-      }, v$2("input", { ...useRefElementProps(useHasFocusProps(useMergedProps()(props, {
-          "aria-disabled": disabled ? "true" : undefined,
-          onKeyDown,
-          ref,
-          readOnly: readOnly || disabled && disabledVariant === "soft",
-          disabled: disabled && disabledVariant === "hard",
-          onBlur,
-          class: clsx("form-control", "faux-form-control-inner", disabled && "disabled", pending && "with-end-icon"),
-          type,
-          onInput,
-          ...extraProps
-        })))
-      }));
+        colorVariant: "info",
+        children: e$3("input", { ...useRefElementProps(useHasFocusProps(useMergedProps()(props, {
+            "aria-disabled": disabled ? "true" : undefined,
+            onKeyDown,
+            ref,
+            readOnly: readOnly || disabled && disabledVariant === "soft",
+            disabled: disabled && disabledVariant === "hard",
+            onBlur,
+            class: clsx("form-control", "faux-form-control-inner", disabled && "disabled", pending && "with-end-icon"),
+            type,
+            onInput,
+            ...extraProps
+          })))
+        }, void 0)
+      }, void 0);
     }
 
     const UnlabelledInput = forwardElementRef(UnlabelledInputR);
@@ -11955,11 +12168,14 @@
       }
 
       const IC = disabled && disabledVariant === "text" ? InputGroupText : UnlabelledInput;
-      const labelJsx = v$2("label", { ...useInputLabelLabelProps({
+
+      const labelJsx = e$3("label", { ...useInputLabelLabelProps({
           class: clsx(disabledVariant !== "text" && disabled && "disabled", isInInputGroup ? "input-group-text" : labelPosition != "floating" ? "form-label" : "")
-        })
-      }, children);
-      let inputJsx = v$2(IC, { ...useInputLabelInputProps(useMergedProps()({
+        }),
+        children: children
+      }, void 0);
+
+      let inputJsx = e$3(IC, { ...useInputLabelInputProps(useMergedProps()({
           children: IC === InputGroupText ? value : undefined,
           value: IC === InputGroupText ? undefined : value !== null && value !== void 0 ? value : undefined,
           placeholder: IC === InputGroupText ? undefined : placeholder,
@@ -11973,25 +12189,31 @@
           [IC == InputGroupText ? "children" : "value"]: value
         },
         children: IC == InputGroupText ? value : undefined
-      });
+      }, void 0);
+
       const isEmpty = true ; //if (isInInputGrid) {
 
       if (!(disabled && disabledVariant === "text")) {
-        inputJsx = v$2("div", {
+        inputJsx = e$3("div", {
           class: clsx(labelPosition != "floating" && classs, labelPosition != "floating" && className, "form-control", "faux-form-control-outer", "elevation-depressed-2", "elevation-body-surface", "focusable-within", !isEmpty , disabled && disabledVariant !== "text" && "disabled", size != "md" && `form-control-${size}`),
           style: width !== null && width !== void 0 && width.endsWith("ch") ? {
             "--form-control-width": width !== null && width !== void 0 ? width : "20ch"
           } : width ? {
             width
-          } : undefined
-        }, inputJsx);
+          } : undefined,
+          children: inputJsx
+        }, void 0);
       } // }
 
 
-      const inputWithLabel = v$2(d$2, null, labelPosition === "start" && labelJsx, inputJsx, (labelPosition === "end" || labelPosition == "floating") && labelJsx);
-      if (labelPosition !== "floating") return inputWithLabel;else return v$2("div", {
-        class: clsx("form-floating", labelPosition == "floating" && classs, labelPosition === "floating" && className)
-      }, inputJsx);
+      const inputWithLabel = e$3(d$2, {
+        children: [labelPosition === "start" && labelJsx, inputJsx, (labelPosition === "end" || labelPosition == "floating") && labelJsx]
+      }, void 0);
+
+      if (labelPosition !== "floating") return inputWithLabel;else return e$3("div", {
+        class: clsx("form-floating", labelPosition == "floating" && classs, labelPosition === "floating" && className),
+        children: inputJsx
+      }, void 0);
     }));
 
     /**
@@ -12159,12 +12381,16 @@
         labelPosition,
         ...domProps
       } = props;
-      let labelVnode = typeof label == "string" ? v$2("label", null, label) : label;
-      return v$2(d$2, null, labelPosition === "start" && labelVnode, v$2(tag !== null && tag !== void 0 ? tag : "ul", useMergedProps()({
-        class: clsx("list-group", flush && "list-group-flush", inline && UtilityClasses.display.inline),
-        ref,
-        "aria-hidden": labelPosition === "hidden" ? label : undefined
-      }, domProps)), labelPosition === "end" && labelVnode);
+      let labelVnode = typeof label == "string" ? e$3("label", {
+        children: label
+      }, void 0) : label;
+      return e$3(d$2, {
+        children: [labelPosition === "start" && labelVnode, v$2(tag !== null && tag !== void 0 ? tag : "ul", useMergedProps()({
+          class: clsx("list-group", flush && "list-group-flush", inline && UtilityClasses.display.inline),
+          ref,
+          "aria-hidden": labelPosition === "hidden" ? label : undefined
+        }, domProps)), labelPosition === "end" && labelVnode]
+      }, void 0);
     }));
     const ListItemStatic = g$1(forwardElementRef(function ListItemStatic(props, ref) {
       const {
@@ -12177,16 +12403,20 @@
       } = { ...props,
         ref
       };
-      return v$2("li", { ...usePseudoActive(useMergedProps()({
+      return e$3("li", { ...usePseudoActive(useMergedProps()({
           class: clsx("list-group-item list-group-item-multiline", disabled && "disabled text-muted", !!badge && "with-badge", !!iconStart && "with-start", !!(badge || iconEnd) && "with-end")
-        }, domProps))
-      }, iconStart && v$2("span", {
-        class: "list-group-item-start-icon"
-      }, iconStart), children, badge && v$2("span", {
-        class: "list-group-item-badge"
-      }, badge), iconEnd && v$2("span", {
-        className: "list-group-item-end-icon"
-      }, iconEnd));
+        }, domProps)),
+        children: [iconStart && e$3("span", {
+          class: "list-group-item-start-icon",
+          children: iconStart
+        }, void 0), children, badge && e$3("span", {
+          class: "list-group-item-badge",
+          children: badge
+        }, void 0), iconEnd && e$3("span", {
+          className: "list-group-item-end-icon",
+          children: iconEnd
+        }, void 0)]
+      }, void 0);
     }));
 
     const UseListboxSingleItemContext = D$1(null);
@@ -12243,20 +12473,23 @@
       });
       (_labelPosition = labelPosition) !== null && _labelPosition !== void 0 ? _labelPosition : labelPosition = "start";
       let labelProps = typeof label == "string" ? {} : label.props;
-      let clonedLabel = labelPosition != "hidden" ? B(typeof label == "string" ? v$2("label", null, label) : label, useListboxSingleLabelProps(labelProps)) : label;
+      let clonedLabel = labelPosition != "hidden" ? B(typeof label == "string" ? e$3("label", {
+        children: label
+      }, void 0) : label, useListboxSingleLabelProps(labelProps)) : label;
       console.assert(!(labelPosition == "hidden" && typeof label != "string"));
-      return v$2(UseListboxSingleItemContext.Provider, {
-        value: useListboxSingleItem
-      }, v$2(ListStatic, {
-        tag: tag,
-        labelPosition: labelPosition,
-        label: clonedLabel,
-        ...useMergedProps()({
-          class: "list-group",
-          ref,
-          "aria-hidden": labelPosition === "hidden" ? label : undefined
-        }, useListboxSingleProps(domProps))
-      }));
+      return e$3(UseListboxSingleItemContext.Provider, {
+        value: useListboxSingleItem,
+        children: e$3(ListStatic, {
+          tag: tag,
+          labelPosition: labelPosition,
+          label: clonedLabel,
+          ...useMergedProps()({
+            class: "list-group",
+            ref,
+            "aria-hidden": labelPosition === "hidden" ? label : undefined
+          }, useListboxSingleProps(domProps))
+        }, void 0)
+      }, void 0);
     }));
     const ListItemSingle = g$1(forwardElementRef(function ListItemSingle(props, ref) {
       useLogRender("ListSingle", `Rendering ListSingleItem #${props.index}`);
@@ -12305,15 +12538,17 @@
         hidden,
         disabled
       });
-      return v$2(ListItemStatic, { ...usePseudoActive(useMergedProps()({
+      return e$3(ListItemStatic, { ...usePseudoActive(useMergedProps()({
           disabled,
           class: clsx("list-group-item-action", selected && "active", pending && "pending")
-        }, useListboxSingleItemProps(useRefElementProps(domProps))))
-      }, v$2(ProgressCircular, {
-        childrenPosition: "after",
-        mode: pending ? "pending" : null,
-        colorVariant: "info"
-      }, children));
+        }, useListboxSingleItemProps(useRefElementProps(domProps)))),
+        children: e$3(ProgressCircular, {
+          childrenPosition: "after",
+          mode: pending ? "pending" : null,
+          colorVariant: "info",
+          children: children
+        }, void 0)
+      }, void 0);
     }));
 
     const UseListboxMultiItemContext = D$1(null);
@@ -12356,20 +12591,23 @@
       } = useListboxMultiLabel();
       (_labelPosition = labelPosition) !== null && _labelPosition !== void 0 ? _labelPosition : labelPosition = "start";
       let labelProps = typeof label == "string" ? {} : label.props;
-      let clonedLabel = labelPosition != "hidden" ? B(typeof label == "string" ? v$2("label", null, label) : label, useListboxMultiLabelProps(labelProps)) : label;
+      let clonedLabel = labelPosition != "hidden" ? B(typeof label == "string" ? e$3("label", {
+        children: label
+      }, void 0) : label, useListboxMultiLabelProps(labelProps)) : label;
       console.assert(!(labelPosition == "hidden" && typeof label != "string"));
-      return v$2(UseListboxMultiItemContext.Provider, {
-        value: useListboxMultiItem
-      }, v$2(ListStatic, {
-        tag: tag,
-        labelPosition: labelPosition,
-        label: clonedLabel,
-        ...useMergedProps()({
-          class: "list-group",
-          ref,
-          "aria-hidden": labelPosition === "hidden" ? label : undefined
-        }, useListboxMultiProps(domProps))
-      }));
+      return e$3(UseListboxMultiItemContext.Provider, {
+        value: useListboxMultiItem,
+        children: e$3(ListStatic, {
+          tag: tag,
+          labelPosition: labelPosition,
+          label: clonedLabel,
+          ...useMergedProps()({
+            class: "list-group",
+            ref,
+            "aria-hidden": labelPosition === "hidden" ? label : undefined
+          }, useListboxMultiProps(domProps))
+        }, void 0)
+      }, void 0);
     }));
     const ListItemMulti = g$1(forwardElementRef(function ListItemMulti(props, ref) {
       useLogRender("ListMulti", `Rendering ListMultiItem #${props.index}`);
@@ -12425,15 +12663,17 @@
         onSelect: onSelectSync,
         disabled
       });
-      return v$2(ListItemStatic, { ...usePseudoActive(useMergedProps()({
+      return e$3(ListItemStatic, { ...usePseudoActive(useMergedProps()({
           disabled,
           class: clsx("list-group-item-action", selected && "active", pending && "pending")
-        }, useListboxMultiItemProps(useRefElementProps(domProps))))
-      }, v$2(ProgressCircular, {
-        childrenPosition: "after",
-        mode: pending ? "pending" : hasError ? "failed" : resolveCount ? "succeeded" : null,
-        colorVariant: "info"
-      }, children));
+        }, useListboxMultiItemProps(useRefElementProps(domProps)))),
+        children: e$3(ProgressCircular, {
+          childrenPosition: "after",
+          mode: pending ? "pending" : hasError ? "failed" : resolveCount ? "succeeded" : null,
+          colorVariant: "info",
+          children: children
+        }, void 0)
+      }, void 0);
     }));
 
     function isSingleProps(props) {
@@ -12445,15 +12685,61 @@
     }
 
     const List = g$1(forwardElementRef(function List(props, ref) {
-      if (isSingleProps(props)) return v$2(ListSingle, { ...props,
+      if (isSingleProps(props)) return e$3(ListSingle, { ...props,
         ref: ref
-      });else if (isMultiProps(props)) return v$2(ListMulti, { ...props,
+      }, void 0);else if (isMultiProps(props)) return e$3(ListMulti, { ...props,
         ref: ref
-      });
-      return v$2(ListStatic, { ...props,
+      }, void 0);
+      return e$3(ListStatic, { ...props,
         ref: ref
-      });
+      }, void 0);
     }));
+
+    const FocusModeContext = D$1("keyboard");
+    function FocusVisibilityManager(_ref) {
+      let {
+        children,
+        autoHideFocusRing
+      } = _ref;
+      const [usingPointer, setUsingPointer] = useState(false);
+      document.addEventListener("mousemove", ev => setUsingPointer(true), {
+        passive: true
+      });
+      document.addEventListener("touchstart", ev => setUsingPointer(true), {
+        passive: true
+      });
+      document.addEventListener("pointermove", ev => setUsingPointer(true), {
+        passive: true
+      });
+      document.addEventListener("keydown", ev => {
+        if (ev.key == "Tab") {
+          setUsingPointer(false);
+        }
+      });
+      y$1(() => {
+        const hideFocusRing = !!autoHideFocusRing && usingPointer;
+        document.body.style.setProperty("--input-btn-focus-color-opacity", hideFocusRing ? "0" : "0.25");
+        document.body.style.setProperty("--btn-active-box-shadow-opacity", hideFocusRing ? "0" : "0.4");
+        document.body.style.setProperty("--input-btn-check-focus-color-opacity", hideFocusRing ? "0" : "0.5");
+      }, [usingPointer, !!autoHideFocusRing]);
+      return v$2(FocusModeContext.Provider, {
+        value: usingPointer ? "mouse" : "keyboard",
+        children
+      });
+    }
+    /**
+     * Returns whether it's more likely that the user is currently
+     * navigating with the keyboard or mouse.
+     *
+     * **FOR VISUAL EFFECTS ONLY.** There should be no actual logic
+     * that depends on this very rough heuristic. Tooltips, for example,
+     * use this to determine whether to show on focus (which otherwise
+     * only happens for focusable-but-not-tabbable elements)
+     */
+
+    function useFocusMode() {
+      return F(FocusModeContext);
+    }
 
     var _globalThis$process, _globalThis$process2, _globalThis$process2$, _globalThis$process$e, _globalThis$process$e2;
 
@@ -14931,10 +15217,12 @@
         TransitionPropFlips,
         mouseoverDelay,
         mouseoutDelay,
+        focusDelay,
         ...restAnchorProps
       } = _ref;
       (_side = side) !== null && _side !== void 0 ? _side : side = "block-start";
       (_align = align) !== null && _align !== void 0 ? _align : align = "center";
+      const focusMode = useFocusMode();
       let {
         getIsOpen,
         isOpen,
@@ -14942,7 +15230,8 @@
         useTooltipTrigger
       } = useAriaTooltip({
         mouseoverDelay,
-        mouseoutDelay
+        mouseoutDelay,
+        focusDelay: focusMode === "mouse" ? Infinity : undefined
       }); // TODO: This is probably the most benign mutation during render issue ever
       // It's just used to preserve the last shown value when the tooltip is fading out because `tooltip` is null.
 
@@ -14952,9 +15241,13 @@
       let cloneable;
 
       if (typeof children === "string" || typeof children === "number" || typeof children == "boolean" || typeof children === "bigint") {
-        cloneable = v$2("span", null, children);
+        cloneable = e$3("span", {
+          children: children
+        }, void 0);
       } else if (Array.isArray(children)) {
-        cloneable = v$2("span", null, children);
+        cloneable = e$3("span", {
+          children: children
+        }, void 0);
       } else {
         cloneable = children;
       }
@@ -15025,23 +15318,31 @@
       anchorProps = useMergedProps()(anchorProps, restAnchorProps); // TODO: It's required for this to be exitVisibility="hidden" for transforms to work?
       // Probably an issue in the Transition element itself because it's not browser-specific but it's a little weird
 
-      return v$2(d$2, null, B(cloneable, anchorProps), v$2(BodyPortal, null, v$2("div", { ...usePopperPopupProps({
-          class: "tooltip-wrapper"
-        })
-      }, v$2(Transition, { ...TransitionProps,
-        show: isOpen,
-        onTransitionUpdate: onInteraction,
-        exitVisibility: "hidden"
-      }, v$2("div", { ...useTooltipProps(useMergedProps()({
-          class: "tooltip show",
-          role: "tooltip"
-        }, {}))
-      }, v$2("div", { ...usePopperArrowProps({
-          class: "popper-arrow"
-        })
-      }), v$2("div", {
-        class: "tooltip-inner"
-      }, tooltip || lastUsedTooltipRef.current))))));
+      return e$3(d$2, {
+        children: [B(cloneable, anchorProps), e$3(BodyPortal, {
+          children: e$3("div", { ...usePopperPopupProps({
+              class: "tooltip-wrapper"
+            }),
+            children: e$3(Transition, { ...TransitionProps,
+              show: isOpen,
+              onTransitionUpdate: onInteraction,
+              exitVisibility: "hidden",
+              children: e$3("div", { ...useTooltipProps(useMergedProps()({
+                  class: "tooltip show",
+                  role: "tooltip"
+                }, {})),
+                children: [e$3("div", { ...usePopperArrowProps({
+                    class: "popper-arrow"
+                  })
+                }, void 0), e$3("div", {
+                  class: "tooltip-inner",
+                  children: tooltip || lastUsedTooltipRef.current
+                }, void 0)]
+              }, void 0)
+            }, void 0)
+          }, void 0)
+        }, void 0)]
+      }, void 0);
     }));
 
     const HasTypeaheadContext = D$1(false);
@@ -15149,9 +15450,11 @@
 
       const onAnchorClick = () => setOpen(open => !open);
 
-      if (currentTypeahead && invalidTypeahead) currentTypeahead = v$2(d$2, null, currentTypeahead, " ", v$2("i", {
-        class: "bi bi-backspace"
-      }));
+      if (currentTypeahead && invalidTypeahead) currentTypeahead = e$3(d$2, {
+        children: [currentTypeahead, " ", e$3("i", {
+          class: "bi bi-backspace"
+        }, void 0)]
+      }, void 0);
       let anchorProps = anchor.props;
       anchorProps = useMenuButtonProps(useElementSizeProps(usePopperSourceProps(anchorProps)));
       anchorProps = useMergedProps()(anchorProps, {
@@ -15166,38 +15469,52 @@
         class: `${open ? "active" : ""}`
       });
       anchorProps = useMergedProps()(anchorProps, restAnchorProps);
-      return v$2(d$2, null, v$2(HasTypeaheadContext.Provider, {
-        value: !!currentTypeahead
-      }, v$2(OnCloseContext.Provider, {
-        value: onClose
-      }, v$2(UseMenuItemContext.Provider, {
-        value: useMenuItem
-      }, v$2(ProvideDefaultButtonDropdownDirection, {
-        value: side
-      }, B(anchor, anchorProps)), v$2(BodyPortal, null, v$2("div", { ...usePopperPopupProps({
-          class: "dropdown-menu-popper"
-        })
-      }, v$2(Tooltip, {
-        tooltip: currentTypeahead || null,
-        side: "inline-end",
-        align: "center"
-      }, v$2(Transition, { ...useMenuProps(flipTransformProps((_TransitionProps2 = TransitionProps) !== null && _TransitionProps2 !== void 0 ? _TransitionProps2 : {}, TransitionPropFlips)),
-        show: open,
-        onTransitionUpdate: onInteraction,
-        exitVisibility: "hidden"
-      }, v$2("div", { ...useHasFocusProps({
-          className: clsx("typeahead-tooltip", invalidTypeahead ? "text-danger" : undefined)
-        })
-      }, v$2("button", { ...useFirstMenuSentinelProps({
-          className: "visually-hidden"
-        })
-      }, "Close menu"), v$2(tag !== null && tag !== void 0 ? tag : "ul", {
-        children,
-        className: "dropdown-menu elevation-raised-4 elevation-body-surface"
-      }), v$2("button", { ...useSecondMenuSentinelProps({
-          className: "visually-hidden"
-        })
-      }, "Close menu"))))))))));
+      return e$3(d$2, {
+        children: e$3(HasTypeaheadContext.Provider, {
+          value: !!currentTypeahead,
+          children: e$3(OnCloseContext.Provider, {
+            value: onClose,
+            children: e$3(UseMenuItemContext.Provider, {
+              value: useMenuItem,
+              children: [e$3(ProvideDefaultButtonDropdownDirection, {
+                value: side,
+                children: B(anchor, anchorProps)
+              }, void 0), e$3(BodyPortal, {
+                children: e$3("div", { ...usePopperPopupProps({
+                    class: "dropdown-menu-popper"
+                  }),
+                  children: e$3(Tooltip, {
+                    tooltip: currentTypeahead || null,
+                    side: "inline-end",
+                    align: "center",
+                    children: e$3(Transition, { ...useMenuProps(flipTransformProps((_TransitionProps2 = TransitionProps) !== null && _TransitionProps2 !== void 0 ? _TransitionProps2 : {}, TransitionPropFlips)),
+                      show: open,
+                      onTransitionUpdate: onInteraction,
+                      exitVisibility: "hidden",
+                      children: e$3("div", { ...useHasFocusProps({
+                          className: clsx("typeahead-tooltip", invalidTypeahead ? "text-danger" : undefined)
+                        }),
+                        children: [e$3("button", { ...useFirstMenuSentinelProps({
+                            className: "visually-hidden"
+                          }),
+                          children: "Close menu"
+                        }, void 0), v$2(tag !== null && tag !== void 0 ? tag : "ul", {
+                          children,
+                          className: "dropdown-menu elevation-raised-4 elevation-body-surface"
+                        }), e$3("button", { ...useSecondMenuSentinelProps({
+                            className: "visually-hidden"
+                          }),
+                          children: "Close menu"
+                        }, void 0)]
+                      }, void 0)
+                    }, void 0)
+                  }, void 0)
+                }, void 0)
+              }, void 0)]
+            }, void 0)
+          }, void 0)
+        }, void 0)
+      }, void 0);
     }
 
     function MenuItemU(_ref2, ref) {
@@ -15265,25 +15582,36 @@
       const buttonProps = usePseudoActive(usePressEventHandlers(disabled ? null : onPress, hasTypeahead ? {
         space: "exclude"
       } : undefined)(newProps));
-      const childrenWithIcons = v$2(d$2, null, iconStart && v$2("span", {
-        class: "dropdown-item-start-icon"
-      }, iconStart), children, badge && v$2("span", {
-        class: "dropdown-item-badge"
-      }, badge), iconEnd && v$2("span", {
-        className: "dropdown-item-end-icon"
-      }, iconEnd));
+
+      const childrenWithIcons = e$3(d$2, {
+        children: [iconStart && e$3("span", {
+          class: "dropdown-item-start-icon",
+          children: iconStart
+        }, void 0), children, badge && e$3("span", {
+          class: "dropdown-item-badge",
+          children: badge
+        }, void 0), iconEnd && e$3("span", {
+          className: "dropdown-item-end-icon",
+          children: iconEnd
+        }, void 0)]
+      }, void 0);
 
       if (isInteractive) {
-        return v$2("li", null, v$2(ProgressCircular, {
-          mode: hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null,
-          childrenPosition: "child",
-          colorFill: "foreground-only",
-          colorVariant: "info"
-        }, v$2("button", { ...buttonProps
-        }, childrenWithIcons)));
+        return e$3("li", {
+          children: e$3(ProgressCircular, {
+            mode: hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null,
+            childrenPosition: "child",
+            colorFill: "foreground-only",
+            colorVariant: "info",
+            children: e$3("button", { ...buttonProps,
+              children: childrenWithIcons
+            }, void 0)
+          }, void 0)
+        }, void 0);
       } else {
-        return v$2("li", { ...newProps
-        }, childrenWithIcons);
+        return e$3("li", { ...newProps,
+          children: childrenWithIcons
+        }, void 0);
       }
     }
 
@@ -15330,20 +15658,26 @@
       const {
         useTabListProps
       } = useTabsList();
-      return v$2("div", {
-        class: clsx("tabs-container", `tabs-orientation-${orientation}`)
-      }, v$2(UseTabContext.Provider, {
-        value: useTab
-      }, B(children[0], useTabListProps({
-        className: clsx("nav", visualVariant == "pills" ? "nav-pills" : "nav-tabs")
-      }), children[0].props.children)), v$2(UseTabPanelContext.Provider, {
-        value: useTabPanel
-      }, v$2(Swappable, null, v$2("div", { ...useMergedProps()({
-          className: "tab-content elevation-depressed-3 elevation-body-surface"
-        }, { ...props,
-          ref
-        })
-      }, ...children.slice(1)))));
+      return e$3("div", {
+        class: clsx("tabs-container", `tabs-orientation-${orientation}`),
+        children: [e$3(UseTabContext.Provider, {
+          value: useTab,
+          children: B(children[0], useTabListProps({
+            className: clsx("nav", visualVariant == "pills" ? "nav-pills" : "nav-tabs")
+          }), children[0].props.children)
+        }, void 0), e$3(UseTabPanelContext.Provider, {
+          value: useTabPanel,
+          children: e$3(Swappable, {
+            children: e$3("div", { ...useMergedProps()({
+                className: "tab-content elevation-depressed-3 elevation-body-surface"
+              }, { ...props,
+                ref
+              }),
+              children: [...children.slice(1)]
+            }, void 0)
+          }, void 0)
+        }, void 0)]
+      }, void 0);
     }));
     const Tab = g$1(forwardElementRef(function Tab(_ref2, ref) {
       let {
@@ -15360,14 +15694,16 @@
         text: null,
         tag: "button"
       });
-      return v$2("li", {
+      return e$3("li", {
         className: "nav-item",
-        role: "presentation"
-      }, v$2("button", { ...useTabProps(useMergedProps()({
-          ref,
-          class: clsx(`nav-link`, selected && `active`)
-        }, props))
-      }, children));
+        role: "presentation",
+        children: e$3("button", { ...useTabProps(useMergedProps()({
+            ref,
+            class: clsx(`nav-link`, selected && `active`)
+          }, props)),
+          children: children
+        }, void 0)
+      }, void 0);
     }));
     const TabPanel = g$1(forwardElementRef(function TabPanel(_ref3, ref) {
       var _TransitionProps;
@@ -15420,16 +15756,21 @@
       const updateToastStable = useStableCallback((index, toast) => {
         return updateToast === null || updateToast === void 0 ? void 0 : updateToast(index, toast);
       });
-      return v$2(d$2, null, v$2(DefaultToastTimeout.Provider, {
-        value: defaultTimeout !== null && defaultTimeout !== void 0 ? defaultTimeout : 5000
-      }, v$2(ToastsProviderHelper, {
-        setPushToast: setPushToast,
-        setUpdateToast: setUpdateToast
-      }), pushToast && updateToast && v$2(PushToastContext.Provider, {
-        value: pushToastStable
-      }, v$2(UpdateToastContext.Provider, {
-        value: updateToastStable
-      }, children))));
+      return e$3(d$2, {
+        children: e$3(DefaultToastTimeout.Provider, {
+          value: defaultTimeout !== null && defaultTimeout !== void 0 ? defaultTimeout : 5000,
+          children: [e$3(ToastsProviderHelper, {
+            setPushToast: setPushToast,
+            setUpdateToast: setUpdateToast
+          }, void 0), pushToast && updateToast && e$3(PushToastContext.Provider, {
+            value: pushToastStable,
+            children: e$3(UpdateToastContext.Provider, {
+              value: updateToastStable,
+              children: children
+            }, void 0)
+          }, void 0)]
+        }, void 0)
+      }, void 0);
     }
     function usePushToast() {
       const pushToast = F(PushToastContext);
@@ -15473,9 +15814,12 @@
       h$1(() => {
         setUpdateToast(_ => updateToast);
       }, [updateToast]);
-      return v$2(BodyPortal, null, v$2(ToastsContainerChildrenContext.Provider, {
-        value: children
-      }, v$2(ToastsContainer, null)));
+      return e$3(BodyPortal, {
+        children: e$3(ToastsContainerChildrenContext.Provider, {
+          value: children,
+          children: e$3(ToastsContainer, {}, void 0)
+        }, void 0)
+      }, void 0);
     }
 
     const ToastsContainerChildrenContext = D$1([]);
@@ -15500,12 +15844,14 @@
           }
         }
       });
-      return v$2(UseToastContext.Provider, {
-        value: useToast
-      }, v$2("div", { ...useToastContainerProps(useMergedProps()({
-          className: `set-theme ${theme}`
-        }, props))
-      }, children));
+      return e$3(UseToastContext.Provider, {
+        value: useToast,
+        children: e$3("div", { ...useToastContainerProps(useMergedProps()({
+            className: `set-theme ${theme}`
+          }, props)),
+          children: children
+        }, void 0)
+      }, void 0);
     }
 
     function oppositeTheme() {
@@ -15530,63 +15876,30 @@
         politeness
       });
       const show = status != "dismissed";
-      return v$2(ToastDismissContext.Provider, {
-        value: dismiss
-      }, v$2(SlideFade, {
-        show: show,
-        slideTargetInline: 1,
-        animateOnMount: show,
-        exitVisibility: "removed"
-      }, v$2("div", { ...useToastProps({
-          class: "toast show"
-        })
-      }, v$2("div", {
-        class: "d-flex"
-      }, v$2("div", {
-        class: "toast-body"
-      }, children), v$2(Button, {
-        class: "btn-close me-2 m-auto",
-        "aria-label": "Dismiss alert",
-        onPress: dismiss
-      })))));
-    }
-    /*
-    export function ToastHeader({ children }: { children: ComponentChildren }) {
-        return (
-            <div class="toast-header">
-                <div class="me-auto">
-                    {children}
-                </div>
-                <Button class="btn-close" aria-label="Close" />
-            </div>
-        )
-    }*/
-
-    function FocusRingVisibilityManager(_ref) {
-      let {
-        children
-      } = _ref;
-      const [hideFocusRing, setHideFocusRing] = useState(false);
-      document.addEventListener("mousemove", ev => setHideFocusRing(true), {
-        passive: true
-      });
-      document.addEventListener("touchstart", ev => setHideFocusRing(true), {
-        passive: true
-      });
-      document.addEventListener("pointermove", ev => setHideFocusRing(true), {
-        passive: true
-      });
-      document.addEventListener("keydown", ev => {
-        if (ev.key == "Tab") {
-          setHideFocusRing(false);
-        }
-      });
-      y$1(() => {
-        document.body.style.setProperty("--input-btn-focus-color-opacity", hideFocusRing ? "0" : "0.25");
-        document.body.style.setProperty("--btn-active-box-shadow-opacity", hideFocusRing ? "0" : "0.4");
-        document.body.style.setProperty("--input-btn-check-focus-color-opacity", hideFocusRing ? "0" : "0.5");
-      }, [hideFocusRing]);
-      return v$2(d$2, {}, children);
+      return e$3(ToastDismissContext.Provider, {
+        value: dismiss,
+        children: e$3(SlideFade, {
+          show: show,
+          slideTargetInline: 1,
+          animateOnMount: show,
+          exitVisibility: "removed",
+          children: e$3("div", { ...useToastProps({
+              class: "toast show"
+            }),
+            children: e$3("div", {
+              class: "d-flex",
+              children: [e$3("div", {
+                class: "toast-body",
+                children: children
+              }, void 0), e$3(Button, {
+                class: "btn-close me-2 m-auto",
+                "aria-label": "Dismiss alert",
+                onPress: dismiss
+              }, void 0)]
+            }, void 0)
+          }, void 0)
+        }, void 0)
+      }, void 0);
     }
 
     const Card = g$1(forwardElementRef(function Card(p, ref) {
@@ -15594,11 +15907,12 @@
         children,
         ...props
       } = p;
-      return v$2("div", { ...useMergedProps()({
+      return e$3("div", { ...useMergedProps()({
           ref,
           className: "card elevation-raised-1 elevation-body-surface"
-        }, props)
-      }, children);
+        }, props),
+        children: children
+      }, void 0);
     }));
 
     function CardElement2(_ref, ref) {
@@ -15615,9 +15929,12 @@
               type,
               ...props
             } = p;
-            return v$2(CardBody, { ...props,
-              ref: ref
-            }, v$2(CardText, null, children));
+            return e$3(CardBody, { ...props,
+              ref: ref,
+              children: e$3(CardText, {
+                children: children
+              }, void 0)
+            }, void 0);
           }
 
         case "footer":
@@ -15626,9 +15943,10 @@
               type,
               ...props
             } = p;
-            return v$2(CardFooter, { ...props,
-              ref: ref
-            }, children);
+            return e$3(CardFooter, { ...props,
+              ref: ref,
+              children: children
+            }, void 0);
           }
 
         case "subtitle":
@@ -15638,13 +15956,14 @@
               tag,
               ...props
             } = p;
-            return v$2(CardSubtitle, {
+            return e$3(CardSubtitle, {
               tag: tag,
               ...useMergedProps()({
                 className: "card-body"
               }, props),
-              ref: ref
-            }, children);
+              ref: ref,
+              children: children
+            }, void 0);
           }
 
         case "title":
@@ -15654,13 +15973,14 @@
               tag,
               ...props
             } = p;
-            return v$2(CardTitle, {
+            return e$3(CardTitle, {
               tag: tag,
               ...useMergedProps()({
                 className: "card-body"
               }, props),
-              ref: ref
-            }, children);
+              ref: ref,
+              children: children
+            }, void 0);
           }
 
         case "image":
@@ -15670,12 +15990,13 @@
               src,
               ...props
             } = p;
-            return v$2(CardImage, {
+            return e$3(CardImage, {
               src: src,
               position: "both",
               ...props,
-              ref: ref
-            }, children);
+              ref: ref,
+              children: children
+            }, void 0);
           }
 
         case "flush":
@@ -15695,25 +16016,25 @@
         position,
         ...props
       } = p;
-      return v$2("img", { ...useMergedProps()(props, {
+      return e$3("img", { ...useMergedProps()(props, {
           ref,
           className: `card-img${position == "both" ? "" : `-${position}`}`
         })
-      });
+      }, void 0);
     }));
     const CardBody = g$1(forwardElementRef(function CardBody(props, ref) {
-      return v$2("div", { ...useMergedProps()(props, {
+      return e$3("div", { ...useMergedProps()(props, {
           ref,
           className: "card-body"
         })
-      });
+      }, void 0);
     }));
     const CardFooter = g$1(forwardElementRef(function CardHeader(props, ref) {
-      return v$2("div", { ...useMergedProps()(props, {
+      return e$3("div", { ...useMergedProps()(props, {
           ref,
           className: "card"
         })
-      });
+      }, void 0);
     }));
     const CardTitle = g$1(forwardElementRef(function CardTitle(p, ref) {
       const {
@@ -15736,18 +16057,18 @@
       }));
     }));
     const CardText = g$1(forwardElementRef(function CardText(props, ref) {
-      return v$2("div", { ...useMergedProps()(props, {
+      return e$3("div", { ...useMergedProps()(props, {
           ref,
           className: "card-text"
         })
-      });
+      }, void 0);
     }));
     g$1(forwardElementRef(function CardHeader(props, ref) {
-      return v$2("div", { ...useMergedProps()(props, {
+      return e$3("div", { ...useMergedProps()(props, {
           ref,
           className: "card-header"
         })
-      });
+      }, void 0);
     }));
 
     function DemoButtons() {
@@ -15760,7 +16081,7 @@
         const [asyncFails, setAsyncFails] = useState(false);
         const [usesLinkButton, setUsesLinkButton] = useState(true);
         const pushToast = usePushToast();
-        const onPressSync = () => void (pushToast(v$2(Toast, null, "Button was clicked")));
+        const onPressSync = () => void (pushToast(e$3(Toast, { children: "Button was clicked" }, void 0)));
         const onPressAsync = async () => {
             await sleep$6(asyncTimeout ?? 0);
             if (asyncFails)
@@ -15777,135 +16098,8 @@
                 setToggleOn(b);
         };
         const onToggleInput = usesAsync ? onToggleInputAsync : setToggleOn;
-        return (v$2(ProvideDefaultButtonFill, { value: buttonsFill },
-            v$2(ProvideDefaultButtonSize, { value: buttonsSize },
-                v$2(ProvideDefaultButtonColor, { value: buttonsColor },
-                    v$2("div", { class: "demo" },
-                        v$2(Card, null,
-                            v$2(CardElement, { type: "title", tag: "h2" }, "Buttons"),
-                            v$2(CardElement, null,
-                                v$2(Button, { onPress: onPress }, "I'm a button")),
-                            v$2(CardElement, null,
-                                "A ",
-                                v$2("code", null, "Button"),
-                                " is a ",
-                                v$2("code", null, "Button"),
-                                " is a ",
-                                v$2("code", null, "Button"),
-                                " \u2013 you can click, tap, or Space-key it to activate it and do something.  If the given action is asynchronous, then the button will disable itself and display a spinner during the operation."),
-                            v$2(CardElement, { type: "subtitle", tag: "h3" }, "Async inputs"),
-                            v$2(CardElement, null,
-                                "The ",
-                                v$2("code", null, "onPress"),
-                                " event handler for buttons can be sync or async, and they will react appropriately if the operation takes long enough.",
-                                v$2(InputGrid, null,
-                                    v$2(InputGroup, null,
-                                        v$2(Checkbox, { onCheck: setUsesAsync, checked: usesAsync, labelPosition: "start" }, "Use async handler")),
-                                    v$2(InputGroup, null,
-                                        v$2(Checkbox, { onCheck: setAsyncFails, checked: asyncFails, labelPosition: "start", disabled: !usesAsync }, "Async handler rejects")),
-                                    v$2(InputGroup, null,
-                                        v$2(Input, { width: "8ch", disabled: !usesAsync, type: "number", onValueChange: setAsyncTimeout, value: asyncTimeout }, "Async timeout")))),
-                            v$2(CardElement, null,
-                                v$2(Button, { onPress: onPress }, "Click me")),
-                            v$2(CardElement, { type: "paragraph" },
-                                v$2("code", null, `const onPress = ${usesAsync ? `async ` : ""}() => { ${usesAsync ? `await sleep(${asyncTimeout}); ` : ""}pushToast(<Toast ... />); }
-<Button onPress={onPress}>Click me</Button>`)),
-                            v$2("hr", null),
-                            v$2(CardElement, { type: "subtitle", tag: "h3" }, "Color, fill, & size"),
-                            v$2(CardElement, { type: "paragraph" },
-                                "Buttons can be styled in different sizes, colors, and fill styles. You can provide a global default with ",
-                                v$2("code", null, "Context"),
-                                " objects, like ",
-                                v$2("code", null, "<ProvideDefaultButtonFill>"),
-                                "."),
-                            v$2(CardElement, null, "All the normal Bootstrap colors are provided, albeit with adjustments to outlined buttons to ensure correct contrast ratios on the theme's body BG color.  Additionally, besides the `light` and `dark` colors, `subtle` and `contrast` are available as colors to use that simply map onto `light` or `dark` depending on the body BG color."),
-                            v$2(CardElement, null,
-                                v$2(ButtonGroup, null,
-                                    v$2(ButtonGroupChild, { index: 0, onPressToggle: () => setButtonsSize("sm"), pressed: buttonsSize === "sm" }, "Small"),
-                                    v$2(ButtonGroupChild, { index: 1, onPressToggle: () => setButtonsSize("md"), pressed: buttonsSize === "md" }, "Medium"),
-                                    v$2(ButtonGroupChild, { index: 2, onPressToggle: () => setButtonsSize("lg"), pressed: buttonsSize === "lg" }, "Large"))),
-                            v$2(CardElement, null,
-                                v$2(ButtonGroup, null,
-                                    v$2(ButtonGroupChild, { index: 0, onPressToggle: () => setButtonsFill("fill"), pressed: buttonsFill === "fill" }, "Fill"),
-                                    v$2(ButtonGroupChild, { index: 1, onPressToggle: () => setButtonsFill("outline"), pressed: buttonsFill === "outline" }, "Outline"))),
-                            v$2(CardElement, null,
-                                v$2(ButtonGroup, { wrap: true },
-                                    v$2(ButtonGroupChild, { index: 0, colorVariant: "primary", pressed: buttonsColor == "primary", onPressToggle: () => setButtonsColor("primary") }, "Primary"),
-                                    v$2(ButtonGroupChild, { index: 1, colorVariant: "secondary", pressed: buttonsColor == "secondary", onPressToggle: () => setButtonsColor("secondary") }, "Secondary"),
-                                    v$2(ButtonGroupChild, { index: 2, colorVariant: "success", pressed: buttonsColor == "success", onPressToggle: () => setButtonsColor("success") }, "Success"),
-                                    v$2(ButtonGroupChild, { index: 3, colorVariant: "warning", pressed: buttonsColor == "warning", onPressToggle: () => setButtonsColor("warning") }, "Warning"),
-                                    v$2(ButtonGroupChild, { index: 4, colorVariant: "danger", pressed: buttonsColor == "danger", onPressToggle: () => setButtonsColor("danger") }, "Danger"),
-                                    v$2(ButtonGroupChild, { index: 5, colorVariant: "info", pressed: buttonsColor == "info", onPressToggle: () => setButtonsColor("info") }, "Info"),
-                                    v$2(ButtonGroupChild, { index: 6, colorVariant: "light", pressed: buttonsColor == "light", onPressToggle: () => setButtonsColor("light") }, "Light"),
-                                    v$2(ButtonGroupChild, { index: 7, colorVariant: "dark", pressed: buttonsColor == "dark", onPressToggle: () => setButtonsColor("dark") }, "Dark"),
-                                    v$2(ButtonGroupChild, { index: 8, colorVariant: "contrast", pressed: buttonsColor == "contrast", onPressToggle: () => setButtonsColor("contrast") }, "Contrast"),
-                                    v$2(ButtonGroupChild, { index: 9, colorVariant: "subtle", pressed: buttonsColor == "subtle", onPressToggle: () => setButtonsColor("subtle") }, "Subtle"))),
-                            v$2(CardElement, null,
-                                v$2(Button, { onPress: onPress },
-                                    buttonsFill === "fill" ? "Filled" : "Outlined",
-                                    " ",
-                                    buttonsColor,
-                                    " button")),
-                            v$2(CardElement, null,
-                                v$2("code", null, `<Button fillVariant="${buttonsFill}" colorVariant="${buttonsColor}">Variant button</Button>`)),
-                            v$2("hr", null),
-                            v$2(CardElement, { type: "subtitle", tag: "h3" }, "Link buttons"),
-                            v$2(CardElement, null,
-                                "A link can be styled as a button while retaining native link functionality (middle clicks, etc.). These buttons have no ",
-                                v$2("code", null, "onPress"),
-                                " handler, instead taking ",
-                                v$2("code", null, "href"),
-                                " and the other ",
-                                v$2("code", null, "<a>"),
-                                " props."),
-                            v$2(CardElement, null,
-                                "A ",
-                                v$2("code", null, "<Button>"),
-                                " will use an anchor link internally if you provide it with an ",
-                                v$2("code", null, "href"),
-                                " prop, or optionally setting the ",
-                                v$2("code", null, "tag"),
-                                " prop to ",
-                                v$2("code", null, "a"),
-                                ".",
-                                v$2(InputGroup, null,
-                                    v$2(Checkbox, { onCheck: setUsesLinkButton, checked: usesLinkButton, labelPosition: "start" }, "Use link button"))),
-                            v$2(CardElement, null, usesLinkButton ? v$2(Button, { target: "_blank", href: "https://www.example.com" },
-                                "example.com ",
-                                v$2("i", { class: "bi bi-box-arrow-up-right" })) : v$2(Button, { onPress: onPress }, "Regular button")),
-                            v$2(CardElement, { type: "paragraph" },
-                                v$2("code", null, usesLinkButton ? `<Button href="https://www.example.com">Link button</Button>` : `<Button onPress={onPress}>Regular button</Button>`)),
-                            v$2(CardElement, null, "Keep in mind that styling a link as a button can cause confusion even while being completely compliant (\"\uD83E\uDDD1\u200D\uD83D\uDCBB click on the link\" \"\uD83D\uDE21 what link??\"), so be sure to use with some level of consideration."),
-                            v$2("hr", null),
-                            v$2(CardElement, { type: "subtitle", tag: "h3" }, "Toggle buttons"),
-                            v$2(CardElement, null,
-                                "If given a ",
-                                v$2("code", null, "pressed"),
-                                " prop, a button will become a toggle button, with an off/on state.  It will style itself as outlined when unpressed, and filled when pressed, so they are best used in groups."),
-                            v$2(CardElement, null,
-                                v$2(Button, { pressed: toggleOn, onPressToggle: onToggleInput }, "Toggle button")),
-                            v$2(CardElement, { type: "paragraph" },
-                                v$2("code", null, `<Button pressed={pressed} onPressToggle={onInput}>Toggle button</Button>`)),
-                            v$2("hr", null),
-                            v$2(CardElement, { type: "subtitle", tag: "h3" }, "Button Groups"),
-                            v$2(CardElement, null,
-                                "A ",
-                                v$2("code", null, "<ButtonGroup>"),
-                                " can be used to group a set of ",
-                                v$2("code", null, "<ButtonGroupChild>"),
-                                " (which is the exact same as a ",
-                                v$2("code", null, "<Button>"),
-                                ", but with an ",
-                                v$2("code", null, "index"),
-                                " prop). This gives them keyboard navigation abilities."),
-                            v$2(CardElement, null,
-                                v$2(ButtonGroup, { wrap: true },
-                                    v$2(ButtonGroupChild, { index: 0, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress }, "First button"),
-                                    v$2(ButtonGroupChild, { index: 1, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress }, "Second button"),
-                                    v$2(ButtonGroupChild, { index: 2, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress }, "Third button"),
-                                    v$2(ButtonGroupChild, { index: 3, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress }, "Fourth button"))),
-                            v$2(CardElement, { type: "paragraph" },
-                                v$2("code", null, `<ButtonGroup wrap>
+        return (e$3(ProvideDefaultButtonFill, { value: buttonsFill, children: e$3(ProvideDefaultButtonSize, { value: buttonsSize, children: e$3(ProvideDefaultButtonColor, { value: buttonsColor, children: e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Buttons" }, void 0), e$3(CardElement, { children: e$3(Button, { onPress: onPress, children: "I'm a button" }, void 0) }, void 0), e$3(CardElement, { children: ["A ", e$3("code", { children: "Button" }, void 0), " is a ", e$3("code", { children: "Button" }, void 0), " is a ", e$3("code", { children: "Button" }, void 0), " \u2013 you can click, tap, or Space-key it to activate it and do something.  If the given action is asynchronous, then the button will disable itself and display a spinner during the operation."] }, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Async inputs" }, void 0), e$3(CardElement, { children: ["The ", e$3("code", { children: "onPress" }, void 0), " event handler for buttons can be sync or async, and they will react appropriately if the operation takes long enough.", e$3(InputGrid, { children: [e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setUsesAsync, checked: usesAsync, labelPosition: "start", children: "Use async handler" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setAsyncFails, checked: asyncFails, labelPosition: "start", disabled: !usesAsync, children: "Async handler rejects" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Input, { width: "8ch", disabled: !usesAsync, type: "number", onValueChange: setAsyncTimeout, value: asyncTimeout, children: "Async timeout" }, void 0) }, void 0)] }, void 0)] }, void 0), e$3(CardElement, { children: e$3(Button, { onPress: onPress, children: "Click me" }, void 0) }, void 0), e$3(CardElement, { type: "paragraph", children: e$3("code", { children: `const onPress = ${usesAsync ? `async ` : ""}() => { ${usesAsync ? `await sleep(${asyncTimeout}); ` : ""}pushToast(<Toast ... />); }
+<Button onPress={onPress}>Click me</Button>` }, void 0) }, void 0), e$3("hr", {}, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Color, fill, & size" }, void 0), e$3(CardElement, { type: "paragraph", children: ["Buttons can be styled in different sizes, colors, and fill styles. You can provide a global default with ", e$3("code", { children: "Context" }, void 0), " objects, like ", e$3("code", { children: "<ProvideDefaultButtonFill>" }, void 0), "."] }, void 0), e$3(CardElement, { children: "All the normal Bootstrap colors are provided, albeit with adjustments to outlined buttons to ensure correct contrast ratios on the theme's body BG color.  Additionally, besides the `light` and `dark` colors, `subtle` and `contrast` are available as colors to use that simply map onto `light` or `dark` depending on the body BG color." }, void 0), e$3(CardElement, { children: e$3(ButtonGroup, { children: [e$3(ButtonGroupChild, { index: 0, onPressToggle: () => setButtonsSize("sm"), pressed: buttonsSize === "sm", children: "Small" }, void 0), e$3(ButtonGroupChild, { index: 1, onPressToggle: () => setButtonsSize("md"), pressed: buttonsSize === "md", children: "Medium" }, void 0), e$3(ButtonGroupChild, { index: 2, onPressToggle: () => setButtonsSize("lg"), pressed: buttonsSize === "lg", children: "Large" }, void 0)] }, void 0) }, void 0), e$3(CardElement, { children: e$3(ButtonGroup, { children: [e$3(ButtonGroupChild, { index: 0, onPressToggle: () => setButtonsFill("fill"), pressed: buttonsFill === "fill", children: "Fill" }, void 0), e$3(ButtonGroupChild, { index: 1, onPressToggle: () => setButtonsFill("outline"), pressed: buttonsFill === "outline", children: "Outline" }, void 0)] }, void 0) }, void 0), e$3(CardElement, { children: e$3(ButtonGroup, { wrap: true, children: [e$3(ButtonGroupChild, { index: 0, colorVariant: "primary", pressed: buttonsColor == "primary", onPressToggle: () => setButtonsColor("primary"), children: "Primary" }, void 0), e$3(ButtonGroupChild, { index: 1, colorVariant: "secondary", pressed: buttonsColor == "secondary", onPressToggle: () => setButtonsColor("secondary"), children: "Secondary" }, void 0), e$3(ButtonGroupChild, { index: 2, colorVariant: "success", pressed: buttonsColor == "success", onPressToggle: () => setButtonsColor("success"), children: "Success" }, void 0), e$3(ButtonGroupChild, { index: 3, colorVariant: "warning", pressed: buttonsColor == "warning", onPressToggle: () => setButtonsColor("warning"), children: "Warning" }, void 0), e$3(ButtonGroupChild, { index: 4, colorVariant: "danger", pressed: buttonsColor == "danger", onPressToggle: () => setButtonsColor("danger"), children: "Danger" }, void 0), e$3(ButtonGroupChild, { index: 5, colorVariant: "info", pressed: buttonsColor == "info", onPressToggle: () => setButtonsColor("info"), children: "Info" }, void 0), e$3(ButtonGroupChild, { index: 6, colorVariant: "light", pressed: buttonsColor == "light", onPressToggle: () => setButtonsColor("light"), children: "Light" }, void 0), e$3(ButtonGroupChild, { index: 7, colorVariant: "dark", pressed: buttonsColor == "dark", onPressToggle: () => setButtonsColor("dark"), children: "Dark" }, void 0), e$3(ButtonGroupChild, { index: 8, colorVariant: "contrast", pressed: buttonsColor == "contrast", onPressToggle: () => setButtonsColor("contrast"), children: "Contrast" }, void 0), e$3(ButtonGroupChild, { index: 9, colorVariant: "subtle", pressed: buttonsColor == "subtle", onPressToggle: () => setButtonsColor("subtle"), children: "Subtle" }, void 0)] }, void 0) }, void 0), e$3(CardElement, { children: e$3(Button, { onPress: onPress, children: [buttonsFill === "fill" ? "Filled" : "Outlined", " ", buttonsColor, " button"] }, void 0) }, void 0), e$3(CardElement, { children: e$3("code", { children: `<Button fillVariant="${buttonsFill}" colorVariant="${buttonsColor}">Variant button</Button>` }, void 0) }, void 0), e$3("hr", {}, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Link buttons" }, void 0), e$3(CardElement, { children: ["A link can be styled as a button while retaining native link functionality (middle clicks, etc.). These buttons have no ", e$3("code", { children: "onPress" }, void 0), " handler, instead taking ", e$3("code", { children: "href" }, void 0), " and the other ", e$3("code", { children: "<a>" }, void 0), " props."] }, void 0), e$3(CardElement, { children: ["A ", e$3("code", { children: "<Button>" }, void 0), " will use an anchor link internally if you provide it with an ", e$3("code", { children: "href" }, void 0), " prop, or optionally setting the ", e$3("code", { children: "tag" }, void 0), " prop to ", e$3("code", { children: "a" }, void 0), ".", e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setUsesLinkButton, checked: usesLinkButton, labelPosition: "start", children: "Use link button" }, void 0) }, void 0)] }, void 0), e$3(CardElement, { children: usesLinkButton ? e$3(Button, { target: "_blank", href: "https://www.example.com", children: ["example.com ", e$3("i", { class: "bi bi-box-arrow-up-right" }, void 0)] }, void 0) : e$3(Button, { onPress: onPress, children: "Regular button" }, void 0) }, void 0), e$3(CardElement, { type: "paragraph", children: e$3("code", { children: usesLinkButton ? `<Button href="https://www.example.com">Link button</Button>` : `<Button onPress={onPress}>Regular button</Button>` }, void 0) }, void 0), e$3(CardElement, { children: "Keep in mind that styling a link as a button can cause confusion even while being completely compliant (\"\uD83E\uDDD1\u200D\uD83D\uDCBB click on the link\" \"\uD83D\uDE21 what link??\"), so be sure to use with some level of consideration." }, void 0), e$3("hr", {}, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Toggle buttons" }, void 0), e$3(CardElement, { children: ["If given a ", e$3("code", { children: "pressed" }, void 0), " prop, a button will become a toggle button, with an off/on state.  It will style itself as outlined when unpressed, and filled when pressed, so they are best used in groups."] }, void 0), e$3(CardElement, { children: e$3(Button, { pressed: toggleOn, onPressToggle: onToggleInput, children: "Toggle button" }, void 0) }, void 0), e$3(CardElement, { type: "paragraph", children: e$3("code", { children: `<Button pressed={pressed} onPressToggle={onInput}>Toggle button</Button>` }, void 0) }, void 0), e$3("hr", {}, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Button Groups" }, void 0), e$3(CardElement, { children: ["A ", e$3("code", { children: "<ButtonGroup>" }, void 0), " can be used to group a set of ", e$3("code", { children: "<ButtonGroupChild>" }, void 0), " (which is the exact same as a ", e$3("code", { children: "<Button>" }, void 0), ", but with an ", e$3("code", { children: "index" }, void 0), " prop). This gives them keyboard navigation abilities."] }, void 0), e$3(CardElement, { children: e$3(ButtonGroup, { wrap: true, children: [e$3(ButtonGroupChild, { index: 0, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress, children: "First button" }, void 0), e$3(ButtonGroupChild, { index: 1, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress, children: "Second button" }, void 0), e$3(ButtonGroupChild, { index: 2, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress, children: "Third button" }, void 0), e$3(ButtonGroupChild, { index: 3, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress, children: "Fourth button" }, void 0)] }, void 0) }, void 0), e$3(CardElement, { type: "paragraph", children: e$3("code", { children: `<ButtonGroup wrap>
     <ButtonGroupChild index={0}>First button</ButtonGroupChild>
     <ButtonGroupChild index={1}>Second button</ButtonGroupChild>
     <ButtonGroupChild index={2}>Third button</ButtonGroupChild>
@@ -15914,7 +16108,7 @@
     <ButtonGroupChild index={5}>Sixth button</ButtonGroupChild>
     <ButtonGroupChild index={6}>Seventh button</ButtonGroupChild>
     <ButtonGroupChild index={7}>Eighth button</ButtonGroupChild>
-</ButtonGroup>`))))))));
+</ButtonGroup>` }, void 0) }, void 0)] }, void 0) }, void 0) }, void 0) }, void 0) }, void 0));
     }
     async function sleep$6(arg0) {
         return new Promise(resolve => setTimeout(resolve, arg0));
@@ -15941,154 +16135,25 @@
                 throw new Error("Attempt to change radio failed");
             setDemoRadio(value);
         }, [asyncTimeout, asyncFails]);
-        return (v$2("div", { class: "demo" },
-            v$2(Card, null,
-                v$2(CardElement, { type: "title", tag: "h2" }, "Checkboxes, switches, & radios"),
-                v$2(CardElement, null,
-                    v$2(Checkbox, { checked: demoChecked, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "I'm a checkbox")),
-                v$2(CardElement, null,
-                    "Several components related to on/off togglable form-like selection controls are provided:",
-                    v$2("ul", null,
-                        v$2("li", null,
-                            v$2("code", null, "Checkbox")),
-                        v$2("li", null,
-                            v$2("code", null, "Switch")),
-                        v$2("li", null,
-                            v$2("code", null, "RadioGroup")),
-                        v$2("li", null,
-                            v$2("code", null, "CheckboxGroup"))),
-                    v$2("code", null, "Checkbox"),
-                    " and ",
-                    v$2("code", null, "Switch"),
-                    " work as you'd expect. ",
-                    v$2("code", null, "RadioGroup"),
-                    " is a parent around a set of ",
-                    v$2("code", null, "Radio"),
-                    " components that communicate with each other. The children ",
-                    v$2("code", null, "Radio"),
-                    " components can be any descendant of the parent ",
-                    v$2("code", null, "RadioGroup"),
-                    " \u2013 the DOM structure ",
-                    v$2("em", null, "does not"),
-                    " matter beyond requiring they be somewhere descendant. ",
-                    v$2("code", null, "CheckboxGroup"),
-                    " works similarly to ",
-                    v$2("code", null, "RadioGroup"),
-                    " in that way."),
-                v$2(CardElement, null,
-                    "See Also: Single Select lists for an alternative to ",
-                    v$2("code", null, "RadioGroup"),
-                    ", and Multi Select lists for an alternative to ",
-                    v$2("code", null, "CheckboxGroup"),
-                    "."),
-                v$2(CardElement, null, "Like other components, the event handlers can be sync or async, and when disabled, all inputs remain focusable so that they can still be announced by screen readers, have tooltips via mouseover, etc."),
-                v$2(CardElement, { type: "subtitle", tag: "h3" }, "Checkbox"),
-                v$2(CardElement, null,
-                    v$2(Checkbox, { disabled: disabled, checked: demoChecked, labelPosition: labelPosition, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Checkbox")),
-                v$2(CardElement, null,
-                    "The ",
-                    v$2("code", null, "checked"),
-                    " prop can be ",
-                    v$2("code", null, "true"),
-                    ", ",
-                    v$2("code", null, "false"),
-                    ", or ",
-                    v$2("code", null, "mixed"),
-                    ". The ",
-                    v$2("code", null, "onCheck"),
-                    " event fires when the user initiates a change."),
-                v$2(CardElement, { type: "subtitle", tag: "h3" }, "Switch"),
-                v$2(CardElement, null,
-                    v$2(Switch, { disabled: disabled, checked: demoChecked, labelPosition: labelPosition, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Switch")),
-                v$2(CardElement, null,
-                    "In terms of props (not use-case), largely identical to a ",
-                    v$2("code", null, "Checkbox"),
-                    ", though it cannot have a ",
-                    v$2("code", null, "mixed"),
-                    " state."),
-                v$2(CardElement, { type: "subtitle", tag: "h3" }, "Radio group"),
-                v$2(CardElement, null,
-                    v$2(RadioGroup, { name: "radio-demo-0", selectedValue: demoRadio, onValueChange: usesAsync ? asyncRadioInput : setDemoRadio }, Array.from(function* () {
-                        for (let i = 0; i < (radioCount ?? 0); ++i) {
-                            yield v$2(Radio, { disabled: disabled, labelPosition: labelPosition, index: i, value: i, key: i },
-                                "Radio #",
-                                i + 1);
-                        }
-                    }()))),
-                v$2(CardElement, null,
-                    "The individual ",
-                    v$2("code", null, "RadioButton"),
-                    "s ",
-                    v$2("strong", null, "do not"),
-                    " accept a ",
-                    v$2("code", null, "checked"),
-                    " prop; instead, the parent ",
-                    v$2("code", null, "RadioGroup"),
-                    " accepts a ",
-                    v$2("code", null, "selectedValue"),
-                    ". Similarly, the ",
-                    v$2("code", null, "onValueChange"),
-                    " event handler lives on that parent ",
-                    v$2("code", null, "RadioGroup"),
-                    ". The individual child ",
-                    v$2("code", null, "Radio"),
-                    "s can be, e.g., marked as ",
-                    v$2("code", null, "disabled"),
-                    ", styled, etc. but all the logic happens with the parent."),
-                v$2(CardElement, { type: "subtitle", tag: "h3" }, "Demos"),
-                v$2(CardElement, null,
-                    v$2(InputGrid, null,
-                        v$2(InputGroup, null,
-                            v$2(Checkbox, { onCheck: setUsesAsync, checked: usesAsync, labelPosition: "start" }, "Async event handler")),
-                        v$2(InputGroup, null,
-                            v$2(Checkbox, { onCheck: setAsyncFails, checked: asyncFails, labelPosition: "start", disabled: !usesAsync }, "Async handler rejects")),
-                        v$2(InputGroup, null,
-                            v$2(Input, { disabled: !usesAsync, type: "number", onValueChange: setAsyncTimeout, value: asyncTimeout }, "Async timeout")),
-                        v$2(InputGroup, null,
-                            v$2(Input, { type: "number", onValueChange: setRadioCount, value: radioCount }, "# of radio buttons")),
-                        v$2(InputGroup, null,
-                            v$2(Checkbox, { onCheck: setDisabled, checked: disabled, labelPosition: "start" }, "Inputs disabled")),
-                        v$2(RadioGroup, { name: "radio-demo-6", selectedValue: labelPosition, onValueChange: setLabelPosition },
-                            v$2(InputGroup, null,
-                                v$2(Radio, { index: 0, value: "start", labelPosition: "start" }, "Label before")),
-                            v$2(InputGroup, null,
-                                v$2(Radio, { index: 1, value: "end", labelPosition: "start" }, "Label after")),
-                            v$2(InputGroup, null,
-                                v$2(Radio, { index: 2, value: "hidden", labelPosition: "start" }, "Label hidden (still announced verbally)"))))),
-                v$2(GridStatic, { columns: 2 },
-                    v$2(CardElement, null,
-                        v$2(Checkbox, { disabled: disabled, checked: demoChecked, labelPosition: labelPosition, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Checkbox"),
-                        v$2(Switch, { disabled: disabled, checked: demoChecked, labelPosition: labelPosition, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Switch"),
-                        v$2(RadioGroup, { name: "radio-demo-1a", selectedValue: demoRadio, onValueChange: usesAsync ? asyncRadioInput : setDemoRadio }, Array.from(function* () {
-                            for (let i = 0; i < (radioCount ?? 0); ++i) {
-                                yield v$2(Radio, { disabled: disabled, labelPosition: labelPosition, index: i, value: i, key: i },
-                                    "Radio #",
-                                    i + 1);
-                            }
-                        }()))),
-                    v$2(CardElement, null,
-                        v$2(InputGrid, null,
-                            v$2(InputGroup, null,
-                                v$2(Checkbox, { disabled: disabled, checked: demoChecked, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Checkbox")),
-                            v$2(InputGroup, null,
-                                v$2(Switch, { disabled: disabled, checked: demoChecked, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked }, "Switch")),
-                            v$2(RadioGroup, { name: "radio-demo-1b", selectedValue: demoRadio, onValueChange: usesAsync ? asyncRadioInput : setDemoRadio }, Array.from(function* () {
+        return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Checkboxes, switches, & radios" }, void 0), e$3(CardElement, { children: e$3(Checkbox, { checked: demoChecked, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked, children: "I'm a checkbox" }, void 0) }, void 0), e$3(CardElement, { children: ["Several components related to on/off togglable form-like selection controls are provided:", e$3("ul", { children: [e$3("li", { children: e$3("code", { children: "Checkbox" }, void 0) }, void 0), e$3("li", { children: e$3("code", { children: "Switch" }, void 0) }, void 0), e$3("li", { children: e$3("code", { children: "RadioGroup" }, void 0) }, void 0), e$3("li", { children: e$3("code", { children: "CheckboxGroup" }, void 0) }, void 0)] }, void 0), e$3("code", { children: "Checkbox" }, void 0), " and ", e$3("code", { children: "Switch" }, void 0), " work as you'd expect. ", e$3("code", { children: "RadioGroup" }, void 0), " is a parent around a set of ", e$3("code", { children: "Radio" }, void 0), " components that communicate with each other. The children ", e$3("code", { children: "Radio" }, void 0), " components can be any descendant of the parent ", e$3("code", { children: "RadioGroup" }, void 0), " \u2013 the DOM structure ", e$3("em", { children: "does not" }, void 0), " matter beyond requiring they be somewhere descendant. ", e$3("code", { children: "CheckboxGroup" }, void 0), " works similarly to ", e$3("code", { children: "RadioGroup" }, void 0), " in that way."] }, void 0), e$3(CardElement, { children: ["See Also: Single Select lists for an alternative to ", e$3("code", { children: "RadioGroup" }, void 0), ", and Multi Select lists for an alternative to ", e$3("code", { children: "CheckboxGroup" }, void 0), "."] }, void 0), e$3(CardElement, { children: "Like other components, the event handlers can be sync or async, and when disabled, all inputs remain focusable so that they can still be announced by screen readers, have tooltips via mouseover, etc." }, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Checkbox" }, void 0), e$3(CardElement, { children: e$3(Checkbox, { disabled: disabled, checked: demoChecked, labelPosition: labelPosition, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked, children: "Checkbox" }, void 0) }, void 0), e$3(CardElement, { children: ["The ", e$3("code", { children: "checked" }, void 0), " prop can be ", e$3("code", { children: "true" }, void 0), ", ", e$3("code", { children: "false" }, void 0), ", or ", e$3("code", { children: "mixed" }, void 0), ". The ", e$3("code", { children: "onCheck" }, void 0), " event fires when the user initiates a change."] }, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Switch" }, void 0), e$3(CardElement, { children: e$3(Switch, { disabled: disabled, checked: demoChecked, labelPosition: labelPosition, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked, children: "Switch" }, void 0) }, void 0), e$3(CardElement, { children: ["In terms of props (not use-case), largely identical to a ", e$3("code", { children: "Checkbox" }, void 0), ", though it cannot have a ", e$3("code", { children: "mixed" }, void 0), " state."] }, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Radio group" }, void 0), e$3(CardElement, { children: e$3(RadioGroup, { name: "radio-demo-0", selectedValue: demoRadio, onValueChange: usesAsync ? asyncRadioInput : setDemoRadio, children: Array.from(function* () {
                                 for (let i = 0; i < (radioCount ?? 0); ++i) {
-                                    yield v$2(InputGroup, null,
-                                        v$2(Radio, { disabled: disabled, labelPosition: labelPosition, index: i, value: i, key: i },
-                                            "Radio #",
-                                            i + 1));
+                                    yield e$3(Radio, { disabled: disabled, labelPosition: labelPosition, index: i, value: i, children: ["Radio #", i + 1] }, i);
                                 }
-                            }())))),
-                    v$2(CardElement, null)),
-                v$2(CardElement, { type: "paragraph" },
-                    v$2("code", null, `<Checkbox checked={checked} onInput={setChecked}>Checkbox</Checkbox>
+                            }()) }, void 0) }, void 0), e$3(CardElement, { children: ["The individual ", e$3("code", { children: "RadioButton" }, void 0), "s ", e$3("strong", { children: "do not" }, void 0), " accept a ", e$3("code", { children: "checked" }, void 0), " prop; instead, the parent ", e$3("code", { children: "RadioGroup" }, void 0), " accepts a ", e$3("code", { children: "selectedValue" }, void 0), ". Similarly, the ", e$3("code", { children: "onValueChange" }, void 0), " event handler lives on that parent ", e$3("code", { children: "RadioGroup" }, void 0), ". The individual child ", e$3("code", { children: "Radio" }, void 0), "s can be, e.g., marked as ", e$3("code", { children: "disabled" }, void 0), ", styled, etc. but all the logic happens with the parent."] }, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Demos" }, void 0), e$3(CardElement, { children: e$3(InputGrid, { children: [e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setUsesAsync, checked: usesAsync, labelPosition: "start", children: "Async event handler" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setAsyncFails, checked: asyncFails, labelPosition: "start", disabled: !usesAsync, children: "Async handler rejects" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Input, { disabled: !usesAsync, type: "number", onValueChange: setAsyncTimeout, value: asyncTimeout, children: "Async timeout" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Input, { type: "number", onValueChange: setRadioCount, value: radioCount, children: "# of radio buttons" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setDisabled, checked: disabled, labelPosition: "start", children: "Inputs disabled" }, void 0) }, void 0), e$3(RadioGroup, { name: "radio-demo-6", selectedValue: labelPosition, onValueChange: setLabelPosition, children: [e$3(InputGroup, { children: e$3(Radio, { index: 0, value: "start", labelPosition: "start", children: "Label before" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Radio, { index: 1, value: "end", labelPosition: "start", children: "Label after" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Radio, { index: 2, value: "hidden", labelPosition: "start", children: "Label hidden (still announced verbally)" }, void 0) }, void 0)] }, void 0)] }, void 0) }, void 0), e$3(GridStatic, { columns: 2, children: [e$3(CardElement, { children: [e$3(Checkbox, { disabled: disabled, checked: demoChecked, labelPosition: labelPosition, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked, children: "Checkbox" }, void 0), e$3(Switch, { disabled: disabled, checked: demoChecked, labelPosition: labelPosition, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked, children: "Switch" }, void 0), e$3(RadioGroup, { name: "radio-demo-1a", selectedValue: demoRadio, onValueChange: usesAsync ? asyncRadioInput : setDemoRadio, children: Array.from(function* () {
+                                            for (let i = 0; i < (radioCount ?? 0); ++i) {
+                                                yield e$3(Radio, { disabled: disabled, labelPosition: labelPosition, index: i, value: i, children: ["Radio #", i + 1] }, i);
+                                            }
+                                        }()) }, void 0)] }, void 0), e$3(CardElement, { children: e$3(InputGrid, { children: [e$3(InputGroup, { children: e$3(Checkbox, { disabled: disabled, checked: demoChecked, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked, children: "Checkbox" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Switch, { disabled: disabled, checked: demoChecked, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked, children: "Switch" }, void 0) }, void 0), e$3(RadioGroup, { name: "radio-demo-1b", selectedValue: demoRadio, onValueChange: usesAsync ? asyncRadioInput : setDemoRadio, children: Array.from(function* () {
+                                                for (let i = 0; i < (radioCount ?? 0); ++i) {
+                                                    yield e$3(InputGroup, { children: e$3(Radio, { disabled: disabled, labelPosition: labelPosition, index: i, value: i, children: ["Radio #", i + 1] }, i) }, void 0);
+                                                }
+                                            }()) }, void 0)] }, void 0) }, void 0), e$3(CardElement, {}, void 0)] }, void 0), e$3(CardElement, { type: "paragraph", children: e$3("code", { children: `<Checkbox checked={checked} onInput={setChecked}>Checkbox</Checkbox>
 <Switch checked={checked} onInput={onInput}>Switch</Switch>
 <RadioGroup name="radio-demo-1" selectedValue={value} onInput={setValue}>
 <Radio index={0} value="value1">Radio #1</Radio>
 <Radio index={1} value="value2">Radio #2</Radio>
 <Radio index={2} value="value3">Radio #3</Radio>
-</RadioGroup>`)))));
+</RadioGroup>` }, void 0) }, void 0)] }, void 0) }, void 0));
     }
     async function sleep$5(arg0) {
         return new Promise(resolve => setTimeout(resolve, arg0));
@@ -16115,132 +16180,21 @@
         }, [asyncTimeout, asyncFails]);
         const onTextInput = usesAsync ? asyncTextInput : setText;
         const onNumberInput = usesAsync ? asyncNumberInput : setNumber;
-        return (v$2("div", { class: "demo" },
-            v$2(Card, null,
-                v$2(CardElement, { type: "title", tag: "h2" }, "Text boxes"),
-                v$2(CardElement, null,
-                    v$2("div", { class: "position-relative" },
-                        v$2(Input, { type: "text", value: text, onValueChange: onTextInput }, "I'm a text box"))),
-                v$2(CardElement, null,
-                    v$2("code", null, "<Input>"),
-                    " components allow for inputting text, numbers, etc. and asyncronously saving it somewhere else as it's being typed."),
-                v$2(CardElement, { type: "subtitle", tag: "h3" }, "Async inputs"),
-                v$2(CardElement, null,
-                    "The ",
-                    v$2("code", null, "onInput"),
-                    " event handler for all types of inputs can be sync or async.",
-                    v$2(InputGrid, null,
-                        v$2(InputGroup, null,
-                            v$2(Checkbox, { onCheck: setUsesAsync, checked: usesAsync, labelPosition: "start" }, "Async event handler")),
-                        v$2(InputGroup, null,
-                            v$2(Checkbox, { onCheck: setAsyncFails, checked: asyncFails, labelPosition: "start", disabled: !usesAsync }, "Async handler rejects")),
-                        v$2(InputGroup, null,
-                            v$2(Input, { disabled: !usesAsync, type: "number", onValueChange: setAsyncTimeout, value: asyncTimeout }, "Async timeout")))),
-                v$2(CardElement, null,
-                    v$2("div", { class: "position-relative" },
-                        v$2(Input, { type: "text", value: text, onValueChange: onTextInput }, "Text-based input")),
-                    v$2("div", { class: "position-relative" },
-                        v$2(Input, { type: "number", value: number, onValueChange: onNumberInput, min: -5 }, "Number-based input"))),
-                v$2(CardElement, { type: "paragraph" },
-                    v$2("code", null, `<Input type="text" value={text} onInput={onTextInput}>Text-based input</Input>
-<Input type="number" value={number} onInput={onNumberInput} min={-5}>Number-based input</Input>`)),
-                v$2(CardElement, { type: "paragraph" },
-                    "When placed in an ",
-                    v$2("code", null, "<InputGroup>"),
-                    ", the styling will be significantly different:"),
-                v$2(CardElement, null,
-                    v$2(ButtonGroup, null,
-                        v$2(ButtonGroupChild, { index: 0, pressed: size == "sm", onPressToggle: e => setSize("sm") }, "Small"),
-                        v$2(ButtonGroupChild, { index: 1, pressed: size == "md", onPressToggle: e => setSize("md") }, "Medium"),
-                        v$2(ButtonGroupChild, { index: 2, pressed: size == "lg", onPressToggle: e => setSize("lg") }, "Large"))),
-                v$2(CardElement, null,
-                    v$2(InputGrid, null,
-                        v$2(InputGroup, { size: size },
-                            v$2(Input, { type: "text", value: text, onValueChange: onTextInput }, "Text-based input")),
-                        v$2(InputGroup, { size: size },
-                            v$2(Input, { type: "number", value: number, onValueChange: onNumberInput, min: -5 }, "Number-based input")))),
-                v$2(CardElement, { type: "paragraph" },
-                    v$2("code", null, `<InputGrid>
+        return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Text boxes" }, void 0), e$3(CardElement, { children: e$3("div", { class: "position-relative", children: e$3(Input, { type: "text", value: text, onValueChange: onTextInput, children: "I'm a text box" }, void 0) }, void 0) }, void 0), e$3(CardElement, { children: [e$3("code", { children: "<Input>" }, void 0), " components allow for inputting text, numbers, etc. and asyncronously saving it somewhere else as it's being typed."] }, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Async inputs" }, void 0), e$3(CardElement, { children: ["The ", e$3("code", { children: "onInput" }, void 0), " event handler for all types of inputs can be sync or async.", e$3(InputGrid, { children: [e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setUsesAsync, checked: usesAsync, labelPosition: "start", children: "Async event handler" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setAsyncFails, checked: asyncFails, labelPosition: "start", disabled: !usesAsync, children: "Async handler rejects" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Input, { disabled: !usesAsync, type: "number", onValueChange: setAsyncTimeout, value: asyncTimeout, children: "Async timeout" }, void 0) }, void 0)] }, void 0)] }, void 0), e$3(CardElement, { children: [e$3("div", { class: "position-relative", children: e$3(Input, { type: "text", value: text, onValueChange: onTextInput, children: "Text-based input" }, void 0) }, void 0), e$3("div", { class: "position-relative", children: e$3(Input, { type: "number", value: number, onValueChange: onNumberInput, min: -5, children: "Number-based input" }, void 0) }, void 0)] }, void 0), e$3(CardElement, { type: "paragraph", children: e$3("code", { children: `<Input type="text" value={text} onInput={onTextInput}>Text-based input</Input>
+<Input type="number" value={number} onInput={onNumberInput} min={-5}>Number-based input</Input>` }, void 0) }, void 0), e$3(CardElement, { type: "paragraph", children: ["When placed in an ", e$3("code", { children: "<InputGroup>" }, void 0), ", the styling will be significantly different:"] }, void 0), e$3(CardElement, { children: e$3(ButtonGroup, { children: [e$3(ButtonGroupChild, { index: 0, pressed: size == "sm", onPressToggle: e => setSize("sm"), children: "Small" }, void 0), e$3(ButtonGroupChild, { index: 1, pressed: size == "md", onPressToggle: e => setSize("md"), children: "Medium" }, void 0), e$3(ButtonGroupChild, { index: 2, pressed: size == "lg", onPressToggle: e => setSize("lg"), children: "Large" }, void 0)] }, void 0) }, void 0), e$3(CardElement, { children: e$3(InputGrid, { children: [e$3(InputGroup, { size: size, children: e$3(Input, { type: "text", value: text, onValueChange: onTextInput, children: "Text-based input" }, void 0) }, void 0), e$3(InputGroup, { size: size, children: e$3(Input, { type: "number", value: number, onValueChange: onNumberInput, min: -5, children: "Number-based input" }, void 0) }, void 0)] }, void 0) }, void 0), e$3(CardElement, { type: "paragraph", children: e$3("code", { children: `<InputGrid>
     <InputGroup size={size}><Input type="text" value={text} onInput={onTextInput}>Text-based input</Input></InputGroup>
     <InputGroup size={size}><Input type="number" value={number} onInput={onNumberInput} min={-5}>Number-based input</Input></InputGroup>
-</InputGrid>`)))));
+</InputGrid>` }, void 0) }, void 0)] }, void 0) }, void 0));
     }
     async function sleep$4(arg0) {
         return new Promise(resolve => setTimeout(resolve, arg0));
     }
 
     function DemoLayout() {
-        return (v$2("div", { class: "demo" },
-            v$2(Card, null,
-                v$2(CardElement, { type: "title", tag: "h2" }, "Layout"),
-                v$2(CardElement, null, "A number of utility components and CSS classes are provided to make it easier to create quick and dirty layouts."),
-                v$2(CardElement, { type: "subtitle", tag: "h3" }, "Simple grids"),
-                v$2(CardElement, null,
-                    "Two different grid components are provided for two separate use cases:",
-                    v$2("ul", null,
-                        v$2("li", null,
-                            "<",
-                            v$2("code", null, "GridResponsive"),
-                            ">, which takes a minimum column size and fits as many columns as possible given that constraint"),
-                        v$2("li", null,
-                            "<",
-                            v$2("code", null, "GridStatic"),
-                            ">, which takes a minimum column count and fits that many columns in no matter the resulting size and/or jankiness"))),
-                v$2(CardElement, { type: "subtitle", tag: "h3" },
-                    v$2("code", null, "<InputGroup>"),
-                    " & ",
-                    v$2("code", null, "<InputGrid>")),
-                v$2(CardElement, null,
-                    "All input types, from checkboxes to number inputs, can be placed within an ",
-                    v$2("code", null, "<InputGrid>"),
-                    " to give an alternate styling to the default \"free floating\" style."),
-                v$2("div", { style: { display: "contents", "--static-grid-columns": "10em auto" } },
-                    v$2(CardElement, null,
-                        "With an ",
-                        v$2("code", null, "<InputGroup>"),
-                        ":",
-                        v$2(GridStatic, { columns: 2 },
-                            v$2(InputGroup, null,
-                                v$2(Checkbox, { disabled: true, checked: true, labelPosition: "start" }, "Checkbox")),
-                            v$2("code", null, `<InputGroup><Checkbox disabled checked={true} labelPosition="start">Checkbox</Checkbox></InputGroup>`))),
-                    v$2(CardElement, null,
-                        "Without an ",
-                        v$2("code", null, "<InputGroup>"),
-                        ":",
-                        v$2(GridStatic, { columns: 2 },
-                            v$2(Checkbox, { disabled: true, checked: true, labelPosition: "start" }, "Checkbox"),
-                            v$2("code", null, `<Checkbox disabled checked={true} labelPosition="start">Checkbox</Checkbox>`)))),
-                v$2(CardElement, null,
-                    "In addition, to help with alignment, a set of ",
-                    v$2("code", null, "InputGroup"),
-                    "s can also be placed within an ",
-                    v$2("code", null, "InputGrid"),
-                    " to manage simple cases.",
-                    v$2("code", null, `<InputGrid>
+        return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Layout" }, void 0), e$3(CardElement, { children: "A number of utility components and CSS classes are provided to make it easier to create quick and dirty layouts." }, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Simple grids" }, void 0), e$3(CardElement, { children: ["Two different grid components are provided for two separate use cases:", e$3("ul", { children: [e$3("li", { children: ["<", e$3("code", { children: "GridResponsive" }, void 0), ">, which takes a minimum column size and fits as many columns as possible given that constraint"] }, void 0), e$3("li", { children: ["<", e$3("code", { children: "GridStatic" }, void 0), ">, which takes a minimum column count and fits that many columns in no matter the resulting size and/or jankiness"] }, void 0)] }, void 0)] }, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: [e$3("code", { children: "<InputGroup>" }, void 0), " & ", e$3("code", { children: "<InputGrid>" }, void 0)] }, void 0), e$3(CardElement, { children: ["All input types, from checkboxes to number inputs, can be placed within an ", e$3("code", { children: "<InputGrid>" }, void 0), " to give an alternate styling to the default \"free floating\" style."] }, void 0), e$3("div", { style: { display: "contents", "--static-grid-columns": "10em auto" }, children: [e$3(CardElement, { children: ["With an ", e$3("code", { children: "<InputGroup>" }, void 0), ":", e$3(GridStatic, { columns: 2, children: [e$3(InputGroup, { children: e$3(Checkbox, { disabled: true, checked: true, labelPosition: "start", children: "Checkbox" }, void 0) }, void 0), e$3("code", { children: `<InputGroup><Checkbox disabled checked={true} labelPosition="start">Checkbox</Checkbox></InputGroup>` }, void 0)] }, void 0)] }, void 0), e$3(CardElement, { children: ["Without an ", e$3("code", { children: "<InputGroup>" }, void 0), ":", e$3(GridStatic, { columns: 2, children: [e$3(Checkbox, { disabled: true, checked: true, labelPosition: "start", children: "Checkbox" }, void 0), e$3("code", { children: `<Checkbox disabled checked={true} labelPosition="start">Checkbox</Checkbox>` }, void 0)] }, void 0)] }, void 0)] }, void 0), e$3(CardElement, { children: ["In addition, to help with alignment, a set of ", e$3("code", { children: "InputGroup" }, void 0), "s can also be placed within an ", e$3("code", { children: "InputGrid" }, void 0), " to manage simple cases.", e$3("code", { children: `<InputGrid>
     <InputGroup><Checkbox disabled checked={true} labelPosition="start">Checkbox</Checkbox></InputGroup>
     {...}
-</InputGrid>`)),
-                v$2(CardElement, null,
-                    "With an ",
-                    v$2("code", null, "<InputGrid>"),
-                    ":",
-                    v$2(InputGrid, null,
-                        v$2(InputGroup, null,
-                            v$2(Checkbox, { disabled: true, checked: true, labelPosition: "start" }, "Checkbox")),
-                        v$2(InputGroup, null,
-                            v$2(Checkbox, { disabled: true, checked: true, labelPosition: "start" }, "Another checkbox")),
-                        v$2(InputGroup, null,
-                            v$2(Input, { disabled: true, onValueChange: () => { }, type: "number", value: 0 }, "Numeric input")))),
-                v$2(CardElement, null,
-                    "Without an ",
-                    v$2("code", null, "<InputGrid>"),
-                    ":",
-                    v$2(InputGroup, null,
-                        v$2(Checkbox, { disabled: true, checked: true, labelPosition: "start" }, "Checkbox")),
-                    v$2(InputGroup, null,
-                        v$2(Checkbox, { disabled: true, checked: true, labelPosition: "start" }, "Another checkbox")),
-                    v$2(InputGroup, null,
-                        v$2(Input, { disabled: true, onValueChange: () => { }, type: "number", value: 0 }, "Numeric input"))))));
+</InputGrid>` }, void 0)] }, void 0), e$3(CardElement, { children: ["With an ", e$3("code", { children: "<InputGrid>" }, void 0), ":", e$3(InputGrid, { children: [e$3(InputGroup, { children: e$3(Checkbox, { disabled: true, checked: true, labelPosition: "start", children: "Checkbox" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Checkbox, { disabled: true, checked: true, labelPosition: "start", children: "Another checkbox" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Input, { disabled: true, onValueChange: () => { }, type: "number", value: 0, children: "Numeric input" }, void 0) }, void 0)] }, void 0)] }, void 0), e$3(CardElement, { children: ["Without an ", e$3("code", { children: "<InputGrid>" }, void 0), ":", e$3(InputGroup, { children: e$3(Checkbox, { disabled: true, checked: true, labelPosition: "start", children: "Checkbox" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Checkbox, { disabled: true, checked: true, labelPosition: "start", children: "Another checkbox" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Input, { disabled: true, onValueChange: () => { }, type: "number", value: 0, children: "Numeric input" }, void 0) }, void 0)] }, void 0)] }, void 0) }, void 0));
     }
 
     /**
@@ -16257,14 +16211,17 @@
         "aria-label": ariaLabel,
         ...props
       } = _ref;
-      const iconElement = v$2("i", { ...props,
+
+      const iconElement = e$3("i", { ...props,
         role: label ? "img" : "presentation",
         "aria-label": ariaLabel || (label !== null && label !== void 0 ? label : undefined),
         ref: ref
-      });
-      if (tooltip) return v$2(Tooltip, {
-        tooltip: tooltip
-      }, iconElement);
+      }, void 0);
+
+      if (tooltip) return e$3(Tooltip, {
+        tooltip: tooltip,
+        children: iconElement
+      }, void 0);
       return iconElement;
     }));
 
@@ -16284,11 +16241,11 @@
         class: `bi bi-${icon}`
       }, props); // Render the actual FontIcon
 
-      return v$2(FontIcon, { ...mergedProps,
+      return e$3(FontIcon, { ...mergedProps,
         label: label,
         tooltip: tooltip,
         ref: ref
-      });
+      }, void 0);
     })); // Probably a better way to get all these names
 
     function DemoMenus() {
@@ -16301,7 +16258,7 @@
         useState(true);
         const [forceOpen, setForceOpen] = useState(true);
         const pushToast = usePushToast();
-        const onPressSync = () => pushToast(v$2(Toast, null, "Menu item was clicked"));
+        const onPressSync = () => pushToast(e$3(Toast, { children: "Menu item was clicked" }, void 0));
         const onPressAsync = async () => {
             await sleep$3(asyncTimeout);
             if (asyncFails)
@@ -16309,148 +16266,14 @@
             else
                 onPressSync();
         };
-        return (v$2("div", { class: "demo" },
-            v$2(Card, null,
-                v$2(CardElement, { type: "title", tag: "h2" }, "Menus"),
-                v$2(CardElement, null,
-                    v$2(Menu, { anchor: v$2(Button, null, "I'm a menu") },
-                        v$2(MenuItem, { index: 0, onPress: onPressAsync }, "A: Item 1"),
-                        v$2(MenuItem, { index: 1, onPress: onPressAsync }, "B: Item 2"),
-                        v$2(MenuItem, { index: 2, onPress: onPressAsync }, "C: Item 3"),
-                        v$2(MenuItem, { index: 3 }, "I'm static"))),
-                v$2(CardElement, null,
-                    v$2("code", null, "<Menu>"),
-                    "s are effectively popup ",
-                    v$2("code", null, "<List>"),
-                    "s. This gives them all the usual list stuff like keyboard navigation (either with the arrow keys or by typing the text content of the ",
-                    v$2("code", null, "<MenuItem>"),
-                    "), ",
-                    v$2(Tooltip, { side: "block-end", mouseoverDelay: 0, tooltip: "Just like this tooltip" },
-                        "with the popup logic handled by ",
-                        v$2("a", { href: "https://popper.js.org/" }, "Popper")),
-                    "."),
-                v$2(CardElement, null,
-                    v$2("code", null, `<Menu anchor={<Button>I'm a menu</Button>}>
+        return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Menus" }, void 0), e$3(CardElement, { children: e$3(Menu, { anchor: e$3(Button, { children: "I'm a menu" }, void 0), children: [e$3(MenuItem, { index: 0, onPress: onPressAsync, children: "A: Item 1" }, void 0), e$3(MenuItem, { index: 1, onPress: onPressAsync, children: "B: Item 2" }, void 0), e$3(MenuItem, { index: 2, onPress: onPressAsync, children: "C: Item 3" }, void 0), e$3(MenuItem, { index: 3, children: "I'm static" }, void 0)] }, void 0) }, void 0), e$3(CardElement, { children: [e$3("code", { children: "<Menu>" }, void 0), "s are effectively popup ", e$3("code", { children: "<List>" }, void 0), "s. This gives them all the usual list stuff like keyboard navigation (either with the arrow keys or by typing the text content of the ", e$3("code", { children: "<MenuItem>" }, void 0), "), ", e$3(Tooltip, { side: "block-end", mouseoverDelay: 0, tooltip: "Just like this tooltip", children: ["with the popup logic handled by ", e$3("a", { href: "https://popper.js.org/", children: "Popper" }, void 0)] }, void 0), "."] }, void 0), e$3(CardElement, { children: e$3("code", { children: `<Menu anchor={<Button>I'm a menu</Button>}>
     <MenuItem index={0} onPress={onPress}>A: Item 1</MenuItem>
     <MenuItem index={1} onPress={onPress}>B: Item 2</MenuItem>
     <MenuItem index={2} onPress={onPress}>C: Item 3</MenuItem>
     <MenuItem index={3}>I'm static</MenuItem>
-</Menu>`)),
-                v$2("hr", null),
-                v$2(CardElement, { type: "subtitle", tag: "h3" }, "Structure"),
-                v$2(CardElement, null,
-                    "A ",
-                    v$2("code", null, "<Menu>"),
-                    " requires both a selection of ",
-                    v$2("code", null, "<MenuItem>"),
-                    "s and also an ",
-                    v$2("code", null, "anchor"),
-                    ", provided by the prop of the same name.  By default, it's assumed that this will be a component that acceps an ",
-                    v$2("code", null, "onPress"),
-                    " event handler, like ",
-                    v$2("code", null, "<Button>"),
-                    "s do.  If you need to use a different event handler (such as ",
-                    v$2("code", null, "onClick"),
-                    ", if your menu isn't tied to a ",
-                    v$2("code", null, "<Button>"),
-                    "), you can pass the name of the prop to use instead to ",
-                    v$2("code", null, "<anchorEventName>")),
-                v$2("hr", null),
-                v$2(CardElement, { type: "subtitle", tag: "h3" }, "Positioning"),
-                v$2(CardElement, { type: "paragraph" },
-                    "A menu's position is, by default, at the start of the line and the bottom of the block (the bottom left corner for this writing mode). You can manipulate this with the ",
-                    v$2("code", null, "side"),
-                    " and ",
-                    v$2("code", null, "align"),
-                    " props."),
-                v$2(CardElement, { type: "paragraph" }, "The menu will also automatically flip when reaching the edge of the viewport."),
-                v$2(CardElement, null,
-                    v$2(RadioGroup, { label: "Alignment", labelPosition: "start", name: "menu-demo-1-align", selectedValue: align, onValueChange: setAlign },
-                        v$2(InputGrid, null,
-                            v$2(InputGroup, null,
-                                v$2(Radio, { index: 0, value: "start" }, "Start")),
-                            v$2(InputGroup, null,
-                                v$2(Radio, { index: 1, value: "end" }, "End")))),
-                    v$2(InputGroup, null,
-                        v$2(Checkbox, { checked: forceOpen, onCheck: setForceOpen }, "Keep menu open"))),
-                v$2(CardElement, null,
-                    v$2(GridStatic, { columns: 3 },
-                        v$2("div", null),
-                        v$2(Button, { colorVariant: "secondary", pressed: side === "block-start", onPressToggle: (pressed) => void (pressed && setSide("block-start")) }, "Block start"),
-                        v$2("div", null),
-                        v$2(Button, { colorVariant: "secondary", pressed: side === "inline-start", onPressToggle: (pressed) => void (pressed && setSide("inline-start")) }, "Inline start"),
-                        v$2(Menu, { anchor: v$2(Button, { dropdownVariant: "combined" }, "Anchored menu"), side: side, align: align, forceOpen: forceOpen },
-                            v$2(MenuItem, { index: 0, onPress: onPressAsync }, "A: Item 1"),
-                            v$2(MenuItem, { index: 1, onPress: onPressAsync }, "B: Item 2"),
-                            v$2(MenuItem, { index: 2, onPress: onPressAsync }, "C: Item 3"),
-                            v$2(MenuItem, { index: 3 }, "I'm static")),
-                        v$2(Button, { colorVariant: "secondary", pressed: side === "inline-end", onPressToggle: (pressed) => void (pressed && setSide("inline-end")) }, "Inline end"),
-                        v$2("div", null),
-                        v$2(Button, { colorVariant: "secondary", pressed: side === "block-end", onPressToggle: (pressed) => void (pressed && setSide("block-end")) }, "Block end"),
-                        v$2("div", null))),
-                v$2(CardElement, null,
-                    v$2("code", null, `<Menu anchor={<Button>Menu</Button>} side="${side}" align="${align}">
+</Menu>` }, void 0) }, void 0), e$3("hr", {}, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Structure" }, void 0), e$3(CardElement, { children: ["A ", e$3("code", { children: "<Menu>" }, void 0), " requires both a selection of ", e$3("code", { children: "<MenuItem>" }, void 0), "s and also an ", e$3("code", { children: "anchor" }, void 0), ", provided by the prop of the same name.  By default, it's assumed that this will be a component that acceps an ", e$3("code", { children: "onPress" }, void 0), " event handler, like ", e$3("code", { children: "<Button>" }, void 0), "s do.  If you need to use a different event handler (such as ", e$3("code", { children: "onClick" }, void 0), ", if your menu isn't tied to a ", e$3("code", { children: "<Button>" }, void 0), "), you can pass the name of the prop to use instead to ", e$3("code", { children: "<anchorEventName>" }, void 0)] }, void 0), e$3("hr", {}, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Positioning" }, void 0), e$3(CardElement, { type: "paragraph", children: ["A menu's position is, by default, at the start of the line and the bottom of the block (the bottom left corner for this writing mode). You can manipulate this with the ", e$3("code", { children: "side" }, void 0), " and ", e$3("code", { children: "align" }, void 0), " props."] }, void 0), e$3(CardElement, { type: "paragraph", children: "The menu will also automatically flip when reaching the edge of the viewport." }, void 0), e$3(CardElement, { children: [e$3(RadioGroup, { label: "Alignment", labelPosition: "start", name: "menu-demo-1-align", selectedValue: align, onValueChange: setAlign, children: e$3(InputGrid, { children: [e$3(InputGroup, { children: e$3(Radio, { index: 0, value: "start", children: "Start" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Radio, { index: 1, value: "end", children: "End" }, void 0) }, void 0)] }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Checkbox, { checked: forceOpen, onCheck: setForceOpen, children: "Keep menu open" }, void 0) }, void 0)] }, void 0), e$3(CardElement, { children: e$3(GridStatic, { columns: 3, children: [e$3("div", {}, void 0), e$3(Button, { colorVariant: "secondary", pressed: side === "block-start", onPressToggle: (pressed) => void (pressed && setSide("block-start")), children: "Block start" }, void 0), e$3("div", {}, void 0), e$3(Button, { colorVariant: "secondary", pressed: side === "inline-start", onPressToggle: (pressed) => void (pressed && setSide("inline-start")), children: "Inline start" }, void 0), e$3(Menu, { anchor: e$3(Button, { dropdownVariant: "combined", children: "Anchored menu" }, void 0), side: side, align: align, forceOpen: forceOpen, children: [e$3(MenuItem, { index: 0, onPress: onPressAsync, children: "A: Item 1" }, void 0), e$3(MenuItem, { index: 1, onPress: onPressAsync, children: "B: Item 2" }, void 0), e$3(MenuItem, { index: 2, onPress: onPressAsync, children: "C: Item 3" }, void 0), e$3(MenuItem, { index: 3, children: "I'm static" }, void 0)] }, void 0), e$3(Button, { colorVariant: "secondary", pressed: side === "inline-end", onPressToggle: (pressed) => void (pressed && setSide("inline-end")), children: "Inline end" }, void 0), e$3("div", {}, void 0), e$3(Button, { colorVariant: "secondary", pressed: side === "block-end", onPressToggle: (pressed) => void (pressed && setSide("block-end")), children: "Block end" }, void 0), e$3("div", {}, void 0)] }, void 0) }, void 0), e$3(CardElement, { children: e$3("code", { children: `<Menu anchor={<Button>Menu</Button>} side="${side}" align="${align}">
     {...}
-</Menu>`)),
-                v$2("hr", null),
-                v$2(CardElement, { type: "subtitle", tag: "h3" }, "List-likes"),
-                v$2(CardElement, { tag: "div" },
-                    "Menu items inherit the same ",
-                    v$2("code", null, "iconBefore"),
-                    ", ",
-                    v$2("code", null, "iconAfter"),
-                    ", ",
-                    v$2("code", null, "badge"),
-                    ", and multiple line support from the various list item types."),
-                v$2(CardElement, null,
-                    v$2(Menu, { anchor: v$2(Button, { dropdownVariant: "combined" }, "Fancy menu items"), side: side, align: align },
-                        v$2(MenuItem, { index: 0, onPress: onPressAsync, iconStart: v$2(BootstrapIcon, { icon: "pencil", label: null }) },
-                            v$2("span", { class: "h5" }, "A: Item 1"),
-                            v$2("span", null, "Line #2")),
-                        v$2(MenuItem, { index: 1, onPress: onPressAsync, iconStart: v$2(BootstrapIcon, { icon: "pencil", label: null }) },
-                            v$2("span", { class: "h5" }, "B: Item 2"),
-                            v$2("span", null, "Line #2")),
-                        v$2(MenuItem, { index: 2, onPress: onPressAsync, iconStart: v$2(BootstrapIcon, { icon: "pencil", label: null }) },
-                            v$2("span", { class: "h5" }, "C: Item 3"),
-                            v$2("span", null, "Line #2")),
-                        v$2(MenuItem, { index: 3 }, "I'm still static"))),
-                v$2("hr", null),
-                v$2(CardElement, { type: "subtitle", tag: "h3" }, "Transitions"),
-                v$2(CardElement, { tag: "div" },
-                    "By default, ",
-                    v$2("code", null, "<Menu>"),
-                    "s use a ",
-                    v$2("code", null, "<ZoomFade>"),
-                    " as their transition. This can be customized by doing the following:",
-                    v$2("ul", null,
-                        v$2("li", null,
-                            "Provide a ",
-                            v$2("code", null, "Transition"),
-                            " prop."),
-                        v$2("li", null,
-                            "The ",
-                            v$2("code", null, "<Menu>"),
-                            " now accepts the same props as the transition component you passed in, with some key differences:"),
-                        v$2("li", null,
-                            "Any props that this ",
-                            v$2("code", null, "Transition"),
-                            " takes with both inline and block components, like ",
-                            v$2("code", null, "fooInline"),
-                            " and ",
-                            v$2("code", null, "fooBlock"),
-                            ", are now replaced with ",
-                            v$2("code", null, "fooDynamic"),
-                            ", which is relative to the location of the anchor to the menu."),
-                        v$2("li", null,
-                            "The menu will, based on the position of the anchor and current position of the menu, turn ",
-                            v$2("code", null, "fooDynamic"),
-                            " into ",
-                            v$2("code", null, "fooInline"),
-                            " or ",
-                            v$2("code", null, "fooBlock"),
-                            ", optionally negated (",
-                            v$2("code", null, "1 - fooDynamic"),
-                            ") if the menu is flipped because it's near the edge of the viewport."))))));
+</Menu>` }, void 0) }, void 0), e$3("hr", {}, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "List-likes" }, void 0), e$3(CardElement, { tag: "div", children: ["Menu items inherit the same ", e$3("code", { children: "iconBefore" }, void 0), ", ", e$3("code", { children: "iconAfter" }, void 0), ", ", e$3("code", { children: "badge" }, void 0), ", and multiple line support from the various list item types."] }, void 0), e$3(CardElement, { children: e$3(Menu, { anchor: e$3(Button, { dropdownVariant: "combined", children: "Fancy menu items" }, void 0), side: side, align: align, children: [e$3(MenuItem, { index: 0, onPress: onPressAsync, iconStart: e$3(BootstrapIcon, { icon: "pencil", label: null }, void 0), children: [e$3("span", { class: "h5", children: "A: Item 1" }, void 0), e$3("span", { children: "Line #2" }, void 0)] }, void 0), e$3(MenuItem, { index: 1, onPress: onPressAsync, iconStart: e$3(BootstrapIcon, { icon: "pencil", label: null }, void 0), children: [e$3("span", { class: "h5", children: "B: Item 2" }, void 0), e$3("span", { children: "Line #2" }, void 0)] }, void 0), e$3(MenuItem, { index: 2, onPress: onPressAsync, iconStart: e$3(BootstrapIcon, { icon: "pencil", label: null }, void 0), children: [e$3("span", { class: "h5", children: "C: Item 3" }, void 0), e$3("span", { children: "Line #2" }, void 0)] }, void 0), e$3(MenuItem, { index: 3, children: "I'm still static" }, void 0)] }, void 0) }, void 0), e$3("hr", {}, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Transitions" }, void 0), e$3(CardElement, { tag: "div", children: ["By default, ", e$3("code", { children: "<Menu>" }, void 0), "s use a ", e$3("code", { children: "<ZoomFade>" }, void 0), " as their transition. This can be customized by doing the following:", e$3("ul", { children: [e$3("li", { children: ["Provide a ", e$3("code", { children: "Transition" }, void 0), " prop."] }, void 0), e$3("li", { children: ["The ", e$3("code", { children: "<Menu>" }, void 0), " now accepts the same props as the transition component you passed in, with some key differences:"] }, void 0), e$3("li", { children: ["Any props that this ", e$3("code", { children: "Transition" }, void 0), " takes with both inline and block components, like ", e$3("code", { children: "fooInline" }, void 0), " and ", e$3("code", { children: "fooBlock" }, void 0), ", are now replaced with ", e$3("code", { children: "fooDynamic" }, void 0), ", which is relative to the location of the anchor to the menu."] }, void 0), e$3("li", { children: ["The menu will, based on the position of the anchor and current position of the menu, turn ", e$3("code", { children: "fooDynamic" }, void 0), " into ", e$3("code", { children: "fooInline" }, void 0), " or ", e$3("code", { children: "fooBlock" }, void 0), ", optionally negated (", e$3("code", { children: "1 - fooDynamic" }, void 0), ") if the menu is flipped because it's near the edge of the viewport."] }, void 0)] }, void 0)] }, void 0)] }, void 0) }, void 0));
     }
     async function sleep$3(arg0) {
         return new Promise(resolve => setTimeout(resolve, arg0));
@@ -16480,17 +16303,21 @@
         useTableFoot,
         managedTableSections
       } = useTable();
-      return v$2("table", { ...useTableProps(useMergedProps()({
+      return e$3("table", { ...useTableProps(useMergedProps()({
           ref,
           className: clsx("table", small && "table-sm", striped && "table-striped", hoverable && "table-hover", border === "all" && "table-bordered", border === "none" && "table-borderless", variant && `table-${variant}`, borderColor && `border-${borderColor}`)
-        }, props))
-      }, v$2(TableHeadContext.Provider, {
-        value: useTableHead
-      }, v$2(TableBodyContext.Provider, {
-        value: useTableBody
-      }, v$2(TableFootContext.Provider, {
-        value: useTableFoot
-      }, children))));
+        }, props)),
+        children: e$3(TableHeadContext.Provider, {
+          value: useTableHead,
+          children: e$3(TableBodyContext.Provider, {
+            value: useTableBody,
+            children: e$3(TableFootContext.Provider, {
+              value: useTableFoot,
+              children: children
+            }, void 0)
+          }, void 0)
+        }, void 0)
+      }, void 0);
     }));
     const CellLocationContext = D$1(null);
     const TableSectionImpl = g$1(forwardElementRef(function TableSectionImpl(_ref2, ref) {
@@ -16538,17 +16365,19 @@
         passive: true,
         capture: true
       });
-      return v$2(CellLocationContext.Provider, {
-        value: "head"
-      }, v$2(TableRowContext.Provider, {
-        value: useTableHeadRow
-      }, v$2(TableSectionImpl, {
-        tag: "thead",
-        ...useRefElementProps(useMergedProps()(useTableHeadProps({
-          ref,
-          className: clsx("elevation-body-surface", showShadow && "floating", variant && `table-${variant}`)
-        }), props))
-      })));
+      return e$3(CellLocationContext.Provider, {
+        value: "head",
+        children: e$3(TableRowContext.Provider, {
+          value: useTableHeadRow,
+          children: e$3(TableSectionImpl, {
+            tag: "thead",
+            ...useRefElementProps(useMergedProps()(useTableHeadProps({
+              ref,
+              className: clsx("elevation-body-surface", showShadow && "floating", variant && `table-${variant}`)
+            }), props))
+          }, void 0)
+        }, void 0)
+      }, void 0);
     }));
     const TableBody = g$1(forwardElementRef(function TableBody(_ref4, ref) {
       let {
@@ -16561,18 +16390,20 @@
         useTableBodyProps,
         useTableBodyRow
       } = F(TableBodyContext)();
-      return v$2(CellLocationContext.Provider, {
-        value: "body"
-      }, v$2(TableRowContext.Provider, {
-        value: useTableBodyRow
-      }, v$2(TableSectionImpl, {
-        tag: "tbody",
-        ...useMergedProps()(useTableBodyProps({
-          ref,
-          children,
-          className: clsx(variant && `table-${variant}`)
-        }), props)
-      })));
+      return e$3(CellLocationContext.Provider, {
+        value: "body",
+        children: e$3(TableRowContext.Provider, {
+          value: useTableBodyRow,
+          children: e$3(TableSectionImpl, {
+            tag: "tbody",
+            ...useMergedProps()(useTableBodyProps({
+              ref,
+              children,
+              className: clsx(variant && `table-${variant}`)
+            }), props)
+          }, void 0)
+        }, void 0)
+      }, void 0);
     }));
     g$1(forwardElementRef(function TableFoot(_ref5, ref) {
       let {
@@ -16585,18 +16416,20 @@
         useTableFootProps,
         useTableFootRow
       } = F(TableFootContext)();
-      return v$2(CellLocationContext.Provider, {
-        value: "foot"
-      }, v$2(TableRowContext.Provider, {
-        value: useTableFootRow
-      }, v$2(TableSectionImpl, {
-        tag: "tfoot",
-        ...useMergedProps()(useTableFootProps({
-          ref,
-          children: Array.isArray(children) ? children : [children],
-          className: clsx(variant && `table-${variant}`)
-        }), props)
-      })));
+      return e$3(CellLocationContext.Provider, {
+        value: "foot",
+        children: e$3(TableRowContext.Provider, {
+          value: useTableFootRow,
+          children: e$3(TableSectionImpl, {
+            tag: "tfoot",
+            ...useMergedProps()(useTableFootProps({
+              ref,
+              children: Array.isArray(children) ? children : [children],
+              className: clsx(variant && `table-${variant}`)
+            }), props)
+          }, void 0)
+        }, void 0)
+      }, void 0);
     }));
     const TableCellContext = D$1(null);
     const TableHeadCellContext = D$1(null);
@@ -16626,12 +16459,14 @@
           className: clsx(variant && `table-${variant}`)
         }, props)
       });
-      return v$2(TableCellContext.Provider, {
-        value: useTableCell
-      }, v$2(TableHeadCellContext.Provider, {
-        value: useTableHeadCell
-      }, v$2("tr", { ...rowProps
-      })));
+      return e$3(TableCellContext.Provider, {
+        value: useTableCell,
+        children: e$3(TableHeadCellContext.Provider, {
+          value: useTableHeadCell,
+          children: e$3("tr", { ...rowProps
+          }, void 0)
+        }, void 0)
+      }, void 0);
     }));
     const TableCell = g$1(forwardElementRef(function TableCell(_ref7, ref) {
       let {
@@ -16671,12 +16506,14 @@
 
       if (childrenReceiveFocus) {
         const p1 = useMergedProps()(useTableCellDelegateProps({}), props);
-        return v$2("td", { ...cellProps
-        }, B(children, useMergedProps()(p1, children.props), children.props.children));
+        return e$3("td", { ...cellProps,
+          children: B(children, useMergedProps()(p1, children.props), children.props.children)
+        }, void 0);
       } else {
         const p2 = useMergedProps()(useTableCellDelegateProps(cellProps), props);
-        return v$2("td", { ...p2
-        }, stringify(displayValue));
+        return e$3("td", { ...p2,
+          children: stringify(displayValue)
+        }, void 0);
       }
     }));
     const TableHeaderCell = g$1(forwardElementRef(function TableHeaderCell(_ref8, ref) {
@@ -16708,33 +16545,43 @@
         role: "columnheader",
         className: clsx(variant && `table-${variant}`, unsortable && "unsortable")
       }, props)));
-      const sortIcon = v$2(Swappable, null, v$2("div", { ...{
-          class: clsx("table-sort-icon-container")
-        }
-      }, v$2(Flip, {
-        flipAngleInline: 180,
-        show: sortDirection == "descending"
-      }, v$2("div", {
-        class: "bi bi-sort-up"
-      })), v$2(Flip, {
-        flipAngleInline: 180,
-        show: hovering && sortDirection == null || sortDirection == "ascending"
-      }, v$2("div", {
-        class: "bi bi-sort-down-alt"
-      }))));
+
+      const sortIcon = e$3(Swappable, {
+        children: e$3("div", { ...{
+            class: clsx("table-sort-icon-container")
+          },
+          children: [e$3(Flip, {
+            flipAngleInline: 180,
+            show: sortDirection == "descending",
+            children: e$3("div", {
+              class: "bi bi-sort-up"
+            }, void 0)
+          }, void 0), e$3(Flip, {
+            flipAngleInline: 180,
+            show: hovering && sortDirection == null || sortDirection == "ascending",
+            children: e$3("div", {
+              class: "bi bi-sort-down-alt"
+            }, void 0)
+          }, void 0)]
+        }, void 0)
+      }, void 0);
 
       if (childrenReceiveFocus) {
         const p1 = useMergedProps()(useTableHeadCellDelegateProps({}), props);
-        return v$2("th", { ...cellProps
-        }, v$2("div", {
-          class: "th-spacing"
-        }, B(children, useMergedProps()(p1, children.props), children.props.children), sortIcon));
+        return e$3("th", { ...cellProps,
+          children: e$3("div", {
+            class: "th-spacing",
+            children: [B(children, useMergedProps()(p1, children.props), children.props.children), sortIcon]
+          }, void 0)
+        }, void 0);
       } else {
         const p2 = useMergedProps()(useTableHeadCellDelegateProps(cellProps), props);
-        return v$2("th", { ...p2
-        }, v$2("div", {
-          class: "th-spacing"
-        }, children, sortIcon));
+        return e$3("th", { ...p2,
+          children: e$3("div", {
+            class: "th-spacing",
+            children: [children, sortIcon]
+          }, void 0)
+        }, void 0);
       }
     }));
 
@@ -16775,53 +16622,12 @@
             await sleep$2(2000);
             setChecked(checked);
         }, []);
-        return (v$2(TableRow, { hidden: filterEvens && (((n ?? 0) & 1) == 0), index: index },
-            v$2(TableCell, { index: 0, value: n, colSpan: !w ? 2 : undefined },
-                v$2(Input, { type: "number", width: "4ch", value: n, onValueChange: setN, labelPosition: "hidden", min: 0 }, "Numeric input")),
-            w && v$2(TableCell, { index: 1, value: w }),
-            v$2(TableCell, { index: 2, value: d }, formatter.format(d)),
-            v$2(TableCell, { index: 3, value: checked },
-                v$2(Checkbox, { checked: checked, onCheck: onInput, labelPosition: "hidden" }, "Demo table checkbox"))));
+        return (e$3(TableRow, { hidden: filterEvens && (((n ?? 0) & 1) == 0), index: index, children: [e$3(TableCell, { index: 0, value: n, colSpan: !w ? 2 : undefined, children: e$3(Input, { type: "number", width: "4ch", value: n, onValueChange: setN, labelPosition: "hidden", min: 0, children: "Numeric input" }, void 0) }, void 0), w && e$3(TableCell, { index: 1, value: w }, void 0), e$3(TableCell, { index: 2, value: d, children: formatter.format(d) }, void 0), e$3(TableCell, { index: 3, value: checked, children: e$3(Checkbox, { checked: checked, onCheck: onInput, labelPosition: "hidden", children: "Demo table checkbox" }, void 0) }, void 0)] }, void 0));
     });
     function DemoTable() {
         const [rowCount, setRowCount] = useState(5);
         const [filterEvens, setFilterEvens] = useState(false);
-        return (v$2("div", { class: "demo" },
-            v$2(Card, null,
-                v$2(CardElement, { type: "title", tag: "h2" }, "Table"),
-                v$2(CardElement, null,
-                    "Tables allow for automatic display, navigation, sorting, and filtering of data. All data is provided by the children and you ",
-                    v$2("strong", null, "don't need to provide a data structure"),
-                    " to the parent ",
-                    v$2("code", null, "Table"),
-                    " element, and by default all columns are user-sortable."),
-                v$2(CardElement, null,
-                    "Sorting and filtering are done by examining each ",
-                    v$2("code", null, "TableCell"),
-                    "'s child (or ",
-                    v$2("code", null, "value"),
-                    " prop, with ",
-                    v$2("code", null, "value"),
-                    " taking precidence). If the child of the ",
-                    v$2("code", null, "TableCell"),
-                    " is a simple number or string (and no ",
-                    v$2("code", null, "value"),
-                    " prop is provided), then that value will be used for sorting. If it's not a string (and again, if no ",
-                    v$2("code", null, "value"),
-                    " prop is provided), then it will be sorted as if its contents were just an empty string, so it's almost always beneficial to provide the ",
-                    v$2("code", null, "value"),
-                    " prop just in case."),
-                v$2(CardElement, null,
-                    "A ",
-                    v$2("code", null, "TableCell"),
-                    " contain any content, including arbitrary HTML and other components. In terms of focus management (i.e. how using the arrow keys works within a table), a ",
-                    v$2("code", null, "TableCell"),
-                    " that just contains a simple string or number will focus itself when tabbed to, but a ",
-                    v$2("code", null, "TableCell"),
-                    " that contains other components ",
-                    v$2("strong", null, "will delegate focus to its children instead"),
-                    ":",
-                    v$2("code", null, `// The table cell itself will receive focus:
+        return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Table" }, void 0), e$3(CardElement, { children: ["Tables allow for automatic display, navigation, sorting, and filtering of data. All data is provided by the children and you ", e$3("strong", { children: "don't need to provide a data structure" }, void 0), " to the parent ", e$3("code", { children: "Table" }, void 0), " element, and by default all columns are user-sortable."] }, void 0), e$3(CardElement, { children: ["Sorting and filtering are done by examining each ", e$3("code", { children: "TableCell" }, void 0), "'s child (or ", e$3("code", { children: "value" }, void 0), " prop, with ", e$3("code", { children: "value" }, void 0), " taking precidence). If the child of the ", e$3("code", { children: "TableCell" }, void 0), " is a simple number or string (and no ", e$3("code", { children: "value" }, void 0), " prop is provided), then that value will be used for sorting. If it's not a string (and again, if no ", e$3("code", { children: "value" }, void 0), " prop is provided), then it will be sorted as if its contents were just an empty string, so it's almost always beneficial to provide the ", e$3("code", { children: "value" }, void 0), " prop just in case."] }, void 0), e$3(CardElement, { children: ["A ", e$3("code", { children: "TableCell" }, void 0), " contain any content, including arbitrary HTML and other components. In terms of focus management (i.e. how using the arrow keys works within a table), a ", e$3("code", { children: "TableCell" }, void 0), " that just contains a simple string or number will focus itself when tabbed to, but a ", e$3("code", { children: "TableCell" }, void 0), " that contains other components ", e$3("strong", { children: "will delegate focus to its children instead" }, void 0), ":", e$3("code", { children: `// The table cell itself will receive focus:
 <TableCell>Text</TableCell>
 <TableCell>0</TableCell>
 <TableCell><>Text</></TableCell> // Fragments are treated as text for these purposes
@@ -16834,55 +16640,17 @@
 <TableCell>{(props) => <p>text</p>}</TableCell>
 
 // ✅ The cell can properly delegate all duties to the child DIV.
-<TableCell>{forwardRef((props, ref) => <p ref={ref} {...props}>text</p>)}</TableCell>`)),
-                v$2(CardElement, null,
-                    "Finally, your rows ",
-                    v$2("em", null, "must"),
-                    " be ",
-                    v$2("em", null, "direct descendants"),
-                    " of ",
-                    v$2("code", null, "TableBody"),
-                    " (and ",
-                    v$2("code", null, "TableHead"),
-                    " and ",
-                    v$2("code", null, "TableFoot"),
-                    ") so that it can properly call ",
-                    v$2("code", null, "createElement"),
-                    " with the expected results when sorting. It's okay if each row you provide is a wrapper component around a single ",
-                    v$2("code", null, "TableRow"),
-                    "\u2014the \"direct descendant\" doesn't need to be specifically a ",
-                    v$2("code", null, "TableRow"),
-                    " component\u2014it's just that the ",
-                    v$2("code", null, "TableBody"),
-                    " (etc.) needs ",
-                    v$2("em", null, "specifically"),
-                    " an array of children whose individual ",
-                    v$2("code", null, "key"),
-                    " props can be manipulated."),
-                v$2(CardElement, null,
-                    v$2(Input, { type: "number", value: rowCount, min: 0, max: 999, onValueChange: setRowCount }, "Row count"),
-                    v$2(Checkbox, { checked: filterEvens, onCheck: setFilterEvens }, "Filter out even numbers")),
-                v$2(CardElement, null,
-                    v$2(Table, null,
-                        v$2(TableHead, null,
-                            v$2(TableRow, { hidden: false, index: 0 },
-                                v$2(TableHeaderCell, { index: 0 }, "Number"),
-                                v$2(TableHeaderCell, { index: 1 }, "String"),
-                                v$2(TableHeaderCell, { index: 2 }, "Date"),
-                                v$2(TableHeaderCell, { index: 3 }, "Checkbox"))),
-                        v$2(TableBody, { ...{ "data-test": filterEvens } }, Array.from(function* () {
-                            for (let i = 0; i < (rowCount ?? 0); ++i) {
-                                yield v$2(RandomRow, { key: i, index: i, filterEvens: filterEvens });
-                                /*<TableRow index={1 + i}>
-                                <TableCell index={0} value={i} />
-                                <TableCell index={1} value={RandomWords[i]} />
-                                <TableCell index={2} value={new Date()} />
-                            </TableRow>*/
-                                //
-                            }
-                        }())))),
-                v$2(CardElement, null,
-                    v$2("code", null, `<Table>
+<TableCell>{forwardRef((props, ref) => <p ref={ref} {...props}>text</p>)}</TableCell>` }, void 0)] }, void 0), e$3(CardElement, { children: ["Finally, your rows ", e$3("em", { children: "must" }, void 0), " be ", e$3("em", { children: "direct descendants" }, void 0), " of ", e$3("code", { children: "TableBody" }, void 0), " (and ", e$3("code", { children: "TableHead" }, void 0), " and ", e$3("code", { children: "TableFoot" }, void 0), ") so that it can properly call ", e$3("code", { children: "createElement" }, void 0), " with the expected results when sorting. It's okay if each row you provide is a wrapper component around a single ", e$3("code", { children: "TableRow" }, void 0), "\u2014the \"direct descendant\" doesn't need to be specifically a ", e$3("code", { children: "TableRow" }, void 0), " component\u2014it's just that the ", e$3("code", { children: "TableBody" }, void 0), " (etc.) needs ", e$3("em", { children: "specifically" }, void 0), " an array of children whose individual ", e$3("code", { children: "key" }, void 0), " props can be manipulated."] }, void 0), e$3(CardElement, { children: [e$3(Input, { type: "number", value: rowCount, min: 0, max: 999, onValueChange: setRowCount, children: "Row count" }, void 0), e$3(Checkbox, { checked: filterEvens, onCheck: setFilterEvens, children: "Filter out even numbers" }, void 0)] }, void 0), e$3(CardElement, { children: e$3(Table, { children: [e$3(TableHead, { children: e$3(TableRow, { hidden: false, index: 0, children: [e$3(TableHeaderCell, { index: 0, children: "Number" }, void 0), e$3(TableHeaderCell, { index: 1, children: "String" }, void 0), e$3(TableHeaderCell, { index: 2, children: "Date" }, void 0), e$3(TableHeaderCell, { index: 3, children: "Checkbox" }, void 0)] }, void 0) }, void 0), e$3(TableBody, { ...{ "data-test": filterEvens }, children: Array.from(function* () {
+                                        for (let i = 0; i < (rowCount ?? 0); ++i) {
+                                            yield e$3(RandomRow, { index: i, filterEvens: filterEvens }, i);
+                                            /*<TableRow index={1 + i}>
+                                            <TableCell index={0} value={i} />
+                                            <TableCell index={1} value={RandomWords[i]} />
+                                            <TableCell index={2} value={new Date()} />
+                                        </TableRow>*/
+                                            //
+                                        }
+                                    }()) }, void 0)] }, void 0) }, void 0), e$3(CardElement, { children: e$3("code", { children: `<Table>
     <TableHead>
         <TableRow index={0}>
             <TableHeaderCell index={0}>Number</TableHeaderCell>
@@ -16910,7 +16678,7 @@
     <TableFoot>
         <ACustomTableRow index={6} />
     </TableFoot>
-</Table>`)))));
+</Table>` }, void 0) }, void 0)] }, void 0) }, void 0));
     }
     async function sleep$2(arg0) {
         return new Promise(resolve => setTimeout(resolve, arg0));
@@ -16923,12 +16691,12 @@
         label,
         ...props
       } = _ref;
-      return v$2("span", { ...useMergedProps()({
+      return e$3("span", { ...useMergedProps()({
           ref,
           "aria-label": label,
           className: clsx("badge", roundedPill && "rounded-pill", `bg-${colorVariant !== null && colorVariant !== void 0 ? colorVariant : "secondary"}`)
         }, props)
-      });
+      }, void 0);
     }));
 
     function DemoLists() {
@@ -16945,108 +16713,34 @@
         usePushToast();
         function makeListItemLines(index) {
             if (lines === 1)
-                return v$2("span", null,
-                    "List Item #",
-                    index + 1);
-            return v$2(d$2, null, Array.from((function* () {
-                for (let i = 0; i < lines; ++i) {
-                    if (i == 0)
-                        yield v$2("span", { class: "h4" },
-                            "List Item #",
-                            index + 1);
-                    else
-                        yield v$2("span", null,
-                            "This is line #",
-                            i + 1);
-                }
-            })()));
+                return e$3("span", { children: ["List Item #", index + 1] }, void 0);
+            return e$3(d$2, { children: Array.from((function* () {
+                    for (let i = 0; i < lines; ++i) {
+                        if (i == 0)
+                            yield e$3("span", { class: "h4", children: ["List Item #", index + 1] }, void 0);
+                        else
+                            yield e$3("span", { children: ["This is line #", i + 1] }, void 0);
+                    }
+                })()) }, void 0);
         }
         function makeListItems(maker) {
-            return v$2(d$2, null, Array.from((function* () {
-                for (let i = 0; i < 5; ++i) {
-                    yield maker(i);
-                }
-            })()));
+            return e$3(d$2, { children: Array.from((function* () {
+                    for (let i = 0; i < 5; ++i) {
+                        yield maker(i);
+                    }
+                })()) }, void 0);
         }
-        return (v$2("div", { class: "demo" },
-            v$2(Card, null,
-                v$2(CardElement, { type: "title", tag: "h2" }, "Lists"),
-                v$2(CardElement, null,
-                    v$2(List, { label: "Demo list", selectedIndex: selectedIndex, onSelect: setSelectedIndex }, makeListItems(index => v$2(ListItemSingle, { index: index, disabled: index == 2 }, makeListItemLines(index))))),
-                v$2(CardElement, null,
-                    "A list is a way to provide a large number of selectable options in a way that's distinct from, say, a list of checkboxes or radio buttons. Lists can be ",
-                    v$2("strong", null, "single-select"),
-                    ", ",
-                    v$2("strong", null, "multi-select"),
-                    ", or ",
-                    v$2("strong", null, "static"),
-                    " (no selection, display only)."),
-                v$2(CardElement, null,
-                    "All list types can have as many lines as needed; each e.g. ",
-                    v$2("code", null, "<span>"),
-                    " will create a new line. Format them however you like (i.e. making some larger or smaller, tinted different colors, etc.)",
-                    v$2(InputGroup, null,
-                        v$2(Input, { type: "number", value: lines, onValueChange: setLines }, "# of lines"))),
-                v$2(CardElement, { type: "subtitle", tag: "h3" }, "Single select"),
-                v$2(CardElement, null,
-                    "For single-select lists, you provide the parent ",
-                    v$2("code", null, "<List>"),
-                    " with ",
-                    v$2("code", null, "selectedIndex"),
-                    " and ",
-                    v$2("code", null, "onSelect"),
-                    " props that control which ",
-                    v$2("code", null, "<ListItemSingle>"),
-                    " is the selected one."),
-                v$2(CardElement, null,
-                    "As with most components, the ",
-                    v$2("code", null, "onSelect"),
-                    " prop can be an async function."),
-                v$2(CardElement, null,
-                    v$2(List, { label: "Single-select list demo", selectedIndex: selectedIndex, onSelect: async (i) => { await sleep$1(2000); setSelectedIndex(i); } }, makeListItems(index => v$2(ListItemSingle, { index: index, disabled: index == 2 }, makeListItemLines(index))))),
-                v$2(CardElement, { type: "subtitle", tag: "h3" }, "Multi select"),
-                v$2(CardElement, null,
-                    "Multi-select lists have a ",
-                    v$2("code", null, "selected"),
-                    " prop on each individual ",
-                    v$2("code", null, "<ListItemMulti>"),
-                    "."),
-                v$2(CardElement, null,
-                    "As with most components, the ",
-                    v$2("code", null, "onSelect"),
-                    " prop can be an async function."),
-                v$2(CardElement, null,
-                    v$2(List, { label: "Multi-select list demo", select: "multi" }, makeListItems(index => v$2(ListItemMulti, { index: index, selected: selectedMulti.has(index), disabled: index == 2, onSelect: async (selected) => {
-                            await sleep$1(2000);
-                            setSelectedMulti(prev => {
-                                let ret = new Set(Array.from(prev));
-                                if (selected)
-                                    ret.add(index);
-                                else
-                                    ret.delete(index);
-                                return ret;
-                            });
-                        } }, makeListItemLines(index))))),
-                v$2(CardElement, { type: "subtitle", tag: "h3" }, "Static lists"),
-                v$2(CardElement, null, "All lists share the same basic styling of a static list, so all of these options can also be used on single- and multi-select lists."),
-                v$2(CardElement, null,
-                    "You can add an icon at the righthand side with ",
-                    v$2("code", null, "iconEnd"),
-                    ":"),
-                v$2(CardElement, null,
-                    v$2(List, { label: "List with icons at the end" }, makeListItems(index => v$2(ListItemStatic, { iconEnd: v$2(BootstrapIcon, { icon: "star", label: null }) }, makeListItemLines(index))))),
-                v$2(CardElement, null,
-                    "Or an icon on the left with ",
-                    v$2("code", null, "iconStart"),
-                    ", or a badge at the top-right with ",
-                    v$2("code", null, "badge"),
-                    ":"),
-                v$2(CardElement, null,
-                    v$2(List, { label: "List with icons at the start and badges" }, makeListItems(index => v$2(ListItemStatic, { badge: v$2(Badge, { label: `Example value` }, Math.floor(Math.abs(Math.sin((index + 7) * 7) * 20))), iconStart: v$2(BootstrapIcon, { icon: "star", label: null }) }, makeListItemLines(index))))),
-                v$2(CardElement, null,
-                    "All these will properly align themselves no matter how many lines the list item has. Keep in mind that a list's contents are always read out as one long string to screen readers, so not only should they ",
-                    v$2("em", null, "not"),
-                    " contain interactive content (beyond itself being selectable), any additional content, should be kept as terse as possible to avoid repeated content when reading each item one at a time."))));
+        return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Lists" }, void 0), e$3(CardElement, { children: e$3(List, { label: "Demo list", selectedIndex: selectedIndex, onSelect: setSelectedIndex, children: makeListItems(index => e$3(ListItemSingle, { index: index, disabled: index == 2, children: makeListItemLines(index) }, void 0)) }, void 0) }, void 0), e$3(CardElement, { children: ["A list is a way to provide a large number of selectable options in a way that's distinct from, say, a list of checkboxes or radio buttons. Lists can be ", e$3("strong", { children: "single-select" }, void 0), ", ", e$3("strong", { children: "multi-select" }, void 0), ", or ", e$3("strong", { children: "static" }, void 0), " (no selection, display only)."] }, void 0), e$3(CardElement, { children: ["All list types can have as many lines as needed; each e.g. ", e$3("code", { children: "<span>" }, void 0), " will create a new line. Format them however you like (i.e. making some larger or smaller, tinted different colors, etc.)", e$3(InputGroup, { children: e$3(Input, { type: "number", value: lines, onValueChange: setLines, children: "# of lines" }, void 0) }, void 0)] }, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Single select" }, void 0), e$3(CardElement, { children: ["For single-select lists, you provide the parent ", e$3("code", { children: "<List>" }, void 0), " with ", e$3("code", { children: "selectedIndex" }, void 0), " and ", e$3("code", { children: "onSelect" }, void 0), " props that control which ", e$3("code", { children: "<ListItemSingle>" }, void 0), " is the selected one."] }, void 0), e$3(CardElement, { children: ["As with most components, the ", e$3("code", { children: "onSelect" }, void 0), " prop can be an async function."] }, void 0), e$3(CardElement, { children: e$3(List, { label: "Single-select list demo", selectedIndex: selectedIndex, onSelect: async (i) => { await sleep$1(2000); setSelectedIndex(i); }, children: makeListItems(index => e$3(ListItemSingle, { index: index, disabled: index == 2, children: makeListItemLines(index) }, void 0)) }, void 0) }, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Multi select" }, void 0), e$3(CardElement, { children: ["Multi-select lists have a ", e$3("code", { children: "selected" }, void 0), " prop on each individual ", e$3("code", { children: "<ListItemMulti>" }, void 0), "."] }, void 0), e$3(CardElement, { children: ["As with most components, the ", e$3("code", { children: "onSelect" }, void 0), " prop can be an async function."] }, void 0), e$3(CardElement, { children: e$3(List, { label: "Multi-select list demo", select: "multi", children: makeListItems(index => e$3(ListItemMulti, { index: index, selected: selectedMulti.has(index), disabled: index == 2, onSelect: async (selected) => {
+                                    await sleep$1(2000);
+                                    setSelectedMulti(prev => {
+                                        let ret = new Set(Array.from(prev));
+                                        if (selected)
+                                            ret.add(index);
+                                        else
+                                            ret.delete(index);
+                                        return ret;
+                                    });
+                                }, children: makeListItemLines(index) }, void 0)) }, void 0) }, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Static lists" }, void 0), e$3(CardElement, { children: "All lists share the same basic styling of a static list, so all of these options can also be used on single- and multi-select lists." }, void 0), e$3(CardElement, { children: ["You can add an icon at the righthand side with ", e$3("code", { children: "iconEnd" }, void 0), ":"] }, void 0), e$3(CardElement, { children: e$3(List, { label: "List with icons at the end", children: makeListItems(index => e$3(ListItemStatic, { iconEnd: e$3(BootstrapIcon, { icon: "star", label: null }, void 0), children: makeListItemLines(index) }, void 0)) }, void 0) }, void 0), e$3(CardElement, { children: ["Or an icon on the left with ", e$3("code", { children: "iconStart" }, void 0), ", or a badge at the top-right with ", e$3("code", { children: "badge" }, void 0), ":"] }, void 0), e$3(CardElement, { children: e$3(List, { label: "List with icons at the start and badges", children: makeListItems(index => e$3(ListItemStatic, { badge: e$3(Badge, { label: `Example value`, children: Math.floor(Math.abs(Math.sin((index + 7) * 7) * 20)) }, void 0), iconStart: e$3(BootstrapIcon, { icon: "star", label: null }, void 0), children: makeListItemLines(index) }, void 0)) }, void 0) }, void 0), e$3(CardElement, { children: ["All these will properly align themselves no matter how many lines the list item has. Keep in mind that a list's contents are always read out as one long string to screen readers, so not only should they ", e$3("em", { children: "not" }, void 0), " contain interactive content (beyond itself being selectable), any additional content, should be kept as terse as possible to avoid repeated content when reading each item one at a time."] }, void 0)] }, void 0) }, void 0));
     }
     async function sleep$1(arg0) {
         return new Promise(resolve => setTimeout(resolve, arg0));
@@ -17063,132 +16757,38 @@
         useState(true);
         useState(true);
         const pushDialog = usePushDialog();
-        const onPressAsync = () => pushDialog(v$2(Dialog, { descriptive: false }, "Dialog item was clicked"));
-        return (v$2("div", { class: "demo" },
-            v$2(Card, null,
-                v$2(CardElement, { type: "title", tag: "h2" }, "Dialogs"),
-                v$2(CardElement, null,
-                    v$2(Button, { onPress: () => pushDialog(v$2(Dialog, { descriptive: false }, "This is a dialog!")) }, "Open a dialog")),
-                v$2(CardElement, null,
-                    v$2("code", null, "<Dialog>"),
-                    "s are a way to show the user (read: force the user to at least skim) some amount of information or other content. They can either be controlled or uncontrolled; controlled ",
-                    v$2("code", null, "<Dialog>"),
-                    "s take ",
-                    v$2("code", null, "open"),
-                    " and ",
-                    v$2("code", null, "onClose"),
-                    " props, while uncontrolled ",
-                    v$2("code", null, "<Dialog>"),
-                    "s give you a ",
-                    v$2("code", null, "async show()"),
-                    " function to call, or can be used from ",
-                    v$2("code", null, "useShowDialog"),
-                    "."),
-                v$2(CardElement, null,
-                    v$2(Button, { onPress: onPressAsync },
-                        v$2("code", null, "usePushDialog"))),
-                v$2(CardElement, null,
-                    v$2(Button, { onPress: show ?? undefined },
-                        v$2("code", null,
-                            "<Dialog provideShow=",
-                            "{provideShow}",
-                            " />")),
-                    v$2(Dialog, { descriptive: false, provideShow: setShow }, "This is a dialog")),
-                v$2(CardElement, null,
-                    "The easiest way to use them is via the ",
-                    v$2("code", null, "useShowDialog"),
-                    " hook. Pass the returned ",
-                    v$2("code", null, "showDialog"),
-                    " function a ",
-                    v$2("code", null, "<Dialog>"),
-                    " and it will be shown on the screen, with the function returning a promise that resolves when ",
-                    v$2("code", null, "onClose"),
-                    " would be called (if you pass your own ",
-                    v$2("code", null, "onClose"),
-                    " you will override this behavior which can be used if you need to prevent the dialog from closing when clicking the backdrop; use a ",
-                    v$2("code", null, "<CloseDialogButton>"),
-                    " or within your own component pass ",
-                    v$2("code", null, "useCloseDialog"),
-                    "'s returned function to close the dialog during your own ",
-                    v$2("code", null, "onClose"),
-                    ")."),
-                v$2(CardElement, null, "All components that use Portals to position themselves on the body will reposition themselves with the dialog as their parent instead, ensuring they still work as expected."),
-                v$2(CardElement, null,
-                    v$2(Button, { onPress: () => pushDialog(v$2(Dialog, { descriptive: false }, "This is a dialog!")) }, "Open a dialog")))));
+        const onPressAsync = () => pushDialog(e$3(Dialog, { descriptive: false, children: "Dialog item was clicked" }, void 0));
+        return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Dialogs" }, void 0), e$3(CardElement, { children: e$3(Button, { onPress: () => pushDialog(e$3(Dialog, { descriptive: false, children: "This is a dialog!" }, void 0)), children: "Open a dialog" }, void 0) }, void 0), e$3(CardElement, { children: [e$3("code", { children: "<Dialog>" }, void 0), "s are a way to show the user (read: force the user to at least skim) some amount of information or other content. They can either be controlled or uncontrolled; controlled ", e$3("code", { children: "<Dialog>" }, void 0), "s take ", e$3("code", { children: "open" }, void 0), " and ", e$3("code", { children: "onClose" }, void 0), " props, while uncontrolled ", e$3("code", { children: "<Dialog>" }, void 0), "s give you a ", e$3("code", { children: "async show()" }, void 0), " function to call, or can be used from ", e$3("code", { children: "useShowDialog" }, void 0), "."] }, void 0), e$3(CardElement, { children: e$3(Button, { onPress: onPressAsync, children: e$3("code", { children: "usePushDialog" }, void 0) }, void 0) }, void 0), e$3(CardElement, { children: [e$3(Button, { onPress: show ?? undefined, children: e$3("code", { children: ["<Dialog provideShow=", "{provideShow}", " />"] }, void 0) }, void 0), e$3(Dialog, { descriptive: false, provideShow: setShow, children: "This is a dialog" }, void 0)] }, void 0), e$3(CardElement, { children: ["The easiest way to use them is via the ", e$3("code", { children: "useShowDialog" }, void 0), " hook. Pass the returned ", e$3("code", { children: "showDialog" }, void 0), " function a ", e$3("code", { children: "<Dialog>" }, void 0), " and it will be shown on the screen, with the function returning a promise that resolves when ", e$3("code", { children: "onClose" }, void 0), " would be called (if you pass your own ", e$3("code", { children: "onClose" }, void 0), " you will override this behavior which can be used if you need to prevent the dialog from closing when clicking the backdrop; use a ", e$3("code", { children: "<CloseDialogButton>" }, void 0), " or within your own component pass ", e$3("code", { children: "useCloseDialog" }, void 0), "'s returned function to close the dialog during your own ", e$3("code", { children: "onClose" }, void 0), ")."] }, void 0), e$3(CardElement, { children: "All components that use Portals to position themselves on the body will reposition themselves with the dialog as their parent instead, ensuring they still work as expected." }, void 0), e$3(CardElement, { children: e$3(Button, { onPress: () => pushDialog(e$3(Dialog, { descriptive: false, children: "This is a dialog!" }, void 0)), children: "Open a dialog" }, void 0) }, void 0)] }, void 0) }, void 0));
     }
 
     const RandomWords = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.".split(" ");
     g$1(({ setActive, active, depth }) => {
-        return (v$2(d$2, null,
-            v$2("button", null, "Button 1"),
-            v$2("button", null, "Button 2"),
-            v$2("button", null, "Button 3"),
-            v$2("label", null,
-                "Active: ",
-                v$2("input", { type: "checkbox", checked: active, onInput: e => { e.preventDefault(); setActive(e.currentTarget.checked); } }))));
+        return (e$3(d$2, { children: [e$3("button", { children: "Button 1" }, void 0), e$3("button", { children: "Button 2" }, void 0), e$3("button", { children: "Button 3" }, void 0), e$3("label", { children: ["Active: ", e$3("input", { type: "checkbox", checked: active, onInput: e => { e.preventDefault(); setActive(e.currentTarget.checked); } }, void 0)] }, void 0)] }, void 0));
     });
     const DemoDialog = g$1(() => {
         const onClose = (() => setOpen(false));
         const [open, setOpen] = useState(false);
-        return (v$2("div", { class: "demo" },
-            v$2(Tooltip, { tooltip: "Open dialog" },
-                v$2(InputGroup, null,
-                    v$2(Checkbox, { checked: open, onCheck: setOpen }, "Open dialog"))),
-            v$2(Dialog, { open: open, onClose: onClose, descriptive: false, title: "Dialog Title", footer: v$2("button", { onClick: onClose }, "Close") },
-                v$2("p", { tabIndex: -1 }, "Dialog body content"),
-                v$2(DemoMenus, null),
-                v$2("p", null, RandomWords.join(" ")),
-                v$2("p", null, RandomWords.join(" ")),
-                v$2("p", null, RandomWords.join(" ")),
-                v$2("p", null, RandomWords.join(" ")),
-                v$2("p", null, RandomWords.join(" ")))));
+        return (e$3("div", { class: "demo", children: [e$3(Tooltip, { tooltip: "Open dialog", children: e$3(InputGroup, { children: e$3(Checkbox, { checked: open, onCheck: setOpen, children: "Open dialog" }, void 0) }, void 0) }, void 0), e$3(Dialog, { open: open, onClose: onClose, descriptive: false, title: "Dialog Title", footer: e$3("button", { onClick: onClose, children: "Close" }, void 0), children: [e$3("p", { tabIndex: -1, children: "Dialog body content" }, void 0), e$3(DemoMenus, {}, void 0), e$3("p", { children: RandomWords.join(" ") }, void 0), e$3("p", { children: RandomWords.join(" ") }, void 0), e$3("p", { children: RandomWords.join(" ") }, void 0), e$3("p", { children: RandomWords.join(" ") }, void 0), e$3("p", { children: RandomWords.join(" ") }, void 0)] }, void 0)] }, void 0));
     });
     const DemoDrawer = g$1(() => {
         const onClose = (() => setOpen(false));
         let [open, setOpen] = useState(false);
         //open = true;
-        return (v$2("div", { class: "demo" },
-            v$2(Checkbox, { checked: open, onCheck: setOpen }, "Open Drawer"),
-            v$2(Drawer, { open: open, onClose: onClose, descriptive: false, title: "Dialog Title" },
-                v$2("p", { tabIndex: -1 }, "Dialog body content"),
-                v$2("p", null, RandomWords.join(" ")),
-                v$2("p", null, RandomWords.join(" ")),
-                v$2("p", null, RandomWords.join(" ")))));
+        return (e$3("div", { class: "demo", children: [e$3(Checkbox, { checked: open, onCheck: setOpen, children: "Open Drawer" }, void 0), e$3(Drawer, { open: open, onClose: onClose, descriptive: false, title: "Dialog Title", children: [e$3("p", { tabIndex: -1, children: "Dialog body content" }, void 0), e$3("p", { children: RandomWords.join(" ") }, void 0), e$3("p", { children: RandomWords.join(" ") }, void 0), e$3("p", { children: RandomWords.join(" ") }, void 0)] }, void 0)] }, void 0));
     });
     const DemoMenu = g$1(() => {
-        return (v$2("div", { class: "demo" },
-            v$2(Menu, { Transition: ZoomFade, tag: "ul", anchor: v$2(Button, { dropdownVariant: "combined" }, "Open menu") },
-                v$2(MenuItem, { index: 0 }, "AItem #1"),
-                v$2(MenuItem, { index: 1 }, "BItem #2"),
-                v$2(MenuItem, { index: 2 }, "CItem #3"),
-                v$2(MenuItem, { index: 3 }, "DItem #4"))));
+        return (e$3("div", { class: "demo", children: e$3(Menu, { Transition: ZoomFade, tag: "ul", anchor: e$3(Button, { dropdownVariant: "combined", children: "Open menu" }, void 0), children: [e$3(MenuItem, { index: 0, children: "AItem #1" }, void 0), e$3(MenuItem, { index: 1, children: "BItem #2" }, void 0), e$3(MenuItem, { index: 2, children: "CItem #3" }, void 0), e$3(MenuItem, { index: 3, children: "DItem #4" }, void 0)] }, void 0) }, void 0));
     });
     const DemoTabs = g$1(() => {
         const [selectedIndex, setSelectedIndex] = useState(0);
         const [selectionMode, setSelectionMode] = useState("activate");
-        return (v$2("div", { class: "demo" },
-            v$2("div", null,
-                v$2(Tabs, { orientation: "block", onSelect: setSelectedIndex, selectedIndex: selectedIndex, selectionMode: selectionMode },
-                    v$2("ol", null,
-                        v$2(Tab, { index: 0 }, "Tab #1"),
-                        v$2(Tab, { index: 1 }, "Tab #2"),
-                        v$2(Tab, { index: 2 }, "Tab #3")),
-                    v$2(TabPanel, { index: 0 },
-                        v$2("div", null, RandomWords.slice(0, Math.floor((1 / 3) * RandomWords.length)).join(" "))),
-                    v$2(TabPanel, { index: 1 },
-                        v$2("div", null, RandomWords.slice(0, Math.floor((2 / 3) * RandomWords.length)).join(" "))),
-                    v$2(TabPanel, { index: 2 },
-                        v$2("div", null, RandomWords.slice(0, Math.floor((3 / 3) * RandomWords.length)).join(" ")))))));
+        return (e$3("div", { class: "demo", children: e$3("div", { children: e$3(Tabs, { orientation: "block", onSelect: setSelectedIndex, selectedIndex: selectedIndex, selectionMode: selectionMode, children: [e$3("ol", { children: [e$3(Tab, { index: 0, children: "Tab #1" }, void 0), e$3(Tab, { index: 1, children: "Tab #2" }, void 0), e$3(Tab, { index: 2, children: "Tab #3" }, void 0)] }, void 0), e$3(TabPanel, { index: 0, children: e$3("div", { children: RandomWords.slice(0, Math.floor((1 / 3) * RandomWords.length)).join(" ") }, void 0) }, void 0), e$3(TabPanel, { index: 1, children: e$3("div", { children: RandomWords.slice(0, Math.floor((2 / 3) * RandomWords.length)).join(" ") }, void 0) }, void 0), e$3(TabPanel, { index: 2, children: e$3("div", { children: RandomWords.slice(0, Math.floor((3 / 3) * RandomWords.length)).join(" ") }, void 0) }, void 0)] }, void 0) }, void 0) }, void 0));
     });
     g$1(() => {
         const { useTooltip, useTooltipTrigger, isOpen } = useAriaTooltip({});
         const { useTooltipProps } = useTooltip();
         const { useTooltipTriggerProps } = useTooltipTrigger();
-        return (v$2("div", { class: "demo" },
-            v$2("p", null,
-                "This is a paragraph with a ",
-                v$2("span", { ...useTooltipTriggerProps({}) }, "tooltip right here."),
-                v$2("span", { ...useTooltipProps({ hidden: !isOpen }) }, "This is the tooltip content."))));
+        return (e$3("div", { class: "demo", children: e$3("p", { children: ["This is a paragraph with a ", e$3("span", { ...useTooltipTriggerProps({}), children: "tooltip right here." }, void 0), e$3("span", { ...useTooltipProps({ hidden: !isOpen }), children: "This is the tooltip content." }, void 0)] }, void 0) }, void 0));
     });
     async function sleep(ms) {
         await new Promise(resolve => setTimeout(resolve, ms));
@@ -17236,43 +16836,11 @@
     });*/
     const DemoAccordion = g$1(() => {
         const [expandedIndex, setExpandedIndex] = useState(-1);
-        return (v$2("div", { class: "demo" },
-            v$2("div", null,
-                v$2(Accordion, { expandedIndex: expandedIndex, setExpandedIndex: setExpandedIndex },
-                    v$2(AccordionSection, { index: 0, header: "Accordion Item #1" },
-                        v$2("div", null,
-                            v$2("strong", null, "This is the 1st item's accordion body."),
-                            " It is visible by default, You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the ",
-                            v$2("code", null, "AccordionSection"),
-                            ".")),
-                    v$2(AccordionSection, { index: 1, header: "Accordion Item #2" },
-                        v$2("div", null,
-                            v$2("strong", null, "This is the 2nd item's accordion body."),
-                            " It is hidden by default,  You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the ",
-                            v$2("code", null, "AccordionSection"),
-                            ".")),
-                    v$2(AccordionSection, { index: 2, header: "Accordion Item #3" },
-                        v$2("div", null,
-                            v$2("strong", null, "This is the 3rd item's accordion body."),
-                            " It is hidden by default,  You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the ",
-                            v$2("code", null, "AccordionSection"),
-                            "."))))));
+        return (e$3("div", { class: "demo", children: e$3("div", { children: e$3(Accordion, { expandedIndex: expandedIndex, setExpandedIndex: setExpandedIndex, children: [e$3(AccordionSection, { index: 0, header: "Accordion Item #1", children: e$3("div", { children: [e$3("strong", { children: "This is the 1st item's accordion body." }, void 0), " It is visible by default, You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the ", e$3("code", { children: "AccordionSection" }, void 0), "."] }, void 0) }, void 0), e$3(AccordionSection, { index: 1, header: "Accordion Item #2", children: e$3("div", { children: [e$3("strong", { children: "This is the 2nd item's accordion body." }, void 0), " It is hidden by default,  You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the ", e$3("code", { children: "AccordionSection" }, void 0), "."] }, void 0) }, void 0), e$3(AccordionSection, { index: 2, header: "Accordion Item #3", children: e$3("div", { children: [e$3("strong", { children: "This is the 3rd item's accordion body." }, void 0), " It is hidden by default,  You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the ", e$3("code", { children: "AccordionSection" }, void 0), "."] }, void 0) }, void 0)] }, void 0) }, void 0) }, void 0));
     });
     const DemoList = g$1(() => {
         const [index, setIndex] = useState(0);
-        return (v$2("div", { class: "demo" },
-            "Selected: ",
-            index,
-            v$2(ListSingle, { label: "Example list", select: "single", onSelect: setIndex, selectedIndex: index, selectionMode: "activate", tag: "ul" },
-                v$2(ListItemSingle, { index: 0 }, "Primary"),
-                v$2(ListItemSingle, { index: 1 }, "Secondary"),
-                v$2(ListItemSingle, { index: 2 }, "Success"),
-                v$2(ListItemSingle, { index: 3 }, "Warning"),
-                v$2(ListItemSingle, { index: 4 }, "Danger"),
-                v$2(ListItemSingle, { index: 5 }, "Info"),
-                v$2(ListItemSingle, { index: 6 }, "Light"),
-                v$2(ListItemSingle, { index: 7 }, "Dark"),
-                v$2(ListItemSingle, { index: 8 }, "Link"))));
+        return (e$3("div", { class: "demo", children: ["Selected: ", index, e$3(ListSingle, { label: "Example list", select: "single", onSelect: setIndex, selectedIndex: index, selectionMode: "activate", tag: "ul", children: [e$3(ListItemSingle, { index: 0, children: "Primary" }, void 0), e$3(ListItemSingle, { index: 1, children: "Secondary" }, void 0), e$3(ListItemSingle, { index: 2, children: "Success" }, void 0), e$3(ListItemSingle, { index: 3, children: "Warning" }, void 0), e$3(ListItemSingle, { index: 4, children: "Danger" }, void 0), e$3(ListItemSingle, { index: 5, children: "Info" }, void 0), e$3(ListItemSingle, { index: 6, children: "Light" }, void 0), e$3(ListItemSingle, { index: 7, children: "Dark" }, void 0), e$3(ListItemSingle, { index: 8, children: "Link" }, void 0)] }, void 0)] }, void 0));
     });
     const DemoInput = g$1(() => {
         const [text, setText] = useState("");
@@ -17285,58 +16853,26 @@
             await sleep(5000);
             setRadioValue(value);
         }, [setRadioValue]);
-        return (v$2("div", { class: "demo" },
-            v$2(InputGroup, null,
-                v$2(Input, { type: "text", onValueChange: onInput1, value: text, width: "100%" }, "Test input")),
-            v$2(RadioGroup, { selectedValue: radioValue, name: "demo-radio", onValueChange: onInput2 },
-                v$2(InputGroup, null,
-                    v$2(Radio, { index: 0, value: "ARadio" })),
-                v$2(InputGroup, null,
-                    v$2(Radio, { index: 1, value: "BRadio" })),
-                v$2(InputGroup, null,
-                    v$2(Radio, { index: 2, value: "CRadio" })))));
+        return (e$3("div", { class: "demo", children: [e$3(InputGroup, { children: e$3(Input, { type: "text", onValueChange: onInput1, value: text, width: "100%", children: "Test input" }, void 0) }, void 0), e$3(RadioGroup, { selectedValue: radioValue, name: "demo-radio", onValueChange: onInput2, children: [e$3(InputGroup, { children: e$3(Radio, { index: 0, value: "ARadio" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Radio, { index: 1, value: "BRadio" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Radio, { index: 2, value: "CRadio" }, void 0) }, void 0)] }, void 0)] }, void 0));
     });
     const Component = () => {
         const [theme, setTheme] = useState("theme-dark");
-        return v$2(d$2, null,
-            v$2(Button, { colorVariant: theme == "theme-dark" ? "light" : "dark", style: { position: "fixed", insetBlockStart: "0.5em", insetInlineEnd: "0.5em", zIndex: 9999999 }, spinnerTimeout: 999999999, onPress: async () => {
-                    let prev = theme;
-                    let next = prev === "theme-dark" ? "theme-light" : "theme-dark";
-                    setTheme(next);
-                    await new Promise(resolve => setTimeout(resolve, 100));
-                    document.getElementById(next).media = "all";
-                    document.getElementById(prev).media = "screen and (max-width: 1px)";
-                    document.documentElement.classList.add("switching-theme");
-                    /*document.documentElement.classList.add(next);
-                    document.documentElement.classList.remove(prev);*/
-                    await new Promise(resolve => setTimeout(resolve, 2000));
-                    document.documentElement.classList.remove("switching-theme");
-                } },
-                "Switch theme to ",
-                v$2("strong", null, theme === "theme-dark" ? "light" : "dark")),
-            v$2(GridResponsive, { minWidth: "35em" },
-                v$2(FocusRingVisibilityManager, null,
-                    v$2(DebugUtilContext.Provider, { value: d$1(() => ({ logRender: new Set(["Table", "TableHead", "TableBody", "TableRow", "TableCell"]) }), []) },
-                        v$2(ToastsProvider, null,
-                            v$2(DialogsProvider, null,
-                                v$2(DemoTable, null),
-                                v$2(DemoLists, null),
-                                v$2(DemoMenus, null),
-                                v$2(DemoDialogs, null),
-                                v$2(DemoButtons, null),
-                                v$2(DemoChecks, null),
-                                v$2(DemoInputs, null),
-                                v$2(DemoLayout, null),
-                                v$2(DemoAccordion, null),
-                                v$2(DemoDialog, null),
-                                v$2(DemoDrawer, null),
-                                v$2(DemoInput, null),
-                                v$2(DemoList, null),
-                                v$2(DemoTabs, null),
-                                v$2(DemoMenu, null)))))));
+        return e$3(d$2, { children: [e$3(Button, { colorVariant: theme == "theme-dark" ? "light" : "dark", style: { position: "fixed", insetBlockStart: "0.5em", insetInlineEnd: "0.5em", zIndex: 9999999 }, spinnerTimeout: 999999999, onPress: async () => {
+                        let prev = theme;
+                        let next = prev === "theme-dark" ? "theme-light" : "theme-dark";
+                        setTheme(next);
+                        await new Promise(resolve => setTimeout(resolve, 100));
+                        document.getElementById(next).media = "all";
+                        document.getElementById(prev).media = "screen and (max-width: 1px)";
+                        document.documentElement.classList.add("switching-theme");
+                        /*document.documentElement.classList.add(next);
+                        document.documentElement.classList.remove(prev);*/
+                        await new Promise(resolve => setTimeout(resolve, 2000));
+                        document.documentElement.classList.remove("switching-theme");
+                    }, children: ["Switch theme to ", e$3("strong", { children: theme === "theme-dark" ? "light" : "dark" }, void 0)] }, void 0), e$3(GridResponsive, { minWidth: "35em", children: e$3(FocusVisibilityManager, { autoHideFocusRing: true, children: e$3(DebugUtilContext.Provider, { value: d$1(() => ({ logRender: new Set(["Table", "TableHead", "TableBody", "TableRow", "TableCell"]) }), []), children: e$3(ToastsProvider, { children: e$3(DialogsProvider, { children: [e$3(DemoTable, {}, void 0), e$3(DemoLists, {}, void 0), e$3(DemoMenus, {}, void 0), e$3(DemoDialogs, {}, void 0), e$3(DemoButtons, {}, void 0), e$3(DemoChecks, {}, void 0), e$3(DemoInputs, {}, void 0), e$3(DemoLayout, {}, void 0), e$3(DemoAccordion, {}, void 0), e$3(DemoDialog, {}, void 0), e$3(DemoDrawer, {}, void 0), e$3(DemoInput, {}, void 0), e$3(DemoList, {}, void 0), e$3(DemoTabs, {}, void 0), e$3(DemoMenu, {}, void 0)] }, void 0) }, void 0) }, void 0) }, void 0) }, void 0)] }, void 0);
     };
     requestAnimationFrame(() => {
-        S$1(v$2(Component, null), document.getElementById("root"));
+        S$1(e$3(Component, {}, void 0), document.getElementById("root"));
     });
 
 })();

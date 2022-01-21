@@ -1,3 +1,4 @@
+import { useFocusMode } from "../focus";
 import { cloneElement, ComponentChild, ComponentChildren, Fragment, h, Ref, VNode } from "preact";
 import { useAriaTooltip } from "preact-aria-widgets";
 import { useElementSize, useMergedProps, useStableCallback, useState } from "preact-prop-helpers";
@@ -17,11 +18,13 @@ export interface TooltipProps<T extends <E extends HTMLElement>(...args: any[]) 
     align?: "start" | "end" | "center";
 }
 
-export const Tooltip = memo(forwardElementRef(function Tooltip<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element>({ children, side, align, tooltip, Transition, TransitionProps, TransitionPropFlips, mouseoverDelay, mouseoutDelay, ...restAnchorProps }: TooltipProps<T>, ref?: Ref<any>) {
+export const Tooltip = memo(forwardElementRef(function Tooltip<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element>({ children, side, align, tooltip, Transition, TransitionProps, TransitionPropFlips, mouseoverDelay, mouseoutDelay, focusDelay, ...restAnchorProps }: TooltipProps<T>, ref?: Ref<any>) {
     side ??= "block-start";
     align ??= "center";
 
-    let { getIsOpen, isOpen, useTooltip, useTooltipTrigger } = useAriaTooltip({ mouseoverDelay, mouseoutDelay });
+    const focusMode = useFocusMode();
+
+    let { getIsOpen, isOpen, useTooltip, useTooltipTrigger } = useAriaTooltip({ mouseoverDelay, mouseoutDelay, focusDelay: focusMode === "mouse"? Infinity : undefined });
 
     // TODO: This is probably the most benign mutation during render issue ever
     // It's just used to preserve the last shown value when the tooltip is fading out because `tooltip` is null.

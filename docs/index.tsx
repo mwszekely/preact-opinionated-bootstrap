@@ -17,7 +17,7 @@ import { Menu, MenuItem } from "../menu";
 import { DebugUtilContext, LogRenderType } from "../props";
 import { Tab, TabPanel, Tabs } from "../tabs";
 import { ToastsProvider } from "../toast";
-import { FocusRingVisibilityManager } from "../focus";
+import { FocusVisibilityManager } from "../focus";
 import { Tooltip } from "../tooltip";
 import { DemoButtons } from "./demos/buttons";
 import { DemoChecks } from "./demos/checks";
@@ -279,7 +279,7 @@ const Component = () => {
             document.documentElement.classList.remove("switching-theme");
         }}>Switch theme to <strong>{theme === "theme-dark" ? "light" : "dark"}</strong></Button>
         <GridResponsive minWidth="35em">
-            <FocusRingVisibilityManager>
+            <FocusVisibilityManager autoHideFocusRing={true}>
                 <DebugUtilContext.Provider value={useMemo(() => ({ logRender: new Set<LogRenderType>(["Table", "TableHead", "TableBody", "TableRow", "TableCell"]) }), [])}>
                     <ToastsProvider>
                         <DialogsProvider>
@@ -308,7 +308,7 @@ const Component = () => {
                         </DialogsProvider>
                     </ToastsProvider>
                 </DebugUtilContext.Provider>
-            </FocusRingVisibilityManager>
+            </FocusVisibilityManager>
         </GridResponsive>
     </>
 }
