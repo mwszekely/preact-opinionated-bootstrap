@@ -1,19 +1,4 @@
 @use "../src/index-dark.scss" as *;
-//@use "../src/variables.scss" as *;
 @forward "../src/index-dark.scss";
 @use "./index-shared.scss";
 
-code {
-  //font-family: $font-family-monospace;
-}
-
-/*
-.theme-dark, .theme-dark * {
-    @import "./index-dark-helper.scss";
-}
-
-html.switching-theme {
-    * {
-        transition: all 2s;
-    }
-}*/

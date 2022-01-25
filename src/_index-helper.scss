@@ -18,6 +18,7 @@
 @use "./progress/" as *;
 @use "./layout/" as *;
 @use "./table/" as *;
+@use "./icon/" as *;
 
 @use "preact-transition/src/index.scss";
 
@@ -38,6 +39,7 @@
 @forward "./progress/";
 @forward "./layout/";
 @forward "./table/";
+@forward "./icon/";
 
 @use "./button/ensure-contrast.scss" as *;
 @use "./elevation.scss";
@@ -46,7 +48,11 @@
 @use "preact-aria-widgets/src/modal.css";
 
 $scrollbar-track-background: ensure-contrasting-color($body-bg, $body-bg, 4.5);
-$scrollbar-thumb-background: ensure-contrasting-color(color.mix($body-bg, $scrollbar-track-background), $secondary, 4.5);
+$scrollbar-thumb-background: ensure-contrasting-color(
+  color.mix($body-bg, $scrollbar-track-background),
+  $secondary,
+  4.5
+);
 $scrollbar-thumb-active-background: color-contrast($body-bg);
 
 code {
@@ -56,33 +62,48 @@ code {
 }
 
 *::-webkit-scrollbar {
-  width: 11px;
-  height: 11px;
+  .themed-scrollbars &,
+  &.themed-scrollbars {
+    width: 11px;
+    height: 11px;
+  }
 }
 
 *::-webkit-scrollbar:hover {
-  &::-webkit-scrollbar-thumb {
-    background-color: #{color-contrast($body-bg)};
+  .themed-scrollbars &,
+  &.themed-scrollbars {
+    &::-webkit-scrollbar-thumb {
+      background-color: #{color-contrast($body-bg)};
+    }
   }
 }
 
 *::-webkit-scrollbar-track {
-  background: var(--scrollbar-background-color, #{$scrollbar-track-background});
+  .themed-scrollbars &,
+  &.themed-scrollbars {
+    background: var(--scrollbar-background-color, #{$scrollbar-track-background});
+  }
 }
 *::-webkit-scrollbar-thumb {
-  background-color: var(--scrollbar-thumb-color, #{$scrollbar-thumb-background});
-  border-radius: 6px;
-  &:active {
-    background-color: #{$scrollbar-thumb-active-background};
+  .themed-scrollbars &,
+  &.themed-scrollbars {
+    background-color: var(--scrollbar-thumb-color, #{$scrollbar-thumb-background});
+    border-radius: 6px;
+    &:active {
+      background-color: #{$scrollbar-thumb-active-background};
+    }
   }
 }
 
 *,
 html,
 body {
-  scrollbar-width: thin;
-  scrollbar-color: var(--scrollbar-thumb-color, #{$scrollbar-thumb-background})
-    var(--scrollbar-color, #{$scrollbar-track-background});
+  .themed-scrollbars &,
+  &.themed-scrollbars {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb-color, #{$scrollbar-thumb-background})
+      var(--scrollbar-color, #{$scrollbar-track-background});
+  }
 }
 
 body.scroll-snap {

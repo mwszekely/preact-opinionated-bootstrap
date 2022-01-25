@@ -1,22 +1,26 @@
 <!DOCTYPE html>
-<html class="theme-dark">
+<html class="theme-dark themed-scrollbars">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1">
-    
 
-    <link id="theme-dark" href="./index-dark.css" rel="stylesheet"  media="all">
+
+    <link id="theme-dark" href="./index-dark.css" rel="stylesheet" media="screen and (max-width: 1px)">
     <link id="theme-light" href="./index-light.css" rel="stylesheet" media="screen and (max-width: 1px)">
 
     <style>
-        html, body, #root {
+        html,
+        body,
+        #root {
             height: 100%;
             width: 100%;
         }
+
         #root {
             padding: 0.5em;
         }
+
         .demo {
             align-items: flex-start;
         }
@@ -38,26 +42,20 @@
             pointer-events: none;
         }
 
-        .demo > hr {
+        .demo>hr {
             width: 100%;
         }
     </style>
 
     <script>
-        
-
-function namedFunction(name, body) {
-    const F = (new Function("func", `return function ${name}(action) { return action(); }`))();
-    return F(body);
-}
 
         window.onerror = function (e) {
             debugger;
             for (let p of arguments) {
-            alert(p);
+                alert(p);
             }
         }
-        </script>
+    </script>
 </head>
 
 <body>

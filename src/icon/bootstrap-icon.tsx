@@ -17,7 +17,7 @@ export const BootstrapIcon = memo(forwardElementRef(function BootstrapIcon({ ico
     const mergedProps = useMergedProps<HTMLElement>()({ class: `bi bi-${icon}` }, props);
 
     // Render the actual FontIcon
-    return <FontIcon {...mergedProps} label={label}  tooltip={tooltip} ref={ref} />;
+    return <FontIcon {...mergedProps} label={label} tooltip={tooltip} ref={ref} />;
 }));
 
 // Probably a better way to get all these names

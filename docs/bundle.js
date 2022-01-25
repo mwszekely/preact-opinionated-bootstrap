@@ -5588,7 +5588,7 @@
         setActive(0);
       };
 
-      const onMouseOut = excludes("click", exclude) ? undefined : onBlur;
+      const onMouseLeave = excludes("click", exclude) ? undefined : onBlur;
       const onKeyDown = excludes("space", exclude) && excludes("enter", exclude) ? undefined : e => {
         if (e.key == " " && onClickSync && !excludes("space", exclude)) {
           // We don't actually activate it on a space keydown
@@ -5622,7 +5622,7 @@
         onBlur,
         onMouseDown,
         onMouseUp,
-        onMouseOut,
+        onMouseLeave,
         onClick,
         ...{
           "data-pseudo-active": active && !textSelectedDuringActivation ? "true" : undefined
@@ -12696,6 +12696,26 @@
     }));
 
     const FocusModeContext = D$1("keyboard");
+    /**
+     * Manages graphical effects related to focus management,
+     * and specifically how the user's input device can affect that.
+     *
+     * Certain components will use this information to slighly adjust
+     * how some small details are handled visually.  For example,
+     * this allows Tooltips to *not* show themselves when an
+     * element with one (that's tabbable, like an <input>) receives focus,
+     * but only when the user is using a mouse or other pointing device
+     * (i.e. when tabbed into, the Tooltip will still show).
+     *
+     * You can also provide `autoHideFocusRing`, which will cause the
+     * CSS focus ring to become invisible when the user is using
+     * a pointing device.  Ideally this should be a UI setting, because
+     * some users may prefer it even while using a mouse.
+     *
+     * @param param0
+     * @returns
+     */
+
     function FocusVisibilityManager(_ref) {
       let {
         children,
@@ -16197,32 +16217,48 @@
 </InputGrid>` }, void 0)] }, void 0), e$3(CardElement, { children: ["With an ", e$3("code", { children: "<InputGrid>" }, void 0), ":", e$3(InputGrid, { children: [e$3(InputGroup, { children: e$3(Checkbox, { disabled: true, checked: true, labelPosition: "start", children: "Checkbox" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Checkbox, { disabled: true, checked: true, labelPosition: "start", children: "Another checkbox" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Input, { disabled: true, onValueChange: () => { }, type: "number", value: 0, children: "Numeric input" }, void 0) }, void 0)] }, void 0)] }, void 0), e$3(CardElement, { children: ["Without an ", e$3("code", { children: "<InputGrid>" }, void 0), ":", e$3(InputGroup, { children: e$3(Checkbox, { disabled: true, checked: true, labelPosition: "start", children: "Checkbox" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Checkbox, { disabled: true, checked: true, labelPosition: "start", children: "Another checkbox" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Input, { disabled: true, onValueChange: () => { }, type: "number", value: 0, children: "Numeric input" }, void 0) }, void 0)] }, void 0)] }, void 0) }, void 0));
     }
 
-    /**
-     * Generic way to represent any icon that's based on a font using some specific class to choose which icon to display.
-     *
-     *
-     */
-
-    const FontIcon = g$1(forwardElementRef(function FontIcon(_ref, ref) {
+    const Icon = g$1(forwardElementRef(function Icon(_ref, ref2) {
       let {
         label,
         tooltip,
         role,
         "aria-label": ariaLabel,
+        children,
+        ref: ref3,
         ...props
       } = _ref;
-
-      const iconElement = e$3("i", { ...props,
-        role: label ? "img" : "presentation",
-        "aria-label": ariaLabel || (label !== null && label !== void 0 ? label : undefined),
-        ref: ref
-      }, void 0);
+      const iconProps = useMergedProps()(props, {
+        class: "icon",
+        [children.type === "img" ? "alt" : "aria-label"]: ariaLabel || (label !== null && label !== void 0 ? label : undefined),
+        role: role || (label ? "img" : "presentation"),
+        ref: useMergedRefs()({
+          ref: ref2
+        }, {
+          ref: ref3
+        })
+      });
+      const iconElement = B(children, useMergedProps()(children.props, iconProps)); //<i {...props} role={label? "img" : "presentation"} aria-label={ariaLabel || (label ?? undefined)} ref={ref} />;
 
       if (tooltip) return e$3(Tooltip, {
         tooltip: tooltip,
         children: iconElement
       }, void 0);
       return iconElement;
+    }));
+
+    /**
+     * Generic way to represent any icon that's based on a font using some specific class to choose which icon to display.
+     *
+     *
+     */
+
+    const FontIcon = g$1(forwardElementRef(function FontIcon(props, ref) {
+      return e$3(Icon, { ...props,
+        ref: ref,
+        children: e$3("i", {
+          class: "font-icon"
+        }, void 0)
+      }, void 0);
     }));
 
     /**

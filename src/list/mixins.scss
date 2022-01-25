@@ -5,74 +5,71 @@
 @forward "../variables";
 
 @mixin list-group-item-ish($name) {
-    .#{$name} {
-      --start-icon-width: var(--start-icon-width, auto);
-      --end-icon-width: var(--end-icon-width, auto);
-      background-color: var(--bs-body-bg);
-      color: $body-color;
-      border-color: $list-group-border-color;
-  
-      & > .circular-progress-container {
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-  
-      &.#{$name}-multiline,
-      &.with-start,
-      &.with-end {
-        display: grid;
-        column-gap: 1em;
-        grid-auto-rows: auto;
-      }
-  
-      &.with-start.with-end {
-        grid-template-columns: var(--start-icon-width, auto) 1fr var(
-            --end-icon-width,
-            auto
-          );
-      }
-      &.with-start:not(.with-end) {
-        grid-template-columns: var(--start-icon-width, auto) 1fr;
-      }
-      &.with-end:not(.with-start) {
-        grid-template-columns: 1fr var(--end-icon-width, auto);
-      }
-  
-      & > .#{$name}-start-icon,
-      & > .#{$name}-end-icon,
-      & > .#{$name}-badge {
-        display: flex;
-        justify-content: center;
-        width: 100%;
-        height: 100%;
-      }
-  
-      & > .#{$name}-start-icon,
-      & > .#{$name}-end-icon {
-        align-items: center;
-      }
-  
-      & > .#{$name}-badge {
-        align-items: flex-start;
-      }
-  
-      & > .#{$name}-start-icon {
-        grid-column: 1 / span 1;
-        grid-row: 1 / 9999999999; // Can't just use -1 because that's only relative to *explicit* rows
-        justify-self: start;
-      }
-  
-      & > .#{$name}-end-icon,
-      & > .#{$name}-badge {
-        grid-column: -2 / span 1;
-        grid-row: 1 / 9999999999;
-        justify-self: end;
-      }
+  .#{$name} {
+    --start-icon-width: var(--start-icon-width, auto);
+    --end-icon-width: var(--end-icon-width, auto);
+    background-color: var(--bs-body-bg);
+    color: $body-color;
+    border-color: $list-group-border-color;
+
+    & > .circular-progress-container {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    &.#{$name}-multiline,
+    &.with-start,
+    &.with-end {
+      display: grid;
+      column-gap: 1em;
+      grid-auto-rows: auto;
+    }
+
+    &.with-start.with-end {
+      grid-template-columns: var(--start-icon-width, auto) 1fr var(--end-icon-width, auto);
+    }
+    &.with-start:not(.with-end) {
+      grid-template-columns: var(--start-icon-width, auto) 1fr;
+    }
+    &.with-end:not(.with-start) {
+      grid-template-columns: 1fr var(--end-icon-width, auto);
+    }
+
+    & > .#{$name}-start-icon,
+    & > .#{$name}-end-icon,
+    & > .#{$name}-badge {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+    }
+
+    & > .#{$name}-start-icon,
+    & > .#{$name}-end-icon {
+      align-items: center;
+    }
+
+    & > .#{$name}-badge {
+      align-items: flex-start;
+    }
+
+    & > .#{$name}-start-icon {
+      grid-column: 1 / span 1;
+      grid-row: 1 / 9999999999; // Can't just use -1 because that's only relative to *explicit* rows
+      justify-self: start;
+    }
+
+    & > .#{$name}-end-icon,
+    & > .#{$name}-badge {
+      grid-column: -2 / span 1;
+      grid-row: 1 / 9999999999;
+      justify-self: end;
     }
   }
+}

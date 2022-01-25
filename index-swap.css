@@ -12626,6 +12626,10 @@
   flex-wrap: nowrap;
   justify-content: space-between;
 }
+.set-theme.theme-light .icon.svg-icon, .set-theme.theme-light .icon.image-icon {
+  width: var(--icon-size, 1.1em);
+  height: var(--icon-size, 1.1em);
+}
 .set-theme.theme-light .transition-enter {
   transition: all var(--transition-duration, 175ms) cubic-bezier(0.4, 0, 0.2, 1), visibility 0ms linear, transform-origin 0ms linear;
 }
@@ -12925,26 +12929,28 @@
   background-color: rgba(25, 135, 84, 0.2);
   color: #212529;
 }
-.set-theme.theme-light *::-webkit-scrollbar {
+.set-theme.theme-light .themed-scrollbars *::-webkit-scrollbar, .set-theme.theme-light *::-webkit-scrollbar.themed-scrollbars {
   width: 11px;
   height: 11px;
 }
-.set-theme.theme-light *::-webkit-scrollbar:hover::-webkit-scrollbar-thumb {
+.set-theme.theme-light .themed-scrollbars *::-webkit-scrollbar:hover::-webkit-scrollbar-thumb, .set-theme.theme-light *::-webkit-scrollbar:hover.themed-scrollbars::-webkit-scrollbar-thumb {
   background-color: #000;
 }
-.set-theme.theme-light *::-webkit-scrollbar-track {
+.set-theme.theme-light .themed-scrollbars *::-webkit-scrollbar-track, .set-theme.theme-light *::-webkit-scrollbar-track.themed-scrollbars {
   background: var(--scrollbar-background-color, #727373);
 }
-.set-theme.theme-light *::-webkit-scrollbar-thumb {
+.set-theme.theme-light .themed-scrollbars *::-webkit-scrollbar-thumb, .set-theme.theme-light *::-webkit-scrollbar-thumb.themed-scrollbars {
   background-color: var(--scrollbar-thumb-color, #550dc9);
   border-radius: 6px;
 }
-.set-theme.theme-light *::-webkit-scrollbar-thumb:active {
+.set-theme.theme-light .themed-scrollbars *::-webkit-scrollbar-thumb:active, .set-theme.theme-light *::-webkit-scrollbar-thumb.themed-scrollbars:active {
   background-color: #000;
 }
-.set-theme.theme-light *,
-.set-theme.theme-light html,
-.set-theme.theme-light body {
+.set-theme.theme-light .themed-scrollbars *, .set-theme.theme-light *.themed-scrollbars,
+.set-theme.theme-light .themed-scrollbars html,
+.set-theme.theme-light html.themed-scrollbars,
+.set-theme.theme-light .themed-scrollbars body,
+.set-theme.theme-light body.themed-scrollbars {
   scrollbar-width: thin;
   scrollbar-color: var(--scrollbar-thumb-color, #550dc9) var(--scrollbar-color, #727373);
 }
@@ -25590,6 +25596,10 @@
   flex-wrap: nowrap;
   justify-content: space-between;
 }
+.set-theme.theme-dark .icon.svg-icon, .set-theme.theme-dark .icon.image-icon {
+  width: var(--icon-size, 1.1em);
+  height: var(--icon-size, 1.1em);
+}
 .set-theme.theme-dark .transition-enter {
   transition: all var(--transition-duration, 175ms) cubic-bezier(0.4, 0, 0.2, 1), visibility 0ms linear, transform-origin 0ms linear;
 }
@@ -25889,26 +25899,28 @@
   background-color: rgba(13, 94, 33, 0.2);
   color: #e6e6e6;
 }
-.set-theme.theme-dark *::-webkit-scrollbar {
+.set-theme.theme-dark .themed-scrollbars *::-webkit-scrollbar, .set-theme.theme-dark *::-webkit-scrollbar.themed-scrollbars {
   width: 11px;
   height: 11px;
 }
-.set-theme.theme-dark *::-webkit-scrollbar:hover::-webkit-scrollbar-thumb {
+.set-theme.theme-dark .themed-scrollbars *::-webkit-scrollbar:hover::-webkit-scrollbar-thumb, .set-theme.theme-dark *::-webkit-scrollbar:hover.themed-scrollbars::-webkit-scrollbar-thumb {
   background-color: white;
 }
-.set-theme.theme-dark *::-webkit-scrollbar-track {
+.set-theme.theme-dark .themed-scrollbars *::-webkit-scrollbar-track, .set-theme.theme-dark *::-webkit-scrollbar-track.themed-scrollbars {
   background: var(--scrollbar-background-color, #838383);
 }
-.set-theme.theme-dark *::-webkit-scrollbar-thumb {
+.set-theme.theme-dark .themed-scrollbars *::-webkit-scrollbar-thumb, .set-theme.theme-dark *::-webkit-scrollbar-thumb.themed-scrollbars {
   background-color: var(--scrollbar-thumb-color, #c6bed8);
   border-radius: 6px;
 }
-.set-theme.theme-dark *::-webkit-scrollbar-thumb:active {
+.set-theme.theme-dark .themed-scrollbars *::-webkit-scrollbar-thumb:active, .set-theme.theme-dark *::-webkit-scrollbar-thumb.themed-scrollbars:active {
   background-color: white;
 }
-.set-theme.theme-dark *,
-.set-theme.theme-dark html,
-.set-theme.theme-dark body {
+.set-theme.theme-dark .themed-scrollbars *, .set-theme.theme-dark *.themed-scrollbars,
+.set-theme.theme-dark .themed-scrollbars html,
+.set-theme.theme-dark html.themed-scrollbars,
+.set-theme.theme-dark .themed-scrollbars body,
+.set-theme.theme-dark body.themed-scrollbars {
   scrollbar-width: thin;
   scrollbar-color: var(--scrollbar-thumb-color, #c6bed8) var(--scrollbar-color, #838383);
 }
