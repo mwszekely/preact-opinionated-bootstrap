@@ -3,12 +3,13 @@ import { cloneElement, ComponentChildren, createContext, h, Ref, VNode } from "p
 import { useAriaListboxSingle } from "preact-aria-widgets";
 import { EventDetail } from "preact-aria-widgets";
 import { UseListboxSingleItem, UseListboxSingleItemInfo, UseListboxSingleItemParameters, UseListboxSingleParameters } from "preact-aria-widgets";
-import { useAsyncHandler, useChildFlag, useMergedProps, useMutationObserver, useRefElement, useStableGetter, useState } from "preact-prop-helpers";
+import { useAsyncHandler, useChildFlag, useMergedProps, useRefElement, useStableGetter, useState } from "preact-prop-helpers";
 import { Children, memo } from "preact/compat";
 import { useCallback, useContext, useEffect, useLayoutEffect } from "preact/hooks";
 import { GlobalAttributes, useLogRender, usePseudoActive, forwardElementRef, OmitStrong, OptionalTagSensitiveProps } from "../props";
 import { ListItemStatic, ListItemStaticProps, ListStatic } from "./list-static";
 import { ProgressCircular } from "../progress";
+import { useChildrenTextProps } from "./utility";
 
 interface ListSingleItemInfo<E extends Element> extends UseListboxSingleItemInfo<E> {
     setPending(pending: boolean): void;
@@ -59,26 +60,24 @@ export interface ListItemSingleProps extends ListSingleItemParameters<HTMLLIElem
 
 }
 
-export const ListItemSingle = memo(forwardElementRef(function ListItemSingle(props: ListItemSingleProps, ref: Ref<HTMLLIElement>) {
-    useLogRender("ListSingle", `Rendering ListSingleItem #${props.index}`);
+export const ListItemSingle = memo(forwardElementRef(function ListItemSingle(p: ListItemSingleProps, ref: Ref<HTMLLIElement>) {
+    let { childrenText, props: { index, hidden, disabled, children, ...domProps } } = useChildrenTextProps({ ...p, ref });
+
+    useLogRender("ListSingle", `Rendering ListSingleItem #${index}`);
 
     const [pending, setPending, getPending] = useState(false);
 
     const useListItemSingle = useContext(UseListboxSingleItemContext);
     console.assert(!!useListItemSingle, "ListItemSingle is being used outside of a single-select list. Did you mean to use a different kind of list, or a different kind of list item?");
 
-    const { index, hidden, disabled, children, ...domProps } = { ...props, ref };
 
-    const [text, setText] = useState<string | null>(null);
-    const { useRefElementProps, getElement } = useRefElement<HTMLLIElement>({ onElementChange: useCallback((element: Node | null) => setText(((element as HTMLElement)?.innerText ?? "").trim()), []) });
-    useMutationObserver(getElement, { subtree: true, onCharacterData: (info) => setText((getElement()?.innerText ?? "").trim()) });
-
-    const { getSelected, tabbable, selected, useListboxSingleItemProps } = useListItemSingle({ index, text, tag: "li", setPending, getPending, hidden, disabled });
+    const { getSelected, tabbable, selected, useListboxSingleItemProps } = useListItemSingle({ index, text: childrenText, tag: "li", setPending, getPending, hidden, disabled });
     return (
-        <ListItemStatic {...usePseudoActive(useMergedProps<HTMLLIElement>()({ disabled, class: clsx("list-group-item-action", selected && "active", pending && "pending") } as any, useListboxSingleItemProps(useRefElementProps(domProps))))}>
+        <ListItemStatic {...usePseudoActive(useMergedProps<HTMLLIElement>()({ disabled, class: clsx("list-group-item-action", selected && "active", pending && "pending") } as any, useListboxSingleItemProps(domProps)))}>
             <ProgressCircular childrenPosition="after" mode={pending ? "pending" : null} colorVariant="info">
                 {children as VNode}
             </ProgressCircular>
         </ListItemStatic>
     )
-}))
+}));
+

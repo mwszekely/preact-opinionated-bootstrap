@@ -6,7 +6,7 @@ import { memo } from "preact/compat";
 import { useCallback, useContext, useEffect, useLayoutEffect } from "preact/hooks";
 import { BodyPortal, BodyPortalRoot } from "../portal";
 import { forwardElementRef, GlobalAttributes, OptionalTransitionComponent } from "../props";
-import { useStableCallback, generateRandomId, useMutationObserver, useMergedProps, useState } from "preact-prop-helpers";
+import { useStableCallback, generateRandomId, useMergedProps, useState } from "preact-prop-helpers";
 import { Button, ButtonButtonProps } from "../button";
 import clsx from "clsx";
 

@@ -1,6 +1,6 @@
 import { ComponentChildren, createContext, Fragment, h } from "preact";
-import { useGlobalHandler, useState } from "preact-prop-helpers";
-import { useContext, useEffect } from "preact/hooks";
+import { useActiveElement, useGlobalHandler, usePassiveState, useState } from "preact-prop-helpers";
+import { useCallback, useContext, useEffect } from "preact/hooks";
 
 // TODO: Names are bad.  "keyboard" should be, like, ""
 const FocusModeContext = createContext<"keyboard" | "mouse">("keyboard");
@@ -27,23 +27,51 @@ const FocusModeContext = createContext<"keyboard" | "mouse">("keyboard");
 export function FocusVisibilityManager({ children, autoHideFocusRing }: { children: ComponentChildren, autoHideFocusRing?: boolean }) {
     const [usingPointer, setUsingPointer] = useState(false);
 
-    document.addEventListener("mousemove", ev => setUsingPointer(true), { passive: true });
-    document.addEventListener("touchstart", ev => setUsingPointer(true), { passive: true });
-    document.addEventListener("pointermove", ev => setUsingPointer(true), { passive: true });
-    document.addEventListener("keydown", ev => {
-        if (ev.key == "Tab") {
-            setUsingPointer(false);
+
+    // Any time the focus changes on the page, and we haven't moved the pointer in a bit,
+    // we'll start showing the focus ring automatically.
+    // While we can catch the Tab key and listen for that, it's tricker for components
+    // that manually manage focus in whatever way.
+    // This is just a rough heuristic to see if any recent change in focus
+    // looked like it was mouse-initiated or not (with the acceptable caveat that
+    // unrelated mouse movement still counts just fine).
+    const [getHadRecentKeyPress, setHadRecentKeyPress] = usePassiveState<boolean>(useCallback((recentKeyPress: boolean) => {
+        if (recentKeyPress) {
+            const handle = setTimeout(() => { setHadRecentKeyPress(false); }, 100);
+            return () => clearInterval(handle);
         }
-    });
+    }, []), returnFalse);
+    useGlobalHandler(document, "focusin", () => {
+        if (getHadRecentKeyPress())
+            setUsingPointer(false);
+    }, { capture: true, passive: true })
+
+    // Listen for different types of pointer events that would imply we're not using keyboard navigation
+    document.addEventListener("mousemove", ev => { setUsingPointer(true); setHadRecentKeyPress(false); }, { passive: true });
+    document.addEventListener("touchstart", ev => { setUsingPointer(true); setHadRecentKeyPress(false); }, { passive: true });
+    document.addEventListener("pointerdown", ev => { setUsingPointer(true); setHadRecentKeyPress(false); }, { passive: true });
+    document.addEventListener("pointermove", ev => { setUsingPointer(true); setHadRecentKeyPress(false); }, { passive: true });
+
+    // Key press events are handled differently--
+    // the Tab key immediately re-activates the focus ring,
+    // while other navigation keys only activate it when we're not in an <input>-ish element.
+    document.addEventListener("keydown", ev => {
+        if (ev.key == "Tab")
+            setUsingPointer(false);
+
+        if (NavigationKeys.includes(ev.key) && !((ev.target as HTMLElement).tagName == "INPUT" || (ev.target as HTMLElement).tagName == "TEXTAREA"))
+            setHadRecentKeyPress(true);
+    }, { capture: true, passive: false });
+
 
     useEffect(() => {
         const hideFocusRing = (!!autoHideFocusRing && usingPointer);
-        document.body.style.setProperty("--input-btn-focus-color-opacity", hideFocusRing? "0" : "0.25");
-        document.body.style.setProperty("--btn-active-box-shadow-opacity", hideFocusRing? "0" : "0.4");
-        document.body.style.setProperty("--input-btn-check-focus-color-opacity", hideFocusRing? "0" : "0.5");
+        document.body.style.setProperty("--input-btn-focus-color-opacity", hideFocusRing ? "0" : "0.25");
+        document.body.style.setProperty("--btn-active-box-shadow-opacity", hideFocusRing ? "0" : "0.4");
+        document.body.style.setProperty("--input-btn-check-focus-color-opacity", hideFocusRing ? "0" : "0.5");
     }, [usingPointer, !!autoHideFocusRing]);
 
-    return h(FocusModeContext.Provider, { value: usingPointer? "mouse" : "keyboard", children });
+    return h(FocusModeContext.Provider, { value: usingPointer ? "mouse" : "keyboard", children });
 }
 
 /**
@@ -58,3 +86,7 @@ export function FocusVisibilityManager({ children, autoHideFocusRing }: { childr
 export function useFocusMode() {
     return useContext(FocusModeContext);
 }
+
+function returnFalse() { return false; }
+
+const NavigationKeys = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Home", "End", "PageUp", "PageDown"];

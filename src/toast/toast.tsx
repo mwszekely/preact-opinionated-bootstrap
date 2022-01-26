@@ -2,7 +2,7 @@ import { cloneElement, ComponentChildren, createContext, Fragment, h } from "pre
 import { UseToast, UseToastParameters, useToasts } from "preact-aria-widgets";
 import { generateRandomId, useMergedProps, useMutationObserver, useStableCallback, useState } from "preact-prop-helpers";
 import { SlideFade } from "preact-transition";
-import { useCallback, useContext, useErrorBoundary, useLayoutEffect } from "preact/hooks";
+import { useCallback, useContext, useEffect, useErrorBoundary, useLayoutEffect } from "preact/hooks";
 import { Button } from "../button/button";
 import { BodyPortal } from "../portal";
 import { GlobalAttributes } from "../props";
@@ -100,14 +100,18 @@ function ToastsContainer(props: ToastsContainerProps) {
 
     const [theme, setTheme] = useState(oppositeTheme());
 
-    useMutationObserver(() => document.documentElement, {
-        attributeFilter: ["class"],
-        onAttributes: ({ attributeName }) => {
-            if (attributeName === "class") {
-                setTheme(oppositeTheme());
+    useEffect(() => {
+        const mo = new MutationObserver((info) => {
+            for (let i of info) {
+                if (i.attributeName === "class") {
+                    setTheme(oppositeTheme())
+                }
             }
-        }
-    });
+        })
+
+        mo.observe(document.documentElement, { attributeFilter: ["class"] });
+        return () => mo.disconnect();
+    }, []);
 
     return (
         <UseToastContext.Provider value={useToast}>

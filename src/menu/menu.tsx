@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { useChildrenTextProps } from "../list/utility";
 import { cloneElement, ComponentChildren, createContext, Fragment, h, Ref, VNode } from "preact";
 import { useAriaMenu, UseMenuItem, usePressEventHandlers } from "preact-aria-widgets";
 import { UseMenuItemDefaultInfo } from "preact-aria-widgets/use-menu";
@@ -131,17 +132,15 @@ function MenuU<E extends Element, T extends <E extends HTMLElement>(...args: any
 }
 
 
-function MenuItemU({ children, disabled, onPress: onPressAsync, index, iconStart, iconEnd, badge, ...rest }: MenuItemProps, ref?: Ref<any>) {
+function MenuItemU(p: MenuItemProps, ref?: Ref<any>) {
+    let { childrenText, props: { children, disabled, onPress: onPressAsync, index, iconStart, iconEnd, badge, ...rest } } = useChildrenTextProps({ ...p, ref });
     useLogRender("MenuItem", `Rendering MenuItem`);
     const useMenuItem = useContext(UseMenuItemContext);
     const hasTypeahead = useContext(HasTypeaheadContext);
 
     const isInteractive = (onPressAsync != null);
-    const [text, setText] = useState<string | null>(null);
-    const { useRefElementProps, getElement } = useRefElement<HTMLLIElement>({ onElementChange: useCallback((element: Node | null) => setText(((element as HTMLElement)?.innerText ?? "").trim()),[]) });
-    useMutationObserver(getElement, { subtree: true, onCharacterData: (info) => setText((getElement()?.innerText ?? "").trim()) });
 
-    const { useMenuItemProps } = useMenuItem({ index, text });
+    const { useMenuItemProps } = useMenuItem({ index, text: childrenText });
 
     const onClose = useContext(OnCloseContext);
 
@@ -151,15 +150,10 @@ function MenuItemU({ children, disabled, onPress: onPressAsync, index, iconStart
 
     const onPress = getSyncHandler((disabled || !onPressAsync) ? null : () => onPressAsync?.()?.then(() => onClose?.()));
 
-    const newProps = useMenuItemProps(useRefElementProps(useMergedProps<HTMLButtonElement>()(rest, { ref, class: clsx(onPressAsync ? "dropdown-item" : "dropdown-item-text", "dropdown-multiline", !!badge && "with-badge", !!iconStart && "with-start", !!(badge || iconEnd) && "with-end", disabled && "disabled", pending && "pending"), "aria-disabled": disabled ? "true" : undefined })));
+    const newProps = useMenuItemProps(useMergedProps<HTMLButtonElement>()(rest, { ref, class: clsx(onPressAsync ? "dropdown-item" : "dropdown-item-text", "dropdown-multiline", !!badge && "with-badge", !!iconStart && "with-start", !!(badge || iconEnd) && "with-end", disabled && "disabled", pending && "pending"), "aria-disabled": disabled ? "true" : undefined }));
     const buttonProps = usePseudoActive(usePressEventHandlers<HTMLButtonElement>(disabled ? null : onPress, hasTypeahead ? { space: "exclude" } : undefined)(newProps));
 
-
-
-
     const childrenWithIcons = <>{iconStart && <span class="dropdown-item-start-icon">{iconStart}</span>}{children}{badge && <span class="dropdown-item-badge">{badge}</span>}{iconEnd && <span className="dropdown-item-end-icon">{iconEnd}</span>}</>
-
-
 
     if (isInteractive) {
         return (

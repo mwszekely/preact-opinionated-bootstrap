@@ -1,11 +1,13 @@
 
-import { ComponentChildren, createContext, h } from "preact";
+import { ComponentChildren, createContext, h, Ref } from "preact";
 import { CheckboxGroupChangeEvent, EventDetail, useCheckboxGroup, UseCheckboxGroupParentProps } from "preact-aria-widgets";
-import { generateRandomId, useAsyncHandler, useHasFocus, useLayoutEffect, useMutationObserver, useRefElement, useState } from "preact-prop-helpers";
+import { generateRandomId, useAsyncHandler, useHasFocus, useLayoutEffect, useRefElement, useState } from "preact-prop-helpers";
 import { useContext } from "preact/hooks";
-import { OmitStrong } from "../props";
+import { forwardElementRef, OmitStrong } from "../props";
 import { Checkbox, CheckboxProps } from "./input-checkbox";
 import { CheckboxGroupChildInfo, UseCheckboxGroupChildContext } from "./props";
+import { useChildrenTextProps } from "../list/utility";
+import { memo } from "preact/compat";
 
 
 
@@ -19,7 +21,7 @@ export interface CheckboxGroupProps {
 }
 
 export function CheckboxGroup({ children }: CheckboxGroupProps) {
-    const { useHasFocusProps, getFocusedInner } = useHasFocus<HTMLDivElement>({  })
+    const { useHasFocusProps, getFocusedInner } = useHasFocus<HTMLDivElement>({})
 
     const onUpdateChildrenAsync = (value: boolean | Map<number, boolean | "mixed">): (Promise<void> | void) => {
         let results = managedCheckboxes.map((child, index) => child.setChecked(typeof value === "boolean" ? value : (value.get(index) ?? false))).filter(r => !!r);
@@ -96,15 +98,12 @@ export interface CheckboxGroupChildProps extends OmitStrong<CheckboxProps, "onCh
  * @param param0 
  * @returns 
  */
-export function CheckboxGroupChild({ index, checked, onCheck, id, ...props }: CheckboxGroupChildProps) {
+export const CheckboxGroupChild = memo(forwardElementRef(function CheckboxGroupChild(p: CheckboxGroupChildProps, ref?: Ref<any>) {
+
+    let { childrenText, props: { index, checked, onCheck, id, ...props } } = useChildrenTextProps({ ...p, ref });
 
     const randomId = generateRandomId("cbc-");
     id ??= randomId;
-
-    const [text, setText] = useState<string | null>(null);
-    
-    const { useRefElementProps, getElement } = useRefElement<HTMLInputElement>({  });
-    useMutationObserver(getElement, { subtree: true, onCharacterData: (info) => setText((getElement()?.innerText ?? "").trim()) });
 
     const useCheckboxGroupChild = useContext(UseCheckboxGroupChildContext)!;
 
@@ -114,12 +113,12 @@ export function CheckboxGroupChild({ index, checked, onCheck, id, ...props }: Ch
 
 
 
-    const { tabbable, useCheckboxGroupChildProps } = useCheckboxGroupChild({ index, checked, text, id, setChecked });
+    const { tabbable, useCheckboxGroupChildProps } = useCheckboxGroupChild({ index, checked, text: childrenText, id, setChecked });
 
 
     return (
-        <Checkbox {...useRefElementProps(useCheckboxGroupChildProps({ id, ...props }))} onCheck={onCheck} checked={checked} />
+        <Checkbox {...useCheckboxGroupChildProps({ id, ...props })} onCheck={onCheck} checked={checked} />
     )
-}
+}));
 
 

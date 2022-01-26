@@ -1,15 +1,16 @@
-import { Fragment, h, render } from "preact";
+import { render } from "preact";
 import { useAriaTooltip } from "preact-aria-widgets";
 import { useState } from "preact-prop-helpers";
 import { ZoomFade } from "preact-transition";
 import { memo } from "preact/compat";
 import "preact/debug";
 import "preact/devtools";
-import { useCallback, useMemo } from "preact/hooks";
+import { useCallback, useLayoutEffect, useMemo } from "preact/hooks";
 import { Accordion, AccordionSection } from "../accordion";
 import { Button } from "../button";
 import { Dialog, DialogsProvider } from "../dialog";
 import { Drawer } from "../drawer";
+import { FocusVisibilityManager } from "../focus";
 import { Checkbox, Input, InputGroup, Radio, RadioGroup } from "../input-group";
 import { GridResponsive } from "../layout";
 import { ListItemSingle, ListSingle } from "../list";
@@ -17,16 +18,15 @@ import { Menu, MenuItem } from "../menu";
 import { DebugUtilContext, LogRenderType } from "../props";
 import { Tab, TabPanel, Tabs } from "../tabs";
 import { ToastsProvider } from "../toast";
-import { FocusVisibilityManager } from "../focus";
 import { Tooltip } from "../tooltip";
 import { DemoButtons } from "./demos/buttons";
 import { DemoChecks } from "./demos/checks";
+import { DemoDialogs } from "./demos/dialogs";
 import { DemoInputs } from "./demos/inputs";
 import { DemoLayout } from "./demos/layout";
+import { DemoLists } from "./demos/lists";
 import { DemoMenus } from "./demos/menus";
 import { DemoTable } from "./demos/tables";
-import { DemoLists } from "./demos/lists";
-import { DemoDialogs } from "./demos/dialogs";
 
 
 
@@ -259,24 +259,21 @@ const DemoInput = memo(() => {
     )
 });
 
-
+function changeThemes(fromTheme: string) {
+    let toTheme = fromTheme === "theme-dark" ? "theme-light" : "theme-dark";
+    (document.getElementById(toTheme) as HTMLLinkElement).media = "all";
+    (document.getElementById(fromTheme) as HTMLLinkElement).media = "screen and (max-width: 1px)";
+    return toTheme;
+}
 
 const Component = () => {
     const [theme, setTheme] = useState("theme-dark");
 
+    useLayoutEffect(() => setTheme(changeThemes("theme-dark")))
+
     return <>
         <Button colorVariant={theme == "theme-dark" ? "light" : "dark"} style={{ position: "fixed", insetBlockStart: "0.5em", insetInlineEnd: "0.5em", zIndex: 9999999 }} spinnerTimeout={999999999} onPress={async () => {
-            let prev = theme;
-            let next = prev === "theme-dark" ? "theme-light" : "theme-dark";
-            setTheme(next);
-            await new Promise<void>(resolve => setTimeout(resolve, 100));
-            (document.getElementById(next) as HTMLLinkElement).media = "all";
-            (document.getElementById(prev) as HTMLLinkElement).media = "screen and (max-width: 1px)";
-            document.documentElement.classList.add("switching-theme");
-            /*document.documentElement.classList.add(next);
-            document.documentElement.classList.remove(prev);*/
-            await new Promise<void>(resolve => setTimeout(resolve, 2000));
-            document.documentElement.classList.remove("switching-theme");
+            setTheme(changeThemes(theme));
         }}>Switch theme to <strong>{theme === "theme-dark" ? "light" : "dark"}</strong></Button>
         <GridResponsive minWidth="35em">
             <FocusVisibilityManager autoHideFocusRing={true}>

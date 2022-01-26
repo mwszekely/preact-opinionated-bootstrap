@@ -1126,7 +1126,7 @@
     function acceptsNever(n: never) {}
     */
 
-    function returnNull$2() {
+    function returnNull$3() {
       return null;
     }
     /**
@@ -1143,7 +1143,7 @@
     function useRefElement(args) {
       const onElementChange = args === null || args === void 0 ? void 0 : args.onElementChange; // Let us store the actual (reference to) the element we capture
 
-      const [getElement, setElement] = usePassiveState(onElementChange, returnNull$2); // Create a RefCallback that's fired when mounted 
+      const [getElement, setElement] = usePassiveState(onElementChange, returnNull$3); // Create a RefCallback that's fired when mounted 
       // and that notifies us of our element when we have it
 
       const myRef = A$2(e => {
@@ -1160,7 +1160,7 @@
       };
     }
 
-    function returnNull$1() {
+    function returnNull$2() {
       return null;
     }
 
@@ -1170,7 +1170,7 @@
         onSizeChange
       } = _ref;
       useEnsureStability(getObserveBox, onSizeChange);
-      const [getSize, setSize] = usePassiveState(onSizeChange, returnNull$1);
+      const [getSize, setSize] = usePassiveState(onSizeChange, returnNull$2);
       const currentObserveBox = s$2(undefined);
       const needANewObserver = A$2((element, observeBox) => {
         if (element) {
@@ -3556,7 +3556,7 @@
       return true;
     }
 
-    function returnFalse$1() {
+    function returnFalse$2() {
       return false;
     }
 
@@ -3571,10 +3571,10 @@
         onWindowFocusedChange
       } = _ref;
       useEnsureStability(onFocusedChanged, onFocusedInnerChanged, onLastFocusedChanged, onLastFocusedInnerChanged, onLastActiveElementChange, onActiveElementChange, onWindowFocusedChange);
-      const [getFocused, setFocused] = usePassiveState(onFocusedChanged, returnFalse$1);
-      const [getFocusedInner, setFocusedInner] = usePassiveState(onFocusedInnerChanged, returnFalse$1);
-      const [getLastFocused, setLastFocused] = usePassiveState(onLastFocusedChanged, returnFalse$1);
-      const [getLastFocusedInner, setLastFocusedInner] = usePassiveState(onLastFocusedInnerChanged, returnFalse$1);
+      const [getFocused, setFocused] = usePassiveState(onFocusedChanged, returnFalse$2);
+      const [getFocusedInner, setFocusedInner] = usePassiveState(onFocusedInnerChanged, returnFalse$2);
+      const [getLastFocused, setLastFocused] = usePassiveState(onLastFocusedChanged, returnFalse$2);
+      const [getLastFocusedInner, setLastFocusedInner] = usePassiveState(onLastFocusedInnerChanged, returnFalse$2);
       const {
         getActiveElement,
         getLastActiveElement,
@@ -5385,10 +5385,13 @@
       return firstFocusable;
     }
 
-    function useMutationObserver(getElement) {
+    function returnNull$1() {
+      return null;
+    }
+
+    function useMutationObserver(options) {
       var _attributeFilter;
 
-      let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
       let {
         attributeFilter,
         subtree,
@@ -5397,7 +5400,7 @@
         onCharacterData,
         onAttributes,
         attributeOldValue
-      } = options;
+      } = options || {};
       if (typeof attributeFilter === "string") attributeFilter = [attributeFilter];
       let attributeKey = (_attributeFilter = attributeFilter) === null || _attributeFilter === void 0 ? void 0 : _attributeFilter.join(";");
       const attributes = !!onAttributes;
@@ -5406,27 +5409,10 @@
       const stableOnChildList = useStableCallback(onChildList !== null && onChildList !== void 0 ? onChildList : () => {});
       const stableOnCharacterData = useStableCallback(onCharacterData !== null && onCharacterData !== void 0 ? onCharacterData : () => {});
       const stableOnAttributes = useStableCallback(onAttributes !== null && onAttributes !== void 0 ? onAttributes : () => {});
-      y$1(() => {
+      const [getMo, setMo] = usePassiveState(useStableCallback(observer => {
         const element = getElement();
 
-        if (element) {
-          let observer = new MutationObserver(a => {
-            for (let mutation of a) {
-              switch (mutation.type) {
-                case "childList":
-                  stableOnChildList(mutation);
-                  break;
-
-                case "attributes":
-                  stableOnAttributes(mutation);
-                  break;
-
-                case "characterData":
-                  stableOnCharacterData(mutation);
-                  break;
-              }
-            }
-          });
+        if (element && observer && (!!attributeKey || !!characterData || !!childList)) {
           observer.observe(element, {
             attributeFilter: attributeFilter,
             attributeOldValue,
@@ -5438,7 +5424,43 @@
           });
           return () => observer.disconnect();
         }
-      }, [getElement, attributeKey, subtree, childList, characterDataOldValue, characterData, attributes, attributeOldValue]);
+      }), returnNull$1);
+      const onNeedMutationObserverReset = A$2(element => {
+        if (element) {
+          queueMicrotask(() => {
+            setMo(new MutationObserver(a => {
+              for (let mutation of a) {
+                switch (mutation.type) {
+                  case "childList":
+                    stableOnChildList(mutation);
+                    break;
+
+                  case "attributes":
+                    stableOnAttributes(mutation);
+                    break;
+
+                  case "characterData":
+                    stableOnCharacterData(mutation);
+                    break;
+                }
+              }
+            }));
+          });
+        }
+      }, []);
+      y$1(() => {
+        onNeedMutationObserverReset(getElement());
+      }, [attributeKey, attributeOldValue, characterDataOldValue, subtree]);
+      const {
+        getElement,
+        useRefElementProps: useMutationObserverProps
+      } = useRefElement({
+        onElementChange: onNeedMutationObserverReset
+      });
+      return {
+        useMutationObserverProps,
+        getElement
+      };
     }
 
     const EventDetail = Symbol("event-detail");
@@ -7423,7 +7445,7 @@
       };
     }
 
-    function returnFalse() {
+    function returnFalse$1() {
       return false;
     }
 
@@ -7471,7 +7493,7 @@
           let handle = setTimeout(() => setTriggerFocusedDelayCorrected(focused), focused ? focusDelay : 1);
           return () => clearTimeout(handle);
         }
-      }), returnFalse);
+      }), returnFalse$1);
       const [getTooltipFocused, setTooltipFocused] = usePassiveState(useStableCallback(focused => {
         const delay = focused ? focusDelay : 1;
 
@@ -7479,7 +7501,7 @@
           let handle = setTimeout(() => setTooltipFocusedDelayCorrected(focused), delay);
           return () => clearTimeout(handle);
         }
-      }), returnFalse);
+      }), returnFalse$1);
       const [getTriggerHover, setTriggerHover] = usePassiveState(useStableCallback(hovering => {
         const delay = hovering ? mouseoverDelay : mouseoutDelay;
 
@@ -7487,7 +7509,7 @@
           let handle = setTimeout(() => setTriggerHoverDelayCorrected(hovering), delay);
           return () => clearTimeout(handle);
         }
-      }), returnFalse);
+      }), returnFalse$1);
       const [getTooltipHover, setTooltipHover] = usePassiveState(useStableCallback(hovering => {
         const delay = hovering ? mouseoverDelay : mouseoutDelay;
 
@@ -7495,7 +7517,7 @@
           let handle = setTimeout(() => setTooltipHoverDelayCorrected(hovering), delay);
           return () => clearTimeout(handle);
         }
-      }), returnFalse);
+      }), returnFalse$1);
       const [getTriggerFocusedDelayCorrected, setTriggerFocusedDelayCorrected] = useState(false);
       const [getTriggerHoverDelayCorrected, setTriggerHoverDelayCorrected] = useState(false);
       const [getTooltipFocusedDelayCorrected, setTooltipFocusedDelayCorrected] = useState(false);
@@ -11304,7 +11326,121 @@
       }, void 0);
     }));
 
-    D$1(null);
+    const FocusModeContext = D$1("keyboard");
+    /**
+     * Manages graphical effects related to focus management,
+     * and specifically how the user's input device can affect that.
+     *
+     * Certain components will use this information to slighly adjust
+     * how some small details are handled visually.  For example,
+     * this allows Tooltips to *not* show themselves when an
+     * element with one (that's tabbable, like an <input>) receives focus,
+     * but only when the user is using a mouse or other pointing device
+     * (i.e. when tabbed into, the Tooltip will still show).
+     *
+     * You can also provide `autoHideFocusRing`, which will cause the
+     * CSS focus ring to become invisible when the user is using
+     * a pointing device.  Ideally this should be a UI setting, because
+     * some users may prefer it even while using a mouse.
+     *
+     * @param param0
+     * @returns
+     */
+
+    function FocusVisibilityManager(_ref) {
+      let {
+        children,
+        autoHideFocusRing
+      } = _ref;
+      const [usingPointer, setUsingPointer] = useState(false); // Any time the focus changes on the page, and we haven't moved the pointer in a bit,
+      // we'll start showing the focus ring automatically.
+      // While we can catch the Tab key and listen for that, it's tricker for components
+      // that manually manage focus in whatever way.
+      // This is just a rough heuristic to see if any recent change in focus
+      // looked like it was mouse-initiated or not (with the acceptable caveat that
+      // unrelated mouse movement still counts just fine).
+
+      const [getHadRecentKeyPress, setHadRecentKeyPress] = usePassiveState(A$2(recentKeyPress => {
+        if (recentKeyPress) {
+          const handle = setTimeout(() => {
+            setHadRecentKeyPress(false);
+          }, 100);
+          return () => clearInterval(handle);
+        }
+      }, []), returnFalse);
+      useGlobalHandler(document, "focusin", () => {
+        if (getHadRecentKeyPress()) setUsingPointer(false);
+      }, {
+        capture: true,
+        passive: true
+      }); // Listen for different types of pointer events that would imply we're not using keyboard navigation
+
+      document.addEventListener("mousemove", ev => {
+        setUsingPointer(true);
+        setHadRecentKeyPress(false);
+      }, {
+        passive: true
+      });
+      document.addEventListener("touchstart", ev => {
+        setUsingPointer(true);
+        setHadRecentKeyPress(false);
+      }, {
+        passive: true
+      });
+      document.addEventListener("pointerdown", ev => {
+        setUsingPointer(true);
+        setHadRecentKeyPress(false);
+      }, {
+        passive: true
+      });
+      document.addEventListener("pointermove", ev => {
+        setUsingPointer(true);
+        setHadRecentKeyPress(false);
+      }, {
+        passive: true
+      }); // Key press events are handled differently--
+      // the Tab key immediately re-activates the focus ring,
+      // while other navigation keys only activate it when we're not in an <input>-ish element.
+
+      document.addEventListener("keydown", ev => {
+        if (ev.key == "Tab") setUsingPointer(false);
+        if (NavigationKeys.includes(ev.key) && !(ev.target.tagName == "INPUT" || ev.target.tagName == "TEXTAREA")) setHadRecentKeyPress(true);
+      }, {
+        capture: true,
+        passive: false
+      });
+      y$1(() => {
+        const hideFocusRing = !!autoHideFocusRing && usingPointer;
+        document.body.style.setProperty("--input-btn-focus-color-opacity", hideFocusRing ? "0" : "0.25");
+        document.body.style.setProperty("--btn-active-box-shadow-opacity", hideFocusRing ? "0" : "0.4");
+        document.body.style.setProperty("--input-btn-check-focus-color-opacity", hideFocusRing ? "0" : "0.5");
+      }, [usingPointer, !!autoHideFocusRing]);
+      return v$2(FocusModeContext.Provider, {
+        value: usingPointer ? "mouse" : "keyboard",
+        children
+      });
+    }
+    /**
+     * Returns whether it's more likely that the user is currently
+     * navigating with the keyboard or mouse.
+     *
+     * **FOR VISUAL EFFECTS ONLY.** There should be no actual logic
+     * that depends on this very rough heuristic. Tooltips, for example,
+     * use this to determine whether to show on focus (which otherwise
+     * only happens for focusable-but-not-tabbable elements)
+     */
+
+    function useFocusMode() {
+      return F(FocusModeContext);
+    }
+
+    function returnFalse() {
+      return false;
+    }
+
+    const NavigationKeys = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Home", "End", "PageUp", "PageDown"];
+
+    const UseCheckboxGroupChildContext = D$1(null);
     const InInputGroupContext = D$1(false);
     const InInputGridContext = D$1(0);
 
@@ -11569,9 +11705,124 @@
       }, void 0);
     });
 
+    /**
+     * Utility function for a parent that quickly needs the text content of its children,
+     * ideally as the `children` prop, but will fall back to a mutation observer if necessary.
+     *
+     * Returns the text content, and the modified props to use for the parent.
+     *
+     * @param props
+     * @returns
+     */
+
+    function useChildrenTextProps(props) {
+      const children = props.children;
+      const childrenNotStringable = !childrenIsStringable(children);
+      const [text, setText] = useState(() => childrenNotStringable ? null : childrenToString(children));
+      const onElementUpdate = A$2(element => {
+        if (childrenNotStringable) {
+          var _element$textContent;
+
+          setText(((_element$textContent = element === null || element === void 0 ? void 0 : element.textContent) !== null && _element$textContent !== void 0 ? _element$textContent : "").trim());
+        }
+      }, [childrenNotStringable]);
+      const {
+        useRefElementProps,
+        getElement
+      } = useRefElement({
+        onElementChange: onElementUpdate
+      });
+      const {
+        useMutationObserverProps
+      } = useMutationObserver(childrenNotStringable ? {
+        subtree: true,
+        onCharacterData: info => onElementUpdate(getElement())
+      } : null);
+      y$1(() => {
+        if (!childrenNotStringable) {
+          setText(childrenToString(children));
+        }
+      }, [childrenNotStringable, childrenNotStringable ? null : children]);
+      return {
+        childrenText: text,
+        props: useMutationObserverProps(useRefElementProps(props))
+      };
+    }
+
+    function childrenToString(children) {
+      if (children == null) return "";else if (Array.isArray(children)) return children.map(child => childrenToString(child)).join("");else if (typeof children == "string") return children;else if (typeof children == "boolean") return "";
+      return `${children}`;
+    }
+
+    function childrenIsStringable(children) {
+      if (children == null) return true;else if (Array.isArray(children)) {
+        for (let child of children) {
+          if (!childrenIsStringable(child)) return false;
+        }
+
+        return true;
+      } else if (typeof children === "string") return true;else if (typeof children === "number") return true;else if (typeof children === "bigint") return true;else if (typeof children === "boolean") return true;
+      return false;
+    }
+
     D$1(null);
     D$1(false);
     D$1(null);
+    /**
+     * This is a child checkbox of a `CheckboxGroup`.
+     *
+     * Effectively the only differences to a normal `Checkbox` are
+     * the addition of an `index` prop and the fact that your
+     * onCheck must be able to handle "mixed" as a value, which can
+     * occur if the child is set to be mixed, unset by the parent
+     * checkbox, and then "restored" by the parent checkbox a few
+     * clicks later.
+     *
+     * @param param0
+     * @returns
+     */
+
+    g$1(forwardElementRef(function CheckboxGroupChild(p, ref) {
+      var _id;
+
+      let {
+        childrenText,
+        props: {
+          index,
+          checked,
+          onCheck,
+          id,
+          ...props
+        }
+      } = useChildrenTextProps({ ...p,
+        ref
+      });
+      const randomId = generateRandomId("cbc-");
+      (_id = id) !== null && _id !== void 0 ? _id : id = randomId;
+      const useCheckboxGroupChild = F(UseCheckboxGroupChildContext);
+
+      let setChecked = checked => {
+        return onCheck(checked, null);
+      };
+
+      const {
+        tabbable,
+        useCheckboxGroupChildProps
+      } = useCheckboxGroupChild({
+        index,
+        checked,
+        text: childrenText,
+        id,
+        setChecked
+      });
+      return e$3(Checkbox, { ...useCheckboxGroupChildProps({
+          id,
+          ...props
+        }),
+        onCheck: onCheck,
+        checked: checked
+      }, void 0);
+    }));
 
     const knownNames = new Set();
     const CurrentHandlerTypeContext = D$1("sync");
@@ -12491,39 +12742,23 @@
         }, void 0)
       }, void 0);
     }));
-    const ListItemSingle = g$1(forwardElementRef(function ListItemSingle(props, ref) {
-      useLogRender("ListSingle", `Rendering ListSingleItem #${props.index}`);
+    const ListItemSingle = g$1(forwardElementRef(function ListItemSingle(p, ref) {
+      let {
+        childrenText,
+        props: {
+          index,
+          hidden,
+          disabled,
+          children,
+          ...domProps
+        }
+      } = useChildrenTextProps({ ...p,
+        ref
+      });
+      useLogRender("ListSingle", `Rendering ListSingleItem #${index}`);
       const [pending, setPending, getPending] = useState(false);
       const useListItemSingle = F(UseListboxSingleItemContext);
       console.assert(!!useListItemSingle, "ListItemSingle is being used outside of a single-select list. Did you mean to use a different kind of list, or a different kind of list item?");
-      const {
-        index,
-        hidden,
-        disabled,
-        children,
-        ...domProps
-      } = { ...props,
-        ref
-      };
-      const [text, setText] = useState(null);
-      const {
-        useRefElementProps,
-        getElement
-      } = useRefElement({
-        onElementChange: A$2(element => {
-          var _element$innerText;
-
-          return setText(((_element$innerText = element === null || element === void 0 ? void 0 : element.innerText) !== null && _element$innerText !== void 0 ? _element$innerText : "").trim());
-        }, [])
-      });
-      useMutationObserver(getElement, {
-        subtree: true,
-        onCharacterData: info => {
-          var _getElement$innerText, _getElement;
-
-          return setText(((_getElement$innerText = (_getElement = getElement()) === null || _getElement === void 0 ? void 0 : _getElement.innerText) !== null && _getElement$innerText !== void 0 ? _getElement$innerText : "").trim());
-        }
-      });
       const {
         getSelected,
         tabbable,
@@ -12531,7 +12766,7 @@
         useListboxSingleItemProps
       } = useListItemSingle({
         index,
-        text,
+        text: childrenText,
         tag: "li",
         setPending,
         getPending,
@@ -12541,7 +12776,7 @@
       return e$3(ListItemStatic, { ...usePseudoActive(useMergedProps()({
           disabled,
           class: clsx("list-group-item-action", selected && "active", pending && "pending")
-        }, useListboxSingleItemProps(useRefElementProps(domProps)))),
+        }, useListboxSingleItemProps(domProps))),
         children: e$3(ProgressCircular, {
           childrenPosition: "after",
           mode: pending ? "pending" : null,
@@ -12609,39 +12844,23 @@
         }, void 0)
       }, void 0);
     }));
-    const ListItemMulti = g$1(forwardElementRef(function ListItemMulti(props, ref) {
-      useLogRender("ListMulti", `Rendering ListMultiItem #${props.index}`);
+    const ListItemMulti = g$1(forwardElementRef(function ListItemMulti(p, ref) {
+      const {
+        childrenText,
+        props: {
+          index,
+          selected,
+          disabled,
+          onSelect: onSelectAsync,
+          children,
+          ...domProps
+        }
+      } = useChildrenTextProps({ ...p,
+        ref
+      });
+      useLogRender("ListMulti", `Rendering ListMultiItem #${index}`);
       const useListItemMulti = F(UseListboxMultiItemContext);
       console.assert(!!useListItemMulti, "ListItemMulti is being used outside of a multi-select list. Did you mean to use a different kind of list, or a different kind of list item?");
-      const {
-        index,
-        selected,
-        disabled,
-        onSelect: onSelectAsync,
-        children,
-        ...domProps
-      } = { ...props,
-        ref
-      };
-      const [text, setText] = useState(null);
-      const {
-        useRefElementProps,
-        getElement
-      } = useRefElement({
-        onElementChange: A$2(element => {
-          var _element$innerText;
-
-          return setText(((_element$innerText = element === null || element === void 0 ? void 0 : element.innerText) !== null && _element$innerText !== void 0 ? _element$innerText : "").trim());
-        }, [])
-      });
-      useMutationObserver(getElement, {
-        subtree: true,
-        onCharacterData: info => {
-          var _getElement$innerText, _getElement;
-
-          return setText(((_getElement$innerText = (_getElement = getElement()) === null || _getElement === void 0 ? void 0 : _getElement.innerText) !== null && _getElement$innerText !== void 0 ? _getElement$innerText : "").trim());
-        }
-      });
       const {
         getSyncHandler,
         pending,
@@ -12657,7 +12876,7 @@
         useListboxMultiItemProps
       } = useListItemMulti({
         index,
-        text,
+        text: childrenText,
         tag: "li",
         selected: currentCapture !== null && currentCapture !== void 0 ? currentCapture : selected,
         onSelect: onSelectSync,
@@ -12666,7 +12885,7 @@
       return e$3(ListItemStatic, { ...usePseudoActive(useMergedProps()({
           disabled,
           class: clsx("list-group-item-action", selected && "active", pending && "pending")
-        }, useListboxMultiItemProps(useRefElementProps(domProps)))),
+        }, useListboxMultiItemProps(domProps))),
         children: e$3(ProgressCircular, {
           childrenPosition: "after",
           mode: pending ? "pending" : hasError ? "failed" : resolveCount ? "succeeded" : null,
@@ -12694,72 +12913,6 @@
         ref: ref
       }, void 0);
     }));
-
-    const FocusModeContext = D$1("keyboard");
-    /**
-     * Manages graphical effects related to focus management,
-     * and specifically how the user's input device can affect that.
-     *
-     * Certain components will use this information to slighly adjust
-     * how some small details are handled visually.  For example,
-     * this allows Tooltips to *not* show themselves when an
-     * element with one (that's tabbable, like an <input>) receives focus,
-     * but only when the user is using a mouse or other pointing device
-     * (i.e. when tabbed into, the Tooltip will still show).
-     *
-     * You can also provide `autoHideFocusRing`, which will cause the
-     * CSS focus ring to become invisible when the user is using
-     * a pointing device.  Ideally this should be a UI setting, because
-     * some users may prefer it even while using a mouse.
-     *
-     * @param param0
-     * @returns
-     */
-
-    function FocusVisibilityManager(_ref) {
-      let {
-        children,
-        autoHideFocusRing
-      } = _ref;
-      const [usingPointer, setUsingPointer] = useState(false);
-      document.addEventListener("mousemove", ev => setUsingPointer(true), {
-        passive: true
-      });
-      document.addEventListener("touchstart", ev => setUsingPointer(true), {
-        passive: true
-      });
-      document.addEventListener("pointermove", ev => setUsingPointer(true), {
-        passive: true
-      });
-      document.addEventListener("keydown", ev => {
-        if (ev.key == "Tab") {
-          setUsingPointer(false);
-        }
-      });
-      y$1(() => {
-        const hideFocusRing = !!autoHideFocusRing && usingPointer;
-        document.body.style.setProperty("--input-btn-focus-color-opacity", hideFocusRing ? "0" : "0.25");
-        document.body.style.setProperty("--btn-active-box-shadow-opacity", hideFocusRing ? "0" : "0.4");
-        document.body.style.setProperty("--input-btn-check-focus-color-opacity", hideFocusRing ? "0" : "0.5");
-      }, [usingPointer, !!autoHideFocusRing]);
-      return v$2(FocusModeContext.Provider, {
-        value: usingPointer ? "mouse" : "keyboard",
-        children
-      });
-    }
-    /**
-     * Returns whether it's more likely that the user is currently
-     * navigating with the keyboard or mouse.
-     *
-     * **FOR VISUAL EFFECTS ONLY.** There should be no actual logic
-     * that depends on this very rough heuristic. Tooltips, for example,
-     * use this to determine whether to show on focus (which otherwise
-     * only happens for focusable-but-not-tabbable elements)
-     */
-
-    function useFocusMode() {
-      return F(FocusModeContext);
-    }
 
     var _globalThis$process, _globalThis$process2, _globalThis$process2$, _globalThis$process$e, _globalThis$process$e2;
 
@@ -15537,45 +15690,31 @@
       }, void 0);
     }
 
-    function MenuItemU(_ref2, ref) {
+    function MenuItemU(p, ref) {
       let {
-        children,
-        disabled,
-        onPress: onPressAsync,
-        index,
-        iconStart,
-        iconEnd,
-        badge,
-        ...rest
-      } = _ref2;
+        childrenText,
+        props: {
+          children,
+          disabled,
+          onPress: onPressAsync,
+          index,
+          iconStart,
+          iconEnd,
+          badge,
+          ...rest
+        }
+      } = useChildrenTextProps({ ...p,
+        ref
+      });
       useLogRender("MenuItem", `Rendering MenuItem`);
       const useMenuItem = F(UseMenuItemContext);
       const hasTypeahead = F(HasTypeaheadContext);
       const isInteractive = onPressAsync != null;
-      const [text, setText] = useState(null);
-      const {
-        useRefElementProps,
-        getElement
-      } = useRefElement({
-        onElementChange: A$2(element => {
-          var _element$innerText;
-
-          return setText(((_element$innerText = element === null || element === void 0 ? void 0 : element.innerText) !== null && _element$innerText !== void 0 ? _element$innerText : "").trim());
-        }, [])
-      });
-      useMutationObserver(getElement, {
-        subtree: true,
-        onCharacterData: info => {
-          var _getElement$innerText, _getElement;
-
-          return setText(((_getElement$innerText = (_getElement = getElement()) === null || _getElement === void 0 ? void 0 : _getElement.innerText) !== null && _getElement$innerText !== void 0 ? _getElement$innerText : "").trim());
-        }
-      });
       const {
         useMenuItemProps
       } = useMenuItem({
         index,
-        text
+        text: childrenText
       });
       const onClose = F(OnCloseContext);
       const {
@@ -15594,11 +15733,11 @@
 
         return onPressAsync === null || onPressAsync === void 0 ? void 0 : (_onPressAsync = onPressAsync()) === null || _onPressAsync === void 0 ? void 0 : _onPressAsync.then(() => onClose === null || onClose === void 0 ? void 0 : onClose());
       });
-      const newProps = useMenuItemProps(useRefElementProps(useMergedProps()(rest, {
+      const newProps = useMenuItemProps(useMergedProps()(rest, {
         ref,
         class: clsx(onPressAsync ? "dropdown-item" : "dropdown-item-text", "dropdown-multiline", !!badge && "with-badge", !!iconStart && "with-start", !!(badge || iconEnd) && "with-end", disabled && "disabled", pending && "pending"),
         "aria-disabled": disabled ? "true" : undefined
-      })));
+      }));
       const buttonProps = usePseudoActive(usePressEventHandlers(disabled ? null : onPress, hasTypeahead ? {
         space: "exclude"
       } : undefined)(newProps));
@@ -15852,18 +15991,19 @@
         useToastContainerProps
       } = useToasts();
       const [theme, setTheme] = useState(oppositeTheme());
-      useMutationObserver(() => document.documentElement, {
-        attributeFilter: ["class"],
-        onAttributes: _ref3 => {
-          let {
-            attributeName
-          } = _ref3;
-
-          if (attributeName === "class") {
-            setTheme(oppositeTheme());
+      y$1(() => {
+        const mo = new MutationObserver(info => {
+          for (let i of info) {
+            if (i.attributeName === "class") {
+              setTheme(oppositeTheme());
+            }
           }
-        }
-      });
+        });
+        mo.observe(document.documentElement, {
+          attributeFilter: ["class"]
+        });
+        return () => mo.disconnect();
+      }, []);
       return e$3(UseToastContext.Provider, {
         value: useToast,
         children: e$3("div", { ...useToastContainerProps(useMergedProps()({
@@ -15879,12 +16019,12 @@
     }
 
     const ToastDismissContext = D$1(null);
-    function Toast(_ref4) {
+    function Toast(_ref3) {
       let {
         timeout,
         politeness,
         children
-      } = _ref4;
+      } = _ref3;
       const useToast = F(UseToastContext);
       const defaultTimeout = F(DefaultToastTimeout);
       const {
@@ -16179,6 +16319,21 @@
         return new Promise(resolve => setTimeout(resolve, arg0));
     }
 
+    function DemoDialogs() {
+        const [show, setShow] = useState(null);
+        useState("start");
+        useState("block-end");
+        useState(false);
+        useState(3000);
+        useState(true);
+        useState(false);
+        useState(true);
+        useState(true);
+        const pushDialog = usePushDialog();
+        const onPressAsync = () => pushDialog(e$3(Dialog, { descriptive: false, children: "Dialog item was clicked" }, void 0));
+        return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Dialogs" }, void 0), e$3(CardElement, { children: e$3(Button, { onPress: () => pushDialog(e$3(Dialog, { descriptive: false, children: "This is a dialog!" }, void 0)), children: "Open a dialog" }, void 0) }, void 0), e$3(CardElement, { children: [e$3("code", { children: "<Dialog>" }, void 0), "s are a way to show the user (read: force the user to at least skim) some amount of information or other content. They can either be controlled or uncontrolled; controlled ", e$3("code", { children: "<Dialog>" }, void 0), "s take ", e$3("code", { children: "open" }, void 0), " and ", e$3("code", { children: "onClose" }, void 0), " props, while uncontrolled ", e$3("code", { children: "<Dialog>" }, void 0), "s give you a ", e$3("code", { children: "async show()" }, void 0), " function to call, or can be used from ", e$3("code", { children: "useShowDialog" }, void 0), "."] }, void 0), e$3(CardElement, { children: e$3(Button, { onPress: onPressAsync, children: e$3("code", { children: "usePushDialog" }, void 0) }, void 0) }, void 0), e$3(CardElement, { children: [e$3(Button, { onPress: show ?? undefined, children: e$3("code", { children: ["<Dialog provideShow=", "{provideShow}", " />"] }, void 0) }, void 0), e$3(Dialog, { descriptive: false, provideShow: setShow, children: "This is a dialog" }, void 0)] }, void 0), e$3(CardElement, { children: ["The easiest way to use them is via the ", e$3("code", { children: "useShowDialog" }, void 0), " hook. Pass the returned ", e$3("code", { children: "showDialog" }, void 0), " function a ", e$3("code", { children: "<Dialog>" }, void 0), " and it will be shown on the screen, with the function returning a promise that resolves when ", e$3("code", { children: "onClose" }, void 0), " would be called (if you pass your own ", e$3("code", { children: "onClose" }, void 0), " you will override this behavior which can be used if you need to prevent the dialog from closing when clicking the backdrop; use a ", e$3("code", { children: "<CloseDialogButton>" }, void 0), " or within your own component pass ", e$3("code", { children: "useCloseDialog" }, void 0), "'s returned function to close the dialog during your own ", e$3("code", { children: "onClose" }, void 0), ")."] }, void 0), e$3(CardElement, { children: "All components that use Portals to position themselves on the body will reposition themselves with the dialog as their parent instead, ensuring they still work as expected." }, void 0), e$3(CardElement, { children: e$3(Button, { onPress: () => pushDialog(e$3(Dialog, { descriptive: false, children: "This is a dialog!" }, void 0)), children: "Open a dialog" }, void 0) }, void 0)] }, void 0) }, void 0));
+    }
+
     function DemoInputs() {
         const [asyncFails, setAsyncFails] = useState(false);
         const [asyncTimeout, setAsyncTimeout] = useState(3000);
@@ -16284,6 +16439,68 @@
       }, void 0);
     })); // Probably a better way to get all these names
 
+    const Badge = g$1(forwardElementRef(function Badge(_ref, ref) {
+      let {
+        colorVariant,
+        roundedPill,
+        label,
+        ...props
+      } = _ref;
+      return e$3("span", { ...useMergedProps()({
+          ref,
+          "aria-label": label,
+          className: clsx("badge", roundedPill && "rounded-pill", `bg-${colorVariant !== null && colorVariant !== void 0 ? colorVariant : "secondary"}`)
+        }, props)
+      }, void 0);
+    }));
+
+    function DemoLists() {
+        const [selectedIndex, setSelectedIndex] = useState(0);
+        useState("outline");
+        useState("md");
+        useState(false);
+        const [lines, setLines] = useState(1);
+        const [selectedMulti, setSelectedMulti] = useState(new Set());
+        useState(3000);
+        useState(true);
+        useState(false);
+        useState(true);
+        usePushToast();
+        function makeListItemLines(index) {
+            if (lines === 1)
+                return e$3("span", { children: ["List Item #", index + 1] }, void 0);
+            return e$3(d$2, { children: Array.from((function* () {
+                    for (let i = 0; i < lines; ++i) {
+                        if (i == 0)
+                            yield e$3("span", { class: "h4", children: ["List Item #", index + 1] }, void 0);
+                        else
+                            yield e$3("span", { children: ["This is line #", i + 1] }, void 0);
+                    }
+                })()) }, void 0);
+        }
+        function makeListItems(maker) {
+            return e$3(d$2, { children: Array.from((function* () {
+                    for (let i = 0; i < 5; ++i) {
+                        yield maker(i);
+                    }
+                })()) }, void 0);
+        }
+        return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Lists" }, void 0), e$3(CardElement, { children: e$3(List, { label: "Demo list", selectedIndex: selectedIndex, onSelect: setSelectedIndex, children: makeListItems(index => e$3(ListItemSingle, { index: index, disabled: index == 2, children: makeListItemLines(index) }, void 0)) }, void 0) }, void 0), e$3(CardElement, { children: ["A list is a way to provide a large number of selectable options in a way that's distinct from, say, a list of checkboxes or radio buttons. Lists can be ", e$3("strong", { children: "single-select" }, void 0), ", ", e$3("strong", { children: "multi-select" }, void 0), ", or ", e$3("strong", { children: "static" }, void 0), " (no selection, display only)."] }, void 0), e$3(CardElement, { children: ["All list types can have as many lines as needed; each e.g. ", e$3("code", { children: "<span>" }, void 0), " will create a new line. Format them however you like (i.e. making some larger or smaller, tinted different colors, etc.)", e$3(InputGroup, { children: e$3(Input, { type: "number", value: lines, onValueChange: setLines, children: "# of lines" }, void 0) }, void 0)] }, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Single select" }, void 0), e$3(CardElement, { children: ["For single-select lists, you provide the parent ", e$3("code", { children: "<List>" }, void 0), " with ", e$3("code", { children: "selectedIndex" }, void 0), " and ", e$3("code", { children: "onSelect" }, void 0), " props that control which ", e$3("code", { children: "<ListItemSingle>" }, void 0), " is the selected one."] }, void 0), e$3(CardElement, { children: ["As with most components, the ", e$3("code", { children: "onSelect" }, void 0), " prop can be an async function."] }, void 0), e$3(CardElement, { children: e$3(List, { label: "Single-select list demo", selectedIndex: selectedIndex, onSelect: async (i) => { await sleep$3(2000); setSelectedIndex(i); }, children: makeListItems(index => e$3(ListItemSingle, { index: index, disabled: index == 2, children: makeListItemLines(index) }, void 0)) }, void 0) }, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Multi select" }, void 0), e$3(CardElement, { children: ["Multi-select lists have a ", e$3("code", { children: "selected" }, void 0), " prop on each individual ", e$3("code", { children: "<ListItemMulti>" }, void 0), "."] }, void 0), e$3(CardElement, { children: ["As with most components, the ", e$3("code", { children: "onSelect" }, void 0), " prop can be an async function."] }, void 0), e$3(CardElement, { children: e$3(List, { label: "Multi-select list demo", select: "multi", children: makeListItems(index => e$3(ListItemMulti, { index: index, selected: selectedMulti.has(index), disabled: index == 2, onSelect: async (selected) => {
+                                    await sleep$3(2000);
+                                    setSelectedMulti(prev => {
+                                        let ret = new Set(Array.from(prev));
+                                        if (selected)
+                                            ret.add(index);
+                                        else
+                                            ret.delete(index);
+                                        return ret;
+                                    });
+                                }, children: makeListItemLines(index) }, void 0)) }, void 0) }, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Static lists" }, void 0), e$3(CardElement, { children: "All lists share the same basic styling of a static list, so all of these options can also be used on single- and multi-select lists." }, void 0), e$3(CardElement, { children: ["You can add an icon at the righthand side with ", e$3("code", { children: "iconEnd" }, void 0), ":"] }, void 0), e$3(CardElement, { children: e$3(List, { label: "List with icons at the end", children: makeListItems(index => e$3(ListItemStatic, { iconEnd: e$3(BootstrapIcon, { icon: "star", label: null }, void 0), children: makeListItemLines(index) }, void 0)) }, void 0) }, void 0), e$3(CardElement, { children: ["Or an icon on the left with ", e$3("code", { children: "iconStart" }, void 0), ", or a badge at the top-right with ", e$3("code", { children: "badge" }, void 0), ":"] }, void 0), e$3(CardElement, { children: e$3(List, { label: "List with icons at the start and badges", children: makeListItems(index => e$3(ListItemStatic, { badge: e$3(Badge, { label: `Example value`, children: Math.floor(Math.abs(Math.sin((index + 7) * 7) * 20)) }, void 0), iconStart: e$3(BootstrapIcon, { icon: "star", label: null }, void 0), children: makeListItemLines(index) }, void 0)) }, void 0) }, void 0), e$3(CardElement, { children: ["All these will properly align themselves no matter how many lines the list item has. Keep in mind that a list's contents are always read out as one long string to screen readers, so not only should they ", e$3("em", { children: "not" }, void 0), " contain interactive content (beyond itself being selectable), any additional content, should be kept as terse as possible to avoid repeated content when reading each item one at a time."] }, void 0)] }, void 0) }, void 0));
+    }
+    async function sleep$3(arg0) {
+        return new Promise(resolve => setTimeout(resolve, arg0));
+    }
+
     function DemoMenus() {
         const [align, setAlign] = useState("start");
         const [side, setSide] = useState("block-end");
@@ -16296,7 +16513,7 @@
         const pushToast = usePushToast();
         const onPressSync = () => pushToast(e$3(Toast, { children: "Menu item was clicked" }, void 0));
         const onPressAsync = async () => {
-            await sleep$3(asyncTimeout);
+            await sleep$2(asyncTimeout);
             if (asyncFails)
                 throw new Error("Button operation failed.");
             else
@@ -16311,7 +16528,7 @@
     {...}
 </Menu>` }, void 0) }, void 0), e$3("hr", {}, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "List-likes" }, void 0), e$3(CardElement, { tag: "div", children: ["Menu items inherit the same ", e$3("code", { children: "iconBefore" }, void 0), ", ", e$3("code", { children: "iconAfter" }, void 0), ", ", e$3("code", { children: "badge" }, void 0), ", and multiple line support from the various list item types."] }, void 0), e$3(CardElement, { children: e$3(Menu, { anchor: e$3(Button, { dropdownVariant: "combined", children: "Fancy menu items" }, void 0), side: side, align: align, children: [e$3(MenuItem, { index: 0, onPress: onPressAsync, iconStart: e$3(BootstrapIcon, { icon: "pencil", label: null }, void 0), children: [e$3("span", { class: "h5", children: "A: Item 1" }, void 0), e$3("span", { children: "Line #2" }, void 0)] }, void 0), e$3(MenuItem, { index: 1, onPress: onPressAsync, iconStart: e$3(BootstrapIcon, { icon: "pencil", label: null }, void 0), children: [e$3("span", { class: "h5", children: "B: Item 2" }, void 0), e$3("span", { children: "Line #2" }, void 0)] }, void 0), e$3(MenuItem, { index: 2, onPress: onPressAsync, iconStart: e$3(BootstrapIcon, { icon: "pencil", label: null }, void 0), children: [e$3("span", { class: "h5", children: "C: Item 3" }, void 0), e$3("span", { children: "Line #2" }, void 0)] }, void 0), e$3(MenuItem, { index: 3, children: "I'm still static" }, void 0)] }, void 0) }, void 0), e$3("hr", {}, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Transitions" }, void 0), e$3(CardElement, { tag: "div", children: ["By default, ", e$3("code", { children: "<Menu>" }, void 0), "s use a ", e$3("code", { children: "<ZoomFade>" }, void 0), " as their transition. This can be customized by doing the following:", e$3("ul", { children: [e$3("li", { children: ["Provide a ", e$3("code", { children: "Transition" }, void 0), " prop."] }, void 0), e$3("li", { children: ["The ", e$3("code", { children: "<Menu>" }, void 0), " now accepts the same props as the transition component you passed in, with some key differences:"] }, void 0), e$3("li", { children: ["Any props that this ", e$3("code", { children: "Transition" }, void 0), " takes with both inline and block components, like ", e$3("code", { children: "fooInline" }, void 0), " and ", e$3("code", { children: "fooBlock" }, void 0), ", are now replaced with ", e$3("code", { children: "fooDynamic" }, void 0), ", which is relative to the location of the anchor to the menu."] }, void 0), e$3("li", { children: ["The menu will, based on the position of the anchor and current position of the menu, turn ", e$3("code", { children: "fooDynamic" }, void 0), " into ", e$3("code", { children: "fooInline" }, void 0), " or ", e$3("code", { children: "fooBlock" }, void 0), ", optionally negated (", e$3("code", { children: "1 - fooDynamic" }, void 0), ") if the menu is flipped because it's near the edge of the viewport."] }, void 0)] }, void 0)] }, void 0)] }, void 0) }, void 0));
     }
-    async function sleep$3(arg0) {
+    async function sleep$2(arg0) {
         return new Promise(resolve => setTimeout(resolve, arg0));
     }
 
@@ -16655,7 +16872,7 @@
         const d = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + (n ?? 0) * 7);
         const [checked, setChecked] = useState(false);
         const onInput = A$2(async (checked) => {
-            await sleep$2(2000);
+            await sleep$1(2000);
             setChecked(checked);
         }, []);
         return (e$3(TableRow, { hidden: filterEvens && (((n ?? 0) & 1) == 0), index: index, children: [e$3(TableCell, { index: 0, value: n, colSpan: !w ? 2 : undefined, children: e$3(Input, { type: "number", width: "4ch", value: n, onValueChange: setN, labelPosition: "hidden", min: 0, children: "Numeric input" }, void 0) }, void 0), w && e$3(TableCell, { index: 1, value: w }, void 0), e$3(TableCell, { index: 2, value: d, children: formatter.format(d) }, void 0), e$3(TableCell, { index: 3, value: checked, children: e$3(Checkbox, { checked: checked, onCheck: onInput, labelPosition: "hidden", children: "Demo table checkbox" }, void 0) }, void 0)] }, void 0));
@@ -16716,85 +16933,8 @@
     </TableFoot>
 </Table>` }, void 0) }, void 0)] }, void 0) }, void 0));
     }
-    async function sleep$2(arg0) {
-        return new Promise(resolve => setTimeout(resolve, arg0));
-    }
-
-    const Badge = g$1(forwardElementRef(function Badge(_ref, ref) {
-      let {
-        colorVariant,
-        roundedPill,
-        label,
-        ...props
-      } = _ref;
-      return e$3("span", { ...useMergedProps()({
-          ref,
-          "aria-label": label,
-          className: clsx("badge", roundedPill && "rounded-pill", `bg-${colorVariant !== null && colorVariant !== void 0 ? colorVariant : "secondary"}`)
-        }, props)
-      }, void 0);
-    }));
-
-    function DemoLists() {
-        const [selectedIndex, setSelectedIndex] = useState(0);
-        useState("outline");
-        useState("md");
-        useState(false);
-        const [lines, setLines] = useState(1);
-        const [selectedMulti, setSelectedMulti] = useState(new Set());
-        useState(3000);
-        useState(true);
-        useState(false);
-        useState(true);
-        usePushToast();
-        function makeListItemLines(index) {
-            if (lines === 1)
-                return e$3("span", { children: ["List Item #", index + 1] }, void 0);
-            return e$3(d$2, { children: Array.from((function* () {
-                    for (let i = 0; i < lines; ++i) {
-                        if (i == 0)
-                            yield e$3("span", { class: "h4", children: ["List Item #", index + 1] }, void 0);
-                        else
-                            yield e$3("span", { children: ["This is line #", i + 1] }, void 0);
-                    }
-                })()) }, void 0);
-        }
-        function makeListItems(maker) {
-            return e$3(d$2, { children: Array.from((function* () {
-                    for (let i = 0; i < 5; ++i) {
-                        yield maker(i);
-                    }
-                })()) }, void 0);
-        }
-        return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Lists" }, void 0), e$3(CardElement, { children: e$3(List, { label: "Demo list", selectedIndex: selectedIndex, onSelect: setSelectedIndex, children: makeListItems(index => e$3(ListItemSingle, { index: index, disabled: index == 2, children: makeListItemLines(index) }, void 0)) }, void 0) }, void 0), e$3(CardElement, { children: ["A list is a way to provide a large number of selectable options in a way that's distinct from, say, a list of checkboxes or radio buttons. Lists can be ", e$3("strong", { children: "single-select" }, void 0), ", ", e$3("strong", { children: "multi-select" }, void 0), ", or ", e$3("strong", { children: "static" }, void 0), " (no selection, display only)."] }, void 0), e$3(CardElement, { children: ["All list types can have as many lines as needed; each e.g. ", e$3("code", { children: "<span>" }, void 0), " will create a new line. Format them however you like (i.e. making some larger or smaller, tinted different colors, etc.)", e$3(InputGroup, { children: e$3(Input, { type: "number", value: lines, onValueChange: setLines, children: "# of lines" }, void 0) }, void 0)] }, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Single select" }, void 0), e$3(CardElement, { children: ["For single-select lists, you provide the parent ", e$3("code", { children: "<List>" }, void 0), " with ", e$3("code", { children: "selectedIndex" }, void 0), " and ", e$3("code", { children: "onSelect" }, void 0), " props that control which ", e$3("code", { children: "<ListItemSingle>" }, void 0), " is the selected one."] }, void 0), e$3(CardElement, { children: ["As with most components, the ", e$3("code", { children: "onSelect" }, void 0), " prop can be an async function."] }, void 0), e$3(CardElement, { children: e$3(List, { label: "Single-select list demo", selectedIndex: selectedIndex, onSelect: async (i) => { await sleep$1(2000); setSelectedIndex(i); }, children: makeListItems(index => e$3(ListItemSingle, { index: index, disabled: index == 2, children: makeListItemLines(index) }, void 0)) }, void 0) }, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Multi select" }, void 0), e$3(CardElement, { children: ["Multi-select lists have a ", e$3("code", { children: "selected" }, void 0), " prop on each individual ", e$3("code", { children: "<ListItemMulti>" }, void 0), "."] }, void 0), e$3(CardElement, { children: ["As with most components, the ", e$3("code", { children: "onSelect" }, void 0), " prop can be an async function."] }, void 0), e$3(CardElement, { children: e$3(List, { label: "Multi-select list demo", select: "multi", children: makeListItems(index => e$3(ListItemMulti, { index: index, selected: selectedMulti.has(index), disabled: index == 2, onSelect: async (selected) => {
-                                    await sleep$1(2000);
-                                    setSelectedMulti(prev => {
-                                        let ret = new Set(Array.from(prev));
-                                        if (selected)
-                                            ret.add(index);
-                                        else
-                                            ret.delete(index);
-                                        return ret;
-                                    });
-                                }, children: makeListItemLines(index) }, void 0)) }, void 0) }, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Static lists" }, void 0), e$3(CardElement, { children: "All lists share the same basic styling of a static list, so all of these options can also be used on single- and multi-select lists." }, void 0), e$3(CardElement, { children: ["You can add an icon at the righthand side with ", e$3("code", { children: "iconEnd" }, void 0), ":"] }, void 0), e$3(CardElement, { children: e$3(List, { label: "List with icons at the end", children: makeListItems(index => e$3(ListItemStatic, { iconEnd: e$3(BootstrapIcon, { icon: "star", label: null }, void 0), children: makeListItemLines(index) }, void 0)) }, void 0) }, void 0), e$3(CardElement, { children: ["Or an icon on the left with ", e$3("code", { children: "iconStart" }, void 0), ", or a badge at the top-right with ", e$3("code", { children: "badge" }, void 0), ":"] }, void 0), e$3(CardElement, { children: e$3(List, { label: "List with icons at the start and badges", children: makeListItems(index => e$3(ListItemStatic, { badge: e$3(Badge, { label: `Example value`, children: Math.floor(Math.abs(Math.sin((index + 7) * 7) * 20)) }, void 0), iconStart: e$3(BootstrapIcon, { icon: "star", label: null }, void 0), children: makeListItemLines(index) }, void 0)) }, void 0) }, void 0), e$3(CardElement, { children: ["All these will properly align themselves no matter how many lines the list item has. Keep in mind that a list's contents are always read out as one long string to screen readers, so not only should they ", e$3("em", { children: "not" }, void 0), " contain interactive content (beyond itself being selectable), any additional content, should be kept as terse as possible to avoid repeated content when reading each item one at a time."] }, void 0)] }, void 0) }, void 0));
-    }
     async function sleep$1(arg0) {
         return new Promise(resolve => setTimeout(resolve, arg0));
-    }
-
-    function DemoDialogs() {
-        const [show, setShow] = useState(null);
-        useState("start");
-        useState("block-end");
-        useState(false);
-        useState(3000);
-        useState(true);
-        useState(false);
-        useState(true);
-        useState(true);
-        const pushDialog = usePushDialog();
-        const onPressAsync = () => pushDialog(e$3(Dialog, { descriptive: false, children: "Dialog item was clicked" }, void 0));
-        return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Dialogs" }, void 0), e$3(CardElement, { children: e$3(Button, { onPress: () => pushDialog(e$3(Dialog, { descriptive: false, children: "This is a dialog!" }, void 0)), children: "Open a dialog" }, void 0) }, void 0), e$3(CardElement, { children: [e$3("code", { children: "<Dialog>" }, void 0), "s are a way to show the user (read: force the user to at least skim) some amount of information or other content. They can either be controlled or uncontrolled; controlled ", e$3("code", { children: "<Dialog>" }, void 0), "s take ", e$3("code", { children: "open" }, void 0), " and ", e$3("code", { children: "onClose" }, void 0), " props, while uncontrolled ", e$3("code", { children: "<Dialog>" }, void 0), "s give you a ", e$3("code", { children: "async show()" }, void 0), " function to call, or can be used from ", e$3("code", { children: "useShowDialog" }, void 0), "."] }, void 0), e$3(CardElement, { children: e$3(Button, { onPress: onPressAsync, children: e$3("code", { children: "usePushDialog" }, void 0) }, void 0) }, void 0), e$3(CardElement, { children: [e$3(Button, { onPress: show ?? undefined, children: e$3("code", { children: ["<Dialog provideShow=", "{provideShow}", " />"] }, void 0) }, void 0), e$3(Dialog, { descriptive: false, provideShow: setShow, children: "This is a dialog" }, void 0)] }, void 0), e$3(CardElement, { children: ["The easiest way to use them is via the ", e$3("code", { children: "useShowDialog" }, void 0), " hook. Pass the returned ", e$3("code", { children: "showDialog" }, void 0), " function a ", e$3("code", { children: "<Dialog>" }, void 0), " and it will be shown on the screen, with the function returning a promise that resolves when ", e$3("code", { children: "onClose" }, void 0), " would be called (if you pass your own ", e$3("code", { children: "onClose" }, void 0), " you will override this behavior which can be used if you need to prevent the dialog from closing when clicking the backdrop; use a ", e$3("code", { children: "<CloseDialogButton>" }, void 0), " or within your own component pass ", e$3("code", { children: "useCloseDialog" }, void 0), "'s returned function to close the dialog during your own ", e$3("code", { children: "onClose" }, void 0), ")."] }, void 0), e$3(CardElement, { children: "All components that use Portals to position themselves on the body will reposition themselves with the dialog as their parent instead, ensuring they still work as expected." }, void 0), e$3(CardElement, { children: e$3(Button, { onPress: () => pushDialog(e$3(Dialog, { descriptive: false, children: "This is a dialog!" }, void 0)), children: "Open a dialog" }, void 0) }, void 0)] }, void 0) }, void 0));
     }
 
     const RandomWords = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.".split(" ");
@@ -16891,20 +17031,17 @@
         }, [setRadioValue]);
         return (e$3("div", { class: "demo", children: [e$3(InputGroup, { children: e$3(Input, { type: "text", onValueChange: onInput1, value: text, width: "100%", children: "Test input" }, void 0) }, void 0), e$3(RadioGroup, { selectedValue: radioValue, name: "demo-radio", onValueChange: onInput2, children: [e$3(InputGroup, { children: e$3(Radio, { index: 0, value: "ARadio" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Radio, { index: 1, value: "BRadio" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Radio, { index: 2, value: "CRadio" }, void 0) }, void 0)] }, void 0)] }, void 0));
     });
+    function changeThemes(fromTheme) {
+        let toTheme = fromTheme === "theme-dark" ? "theme-light" : "theme-dark";
+        document.getElementById(toTheme).media = "all";
+        document.getElementById(fromTheme).media = "screen and (max-width: 1px)";
+        return toTheme;
+    }
     const Component = () => {
         const [theme, setTheme] = useState("theme-dark");
+        h$1(() => setTheme(changeThemes("theme-dark")));
         return e$3(d$2, { children: [e$3(Button, { colorVariant: theme == "theme-dark" ? "light" : "dark", style: { position: "fixed", insetBlockStart: "0.5em", insetInlineEnd: "0.5em", zIndex: 9999999 }, spinnerTimeout: 999999999, onPress: async () => {
-                        let prev = theme;
-                        let next = prev === "theme-dark" ? "theme-light" : "theme-dark";
-                        setTheme(next);
-                        await new Promise(resolve => setTimeout(resolve, 100));
-                        document.getElementById(next).media = "all";
-                        document.getElementById(prev).media = "screen and (max-width: 1px)";
-                        document.documentElement.classList.add("switching-theme");
-                        /*document.documentElement.classList.add(next);
-                        document.documentElement.classList.remove(prev);*/
-                        await new Promise(resolve => setTimeout(resolve, 2000));
-                        document.documentElement.classList.remove("switching-theme");
+                        setTheme(changeThemes(theme));
                     }, children: ["Switch theme to ", e$3("strong", { children: theme === "theme-dark" ? "light" : "dark" }, void 0)] }, void 0), e$3(GridResponsive, { minWidth: "35em", children: e$3(FocusVisibilityManager, { autoHideFocusRing: true, children: e$3(DebugUtilContext.Provider, { value: d$1(() => ({ logRender: new Set(["Table", "TableHead", "TableBody", "TableRow", "TableCell"]) }), []), children: e$3(ToastsProvider, { children: e$3(DialogsProvider, { children: [e$3(DemoTable, {}, void 0), e$3(DemoLists, {}, void 0), e$3(DemoMenus, {}, void 0), e$3(DemoDialogs, {}, void 0), e$3(DemoButtons, {}, void 0), e$3(DemoChecks, {}, void 0), e$3(DemoInputs, {}, void 0), e$3(DemoLayout, {}, void 0), e$3(DemoAccordion, {}, void 0), e$3(DemoDialog, {}, void 0), e$3(DemoDrawer, {}, void 0), e$3(DemoInput, {}, void 0), e$3(DemoList, {}, void 0), e$3(DemoTabs, {}, void 0), e$3(DemoMenu, {}, void 0)] }, void 0) }, void 0) }, void 0) }, void 0) }, void 0)] }, void 0);
     };
     requestAnimationFrame(() => {
