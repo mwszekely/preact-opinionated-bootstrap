@@ -13485,6 +13485,7 @@ select {
 .list-group-item[tabindex="0"] {
     outline: none;
     transition: box-shadow 0.15s cubic-bezier(0, 1, 0.33, 1), padding 0.1s linear, text-shadow 0.15s cubic-bezier(0, 1, 0.33, 1);
+    background-position-y: 0;
   }
 
   .list-group-item-action:not(.disabled):not(.pending),
@@ -13548,6 +13549,7 @@ select {
 .list-group-item[tabindex="0"]:not(:active):not(.active).pending {
     padding-bottom: 0.25rem;
     padding-top: 0.75rem;
+    background-position-y: 0.25rem;
   }
 
   @media (prefers-reduced-motion) {
@@ -13581,8 +13583,11 @@ select {
     border-color: transparent;
   }
 
-  .input-group-text {
+  :not(.faux-input-group-text) > .input-group-text {
     position: relative;
+  }
+
+  .input-group-text {
     border-top-color: transparent;
     border-bottom: transparent;
   }
@@ -13619,6 +13624,12 @@ select {
     overflow: hidden;
     max-width: calc(1.5rem + 15px + var(--form-control-width, 9999ch));
     box-shadow: 0 0 0 rgba(128, 134, 223, var(--input-btn-focus-color-opacity, 0.4)), inset 0 0 0 rgba(0, 0, 0, 0.4);
+  }
+
+  .input-group-text > .form-check-input::after {
+    content: "";
+    position: absolute;
+    inset: 0;
   }
 
   .form-check-input + .circular-progress-container {
@@ -30943,6 +30954,7 @@ select {
 .list-group-item[tabindex="0"] {
     outline: none;
     transition: box-shadow 0.15s cubic-bezier(0, 1, 0.33, 1), padding 0.1s linear, text-shadow 0.15s cubic-bezier(0, 1, 0.33, 1);
+    background-position-y: 0;
   }
 }
 @media all and (prefers-color-scheme: light) {
@@ -31015,6 +31027,7 @@ select {
 .list-group-item[tabindex="0"]:not(:active):not(.active).pending {
     padding-bottom: 0.25rem;
     padding-top: 0.75rem;
+    background-position-y: 0.25rem;
   }
 }
 @media (prefers-color-scheme: light) and (prefers-reduced-motion) {
@@ -31053,8 +31066,12 @@ select {
   }
 }
 @media all and (prefers-color-scheme: light) {
-  .input-group-text {
+  :not(.faux-input-group-text) > .input-group-text {
     position: relative;
+  }
+}
+@media all and (prefers-color-scheme: light) {
+  .input-group-text {
     border-top-color: transparent;
     border-bottom: transparent;
   }
@@ -31097,6 +31114,13 @@ select {
     overflow: hidden;
     max-width: calc(1.5rem + 15px + var(--form-control-width, 9999ch));
     box-shadow: 0 0 0 rgba(110, 168, 254, var(--input-btn-focus-color-opacity, 0.4)), inset 0 0 0 rgba(0, 0, 0, 0.4);
+  }
+}
+@media all and (prefers-color-scheme: light) {
+  .input-group-text > .form-check-input::after {
+    content: "";
+    position: absolute;
+    inset: 0;
   }
 }
 @media all and (prefers-color-scheme: light) {
@@ -47427,6 +47451,7 @@ body.themed-scrollbars {
 .set-theme.theme-light .list-group-item[tabindex="0"] {
   outline: none;
   transition: box-shadow 0.15s cubic-bezier(0, 1, 0.33, 1), padding 0.1s linear, text-shadow 0.15s cubic-bezier(0, 1, 0.33, 1);
+  background-position-y: 0;
 }
 
 .set-theme.theme-light .list-group-item-action:not(.disabled):not(.pending),
@@ -47490,6 +47515,7 @@ body.themed-scrollbars {
 .set-theme.theme-light .list-group-item[tabindex="0"]:not(:active):not(.active).pending {
   padding-bottom: 0.25rem;
   padding-top: 0.75rem;
+  background-position-y: 0.25rem;
 }
 
 @media (prefers-reduced-motion) {
@@ -47523,8 +47549,11 @@ body.themed-scrollbars {
   border-color: transparent;
 }
 
-.set-theme.theme-light .input-group-text {
+.set-theme.theme-light :not(.faux-input-group-text) > .input-group-text {
   position: relative;
+}
+
+.set-theme.theme-light .input-group-text {
   border-top-color: transparent;
   border-bottom: transparent;
 }
@@ -47561,6 +47590,12 @@ body.themed-scrollbars {
   overflow: hidden;
   max-width: calc(1.5rem + 15px + var(--form-control-width, 9999ch));
   box-shadow: 0 0 0 rgba(110, 168, 254, var(--input-btn-focus-color-opacity, 0.4)), inset 0 0 0 rgba(0, 0, 0, 0.4);
+}
+
+.set-theme.theme-light .input-group-text > .form-check-input::after {
+  content: "";
+  position: absolute;
+  inset: 0;
 }
 
 .set-theme.theme-light .form-check-input + .circular-progress-container {
@@ -63433,6 +63468,7 @@ body.themed-scrollbars {
 .set-theme.theme-dark .list-group-item[tabindex="0"] {
   outline: none;
   transition: box-shadow 0.15s cubic-bezier(0, 1, 0.33, 1), padding 0.1s linear, text-shadow 0.15s cubic-bezier(0, 1, 0.33, 1);
+  background-position-y: 0;
 }
 
 .set-theme.theme-dark .list-group-item-action:not(.disabled):not(.pending),
@@ -63496,6 +63532,7 @@ body.themed-scrollbars {
 .set-theme.theme-dark .list-group-item[tabindex="0"]:not(:active):not(.active).pending {
   padding-bottom: 0.25rem;
   padding-top: 0.75rem;
+  background-position-y: 0.25rem;
 }
 
 @media (prefers-reduced-motion) {
@@ -63529,8 +63566,11 @@ body.themed-scrollbars {
   border-color: transparent;
 }
 
-.set-theme.theme-dark .input-group-text {
+.set-theme.theme-dark :not(.faux-input-group-text) > .input-group-text {
   position: relative;
+}
+
+.set-theme.theme-dark .input-group-text {
   border-top-color: transparent;
   border-bottom: transparent;
 }
@@ -63567,6 +63607,12 @@ body.themed-scrollbars {
   overflow: hidden;
   max-width: calc(1.5rem + 15px + var(--form-control-width, 9999ch));
   box-shadow: 0 0 0 rgba(128, 134, 223, var(--input-btn-focus-color-opacity, 0.4)), inset 0 0 0 rgba(0, 0, 0, 0.4);
+}
+
+.set-theme.theme-dark .input-group-text > .form-check-input::after {
+  content: "";
+  position: absolute;
+  inset: 0;
 }
 
 .set-theme.theme-dark .form-check-input + .circular-progress-container {

@@ -23,8 +23,11 @@
   border-color: transparent;
 }
 
-.input-group-text {
+:not(.faux-input-group-text)>.input-group-text {
   position: relative;
+}
+
+.input-group-text {
   border-top-color: transparent;
   border-bottom: transparent;
   &:first-child {
@@ -65,13 +68,20 @@
 .form-control.faux-form-control-outer {
   position: relative;
   overflow: hidden;
-  max-width: calc(#{2 * $input-padding-x} + 15px + var(--form-control-width, 9999ch));
+  max-width: calc(
+    #{2 * $input-padding-x} + 15px + var(--form-control-width, 9999ch)
+  );
 
   @include box-shadow($input-box-shadow);
 }
 
-
-
+// Make sure that checkboxes are clickable within the entire
+// input group section they're in, like the labels are.
+.input-group-text>.form-check-input::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
 
 .form-check-input + .circular-progress-container {
   position: absolute;
@@ -138,7 +148,9 @@ label.input-group-text:not(.disabled) {
 .form-check {
   position: relative;
 
-  &.form-switch > .form-check-input:not(:checked) + .circular-progress-container {
+  &.form-switch
+    > .form-check-input:not(:checked)
+    + .circular-progress-container {
     //inset-inline-start: -1.05em;
   }
 
@@ -167,24 +179,40 @@ label.input-group-text:not(.disabled) {
   }
 
   // For full-width rows, give the input the most space.
-  &>.input-grid-span-all>label {
+  & > .input-grid-span-all > label {
     grid-column: auto / span 1;
   }
-  &>.input-grid-span-all>.form-control {
-      width: 100%;
-      grid-column: auto / span calc(var(--input-grid-columns, 1) * 2 - 1);
+  & > .input-grid-span-all > .form-control {
+    width: 100%;
+    grid-column: auto / span calc(var(--input-grid-columns, 1) * 2 - 1);
   }
 
-  &>.input-grid-span-2 > * {grid-column: auto / span 2;}
-  &>.input-grid-span-3 > * {grid-column: auto / span 3;}
-  &>.input-grid-span-4 > * {grid-column: auto / span 4;}
-  &>.input-grid-span-5 > * {grid-column: auto / span 5;}
-  &>.input-grid-span-6 > * {grid-column: auto / span 6;}
-  &>.input-grid-span-7 > * {grid-column: auto / span 7;}
-  &>.input-grid-span-8 > * {grid-column: auto / span 8;}
-  &>.input-grid-span-all > * {grid-column: auto / span var(--input-grid-columns, 1); }
+  & > .input-grid-span-2 > * {
+    grid-column: auto / span 2;
+  }
+  & > .input-grid-span-3 > * {
+    grid-column: auto / span 3;
+  }
+  & > .input-grid-span-4 > * {
+    grid-column: auto / span 4;
+  }
+  & > .input-grid-span-5 > * {
+    grid-column: auto / span 5;
+  }
+  & > .input-grid-span-6 > * {
+    grid-column: auto / span 6;
+  }
+  & > .input-grid-span-7 > * {
+    grid-column: auto / span 7;
+  }
+  & > .input-grid-span-8 > * {
+    grid-column: auto / span 8;
+  }
+  & > .input-grid-span-all > * {
+    grid-column: auto / span var(--input-grid-columns, 1);
+  }
 
-  &>.input-group {
+  & > .input-group {
     & > *:nth-child(2n + 0) {
       justify-self: flex-start;
     }
@@ -192,7 +220,7 @@ label.input-group-text:not(.disabled) {
       justify-self: flex-end;
     }
 
-  /*
+    /*
 This is a bunch of hackery to allow spinners, which must be placed
 absolutely relative to the input, to be placed there *despite*
 input not allowing children, and the Bootstrap DOM generally not being

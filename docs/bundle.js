@@ -2072,7 +2072,7 @@
               setDebouncedPromiseStarter(_ => startPromise);
             }
           });
-          return asyncHandler == null ? undefined : syncHandler;
+          return syncHandler;
         }
       };
     }
@@ -12655,18 +12655,20 @@
         ref
       };
       return e$3("li", { ...usePseudoActive(useMergedProps()({
+          children: e$3(d$2, {
+            children: [iconStart && e$3("span", {
+              class: "list-group-item-start-icon",
+              children: iconStart
+            }, void 0), children, badge && e$3("span", {
+              class: "list-group-item-badge",
+              children: badge
+            }, void 0), iconEnd && e$3("span", {
+              className: "list-group-item-end-icon",
+              children: iconEnd
+            }, void 0)]
+          }, void 0),
           class: clsx("list-group-item list-group-item-multiline", disabled && "disabled text-muted", !!badge && "with-badge", !!iconStart && "with-start", !!(badge || iconEnd) && "with-end")
-        }, domProps)),
-        children: [iconStart && e$3("span", {
-          class: "list-group-item-start-icon",
-          children: iconStart
-        }, void 0), children, badge && e$3("span", {
-          class: "list-group-item-badge",
-          children: badge
-        }, void 0), iconEnd && e$3("span", {
-          className: "list-group-item-end-icon",
-          children: iconEnd
-        }, void 0)]
+        }, domProps))
       }, void 0);
     }));
 
@@ -12895,6 +12897,78 @@
       }, void 0);
     }));
 
+    const ListActionableChildContext = D$1(null);
+    const ListActionable = g$1(forwardElementRef(function ListActionable(props, ref) {
+      const {
+        useHasFocusProps,
+        getFocusedInner
+      } = useHasFocus({});
+      const {
+        indicesByElement,
+        managedChildren,
+        useListNavigationProps,
+        useListNavigationChild,
+        navigateToIndex,
+        childCount
+      } = useListNavigation({
+        shouldFocusOnChange: getFocusedInner,
+        keyNavigation: "block"
+      });
+      const listStaticProps = useHasFocusProps(useListNavigationProps(props));
+      return e$3(ListActionableChildContext.Provider, {
+        value: useListNavigationChild,
+        children: e$3(ListStatic, {
+          role: childCount ? "toolbar" : undefined,
+          ...listStaticProps
+        }, void 0)
+      }, void 0);
+    }));
+    const ListItemActionable = g$1(forwardElementRef(function ListItemActionable(props, ref) {
+      const {
+        childrenText,
+        props: {
+          onPress,
+          index,
+          hidden,
+          children,
+          ...domPropsWithoutPress
+        }
+      } = useChildrenTextProps({ ...props,
+        ref
+      });
+      const useListNavigationChild = F(ListActionableChildContext);
+      const {
+        useListNavigationChildProps
+      } = useListNavigationChild({
+        index,
+        text: childrenText,
+        hidden
+      });
+      const {
+        pending,
+        hasError,
+        getSyncHandler
+      } = useAsyncHandler()({
+        capture: returnVoid
+      });
+      const domProps = useMergedProps()({
+        className: clsx("list-group-item-action", pending && "pending")
+      }, useListNavigationChildProps(usePressEventHandlers(getSyncHandler(props.disabled || pending ? undefined : onPress), undefined)(domPropsWithoutPress)));
+      return e$3(ListItemStatic, { ...domProps,
+        children: e$3(ProgressCircular, {
+          colorFill: "foreground-only",
+          childrenPosition: "after",
+          mode: pending ? "pending" : null,
+          colorVariant: "info",
+          children: children
+        }, void 0)
+      }, void 0);
+    }));
+
+    function returnVoid() {
+      return undefined;
+    }
+
     function isSingleProps(props) {
       return props.select == "single" || props.onSelect != null;
     }
@@ -12908,8 +12982,12 @@
         ref: ref
       }, void 0);else if (isMultiProps(props)) return e$3(ListMulti, { ...props,
         ref: ref
-      }, void 0);
-      return e$3(ListStatic, { ...props,
+      }, void 0); // There's no meaningful distinction between an actionable list and a static one
+      // (on the outside at least)
+      // but also there's no harm in just always assuming an actionable list.
+      // It doesn't cost much to not use the list navigation after all.
+
+      return e$3(ListActionable, { ...props,
         ref: ref
       }, void 0);
     }));
@@ -16372,6 +16450,21 @@
 </InputGrid>` }, void 0)] }, void 0), e$3(CardElement, { children: ["With an ", e$3("code", { children: "<InputGrid>" }, void 0), ":", e$3(InputGrid, { children: [e$3(InputGroup, { children: e$3(Checkbox, { disabled: true, checked: true, labelPosition: "start", children: "Checkbox" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Checkbox, { disabled: true, checked: true, labelPosition: "start", children: "Another checkbox" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Input, { disabled: true, onValueChange: () => { }, type: "number", value: 0, children: "Numeric input" }, void 0) }, void 0)] }, void 0)] }, void 0), e$3(CardElement, { children: ["Without an ", e$3("code", { children: "<InputGrid>" }, void 0), ":", e$3(InputGroup, { children: e$3(Checkbox, { disabled: true, checked: true, labelPosition: "start", children: "Checkbox" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Checkbox, { disabled: true, checked: true, labelPosition: "start", children: "Another checkbox" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Input, { disabled: true, onValueChange: () => { }, type: "number", value: 0, children: "Numeric input" }, void 0) }, void 0)] }, void 0)] }, void 0) }, void 0));
     }
 
+    const Badge = g$1(forwardElementRef(function Badge(_ref, ref) {
+      let {
+        colorVariant,
+        roundedPill,
+        label,
+        ...props
+      } = _ref;
+      return e$3("span", { ...useMergedProps()({
+          ref,
+          "aria-label": label,
+          className: clsx("badge", roundedPill && "rounded-pill", `bg-${colorVariant !== null && colorVariant !== void 0 ? colorVariant : "secondary"}`)
+        }, props)
+      }, void 0);
+    }));
+
     const Icon = g$1(forwardElementRef(function Icon(_ref, ref2) {
       let {
         label,
@@ -16439,21 +16532,6 @@
       }, void 0);
     })); // Probably a better way to get all these names
 
-    const Badge = g$1(forwardElementRef(function Badge(_ref, ref) {
-      let {
-        colorVariant,
-        roundedPill,
-        label,
-        ...props
-      } = _ref;
-      return e$3("span", { ...useMergedProps()({
-          ref,
-          "aria-label": label,
-          className: clsx("badge", roundedPill && "rounded-pill", `bg-${colorVariant !== null && colorVariant !== void 0 ? colorVariant : "secondary"}`)
-        }, props)
-      }, void 0);
-    }));
-
     function DemoLists() {
         const [selectedIndex, setSelectedIndex] = useState(0);
         useState("outline");
@@ -16461,11 +16539,19 @@
         useState(false);
         const [lines, setLines] = useState(1);
         const [selectedMulti, setSelectedMulti] = useState(new Set());
-        useState(3000);
+        const [asyncTimeout, setAsyncTimeout] = useState(3000);
         useState(true);
-        useState(false);
+        const [asyncFails, setAsyncFails] = useState(false);
         useState(true);
-        usePushToast();
+        const pushToast = usePushToast();
+        const onPressSync = () => void (pushToast(e$3(Toast, { children: "List item was clicked" }, void 0)));
+        const onPressAsync = async () => {
+            await sleep$3(asyncTimeout ?? 0);
+            if (asyncFails)
+                throw new Error("List operation failed.");
+            else
+                onPressSync();
+        };
         function makeListItemLines(index) {
             if (lines === 1)
                 return e$3("span", { children: ["List Item #", index + 1] }, void 0);
@@ -16485,7 +16571,7 @@
                     }
                 })()) }, void 0);
         }
-        return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Lists" }, void 0), e$3(CardElement, { children: e$3(List, { label: "Demo list", selectedIndex: selectedIndex, onSelect: setSelectedIndex, children: makeListItems(index => e$3(ListItemSingle, { index: index, disabled: index == 2, children: makeListItemLines(index) }, void 0)) }, void 0) }, void 0), e$3(CardElement, { children: ["A list is a way to provide a large number of selectable options in a way that's distinct from, say, a list of checkboxes or radio buttons. Lists can be ", e$3("strong", { children: "single-select" }, void 0), ", ", e$3("strong", { children: "multi-select" }, void 0), ", or ", e$3("strong", { children: "static" }, void 0), " (no selection, display only)."] }, void 0), e$3(CardElement, { children: ["All list types can have as many lines as needed; each e.g. ", e$3("code", { children: "<span>" }, void 0), " will create a new line. Format them however you like (i.e. making some larger or smaller, tinted different colors, etc.)", e$3(InputGroup, { children: e$3(Input, { type: "number", value: lines, onValueChange: setLines, children: "# of lines" }, void 0) }, void 0)] }, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Single select" }, void 0), e$3(CardElement, { children: ["For single-select lists, you provide the parent ", e$3("code", { children: "<List>" }, void 0), " with ", e$3("code", { children: "selectedIndex" }, void 0), " and ", e$3("code", { children: "onSelect" }, void 0), " props that control which ", e$3("code", { children: "<ListItemSingle>" }, void 0), " is the selected one."] }, void 0), e$3(CardElement, { children: ["As with most components, the ", e$3("code", { children: "onSelect" }, void 0), " prop can be an async function."] }, void 0), e$3(CardElement, { children: e$3(List, { label: "Single-select list demo", selectedIndex: selectedIndex, onSelect: async (i) => { await sleep$3(2000); setSelectedIndex(i); }, children: makeListItems(index => e$3(ListItemSingle, { index: index, disabled: index == 2, children: makeListItemLines(index) }, void 0)) }, void 0) }, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Multi select" }, void 0), e$3(CardElement, { children: ["Multi-select lists have a ", e$3("code", { children: "selected" }, void 0), " prop on each individual ", e$3("code", { children: "<ListItemMulti>" }, void 0), "."] }, void 0), e$3(CardElement, { children: ["As with most components, the ", e$3("code", { children: "onSelect" }, void 0), " prop can be an async function."] }, void 0), e$3(CardElement, { children: e$3(List, { label: "Multi-select list demo", select: "multi", children: makeListItems(index => e$3(ListItemMulti, { index: index, selected: selectedMulti.has(index), disabled: index == 2, onSelect: async (selected) => {
+        return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Lists" }, void 0), e$3(CardElement, { children: e$3(List, { label: "Demo list", selectedIndex: selectedIndex, onSelect: setSelectedIndex, children: makeListItems(index => e$3(ListItemSingle, { index: index, disabled: index == 3, children: makeListItemLines(index) }, void 0)) }, void 0) }, void 0), e$3(CardElement, { children: ["A list is a way to provide a large number of selectable options in a way that's distinct from, say, a list of checkboxes or radio buttons. Lists can be ", e$3("strong", { children: "single-select" }, void 0), ", ", e$3("strong", { children: "multi-select" }, void 0), ", or ", e$3("strong", { children: "static" }, void 0), " (no selection, display only)."] }, void 0), e$3(CardElement, { children: ["All list types can have as many lines as needed; each e.g. ", e$3("code", { children: "<span>" }, void 0), " will create a new line. Format them however you like (i.e. making some larger or smaller, tinted different colors, etc.)", e$3(InputGroup, { children: e$3(Input, { type: "number", value: lines, onValueChange: setLines, children: "# of lines" }, void 0) }, void 0)] }, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Single select" }, void 0), e$3(CardElement, { children: ["For single-select lists, you provide the parent ", e$3("code", { children: "<List>" }, void 0), " with ", e$3("code", { children: "selectedIndex" }, void 0), " and ", e$3("code", { children: "onSelect" }, void 0), " props that control which ", e$3("code", { children: "<ListItemSingle>" }, void 0), " is the selected one."] }, void 0), e$3(CardElement, { children: ["As with most components, the ", e$3("code", { children: "onSelect" }, void 0), " prop can be an async function."] }, void 0), e$3(CardElement, { children: e$3(List, { label: "Single-select list demo", selectedIndex: selectedIndex, onSelect: async (i) => { await sleep$3(2000); setSelectedIndex(i); }, children: makeListItems(index => e$3(ListItemSingle, { index: index, disabled: index == 3, children: makeListItemLines(index) }, void 0)) }, void 0) }, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Multi select" }, void 0), e$3(CardElement, { children: ["Multi-select lists have a ", e$3("code", { children: "selected" }, void 0), " prop on each individual ", e$3("code", { children: "<ListItemMulti>" }, void 0), "."] }, void 0), e$3(CardElement, { children: ["As with most components, the ", e$3("code", { children: "onSelect" }, void 0), " prop can be an async function."] }, void 0), e$3(CardElement, { children: e$3(List, { label: "Multi-select list demo", select: "multi", children: makeListItems(index => e$3(ListItemMulti, { index: index, selected: selectedMulti.has(index), disabled: index == 3, onSelect: async (selected) => {
                                     await sleep$3(2000);
                                     setSelectedMulti(prev => {
                                         let ret = new Set(Array.from(prev));
@@ -16495,7 +16581,7 @@
                                             ret.delete(index);
                                         return ret;
                                     });
-                                }, children: makeListItemLines(index) }, void 0)) }, void 0) }, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Static lists" }, void 0), e$3(CardElement, { children: "All lists share the same basic styling of a static list, so all of these options can also be used on single- and multi-select lists." }, void 0), e$3(CardElement, { children: ["You can add an icon at the righthand side with ", e$3("code", { children: "iconEnd" }, void 0), ":"] }, void 0), e$3(CardElement, { children: e$3(List, { label: "List with icons at the end", children: makeListItems(index => e$3(ListItemStatic, { iconEnd: e$3(BootstrapIcon, { icon: "star", label: null }, void 0), children: makeListItemLines(index) }, void 0)) }, void 0) }, void 0), e$3(CardElement, { children: ["Or an icon on the left with ", e$3("code", { children: "iconStart" }, void 0), ", or a badge at the top-right with ", e$3("code", { children: "badge" }, void 0), ":"] }, void 0), e$3(CardElement, { children: e$3(List, { label: "List with icons at the start and badges", children: makeListItems(index => e$3(ListItemStatic, { badge: e$3(Badge, { label: `Example value`, children: Math.floor(Math.abs(Math.sin((index + 7) * 7) * 20)) }, void 0), iconStart: e$3(BootstrapIcon, { icon: "star", label: null }, void 0), children: makeListItemLines(index) }, void 0)) }, void 0) }, void 0), e$3(CardElement, { children: ["All these will properly align themselves no matter how many lines the list item has. Keep in mind that a list's contents are always read out as one long string to screen readers, so not only should they ", e$3("em", { children: "not" }, void 0), " contain interactive content (beyond itself being selectable), any additional content, should be kept as terse as possible to avoid repeated content when reading each item one at a time."] }, void 0)] }, void 0) }, void 0));
+                                }, children: makeListItemLines(index) }, void 0)) }, void 0) }, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Static lists" }, void 0), e$3(CardElement, { children: "All lists share the same basic styling of a static list, so all of these options can also be used on single- and multi-select lists." }, void 0), e$3(CardElement, { children: ["You can add an icon at the righthand side with ", e$3("code", { children: "iconEnd" }, void 0), ":"] }, void 0), e$3(CardElement, { children: e$3(List, { label: "List with icons at the end", children: makeListItems(index => e$3(ListItemActionable, { index: index, onPress: onPressAsync, disabled: index == 3, iconEnd: e$3(BootstrapIcon, { icon: "star", label: null }, void 0), children: makeListItemLines(index) }, void 0)) }, void 0) }, void 0), e$3(CardElement, { children: ["Or an icon on the left with ", e$3("code", { children: "iconStart" }, void 0), ", or a badge at the top-right with ", e$3("code", { children: "badge" }, void 0), ":"] }, void 0), e$3(CardElement, { children: e$3(List, { label: "List with icons at the start and badges", children: makeListItems(index => e$3(ListItemActionable, { index: index, onPress: onPressSync, disabled: index == 3, badge: e$3(Badge, { label: `Example value`, children: Math.floor(Math.abs(Math.sin((index + 7) * 7) * 20)) }, void 0), iconStart: e$3(BootstrapIcon, { icon: "star", label: null }, void 0), children: makeListItemLines(index) }, void 0)) }, void 0) }, void 0), e$3(CardElement, { children: ["All these will properly align themselves no matter how many lines the list item has. Keep in mind that a list's contents are always read out as one long string to screen readers, so not only should they ", e$3("em", { children: "not" }, void 0), " contain interactive content (beyond itself being selectable), any additional content, should be kept as terse as possible to avoid repeated content when reading each item one at a time."] }, void 0)] }, void 0) }, void 0));
     }
     async function sleep$3(arg0) {
         return new Promise(resolve => setTimeout(resolve, arg0));

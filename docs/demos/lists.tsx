@@ -1,8 +1,11 @@
-import { Fragment, h } from "preact";
+import { h } from "preact";
 import { useState } from "preact-prop-helpers";
+import { Badge } from "../../badge";
 import { Card, CardElement } from "../../card/card";
 import { BootstrapIcon } from "../../icon";
+import { Input, InputGroup } from "../../input-group";
 import { List, ListItemMulti, ListItemSingle, ListItemStatic } from "../../list";
+import { ListItemActionable } from "../../list/list-actionable";
 import { Toast, usePushToast } from "../../toast";
 
 export function DemoLists() {
@@ -21,7 +24,7 @@ export function DemoLists() {
     const [usesLinkList, setUsesLinkList] = useState(true);
 
     const pushToast = usePushToast();
-    const onPressSync = () => void (pushToast(<Toast>List was clicked</Toast>));
+    const onPressSync = () => void (pushToast(<Toast>List item was clicked</Toast>));
     const onPressAsync = async () => {
         await sleep(asyncTimeout ?? 0);
         if (asyncFails)
@@ -65,7 +68,7 @@ export function DemoLists() {
         <div class="demo">
             <Card>
                 <CardElement type="title" tag="h2">Lists</CardElement>
-                <CardElement><List label="Demo list" selectedIndex={selectedIndex} onSelect={setSelectedIndex}>{makeListItems(index => <ListItemSingle index={index} disabled={index == 2}>{makeListItemLines(index)}</ListItemSingle>)}</List></CardElement>
+                <CardElement><List label="Demo list" selectedIndex={selectedIndex} onSelect={setSelectedIndex}>{makeListItems(index => <ListItemSingle index={index} disabled={index == 3}>{makeListItemLines(index)}</ListItemSingle>)}</List></CardElement>
 
                 <CardElement>
                     A list is a way to provide a large number of selectable options in a way that's distinct from, say, a list of checkboxes or radio buttons. Lists can be <strong>single-select</strong>, <strong>multi-select</strong>, or <strong>static</strong> (no selection, display only).
@@ -81,7 +84,7 @@ export function DemoLists() {
                     For single-select lists, you provide the parent <code>&lt;List&gt;</code> with <code>selectedIndex</code> and <code>onSelect</code> props that control which <code>&lt;ListItemSingle&gt;</code> is the selected one.
                 </CardElement>
                 <CardElement>As with most components, the <code>onSelect</code> prop can be an async function.</CardElement>
-                <CardElement><List label="Single-select list demo" selectedIndex={selectedIndex} onSelect={async (i) => { await sleep(2000); setSelectedIndex(i) }}>{makeListItems(index => <ListItemSingle index={index}  disabled={index == 2}>{makeListItemLines(index)}</ListItemSingle>)}</List></CardElement>
+                <CardElement><List label="Single-select list demo" selectedIndex={selectedIndex} onSelect={async (i) => { await sleep(2000); setSelectedIndex(i) }}>{makeListItems(index => <ListItemSingle index={index}  disabled={index == 3}>{makeListItemLines(index)}</ListItemSingle>)}</List></CardElement>
 
 
                 <CardElement type="subtitle" tag="h3">Multi select</CardElement>
@@ -89,7 +92,7 @@ export function DemoLists() {
                     Multi-select lists have a <code>selected</code> prop on each individual <code>&lt;ListItemMulti&gt;</code>.
                 </CardElement>
                 <CardElement>As with most components, the <code>onSelect</code> prop can be an async function.</CardElement>
-                <CardElement><List label="Multi-select list demo" select="multi">{makeListItems(index => <ListItemMulti index={index} selected={selectedMulti.has(index)}  disabled={index == 2} onSelect={async (selected) => {
+                <CardElement><List label="Multi-select list demo" select="multi">{makeListItems(index => <ListItemMulti index={index} selected={selectedMulti.has(index)}  disabled={index == 3} onSelect={async (selected) => {
                     await sleep(2000); setSelectedMulti(prev => {
                         let ret = new Set(Array.from(prev));
                         if (selected)
@@ -105,16 +108,14 @@ export function DemoLists() {
                 <CardElement type="subtitle" tag="h3">Static lists</CardElement>
                 <CardElement>All lists share the same basic styling of a static list, so all of these options can also be used on single- and multi-select lists.</CardElement>
                 <CardElement>You can add an icon at the righthand side with <code>iconEnd</code>:</CardElement>
-                <CardElement><List label="List with icons at the end">{makeListItems(index => <ListItemStatic iconEnd={<BootstrapIcon icon="star" label={null} />}>{makeListItemLines(index)}</ListItemStatic>)}</List></CardElement>
+                <CardElement><List label="List with icons at the end">{makeListItems(index => <ListItemActionable index={index} onPress={onPressAsync} disabled={index == 3} iconEnd={<BootstrapIcon icon="star" label={null} />}>{makeListItemLines(index)}</ListItemActionable>)}</List></CardElement>
                 <CardElement>Or an icon on the left with <code>iconStart</code>, or a badge at the top-right with <code>badge</code>:</CardElement>
-                <CardElement><List label="List with icons at the start and badges">{makeListItems(index => <ListItemStatic badge={<Badge label={`Example value`}>{Math.floor(Math.abs(Math.sin((index + 7) * 7) * 20))}</Badge>} iconStart={<BootstrapIcon icon="star" label={null} />}>{makeListItemLines(index)}</ListItemStatic>)}</List></CardElement>
+                <CardElement><List label="List with icons at the start and badges">{makeListItems(index => <ListItemActionable index={index} onPress={onPressSync} disabled={index == 3} badge={<Badge label={`Example value`}>{Math.floor(Math.abs(Math.sin((index + 7) * 7) * 20))}</Badge>} iconStart={<BootstrapIcon icon="star" label={null} />}>{makeListItemLines(index)}</ListItemActionable>)}</List></CardElement>
                 <CardElement>All these will properly align themselves no matter how many lines the list item has. Keep in mind that a list's contents are always read out as one long string to screen readers, so not only should they <em>not</em> contain interactive content (beyond itself being selectable), any additional content, should be kept as terse as possible to avoid repeated content when reading each item one at a time.</CardElement>
             </Card>
         </div>
     );
 }
-import { Badge } from "../../badge"
-import { Input, InputGroup } from "../../input-group";
 async function sleep(arg0: number) {
     return new Promise(resolve => setTimeout(resolve, arg0));
 }

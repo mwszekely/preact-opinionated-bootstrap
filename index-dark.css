@@ -12681,6 +12681,7 @@ textarea.form-control-lg {
 .list-group-item[tabindex="0"] {
   outline: none;
   transition: box-shadow 0.15s cubic-bezier(0, 1, 0.33, 1), padding 0.1s linear, text-shadow 0.15s cubic-bezier(0, 1, 0.33, 1);
+  background-position-y: 0;
 }
 .list-group-item-action:not(.disabled):not(.pending),
 .list-group-item[tabindex="0"]:not(.disabled):not(.pending) {
@@ -12735,6 +12736,7 @@ textarea.form-control-lg {
 .list-group-item[tabindex="0"]:not(:active):not(.active).pending {
   padding-bottom: 0.25rem;
   padding-top: 0.75rem;
+  background-position-y: 0.25rem;
 }
 
 @media (prefers-reduced-motion) {
@@ -12767,8 +12769,11 @@ textarea.form-control-lg {
   border-color: transparent;
 }
 
-.input-group-text {
+:not(.faux-input-group-text) > .input-group-text {
   position: relative;
+}
+
+.input-group-text {
   border-top-color: transparent;
   border-bottom: transparent;
 }
@@ -12799,8 +12804,16 @@ textarea.form-control-lg {
 .form-control.faux-form-control-outer {
   position: relative;
   overflow: hidden;
-  max-width: calc(1.5rem + 15px + var(--form-control-width, 9999ch));
+  max-width: calc(
+    1.5rem + 15px + var(--form-control-width, 9999ch)
+  );
   box-shadow: 0 0 0 rgba(128, 134, 223, var(--input-btn-focus-color-opacity, 0.4)), inset 0 0 0 rgba(0, 0, 0, 0.4);
+}
+
+.input-group-text > .form-check-input::after {
+  content: "";
+  position: absolute;
+  inset: 0;
 }
 
 .form-check-input + .circular-progress-container {

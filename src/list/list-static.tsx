@@ -12,6 +12,7 @@ export interface ListStaticProps<E extends HTMLUListElement | HTMLOListElement> 
     label: h.JSX.Element | string;
     inline?: boolean;
     flush?: boolean;
+    role?: string;
 }
 
 
@@ -39,6 +40,11 @@ export interface ListItemStaticProps extends GlobalAttributes<HTMLLIElement> {
 export const ListItemStatic = memo(forwardElementRef(function ListItemStatic(props: ListItemStaticProps, ref: Ref<HTMLLIElement>) {
     const { children, badge, iconStart, iconEnd, disabled, ...domProps } = { ...props, ref };
     return <li {...usePseudoActive(useMergedProps<HTMLLIElement>()({
+        children: <>
+            {iconStart && <span class="list-group-item-start-icon">{iconStart}</span>}
+            {children}
+            {badge && <span class="list-group-item-badge">{badge}</span>}{iconEnd && <span className="list-group-item-end-icon">{iconEnd}</span>}
+        </>,
         class: clsx("list-group-item list-group-item-multiline", disabled && "disabled text-muted", !!badge && "with-badge", !!iconStart && "with-start", !!(badge || iconEnd) && "with-end"),
-    } as any, domProps))}>{iconStart && <span class="list-group-item-start-icon">{iconStart}</span>}{children}{badge && <span class="list-group-item-badge">{badge}</span>}{iconEnd && <span className="list-group-item-end-icon">{iconEnd}</span>}</li>
+    } as any, domProps))} />
 }))

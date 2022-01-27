@@ -81,7 +81,9 @@
   &:not(:active):not(.active).pending {
     padding-bottom: $list-group-item-padding-y * 0.5;
     padding-top: $list-group-item-padding-y + $list-group-item-padding-y * 0.5;
+    background-position-y: $list-group-item-padding-y * 0.5;
   }
+  background-position-y: 0;
 }
 
 // Undo the above if the user prefers less motion
