@@ -12977,6 +12977,18 @@
       return props.select == "multi";
     }
 
+    function isSingleItemProps(props) {
+      return props.index != null && !isActionableItemProps(props);
+    }
+
+    function isMultiItemProps(props) {
+      return props.onSelect != null;
+    }
+
+    function isActionableItemProps(props) {
+      return props.onPress != null;
+    }
+
     const List = g$1(forwardElementRef(function List(props, ref) {
       if (isSingleProps(props)) return e$3(ListSingle, { ...props,
         ref: ref
@@ -12988,6 +13000,17 @@
       // It doesn't cost much to not use the list navigation after all.
 
       return e$3(ListActionable, { ...props,
+        ref: ref
+      }, void 0);
+    }));
+    g$1(forwardElementRef(function ListItem(props, ref) {
+      if (isSingleItemProps(props)) return e$3(ListItemSingle, { ...props,
+        ref: ref
+      }, void 0);else if (isMultiItemProps(props)) return e$3(ListItemMulti, { ...props,
+        ref: ref
+      }, void 0);else if (isActionableItemProps(props)) return e$3(ListItemActionable, { ...props,
+        ref: ref
+      }, void 0);else return e$3(ListItemStatic, { ...props,
         ref: ref
       }, void 0);
     }));
