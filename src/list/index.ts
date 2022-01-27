@@ -1,4 +1,7 @@
-export { ListItemSingle, ListSingle, ListSingleProps, ListItemSingleProps } from "./list-single";
-export { ListItemMulti, ListMulti, ListMultiProps, ListItemMultiProps } from "./list-multi";
-export { ListItemStatic, ListStatic, ListStaticProps, ListItemStaticProps } from "./list-static";
-export { List, ListProps } from "./list";
+
+export {
+    ListItemSingle, ListSingle, ListSingleProps, ListItemSingleProps,
+    ListItemMulti, ListMulti, ListMultiProps, ListItemMultiProps,
+    ListItemStatic, ListStatic, ListStaticProps, ListItemStaticProps,
+    List, ListProps
+} from "./list";

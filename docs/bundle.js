@@ -12672,6 +12672,115 @@
       }, void 0);
     }));
 
+    const UseListboxMultiItemContext = D$1(null);
+    const ListMulti = g$1(forwardElementRef(function ListMulti(props, ref) {
+      var _labelPosition;
+
+      useLogRender("ListMulti", `Rendering ListMulti`);
+      let {
+        collator,
+        keyNavigation,
+        noTypeahead,
+        noWrap,
+        typeaheadTimeout,
+        tag,
+        select,
+        label,
+        labelPosition,
+        ...domProps
+      } = props;
+      useAsyncHandler()({
+        capture: e => e[EventDetail].selectedIndex
+      });
+      const {
+        useListboxMultiItem,
+        useListboxMultiLabel,
+        useListboxMultiProps,
+        currentTypeahead,
+        focus,
+        invalidTypeahead,
+        tabbableIndex
+      } = useAriaListboxMulti({
+        typeaheadTimeout,
+        noWrap,
+        noTypeahead,
+        keyNavigation,
+        collator
+      });
+      const {
+        useListboxMultiLabelProps
+      } = useListboxMultiLabel();
+      (_labelPosition = labelPosition) !== null && _labelPosition !== void 0 ? _labelPosition : labelPosition = "start";
+      let labelProps = typeof label == "string" ? {} : label.props;
+      let clonedLabel = labelPosition != "hidden" ? B(typeof label == "string" ? e$3("label", {
+        children: label
+      }, void 0) : label, useListboxMultiLabelProps(labelProps)) : label;
+      console.assert(!(labelPosition == "hidden" && typeof label != "string"));
+      return e$3(UseListboxMultiItemContext.Provider, {
+        value: useListboxMultiItem,
+        children: e$3(ListStatic, {
+          tag: tag,
+          labelPosition: labelPosition,
+          label: clonedLabel,
+          ...useMergedProps()({
+            class: "list-group",
+            ref,
+            "aria-hidden": labelPosition === "hidden" ? label : undefined
+          }, useListboxMultiProps(domProps))
+        }, void 0)
+      }, void 0);
+    }));
+    const ListItemMulti = g$1(forwardElementRef(function ListItemMulti(p, ref) {
+      const {
+        childrenText,
+        props: {
+          index,
+          selected,
+          disabled,
+          onSelect: onSelectAsync,
+          children,
+          ...domProps
+        }
+      } = useChildrenTextProps({ ...p,
+        ref
+      });
+      useLogRender("ListMulti", `Rendering ListMultiItem #${index}`);
+      const useListItemMulti = F(UseListboxMultiItemContext);
+      console.assert(!!useListItemMulti, "ListItemMulti is being used outside of a multi-select list. Did you mean to use a different kind of list, or a different kind of list item?");
+      const {
+        getSyncHandler,
+        pending,
+        currentCapture,
+        hasError,
+        resolveCount
+      } = useAsyncHandler()({
+        capture: e => e[EventDetail].selected
+      });
+      const onSelectSync = getSyncHandler(disabled ? null : onSelectAsync);
+      const {
+        tabbable,
+        useListboxMultiItemProps
+      } = useListItemMulti({
+        index,
+        text: childrenText,
+        tag: "li",
+        selected: currentCapture !== null && currentCapture !== void 0 ? currentCapture : selected,
+        onSelect: onSelectSync,
+        disabled
+      });
+      return e$3(ListItemStatic, { ...usePseudoActive(useMergedProps()({
+          disabled,
+          class: clsx("list-group-item-action", selected && "active", pending && "pending")
+        }, useListboxMultiItemProps(domProps))),
+        children: e$3(ProgressCircular, {
+          childrenPosition: "after",
+          mode: pending ? "pending" : hasError ? "failed" : resolveCount ? "succeeded" : null,
+          colorVariant: "info",
+          children: children
+        }, void 0)
+      }, void 0);
+    }));
+
     const UseListboxSingleItemContext = D$1(null);
     const ListSingle = g$1(forwardElementRef(function ListSingle(props, ref) {
       var _labelPosition;
@@ -12782,115 +12891,6 @@
         children: e$3(ProgressCircular, {
           childrenPosition: "after",
           mode: pending ? "pending" : null,
-          colorVariant: "info",
-          children: children
-        }, void 0)
-      }, void 0);
-    }));
-
-    const UseListboxMultiItemContext = D$1(null);
-    const ListMulti = g$1(forwardElementRef(function ListMulti(props, ref) {
-      var _labelPosition;
-
-      useLogRender("ListMulti", `Rendering ListMulti`);
-      let {
-        collator,
-        keyNavigation,
-        noTypeahead,
-        noWrap,
-        typeaheadTimeout,
-        tag,
-        select,
-        label,
-        labelPosition,
-        ...domProps
-      } = props;
-      useAsyncHandler()({
-        capture: e => e[EventDetail].selectedIndex
-      });
-      const {
-        useListboxMultiItem,
-        useListboxMultiLabel,
-        useListboxMultiProps,
-        currentTypeahead,
-        focus,
-        invalidTypeahead,
-        tabbableIndex
-      } = useAriaListboxMulti({
-        typeaheadTimeout,
-        noWrap,
-        noTypeahead,
-        keyNavigation,
-        collator
-      });
-      const {
-        useListboxMultiLabelProps
-      } = useListboxMultiLabel();
-      (_labelPosition = labelPosition) !== null && _labelPosition !== void 0 ? _labelPosition : labelPosition = "start";
-      let labelProps = typeof label == "string" ? {} : label.props;
-      let clonedLabel = labelPosition != "hidden" ? B(typeof label == "string" ? e$3("label", {
-        children: label
-      }, void 0) : label, useListboxMultiLabelProps(labelProps)) : label;
-      console.assert(!(labelPosition == "hidden" && typeof label != "string"));
-      return e$3(UseListboxMultiItemContext.Provider, {
-        value: useListboxMultiItem,
-        children: e$3(ListStatic, {
-          tag: tag,
-          labelPosition: labelPosition,
-          label: clonedLabel,
-          ...useMergedProps()({
-            class: "list-group",
-            ref,
-            "aria-hidden": labelPosition === "hidden" ? label : undefined
-          }, useListboxMultiProps(domProps))
-        }, void 0)
-      }, void 0);
-    }));
-    const ListItemMulti = g$1(forwardElementRef(function ListItemMulti(p, ref) {
-      const {
-        childrenText,
-        props: {
-          index,
-          selected,
-          disabled,
-          onSelect: onSelectAsync,
-          children,
-          ...domProps
-        }
-      } = useChildrenTextProps({ ...p,
-        ref
-      });
-      useLogRender("ListMulti", `Rendering ListMultiItem #${index}`);
-      const useListItemMulti = F(UseListboxMultiItemContext);
-      console.assert(!!useListItemMulti, "ListItemMulti is being used outside of a multi-select list. Did you mean to use a different kind of list, or a different kind of list item?");
-      const {
-        getSyncHandler,
-        pending,
-        currentCapture,
-        hasError,
-        resolveCount
-      } = useAsyncHandler()({
-        capture: e => e[EventDetail].selected
-      });
-      const onSelectSync = getSyncHandler(disabled ? null : onSelectAsync);
-      const {
-        tabbable,
-        useListboxMultiItemProps
-      } = useListItemMulti({
-        index,
-        text: childrenText,
-        tag: "li",
-        selected: currentCapture !== null && currentCapture !== void 0 ? currentCapture : selected,
-        onSelect: onSelectSync,
-        disabled
-      });
-      return e$3(ListItemStatic, { ...usePseudoActive(useMergedProps()({
-          disabled,
-          class: clsx("list-group-item-action", selected && "active", pending && "pending")
-        }, useListboxMultiItemProps(domProps))),
-        children: e$3(ProgressCircular, {
-          childrenPosition: "after",
-          mode: pending ? "pending" : hasError ? "failed" : resolveCount ? "succeeded" : null,
           colorVariant: "info",
           children: children
         }, void 0)
