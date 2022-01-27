@@ -20,7 +20,7 @@ export const ListActionable = memo(forwardElementRef(function ListActionable<E e
     const listStaticProps = useHasFocusProps(useListNavigationProps(props as any)) as ListStaticProps<E>;
     return (
         <ListActionableChildContext.Provider value={useListNavigationChild}>
-            <ListStatic role={childCount? "toolbar" : undefined} {...listStaticProps} />
+            <ListStatic role={childCount ? "toolbar" : undefined} {...listStaticProps} />
         </ListActionableChildContext.Provider>
     );
 }));
@@ -49,11 +49,11 @@ export const ListItemActionable = memo(forwardElementRef(function ListItemAction
         { className: clsx("list-group-item-action", pending && "pending") },
         useListNavigationChildProps(usePressEventHandlers<HTMLLIElement>(getSyncHandler((props.disabled || pending) ? undefined : onPress), undefined)(domPropsWithoutPress))) as ListItemStaticProps;
     return (
-        <ListItemStatic {...domProps}>
-            <ProgressCircular colorFill="foreground-only" childrenPosition="after" mode={pending ? "pending" : null} colorVariant="info">
+        <ProgressCircular childrenPosition="child" mode={pending ? "pending" : null} colorVariant="info">
+            <ListItemStatic {...domProps}>
                 {children as VNode}
-            </ProgressCircular>
-        </ListItemStatic>
+            </ListItemStatic>
+        </ProgressCircular>
     );
 }));
 function returnVoid(): void { return undefined!; }

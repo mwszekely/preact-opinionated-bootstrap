@@ -64,12 +64,11 @@ export const ListItemMulti = memo(forwardElementRef(function ListItemMulti(p: Li
 
     const { tabbable, useListboxMultiItemProps } = useListItemMulti({ index, text: childrenText, tag: "li", selected: currentCapture ?? selected, onSelect: onSelectSync, disabled });
     return (
-        <ListItemStatic {...usePseudoActive(useMergedProps<HTMLLIElement>()({ disabled, class: clsx("list-group-item-action", selected && "active", pending && "pending") } as any, useListboxMultiItemProps(domProps)))}>
-            <ProgressCircular childrenPosition="after" mode={pending ? "pending" : hasError ? "failed" : resolveCount ? "succeeded" : null} colorVariant="info">
+        <ProgressCircular childrenPosition="child" mode={pending ? "pending" : hasError ? "failed" : resolveCount ? "succeeded" : null} colorVariant="info">
+            <ListItemStatic {...usePseudoActive(useMergedProps<HTMLLIElement>()({ disabled, class: clsx("list-group-item-action", selected && "active", pending && "pending") } as any, useListboxMultiItemProps(domProps)))}>
                 {children as VNode}
-            </ProgressCircular>
-        </ListItemStatic>
-
+            </ListItemStatic>
+        </ProgressCircular>
     );
 }));
 

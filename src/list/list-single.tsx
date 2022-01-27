@@ -73,11 +73,11 @@ export const ListItemSingle = memo(forwardElementRef(function ListItemSingle(p: 
 
     const { getSelected, tabbable, selected, useListboxSingleItemProps } = useListItemSingle({ index, text: childrenText, tag: "li", setPending, getPending, hidden, disabled });
     return (
-        <ListItemStatic {...usePseudoActive(useMergedProps<HTMLLIElement>()({ disabled, class: clsx("list-group-item-action", selected && "active", pending && "pending") } as any, useListboxSingleItemProps(domProps)))}>
-            <ProgressCircular childrenPosition="after" mode={pending ? "pending" : null} colorVariant="info">
+        <ProgressCircular childrenPosition="child" mode={pending ? "pending" : null} colorVariant="info">
+            <ListItemStatic {...usePseudoActive(useMergedProps<HTMLLIElement>()({ disabled, class: clsx("list-group-item-action", selected && "active", pending && "pending") } as any, useListboxSingleItemProps(domProps)))}>
                 {children as VNode}
-            </ProgressCircular>
-        </ListItemStatic>
+            </ListItemStatic>
+        </ProgressCircular>
     )
 }));
 

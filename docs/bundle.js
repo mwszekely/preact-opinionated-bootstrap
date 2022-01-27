@@ -12768,14 +12768,14 @@
         onSelect: onSelectSync,
         disabled
       });
-      return e$3(ListItemStatic, { ...usePseudoActive(useMergedProps()({
-          disabled,
-          class: clsx("list-group-item-action", selected && "active", pending && "pending")
-        }, useListboxMultiItemProps(domProps))),
-        children: e$3(ProgressCircular, {
-          childrenPosition: "after",
-          mode: pending ? "pending" : hasError ? "failed" : resolveCount ? "succeeded" : null,
-          colorVariant: "info",
+      return e$3(ProgressCircular, {
+        childrenPosition: "child",
+        mode: pending ? "pending" : hasError ? "failed" : resolveCount ? "succeeded" : null,
+        colorVariant: "info",
+        children: e$3(ListItemStatic, { ...usePseudoActive(useMergedProps()({
+            disabled,
+            class: clsx("list-group-item-action", selected && "active", pending && "pending")
+          }, useListboxMultiItemProps(domProps))),
           children: children
         }, void 0)
       }, void 0);
@@ -12884,14 +12884,14 @@
         hidden,
         disabled
       });
-      return e$3(ListItemStatic, { ...usePseudoActive(useMergedProps()({
-          disabled,
-          class: clsx("list-group-item-action", selected && "active", pending && "pending")
-        }, useListboxSingleItemProps(domProps))),
-        children: e$3(ProgressCircular, {
-          childrenPosition: "after",
-          mode: pending ? "pending" : null,
-          colorVariant: "info",
+      return e$3(ProgressCircular, {
+        childrenPosition: "child",
+        mode: pending ? "pending" : null,
+        colorVariant: "info",
+        children: e$3(ListItemStatic, { ...usePseudoActive(useMergedProps()({
+            disabled,
+            class: clsx("list-group-item-action", selected && "active", pending && "pending")
+          }, useListboxSingleItemProps(domProps))),
           children: children
         }, void 0)
       }, void 0);
@@ -12954,12 +12954,11 @@
       const domProps = useMergedProps()({
         className: clsx("list-group-item-action", pending && "pending")
       }, useListNavigationChildProps(usePressEventHandlers(getSyncHandler(props.disabled || pending ? undefined : onPress), undefined)(domPropsWithoutPress)));
-      return e$3(ListItemStatic, { ...domProps,
-        children: e$3(ProgressCircular, {
-          colorFill: "foreground-only",
-          childrenPosition: "after",
-          mode: pending ? "pending" : null,
-          colorVariant: "info",
+      return e$3(ProgressCircular, {
+        childrenPosition: "child",
+        mode: pending ? "pending" : null,
+        colorVariant: "info",
+        children: e$3(ListItemStatic, { ...domProps,
           children: children
         }, void 0)
       }, void 0);
