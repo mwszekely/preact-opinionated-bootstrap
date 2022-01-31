@@ -1,130 +1,24 @@
 @use "sass:color";
 @use "sass:math";
-@use "bootstrap/scss/functions" as *;
+@use "sass:meta";
 @use "./bootstrap-shared" as *;
+@use "./bootstrap-variables/light/body-bg" as *;
+@forward "bootstrap-sass-variables/body-bg" with ($body-bg: $body-bg);
+@use "./bootstrap-variables/light/body-color" as *;
+@forward "bootstrap-sass-variables/body-color" with ($body-color: $body-color);
 
-$white: #fff !default;
-$gray-100: #f8f9fa !default;
-$gray-200: #e9ecef !default;
-$gray-300: #dee2e6 !default;
-$gray-400: #ced4da !default;
-$gray-500: #adb5bd !default;
-$gray-600: #6c757d !default;
-$gray-700: #495057 !default;
-$gray-800: #343a40 !default;
-$gray-900: #212529 !default;
-$black: #000 !default;
+@use "./bootstrap-variables/list-group-active-color" as *;
+@forward "bootstrap-sass-variables/list-group-active-color" with ($list-group-active-color: $list-group-active-color);
+@use "./bootstrap-variables/progress-bar-transition" as *;
+@forward "bootstrap-sass-variables/progress-bar-transition" with ($progress-bar-transition: $progress-bar-transition);
 
+@use "./bootstrap-variables/light/theme-colors" as *;
+@forward "bootstrap-sass-variables/theme-colors" with ($theme-colors: $theme-colors !default);
 
-$body-bg: $gray-100 !default;
-$body-color: $gray-900 !default;
+@use "./bootstrap-variables/btn-active-box-shadow" as *;
+@forward "bootstrap-sass-variables/btn-active-box-shadow" with ($btn-active-box-shadow: $btn-active-box-shadow !default);
+@use "./bootstrap-variables/btn-box-shadow" as *;
+@forward "bootstrap-sass-variables/btn-box-shadow" with ($btn-box-shadow: $btn-box-shadow !default);
 
-$blue: #0d6efd !default;
-$indigo: #6610f2 !default;
-$purple: #6f42c1 !default;
-$pink: #d63384 !default;
-$red: #dc3545 !default;
-$orange: #fd7e14 !default;
-$yellow: #ffc107 !default;
-$green: #198754 !default;
-$teal: #20c997 !default;
-$cyan: #0dcaf0 !default;
-
-$primary: $blue !default;
-$secondary: $indigo !default;
-$success: $green !default;
-$info: $cyan !default;
-$warning: $yellow !default;
-$danger: $red !default;
-$light: $gray-100 !default;
-$dark: $gray-900 !default;
-
-$theme-colors: (
-  "primary": $primary,
-  "secondary": $secondary,
-  "success": $success,
-  "info": $info,
-  "warning": $warning,
-  "danger": $danger,
-  "light": $light,
-  "dark": $dark,
-  "contrast": $dark,
-  "subtle": $light,
-) !default;
-
-$component-active-bg: $primary !default;
-$input-btn-focus-color: rgba(
-  tint-color($component-active-bg, 40%),
-  $input-btn-focus-color-opacity
-) !default;
-
-
-$input-btn-focus-box-shadow: 0 0 0 $input-btn-focus-width $input-btn-focus-color !default;
-$input-focus-box-shadow: #{$input-btn-focus-box-shadow, inset 0 0 0 rgb(0 0 0 / 40%)} !default;
-$input-box-shadow: #{0 0 0 $input-btn-focus-color, inset 0 0 0 rgb(0 0 0 / 40%)} !default;
-
-
-$input-focus-box-shadow: $input-focus-box-shadow !default;
-$input-btn-focus-color: $input-btn-focus-color !default;
-$input-btn-focus-box-shadow: $input-btn-focus-box-shadow !default;
-$input-box-shadow: $input-box-shadow !default;
-$list-group-active-bg: color.adjust(
-  $component-active-bg,
-  $alpha: -0.83
-) !default;
-$list-group-active-border-color: $list-group-active-bg !default;
-$list-group-active-color: $body-color !default;
-
-
-@use "bootstrap/scss/bootstrap" with (
-  $enable-shadows: true,
-  $btn-transition: $btn-transition,
-  $body-bg: $body-bg,
-  $body-color: $body-color,
-  $white: $white,
-  $gray-100: $gray-100,
-  $gray-200: $gray-200,
-  $gray-300: $gray-300,
-  $gray-400: $gray-400,
-  $gray-500: $gray-500,
-  $gray-600: $gray-600,
-  $gray-700: $gray-700,
-  $gray-800: $gray-800,
-  $gray-900: $gray-900,
-  $black: $black,
-  $blue: $blue,
-  $indigo: $indigo,
-  $purple: $purple,
-  $pink: $pink,
-  $red: $red,
-  $orange: $orange,
-  $yellow: $yellow,
-  $green: $green,
-  $teal: $teal,
-  $cyan: $cyan,
-  $primary: $primary,
-  $secondary: $secondary,
-  $success: $success,
-  $info: $info,
-  $warning: $warning,
-  $danger: $danger,
-  $light: $light,
-  $dark: $dark,
-  $theme-colors: $theme-colors,
-  $btn-close-padding-y: $btn-close-padding-y,
-  $btn-close-padding-x: $btn-close-padding-x,
-  $font-family-sans-serif: $font-family-sans-serif,
-  $progress-bar-transition: $progress-bar-transition,
-  $btn-box-shadow: $btn-box-shadow,
-  $btn-active-box-shadow: $btn-active-box-shadow,
-  $input-focus-box-shadow: $input-focus-box-shadow,
-  $input-btn-focus-color-opacity: $input-btn-focus-color-opacity,
-  $input-btn-focus-color: $input-btn-focus-color,
-  $input-btn-focus-box-shadow: $input-btn-focus-box-shadow,
-  $input-box-shadow: $input-box-shadow,
-  $list-group-active-bg: $list-group-active-bg,
-  $list-group-active-border-color: $list-group-active-border-color,
-  $list-group-active-color: $list-group-active-color
-);
-
-@forward "bootstrap/scss/bootstrap";
+@forward "bootstrap-sass-variables/variables";
+@use "bootstrap-sass-variables/bootstrap";

@@ -17139,17 +17139,16 @@
         }, [setRadioValue]);
         return (e$3("div", { class: "demo", children: [e$3(InputGroup, { children: e$3(Input, { type: "text", onValueChange: onInput1, value: text, width: "100%", children: "Test input" }, void 0) }, void 0), e$3(RadioGroup, { selectedValue: radioValue, name: "demo-radio", onValueChange: onInput2, children: [e$3(InputGroup, { children: e$3(Radio, { index: 0, value: "ARadio" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Radio, { index: 1, value: "BRadio" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Radio, { index: 2, value: "CRadio" }, void 0) }, void 0)] }, void 0)] }, void 0));
     });
-    function changeThemes(fromTheme) {
-        let toTheme = fromTheme === "theme-dark" ? "theme-light" : "theme-dark";
+    function changeThemes(toTheme) {
+        const fromTheme = (toTheme === "theme-dark" ? "theme-light" : "theme-dark");
         document.getElementById(toTheme).media = "all";
         document.getElementById(fromTheme).media = "screen and (max-width: 1px)";
-        return toTheme;
     }
     const Component = () => {
         const [theme, setTheme] = useState("theme-dark");
-        h$1(() => setTheme(changeThemes("theme-dark")));
+        h$1(() => changeThemes(theme), [theme]);
         return e$3(d$2, { children: [e$3(Button, { colorVariant: theme == "theme-dark" ? "light" : "dark", style: { position: "fixed", insetBlockStart: "0.5em", insetInlineEnd: "0.5em", zIndex: 9999999 }, spinnerTimeout: 999999999, onPress: async () => {
-                        setTheme(changeThemes(theme));
+                        setTheme(theme === "theme-dark" ? "theme-light" : "theme-dark");
                     }, children: ["Switch theme to ", e$3("strong", { children: theme === "theme-dark" ? "light" : "dark" }, void 0)] }, void 0), e$3(GridResponsive, { minWidth: "35em", children: e$3(FocusVisibilityManager, { autoHideFocusRing: true, children: e$3(DebugUtilContext.Provider, { value: d$1(() => ({ logRender: new Set(["Table", "TableHead", "TableBody", "TableRow", "TableCell"]) }), []), children: e$3(ToastsProvider, { children: e$3(DialogsProvider, { children: [e$3(DemoTable, {}, void 0), e$3(DemoLists, {}, void 0), e$3(DemoMenus, {}, void 0), e$3(DemoDialogs, {}, void 0), e$3(DemoButtons, {}, void 0), e$3(DemoChecks, {}, void 0), e$3(DemoInputs, {}, void 0), e$3(DemoLayout, {}, void 0), e$3(DemoAccordion, {}, void 0), e$3(DemoDialog, {}, void 0), e$3(DemoDrawer, {}, void 0), e$3(DemoInput, {}, void 0), e$3(DemoList, {}, void 0), e$3(DemoTabs, {}, void 0), e$3(DemoMenu, {}, void 0)] }, void 0) }, void 0) }, void 0) }, void 0) }, void 0)] }, void 0);
     };
     requestAnimationFrame(() => {

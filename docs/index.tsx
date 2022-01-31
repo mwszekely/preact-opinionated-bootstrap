@@ -259,21 +259,20 @@ const DemoInput = memo(() => {
     )
 });
 
-function changeThemes(fromTheme: string) {
-    let toTheme = fromTheme === "theme-dark" ? "theme-light" : "theme-dark";
+function changeThemes(toTheme: string) {
+    const fromTheme = (toTheme === "theme-dark" ? "theme-light" : "theme-dark");
     (document.getElementById(toTheme) as HTMLLinkElement).media = "all";
     (document.getElementById(fromTheme) as HTMLLinkElement).media = "screen and (max-width: 1px)";
-    return toTheme;
 }
 
 const Component = () => {
     const [theme, setTheme] = useState("theme-dark");
 
-    useLayoutEffect(() => setTheme(changeThemes("theme-dark")))
+    useLayoutEffect(() => changeThemes(theme), [theme])
 
     return <>
         <Button colorVariant={theme == "theme-dark" ? "light" : "dark"} style={{ position: "fixed", insetBlockStart: "0.5em", insetInlineEnd: "0.5em", zIndex: 9999999 }} spinnerTimeout={999999999} onPress={async () => {
-            setTheme(changeThemes(theme));
+            setTheme(theme === "theme-dark" ? "theme-light" : "theme-dark");
         }}>Switch theme to <strong>{theme === "theme-dark" ? "light" : "dark"}</strong></Button>
         <GridResponsive minWidth="35em">
             <FocusVisibilityManager autoHideFocusRing={true}>

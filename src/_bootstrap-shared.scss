@@ -1,15 +1,52 @@
-$primary-font-family: #{"Jost", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",
-    "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"} !default;
+@use "sass:color";
+@use "bootstrap-sass-variables/blue" as *;
+@use "bootstrap-sass-variables/indigo" as *;
+@use "bootstrap-sass-variables/green" as *;
+@use "bootstrap-sass-variables/cyan" as *;
+@use "bootstrap-sass-variables/yellow" as *;
+@use "bootstrap-sass-variables/red" as *;
+$primary: $blue !default;
+@use "bootstrap-sass-variables/primary" with ($primary: $primary);
+@use "bootstrap-sass-variables/white" as *;
+@use "bootstrap-sass-variables/gray-100" as * with($gray-100: color.change(color.scale($primary, $saturation: -90%), $lightness: 95.00%));
+@use "bootstrap-sass-variables/gray-200" as * with($gray-200: color.change(color.scale($primary, $saturation: -90%), $lightness: 83.75%));
+@use "bootstrap-sass-variables/gray-300" as * with($gray-300: color.change(color.scale($primary, $saturation: -90%), $lightness: 72.50%));
+@use "bootstrap-sass-variables/gray-400" as * with($gray-400: color.change(color.scale($primary, $saturation: -90%), $lightness: 61.25%));
+@use "bootstrap-sass-variables/gray-500" as * with($gray-500: color.change(color.scale($primary, $saturation: -90%), $lightness: 50.00%));
+@use "bootstrap-sass-variables/gray-600" as * with($gray-600: color.change(color.scale($primary, $saturation: -90%), $lightness: 38.75%));
+@use "bootstrap-sass-variables/gray-700" as * with($gray-700: color.change(color.scale($primary, $saturation: -90%), $lightness: 27.50%));
+@use "bootstrap-sass-variables/gray-800" as * with($gray-800: color.change(color.scale($primary, $saturation: -90%), $lightness: 16.25%));
+@use "bootstrap-sass-variables/gray-900" as * with($gray-900: color.change(color.scale($primary, $saturation: -90%), $lightness: 5.00%));
+@use "bootstrap-sass-variables/black" as *;
+@forward "bootstrap-sass-variables/secondary" with ($secondary: $indigo !default);
+@forward "bootstrap-sass-variables/success" with ($success: $green !default);
+@forward "bootstrap-sass-variables/info" with ($info: $cyan !default);
+@forward "bootstrap-sass-variables/warning" with ($warning: $yellow !default);
+@forward "bootstrap-sass-variables/danger" with ($danger: $red !default);
+@forward "bootstrap-sass-variables/light" with ($light: $gray-100 !default);
+@forward "bootstrap-sass-variables/dark" with ($dark: $gray-900 !default);
 
-$input-btn-focus-color-opacity: var(--input-btn-focus-color-opacity,0.4) !default;
-$input-btn-focus-width: 0.25rem !default;
-
-$btn-close-padding-y: 0 !default;
-$btn-close-padding-x: 0 !default;
-$btn-transition: box-shadow 0.1s cubic-bezier(0, 1, 0.33, 1), padding 0.1s cubic-bezier(0, 1, 0.33, 1),
-    text-shadow 0.1s cubic-bezier(0, 1, 0.33, 1), color 0.15s ease-in-out, background-color 0.15s ease-in-out,
-    border-color 0.15s ease-in-out !default;
-$font-family-sans-serif: $primary-font-family !default;
-$progress-bar-transition: #{width, clip-path 0.6s ease} !default;
-$btn-box-shadow: inset 0 -3px 0 0 rgba(0 0 0 / 30%) !default;
-$btn-active-box-shadow: inset 0 3px 5px rgb(0 0 0 / 0.4) !default;
+@use "./bootstrap-variables/btn-close-padding-x" as *;
+@forward "bootstrap-sass-variables/btn-close-padding-x" with ($btn-close-padding-x: $btn-close-padding-x !default);
+@use "./bootstrap-variables/btn-close-padding-y" as *;
+@forward "bootstrap-sass-variables/btn-close-padding-y" with ($btn-close-padding-y: $btn-close-padding-y !default);
+@use "./bootstrap-variables/btn-transition" as *;
+@forward "bootstrap-sass-variables/btn-transition" with ($btn-transition: $btn-transition !default);
+@use "./bootstrap-variables/enable-shadows" as *;
+@forward "bootstrap-sass-variables/enable-shadows" with ($enable-shadows: $enable-shadows !default);
+@use "./bootstrap-variables/font-family-sans-serif" as *;
+@forward "bootstrap-sass-variables/font-family-sans-serif" with ($font-family-sans-serif: $font-family-sans-serif !default);
+@use "./bootstrap-variables/input-btn-focus-color-opacity" as *;
+@forward "bootstrap-sass-variables/input-btn-focus-color-opacity" with ($input-btn-focus-color-opacity: $input-btn-focus-color-opacity !default);
+@use "./bootstrap-variables/input-btn-focus-color" as *;
+@forward "bootstrap-sass-variables/input-btn-focus-color" with ($input-btn-focus-color: $input-btn-focus-color !default);
+@use "./bootstrap-variables/input-box-shadow" as *;
+@forward "bootstrap-sass-variables/input-box-shadow" with ($input-box-shadow: $input-box-shadow !default);
+@use "./bootstrap-variables/input-btn-focus-width" as *;
+@forward "bootstrap-sass-variables/input-btn-focus-width" with ($input-btn-focus-width: $input-btn-focus-width !default);
+@use "./bootstrap-variables/input-focus-box-shadow" as *;
+@forward "bootstrap-sass-variables/input-focus-box-shadow" with ($input-focus-box-shadow: $input-focus-box-shadow !default);
+@use "./bootstrap-variables/list-group-active-bg" as *;
+@forward "bootstrap-sass-variables/list-group-active-bg" with ($list-group-active-bg: $list-group-active-bg !default);
+@use "./bootstrap-variables/list-group-active-border-color" as *;
+@forward "bootstrap-sass-variables/list-group-active-border-color" with ($list-group-active-border-color: $list-group-active-border-color !default);

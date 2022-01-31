@@ -45,6 +45,7 @@
     "@popperjs/core": "^2.11.2",
     "bootstrap": "^5.1.3",
     "bootstrap-icons": "^1.7.2",
+    "bootstrap-sass-variables": "github:mwszekely/bootstrap-sass-variables",
     "clsx": "^1.1.1",
     "preact-aria-widgets": "github:mwszekely/preact-aria-widgets",
     "preact-prop-helpers": "github:mwszekely/preact-prop-helpers",

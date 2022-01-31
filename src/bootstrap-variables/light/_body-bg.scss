@@ -1,0 +1,3 @@
+@use "bootstrap-sass-variables/gray-100" as *;
+@use "sass:color";
+$body-bg: color.scale($gray-100, $lightness: 66.666%);

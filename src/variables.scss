@@ -1,7 +1,8 @@
-@use "bootstrap/scss/bootstrap" as *;
-@forward "bootstrap/scss/bootstrap";
+//@use "bootstrap/scss/bootstrap" as *;
+//@forward "bootstrap/scss/bootstrap";
+@forward "bootstrap-sass-variables/bootstrap";
 
-// This file imports all Boostrap variables (that have, presumably,
+// This file imports all Bootstrap variables (that have, presumably,
 // already been configured with another use-with), along with
 // other newly-introduced global variables.
 
