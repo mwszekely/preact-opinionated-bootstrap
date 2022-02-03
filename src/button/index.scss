@@ -74,13 +74,21 @@
 
 // Make the buttons' text move up and down as the shadows imply
 .btn {
-  position: relative;
-  touch-action: manipulation;
-  position: relative;
+
+  // Boilerplate
+  position: relative;         // Needed for spinners, etc.
+  touch-action: manipulation; // Improve responsiveness
+  position: relative;         //
+  appearance: none;           // Standardize styling
+
+  // Because buttons animate the press effect by
+  // adjusting their padding, which affects layout,
+  // we force a certain height and disable layout shifting.
   contain: content;
-  appearance: none;
   height: calc(1.5em + (#{$btn-padding-y} * 2) + 2px);
 
+  // Bootstrap also does this when $enable-button-pointers
+  // but not for .pending
   &:not(.disabled):not(:disabled):not(.pending) {
     cursor: pointer;
   }
@@ -89,6 +97,7 @@
     pointer-events: auto;
   }
 
+  // The reason buttons are position: relative
   & > .circular-progress-container {
     position: absolute;
     left: 0;
@@ -97,40 +106,44 @@
     bottom: 0;
   }
 
-  padding-top: $btn-padding-y * 0.75;
-  padding-bottom: $btn-padding-y + $btn-padding-y * 0.25;
+  // By default, buttons are raised slightly
+  --press-effect-block-offset: 0.75;
 
+  padding-top: calc(#{$btn-padding-y} * var(--press-effect-block-offset));
+  padding-bottom: calc(#{$btn-padding-y} * (2 - var(--press-effect-block-offset)));
+
+  // When, when hoving or focused, they're level with the page
   &:hover:not(.active):not(:active),
   &:focus:not(.active):not(:active) {
-    padding-top: $btn-padding-y;
-    padding-bottom: $btn-padding-y;
+    --press-effect-block-offset: 1;
   }
 
+  // And when pressed, they're inset into the page.
   &:active,
   &.active,
   &.pending:not(.toggle-button) {
-    padding-bottom: $btn-padding-y * 0.5;
-    padding-top: $btn-padding-y + $btn-padding-y * 0.5;
+    --press-effect-block-offset: 1.5;
   }
 
-  // Fix some default Bootstrap styles not applying all the box-shadows we want
-  // Box shadows should always appear when active.
-  @each $color, $value in $theme-colors {
-    &.btn-outline-#{$color} {
+
+  @each $color-name, $color-value in $theme-colors {
+    &.btn-outline-#{$color-name} {
+
       // Make outline button styles a bit less flashy
+      // by only partially fading in the background
       @include button-outline-variant(
-        $color: $value,
-        $color-hover: $value,
-        $active-background: color.change($value, $alpha: 0.125),
-        $active-border: color.change($value, $alpha: 0.25),
-        $active-color: $value
+        $color: $color-value,
+        $color-hover: $color-value,
+        $active-background: color.change($color-value, $alpha: 0.125),
+        $active-border: color.change($color-value, $alpha: 0.25),
+        $active-color: $color-value
       );
 
       // Make sure all colors are visible on the default body background
       // (Especially a problem for dark themes)
-      $contrast-ratio: contrast-ratio($body-bg, $value);
+      $contrast-ratio: contrast-ratio($body-bg, $color-value);
       @if $contrast-ratio <= $min-contrast-ratio {
-        $adjusted-color: ensure-contrasting-color($body-bg, $value);
+        $adjusted-color: ensure-contrasting-color($body-bg, $color-value);
         color: $adjusted-color;
         border-color: $adjusted-color;
 
@@ -143,14 +156,15 @@
         &:active,
         &:disabled,
         &.disabled {
-          color: ensure-contrasting-color(mix($value, $body-bg), $value);
+          color: ensure-contrasting-color(mix($color-value, $body-bg), $color-value);
         }
       }
 
+      // TODO: Redundant? Why not?
       &:focus,
       &.active {
-        border-color: color.change($value, $alpha: 0.4);
-        background-color: color.change($value, $alpha: 0.25);
+        border-color: color.change($color-value, $alpha: 0.4);
+        background-color: color.change($color-value, $alpha: 0.25);
       }
     }
 
@@ -158,17 +172,17 @@
     // Slightly raised, 0-width focus ring
     // The raised effect is done with a solid inset at the bottom.
     // The color of the inset is black for filled buttons and the (contrast-adjusted) border color for outlined buttons.
-    &.btn-#{$color} {
-      border: none;
+    &.btn-#{$color-name} {
+      border-color: transparent;
       @include box-shadow(
         inset 0 -3px 0 0 rgba(0 0 0 / 40%),
-        0 0 0 0 rgba(tint-color($value, 40%), $input-btn-focus-color-opacity)
+        0 0 0 0 rgba(tint-color($color-value, 40%), $input-btn-focus-color-opacity)
       );
     }
-    &.btn-outline-#{$color} {
+    &.btn-outline-#{$color-name} {
       @include box-shadow(
-        inset 0 -3px 0 0 rgba(ensure-contrasting-color($body-bg, $value), 80%),
-        0 0 0 0 rgba(tint-color($value, 40%), $input-btn-focus-color-opacity)
+        inset 0 -3px 0 0 rgba(ensure-contrasting-color($body-bg, $color-value), 80%),
+        0 0 0 0 rgba(tint-color($color-value, 40%), $input-btn-focus-color-opacity)
       );
     }
 
@@ -176,18 +190,18 @@
     // (FYI: In most contexts, including this one, pending also counts as active)
     // Flat, with a focus ring
     &:focus:not(.active):not(:active):not(.pending) {
-      &.btn-#{$color} {
+      &.btn-#{$color-name} {
         @include box-shadow(
           inset 0 0 0 0 rgba(0 0 0 / 30%),
           0 0 0 $btn-focus-width
-            rgba(tint-color($value, 40%), $input-btn-focus-color-opacity)
+            rgba(tint-color($color-value, 40%), $input-btn-focus-color-opacity)
         );
       }
-      &.btn-outline-#{$color} {
+      &.btn-outline-#{$color-name} {
         @include box-shadow(
           inset 0 0 0 0 rgba(0 0 0 / 30%),
           0 0 0 $btn-focus-width
-            rgba(tint-color($value, 40%), $input-btn-focus-color-opacity)
+            rgba(tint-color($color-value, 40%), $input-btn-focus-color-opacity)
         );
       }
     }
@@ -195,16 +209,16 @@
     // Box shadow when hovering, but not active:
     // Flat, 0-width focus ring
     &:hover:not(.active):not(:active):not(.pending) {
-      &.btn-#{$color} {
+      &.btn-#{$color-name} {
         @include box-shadow(
           inset 0 0 0 0 rgba(0 0 0 / 30%),
-          0 0 0 0 rgba(tint-color($value, 40%), $input-btn-focus-color-opacity)
+          0 0 0 0 rgba(tint-color($color-value, 40%), $input-btn-focus-color-opacity)
         );
       }
-      &.btn-outline-#{$color} {
+      &.btn-outline-#{$color-name} {
         @include box-shadow(
           inset 0 0 0 0 rgba(0 0 0 / 30%),
-          0 0 0 0 rgba(tint-color($value, 40%), $input-btn-focus-color-opacity)
+          0 0 0 0 rgba(tint-color($color-value, 40%), $input-btn-focus-color-opacity)
         );
       }
     }
@@ -215,16 +229,16 @@
     &:active:not(:focus),
     &.active:not(:focus),
     &:not(:active):not(.active).pending:not(:focus) {
-      &.btn-#{$color} {
+      &.btn-#{$color-name} {
         @include box-shadow(
           $btn-active-box-shadow,
-          0 0 0 0 rgba(tint-color($value, 40%), $input-btn-focus-color-opacity)
+          0 0 0 0 rgba(tint-color($color-value, 40%), $input-btn-focus-color-opacity)
         );
       }
-      &.btn-outline-#{$color} {
+      &.btn-outline-#{$color-name} {
         @include box-shadow(
           $btn-active-box-shadow,
-          0 0 0 0 rgba(tint-color($value, 40%), $input-btn-focus-color-opacity)
+          0 0 0 0 rgba(tint-color($color-value, 40%), $input-btn-focus-color-opacity)
         );
       }
     }
@@ -234,126 +248,32 @@
     &:active:focus,
     &.active:focus,
     &:not(:active):not(.active).pending:focus {
-      &.btn-#{$color} {
+      &.btn-#{$color-name} {
         @include box-shadow(
           $btn-active-box-shadow,
           0 0 0 $btn-focus-width
-            rgba(tint-color($value, 40%), $input-btn-focus-color-opacity)
+            rgba(tint-color($color-value, 40%), $input-btn-focus-color-opacity)
         );
       }
-      &.btn-outline-#{$color} {
+      &.btn-outline-#{$color-name} {
         @include box-shadow(
           $btn-active-box-shadow,
           0 0 0 $btn-focus-width
-            rgba(tint-color($value, 40%), $input-btn-focus-color-opacity)
+            rgba(tint-color($color-value, 40%), $input-btn-focus-color-opacity)
         );
       }
-    }
-
-    /*&.pending:focus {
-      &.btn-#{$color} {
-        @include box-shadow(
-          $btn-active-box-shadow,
-          0 0 0 $btn-focus-width
-            rgba(tint-color($value, 40%), $input-btn-focus-color-opacity)
-        );
-      }
-      &.btn-outline-#{$color} {
-        @include box-shadow(
-          $btn-active-box-shadow,
-          0 0 0 $btn-focus-width
-            rgba(tint-color($value, 40%), $input-btn-focus-color-opacity)
-        );
-      }
-    }
-
-    &.pending:not(:focus) {
-      &.btn-#{$color} {
-        @include box-shadow(
-          $btn-active-box-shadow,
-          0 0 0 0 rgba(tint-color($value, 40%), $input-btn-focus-color-opacity)
-        );
-      }
-      &.btn-outline-#{$color} {
-        @include box-shadow(
-          $btn-active-box-shadow,
-          0 0 0 0 rgba(tint-color($value, 40%), $input-btn-focus-color-opacity)
-        );
-      }
-    }*/
-
-    // Handle the "text depression" effect
-    // It should happen when we're active *and* have focus.
-    // (TODO: iOS is *really* reluctant to focus buttons.
-    // The pending class acts the same as :focus for now to "fix" that,
-    // at least for async buttons, but it would be nice to remove that
-    // and just have :focus apply the relevant styles without also .pending,
-    // which should normally apply the box shadow but NOT the text shadow.)
-    /*&:focus,
-    &:active:not(:focus),
-    &.active:not(:focus),
-    &.pending:not(.toggle-button) {
-      padding-bottom: $btn-padding-y * 0.5;
-      padding-top: $btn-padding-y + $btn-padding-y * 0.5;
-    }*/
-
-    // We don't offset the text when the button isn't actively focused
-    // (it's a little distracting if it's in a row with other buttons)
-    // so as a compromise, there's a small shadow to make it appear to float.
-    //
-    // Do this any time we're active *but not* focused.
-    &:not(:focus):not(.pending).active,
-    &:not(:focus):not(.pending).active.toggle-button {
-      //--text-shadow-color: rgb(0 0 0 / 35%);
-      //text-shadow: 0em 0.2em 0.25em var(--text-shadow-color), 0.05em 0.15em 0.25em var(--text-shadow-color), -0.05em 0.15em 0.25em var(--text-shadow-color);
     }
   }
 }
 .btn-lg {
   height: calc(1.5em + (#{$btn-padding-y-lg} * 2) + 2px);
-  &:focus,
-  &:active:not(:focus),
-  &.active:not(:focus),
-  &.pending:not(.toggle-button) {
-    padding-top: $btn-padding-y-lg * 0.75;
-    padding-bottom: $btn-padding-y-lg + $btn-padding-y-lg * 0.25;
-
-    &:hover:not(.active):not(:active),
-    &:focus:not(.active):not(:active) {
-      padding-top: $btn-padding-y-lg;
-      padding-bottom: $btn-padding-y-lg;
-    }
-
-    &:active,
-    &.active,
-    &.pending:not(.toggle-button) {
-      padding-bottom: $btn-padding-y-lg * 0.5;
-      padding-top: $btn-padding-y-lg + $btn-padding-y-lg * 0.5;
-    }
-  }
+  padding-top: calc(#{$btn-padding-y-lg} * var(--press-effect-block-offset));
+  padding-bottom: calc(#{$btn-padding-y-lg} * (2 - var(--press-effect-block-offset)));
 }
 .btn-sm {
   height: calc(1.5em + (#{$btn-padding-y-sm} * 2) + 2px);
-  &:focus,
-  &:active:not(:focus),
-  &.active:not(:focus),
-  &.pending:not(.toggle-button) {
-    padding-top: $btn-padding-y-sm * 0.75;
-    padding-bottom: $btn-padding-y-sm + $btn-padding-y-sm * 0.25;
-
-    &:hover:not(.active):not(:active),
-    &:focus:not(.active):not(:active) {
-      padding-top: $btn-padding-y-sm;
-      padding-bottom: $btn-padding-y-sm;
-    }
-
-    &:active,
-    &.active,
-    &.pending:not(.toggle-button) {
-      padding-bottom: $btn-padding-y-sm * 0.5;
-      padding-top: $btn-padding-y-sm + $btn-padding-y-sm * 0.5;
-    }
-  }
+  padding-top: calc(#{$btn-padding-y-sm} * var(--press-effect-block-offset));
+  padding-bottom: calc(#{$btn-padding-y-sm} * (2 - var(--press-effect-block-offset)));
 }
 
 @each $color, $value in $theme-colors {
@@ -361,34 +281,6 @@
 
 @media (prefers-reduced-motion) {
   .btn {
-    .btn-check:checked + &,
-    .btn-check:active + &,
-    &:active,
-    &.active {
-      padding-bottom: $btn-padding-y;
-      padding-top: $btn-padding-y;
-      &.list-group-item {
-        padding-bottom: $btn-padding-y;
-        padding-top: $btn-padding-y;
-      }
-    }
-  }
-  .btn-lg {
-    .btn-check:checked + &,
-    .btn-check:active + &,
-    &:active,
-    &.active {
-      padding-bottom: $btn-padding-y-lg;
-      padding-top: $btn-padding-y-lg;
-    }
-  }
-  .btn-sm {
-    .btn-check:checked + &,
-    .btn-check:active + &,
-    &:active,
-    &.active {
-      padding-bottom: $btn-padding-y-sm;
-      padding-top: $btn-padding-y-sm;
-    }
+    --press-effect-block-offset: 1 !important;
   }
 }
