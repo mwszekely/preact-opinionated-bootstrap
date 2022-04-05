@@ -12209,7 +12209,7 @@ select {
   }
 
   .btn.btn-primary {
-    border: none;
+    border-color: transparent;
     box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(128, 134, 223, var(--input-btn-focus-color-opacity, 0.4));
   }
 
@@ -12291,7 +12291,7 @@ select {
   }
 
   .btn.btn-secondary {
-    border: none;
+    border-color: transparent;
     box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(124, 106, 166, var(--input-btn-focus-color-opacity, 0.4));
   }
 
@@ -12373,7 +12373,7 @@ select {
   }
 
   .btn.btn-success {
-    border: none;
+    border-color: transparent;
     box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(110, 158, 122, var(--input-btn-focus-color-opacity, 0.4));
   }
 
@@ -12449,7 +12449,7 @@ select {
   }
 
   .btn.btn-info {
-    border: none;
+    border-color: transparent;
     box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(102, 206, 227, var(--input-btn-focus-color-opacity, 0.4));
   }
 
@@ -12525,7 +12525,7 @@ select {
   }
 
   .btn.btn-warning {
-    border: none;
+    border-color: transparent;
     box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(255, 209, 102, var(--input-btn-focus-color-opacity, 0.4));
   }
 
@@ -12607,7 +12607,7 @@ select {
   }
 
   .btn.btn-danger {
-    border: none;
+    border-color: transparent;
     box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(195, 119, 127, var(--input-btn-focus-color-opacity, 0.4));
   }
 
@@ -12683,7 +12683,7 @@ select {
   }
 
   .btn.btn-light {
-    border: none;
+    border-color: transparent;
     box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
   }
 
@@ -12765,7 +12765,7 @@ select {
   }
 
   .btn.btn-dark {
-    border: none;
+    border-color: transparent;
     box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(109, 109, 110, var(--input-btn-focus-color-opacity, 0.4));
   }
 
@@ -12841,7 +12841,7 @@ select {
   }
 
   .btn.btn-contrast {
-    border: none;
+    border-color: transparent;
     box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
   }
 
@@ -12923,7 +12923,7 @@ select {
   }
 
   .btn.btn-subtle {
-    border: none;
+    border-color: transparent;
     box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(109, 109, 110, var(--input-btn-focus-color-opacity, 0.4));
   }
 
@@ -29059,7 +29059,7 @@ select {
 }
 @media all and (prefers-color-scheme: light) {
   .btn.btn-primary {
-    border: none;
+    border-color: transparent;
     box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(110, 168, 254, var(--input-btn-focus-color-opacity, 0.4));
   }
 }
@@ -29152,7 +29152,7 @@ select {
 }
 @media all and (prefers-color-scheme: light) {
   .btn.btn-secondary {
-    border: none;
+    border-color: transparent;
     box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(163, 112, 247, var(--input-btn-focus-color-opacity, 0.4));
   }
 }
@@ -29252,7 +29252,7 @@ select {
 }
 @media all and (prefers-color-scheme: light) {
   .btn.btn-success {
-    border: none;
+    border-color: transparent;
     box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(117, 183, 152, var(--input-btn-focus-color-opacity, 0.4));
   }
 }
@@ -29352,7 +29352,7 @@ select {
 }
 @media all and (prefers-color-scheme: light) {
   .btn.btn-info {
-    border: none;
+    border-color: transparent;
     box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(110, 223, 246, var(--input-btn-focus-color-opacity, 0.4));
   }
 }
@@ -29452,7 +29452,7 @@ select {
 }
 @media all and (prefers-color-scheme: light) {
   .btn.btn-warning {
-    border: none;
+    border-color: transparent;
     box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(255, 218, 106, var(--input-btn-focus-color-opacity, 0.4));
   }
 }
@@ -29552,7 +29552,7 @@ select {
 }
 @media all and (prefers-color-scheme: light) {
   .btn.btn-danger {
-    border: none;
+    border-color: transparent;
     box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(234, 134, 143, var(--input-btn-focus-color-opacity, 0.4));
   }
 }
@@ -29652,7 +29652,7 @@ select {
 }
 @media all and (prefers-color-scheme: light) {
   .btn.btn-light {
-    border: none;
+    border-color: transparent;
     box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
   }
 }
@@ -29745,7 +29745,7 @@ select {
 }
 @media all and (prefers-color-scheme: light) {
   .btn.btn-dark {
-    border: none;
+    border-color: transparent;
     box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(109, 110, 110, var(--input-btn-focus-color-opacity, 0.4));
   }
 }
@@ -29838,7 +29838,7 @@ select {
 }
 @media all and (prefers-color-scheme: light) {
   .btn.btn-contrast {
-    border: none;
+    border-color: transparent;
     box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(109, 110, 110, var(--input-btn-focus-color-opacity, 0.4));
   }
 }
@@ -29938,7 +29938,7 @@ select {
 }
 @media all and (prefers-color-scheme: light) {
   .btn.btn-subtle {
-    border: none;
+    border-color: transparent;
     box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
   }
 }
@@ -45317,7 +45317,7 @@ body.themed-scrollbars {
 }
 
 .set-theme.theme-light .btn.btn-primary {
-  border: none;
+  border-color: transparent;
   box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(110, 168, 254, var(--input-btn-focus-color-opacity, 0.4));
 }
 
@@ -45393,7 +45393,7 @@ body.themed-scrollbars {
 }
 
 .set-theme.theme-light .btn.btn-secondary {
-  border: none;
+  border-color: transparent;
   box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(163, 112, 247, var(--input-btn-focus-color-opacity, 0.4));
 }
 
@@ -45475,7 +45475,7 @@ body.themed-scrollbars {
 }
 
 .set-theme.theme-light .btn.btn-success {
-  border: none;
+  border-color: transparent;
   box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(117, 183, 152, var(--input-btn-focus-color-opacity, 0.4));
 }
 
@@ -45557,7 +45557,7 @@ body.themed-scrollbars {
 }
 
 .set-theme.theme-light .btn.btn-info {
-  border: none;
+  border-color: transparent;
   box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(110, 223, 246, var(--input-btn-focus-color-opacity, 0.4));
 }
 
@@ -45639,7 +45639,7 @@ body.themed-scrollbars {
 }
 
 .set-theme.theme-light .btn.btn-warning {
-  border: none;
+  border-color: transparent;
   box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(255, 218, 106, var(--input-btn-focus-color-opacity, 0.4));
 }
 
@@ -45721,7 +45721,7 @@ body.themed-scrollbars {
 }
 
 .set-theme.theme-light .btn.btn-danger {
-  border: none;
+  border-color: transparent;
   box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(234, 134, 143, var(--input-btn-focus-color-opacity, 0.4));
 }
 
@@ -45803,7 +45803,7 @@ body.themed-scrollbars {
 }
 
 .set-theme.theme-light .btn.btn-light {
-  border: none;
+  border-color: transparent;
   box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
 }
 
@@ -45879,7 +45879,7 @@ body.themed-scrollbars {
 }
 
 .set-theme.theme-light .btn.btn-dark {
-  border: none;
+  border-color: transparent;
   box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(109, 110, 110, var(--input-btn-focus-color-opacity, 0.4));
 }
 
@@ -45955,7 +45955,7 @@ body.themed-scrollbars {
 }
 
 .set-theme.theme-light .btn.btn-contrast {
-  border: none;
+  border-color: transparent;
   box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(109, 110, 110, var(--input-btn-focus-color-opacity, 0.4));
 }
 
@@ -46037,7 +46037,7 @@ body.themed-scrollbars {
 }
 
 .set-theme.theme-light .btn.btn-subtle {
-  border: none;
+  border-color: transparent;
   box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
 }
 
@@ -60911,7 +60911,7 @@ body.themed-scrollbars {
 }
 
 .set-theme.theme-dark .btn.btn-primary {
-  border: none;
+  border-color: transparent;
   box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(128, 134, 223, var(--input-btn-focus-color-opacity, 0.4));
 }
 
@@ -60993,7 +60993,7 @@ body.themed-scrollbars {
 }
 
 .set-theme.theme-dark .btn.btn-secondary {
-  border: none;
+  border-color: transparent;
   box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(124, 106, 166, var(--input-btn-focus-color-opacity, 0.4));
 }
 
@@ -61075,7 +61075,7 @@ body.themed-scrollbars {
 }
 
 .set-theme.theme-dark .btn.btn-success {
-  border: none;
+  border-color: transparent;
   box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(110, 158, 122, var(--input-btn-focus-color-opacity, 0.4));
 }
 
@@ -61151,7 +61151,7 @@ body.themed-scrollbars {
 }
 
 .set-theme.theme-dark .btn.btn-info {
-  border: none;
+  border-color: transparent;
   box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(102, 206, 227, var(--input-btn-focus-color-opacity, 0.4));
 }
 
@@ -61227,7 +61227,7 @@ body.themed-scrollbars {
 }
 
 .set-theme.theme-dark .btn.btn-warning {
-  border: none;
+  border-color: transparent;
   box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(255, 209, 102, var(--input-btn-focus-color-opacity, 0.4));
 }
 
@@ -61309,7 +61309,7 @@ body.themed-scrollbars {
 }
 
 .set-theme.theme-dark .btn.btn-danger {
-  border: none;
+  border-color: transparent;
   box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(195, 119, 127, var(--input-btn-focus-color-opacity, 0.4));
 }
 
@@ -61385,7 +61385,7 @@ body.themed-scrollbars {
 }
 
 .set-theme.theme-dark .btn.btn-light {
-  border: none;
+  border-color: transparent;
   box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
 }
 
@@ -61467,7 +61467,7 @@ body.themed-scrollbars {
 }
 
 .set-theme.theme-dark .btn.btn-dark {
-  border: none;
+  border-color: transparent;
   box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(109, 109, 110, var(--input-btn-focus-color-opacity, 0.4));
 }
 
@@ -61543,7 +61543,7 @@ body.themed-scrollbars {
 }
 
 .set-theme.theme-dark .btn.btn-contrast {
-  border: none;
+  border-color: transparent;
   box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
 }
 
@@ -61625,7 +61625,7 @@ body.themed-scrollbars {
 }
 
 .set-theme.theme-dark .btn.btn-subtle {
-  border: none;
+  border-color: transparent;
   box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(109, 109, 110, var(--input-btn-focus-color-opacity, 0.4));
 }
 

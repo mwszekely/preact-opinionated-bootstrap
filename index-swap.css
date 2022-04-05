@@ -9845,7 +9845,7 @@
   background-color: rgba(13, 110, 253, 0.25);
 }
 .set-theme.theme-light .btn.btn-primary {
-  border: none;
+  border-color: transparent;
   box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(110, 168, 254, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-light .btn.btn-outline-primary {
@@ -9904,7 +9904,7 @@
   background-color: rgba(102, 16, 242, 0.25);
 }
 .set-theme.theme-light .btn.btn-secondary {
-  border: none;
+  border-color: transparent;
   box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(163, 112, 247, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-light .btn.btn-outline-secondary {
@@ -9968,7 +9968,7 @@
   background-color: rgba(25, 135, 84, 0.25);
 }
 .set-theme.theme-light .btn.btn-success {
-  border: none;
+  border-color: transparent;
   box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(117, 183, 152, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-light .btn.btn-outline-success {
@@ -10032,7 +10032,7 @@
   background-color: rgba(13, 202, 240, 0.25);
 }
 .set-theme.theme-light .btn.btn-info {
-  border: none;
+  border-color: transparent;
   box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(110, 223, 246, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-light .btn.btn-outline-info {
@@ -10096,7 +10096,7 @@
   background-color: rgba(255, 193, 7, 0.25);
 }
 .set-theme.theme-light .btn.btn-warning {
-  border: none;
+  border-color: transparent;
   box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(255, 218, 106, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-light .btn.btn-outline-warning {
@@ -10160,7 +10160,7 @@
   background-color: rgba(220, 53, 69, 0.25);
 }
 .set-theme.theme-light .btn.btn-danger {
-  border: none;
+  border-color: transparent;
   box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(234, 134, 143, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-light .btn.btn-outline-danger {
@@ -10224,7 +10224,7 @@
   background-color: rgba(241, 242, 244, 0.25);
 }
 .set-theme.theme-light .btn.btn-light {
-  border: none;
+  border-color: transparent;
   box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-light .btn.btn-outline-light {
@@ -10283,7 +10283,7 @@
   background-color: rgba(11, 13, 14, 0.25);
 }
 .set-theme.theme-light .btn.btn-dark {
-  border: none;
+  border-color: transparent;
   box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(109, 110, 110, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-light .btn.btn-outline-dark {
@@ -10342,7 +10342,7 @@
   background-color: rgba(11, 13, 14, 0.25);
 }
 .set-theme.theme-light .btn.btn-contrast {
-  border: none;
+  border-color: transparent;
   box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(109, 110, 110, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-light .btn.btn-outline-contrast {
@@ -10406,7 +10406,7 @@
   background-color: rgba(241, 242, 244, 0.25);
 }
 .set-theme.theme-light .btn.btn-subtle {
-  border: none;
+  border-color: transparent;
   box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-light .btn.btn-outline-subtle {
@@ -22410,7 +22410,7 @@
   background-color: rgba(43, 53, 202, 0.25);
 }
 .set-theme.theme-dark .btn.btn-primary {
-  border: none;
+  border-color: transparent;
   box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(128, 134, 223, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-dark .btn.btn-outline-primary {
@@ -22474,7 +22474,7 @@
   background-color: rgba(36, 6, 106, 0.25);
 }
 .set-theme.theme-dark .btn.btn-secondary {
-  border: none;
+  border-color: transparent;
   box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(124, 106, 166, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-dark .btn.btn-outline-secondary {
@@ -22538,7 +22538,7 @@
   background-color: rgba(13, 94, 33, 0.25);
 }
 .set-theme.theme-dark .btn.btn-success {
-  border: none;
+  border-color: transparent;
   box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(110, 158, 122, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-dark .btn.btn-outline-success {
@@ -22597,7 +22597,7 @@
   background-color: rgba(0, 174, 209, 0.25);
 }
 .set-theme.theme-dark .btn.btn-info {
-  border: none;
+  border-color: transparent;
   box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(102, 206, 227, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-dark .btn.btn-outline-info {
@@ -22656,7 +22656,7 @@
   background-color: rgba(255, 179, 0, 0.25);
 }
 .set-theme.theme-dark .btn.btn-warning {
-  border: none;
+  border-color: transparent;
   box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(255, 209, 102, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-dark .btn.btn-outline-warning {
@@ -22720,7 +22720,7 @@
   background-color: rgba(155, 28, 41, 0.25);
 }
 .set-theme.theme-dark .btn.btn-danger {
-  border: none;
+  border-color: transparent;
   box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(195, 119, 127, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-dark .btn.btn-outline-danger {
@@ -22779,7 +22779,7 @@
   background-color: rgba(241, 242, 243, 0.25);
 }
 .set-theme.theme-dark .btn.btn-light {
-  border: none;
+  border-color: transparent;
   box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-dark .btn.btn-outline-light {
@@ -22843,7 +22843,7 @@
   background-color: rgba(12, 12, 14, 0.25);
 }
 .set-theme.theme-dark .btn.btn-dark {
-  border: none;
+  border-color: transparent;
   box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(109, 109, 110, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-dark .btn.btn-outline-dark {
@@ -22902,7 +22902,7 @@
   background-color: rgba(241, 242, 243, 0.25);
 }
 .set-theme.theme-dark .btn.btn-contrast {
-  border: none;
+  border-color: transparent;
   box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-dark .btn.btn-outline-contrast {
@@ -22966,7 +22966,7 @@
   background-color: rgba(12, 12, 14, 0.25);
 }
 .set-theme.theme-dark .btn.btn-subtle {
-  border: none;
+  border-color: transparent;
   box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(109, 109, 110, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-dark .btn.btn-outline-subtle {

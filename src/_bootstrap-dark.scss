@@ -28,7 +28,7 @@ $max-dark: -1 !default;
 
 @use "./bootstrap-variables/dark/theme-colors" as *;
 @forward "bootstrap-sass-variables/theme-colors" with ($theme-colors: $theme-colors !default);
-@use "bootstrap-sass-variables/variables-dark" with ($body-bg: $body-bg, $body-color: $body-color, $btn-box-shadow: $btn-box-shadow, $btn-active-box-shadow: $btn-active-box-shadow, $component-active-color: tint-color($primary, 80%));
+@use "bootstrap-sass-variables/theme-dark" with ($body-bg: $body-bg, $body-color: $body-color, $btn-box-shadow: $btn-box-shadow, $btn-active-box-shadow: $btn-active-box-shadow, $component-active-color: tint-color($primary, 80%));
 
 
 @forward "bootstrap-sass-variables/input-bg" with ($input-bg: $black !default);

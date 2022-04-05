@@ -20,5 +20,4 @@
 @use "./bootstrap-variables/btn-box-shadow" as *;
 @forward "bootstrap-sass-variables/btn-box-shadow" with ($btn-box-shadow: $btn-box-shadow !default);
 
-@forward "bootstrap-sass-variables/variables";
 @use "bootstrap-sass-variables/bootstrap";
