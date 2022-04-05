@@ -2378,17 +2378,17 @@
               But roughly isn't good enough if there are multiple matches.
               To convert our sorted index to the unsorted index we need, we have to find the first
               element that matches us *and* (if any such exist) is *after* our current selection.
-                In other words, the only way typeahead moves backwards relative to our current
+               In other words, the only way typeahead moves backwards relative to our current
               position is if the only other option is behind us.
-                It's not specified in WAI-ARIA what to do in that case.  I suppose wrap back to the start?
+               It's not specified in WAI-ARIA what to do in that case.  I suppose wrap back to the start?
               Though there's also a case for just going upwards to the nearest to prevent jumpiness.
               But if you're already doing typeahead on an unsorted list, like, jumpiness can't be avoided.
               I dunno. Going back to the start is the simplist though.
-                Basically what this does: Starting from where we found ourselves after our binary search,
+               Basically what this does: Starting from where we found ourselves after our binary search,
               scan backwards and forwards through all adjacent entries that also compare equally so that
               we can find the one whose `unsortedIndex` is the lowest amongst all other equal strings
               (and also the lowest `unsortedIndex` yadda yadda except that it comes after us).
-                TODO: The binary search starts this off with a solid O(log n), but one-character
+               TODO: The binary search starts this off with a solid O(log n), but one-character
               searches are, thanks to pigeonhole principal, eventually guaranteed to become
               O(n*log n). This is annoying but probably not easily solvable? There could be an
               exception for one-character strings, but that's just kicking the can down
@@ -7146,8 +7146,8 @@
       /*const useMenuSubmenuItem = useCallback((args: UseMenuSubmenuItemParameters) => {
           const { useMenuProps, useMenuButton } = useAriaMenu<HTMLElement, ChildElement, I>(args);
           const { useMenuButtonProps } = useMenuButton<E>({ tag: "li" as any });
-            const { getElement, useRefElementProps } = useRefElement<any>({ onElementChange: setOpenerElement as OnPassiveStateChange<any> });
-            return {
+           const { getElement, useRefElementProps } = useRefElement<any>({ onElementChange: setOpenerElement as OnPassiveStateChange<any> });
+           return {
               getElement,
               useMenuProps,
               useMenuSubmenuItemProps: function <P extends h.JSX.HTMLAttributes<E>>({ ...props }: P) {
@@ -10135,8 +10135,8 @@
         children: e$3(UseAriaAccordionSectionContext.Provider, {
           value: useAriaAccordionSection,
           children: children
-        }, void 0)
-      }, void 0);
+        })
+      });
     }));
     const AccordionSection = g$1(forwardElementRef(function AccordionSection(_ref2, ref) {
       var _Transition, _headerLevel;
@@ -10178,7 +10178,7 @@
         class: "accordion-header",
         children: e$3("button", { ...headerButtonProps,
           children: header
-        }, void 0)
+        })
       };
       const headerJsx = headerLevel >= 1 && headerLevel <= 6 ? v$2(`h${headerLevel}`, headerProps) : v$2("div", useMergedProps()(headerProps, {
         role: "heading",
@@ -10197,10 +10197,10 @@
             children: e$3("div", {
               class: clsx("accordion-body", expanded && "elevation-depressed-2", "elevation-body-surface"),
               children: children
-            }, void 0)
-          }, void 0)
-        }, void 0)]
-      }, void 0);
+            })
+          })
+        })]
+      });
     }));
 
     // presumably because the number of elements changes. 
@@ -10330,8 +10330,8 @@
         children: e$3("progress", { ...useProgressProps({
             className: "progress-bar"
           })
-        }, void 0)
-      }, void 0);
+        })
+      });
     })); // :)
 
     new Date().getDate() % 2;
@@ -10339,13 +10339,13 @@
     function Check() {
       return e$3("i", {
         class: "bi bi-check"
-      }, void 0);
+      });
     }
 
     function Cross() {
       return e$3("i", {
         class: "bi bi-x"
-      }, void 0);
+      });
     }
 
     const ProgressCircular = forwardElementRef(function (_ref4, ref) {
@@ -10410,7 +10410,7 @@
       (_childrenPosition = childrenPosition) !== null && _childrenPosition !== void 0 ? _childrenPosition : childrenPosition = "after";
       if (children && (typeof children != "object" || !("type" in children))) children = e$3("span", {
         children: children
-      }, void 0);
+      });
       let progressProps = useMergedProps()({
         ref,
         className: clsx("circular-progress-container")
@@ -10427,7 +10427,7 @@
           "aria-live": "assertive",
           class: "visually-hidden",
           children: loadingLabel
-        }, void 0), mode !== null && e$3(Swappable, {
+        }), mode !== null && e$3(Swappable, {
           children: e$3("div", {
             className: "circular-progress-swappable",
             children: [e$3(Fade, {
@@ -10444,32 +10444,32 @@
                     class: clsx("circular-progress-ball-origin", `circular-progress-ball-origin-${i}`),
                     children: e$3("div", {
                       class: "circular-progress-ball"
-                    }, void 0)
-                  }, void 0);
+                    })
+                  });
                 }())
-              }, void 0)
-            }, void 0), e$3(Fade, {
+              })
+            }), e$3(Fade, {
               show: !shownStatusLongEnough && mode === "succeeded" && succeededAfterFailure,
               children: e$3("div", {
                 class: "circular-progress-succeeded",
-                children: e$3(Check, {}, void 0)
-              }, void 0)
-            }, void 0), e$3(Fade, {
+                children: e$3(Check, {})
+              })
+            }), e$3(Fade, {
               show: !shownStatusLongEnough && mode === "failed",
               children: e$3("div", {
                 class: "circular-progress-failed",
-                children: e$3(Cross, {}, void 0)
-              }, void 0)
-            }, void 0)]
-          }, void 0)
-        }, void 0)]
-      }, void 0));
+                children: e$3(Cross, {})
+              })
+            })]
+          })
+        })]
+      }));
       return e$3(d$2, {
         children: [childrenPosition == "before" && progressElement, children && v$2(children.type, useMergedProps()({
           children: childrenPosition === "child" ? progressElement : undefined,
           ref: children.ref
         }, useReferencedProps(children.props))), childrenPosition == "after" && progressElement]
-      }, void 0);
+      });
     });
 
     const UseButtonGroupChild = D$1(null);
@@ -10486,7 +10486,7 @@
       return e$3(DefaultFillStyleContext.Provider, {
         value: value,
         children: children
-      }, void 0);
+      });
     });
     const ProvideDefaultButtonColor = g$1(function ProvideDefaultButtonColor(_ref2) {
       let {
@@ -10496,7 +10496,7 @@
       return e$3(DefaultColorStyleContext.Provider, {
         value: value,
         children: children
-      }, void 0);
+      });
     });
     const ProvideDefaultButtonSize = g$1(function ProvideDefaultButtonSize(_ref3) {
       let {
@@ -10506,7 +10506,7 @@
       return e$3(DefaultSizeContext.Provider, {
         value: value,
         children: children
-      }, void 0);
+      });
     });
     const ProvideDefaultButtonDisabled = g$1(function ProvideDefaultButtonDisabled(_ref4) {
       let {
@@ -10516,7 +10516,7 @@
       return e$3(DefaultDisabledContext.Provider, {
         value: value,
         children: children
-      }, void 0);
+      });
     });
     const ProvideDefaultButtonDropdownDirection = g$1(function ProvideDefaultButtonDropdownDirection(_ref5) {
       let {
@@ -10526,7 +10526,7 @@
       return e$3(DefaultDropdownDirectionContext.Provider, {
         value: value,
         children: children
-      }, void 0);
+      });
     });
     function useButtonFillVariant(providedValue) {
       const defaultFill = F(DefaultFillStyleContext);
@@ -10581,13 +10581,13 @@
       if (((_p$tag = p.tag) === null || _p$tag === void 0 ? void 0 : _p$tag.toLowerCase()) === "a" || !!p.href) return e$3(AnchorButton, {
         ref: ref,
         ...p
-      }, void 0);else if (p.pressed != null) return e$3(ToggleButton, {
+      });else if (p.pressed != null) return e$3(ToggleButton, {
         ref: ref,
         ...p
-      }, void 0);else return e$3(ButtonButton, {
+      });else return e$3(ButtonButton, {
         ref: ref,
         ...p
-      }, void 0);
+      });
     }
 
     const AnchorButton = forwardElementRef(function AnchorButton(p, ref) {
@@ -10612,7 +10612,7 @@
       return e$3("a", { ...usePseudoActive(useButtonStylesProps({ ...props,
           ref
         }))
-      }, void 0);
+      });
     });
     const ButtonButton = forwardElementRef(function ButtonButton(p, ref) {
       let {
@@ -10669,7 +10669,7 @@
 
       if (dropdownVariant == "combined") children = e$3(d$2, {
         children: [" ", children, " "]
-      }, void 0);
+      });
       return e$3(ProgressCircular, {
         spinnerTimeout: spinnerTimeout,
         mode: hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null,
@@ -10684,8 +10684,8 @@
             onPress,
             ref
           }))))
-        }, void 0)
-      }, void 0);
+        })
+      });
     });
     const ToggleButton = forwardElementRef(function ToggleButton(p, ref) {
       let {
@@ -10743,8 +10743,8 @@
               ref
             }, props)
           })))
-        }, void 0)
-      }, void 0);
+        })
+      });
     });
     const Button = forwardElementRef(ButtonR);
 
@@ -10821,13 +10821,13 @@
                 children: e$3("div", { ...outerDomProps,
                   children: e$3("div", { ...innerDomProps,
                     children: children
-                  }, void 0)
-                }, void 0)
-              }, void 0)
-            }, void 0)
-          }, void 0)
-        }, void 0)
-      }, void 0);
+                  })
+                })
+              })
+            })
+          })
+        })
+      });
     }));
     const ButtonGroupChild = g$1(forwardElementRef(function ButtonGroupChild1(_ref, ref) {
       let {
@@ -10852,13 +10852,13 @@
       }, { ...buttonProps
       }));
       return e$3(Button, { ...p
-      }, void 0);
+      });
     }));
 
     e$3(Button, {
       pressed: true,
       onPress: p => console.log(p)
-    }, void 0);
+    });
 
     const baseId = generateRandomId("render-portal-container-");
     const BodyPortalClassContext = D$1("");
@@ -10871,7 +10871,7 @@
       return e$3(BodyPortalClassContext.Provider, {
         value: className,
         children: children
-      }, void 0);
+      });
     });
 
     function useBodyPortalRoot() {
@@ -10905,8 +10905,8 @@
       return e$3(BodyPortalRootContext.Provider, {
         value: getElement,
         children: [children, e$3("div", { ...useRefElementProps({})
-        }, void 0)]
-      }, void 0);
+        })]
+      });
     }
     function BodyPortal(_ref3) {
       let {
@@ -10944,6 +10944,8 @@
       var _onClose, _align;
 
       let {
+        maxWidth,
+        fullscreen,
         align,
         onClose,
         open,
@@ -10996,14 +10998,14 @@
               children: e$3("div", { ...useDialogBackdropProps({
                   class: "modal-backdrop backdrop-filter-transition"
                 })
-              }, void 0)
-            }, void 0), e$3(Transition, { ...{
+              })
+            }), e$3(Transition, { ...{
                 ref,
                 show: open,
                 ...rest
               },
               children: e$3("div", { ...useDialogProps({
-                  class: clsx("modal-dialog modal-dialog-scrollable", align == "center" ? "modal-dialog-centered" : "")
+                  class: clsx("modal-dialog modal-dialog-scrollable", align == "center" ? "modal-dialog-centered" : "", maxWidth && `modal-${maxWidth}`, fullscreen === true ? "modal-fullscreen" : fullscreen ? `modal-fullscreen-${fullscreen}` : "")
                 }),
                 children: e$3(BodyPortalRoot, {
                   children: e$3(Fade, {
@@ -11016,23 +11018,23 @@
                         children: e$3("h1", {
                           class: "modal-title",
                           children: title
-                        }, void 0)
-                      }, void 0), e$3("div", { ...useDialogBodyProps({
+                        })
+                      }), e$3("div", { ...useDialogBodyProps({
                           class: "modal-body"
                         }),
                         children: children
-                      }, void 0), footer != null && e$3("div", {
+                      }), footer != null && e$3("div", {
                         class: "modal-footer",
                         children: footer
-                      }, void 0)]
-                    }, void 0)
-                  }, void 0)
-                }, void 0)
-              }, void 0)
-            }, void 0)]
-          }, void 0)
-        }, void 0)
-      }, void 0);
+                      })]
+                    })
+                  })
+                })
+              })
+            })]
+          })
+        })
+      });
     }));
     const DialogUncontrolled = g$1(forwardElementRef(function DialogUncontrolled(_ref2, ref) {
       let {
@@ -11082,17 +11084,17 @@
       return e$3(DialogControlled, { ...props,
         open: !!state,
         onClose: onClose
-      }, void 0);
+      });
     }));
     const Dialog = g$1(forwardElementRef(function Dialog(props, ref) {
       if (props.provideShow) return e$3(DialogUncontrolled, { ...props,
         ref: ref
-      }, void 0);
+      });
       if (props.onClose) return e$3(DialogControlled, { ...props,
         ref: ref
-      }, void 0);else return e$3(DialogUncontrolled, { ...props,
+      });else return e$3(DialogUncontrolled, { ...props,
         ref: ref
-      }, void 0);
+      });
     }));
     const PushDialogContext = D$1(null);
     const CloseDialogContext = D$1(null);
@@ -11119,15 +11121,15 @@
           children: [e$3(DialogsProviderHelper, {
             setPushDialog: setPushDialog,
             setUpdateDialog: setUpdateDialog
-          }, void 0), pushDialog && updateDialog && e$3(PushDialogContext.Provider, {
+          }), pushDialog && updateDialog && e$3(PushDialogContext.Provider, {
             value: pushDialogStable,
             children: e$3(UpdateDialogContext.Provider, {
               value: updateDialogStable,
               children: children
-            }, void 0)
-          }, void 0)]
-        }, void 0)
-      }, void 0);
+            })
+          })]
+        })
+      });
     }
     /**
      * Returns a function that immediately displays the given JSX Dialog element and returns a promise when it closes.
@@ -11160,7 +11162,7 @@
           ref,
           onPress: useCloseDialog()
         })
-      }, void 0);
+      });
     })); // Extracted to a separate component to avoid rerendering all non-dialog children
 
     function DialogsProviderHelper(_ref4) {
@@ -11229,9 +11231,9 @@
       return e$3(BodyPortal, {
         children: e$3(DialogsContainerChildrenContext.Provider, {
           value: children,
-          children: e$3(DialogsContainer, {}, void 0)
-        }, void 0)
-      }, void 0);
+          children: e$3(DialogsContainer, {})
+        })
+      });
     }
 
     const DialogsContainerChildrenContext = D$1(new Map());
@@ -11245,7 +11247,7 @@
           }] = _ref5;
           return children;
         })
-      }, void 0);
+      });
     }
 
     const Drawer = g$1(forwardElementRef(function Drawer(_ref, ref) {
@@ -11297,8 +11299,8 @@
             children: e$3("div", { ...useDrawerBackdropProps({
                 class: "offcanvas-backdrop backdrop-filter-transition"
               })
-            }, void 0)
-          }, void 0), e$3(Transition, { ...{
+            })
+          }), e$3(Transition, { ...{
               show: open,
               ...TransitionProps
             },
@@ -11312,21 +11314,21 @@
                     class: "offcanvas-title"
                   }),
                   children: "Drawer"
-                }, void 0), closeButton !== null && closeButton !== void 0 ? closeButton : e$3(Button, {
+                }), closeButton !== null && closeButton !== void 0 ? closeButton : e$3(Button, {
                   tag: "button",
                   class: "btn-close text-reset",
                   "aria-label": "Close",
                   onPress: () => onClose("escape")
-                }, void 0)]
-              }, void 0), e$3("div", { ...useDrawerBodyProps({
+                })]
+              }), e$3("div", { ...useDrawerBodyProps({
                   class: "offcanvas-body"
                 }),
                 children: children
-              }, void 0)]
-            }, void 0)
-          }, void 0)]
-        }, void 0)
-      }, void 0);
+              })]
+            })
+          })]
+        })
+      });
     }));
 
     const FocusModeContext = D$1("keyboard");
@@ -11518,7 +11520,7 @@
       }, props), e$3(InInputGridContext.Provider, {
         value: F(InInputGridContext) + 1,
         children: children
-      }, void 0));
+      }));
     }));
     /**
      * An InputGroup, that puts an Input and its Label together, visually, into one component.
@@ -11540,7 +11542,7 @@
       }, props), e$3(InInputGroupContext.Provider, {
         value: true,
         children: children
-      }, void 0));
+      }));
     }));
     /**
      * Not generally needed, since most input components come with labels that do this for you.
@@ -11649,9 +11651,9 @@
           mode: currentType === "async" ? asyncState : null,
           colorVariant: "info",
           children: e$3("input", { ...propsForInput
-          }, void 0)
-        }, void 0)
-      }, void 0);
+          })
+        })
+      });
 
       const p2 = { ...useCheckboxLabelElementProps({
           className: clsx(pending && "pending", disabled && "disabled", "form-check-label"),
@@ -11665,18 +11667,18 @@
           tag: "label",
           ...p2,
           children: label
-        }, void 0)
-      }, void 0);
+        })
+      });
 
       const ret = e$3(d$2, {
         children: [labelPosition == "start" && labelElement, inputElement, labelPosition == "end" && labelElement]
-      }, void 0);
+      });
 
       if (!inInputGroup) return e$3("div", { ...useMergedProps()({}, {
           class: "form-check"
         }),
         children: ret
-      }, void 0);
+      });
       return ret;
     }));
     const OptionallyInputGroup$1 = forwardElementRef(function OptionallyInputGroup(_ref2, ref) {
@@ -11698,14 +11700,14 @@
       if (inInputGrid && isInput) children = e$3("div", {
         className: "input-group-text",
         children: children
-      }, void 0);
+      });
       return e$3(InputGroupText, {
         tag: tag !== null && tag !== void 0 ? tag : "div",
         ...useMergedProps()({
           className: clsx(isInput && inInputGrid && "faux-input-group-text")
         }, props),
         children: children
-      }, void 0);
+      });
     });
 
     /**
@@ -11824,7 +11826,7 @@
         }),
         onCheck: onCheck,
         checked: checked
-      }, void 0);
+      });
     }));
 
     const knownNames = new Set();
@@ -11915,22 +11917,22 @@
       let labelJsx = e$3("label", { ...useGenericLabelLabelProps(useReferencedInputIdProps("for")({
           children: label
         }))
-      }, void 0);
+      });
 
       let groupJsx = e$3("div", { ...useGenericLabelInputProps(useRadioGroupProps({
           ref,
           "aria-label": labelPosition === "hidden" ? stringLabel : undefined
         })),
         children: children
-      }, void 0);
+      });
 
       return e$3(CurrentHandlerTypeContext.Provider, {
         value: currentType !== null && currentType !== void 0 ? currentType : "sync",
         children: e$3(RadioGroupContext.Provider, {
           value: useRadio,
           children: [labelPosition == "start" && labelJsx, groupJsx, labelPosition == "end" && labelJsx]
-        }, void 0)
-      }, void 0);
+        })
+      });
     }));
     const Radio = g$1(forwardElementRef(function Radio(_ref2, ref) {
       var _labelPosition, _disabled, _label;
@@ -11998,9 +12000,9 @@
               className: clsx(asyncState === "pending" && "pending", disabled && "disabled", "form-check-input"),
               "aria-label": labelPosition === "hidden" ? stringLabel : undefined
             })
-          }, void 0)
-        }, void 0)
-      }, void 0);
+          })
+        })
+      });
 
       const labelElement = e$3(d$2, {
         children: label != null && e$3(OptionallyInputGroup$1, {
@@ -12011,17 +12013,17 @@
             "aria-hidden": "true"
           }),
           children: label
-        }, void 0)
-      }, void 0);
+        })
+      });
 
       const ret = e$3(d$2, {
         children: [labelPosition == "start" && labelElement, inputElement, labelPosition == "end" && labelElement]
-      }, void 0);
+      });
 
       if (!inInputGroup) return e$3("div", {
         class: "form-check",
         children: ret
-      }, void 0);
+      });
       return ret;
     }));
 
@@ -12105,9 +12107,9 @@
               className: clsx(pending && "pending", "form-check-input", disabled && "disabled"),
               "aria-label": labelPosition === "hidden" ? stringLabel : undefined
             })
-          }, void 0)
-        }, void 0)
-      }, void 0);
+          })
+        })
+      });
 
       const p2 = { ...useSwitchLabelElementProps({
           className: clsx(pending && "pending", "form-check-label", disabled && "disabled"),
@@ -12121,18 +12123,18 @@
           isInput: false,
           ...p2,
           children: label
-        }, void 0)
-      }, void 0);
+        })
+      });
 
       const ret = e$3(d$2, {
         children: [labelPosition == "start" && labelElement, inputElement, labelPosition == "end" && labelElement]
-      }, void 0);
+      });
 
       if (!inInputGroup) return e$3("div", { ...useMergedProps()(rest, {
           class: "form-check form-switch"
         }),
         children: ret
-      }, void 0);
+      });
       return ret;
     })); // Note: Slightly different from the others
     // (^^^^ I'm really glad I left that there)
@@ -12153,14 +12155,14 @@
       if (inInputGrid && isInput) children = e$3("div", {
         className: clsx(isInput && inInputGrid && "form-switch", "input-group-text"),
         children: children
-      }, void 0);
+      });
       return e$3(InputGroupText, {
         tag: tag !== null && tag !== void 0 ? tag : "div",
         ...useMergedProps()({
           className: clsx("input-group-text", isInput && !inInputGrid && "form-switch", isInput && inInputGrid && "faux-input-group-text")
         }, props),
         children: children
-      }, void 0);
+      });
     });
 
     function return0() {
@@ -12369,8 +12371,8 @@
             onInput,
             ...extraProps
           })))
-        }, void 0)
-      }, void 0);
+        })
+      });
     }
 
     const UnlabelledInput = forwardElementRef(UnlabelledInputR);
@@ -12427,7 +12429,7 @@
           class: clsx(disabledVariant !== "text" && disabled && "disabled", isInInputGroup ? "input-group-text" : labelPosition != "floating" ? "form-label" : "")
         }),
         children: children
-      }, void 0);
+      });
 
       let inputJsx = e$3(IC, { ...useInputLabelInputProps(useMergedProps()({
           children: IC === InputGroupText ? value : undefined,
@@ -12443,7 +12445,7 @@
           [IC == InputGroupText ? "children" : "value"]: value
         },
         children: IC == InputGroupText ? value : undefined
-      }, void 0);
+      });
 
       const isEmpty = true ; //if (isInInputGrid) {
 
@@ -12456,18 +12458,18 @@
             width
           } : undefined,
           children: inputJsx
-        }, void 0);
+        });
       } // }
 
 
       const inputWithLabel = e$3(d$2, {
         children: [labelPosition === "start" && labelJsx, inputJsx, (labelPosition === "end" || labelPosition == "floating") && labelJsx]
-      }, void 0);
+      });
 
       if (labelPosition !== "floating") return inputWithLabel;else return e$3("div", {
         class: clsx("form-floating", labelPosition == "floating" && classs, labelPosition === "floating" && className),
         children: inputJsx
-      }, void 0);
+      });
     }));
 
     /**
@@ -12637,14 +12639,14 @@
       } = props;
       let labelVnode = typeof label == "string" ? e$3("label", {
         children: label
-      }, void 0) : label;
+      }) : label;
       return e$3(d$2, {
         children: [labelPosition === "start" && labelVnode, v$2(tag !== null && tag !== void 0 ? tag : "ul", useMergedProps()({
           class: clsx("list-group", flush && "list-group-flush", inline && UtilityClasses.display.inline),
           ref,
           "aria-hidden": labelPosition === "hidden" ? label : undefined
         }, domProps)), labelPosition === "end" && labelVnode]
-      }, void 0);
+      });
     }));
     const ListItemStatic = g$1(forwardElementRef(function ListItemStatic(props, ref) {
       const {
@@ -12662,17 +12664,17 @@
             children: [iconStart && e$3("span", {
               class: "list-group-item-start-icon",
               children: iconStart
-            }, void 0), children, badge && e$3("span", {
+            }), children, badge && e$3("span", {
               class: "list-group-item-badge",
               children: badge
-            }, void 0), iconEnd && e$3("span", {
+            }), iconEnd && e$3("span", {
               className: "list-group-item-end-icon",
               children: iconEnd
-            }, void 0)]
-          }, void 0),
+            })]
+          }),
           class: clsx("list-group-item list-group-item-multiline", disabled && "disabled text-muted", !!badge && "with-badge", !!iconStart && "with-start", !!(badge || iconEnd) && "with-end")
         }, domProps))
-      }, void 0);
+      });
     }));
 
     const UseListboxMultiItemContext = D$1(null);
@@ -12717,7 +12719,7 @@
       let labelProps = typeof label == "string" ? {} : label.props;
       let clonedLabel = labelPosition != "hidden" ? B(typeof label == "string" ? e$3("label", {
         children: label
-      }, void 0) : label, useListboxMultiLabelProps(labelProps)) : label;
+      }) : label, useListboxMultiLabelProps(labelProps)) : label;
       console.assert(!(labelPosition == "hidden" && typeof label != "string"));
       return e$3(UseListboxMultiItemContext.Provider, {
         value: useListboxMultiItem,
@@ -12730,8 +12732,8 @@
             ref,
             "aria-hidden": labelPosition === "hidden" ? label : undefined
           }, useListboxMultiProps(domProps))
-        }, void 0)
-      }, void 0);
+        })
+      });
     }));
     const ListItemMulti = g$1(forwardElementRef(function ListItemMulti(p, ref) {
       const {
@@ -12780,8 +12782,8 @@
             class: clsx("list-group-item-action", selected && "active", pending && "pending")
           }, useListboxMultiItemProps(domProps))),
           children: children
-        }, void 0)
-      }, void 0);
+        })
+      });
     }));
 
     const UseListboxSingleItemContext = D$1(null);
@@ -12840,7 +12842,7 @@
       let labelProps = typeof label == "string" ? {} : label.props;
       let clonedLabel = labelPosition != "hidden" ? B(typeof label == "string" ? e$3("label", {
         children: label
-      }, void 0) : label, useListboxSingleLabelProps(labelProps)) : label;
+      }) : label, useListboxSingleLabelProps(labelProps)) : label;
       console.assert(!(labelPosition == "hidden" && typeof label != "string"));
       return e$3(UseListboxSingleItemContext.Provider, {
         value: useListboxSingleItem,
@@ -12853,8 +12855,8 @@
             ref,
             "aria-hidden": labelPosition === "hidden" ? label : undefined
           }, useListboxSingleProps(domProps))
-        }, void 0)
-      }, void 0);
+        })
+      });
     }));
     const ListItemSingle = g$1(forwardElementRef(function ListItemSingle(p, ref) {
       let {
@@ -12896,8 +12898,8 @@
             class: clsx("list-group-item-action", selected && "active", pending && "pending")
           }, useListboxSingleItemProps(domProps))),
           children: children
-        }, void 0)
-      }, void 0);
+        })
+      });
     }));
 
     const ListActionableChildContext = D$1(null);
@@ -12923,8 +12925,8 @@
         children: e$3(ListStatic, {
           role: childCount ? "toolbar" : undefined,
           ...listStaticProps
-        }, void 0)
-      }, void 0);
+        })
+      });
     }));
     const ListItemActionable = g$1(forwardElementRef(function ListItemActionable(props, ref) {
       const {
@@ -12963,8 +12965,8 @@
         colorVariant: "info",
         children: e$3(ListItemStatic, { ...domProps,
           children: children
-        }, void 0)
-      }, void 0);
+        })
+      });
     }));
 
     function returnVoid() {
@@ -12994,27 +12996,27 @@
     const List = g$1(forwardElementRef(function List(props, ref) {
       if (isSingleProps(props)) return e$3(ListSingle, { ...props,
         ref: ref
-      }, void 0);else if (isMultiProps(props)) return e$3(ListMulti, { ...props,
+      });else if (isMultiProps(props)) return e$3(ListMulti, { ...props,
         ref: ref
-      }, void 0); // There's no meaningful distinction between an actionable list and a static one
+      }); // There's no meaningful distinction between an actionable list and a static one
       // (on the outside at least)
       // but also there's no harm in just always assuming an actionable list.
       // It doesn't cost much to not use the list navigation after all.
 
       return e$3(ListActionable, { ...props,
         ref: ref
-      }, void 0);
+      });
     }));
     g$1(forwardElementRef(function ListItem(props, ref) {
       if (isSingleItemProps(props)) return e$3(ListItemSingle, { ...props,
         ref: ref
-      }, void 0);else if (isMultiItemProps(props)) return e$3(ListItemMulti, { ...props,
+      });else if (isMultiItemProps(props)) return e$3(ListItemMulti, { ...props,
         ref: ref
-      }, void 0);else if (isActionableItemProps(props)) return e$3(ListItemActionable, { ...props,
+      });else if (isActionableItemProps(props)) return e$3(ListItemActionable, { ...props,
         ref: ref
-      }, void 0);else return e$3(ListItemStatic, { ...props,
+      });else return e$3(ListItemStatic, { ...props,
         ref: ref
-      }, void 0);
+      });
     }));
 
     var _globalThis$process, _globalThis$process2, _globalThis$process2$, _globalThis$process$e, _globalThis$process$e2;
@@ -13323,6 +13325,10 @@
 
       var currentNode = getParentNode(element);
 
+      if (isShadowRoot(currentNode)) {
+        currentNode = currentNode.host;
+      }
+
       while (isHTMLElement(currentNode) && ['html', 'body'].indexOf(getNodeName(currentNode)) < 0) {
         var css = getComputedStyle$1(currentNode); // This is non-exhaustive but covers the most common CSS properties that
         // create a containing block.
@@ -13555,7 +13561,7 @@
 
         if (placement === top || (placement === left || placement === right) && variation === end) {
           sideY = bottom;
-          var offsetY = isFixed && win.visualViewport ? win.visualViewport.height : // $FlowFixMe[prop-missing]
+          var offsetY = isFixed && offsetParent === win && win.visualViewport ? win.visualViewport.height : // $FlowFixMe[prop-missing]
           offsetParent[heightProp];
           y -= offsetY - popperRect.height;
           y *= gpuAcceleration ? 1 : -1;
@@ -13563,7 +13569,7 @@
 
         if (placement === left || (placement === top || placement === bottom) && variation === end) {
           sideX = right;
-          var offsetX = isFixed && win.visualViewport ? win.visualViewport.width : // $FlowFixMe[prop-missing]
+          var offsetX = isFixed && offsetParent === win && win.visualViewport ? win.visualViewport.width : // $FlowFixMe[prop-missing]
           offsetParent[widthProp];
           x -= offsetX - popperRect.width;
           x *= gpuAcceleration ? 1 : -1;
@@ -15519,11 +15525,11 @@
       if (typeof children === "string" || typeof children === "number" || typeof children == "boolean" || typeof children === "bigint") {
         cloneable = e$3("span", {
           children: children
-        }, void 0);
+        });
       } else if (Array.isArray(children)) {
         cloneable = e$3("span", {
           children: children
-        }, void 0);
+        });
       } else {
         cloneable = children;
       }
@@ -15610,15 +15616,15 @@
                 children: [e$3("div", { ...usePopperArrowProps({
                     class: "popper-arrow"
                   })
-                }, void 0), e$3("div", {
+                }), e$3("div", {
                   class: "tooltip-inner",
                   children: tooltip || lastUsedTooltipRef.current
-                }, void 0)]
-              }, void 0)
-            }, void 0)
-          }, void 0)
-        }, void 0)]
-      }, void 0);
+                })]
+              })
+            })
+          })
+        })]
+      });
     }));
 
     const HasTypeaheadContext = D$1(false);
@@ -15729,8 +15735,8 @@
       if (currentTypeahead && invalidTypeahead) currentTypeahead = e$3(d$2, {
         children: [currentTypeahead, " ", e$3("i", {
           class: "bi bi-backspace"
-        }, void 0)]
-      }, void 0);
+        })]
+      });
       let anchorProps = anchor.props;
       anchorProps = useMenuButtonProps(useElementSizeProps(usePopperSourceProps(anchorProps)));
       anchorProps = useMergedProps()(anchorProps, {
@@ -15755,7 +15761,7 @@
               children: [e$3(ProvideDefaultButtonDropdownDirection, {
                 value: side,
                 children: B(anchor, anchorProps)
-              }, void 0), e$3(BodyPortal, {
+              }), e$3(BodyPortal, {
                 children: e$3("div", { ...usePopperPopupProps({
                     class: "dropdown-menu-popper"
                   }),
@@ -15774,23 +15780,23 @@
                             className: "visually-hidden"
                           }),
                           children: "Close menu"
-                        }, void 0), v$2(tag !== null && tag !== void 0 ? tag : "ul", {
+                        }), v$2(tag !== null && tag !== void 0 ? tag : "ul", {
                           children,
                           className: "dropdown-menu elevation-raised-4 elevation-body-surface"
                         }), e$3("button", { ...useSecondMenuSentinelProps({
                             className: "visually-hidden"
                           }),
                           children: "Close menu"
-                        }, void 0)]
-                      }, void 0)
-                    }, void 0)
-                  }, void 0)
-                }, void 0)
-              }, void 0)]
-            }, void 0)
-          }, void 0)
-        }, void 0)
-      }, void 0);
+                        })]
+                      })
+                    })
+                  })
+                })
+              })]
+            })
+          })
+        })
+      });
     }
 
     function MenuItemU(p, ref) {
@@ -15849,14 +15855,14 @@
         children: [iconStart && e$3("span", {
           class: "dropdown-item-start-icon",
           children: iconStart
-        }, void 0), children, badge && e$3("span", {
+        }), children, badge && e$3("span", {
           class: "dropdown-item-badge",
           children: badge
-        }, void 0), iconEnd && e$3("span", {
+        }), iconEnd && e$3("span", {
           className: "dropdown-item-end-icon",
           children: iconEnd
-        }, void 0)]
-      }, void 0);
+        })]
+      });
 
       if (isInteractive) {
         return e$3("li", {
@@ -15867,13 +15873,13 @@
             colorVariant: "info",
             children: e$3("button", { ...buttonProps,
               children: childrenWithIcons
-            }, void 0)
-          }, void 0)
-        }, void 0);
+            })
+          })
+        });
       } else {
         return e$3("li", { ...newProps,
           children: childrenWithIcons
-        }, void 0);
+        });
       }
     }
 
@@ -15927,7 +15933,7 @@
           children: B(children[0], useTabListProps({
             className: clsx("nav", visualVariant == "pills" ? "nav-pills" : "nav-tabs")
           }), children[0].props.children)
-        }, void 0), e$3(UseTabPanelContext.Provider, {
+        }), e$3(UseTabPanelContext.Provider, {
           value: useTabPanel,
           children: e$3(Swappable, {
             children: e$3("div", { ...useMergedProps()({
@@ -15936,10 +15942,10 @@
                 ref
               }),
               children: [...children.slice(1)]
-            }, void 0)
-          }, void 0)
-        }, void 0)]
-      }, void 0);
+            })
+          })
+        })]
+      });
     }));
     const Tab = g$1(forwardElementRef(function Tab(_ref2, ref) {
       let {
@@ -15964,8 +15970,8 @@
             class: clsx(`nav-link`, selected && `active`)
           }, props)),
           children: children
-        }, void 0)
-      }, void 0);
+        })
+      });
     }));
     const TabPanel = g$1(forwardElementRef(function TabPanel(_ref3, ref) {
       var _TransitionProps;
@@ -16024,15 +16030,15 @@
           children: [e$3(ToastsProviderHelper, {
             setPushToast: setPushToast,
             setUpdateToast: setUpdateToast
-          }, void 0), pushToast && updateToast && e$3(PushToastContext.Provider, {
+          }), pushToast && updateToast && e$3(PushToastContext.Provider, {
             value: pushToastStable,
             children: e$3(UpdateToastContext.Provider, {
               value: updateToastStable,
               children: children
-            }, void 0)
-          }, void 0)]
-        }, void 0)
-      }, void 0);
+            })
+          })]
+        })
+      });
     }
     function usePushToast() {
       const pushToast = F(PushToastContext);
@@ -16079,9 +16085,9 @@
       return e$3(BodyPortal, {
         children: e$3(ToastsContainerChildrenContext.Provider, {
           value: children,
-          children: e$3(ToastsContainer, {}, void 0)
-        }, void 0)
-      }, void 0);
+          children: e$3(ToastsContainer, {})
+        })
+      });
     }
 
     const ToastsContainerChildrenContext = D$1([]);
@@ -16113,8 +16119,8 @@
             className: `set-theme ${theme}`
           }, props)),
           children: children
-        }, void 0)
-      }, void 0);
+        })
+      });
     }
 
     function oppositeTheme() {
@@ -16154,15 +16160,15 @@
               children: [e$3("div", {
                 class: "toast-body",
                 children: children
-              }, void 0), e$3(Button, {
+              }), e$3(Button, {
                 class: "btn-close me-2 m-auto",
                 "aria-label": "Dismiss alert",
                 onPress: dismiss
-              }, void 0)]
-            }, void 0)
-          }, void 0)
-        }, void 0)
-      }, void 0);
+              })]
+            })
+          })
+        })
+      });
     }
 
     const Card = g$1(forwardElementRef(function Card(p, ref) {
@@ -16175,7 +16181,7 @@
           className: "card elevation-raised-1 elevation-body-surface"
         }, props),
         children: children
-      }, void 0);
+      });
     }));
 
     function CardElement2(_ref, ref) {
@@ -16196,8 +16202,8 @@
               ref: ref,
               children: e$3(CardText, {
                 children: children
-              }, void 0)
-            }, void 0);
+              })
+            });
           }
 
         case "footer":
@@ -16209,7 +16215,7 @@
             return e$3(CardFooter, { ...props,
               ref: ref,
               children: children
-            }, void 0);
+            });
           }
 
         case "subtitle":
@@ -16226,7 +16232,7 @@
               }, props),
               ref: ref,
               children: children
-            }, void 0);
+            });
           }
 
         case "title":
@@ -16243,7 +16249,7 @@
               }, props),
               ref: ref,
               children: children
-            }, void 0);
+            });
           }
 
         case "image":
@@ -16259,7 +16265,7 @@
               ...props,
               ref: ref,
               children: children
-            }, void 0);
+            });
           }
 
         case "flush":
@@ -16283,21 +16289,21 @@
           ref,
           className: `card-img${position == "both" ? "" : `-${position}`}`
         })
-      }, void 0);
+      });
     }));
     const CardBody = g$1(forwardElementRef(function CardBody(props, ref) {
       return e$3("div", { ...useMergedProps()(props, {
           ref,
           className: "card-body"
         })
-      }, void 0);
+      });
     }));
     const CardFooter = g$1(forwardElementRef(function CardHeader(props, ref) {
       return e$3("div", { ...useMergedProps()(props, {
           ref,
           className: "card"
         })
-      }, void 0);
+      });
     }));
     const CardTitle = g$1(forwardElementRef(function CardTitle(p, ref) {
       const {
@@ -16324,14 +16330,14 @@
           ref,
           className: "card-text"
         })
-      }, void 0);
+      });
     }));
     g$1(forwardElementRef(function CardHeader(props, ref) {
       return e$3("div", { ...useMergedProps()(props, {
           ref,
           className: "card-header"
         })
-      }, void 0);
+      });
     }));
 
     function DemoButtons() {
@@ -16487,7 +16493,7 @@
           "aria-label": label,
           className: clsx("badge", roundedPill && "rounded-pill", `bg-${colorVariant !== null && colorVariant !== void 0 ? colorVariant : "secondary"}`)
         }, props)
-      }, void 0);
+      });
     }));
 
     const Icon = g$1(forwardElementRef(function Icon(_ref, ref2) {
@@ -16515,7 +16521,7 @@
       if (tooltip) return e$3(Tooltip, {
         tooltip: tooltip,
         children: iconElement
-      }, void 0);
+      });
       return iconElement;
     }));
 
@@ -16530,8 +16536,8 @@
         ref: ref,
         children: e$3("i", {
           class: "font-icon"
-        }, void 0)
-      }, void 0);
+        })
+      });
     }));
 
     /**
@@ -16554,7 +16560,7 @@
         label: label,
         tooltip: tooltip,
         ref: ref
-      }, void 0);
+      });
     })); // Probably a better way to get all these names
 
     function DemoLists() {
@@ -16678,10 +16684,10 @@
             children: e$3(TableFootContext.Provider, {
               value: useTableFoot,
               children: children
-            }, void 0)
-          }, void 0)
-        }, void 0)
-      }, void 0);
+            })
+          })
+        })
+      });
     }));
     const CellLocationContext = D$1(null);
     const TableSectionImpl = g$1(forwardElementRef(function TableSectionImpl(_ref2, ref) {
@@ -16739,9 +16745,9 @@
               ref,
               className: clsx("elevation-body-surface", showShadow && "floating", variant && `table-${variant}`)
             }), props))
-          }, void 0)
-        }, void 0)
-      }, void 0);
+          })
+        })
+      });
     }));
     const TableBody = g$1(forwardElementRef(function TableBody(_ref4, ref) {
       let {
@@ -16765,9 +16771,9 @@
               children,
               className: clsx(variant && `table-${variant}`)
             }), props)
-          }, void 0)
-        }, void 0)
-      }, void 0);
+          })
+        })
+      });
     }));
     g$1(forwardElementRef(function TableFoot(_ref5, ref) {
       let {
@@ -16791,9 +16797,9 @@
               children: Array.isArray(children) ? children : [children],
               className: clsx(variant && `table-${variant}`)
             }), props)
-          }, void 0)
-        }, void 0)
-      }, void 0);
+          })
+        })
+      });
     }));
     const TableCellContext = D$1(null);
     const TableHeadCellContext = D$1(null);
@@ -16828,9 +16834,9 @@
         children: e$3(TableHeadCellContext.Provider, {
           value: useTableHeadCell,
           children: e$3("tr", { ...rowProps
-          }, void 0)
-        }, void 0)
-      }, void 0);
+          })
+        })
+      });
     }));
     const TableCell = g$1(forwardElementRef(function TableCell(_ref7, ref) {
       let {
@@ -16872,12 +16878,12 @@
         const p1 = useMergedProps()(useTableCellDelegateProps({}), props);
         return e$3("td", { ...cellProps,
           children: B(children, useMergedProps()(p1, children.props), children.props.children)
-        }, void 0);
+        });
       } else {
         const p2 = useMergedProps()(useTableCellDelegateProps(cellProps), props);
         return e$3("td", { ...p2,
           children: stringify(displayValue)
-        }, void 0);
+        });
       }
     }));
     const TableHeaderCell = g$1(forwardElementRef(function TableHeaderCell(_ref8, ref) {
@@ -16919,16 +16925,16 @@
             show: sortDirection == "descending",
             children: e$3("div", {
               class: "bi bi-sort-up"
-            }, void 0)
-          }, void 0), e$3(Flip, {
+            })
+          }), e$3(Flip, {
             flipAngleInline: 180,
             show: hovering && sortDirection == null || sortDirection == "ascending",
             children: e$3("div", {
               class: "bi bi-sort-down-alt"
-            }, void 0)
-          }, void 0)]
-        }, void 0)
-      }, void 0);
+            })
+          })]
+        })
+      });
 
       if (childrenReceiveFocus) {
         const p1 = useMergedProps()(useTableHeadCellDelegateProps({}), props);
@@ -16936,16 +16942,16 @@
           children: e$3("div", {
             class: "th-spacing",
             children: [B(children, useMergedProps()(p1, children.props), children.props.children), sortIcon]
-          }, void 0)
-        }, void 0);
+          })
+        });
       } else {
         const p2 = useMergedProps()(useTableHeadCellDelegateProps(cellProps), props);
         return e$3("th", { ...p2,
           children: e$3("div", {
             class: "th-spacing",
             children: [children, sortIcon]
-          }, void 0)
-        }, void 0);
+          })
+        });
       }
     }));
 

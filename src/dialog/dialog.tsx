@@ -17,6 +17,8 @@ interface DialogSharedProps<T extends <E extends HTMLElement>(...args: any[]) =>
     ref?: Ref<T>;
     children?: ComponentChildren;
     align?: "top" | "center";
+    maxWidth?: "sm" | "lg" | "xl";
+    fullscreen?: `${"xxl" | "xl" | "lg" | "md" | "sm"}-down` | boolean;
 };
 
 interface DialogControlledProps<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element> extends DialogSharedProps<T> {
@@ -45,7 +47,7 @@ interface DialogUncontrolledProps<T extends <E extends HTMLElement>(...args: any
 
 export type DialogProps<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element> = DialogControlledProps<T> | DialogUncontrolledProps<T>;
 
-const DialogControlled = memo(forwardElementRef(function DialogControlled<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element>({ align, onClose, open, descriptive, title, footer, Transition, children, ...rest }: RenderableProps<DialogControlledProps<T>>, ref: Ref<HTMLDivElement>) {
+const DialogControlled = memo(forwardElementRef(function DialogControlled<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element>({ maxWidth, fullscreen, align, onClose, open, descriptive, title, footer, Transition, children, ...rest }: RenderableProps<DialogControlledProps<T>>, ref: Ref<HTMLDivElement>) {
 
     onClose = (onClose ?? (() => { }));
 
@@ -69,7 +71,7 @@ const DialogControlled = memo(forwardElementRef(function DialogControlled<T exte
                         <div {...useDialogBackdropProps({ class: "modal-backdrop backdrop-filter-transition" })} />
                     </Fade>
                     <Transition {...{ ref, show: open, ...rest } as any}>
-                        <div {...useDialogProps({ class: clsx("modal-dialog modal-dialog-scrollable", align == "center"? "modal-dialog-centered" : "") })}>
+                        <div {...useDialogProps({ class: clsx("modal-dialog modal-dialog-scrollable", align == "center" ? "modal-dialog-centered" : "", maxWidth && `modal-${maxWidth}`, fullscreen === true ? "modal-fullscreen" : fullscreen ? `modal-fullscreen-${fullscreen}` : ""), })}>
                             <BodyPortalRoot>
                                 <Fade show={open}>
                                     <div class="modal-content elevation-body-surface elevation-raised-6">
@@ -229,8 +231,8 @@ function DialogsProviderHelper({ setPushDialog, setUpdateDialog }: { setPushDial
         const promise = new Promise<void>((res, rej) => { resolve = res; reject = rej; });
 
         let show!: () => Promise<void>;
-        const provideShow: StateUpdater<typeof show> = (s) => { 
-            show = s(show); 
+        const provideShow: StateUpdater<typeof show> = (s) => {
+            show = s(show);
             show().then(resolve).catch(reject);
         };
         const clonedDialogProps: Partial<DialogUncontrolledProps<any>> = { provideShow };
