@@ -7568,26 +7568,24 @@
         };
       }, [useTooltipIdReferencingProps]);
       const useTooltip = A$2(function useTooltip() {
-        function onPointerEnter(e) {
-          setTooltipHover(true);
-        }
-
-        function onPointerLeave(e) {
-          setTooltipHover(false);
-        }
+        //const [mouseOver, setMouseOver] = useState(false);
+        const {
+          useHasFocusProps,
+          getElement
+        } = useHasFocus({
+          onFocusedInnerChanged: setTooltipFocused
+        });
+        useGlobalHandler(document, "pointermove", e => {
+          let target = e.target;
+          setTooltipHover(target == getElement() || target.contains(getElement()));
+        }, {
+          capture: true
+        });
 
         function useTooltipProps(_ref3) {
           let { ...props
           } = _ref3;
-          const {
-            useHasFocusProps
-          } = useHasFocus({
-            onFocusedInnerChanged: setTooltipFocused
-          });
-          return useTooltipIdProps(useHasFocusProps(useMergedProps()({
-            onPointerEnter,
-            onPointerLeave
-          }, props)));
+          return useTooltipIdProps(useHasFocusProps(useMergedProps()({}, props)));
         }
 
         return {
@@ -7848,11 +7846,9 @@
           setStatus("dismissed");
         }, []);
         const [mouseOver, setMouseOver] = useState(false);
-
-        function onMouseOut(e) {
-          setMouseOver(false);
-        }
-
+        useGlobalHandler(document, "pointermove", e => {
+          setMouseOver(e.target.contains(getElement()));
+        });
         const {
           randomId: toastId
         } = useRandomId({
@@ -7906,9 +7902,7 @@
           useToastProps: function (_ref3) {
             let { ...props
             } = _ref3;
-            return useMergedProps()(useManagedChildProps({
-              onMouseOut
-            }), props);
+            return useMergedProps()(useManagedChildProps({}), props);
           }
         };
       }, []);
