@@ -13509,6 +13509,14 @@ label.input-group-text:not(.disabled) {
     z-index: 1055;
   }
 
+  .modal-content {
+    width: 100%;
+  }
+
+  .modal-content-fill {
+    height: 100%;
+  }
+
   .modal-backdrop {
     width: auto;
     height: auto;
@@ -15156,6 +15164,13 @@ td:focus-visible {
   .icon.svg-icon, .icon.image-icon {
     width: var(--icon-size, 1.1em);
     height: var(--icon-size, 1.1em);
+  }
+
+  .body-portal {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
   }
 
   .transition-enter {
@@ -30632,6 +30647,16 @@ label.input-group-text:not(.disabled) {
   }
 }
 @media all and (prefers-color-scheme: light) {
+  .modal-content {
+    width: 100%;
+  }
+}
+@media all and (prefers-color-scheme: light) {
+  .modal-content-fill {
+    height: 100%;
+  }
+}
+@media all and (prefers-color-scheme: light) {
   .modal-backdrop {
     width: auto;
     height: auto;
@@ -32593,6 +32618,14 @@ td:focus-visible {
   .icon.svg-icon, .icon.image-icon {
     width: var(--icon-size, 1.1em);
     height: var(--icon-size, 1.1em);
+  }
+}
+@media all and (prefers-color-scheme: light) {
+  .body-portal {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
   }
 }
 @media all and (prefers-color-scheme: light) {
@@ -46623,6 +46656,14 @@ body.themed-scrollbars {
   z-index: 1055;
 }
 
+.set-theme.theme-light .modal-content {
+  width: 100%;
+}
+
+.set-theme.theme-light .modal-content-fill {
+  height: 100%;
+}
+
 .set-theme.theme-light .modal-backdrop {
   width: auto;
   height: auto;
@@ -48270,6 +48311,13 @@ body.themed-scrollbars {
 .set-theme.theme-light .icon.svg-icon, .set-theme.theme-light .icon.image-icon {
   width: var(--icon-size, 1.1em);
   height: var(--icon-size, 1.1em);
+}
+
+.set-theme.theme-light .body-portal {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
 }
 
 .set-theme.theme-light .transition-enter {
@@ -62211,6 +62259,14 @@ body.themed-scrollbars {
   z-index: 1055;
 }
 
+.set-theme.theme-dark .modal-content {
+  width: 100%;
+}
+
+.set-theme.theme-dark .modal-content-fill {
+  height: 100%;
+}
+
 .set-theme.theme-dark .modal-backdrop {
   width: auto;
   height: auto;
@@ -63858,6 +63914,13 @@ body.themed-scrollbars {
 .set-theme.theme-dark .icon.svg-icon, .set-theme.theme-dark .icon.image-icon {
   width: var(--icon-size, 1.1em);
   height: var(--icon-size, 1.1em);
+}
+
+.set-theme.theme-dark .body-portal {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
 }
 
 .set-theme.theme-dark .transition-enter {

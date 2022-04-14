@@ -12666,6 +12666,13 @@ input[type=number]:not(.show-spin-buttons)::-webkit-inner-spin-button {
   z-index: 1055;
 }
 
+.modal-content {
+  width: 100%;
+}
+.modal-content-fill {
+  height: 100%;
+}
+
 .modal-backdrop {
   width: auto;
   height: auto;
@@ -14104,6 +14111,13 @@ table.table th > .th-spacing {
 .icon.svg-icon, .icon.image-icon {
   width: var(--icon-size, 1.1em);
   height: var(--icon-size, 1.1em);
+}
+
+.body-portal {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
 }
 
 .transition-enter {

@@ -16,8 +16,8 @@ interface DialogSharedProps<T extends <E extends HTMLElement>(...args: any[]) =>
     footer?: ComponentChildren;
     ref?: Ref<T>;
     children?: ComponentChildren;
-    align?: "top" | "center";
-    maxWidth?: "sm" | "lg" | "xl";
+    align?: "top" | "center" | "fill";  // Note: "fill" sets height to 100%, which is useful for custom overflow behavior
+    maxWidth?: "sm" | "lg" | "xl" | "xxl";
     fullscreen?: `${"xxl" | "xl" | "lg" | "md" | "sm"}-down` | boolean;
 };
 
@@ -74,7 +74,7 @@ const DialogControlled = memo(forwardElementRef(function DialogControlled<T exte
                         <div {...useDialogProps({ class: clsx("modal-dialog modal-dialog-scrollable", align == "center" ? "modal-dialog-centered" : "", maxWidth && `modal-${maxWidth}`, fullscreen === true ? "modal-fullscreen" : fullscreen ? `modal-fullscreen-${fullscreen}` : ""), })}>
                             <BodyPortalRoot>
                                 <Fade show={open}>
-                                    <div class="modal-content elevation-body-surface elevation-raised-6">
+                                    <div class={clsx("modal-content elevation-body-surface elevation-raised-6", align == "fill"? "modal-content-fill" : "")}>
                                         {title != null && <div {...useDialogTitleProps({ class: "modal-header" })}>
                                             <h1 class="modal-title">{title}</h1>
                                         </div>}

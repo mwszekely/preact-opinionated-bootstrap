@@ -7529,11 +7529,11 @@
         setOpen(getTriggerFocusedDelayCorrected || getTriggerHoverDelayCorrected);
       }, [getTriggerFocusedDelayCorrected || getTriggerHoverDelayCorrected]);
       const useTooltipTrigger = A$2(function useTooltipTrigger() {
-        function onPointerEnter(e) {
+        function onPointerOver(e) {
           setTriggerHover(true);
         }
 
-        function onPointerLeave(e) {
+        function onPointerOut(e) {
           setTriggerHover(false);
         }
 
@@ -7557,8 +7557,8 @@
           // not this one, so we don't set tabIndex=0
           (_props$tabIndex = props.tabIndex) !== null && _props$tabIndex !== void 0 ? _props$tabIndex : props.tabIndex = -1;
           return useTooltipIdReferencingProps("aria-describedby")(useHasFocusProps(useMergedProps()({
-            onPointerEnter,
-            onPointerLeave,
+            onPointerOver,
+            onPointerOut,
             onTouchEnd
           }, props)));
         }
@@ -7847,6 +7847,12 @@
         const dismiss = A$2(() => {
           setStatus("dismissed");
         }, []);
+        const [mouseOver, setMouseOver] = useState(false);
+
+        function onMouseOut(e) {
+          setMouseOver(false);
+        }
+
         const {
           randomId: toastId
         } = useRandomId({
@@ -7875,6 +7881,10 @@
           focus
         });
         const isActive = status === "active";
+        const [triggerIndex, setTriggerIndex] = useState(1);
+        const resetDismissTimer = A$2(() => {
+          setTriggerIndex(i => ++i);
+        }, []);
         y$1(() => {
           onAnyToastMounted(getMountIndex(toastId));
         }, []);
@@ -7882,20 +7892,23 @@
           if (dismissed) onAnyToastDismissed(getMountIndex(toastId));
         }, [dismissed]);
         useTimeout({
-          timeout: timeout == null ? null : isFinite(timeout) ? timeout : timeout > 0 ? null : 0,
+          timeout: timeout == null || mouseOver ? null : isFinite(timeout) ? timeout : timeout > 0 ? null : 0,
           callback: () => {
             if (isActive) setStatus("dismissed");
           },
-          triggerIndex: isActive
+          triggerIndex: isActive ? triggerIndex : false
         });
         return {
           status,
           getStatus,
           dismiss,
+          resetDismissTimer,
           useToastProps: function (_ref3) {
             let { ...props
             } = _ref3;
-            return useMergedProps()(useManagedChildProps({}), props);
+            return useMergedProps()(useManagedChildProps({
+              onMouseOut
+            }), props);
           }
         };
       }, []);
@@ -11011,7 +11024,7 @@
                   children: e$3(Fade, {
                     show: open,
                     children: e$3("div", {
-                      class: "modal-content elevation-body-surface elevation-raised-6",
+                      class: clsx("modal-content elevation-body-surface elevation-raised-6", align == "fill" ? "modal-content-fill" : ""),
                       children: [title != null && e$3("div", { ...useDialogTitleProps({
                           class: "modal-header"
                         }),
@@ -16139,7 +16152,8 @@
       const {
         useToastProps,
         dismiss,
-        status
+        status,
+        resetDismissTimer
       } = useToast({
         timeout: timeout !== null && timeout !== void 0 ? timeout : defaultTimeout,
         politeness

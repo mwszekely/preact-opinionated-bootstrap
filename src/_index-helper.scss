@@ -19,6 +19,7 @@
 @use "./layout/" as *;
 @use "./table/" as *;
 @use "./icon/" as *;
+@use "./portal/" as *;
 
 @use "preact-transition/src/index.scss";
 
@@ -40,6 +41,7 @@
 @forward "./layout/";
 @forward "./table/";
 @forward "./icon/";
+@forward "./portal/";
 
 @use "./button/ensure-contrast.scss" as *;
 @use "./elevation.scss";
