@@ -7,6 +7,8 @@ import { Input, InputGroup } from "../../input-group";
 import { List, ListItemMulti, ListItemSingle, ListItemStatic } from "../../list";
 import { ListItemActionable } from "../../list/list-actionable";
 import { Toast, usePushToast } from "../../toast";
+import { Range, RangeThumb } from "../../range";
+import { useCallback } from "preact/hooks";
 
 export function DemoLists() {
     const [selectedIndex, setSelectedIndex] = useState<number | null>(0);
@@ -64,10 +66,16 @@ export function DemoLists() {
         })())}</>
     }
 
+    const [value, setValue] = useState(0);
+    const [value2, setValue2] = useState(10);
+
     return (
         <div class="demo">
             <Card>
                 <CardElement type="title" tag="h2">Lists</CardElement>
+                <CardElement>
+                    <Range min={0} max={10} getValueText={useCallback((n: number) => { return "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[n]; }, [])} value={value} onValueChange={setValue} step={2} />
+                </CardElement>
                 <CardElement><List label="Demo list" selectedIndex={selectedIndex} onSelect={setSelectedIndex}>{makeListItems(index => <ListItemSingle index={index} disabled={index == 3}>{makeListItemLines(index)}</ListItemSingle>)}</List></CardElement>
 
                 <CardElement>

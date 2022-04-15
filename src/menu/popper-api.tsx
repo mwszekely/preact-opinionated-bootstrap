@@ -7,13 +7,15 @@ import { ZoomFade, Clip, ClipFade, Collapse, Zoom, SlideZoom, Fade, SlideFade, C
 
 function returnNull() { return null; }
 
-export function usePopperApi({ updating, align, side, useArrow, followMouse, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight }: UsePopperParameters) {
+export function usePopperApi({ updating, align, side, useArrow, followMouse, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight, childSelector }: UsePopperParameters) {
 
     const [popperInstance, setPopperInstance, getPopperInstance] = useState<Instance | null>(null);
     const [usedSide, setUsedSide] = useState<typeof side>(side);
     const [logicalDirection, setLogicalDirection] = useState<LogicalDirectionInfo | null>(null);
     const { useLogicalDirectionProps, convertToLogicalSide, convertToPhysicalSide } = useLogicalDirection<any>({ onLogicalDirectionChange: setLogicalDirection });
-    useEffect(() => { resetPopperInstance(getSourceElement() as any, getPopperElement() as any); }, [side, align, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight, logicalDirection])
+    useEffect(() => { 
+        resetPopperInstance(getSourceElement() as any, getPopperElement() as any); 
+    }, [side, align, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight, logicalDirection]);
 
     useArrow ??= false;
 
@@ -74,7 +76,11 @@ export function usePopperApi({ updating, align, side, useArrow, followMouse, ski
                 getBoundingClientRect: () => {
                     const focusedElement = getFocusedElement();
 
-                    let baseRect = focusedElement ? (focusedElement as Element).getBoundingClientRect?.() : getSourceElement()?.getBoundingClientRect();
+                    let sourceElement = getSourceElement();
+                    if (childSelector && sourceElement)
+                        sourceElement = childSelector(sourceElement);
+
+                    let baseRect = focusedElement ? (focusedElement as Element).getBoundingClientRect?.() : sourceElement?.getBoundingClientRect();
                     let x = baseRect?.x ?? 0;
                     let y = baseRect?.y ?? 0;
                     let width = baseRect?.width ?? 0;
@@ -151,7 +157,7 @@ export function usePopperApi({ updating, align, side, useArrow, followMouse, ski
                 strategy
             }));
         }
-    }, [followMouse, useArrow, side, align, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight, logicalDirection]);
+    }, [followMouse, useArrow, side, align, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight, logicalDirection, childSelector]);
 
     const { getElement: getSourceElement, useRefElementProps: useSourceElementRefProps } = useRefElement<Element>({ onElementChange: useCallback((e: any) => resetPopperInstance(e, (getPopperElement as any)()!), []) } as any);
     const { getElement: getPopperElement, useRefElementProps: usePopperElementRefProps } = useRefElement<HTMLElement>({ onElementChange: useCallback((e: HTMLElement | null) => resetPopperInstance((getSourceElement as any)()!, e), []) });
@@ -431,6 +437,10 @@ export interface UsePopperParameters {
     paddingRight?: number;
     paddingLeft?: number;
     paddingBottom?: number;
+
+    // If given, the tooltip will react via mouseover to the entire source
+    // but be limited to the child that matches the selector.
+    childSelector?: (e: Element) => Element;
 }
 
 //type T = HTMLDivElement["style"];

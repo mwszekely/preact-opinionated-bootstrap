@@ -1,0 +1,87 @@
+.form-range-container {
+  display: grid;
+  grid-template-rows: 0.75rem 0.75rem 0.5rem;
+  grid-template-columns: 0.5rem repeat(var(--form-range-tick-count, 1), 1fr) 0.5rem;
+  position: relative;
+
+  --tick-width: 0.125em;
+
+  & *:not(input[type=range]) {
+    pointer-events: none;
+  }
+
+  & > .form-range-track-background {
+    grid-row: 1 / span 2;
+    grid-column: 1 / -1;
+
+    content: "";
+    z-index: -1;
+    background: #42424b;
+    border-radius: 1rem;
+    margin-top: 0.45rem;
+    margin-bottom: 0.45rem;
+  }
+
+  & > .form-range-ticks {
+    grid-row: 2 / span 2;
+    grid-column: 2 / -2;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    pointer-events: none;
+    z-index: -10;
+    position: relative;
+
+    & > .form-range-tick {
+      &:not(:first-child):not(:last-child) {
+        &::before {
+          bottom: 33.33333333%;
+        }
+      }
+
+      &::before {
+        content: "";
+        position: absolute;
+        border: 1px solid #808080;
+        top: 0;
+        bottom: 0;
+      }
+
+      position: relative;
+      background: none;
+      padding: 0;
+      margin: 0;
+      width: 0;
+    }
+    //grid-area: 2 / 1 / span 2 / span 1;
+    /*background: repeating-linear-gradient(90deg, 
+    #c8c8c8, 
+    #c8c8c8 calc(var(--tick-width) / 2), 
+    transparent calc(var(--tick-width) / 2), 
+    transparent calc(100% / (var(--form-range-tick-count)) - (var(--tick-width) / 2))
+    #c8c8c8 calc(100% / (var(--form-range-tick-count)) - (var(--tick-width) / 2))
+    #c8c8c8 calc(100% / (var(--form-range-tick-count)) - (var(--tick-width) / 2) + (var(--tick-width) / 2))
+    ) 100% no-repeat;
+    background-size: 100% 0.5em;
+    background-position: 0% center;*/
+  }
+
+  & > input[type="range"].form-range {
+    grid-area: 1 / 1 / span 2 / -1;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+// Force the tooltip that shows the value
+// to only be visible over the thumb, wherever it is
+.form-range-tooltip-root {
+  position: absolute;
+  top: 0;
+  width: 0;
+  left: calc(var(--range-value) * 100% + -1rem * (var(--range-value) - 0.5));
+  height: 1.5rem;
+  background: none;
+  pointer-events: none;
+  contain: strict;
+}

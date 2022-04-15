@@ -20,6 +20,7 @@
 @use "./table/" as *;
 @use "./icon/" as *;
 @use "./portal/" as *;
+@use "./range/" as *;
 
 @use "preact-transition/src/index.scss";
 
@@ -42,6 +43,7 @@
 @forward "./table/";
 @forward "./icon/";
 @forward "./portal/";
+@forward "./range/";
 
 @use "./button/ensure-contrast.scss" as *;
 @use "./elevation.scss";

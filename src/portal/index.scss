@@ -1,12 +1,13 @@
 // Nothing in a portal should ever cause the body to scroll.
 // I really can't think of a situation where that's ever wanted?
 .body-portal {
-  position: absolute;
+  // This messes up Popper actually...
+  /*position: absolute;
   inset: 0;
   pointer-events: none;
   overflow: hidden;
 
   & > * {
     pointer-events: initial;
-  }
+  }*/
 }

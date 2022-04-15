@@ -3393,6 +3393,8 @@
       };
     }
 
+    D$1(null);
+
     /**
      * Allows attaching an event handler to any *non-Preact* element, and removing it when the component using the hook unmounts. The callback does not need to be stable across renders.
      *
@@ -7521,28 +7523,30 @@
           return () => clearTimeout(handle);
         }
       }), returnFalse$1);
-      const [getTriggerFocusedDelayCorrected, setTriggerFocusedDelayCorrected] = useState(false);
-      const [getTriggerHoverDelayCorrected, setTriggerHoverDelayCorrected] = useState(false);
-      const [getTooltipFocusedDelayCorrected, setTooltipFocusedDelayCorrected] = useState(false);
-      const [getTooltipHoverDelayCorrected, setTooltipHoverDelayCorrected] = useState(false);
+      const [triggerFocusedDelayCorrected, setTriggerFocusedDelayCorrected] = useState(false);
+      const [triggerHoverDelayCorrected, setTriggerHoverDelayCorrected] = useState(false);
+      const [tooltipFocusedDelayCorrected, setTooltipFocusedDelayCorrected] = useState(false);
+      const [tooltipHoverDelayCorrected, setTooltipHoverDelayCorrected] = useState(false);
       y$1(() => {
-        setOpen(getTriggerFocusedDelayCorrected || getTriggerHoverDelayCorrected);
-      }, [getTriggerFocusedDelayCorrected || getTriggerHoverDelayCorrected]);
+        setOpen(triggerFocusedDelayCorrected || triggerHoverDelayCorrected || tooltipFocusedDelayCorrected || tooltipHoverDelayCorrected);
+      }, [triggerFocusedDelayCorrected || triggerHoverDelayCorrected || tooltipFocusedDelayCorrected || tooltipHoverDelayCorrected]);
       const useTooltipTrigger = A$2(function useTooltipTrigger() {
-        function onPointerOver(e) {
-          setTriggerHover(true);
-        }
+        useGlobalHandler(document, "pointermove", e => {
+          var _getElement;
 
-        function onPointerOut(e) {
-          setTriggerHover(false);
-        }
+          let target = e.target;
+          setTriggerHover(target == getElement() || !!((_getElement = getElement()) !== null && _getElement !== void 0 && _getElement.contains(target)));
+        }, {
+          capture: true
+        });
 
         function onTouchEnd(e) {
           e.target.focus();
         }
 
         const {
-          useHasFocusProps
+          useHasFocusProps,
+          getElement
         } = useHasFocus({
           onFocusedInnerChanged: setTriggerFocused
         });
@@ -7557,8 +7561,6 @@
           // not this one, so we don't set tabIndex=0
           (_props$tabIndex = props.tabIndex) !== null && _props$tabIndex !== void 0 ? _props$tabIndex : props.tabIndex = -1;
           return useTooltipIdReferencingProps("aria-describedby")(useHasFocusProps(useMergedProps()({
-            onPointerOver,
-            onPointerOut,
             onTouchEnd
           }, props)));
         }
@@ -7568,7 +7570,6 @@
         };
       }, [useTooltipIdReferencingProps]);
       const useTooltip = A$2(function useTooltip() {
-        //const [mouseOver, setMouseOver] = useState(false);
         const {
           useHasFocusProps,
           getElement
@@ -7576,8 +7577,10 @@
           onFocusedInnerChanged: setTooltipFocused
         });
         useGlobalHandler(document, "pointermove", e => {
+          var _getElement2;
+
           let target = e.target;
-          setTooltipHover(target == getElement() || target.contains(getElement()));
+          setTooltipHover(target == getElement() || !!((_getElement2 = getElement()) !== null && _getElement2 !== void 0 && _getElement2.contains(target)));
         }, {
           capture: true
         });
@@ -7768,6 +7771,92 @@
         focusRadio: focusCurrent,
         currentTypeahead,
         invalidTypeahead
+      };
+    }
+
+    function useAriaSlider(_ref) {
+      let {
+        max: maxParent,
+        min: minParent
+      } = _ref;
+      const {
+        useManagedChild,
+        childCount,
+        deletedIndices,
+        getMountIndex,
+        indicesByElement,
+        managedChildren,
+        mountedChildren,
+        totalChildrenMounted,
+        totalChildrenUnounted
+      } = useChildManager();
+      const useAriaSliderThumb = A$2(function useAriaSliderThumb(_ref2) {
+        let {
+          index,
+          onValueChange,
+          value,
+          valueText,
+          tag,
+          min: minOverride,
+          max: maxOverride,
+          ...rest
+        } = _ref2;
+        const [minParentCopy, setMinParentCopy] = l$2(minParent);
+        const [maxParentCopy, setMaxParentCopy] = l$2(maxParent);
+        const {
+          getElement,
+          useManagedChildProps
+        } = useManagedChild({
+          index,
+          setMin: setMinParentCopy,
+          setMax: setMaxParentCopy
+        });
+        let min = minOverride !== null && minOverride !== void 0 ? minOverride : minParentCopy;
+        let max = maxOverride !== null && maxOverride !== void 0 ? maxOverride : maxParentCopy;
+        return {
+          getElement,
+          useAriaSliderThumbProps,
+          min,
+          max
+        };
+
+        function useAriaSliderThumbProps(props) {
+          let newProps = tag == "input" ? {
+            min,
+            max,
+            value,
+            type: "range"
+          } : {
+            "aria-valuemax": `${max}`,
+            "aria-valuemin": `${min}`
+          };
+          newProps = { ...newProps,
+            "aria-valuetext": valueText,
+            style: {
+              "--range-value": `${value}`,
+              "--range-value-text": `${valueText}`
+            }
+          };
+
+          if (tag == "input") {
+            newProps.onInput = e => {
+              onValueChange === null || onValueChange === void 0 ? void 0 : onValueChange({
+                currentTarget: e.currentTarget,
+                target: e.target,
+                [EventDetail]: {
+                  value: e.currentTarget.valueAsNumber
+                }
+              });
+            };
+          } else {
+            throw new Error("Unimplemented");
+          }
+
+          return useManagedChildProps(useMergedProps()(newProps, props));
+        }
+      }, []);
+      return {
+        useAriaSliderThumb
       };
     }
 
@@ -11570,7 +11659,7 @@
       }, props), children);
     });
 
-    function capture(e) {
+    function capture$1(e) {
       return e[EventDetail].checked;
     }
     /**
@@ -11602,7 +11691,7 @@
         currentCapture,
         currentType
       } = useAsyncHandler()({
-        capture
+        capture: capture$1
       });
       disabled || (disabled = pending);
       const onChecked = getSyncHandler(onCheckedAsync);
@@ -15013,7 +15102,8 @@
         paddingTop,
         paddingBottom,
         paddingLeft,
-        paddingRight
+        paddingRight,
+        childSelector
       } = _ref;
       const [popperInstance, setPopperInstance, getPopperInstance] = useState(null);
       const [usedSide, setUsedSide] = useState(side);
@@ -15093,10 +15183,12 @@
           if (align === "center") placement = `${placement}`;else placement = `${placement}-${align}`;
           const virtualElement = {
             getBoundingClientRect: () => {
-              var _focusedElement$getBo, _getSourceElement2, _baseRect$x, _baseRect$y, _baseRect$width, _baseRect$height;
+              var _focusedElement$getBo, _sourceElement, _baseRect$x, _baseRect$y, _baseRect$width, _baseRect$height;
 
               const focusedElement = getFocusedElement();
-              let baseRect = focusedElement ? (_focusedElement$getBo = focusedElement.getBoundingClientRect) === null || _focusedElement$getBo === void 0 ? void 0 : _focusedElement$getBo.call(focusedElement) : (_getSourceElement2 = getSourceElement()) === null || _getSourceElement2 === void 0 ? void 0 : _getSourceElement2.getBoundingClientRect();
+              let sourceElement = getSourceElement();
+              if (childSelector && sourceElement) sourceElement = childSelector(sourceElement);
+              let baseRect = focusedElement ? (_focusedElement$getBo = focusedElement.getBoundingClientRect) === null || _focusedElement$getBo === void 0 ? void 0 : _focusedElement$getBo.call(focusedElement) : (_sourceElement = sourceElement) === null || _sourceElement === void 0 ? void 0 : _sourceElement.getBoundingClientRect();
               let x = (_baseRect$x = baseRect === null || baseRect === void 0 ? void 0 : baseRect.x) !== null && _baseRect$x !== void 0 ? _baseRect$x : 0;
               let y = (_baseRect$y = baseRect === null || baseRect === void 0 ? void 0 : baseRect.y) !== null && _baseRect$y !== void 0 ? _baseRect$y : 0;
               let width = (_baseRect$width = baseRect === null || baseRect === void 0 ? void 0 : baseRect.width) !== null && _baseRect$width !== void 0 ? _baseRect$width : 0;
@@ -15196,7 +15288,7 @@
             strategy
           }));
         }
-      }, [followMouse, useArrow, side, align, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight, logicalDirection]);
+      }, [followMouse, useArrow, side, align, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight, logicalDirection, childSelector]);
       const {
         getElement: getSourceElement,
         useRefElementProps: useSourceElementRefProps
@@ -15498,9 +15590,11 @@
 
       let {
         children,
+        childSelector,
         side,
         align,
         tooltip,
+        forceOpen,
         Transition,
         TransitionProps,
         TransitionPropFlips,
@@ -15526,6 +15620,7 @@
 
       const lastUsedTooltipRef = s$2(tooltip);
       lastUsedTooltipRef.current = tooltip || lastUsedTooltipRef.current;
+      isOpen || (isOpen = !!forceOpen);
       isOpen && (isOpen = !!tooltip);
       let cloneable;
 
@@ -15567,7 +15662,8 @@
         side,
         align,
         useArrow: true,
-        followMouse: true
+        followMouse: true,
+        childSelector
       });
       const {
         usePopperPopupProps
@@ -16146,8 +16242,7 @@
       const {
         useToastProps,
         dismiss,
-        status,
-        resetDismissTimer
+        status
       } = useToast({
         timeout: timeout !== null && timeout !== void 0 ? timeout : defaultTimeout,
         politeness
@@ -16571,6 +16666,175 @@
       });
     })); // Probably a better way to get all these names
 
+    const RangeThumbContext = D$1(null);
+    const DebounceContext = D$1(false);
+    const GetValueTextContext = D$1(null);
+    const GetListContext = D$1("");
+    const StepContext = D$1(0);
+    const Range = g$1(forwardElementRef(function Range(_ref, ref) {
+      var _id, _step;
+
+      let {
+        max,
+        min,
+        debounce,
+        children,
+        getValueText,
+        value,
+        onValueChange,
+        step,
+        ...rest
+      } = _ref;
+      const {
+        useAriaSliderThumb
+      } = useAriaSlider({
+        min,
+        max
+      });
+      let id = d$1(generateRandomId, []);
+      (_id = id) !== null && _id !== void 0 ? _id : id = "";
+      (_step = step) !== null && _step !== void 0 ? _step : step = 1;
+      let tickCount = Math.ceil(1 + (max - min) / step);
+      return e$3(RangeThumbContext.Provider, {
+        value: useAriaSliderThumb,
+        children: e$3(DebounceContext.Provider, {
+          value: debounce !== null && debounce !== void 0 ? debounce : false,
+          children: e$3(GetValueTextContext.Provider, {
+            value: getValueText !== null && getValueText !== void 0 ? getValueText : defaultGetValueText,
+            children: e$3(GetListContext.Provider, {
+              value: id,
+              children: e$3(StepContext.Provider, {
+                value: step,
+                children: e$3("div", { ...useMergedProps()({
+                    class: "form-range-container",
+                    ref,
+                    style: {
+                      "--form-range-tick-count": tickCount
+                    }
+                  }, rest),
+                  children: [children !== null && children !== void 0 ? children : e$3(RangeThumb, {
+                    index: 0,
+                    value: value !== null && value !== void 0 ? value : 0,
+                    onValueChange: onValueChange
+                  }), e$3("div", {
+                    class: "form-range-track-background"
+                  }), e$3(RangeTicks, {
+                    min: min,
+                    max: max,
+                    step: step,
+                    id: id
+                  })]
+                })
+              })
+            })
+          })
+        })
+      });
+    }));
+
+    function defaultGetValueText(number) {
+      return `${number}`;
+    }
+
+    const RangeTicks = g$1(function RangeTicks(_ref2) {
+      let {
+        step,
+        min,
+        max,
+        id
+      } = _ref2;
+      const getValueText = F(GetValueTextContext);
+      let children = [];
+
+      for (let i = min; i <= max; i += step) {
+        children.push(e$3("option", {
+          value: getValueText(i),
+          class: "form-range-tick"
+        }, i));
+      }
+
+      return e$3("datalist", {
+        id: id,
+        class: "form-range-ticks",
+        children: [...children]
+      });
+    });
+    const RangeThumb = g$1(forwardElementRef(function RangeThumb(_ref3, ref) {
+      let {
+        index,
+        value,
+        max,
+        min,
+        onValueChange: onValueChangeAsync
+      } = _ref3;
+      const debounceSetting = F(DebounceContext);
+      const {
+        getSyncHandler,
+        pending,
+        hasError,
+        currentCapture
+      } = useAsyncHandler()({
+        capture,
+        debounce: debounceSetting == true ? 1500 : debounceSetting != false ? debounceSetting : undefined
+      });
+      const onValueChangeSync = getSyncHandler(onValueChangeAsync);
+      value = currentCapture !== null && currentCapture !== void 0 ? currentCapture : value;
+      const getValueText = F(GetValueTextContext);
+      const valueText = d$1(() => {
+        var _getValueText;
+
+        return (_getValueText = getValueText === null || getValueText === void 0 ? void 0 : getValueText(value)) !== null && _getValueText !== void 0 ? _getValueText : value == null ? "" : `${value}`;
+      }, [value, getValueText]);
+      const {
+        getElement,
+        useAriaSliderThumbProps,
+        min: usedMin,
+        max: usedMax
+      } = F(RangeThumbContext)({
+        tag: "input",
+        value: value,
+        valueText,
+        index,
+        max,
+        min,
+        onValueChange: onValueChangeSync
+      });
+      const [inputHasFocus, setInputHasFocus] = l$2(false);
+      const {
+        useHasFocusProps
+      } = useHasFocus({
+        onFocusedChanged: setInputHasFocus
+      });
+      const valuePercent = (value - usedMin) / (usedMax - usedMin);
+      return e$3(d$2, {
+        children: [e$3(Tooltip, {
+          side: "block-end",
+          forceOpen: inputHasFocus,
+          tooltip: valueText,
+          childSelector: A$2(function (e) {
+            return e.nextElementSibling;
+          }, []),
+          children: e$3("input", { ...useAriaSliderThumbProps(useHasFocusProps({
+              ref,
+              class: "form-range",
+              tabIndex: 0,
+              step: F(StepContext)
+            })),
+            list: F(GetListContext)
+          })
+        }), e$3("div", {
+          class: "form-range-tooltip-root",
+          style: {
+            "--range-value": `${valuePercent}`
+          }
+        })]
+      });
+    }));
+
+    function capture(e) {
+      return e[EventDetail].value;
+    }
+
     function DemoLists() {
         const [selectedIndex, setSelectedIndex] = useState(0);
         useState("outline");
@@ -16610,7 +16874,9 @@
                     }
                 })()) }, void 0);
         }
-        return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Lists" }, void 0), e$3(CardElement, { children: e$3(List, { label: "Demo list", selectedIndex: selectedIndex, onSelect: setSelectedIndex, children: makeListItems(index => e$3(ListItemSingle, { index: index, disabled: index == 3, children: makeListItemLines(index) }, void 0)) }, void 0) }, void 0), e$3(CardElement, { children: ["A list is a way to provide a large number of selectable options in a way that's distinct from, say, a list of checkboxes or radio buttons. Lists can be ", e$3("strong", { children: "single-select" }, void 0), ", ", e$3("strong", { children: "multi-select" }, void 0), ", or ", e$3("strong", { children: "static" }, void 0), " (no selection, display only)."] }, void 0), e$3(CardElement, { children: ["All list types can have as many lines as needed; each e.g. ", e$3("code", { children: "<span>" }, void 0), " will create a new line. Format them however you like (i.e. making some larger or smaller, tinted different colors, etc.)", e$3(InputGroup, { children: e$3(Input, { type: "number", value: lines, onValueChange: setLines, children: "# of lines" }, void 0) }, void 0)] }, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Single select" }, void 0), e$3(CardElement, { children: ["For single-select lists, you provide the parent ", e$3("code", { children: "<List>" }, void 0), " with ", e$3("code", { children: "selectedIndex" }, void 0), " and ", e$3("code", { children: "onSelect" }, void 0), " props that control which ", e$3("code", { children: "<ListItemSingle>" }, void 0), " is the selected one."] }, void 0), e$3(CardElement, { children: ["As with most components, the ", e$3("code", { children: "onSelect" }, void 0), " prop can be an async function."] }, void 0), e$3(CardElement, { children: e$3(List, { label: "Single-select list demo", selectedIndex: selectedIndex, onSelect: async (i) => { await sleep$3(2000); setSelectedIndex(i); }, children: makeListItems(index => e$3(ListItemSingle, { index: index, disabled: index == 3, children: makeListItemLines(index) }, void 0)) }, void 0) }, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Multi select" }, void 0), e$3(CardElement, { children: ["Multi-select lists have a ", e$3("code", { children: "selected" }, void 0), " prop on each individual ", e$3("code", { children: "<ListItemMulti>" }, void 0), "."] }, void 0), e$3(CardElement, { children: ["As with most components, the ", e$3("code", { children: "onSelect" }, void 0), " prop can be an async function."] }, void 0), e$3(CardElement, { children: e$3(List, { label: "Multi-select list demo", select: "multi", children: makeListItems(index => e$3(ListItemMulti, { index: index, selected: selectedMulti.has(index), disabled: index == 3, onSelect: async (selected) => {
+        const [value, setValue] = useState(0);
+        useState(10);
+        return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Lists" }, void 0), e$3(CardElement, { children: e$3(Range, { min: 0, max: 10, getValueText: A$2((n) => { return "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[n]; }, []), value: value, onValueChange: setValue, step: 2 }, void 0) }, void 0), e$3(CardElement, { children: e$3(List, { label: "Demo list", selectedIndex: selectedIndex, onSelect: setSelectedIndex, children: makeListItems(index => e$3(ListItemSingle, { index: index, disabled: index == 3, children: makeListItemLines(index) }, void 0)) }, void 0) }, void 0), e$3(CardElement, { children: ["A list is a way to provide a large number of selectable options in a way that's distinct from, say, a list of checkboxes or radio buttons. Lists can be ", e$3("strong", { children: "single-select" }, void 0), ", ", e$3("strong", { children: "multi-select" }, void 0), ", or ", e$3("strong", { children: "static" }, void 0), " (no selection, display only)."] }, void 0), e$3(CardElement, { children: ["All list types can have as many lines as needed; each e.g. ", e$3("code", { children: "<span>" }, void 0), " will create a new line. Format them however you like (i.e. making some larger or smaller, tinted different colors, etc.)", e$3(InputGroup, { children: e$3(Input, { type: "number", value: lines, onValueChange: setLines, children: "# of lines" }, void 0) }, void 0)] }, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Single select" }, void 0), e$3(CardElement, { children: ["For single-select lists, you provide the parent ", e$3("code", { children: "<List>" }, void 0), " with ", e$3("code", { children: "selectedIndex" }, void 0), " and ", e$3("code", { children: "onSelect" }, void 0), " props that control which ", e$3("code", { children: "<ListItemSingle>" }, void 0), " is the selected one."] }, void 0), e$3(CardElement, { children: ["As with most components, the ", e$3("code", { children: "onSelect" }, void 0), " prop can be an async function."] }, void 0), e$3(CardElement, { children: e$3(List, { label: "Single-select list demo", selectedIndex: selectedIndex, onSelect: async (i) => { await sleep$3(2000); setSelectedIndex(i); }, children: makeListItems(index => e$3(ListItemSingle, { index: index, disabled: index == 3, children: makeListItemLines(index) }, void 0)) }, void 0) }, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Multi select" }, void 0), e$3(CardElement, { children: ["Multi-select lists have a ", e$3("code", { children: "selected" }, void 0), " prop on each individual ", e$3("code", { children: "<ListItemMulti>" }, void 0), "."] }, void 0), e$3(CardElement, { children: ["As with most components, the ", e$3("code", { children: "onSelect" }, void 0), " prop can be an async function."] }, void 0), e$3(CardElement, { children: e$3(List, { label: "Multi-select list demo", select: "multi", children: makeListItems(index => e$3(ListItemMulti, { index: index, selected: selectedMulti.has(index), disabled: index == 3, onSelect: async (selected) => {
                                     await sleep$3(2000);
                                     setSelectedMulti(prev => {
                                         let ret = new Set(Array.from(prev));

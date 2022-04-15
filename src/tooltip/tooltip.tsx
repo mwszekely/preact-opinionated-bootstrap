@@ -16,9 +16,11 @@ export interface TooltipProps<T extends <E extends HTMLElement>(...args: any[]) 
     tooltip: ComponentChildren;
     side?: "block-start" | "block-end" | "inline-start" | "inline-end";
     align?: "start" | "end" | "center";
+    childSelector?: (e: Element) => Element;
+    forceOpen?: boolean;
 }
 
-export const Tooltip = memo(forwardElementRef(function Tooltip<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element>({ children, side, align, tooltip, Transition, TransitionProps, TransitionPropFlips, mouseoverDelay, mouseoutDelay, focusDelay, ...restAnchorProps }: TooltipProps<T>, ref?: Ref<any>) {
+export const Tooltip = memo(forwardElementRef(function Tooltip<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element>({ children, childSelector, side, align, tooltip, forceOpen, Transition, TransitionProps, TransitionPropFlips, mouseoverDelay, mouseoutDelay, focusDelay, ...restAnchorProps }: TooltipProps<T>, ref?: Ref<any>) {
     side ??= "block-start";
     align ??= "center";
 
@@ -31,6 +33,7 @@ export const Tooltip = memo(forwardElementRef(function Tooltip<T extends <E exte
     const lastUsedTooltipRef = useRef(tooltip);
     lastUsedTooltipRef.current = (tooltip || lastUsedTooltipRef.current);
 
+    isOpen ||= !!forceOpen;
     isOpen &&= !!tooltip;
 
     let cloneable: VNode;
@@ -48,7 +51,7 @@ export const Tooltip = memo(forwardElementRef(function Tooltip<T extends <E exte
     const { useTooltipTriggerProps } = useTooltipTrigger();
     const { shouldUpdate, onInteraction } = useShouldUpdatePopper(isOpen);
     const { useElementSizeProps } = useElementSize<any>({ onSizeChange: useStableCallback(onInteraction ?? (() => { })) });
-    const { logicalDirection, usePopperArrow, usePopperPopup, usePopperSource, flipTransformProps } = usePopperApi({ updating: shouldUpdate, side, align, useArrow: true, followMouse: true });
+    const { logicalDirection, usePopperArrow, usePopperPopup, usePopperSource, flipTransformProps } = usePopperApi({ updating: shouldUpdate, side, align, useArrow: true, followMouse: true, childSelector });
 
     const { usePopperPopupProps } = usePopperPopup<HTMLDivElement>({ open: isOpen });
     const { usePopperArrowProps } = usePopperArrow<HTMLDivElement>();

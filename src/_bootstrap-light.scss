@@ -1,6 +1,8 @@
 @use "sass:color";
 @use "sass:math";
 @use "sass:meta";
+//@use "./bootstrap-variables/form-range-track-bg" as *;
+//@forward "bootstrap-sass-variables/form-range-track-bg" with ($form-range-track-bg: $form-range-track-bg !default);
 @use "./bootstrap-shared" as *;
 @use "./bootstrap-variables/light/body-bg" as *;
 @forward "bootstrap-sass-variables/body-bg" with ($body-bg: $body-bg);
@@ -19,5 +21,8 @@
 @forward "bootstrap-sass-variables/btn-active-box-shadow" with ($btn-active-box-shadow: $btn-active-box-shadow !default);
 @use "./bootstrap-variables/btn-box-shadow" as *;
 @forward "bootstrap-sass-variables/btn-box-shadow" with ($btn-box-shadow: $btn-box-shadow !default);
+
+@use "./bootstrap-variables/form-range-track-bg" as *;
+@use "bootstrap-sass-variables/form-range-track-bg" with ($form-range-track-bg: $form-range-track-bg);
 
 @use "bootstrap-sass-variables/bootstrap";

@@ -10,6 +10,7 @@ export { GridResponsive, GridStatic } from "./layout";
 export { ListItemSingle, ListSingle, ListSingleProps, ListItemSingleProps, ListItemMulti, ListMulti, ListMultiProps, ListItemMultiProps, ListItemStatic, ListStatic, ListStaticProps, ListItemStaticProps, List, ListItem, ListProps, ListItemProps } from "./list";
 export { Menu, MenuItem } from "./menu";
 export { ProgressCircular, ProgressLinear } from "./progress";
+export { Range, RangeThumb, RangeProps, RangeThumbProps } from "./range"
 export { Table, TableBody, TableBodyProps, TableCell, TableCellProps, TableFootProps, TableHead, TableHeaderCell, TableHeaderCellProps, TableHeadProps, TableProps, TableRow, TableRowProps, TableSectionProps, TableBorderColor, TableCellVariant, TableFoot, TableRowVariant, TableVariant } from "./table";
 export { Tab, TabPanel, TabPanelProps, TabProps, Tabs, TabsProps } from "./tabs";
 export { PushToast, Toast, ToastErrorBoundary, ToastProps, ToastsProvider, usePushToast, useUpdateToast } from "./toast";
