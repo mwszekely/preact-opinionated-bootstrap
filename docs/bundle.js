@@ -16882,7 +16882,7 @@
         children: [e$3(Tooltip, {
           side: orientation == "inline" ? "block-end" : "inline-end",
           forceOpen: inputHasFocus,
-          tooltip: `${value}.${valueText}`,
+          tooltip: `${valueText}`,
           childSelector: A$2(function (e) {
             return e.nextElementSibling.firstElementChild;
           }, []),

@@ -169,7 +169,7 @@ export const RangeThumb = memo(forwardElementRef(function RangeThumb({ index, va
 
     return (
         <>
-            <Tooltip side={orientation == "inline"? "block-end" : "inline-end"} forceOpen={inputHasFocus} tooltip={`${value}.${valueText}`} childSelector={useCallback(function (e: Element) { return e.nextElementSibling!.firstElementChild!; }, [])}>
+            <Tooltip side={orientation == "inline"? "block-end" : "inline-end"} forceOpen={inputHasFocus} tooltip={`${valueText}`} childSelector={useCallback(function (e: Element) { return e.nextElementSibling!.firstElementChild!; }, [])}>
                 <input {...useAriaSliderThumbProps(useHasFocusProps({
                     ref,
                     ...({ orient: orientation == "block" ? "vertical" : undefined } as {}),
