@@ -16855,7 +16855,7 @@
             if (snapTimeout.current > 0) clearTimeout(snapTimeout.current);
             snapTimeout.current = setTimeout(() => {
               setForceSnap(false);
-            }, 250);
+            }, 750);
             e[EventDetail].value = closestStep;
           }
         }
