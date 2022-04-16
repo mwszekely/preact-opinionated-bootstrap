@@ -12232,42 +12232,155 @@
   height: var(--icon-size, 1.1em);
 }
 .set-theme.theme-light .body-portal {
-  position: absolute;
+  /*position: absolute;
   inset: 0;
   pointer-events: none;
   overflow: hidden;
-}
-.set-theme.theme-light .body-portal > * {
-  pointer-events: initial;
+
+  & > * {
+    pointer-events: initial;
+  }*/
 }
 .set-theme.theme-light .form-range-container {
-  font-size: 1em;
-  height: 1em;
   display: grid;
+  grid-template-rows: auto 0.75rem 0.75rem 0.5rem;
+  grid-template-columns: 0.5rem repeat(var(--form-range-tick-count, 1), 1fr) 0.5rem;
   position: relative;
+  --tick-width: 0.125em;
 }
-.set-theme.theme-light .form-range-container > input[type=range] {
-  grid-area: 1/1/span 1/span 1;
+.set-theme.theme-light .form-range-container.form-range-vertical {
+  grid-template-rows: auto 0.5rem repeat(var(--form-range-tick-count, 1), 1fr) 0.5rem;
+  grid-template-columns: 0.75rem 0.75rem 0.5rem;
+}
+.set-theme.theme-light .form-range-container > .form-range-label {
+  grid-row: 1/span 1;
+  grid-column: 1/-1;
+}
+.set-theme.theme-light .form-range-container.form-range-vertical > .form-range-label {
+  grid-row: 1/span 1;
+  grid-column: 1/-1;
+}
+.set-theme.theme-light .form-range-container > input[type=range].form-range {
+  grid-row: 2/span 2;
+  grid-column: 1/-1;
   width: 100%;
   height: 100%;
 }
-.set-theme.theme-light .form-range-container > .form-range-tooltip-root {
+.set-theme.theme-light .form-range-container > input[type=range].form-range.form-range-vertical {
+  grid-row: 2/-1;
+  grid-column: 1/span 2;
+}
+.set-theme.theme-light .form-range-container > input[type=range].form-range-vertical {
+  -webkit-appearance: slider-vertical;
+  width: 1rem;
+  justify-self: center;
+}
+.set-theme.theme-light .form-range-container *:not(input[type=range]) {
+  pointer-events: none;
+}
+.set-theme.theme-light .form-range-container.form-range-vertical > .form-range-track-background, .set-theme.theme-light .form-range-container.form-range-vertical > .form-range-track-fill-background, .set-theme.theme-light .form-range-container.form-range-vertical > .form-range-tooltip-container {
+  grid-column: 1/span 2;
+  grid-row: 2/-1;
+}
+.set-theme.theme-light .form-range-container.form-range-vertical > .form-range-track-background, .set-theme.theme-light .form-range-container.form-range-vertical > .form-range-track-fill-background {
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-left: 0.37rem;
+  margin-right: 0.37rem;
+}
+.set-theme.theme-light .form-range-container > .form-range-tooltip-container {
+  position: relative;
+  grid-row: 2/span 2;
+  grid-column: 1/-1;
+}
+.set-theme.theme-light .form-range-container > .form-range-track-background {
+  background: #b2b8c0;
+  z-index: -2;
+}
+.set-theme.theme-light .form-range-container > .form-range-track-fill-background {
+  background: #0d6efd;
+  z-index: -1;
+  width: calc(var(--form-range-value-percent) * 100%);
+}
+.set-theme.theme-light .form-range-container.form-range-vertical > .form-range-track-fill-background {
+  width: auto;
+  height: calc(var(--form-range-value-percent) * 100%);
+  align-self: flex-end;
+}
+.set-theme.theme-light .form-range-container > .form-range-track-track-background {
+  background: #b2b8c0;
+  z-index: -2;
+}
+.set-theme.theme-light .form-range-container > .form-range-track-background, .set-theme.theme-light .form-range-container > .form-range-track-fill-background {
+  grid-row: 2/span 2;
+  grid-column: 1/-1;
+  content: "";
+  border-radius: 1rem;
+  margin-top: 0.37rem;
+  margin-bottom: 0.37rem;
+}
+.set-theme.theme-light .form-range-container.form-range-vertical > .form-range-ticks {
+  grid-column: 2/span 2;
+  grid-row: 3/-2;
+  flex-direction: column;
+}
+.set-theme.theme-light .form-range-container.form-range-vertical > .form-range-ticks > .form-range-tick {
+  width: auto;
+  height: 0;
+}
+.set-theme.theme-light .form-range-container.form-range-vertical > .form-range-ticks > .form-range-tick:not(:first-child):not(:last-child)::before {
+  left: 33.33333333%;
+}
+.set-theme.theme-light .form-range-container.form-range-vertical > .form-range-ticks > .form-range-tick::before {
+  content: "";
+  position: absolute;
+  background: #d1d5da;
+  top: unset;
+  bottom: unset;
+  left: 0;
+  right: 0;
+}
+.set-theme.theme-light .form-range-container > .form-range-ticks {
+  grid-row: 3/span 2;
+  grid-column: 2/-2;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  pointer-events: none;
+  z-index: -10;
+  position: relative;
+}
+.set-theme.theme-light .form-range-container > .form-range-ticks > .form-range-tick {
+  position: relative;
+  background: none;
+  padding: 0;
+  margin: 0;
+  width: 0;
+}
+.set-theme.theme-light .form-range-container > .form-range-ticks > .form-range-tick:not(:first-child):not(:last-child)::before {
+  bottom: 33.33333333%;
+}
+.set-theme.theme-light .form-range-container > .form-range-ticks > .form-range-tick::before {
+  content: "";
   position: absolute;
   top: 0;
-  left: calc(var(--range-value) * 100% + -1em * (var(--range-value)));
-  width: 1em;
-  height: 1em;
-  background: red;
+  bottom: 0;
+  width: 1px;
+  background: #d1d5da;
 }
-.set-theme.theme-light .form-range-container::before {
-  content: "";
-  inset: 0;
+.set-theme.theme-light .form-range-tooltip-root {
   position: absolute;
-  z-index: -1;
-  background: #42424b;
-  border-radius: 1rem;
-  top: 0.3333333em;
-  bottom: 0.3333333em;
+  top: 0;
+  width: 0;
+  left: calc(var(--range-value) * 100% + -1rem * (var(--range-value) - 0.5));
+  height: 1.5rem;
+  background: none;
+  pointer-events: none;
+  contain: strict;
+}
+.set-theme.theme-light .form-range-tooltip-root.form-range-vertical {
+  left: 0;
+  top: calc(var(--range-value) * 100% + -1rem * (var(--range-value) - 0.5));
 }
 .set-theme.theme-light .transition-enter {
   transition: all var(--transition-duration, 175ms) cubic-bezier(0.4, 0, 0.2, 1), visibility 0ms linear, transform-origin 0ms linear;
@@ -24836,42 +24949,155 @@
   height: var(--icon-size, 1.1em);
 }
 .set-theme.theme-dark .body-portal {
-  position: absolute;
+  /*position: absolute;
   inset: 0;
   pointer-events: none;
   overflow: hidden;
-}
-.set-theme.theme-dark .body-portal > * {
-  pointer-events: initial;
+
+  & > * {
+    pointer-events: initial;
+  }*/
 }
 .set-theme.theme-dark .form-range-container {
-  font-size: 1em;
-  height: 1em;
   display: grid;
+  grid-template-rows: auto 0.75rem 0.75rem 0.5rem;
+  grid-template-columns: 0.5rem repeat(var(--form-range-tick-count, 1), 1fr) 0.5rem;
   position: relative;
+  --tick-width: 0.125em;
 }
-.set-theme.theme-dark .form-range-container > input[type=range] {
-  grid-area: 1/1/span 1/span 1;
+.set-theme.theme-dark .form-range-container.form-range-vertical {
+  grid-template-rows: auto 0.5rem repeat(var(--form-range-tick-count, 1), 1fr) 0.5rem;
+  grid-template-columns: 0.75rem 0.75rem 0.5rem;
+}
+.set-theme.theme-dark .form-range-container > .form-range-label {
+  grid-row: 1/span 1;
+  grid-column: 1/-1;
+}
+.set-theme.theme-dark .form-range-container.form-range-vertical > .form-range-label {
+  grid-row: 1/span 1;
+  grid-column: 1/-1;
+}
+.set-theme.theme-dark .form-range-container > input[type=range].form-range {
+  grid-row: 2/span 2;
+  grid-column: 1/-1;
   width: 100%;
   height: 100%;
 }
-.set-theme.theme-dark .form-range-container > .form-range-tooltip-root {
+.set-theme.theme-dark .form-range-container > input[type=range].form-range.form-range-vertical {
+  grid-row: 2/-1;
+  grid-column: 1/span 2;
+}
+.set-theme.theme-dark .form-range-container > input[type=range].form-range-vertical {
+  -webkit-appearance: slider-vertical;
+  width: 1rem;
+  justify-self: center;
+}
+.set-theme.theme-dark .form-range-container *:not(input[type=range]) {
+  pointer-events: none;
+}
+.set-theme.theme-dark .form-range-container.form-range-vertical > .form-range-track-background, .set-theme.theme-dark .form-range-container.form-range-vertical > .form-range-track-fill-background, .set-theme.theme-dark .form-range-container.form-range-vertical > .form-range-tooltip-container {
+  grid-column: 1/span 2;
+  grid-row: 2/-1;
+}
+.set-theme.theme-dark .form-range-container.form-range-vertical > .form-range-track-background, .set-theme.theme-dark .form-range-container.form-range-vertical > .form-range-track-fill-background {
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-left: 0.37rem;
+  margin-right: 0.37rem;
+}
+.set-theme.theme-dark .form-range-container > .form-range-tooltip-container {
+  position: relative;
+  grid-row: 2/span 2;
+  grid-column: 1/-1;
+}
+.set-theme.theme-dark .form-range-container > .form-range-track-background {
+  background: #42424b;
+  z-index: -2;
+}
+.set-theme.theme-dark .form-range-container > .form-range-track-fill-background {
+  background: #2b35CA;
+  z-index: -1;
+  width: calc(var(--form-range-value-percent) * 100%);
+}
+.set-theme.theme-dark .form-range-container.form-range-vertical > .form-range-track-fill-background {
+  width: auto;
+  height: calc(var(--form-range-value-percent) * 100%);
+  align-self: flex-end;
+}
+.set-theme.theme-dark .form-range-container > .form-range-track-track-background {
+  background: #42424b;
+  z-index: -2;
+}
+.set-theme.theme-dark .form-range-container > .form-range-track-background, .set-theme.theme-dark .form-range-container > .form-range-track-fill-background {
+  grid-row: 2/span 2;
+  grid-column: 1/-1;
+  content: "";
+  border-radius: 1rem;
+  margin-top: 0.37rem;
+  margin-bottom: 0.37rem;
+}
+.set-theme.theme-dark .form-range-container.form-range-vertical > .form-range-ticks {
+  grid-column: 2/span 2;
+  grid-row: 3/-2;
+  flex-direction: column;
+}
+.set-theme.theme-dark .form-range-container.form-range-vertical > .form-range-ticks > .form-range-tick {
+  width: auto;
+  height: 0;
+}
+.set-theme.theme-dark .form-range-container.form-range-vertical > .form-range-ticks > .form-range-tick:not(:first-child):not(:last-child)::before {
+  left: 33.33333333%;
+}
+.set-theme.theme-dark .form-range-container.form-range-vertical > .form-range-ticks > .form-range-tick::before {
+  content: "";
+  position: absolute;
+  background: #27272c;
+  top: unset;
+  bottom: unset;
+  left: 0;
+  right: 0;
+}
+.set-theme.theme-dark .form-range-container > .form-range-ticks {
+  grid-row: 3/span 2;
+  grid-column: 2/-2;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  pointer-events: none;
+  z-index: -10;
+  position: relative;
+}
+.set-theme.theme-dark .form-range-container > .form-range-ticks > .form-range-tick {
+  position: relative;
+  background: none;
+  padding: 0;
+  margin: 0;
+  width: 0;
+}
+.set-theme.theme-dark .form-range-container > .form-range-ticks > .form-range-tick:not(:first-child):not(:last-child)::before {
+  bottom: 33.33333333%;
+}
+.set-theme.theme-dark .form-range-container > .form-range-ticks > .form-range-tick::before {
+  content: "";
   position: absolute;
   top: 0;
-  left: calc(var(--range-value) * 100% + -1em * (var(--range-value)));
-  width: 1em;
-  height: 1em;
-  background: red;
+  bottom: 0;
+  width: 1px;
+  background: #27272c;
 }
-.set-theme.theme-dark .form-range-container::before {
-  content: "";
-  inset: 0;
+.set-theme.theme-dark .form-range-tooltip-root {
   position: absolute;
-  z-index: -1;
-  background: #42424b;
-  border-radius: 1rem;
-  top: 0.3333333em;
-  bottom: 0.3333333em;
+  top: 0;
+  width: 0;
+  left: calc(var(--range-value) * 100% + -1rem * (var(--range-value) - 0.5));
+  height: 1.5rem;
+  background: none;
+  pointer-events: none;
+  contain: strict;
+}
+.set-theme.theme-dark .form-range-tooltip-root.form-range-vertical {
+  left: 0;
+  top: calc(var(--range-value) * 100% + -1rem * (var(--range-value) - 0.5));
 }
 .set-theme.theme-dark .transition-enter {
   transition: all var(--transition-duration, 175ms) cubic-bezier(0.4, 0, 0.2, 1), visibility 0ms linear, transform-origin 0ms linear;

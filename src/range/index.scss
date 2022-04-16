@@ -1,29 +1,158 @@
+@use "./form-range-track-bg" as *;
+@use "./form-range-tick" as *;
+@use "../bootstrap-variables/primary" as *;
+
 .form-range-container {
   display: grid;
-  grid-template-rows: 0.75rem 0.75rem 0.5rem;
+  grid-template-rows: auto 0.75rem 0.75rem 0.5rem;
   grid-template-columns: 0.5rem repeat(var(--form-range-tick-count, 1), 1fr) 0.5rem;
+
+  &.form-range-vertical {
+    grid-template-rows: auto 0.5rem repeat(var(--form-range-tick-count, 1), 1fr) 0.5rem;
+    grid-template-columns: 0.75rem 0.75rem auto;
+  }
+
   position: relative;
 
   --tick-width: 0.125em;
 
-  & *:not(input[type=range]) {
+  & > .form-range-label {
+    grid-row: 1 / span 1;
+    grid-column: 1 / -1;
+  }
+  &.form-range-vertical > .form-range-label {
+    grid-row: 1 / span 1;
+    grid-column: 1 / -1;
+  }
+
+  & > input[type="range"].form-range {
+    grid-row: 2 / span 2;
+    grid-column: 1 / -1;
+    &.form-range-vertical {
+      grid-row: 2 / -1;
+      grid-column: 1 / span 2;
+    }
+    width: 100%;
+    height: 100%;
+  }
+
+  & > input[type="range"].form-range-vertical {
+    -webkit-appearance: slider-vertical;
+    width: 1rem;
+    justify-self: center;
+  }
+
+  & *:not(input[type="range"]) {
     pointer-events: none;
   }
 
+  &.form-range-vertical {
+    & > .form-range-track-background,
+    & > .form-range-track-fill-background,
+    & > .form-range-tooltip-container {
+      grid-column: 1 / span 2;
+      grid-row: 2 / -1;
+
+
+    // Force the tooltip that shows the value
+    // to only be visible over the thumb, wherever it is
+      & > .form-range-tooltip-root {
+        left: 50%;
+        top: unset;
+        bottom: calc(var(--range-value) * 100% + -1rem * (var(--range-value) - 0.5));
+        height: 1px;
+      }
+  
+    }
+
+    & > .form-range-track-background,
+    & > .form-range-track-fill-background {
+      margin-top: 0;
+      margin-bottom: 0;
+      margin-left: 0.37rem;
+      margin-right: 0.37rem;
+    }
+  }
+
+  & > .form-range-tooltip-container {
+    position: relative;
+    grid-row: 2 / span 2;
+    grid-column: 1 / -1;
+
+    // Force the tooltip that shows the value
+    // to only be visible over the thumb, wherever it is
+    & > .form-range-tooltip-root {
+      position: absolute;
+      top: 0;
+      width: 0;
+      left: calc(var(--range-value) * 100% + -1rem * (var(--range-value) - 0.5));
+      height: 1.5rem;
+      background: none;
+      pointer-events: none;
+      contain: strict;
+    }
+  }
+
   & > .form-range-track-background {
-    grid-row: 1 / span 2;
+    background: $form-range-track-bg;
+    z-index: -2;
+  }
+  & > .form-range-track-fill-background {
+    background: $primary;
+    z-index: -1;
+    width: calc(var(--form-range-value-percent) * 100%);
+  }
+  &.form-range-vertical > .form-range-track-fill-background {
+    width: auto;
+    height: calc(var(--form-range-value-percent) * 100%);
+    align-self: flex-end;
+  }
+  & > .form-range-track-track-background {
+    background: $form-range-track-bg;
+    z-index: -2;
+  }
+
+  & > .form-range-track-background,
+  & > .form-range-track-fill-background {
+    grid-row: 2 / span 2;
     grid-column: 1 / -1;
 
     content: "";
-    z-index: -1;
-    background: #42424b;
     border-radius: 1rem;
-    margin-top: 0.45rem;
-    margin-bottom: 0.45rem;
+    margin-top: 0.37rem;
+    margin-bottom: 0.37rem;
+  }
+
+  &.form-range-vertical > .form-range-ticks {
+    display: none;
+    grid-column: 2 / span 2;
+    grid-row: 3 / -2;
+    flex-direction: column;
+
+    & > .form-range-tick {
+      width: auto;
+      height: 0;
+
+      &:not(:first-child):not(:last-child) {
+        &::before {
+          left: 33.33333333%;
+        }
+      }
+
+      &::before {
+        content: "";
+        position: absolute;
+        background: $form-range-tick;
+        top: unset;
+        bottom: unset;
+        left: 0;
+        right: 0;
+      }
+    }
   }
 
   & > .form-range-ticks {
-    grid-row: 2 / span 2;
+    grid-row: 3 / span 2;
     grid-column: 2 / -2;
     display: flex;
     justify-content: space-between;
@@ -42,9 +171,10 @@
       &::before {
         content: "";
         position: absolute;
-        border: 1px solid #808080;
         top: 0;
         bottom: 0;
+        width: 1px;
+        background: $form-range-tick;
       }
 
       position: relative;
@@ -53,35 +183,5 @@
       margin: 0;
       width: 0;
     }
-    //grid-area: 2 / 1 / span 2 / span 1;
-    /*background: repeating-linear-gradient(90deg, 
-    #c8c8c8, 
-    #c8c8c8 calc(var(--tick-width) / 2), 
-    transparent calc(var(--tick-width) / 2), 
-    transparent calc(100% / (var(--form-range-tick-count)) - (var(--tick-width) / 2))
-    #c8c8c8 calc(100% / (var(--form-range-tick-count)) - (var(--tick-width) / 2))
-    #c8c8c8 calc(100% / (var(--form-range-tick-count)) - (var(--tick-width) / 2) + (var(--tick-width) / 2))
-    ) 100% no-repeat;
-    background-size: 100% 0.5em;
-    background-position: 0% center;*/
   }
-
-  & > input[type="range"].form-range {
-    grid-area: 1 / 1 / span 2 / -1;
-    width: 100%;
-    height: 100%;
-  }
-}
-
-// Force the tooltip that shows the value
-// to only be visible over the thumb, wherever it is
-.form-range-tooltip-root {
-  position: absolute;
-  top: 0;
-  width: 0;
-  left: calc(var(--range-value) * 100% + -1rem * (var(--range-value) - 0.5));
-  height: 1.5rem;
-  background: none;
-  pointer-events: none;
-  contain: strict;
 }

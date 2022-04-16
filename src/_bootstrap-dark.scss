@@ -12,6 +12,9 @@ $max-dark: -1 !default;
 @use "bootstrap-sass-variables/green" as * with ($green: #0D5E21);
 @use "bootstrap-sass-variables/teal" as * with ($teal: #00BD6E);
 @use "bootstrap-sass-variables/cyan" as * with ($cyan: #00AED1);
+@use "./bootstrap-variables/grays" as *;
+@use "./range/form-range-track-bg" with ($form-range-track-bg: $gray-700);
+@use "./range/form-range-tick" with ($form-range-tick: $gray-800);
 
 @use "bootstrap-sass-variables/functions" as *;
 @use "./bootstrap-variables/btn-box-shadow" as *;

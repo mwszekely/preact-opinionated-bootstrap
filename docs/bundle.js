@@ -5482,21 +5482,30 @@
      * selection.containsNode doesn't account for selection.isCollapsed,
      * so here's a workaround for that.
      *
+     * We also only look for the selection end to only catch the
+     * essense of a non-existant "selectionstop" event.
+     *
      * @param element
      * @returns
      */
 
 
-    function nodeHasSelectedText(element) {
+    function nodeSelectedTextLength(element) {
       if (element && element instanceof Node) {
         const selection = window.getSelection();
 
-        if (selection !== null && selection !== void 0 && selection.containsNode(element, true) && !selection.isCollapsed) {
-          return true;
+        for (let i = 0; i < ((_selection$rangeCount = selection === null || selection === void 0 ? void 0 : selection.rangeCount) !== null && _selection$rangeCount !== void 0 ? _selection$rangeCount : 0); ++i) {
+          var _selection$rangeCount;
+
+          let range = selection.getRangeAt(i);
+
+          if (element.contains(range.endContainer) && !(selection !== null && selection !== void 0 && selection.isCollapsed)) {
+            return selection.toString().length;
+          }
         }
       }
 
-      return false;
+      return 0;
     }
     /**
      * Adds the necessary event handlers to create a "press"-like event for
@@ -5541,20 +5550,24 @@
       // The flag is reset any time the selection is empty or the button is
       // no longer active.
 
-      const [textSelectedDuringActivation, setTextSelectedDuringActivation] = useState(false);
+      const [textSelectedDuringActivationStartTime, setTextSelectedDuringActivationStartTime] = useState(null);
       useGlobalHandler(document, "selectionchange", e => {
-        setTextSelectedDuringActivation(active == 0 ? false : nodeHasSelectedText(getElement()));
+        setTextSelectedDuringActivationStartTime(prev => nodeSelectedTextLength(getElement()) == 0 ? null : prev != null ? prev : new Date());
       });
       useEffect(() => {
-        if (active == 0) setTextSelectedDuringActivation(false);
+        if (active == 0) setTextSelectedDuringActivationStartTime(null);
       }, [active == 0]);
       const onActiveStart = useStableCallback(e => {
         setActive(a => ++a);
       });
       const onActiveStop = useStableCallback(e => {
         setActive(a => Math.max(0, --a));
+        let currentTime = new Date();
+        let timeDifference = textSelectedDuringActivationStartTime == null ? null : +currentTime - +textSelectedDuringActivationStartTime; // If we're selecting text (heuristically determined by selecting for longer than 1/4 a second, or more than 2 characters)
+        // then this isn't a press event.
+        // TODO: This should measure glyphs instead of characters.
 
-        if (textSelectedDuringActivation) {
+        if (timeDifference && timeDifference > 250 || nodeSelectedTextLength(getElement()) >= 2) {
           e.preventDefault();
           return;
         }
@@ -5648,11 +5661,11 @@
         onMouseUp,
         onMouseLeave,
         onClick,
-        style: textSelectedDuringActivation ? {
+        style: textSelectedDuringActivationStartTime != null ? {
           cursor: "text"
         } : undefined,
         ...{
-          "data-pseudo-active": active && !textSelectedDuringActivation ? "true" : undefined
+          "data-pseudo-active": active && textSelectedDuringActivationStartTime == null ? "true" : undefined
         }
       }, props));
     }
@@ -16670,7 +16683,9 @@
     const DebounceContext = D$1(false);
     const GetValueTextContext = D$1(null);
     const GetListContext = D$1("");
-    const StepContext = D$1(0);
+    const StepContext = D$1(1);
+    const SnapContext = D$1("discrete");
+    const OrientationContext = D$1("inline");
     const Range = g$1(forwardElementRef(function Range(_ref, ref) {
       var _id, _step;
 
@@ -16678,11 +16693,15 @@
         max,
         min,
         debounce,
+        hideTicks,
+        orientation,
         children,
         getValueText,
         value,
         onValueChange,
         step,
+        snap,
+        label,
         ...rest
       } = _ref;
       const {
@@ -16693,8 +16712,8 @@
       });
       let id = d$1(generateRandomId, []);
       (_id = id) !== null && _id !== void 0 ? _id : id = "";
-      (_step = step) !== null && _step !== void 0 ? _step : step = 1;
-      let tickCount = Math.ceil(1 + (max - min) / step);
+      (_step = step) !== null && _step !== void 0 ? _step : step = "any";
+      let tickCount = step == "any" ? Infinity : Math.ceil(1 + (max - min) / step);
       return e$3(RangeThumbContext.Provider, {
         value: useAriaSliderThumb,
         children: e$3(DebounceContext.Provider, {
@@ -16705,25 +16724,33 @@
               value: id,
               children: e$3(StepContext.Provider, {
                 value: step,
-                children: e$3("div", { ...useMergedProps()({
-                    class: "form-range-container",
-                    ref,
-                    style: {
-                      "--form-range-tick-count": tickCount
-                    }
-                  }, rest),
-                  children: [children !== null && children !== void 0 ? children : e$3(RangeThumb, {
-                    index: 0,
-                    value: value !== null && value !== void 0 ? value : 0,
-                    onValueChange: onValueChange
-                  }), e$3("div", {
-                    class: "form-range-track-background"
-                  }), e$3(RangeTicks, {
-                    min: min,
-                    max: max,
-                    step: step,
-                    id: id
-                  })]
+                children: e$3(SnapContext.Provider, {
+                  value: snap !== null && snap !== void 0 ? snap : "discrete",
+                  children: e$3(OrientationContext.Provider, {
+                    value: orientation !== null && orientation !== void 0 ? orientation : "inline",
+                    children: v$2(label ? "label" : "div", useMergedProps()({
+                      class: clsx("form-range-container", orientation == "block" && "form-range-vertical"),
+                      ref,
+                      style: {
+                        "--form-range-tick-count": tickCount
+                      }
+                    }, rest), label && e$3("div", {
+                      class: "form-range-label",
+                      children: label
+                    }), children !== null && children !== void 0 ? children : e$3(RangeThumb, {
+                      index: 0,
+                      value: value !== null && value !== void 0 ? value : 0,
+                      onValueChange: onValueChange,
+                      label: label !== null && label !== void 0 ? label : ""
+                    }), e$3("div", {
+                      class: "form-range-track-background"
+                    }), e$3(RangeTicks, {
+                      min: min,
+                      max: max,
+                      step: step,
+                      id: id
+                    }))
+                  })
                 })
               })
             })
@@ -16743,6 +16770,7 @@
         max,
         id
       } = _ref2;
+      if (step == "any") return null;
       const getValueText = F(GetValueTextContext);
       let children = [];
 
@@ -16760,6 +16788,8 @@
       });
     });
     const RangeThumb = g$1(forwardElementRef(function RangeThumb(_ref3, ref) {
+      var _useContext;
+
       let {
         index,
         value,
@@ -16785,6 +16815,54 @@
 
         return (_getValueText = getValueText === null || getValueText === void 0 ? void 0 : getValueText(value)) !== null && _getValueText !== void 0 ? _getValueText : value == null ? "" : `${value}`;
       }, [value, getValueText]);
+      const orientation = F(OrientationContext);
+      const [inputHasFocus, setInputHasFocus] = l$2(false);
+      const {
+        useHasFocusProps
+      } = useHasFocus({
+        onFocusedChanged: setInputHasFocus
+      });
+      let usedStep = (_useContext = F(StepContext)) !== null && _useContext !== void 0 ? _useContext : 1;
+      let userStep = usedStep;
+      const [lastSnappedValue, setLastSnappedValue] = l$2(null);
+      const [forceSnap, setForceSnap] = l$2(false);
+      const snap = F(SnapContext); //const [snap, setSnap] = useState<boolean | null>(null);
+
+      if (snap == "continuous" && !forceSnap) usedStep = "any";
+      /*if (snap === false)
+          step = "any";
+      if (snap === true && step == "any")
+          step = 1;*/
+
+      const snapTimeout = s$2(-1);
+
+      function onValueChange(e) {
+        const newValue = e[EventDetail].value;
+
+        if (userStep != "any") {
+          let closestStep = Math.round(newValue / userStep) * userStep;
+          let distanceToStep = Math.abs(closestStep - newValue);
+          let distanceToLastSnap = lastSnappedValue == null ? null : Math.abs(lastSnappedValue - newValue);
+
+          if (distanceToLastSnap != null && distanceToLastSnap >= userStep) {
+            setForceSnap(false);
+            setLastSnappedValue(null);
+          }
+
+          if (distanceToStep <= 0.125 && closestStep != lastSnappedValue) {
+            setLastSnappedValue(closestStep);
+            setForceSnap(true);
+            if (snapTimeout.current > 0) clearTimeout(snapTimeout.current);
+            snapTimeout.current = setTimeout(() => {
+              setForceSnap(false);
+            }, 250);
+            e[EventDetail].value = closestStep;
+          }
+        }
+
+        return onValueChangeSync === null || onValueChangeSync === void 0 ? void 0 : onValueChangeSync(e);
+      }
+
       const {
         getElement,
         useAriaSliderThumbProps,
@@ -16797,35 +16875,40 @@
         index,
         max,
         min,
-        onValueChange: onValueChangeSync
-      });
-      const [inputHasFocus, setInputHasFocus] = l$2(false);
-      const {
-        useHasFocusProps
-      } = useHasFocus({
-        onFocusedChanged: setInputHasFocus
+        onValueChange
       });
       const valuePercent = (value - usedMin) / (usedMax - usedMin);
       return e$3(d$2, {
         children: [e$3(Tooltip, {
-          side: "block-end",
+          side: orientation == "inline" ? "block-end" : "inline-end",
           forceOpen: inputHasFocus,
-          tooltip: valueText,
+          tooltip: `${value}.${valueText}`,
           childSelector: A$2(function (e) {
-            return e.nextElementSibling;
+            return e.nextElementSibling.firstElementChild;
           }, []),
           children: e$3("input", { ...useAriaSliderThumbProps(useHasFocusProps({
               ref,
-              class: "form-range",
+              ...{
+                orient: orientation == "block" ? "vertical" : undefined
+              },
+              class: clsx("form-range", orientation == "block" && "form-range-vertical"),
               tabIndex: 0,
-              step: F(StepContext)
-            })),
-            list: F(GetListContext)
+              step: usedStep,
+              list: F(GetListContext)
+            }))
           })
         }), e$3("div", {
-          class: "form-range-tooltip-root",
+          class: "form-range-tooltip-container",
+          children: e$3("div", {
+            class: "form-range-tooltip-root",
+            style: {
+              "--range-value": `${valuePercent}`
+            }
+          })
+        }), e$3("div", {
+          class: "form-range-track-fill-background",
           style: {
-            "--range-value": `${valuePercent}`
+            "--form-range-value-percent": valuePercent
           }
         })]
       });
@@ -16876,7 +16959,7 @@
         }
         const [value, setValue] = useState(0);
         useState(10);
-        return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Lists" }, void 0), e$3(CardElement, { children: e$3(Range, { min: 0, max: 10, getValueText: A$2((n) => { return "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[n]; }, []), value: value, onValueChange: setValue, step: 2 }, void 0) }, void 0), e$3(CardElement, { children: e$3(List, { label: "Demo list", selectedIndex: selectedIndex, onSelect: setSelectedIndex, children: makeListItems(index => e$3(ListItemSingle, { index: index, disabled: index == 3, children: makeListItemLines(index) }, void 0)) }, void 0) }, void 0), e$3(CardElement, { children: ["A list is a way to provide a large number of selectable options in a way that's distinct from, say, a list of checkboxes or radio buttons. Lists can be ", e$3("strong", { children: "single-select" }, void 0), ", ", e$3("strong", { children: "multi-select" }, void 0), ", or ", e$3("strong", { children: "static" }, void 0), " (no selection, display only)."] }, void 0), e$3(CardElement, { children: ["All list types can have as many lines as needed; each e.g. ", e$3("code", { children: "<span>" }, void 0), " will create a new line. Format them however you like (i.e. making some larger or smaller, tinted different colors, etc.)", e$3(InputGroup, { children: e$3(Input, { type: "number", value: lines, onValueChange: setLines, children: "# of lines" }, void 0) }, void 0)] }, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Single select" }, void 0), e$3(CardElement, { children: ["For single-select lists, you provide the parent ", e$3("code", { children: "<List>" }, void 0), " with ", e$3("code", { children: "selectedIndex" }, void 0), " and ", e$3("code", { children: "onSelect" }, void 0), " props that control which ", e$3("code", { children: "<ListItemSingle>" }, void 0), " is the selected one."] }, void 0), e$3(CardElement, { children: ["As with most components, the ", e$3("code", { children: "onSelect" }, void 0), " prop can be an async function."] }, void 0), e$3(CardElement, { children: e$3(List, { label: "Single-select list demo", selectedIndex: selectedIndex, onSelect: async (i) => { await sleep$3(2000); setSelectedIndex(i); }, children: makeListItems(index => e$3(ListItemSingle, { index: index, disabled: index == 3, children: makeListItemLines(index) }, void 0)) }, void 0) }, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Multi select" }, void 0), e$3(CardElement, { children: ["Multi-select lists have a ", e$3("code", { children: "selected" }, void 0), " prop on each individual ", e$3("code", { children: "<ListItemMulti>" }, void 0), "."] }, void 0), e$3(CardElement, { children: ["As with most components, the ", e$3("code", { children: "onSelect" }, void 0), " prop can be an async function."] }, void 0), e$3(CardElement, { children: e$3(List, { label: "Multi-select list demo", select: "multi", children: makeListItems(index => e$3(ListItemMulti, { index: index, selected: selectedMulti.has(index), disabled: index == 3, onSelect: async (selected) => {
+        return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Lists" }, void 0), e$3(CardElement, { children: e$3(Range, { orientation: "block", label: "Test range", step: 1, snap: "continuous", min: 0, max: 10, getValueText: A$2((n) => { return "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[Math.round(n)]; }, []), value: value, onValueChange: setValue }, void 0) }, void 0), e$3(CardElement, { children: e$3(List, { label: "Demo list", selectedIndex: selectedIndex, onSelect: setSelectedIndex, children: makeListItems(index => e$3(ListItemSingle, { index: index, disabled: index == 3, children: makeListItemLines(index) }, void 0)) }, void 0) }, void 0), e$3(CardElement, { children: ["A list is a way to provide a large number of selectable options in a way that's distinct from, say, a list of checkboxes or radio buttons. Lists can be ", e$3("strong", { children: "single-select" }, void 0), ", ", e$3("strong", { children: "multi-select" }, void 0), ", or ", e$3("strong", { children: "static" }, void 0), " (no selection, display only)."] }, void 0), e$3(CardElement, { children: ["All list types can have as many lines as needed; each e.g. ", e$3("code", { children: "<span>" }, void 0), " will create a new line. Format them however you like (i.e. making some larger or smaller, tinted different colors, etc.)", e$3(InputGroup, { children: e$3(Input, { type: "number", value: lines, onValueChange: setLines, children: "# of lines" }, void 0) }, void 0)] }, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Single select" }, void 0), e$3(CardElement, { children: ["For single-select lists, you provide the parent ", e$3("code", { children: "<List>" }, void 0), " with ", e$3("code", { children: "selectedIndex" }, void 0), " and ", e$3("code", { children: "onSelect" }, void 0), " props that control which ", e$3("code", { children: "<ListItemSingle>" }, void 0), " is the selected one."] }, void 0), e$3(CardElement, { children: ["As with most components, the ", e$3("code", { children: "onSelect" }, void 0), " prop can be an async function."] }, void 0), e$3(CardElement, { children: e$3(List, { label: "Single-select list demo", selectedIndex: selectedIndex, onSelect: async (i) => { await sleep$3(2000); setSelectedIndex(i); }, children: makeListItems(index => e$3(ListItemSingle, { index: index, disabled: index == 3, children: makeListItemLines(index) }, void 0)) }, void 0) }, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Multi select" }, void 0), e$3(CardElement, { children: ["Multi-select lists have a ", e$3("code", { children: "selected" }, void 0), " prop on each individual ", e$3("code", { children: "<ListItemMulti>" }, void 0), "."] }, void 0), e$3(CardElement, { children: ["As with most components, the ", e$3("code", { children: "onSelect" }, void 0), " prop can be an async function."] }, void 0), e$3(CardElement, { children: e$3(List, { label: "Multi-select list demo", select: "multi", children: makeListItems(index => e$3(ListItemMulti, { index: index, selected: selectedMulti.has(index), disabled: index == 3, onSelect: async (selected) => {
                                     await sleep$3(2000);
                                     setSelectedMulti(prev => {
                                         let ret = new Set(Array.from(prev));

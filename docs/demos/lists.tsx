@@ -74,7 +74,7 @@ export function DemoLists() {
             <Card>
                 <CardElement type="title" tag="h2">Lists</CardElement>
                 <CardElement>
-                    <Range min={0} max={10} getValueText={useCallback((n: number) => { return "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[n]; }, [])} value={value} onValueChange={setValue} step={2} />
+                    <Range orientation="block" label="Test range" step={1} snap="continuous" min={0} max={10} getValueText={useCallback((n: number) => { return "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[Math.round(n)]; }, [])} value={value} onValueChange={setValue} />
                 </CardElement>
                 <CardElement><List label="Demo list" selectedIndex={selectedIndex} onSelect={setSelectedIndex}>{makeListItems(index => <ListItemSingle index={index} disabled={index == 3}>{makeListItemLines(index)}</ListItemSingle>)}</List></CardElement>
 
