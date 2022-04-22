@@ -5,12 +5,12 @@
         l$3,
         u$3,
         t$3,
-        r$3,
         o$4,
+        r$3,
         f$3,
         e$4 = {},
         c$3 = [],
-        s$3 = /acit|ex(?:s|g|n|p|$)|rph|grid|ows|mnc|ntw|ine[ch]|zoo|^ord|itera/i;
+        s$2 = /acit|ex(?:s|g|n|p|$)|rph|grid|ows|mnc|ntw|ine[ch]|zoo|^ord|itera/i;
 
     function a$3(n, l) {
       for (var u in l) n[u] = l[u];
@@ -25,22 +25,22 @@
 
     function v$2(l, u, i) {
       var t,
-          r,
           o,
+          r,
           f = {};
 
-      for (o in u) "key" == o ? t = u[o] : "ref" == o ? r = u[o] : f[o] = u[o];
+      for (r in u) "key" == r ? t = u[r] : "ref" == r ? o = u[r] : f[r] = u[r];
 
-      if (arguments.length > 2 && (f.children = arguments.length > 3 ? n$3.call(arguments, 2) : i), "function" == typeof l && null != l.defaultProps) for (o in l.defaultProps) void 0 === f[o] && (f[o] = l.defaultProps[o]);
-      return y$2(l, f, t, r, null);
+      if (arguments.length > 2 && (f.children = arguments.length > 3 ? n$3.call(arguments, 2) : i), "function" == typeof l && null != l.defaultProps) for (r in l.defaultProps) void 0 === f[r] && (f[r] = l.defaultProps[r]);
+      return y$2(l, f, t, o, null);
     }
 
-    function y$2(n, i, t, r, o) {
+    function y$2(n, i, t, o, r) {
       var f = {
         type: n,
         props: i,
         key: t,
-        ref: r,
+        ref: o,
         __k: null,
         __: null,
         __b: 0,
@@ -49,16 +49,16 @@
         __c: null,
         __h: null,
         constructor: void 0,
-        __v: null == o ? ++u$3 : o
+        __v: null == r ? ++u$3 : r
       };
-      return null == o && null != l$3.vnode && l$3.vnode(f), f;
+      return null == r && null != l$3.vnode && l$3.vnode(f), f;
     }
 
     function d$2(n) {
       return n.children;
     }
 
-    function _$1(n, l) {
+    function _$2(n, l) {
       this.props = n, this.context = l;
     }
 
@@ -84,19 +84,19 @@
     }
 
     function m$2(n) {
-      (!n.__d && (n.__d = !0) && t$3.push(n) && !g$3.__r++ || o$4 !== l$3.debounceRendering) && ((o$4 = l$3.debounceRendering) || r$3)(g$3);
+      (!n.__d && (n.__d = !0) && t$3.push(n) && !g$3.__r++ || r$3 !== l$3.debounceRendering) && ((r$3 = l$3.debounceRendering) || o$4)(g$3);
     }
 
     function g$3() {
       for (var n; g$3.__r = t$3.length;) n = t$3.sort(function (n, l) {
         return n.__v.__b - l.__v.__b;
       }), t$3 = [], n.some(function (n) {
-        var l, u, i, t, r, o;
-        n.__d && (r = (t = (l = n).__v).__e, (o = l.__P) && (u = [], (i = a$3({}, t)).__v = t.__v + 1, j$3(o, t, i, l.__n, void 0 !== o.ownerSVGElement, null != t.__h ? [r] : null, u, null == r ? k$2(t) : r, t.__h), z$2(u, t), t.__e != r && b$2(t)));
+        var l, u, i, t, o, r;
+        n.__d && (o = (t = (l = n).__v).__e, (r = l.__P) && (u = [], (i = a$3({}, t)).__v = t.__v + 1, j$3(r, t, i, l.__n, void 0 !== r.ownerSVGElement, null != t.__h ? [o] : null, u, null == o ? k$2(t) : o, t.__h), z$2(u, t), t.__e != o && b$2(t)));
       });
     }
 
-    function w$3(n, l, u, i, t, r, o, f, s, a) {
+    function w$3(n, l, u, i, t, o, r, f, s, a) {
       var h,
           v,
           p,
@@ -118,7 +118,7 @@
 
           p = null;
         }
-        j$3(n, _, p = p || e$4, t, r, o, f, s, a), b = _.__e, (v = _.ref) && p.ref != v && (g || (g = []), p.ref && g.push(p.ref, null, _), g.push(v, _.__c || b, _)), null != b ? (null == m && (m = b), "function" == typeof _.type && _.__k === p.__k ? _.__d = s = x$3(_, s, n) : s = P$2(n, _, p, w, b, s), "function" == typeof u.type && (u.__d = s)) : s && p.__e == s && s.parentNode != n && (s = k$2(p));
+        j$3(n, _, p = p || e$4, t, o, r, f, s, a), b = _.__e, (v = _.ref) && p.ref != v && (g || (g = []), p.ref && g.push(p.ref, null, _), g.push(v, _.__c || b, _)), null != b ? (null == m && (m = b), "function" == typeof _.type && _.__k === p.__k ? _.__d = s = x$3(_, s, n) : s = P$2(n, _, p, w, b, s), "function" == typeof u.type && (u.__d = s)) : s && p.__e == s && s.parentNode != n && (s = k$2(p));
       }
 
       for (u.__e = m, h = A; h--;) null != w[h] && ("function" == typeof u.type && null != w[h].__e && w[h].__e == u.__d && (u.__d = k$2(i, h + 1)), N$1(w[h], w[h]));
@@ -127,7 +127,7 @@
     }
 
     function x$3(n, l, u) {
-      for (var i, t = n.__k, r = 0; t && r < t.length; r++) (i = t[r]) && (i.__ = n, l = "function" == typeof i.type ? x$3(i, l, u) : P$2(u, i, i, t, i.__e, l));
+      for (var i, t = n.__k, o = 0; t && o < t.length; o++) (i = t[o]) && (i.__ = n, l = "function" == typeof i.type ? x$3(i, l, u) : P$2(u, i, i, t, i.__e, l));
 
       return l;
     }
@@ -138,38 +138,38 @@
       }) : l.push(n)), l;
     }
 
-    function P$2(n, l, u, i, t, r) {
-      var o, f, e;
-      if (void 0 !== l.__d) o = l.__d, l.__d = void 0;else if (null == u || t != r || null == t.parentNode) n: if (null == r || r.parentNode !== n) n.appendChild(t), o = null;else {
-        for (f = r, e = 0; (f = f.nextSibling) && e < i.length; e += 2) if (f == t) break n;
+    function P$2(n, l, u, i, t, o) {
+      var r, f, e;
+      if (void 0 !== l.__d) r = l.__d, l.__d = void 0;else if (null == u || t != o || null == t.parentNode) n: if (null == o || o.parentNode !== n) n.appendChild(t), r = null;else {
+        for (f = o, e = 0; (f = f.nextSibling) && e < i.length; e += 2) if (f == t) break n;
 
-        n.insertBefore(t, r), o = r;
+        n.insertBefore(t, o), r = o;
       }
-      return void 0 !== o ? o : t.nextSibling;
+      return void 0 !== r ? r : t.nextSibling;
     }
 
     function C$2(n, l, u, i, t) {
-      var r;
+      var o;
 
-      for (r in u) "children" === r || "key" === r || r in l || H$2(n, r, null, u[r], i);
+      for (o in u) "children" === o || "key" === o || o in l || H$2(n, o, null, u[o], i);
 
-      for (r in l) t && "function" != typeof l[r] || "children" === r || "key" === r || "value" === r || "checked" === r || u[r] === l[r] || H$2(n, r, l[r], u[r], i);
+      for (o in l) t && "function" != typeof l[o] || "children" === o || "key" === o || "value" === o || "checked" === o || u[o] === l[o] || H$2(n, o, l[o], u[o], i);
     }
 
     function $$1(n, l, u) {
-      "-" === l[0] ? n.setProperty(l, u) : n[l] = null == u ? "" : "number" != typeof u || s$3.test(l) ? u : u + "px";
+      "-" === l[0] ? n.setProperty(l, u) : n[l] = null == u ? "" : "number" != typeof u || s$2.test(l) ? u : u + "px";
     }
 
     function H$2(n, l, u, i, t) {
-      var r;
+      var o;
 
       n: if ("style" === l) {
         if ("string" == typeof u) n.style.cssText = u;else {
           if ("string" == typeof i && (n.style.cssText = i = ""), i) for (l in i) u && l in u || $$1(n.style, l, "");
           if (u) for (l in u) i && u[l] === i[l] || $$1(n.style, l, u[l]);
         }
-      } else if ("o" === l[0] && "n" === l[1]) r = l !== (l = l.replace(/Capture$/, "")), l = l.toLowerCase() in n ? l.toLowerCase().slice(2) : l.slice(2), n.l || (n.l = {}), n.l[l + r] = u, u ? i || n.addEventListener(l, r ? T$2 : I$2, r) : n.removeEventListener(l, r ? T$2 : I$2, r);else if ("dangerouslySetInnerHTML" !== l) {
-        if (t) l = l.replace(/xlink[H:h]/, "h").replace(/sName$/, "s");else if ("href" !== l && "list" !== l && "form" !== l && "tabIndex" !== l && "download" !== l && l in n) try {
+      } else if ("o" === l[0] && "n" === l[1]) o = l !== (l = l.replace(/Capture$/, "")), l = l.toLowerCase() in n ? l.toLowerCase().slice(2) : l.slice(2), n.l || (n.l = {}), n.l[l + o] = u, u ? i || n.addEventListener(l, o ? T$2 : I$2, o) : n.removeEventListener(l, o ? T$2 : I$2, o);else if ("dangerouslySetInnerHTML" !== l) {
+        if (t) l = l.replace(/xlink(H|:h)/, "h").replace(/sName$/, "s");else if ("href" !== l && "list" !== l && "form" !== l && "tabIndex" !== l && "download" !== l && l in n) try {
           n[l] = null == u ? "" : u;
           break n;
         } catch (n) {}
@@ -185,7 +185,7 @@
       this.l[n.type + !0](l$3.event ? l$3.event(n) : n);
     }
 
-    function j$3(n, u, i, t, r, o, f, e, c) {
+    function j$3(n, u, i, t, o, r, f, e, c) {
       var s,
           h,
           v,
@@ -199,11 +199,11 @@
           A,
           P = u.type;
       if (void 0 !== u.constructor) return null;
-      null != i.__h && (c = i.__h, e = u.__e = i.__e, u.__h = null, o = [e]), (s = l$3.__b) && s(u);
+      null != i.__h && (c = i.__h, e = u.__e = i.__e, u.__h = null, r = [e]), (s = l$3.__b) && s(u);
 
       try {
         n: if ("function" == typeof P) {
-          if (m = u.props, g = (s = P.contextType) && t[s.__c], x = s ? g ? g.props.value : s.__ : t, i.__c ? b = (h = u.__c = i.__c).__ = h.__E : ("prototype" in P && P.prototype.render ? u.__c = h = new P(m, x) : (u.__c = h = new _$1(m, x), h.constructor = P, h.render = O$1), g && g.sub(h), h.props = m, h.state || (h.state = {}), h.context = x, h.__n = t, v = h.__d = !0, h.__h = []), null == h.__s && (h.__s = h.state), null != P.getDerivedStateFromProps && (h.__s == h.state && (h.__s = a$3({}, h.__s)), a$3(h.__s, P.getDerivedStateFromProps(m, h.__s))), y = h.props, p = h.state, v) null == P.getDerivedStateFromProps && null != h.componentWillMount && h.componentWillMount(), null != h.componentDidMount && h.__h.push(h.componentDidMount);else {
+          if (m = u.props, g = (s = P.contextType) && t[s.__c], x = s ? g ? g.props.value : s.__ : t, i.__c ? b = (h = u.__c = i.__c).__ = h.__E : ("prototype" in P && P.prototype.render ? u.__c = h = new P(m, x) : (u.__c = h = new _$2(m, x), h.constructor = P, h.render = O$1), g && g.sub(h), h.props = m, h.state || (h.state = {}), h.context = x, h.__n = t, v = h.__d = !0, h.__h = []), null == h.__s && (h.__s = h.state), null != P.getDerivedStateFromProps && (h.__s == h.state && (h.__s = a$3({}, h.__s)), a$3(h.__s, P.getDerivedStateFromProps(m, h.__s))), y = h.props, p = h.state, v) null == P.getDerivedStateFromProps && null != h.componentWillMount && h.componentWillMount(), null != h.componentDidMount && h.__h.push(h.componentDidMount);else {
             if (null == P.getDerivedStateFromProps && m !== y && null != h.componentWillReceiveProps && h.componentWillReceiveProps(m, x), !h.__e && null != h.shouldComponentUpdate && !1 === h.shouldComponentUpdate(m, h.__s, x) || u.__v === i.__v) {
               h.props = m, h.state = h.__s, u.__v !== i.__v && (h.__d = !1), h.__v = u, u.__e = i.__e, u.__k = i.__k, u.__k.forEach(function (n) {
                 n && (n.__ = u);
@@ -215,12 +215,12 @@
               h.componentDidUpdate(y, p, k);
             });
           }
-          h.context = x, h.props = m, h.state = h.__s, (s = l$3.__r) && s(u), h.__d = !1, h.__v = u, h.__P = n, s = h.render(h.props, h.state, h.context), h.state = h.__s, null != h.getChildContext && (t = a$3(a$3({}, t), h.getChildContext())), v || null == h.getSnapshotBeforeUpdate || (k = h.getSnapshotBeforeUpdate(y, p)), A = null != s && s.type === d$2 && null == s.key ? s.props.children : s, w$3(n, Array.isArray(A) ? A : [A], u, i, t, r, o, f, e, c), h.base = u.__e, u.__h = null, h.__h.length && f.push(h), b && (h.__E = h.__ = null), h.__e = !1;
-        } else null == o && u.__v === i.__v ? (u.__k = i.__k, u.__e = i.__e) : u.__e = L$2(i.__e, u, i, t, r, o, f, c);
+          h.context = x, h.props = m, h.state = h.__s, (s = l$3.__r) && s(u), h.__d = !1, h.__v = u, h.__P = n, s = h.render(h.props, h.state, h.context), h.state = h.__s, null != h.getChildContext && (t = a$3(a$3({}, t), h.getChildContext())), v || null == h.getSnapshotBeforeUpdate || (k = h.getSnapshotBeforeUpdate(y, p)), A = null != s && s.type === d$2 && null == s.key ? s.props.children : s, w$3(n, Array.isArray(A) ? A : [A], u, i, t, o, r, f, e, c), h.base = u.__e, u.__h = null, h.__h.length && f.push(h), b && (h.__E = h.__ = null), h.__e = !1;
+        } else null == r && u.__v === i.__v ? (u.__k = i.__k, u.__e = i.__e) : u.__e = L$2(i.__e, u, i, t, o, r, f, c);
 
         (s = l$3.diffed) && s(u);
       } catch (n) {
-        u.__v = null, (c || null != o) && (u.__e = e, u.__h = !!c, o[o.indexOf(e)] = null), l$3.__e(n, u, i);
+        u.__v = null, (c || null != r) && (u.__e = e, u.__h = !!c, r[r.indexOf(e)] = null), l$3.__e(n, u, i);
       }
     }
 
@@ -236,7 +236,7 @@
       });
     }
 
-    function L$2(l, u, i, t, r, o, f, c) {
+    function L$2(l, u, i, t, o, r, f, c) {
       var s,
           a,
           v,
@@ -244,24 +244,24 @@
           p = u.props,
           d = u.type,
           _ = 0;
-      if ("svg" === d && (r = !0), null != o) for (; _ < o.length; _++) if ((s = o[_]) && "setAttribute" in s == !!d && (d ? s.localName === d : 3 === s.nodeType)) {
-        l = s, o[_] = null;
+      if ("svg" === d && (o = !0), null != r) for (; _ < r.length; _++) if ((s = r[_]) && "setAttribute" in s == !!d && (d ? s.localName === d : 3 === s.nodeType)) {
+        l = s, r[_] = null;
         break;
       }
 
       if (null == l) {
         if (null === d) return document.createTextNode(p);
-        l = r ? document.createElementNS("http://www.w3.org/2000/svg", d) : document.createElement(d, p.is && p), o = null, c = !1;
+        l = o ? document.createElementNS("http://www.w3.org/2000/svg", d) : document.createElement(d, p.is && p), r = null, c = !1;
       }
 
       if (null === d) y === p || c && l.data === p || (l.data = p);else {
-        if (o = o && n$3.call(l.childNodes), a = (y = i.props || e$4).dangerouslySetInnerHTML, v = p.dangerouslySetInnerHTML, !c) {
-          if (null != o) for (y = {}, _ = 0; _ < l.attributes.length; _++) y[l.attributes[_].name] = l.attributes[_].value;
+        if (r = r && n$3.call(l.childNodes), a = (y = i.props || e$4).dangerouslySetInnerHTML, v = p.dangerouslySetInnerHTML, !c) {
+          if (null != r) for (y = {}, _ = 0; _ < l.attributes.length; _++) y[l.attributes[_].name] = l.attributes[_].value;
           (v || a) && (v && (a && v.__html == a.__html || v.__html === l.innerHTML) || (l.innerHTML = v && v.__html || ""));
         }
 
-        if (C$2(l, p, y, r, c), v) u.__k = [];else if (_ = u.props.children, w$3(l, Array.isArray(_) ? _ : [_], u, i, t, r && "foreignObject" !== d, o, f, o ? o[0] : i.__k && k$2(i, 0), c), null != o) for (_ = o.length; _--;) null != o[_] && h$2(o[_]);
-        c || ("value" in p && void 0 !== (_ = p.value) && (_ !== y.value || _ !== l.value || "progress" === d && !_) && H$2(l, "value", _, y.value, !1), "checked" in p && void 0 !== (_ = p.checked) && _ !== l.checked && H$2(l, "checked", _, y.checked, !1));
+        if (C$2(l, p, y, o, c), v) u.__k = [];else if (_ = u.props.children, w$3(l, Array.isArray(_) ? _ : [_], u, i, t, o && "foreignObject" !== d, r, f, r ? r[0] : i.__k && k$2(i, 0), c), null != r) for (_ = r.length; _--;) null != r[_] && h$2(r[_]);
+        c || ("value" in p && void 0 !== (_ = p.value) && (_ !== l.value || "progress" === d && !_ || "option" === d && _ !== y.value) && H$2(l, "value", _, y.value, !1), "checked" in p && void 0 !== (_ = p.checked) && _ !== l.checked && H$2(l, "checked", _, y.checked, !1));
       }
       return l;
     }
@@ -275,7 +275,7 @@
     }
 
     function N$1(n, u, i) {
-      var t, r;
+      var t, o;
 
       if (l$3.unmount && l$3.unmount(n), (t = n.ref) && (t.current && t.current !== n.__e || M$3(t, null, u)), null != (t = n.__c)) {
         if (t.componentWillUnmount) try {
@@ -286,7 +286,7 @@
         t.base = t.__P = null;
       }
 
-      if (t = n.__k) for (r = 0; r < t.length; r++) t[r] && N$1(t[r], u, "function" != typeof n.type);
+      if (t = n.__k) for (o = 0; o < t.length; o++) t[o] && N$1(t[o], u, "function" != typeof n.type);
       i || null == n.__e || h$2(n.__e), n.__e = n.__d = void 0;
     }
 
@@ -295,19 +295,19 @@
     }
 
     function S$1(u, i, t) {
-      var r, o, f;
-      l$3.__ && l$3.__(u, i), o = (r = "function" == typeof t) ? null : t && t.__k || i.__k, f = [], j$3(i, u = (!r && t || i).__k = v$2(d$2, null, [u]), o || e$4, e$4, void 0 !== i.ownerSVGElement, !r && t ? [t] : o ? null : i.firstChild ? n$3.call(i.childNodes) : null, f, !r && t ? t : o ? o.__e : i.firstChild, r), z$2(f, u);
+      var o, r, f;
+      l$3.__ && l$3.__(u, i), r = (o = "function" == typeof t) ? null : t && t.__k || i.__k, f = [], j$3(i, u = (!o && t || i).__k = v$2(d$2, null, [u]), r || e$4, e$4, void 0 !== i.ownerSVGElement, !o && t ? [t] : r ? null : i.firstChild ? n$3.call(i.childNodes) : null, f, !o && t ? t : r ? r.__e : i.firstChild, o), z$2(f, u);
     }
 
     function B(l, u, i) {
       var t,
-          r,
           o,
+          r,
           f = a$3({}, l.props);
 
-      for (o in u) "key" == o ? t = u[o] : "ref" == o ? r = u[o] : f[o] = u[o];
+      for (r in u) "key" == r ? t = u[r] : "ref" == r ? o = u[r] : f[r] = u[r];
 
-      return arguments.length > 2 && (f.children = arguments.length > 3 ? n$3.call(arguments, 2) : i), y$2(l.type, f, t || l.key, r || l.ref, null);
+      return arguments.length > 2 && (f.children = arguments.length > 3 ? n$3.call(arguments, 2) : i), y$2(l.type, f, t || l.key, o || l.ref, null);
     }
 
     function D$1(n, l) {
@@ -337,21 +337,21 @@
     }
 
     n$3 = c$3.slice, l$3 = {
-      __e: function (n, l) {
-        for (var u, i, t; l = l.__;) if ((u = l.__c) && !u.__) try {
-          if ((i = u.constructor) && null != i.getDerivedStateFromError && (u.setState(i.getDerivedStateFromError(n)), t = u.__d), null != u.componentDidCatch && (u.componentDidCatch(n), t = u.__d), t) return u.__E = u;
+      __e: function (n, l, u, i) {
+        for (var t, o, r; l = l.__;) if ((t = l.__c) && !t.__) try {
+          if ((o = t.constructor) && null != o.getDerivedStateFromError && (t.setState(o.getDerivedStateFromError(n)), r = t.__d), null != t.componentDidCatch && (t.componentDidCatch(n, i || {}), r = t.__d), r) return t.__E = t;
         } catch (l) {
           n = l;
         }
 
         throw n;
       }
-    }, u$3 = 0, _$1.prototype.setState = function (n, l) {
+    }, u$3 = 0, _$2.prototype.setState = function (n, l) {
       var u;
       u = null != this.__s && this.__s !== this.state ? this.__s : this.__s = a$3({}, this.state), "function" == typeof n && (n = n(a$3({}, u), this.props)), n && a$3(u, n), null != n && this.__v && (l && this.__h.push(l), m$2(this));
-    }, _$1.prototype.forceUpdate = function (n) {
+    }, _$2.prototype.forceUpdate = function (n) {
       this.__v && (this.__e = !0, n && this.__h.push(n), m$2(this));
-    }, _$1.prototype.render = d$2, t$3 = [], r$3 = "function" == typeof Promise ? Promise.prototype.then.bind(Promise.resolve()) : setTimeout, g$3.__r = 0, f$3 = 0;
+    }, _$2.prototype.render = d$2, t$3 = [], o$4 = "function" == typeof Promise ? Promise.prototype.then.bind(Promise.resolve()) : setTimeout, g$3.__r = 0, f$3 = 0;
 
     var o$3 = 0;
 
@@ -376,8 +376,8 @@
         __h: null,
         constructor: void 0,
         __v: --o$3,
-        __source: t,
-        __self: f
+        __source: f,
+        __self: t
       };
       if ("function" == typeof _ && (l = _.defaultProps)) for (s in l) void 0 === u[s] && (u[s] = l[s]);
       return l$3.vnode && l$3.vnode(a), a;
@@ -394,7 +394,7 @@
         a$2 = l$3.__c,
         v$1 = l$3.unmount;
 
-    function m$1(t, r) {
+    function l$2(t, r) {
       l$3.__h && l$3.__h(u$2, t, o$2 || r), o$2 = 0;
       var i = u$2.__H || (u$2.__H = {
         __: [],
@@ -403,12 +403,12 @@
       return t >= i.__.length && i.__.push({}), i.__[t];
     }
 
-    function l$2(n) {
+    function m$1(n) {
       return o$2 = 1, p$2(w$2, n);
     }
 
     function p$2(n, r, o) {
-      var i = m$1(t$2++, 2);
+      var i = l$2(t$2++, 2);
       return i.t = n, i.__c || (i.__ = [o ? o(r) : w$2(void 0, r), function (n) {
         var t = i.t(i.__[0], n);
         i.__[0] !== t && (i.__ = [t, i.__[1]], i.__c.setState({}));
@@ -416,46 +416,42 @@
     }
 
     function y$1(r, o) {
-      var i = m$1(t$2++, 3);
+      var i = l$2(t$2++, 3);
       !l$3.__s && k$1(i.__H, o) && (i.__ = r, i.__H = o, u$2.__H.__h.push(i));
     }
 
-    function h$1(r, o) {
-      var i = m$1(t$2++, 4);
+    function d$1(r, o) {
+      var i = l$2(t$2++, 4);
       !l$3.__s && k$1(i.__H, o) && (i.__ = r, i.__H = o, u$2.__h.push(i));
     }
 
-    function s$2(n) {
-      return o$2 = 5, d$1(function () {
+    function h$1(n) {
+      return o$2 = 5, _$1(function () {
         return {
           current: n
         };
       }, []);
     }
 
-    function d$1(n, u) {
-      var r = m$1(t$2++, 7);
+    function _$1(n, u) {
+      var r = l$2(t$2++, 7);
       return k$1(r.__H, u) && (r.__ = n(), r.__H = u, r.__h = n), r.__;
     }
 
     function A$2(n, t) {
-      return o$2 = 8, d$1(function () {
+      return o$2 = 8, _$1(function () {
         return n;
       }, t);
     }
 
     function F(n) {
       var r = u$2.context[n.__c],
-          o = m$1(t$2++, 9);
+          o = l$2(t$2++, 9);
       return o.c = n, r ? (null == o.__ && (o.__ = !0, r.sub(u$2)), r.props.value) : n.__;
     }
 
     function x$2() {
-      var t;
-
-      for (i$2.sort(function (n, t) {
-        return n.__v.__b - t.__v.__b;
-      }); t = i$2.pop();) if (t.__P) try {
+      for (var t; t = i$2.shift();) if (t.__P) try {
         t.__H.__h.forEach(g$2), t.__H.__h.forEach(j$2), t.__H.__h = [];
       } catch (u) {
         t.__H.__h = [], l$3.__e(u, t.__v);
@@ -544,8 +540,8 @@
 
       function useHelper(value, index) {
         // Make sure that the provided functions are perfectly stable across renders
-        const helperToEnsureStability = s$2(value);
-        const shownError = s$2(false);
+        const helperToEnsureStability = h$1(value);
+        const shownError = h$1(false);
 
         if (helperToEnsureStability.current != value) {
           if (!shownError.current) {
@@ -576,9 +572,9 @@
      */
 
     function usePassiveState(onChange, getInitialValue) {
-      const valueRef = s$2(Unset$1);
-      const warningRef = s$2(false);
-      const cleanupCallbackRef = s$2(undefined); // Make sure that the provided functions are perfectly stable across renders
+      const valueRef = h$1(Unset$1);
+      const warningRef = h$1(false);
+      const cleanupCallbackRef = h$1(undefined); // Make sure that the provided functions are perfectly stable across renders
 
       useEnsureStability(onChange, getInitialValue); // Shared between "dependency changed" and "component unmounted".
 
@@ -612,7 +608,7 @@
         if (valueRef.current === Unset$1) tryEnsureValue();
         return valueRef.current === Unset$1 ? undefined : valueRef.current;
       }, []);
-      h$1(() => {
+      d$1(() => {
         // Make sure we've run our effect at least once on mount.
         // (If we have an initial value, of course)
         tryEnsureValue();
@@ -1171,7 +1167,7 @@
       } = _ref;
       useEnsureStability(getObserveBox, onSizeChange);
       const [getSize, setSize] = usePassiveState(onSizeChange, returnNull$2);
-      const currentObserveBox = s$2(undefined);
+      const currentObserveBox = h$1(undefined);
       const needANewObserver = A$2((element, observeBox) => {
         if (element) {
           const document = element.ownerDocument;
@@ -1553,8 +1549,8 @@
 
     function useState(initialState) {
       // We keep both, but overrride the `setState` functionality
-      const [state, setStateP] = l$2(initialState);
-      const ref = s$2(state); // Hijack the normal setter function 
+      const [state, setStateP] = m$1(initialState);
+      const ref = h$1(state); // Hijack the normal setter function 
       // to also set our ref to the new value
 
       const setState = A$2(value => {
@@ -1618,7 +1614,7 @@
       } = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
       const [randomId, setRandomId] = useState(() => generateRandomId(prefix));
       const [watchPrefixUpdates, setWatchPrefixUpdates, getWatchPrefixUpdates] = useState(false);
-      h$1(() => {
+      d$1(() => {
         const watchPrefixUpdates = getWatchPrefixUpdates();
         if (watchPrefixUpdates) setRandomId(() => generateRandomId(prefix));
         setWatchPrefixUpdates(true);
@@ -1700,7 +1696,7 @@
      */
 
     function useBeforeLayoutEffect(effect, inputs) {
-      const [id] = l$2(() => generateRandomId());
+      const [id] = m$1(() => generateRandomId());
       toRun.set(id, {
         effect,
         inputs,
@@ -1731,7 +1727,7 @@
      */
 
     function useStableGetter(value) {
-      const ref = s$2(Unset);
+      const ref = h$1(Unset);
       useBeforeLayoutEffect(() => {
         ref.current = value;
       }, [value]);
@@ -1771,7 +1767,7 @@
 
     function useEffect(effect, inputs) {
       let impl = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : y$1;
-      const prevInputs = s$2(undefined);
+      const prevInputs = h$1(undefined);
 
       const effect2 = () => {
         let changes = [];
@@ -1803,7 +1799,7 @@
      */
 
     function useLayoutEffect(effect, inputs) {
-      return useEffect(effect, inputs, h$1);
+      return useEffect(effect, inputs, d$1);
     }
 
     function useTimeout(_ref) {
@@ -1819,7 +1815,7 @@
       const getTimeout = useStableGetter(timeout); // Set any time we start timeout.
       // Unset any time the timeout completes
 
-      const startTimeRef = s$2(null);
+      const startTimeRef = h$1(null);
       const timeoutIsNull = timeout == null; // Any time the triggerIndex changes (including on mount)
       // restart the timeout.  The timeout does NOT reset
       // when the duration or callback changes, only triggerIndex.
@@ -2264,7 +2260,7 @@
         },
         triggerIndex: currentTypeahead
       });
-      const sortedTypeaheadInfo = s$2([]);
+      const sortedTypeaheadInfo = h$1([]);
       const [invalidTypeahead, setInvalidTypeahead] = useState(false); // Handle typeahead for input method editors as well
       // Essentially, when active, ignore further keys 
       // because we're waiting for a CompositionEnd event
@@ -2378,17 +2374,17 @@
               But roughly isn't good enough if there are multiple matches.
               To convert our sorted index to the unsorted index we need, we have to find the first
               element that matches us *and* (if any such exist) is *after* our current selection.
-               In other words, the only way typeahead moves backwards relative to our current
+                In other words, the only way typeahead moves backwards relative to our current
               position is if the only other option is behind us.
-               It's not specified in WAI-ARIA what to do in that case.  I suppose wrap back to the start?
+                It's not specified in WAI-ARIA what to do in that case.  I suppose wrap back to the start?
               Though there's also a case for just going upwards to the nearest to prevent jumpiness.
               But if you're already doing typeahead on an unsorted list, like, jumpiness can't be avoided.
               I dunno. Going back to the start is the simplist though.
-               Basically what this does: Starting from where we found ourselves after our binary search,
+                Basically what this does: Starting from where we found ourselves after our binary search,
               scan backwards and forwards through all adjacent entries that also compare equally so that
               we can find the one whose `unsortedIndex` is the lowest amongst all other equal strings
               (and also the lowest `unsortedIndex` yadda yadda except that it comes after us).
-               TODO: The binary search starts this off with a solid O(log n), but one-character
+                TODO: The binary search starts this off with a solid O(log n), but one-character
               searches are, thanks to pigeonhole principal, eventually guaranteed to become
               O(n*log n). This is annoying but probably not easily solvable? There could be an
               exception for one-character strings, but that's just kicking the can down
@@ -2532,13 +2528,13 @@
       const [totalChildrenMounted, setTotalChildrenMounted, getTotalChildrenMounted] = useState(0);
       const [totalChildrenUnounted, setTotalChildrenUnounted, getTotalChildrenUnounted] = useState(0);
       const childrenCurrentlyMounted = totalChildrenMounted - totalChildrenUnounted;
-      const managedChildren = s$2([]
+      const managedChildren = h$1([]
       /** TODO: Any problems caused by using an array when it should be an object? */
       );
-      const mountedChildren = s$2([]);
-      const mountOrder = s$2(new Map());
-      const indicesByElement = s$2(new Map());
-      const deletedIndices = s$2(new Set()); // Used to keep track of indices that have "over-mounted" and by how much.
+      const mountedChildren = h$1([]);
+      const mountOrder = h$1(new Map());
+      const indicesByElement = h$1(new Map());
+      const deletedIndices = h$1(new Set()); // Used to keep track of indices that have "over-mounted" and by how much.
       // We need this so that we don't erase saved information when a component
       // "overmounts" over another which then, correctly, switches *itself* to something else.
       // In general, this should only happen when components are swapping between indices.
@@ -2550,7 +2546,7 @@
       // Namely, is this map all 0s when the parent element re-renders? 
       // Probably not because of setChildUpdateIndex
 
-      const overmountCount = s$2(new Map());
+      const overmountCount = h$1(new Map());
       const getMountIndex = A$2(index => {
         return mountOrder.current.get(index);
       }, []);
@@ -2765,7 +2761,7 @@
       } = _ref;
       const getShouldFocusOnChange = useStableGetter(foc);
       const getTabbableIndex = useStableGetter(tabbableIndex);
-      s$2(-Infinity); // Call the hook that allows us to collect information from children who provide it
+      h$1(-Infinity); // Call the hook that allows us to collect information from children who provide it
 
       const {
         managedChildren,
@@ -3098,8 +3094,8 @@
      */
 
     function useForceUpdate() {
-      const [, set] = l$2(0);
-      return s$2(() => set(i => ++i)).current;
+      const [, set] = m$1(0);
+      return h$1(() => set(i => ++i)).current;
     }
 
     function identity(t) {
@@ -3670,8 +3666,8 @@
       const compare = userCompare !== null && userCompare !== void 0 ? userCompare : defaultCompare; // These are used to keep track of a mapping between unsorted index <---> sorted index.
       // These are needed for navigation with the arrow keys.
 
-      const mangleMap = s$2(new Map());
-      const demangleMap = s$2(new Map());
+      const mangleMap = h$1(new Map());
+      const demangleMap = h$1(new Map());
       const indexMangler = A$2(n => {
         var _mangleMap$current$ge;
 
@@ -3721,7 +3717,7 @@
           ...props
         } = _ref2;
         const forceUpdate = useForceUpdate();
-        h$1(() => {
+        d$1(() => {
           setForceUpdate(prev => forceUpdate);
         }, [forceUpdate]);
         return useMergedProps()({
@@ -3781,11 +3777,17 @@
     }
 
     /*!
-    * tabbable 5.2.1
+    * tabbable 5.3.1
     * @license MIT, https://github.com/focus-trap/tabbable/blob/master/LICENSE
     */
-    var candidateSelectors = ['input', 'select', 'textarea', 'a[href]', 'button', '[tabindex]', 'audio[controls]', 'video[controls]', '[contenteditable]:not([contenteditable="false"])', 'details>summary:first-of-type', 'details'];
-    var matches = typeof Element === 'undefined' ? function () {} : Element.prototype.matches || Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector;
+    var candidateSelectors = ['input', 'select', 'textarea', 'a[href]', 'button', '[tabindex]:not(slot)', 'audio[controls]', 'video[controls]', '[contenteditable]:not([contenteditable="false"])', 'details>summary:first-of-type', 'details'];
+    var NoElement = typeof Element === 'undefined';
+    var matches = NoElement ? function () {} : Element.prototype.matches || Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector;
+    var getRootNode = !NoElement && Element.prototype.getRootNode ? function (element) {
+      return element.getRootNode();
+    } : function (element) {
+      return element.ownerDocument;
+    };
 
     var isInput = function isInput(node) {
       return node.tagName === 'INPUT';
@@ -3802,7 +3804,18 @@
       return r;
     };
 
-    var isHidden = function isHidden(node, displayCheck) {
+    var isZeroArea = function isZeroArea(node) {
+      var _node$getBoundingClie = node.getBoundingClientRect(),
+          width = _node$getBoundingClie.width,
+          height = _node$getBoundingClie.height;
+
+      return width === 0 && height === 0;
+    };
+
+    var isHidden = function isHidden(node, _ref) {
+      var displayCheck = _ref.displayCheck,
+          getShadowRoot = _ref.getShadowRoot;
+
       if (getComputedStyle(node).visibility === 'hidden') {
         return true;
       }
@@ -3815,19 +3828,47 @@
       }
 
       if (!displayCheck || displayCheck === 'full') {
-        while (node) {
-          if (getComputedStyle(node).display === 'none') {
-            return true;
+        if (typeof getShadowRoot === 'function') {
+          // figure out if we should consider the node to be in an undisclosed shadow and use the
+          //  'non-zero-area' fallback
+          var originalNode = node;
+
+          while (node) {
+            var parentElement = node.parentElement;
+            var rootNode = getRootNode(node);
+
+            if (parentElement && !parentElement.shadowRoot && getShadowRoot(parentElement) === true // check if there's an undisclosed shadow
+            ) {
+              // node has an undisclosed shadow which means we can only treat it as a black box, so we
+              //  fall back to a non-zero-area test
+              return isZeroArea(node);
+            } else if (node.assignedSlot) {
+              // iterate up slot
+              node = node.assignedSlot;
+            } else if (!parentElement && rootNode !== node.ownerDocument) {
+              // cross shadow boundary
+              node = rootNode.host;
+            } else {
+              // iterate up normal dom
+              node = parentElement;
+            }
           }
 
-          node = node.parentElement;
-        }
-      } else if (displayCheck === 'non-zero-area') {
-        var _node$getBoundingClie = node.getBoundingClientRect(),
-            width = _node$getBoundingClie.width,
-            height = _node$getBoundingClie.height;
+          node = originalNode;
+        } // else, `getShadowRoot` might be true, but all that does is enable shadow DOM support
+        //  (i.e. it does not also presume that all nodes might have undisclosed shadows); or
+        //  it might be a falsy value, which means shadow DOM support is disabled
+        // didn't find it sitting in an undisclosed shadow (or shadows are disabled) so now we
+        //  can just test to see if it would normally be visible or not
+        // this works wherever the node is: if there's at least one client rect, it's
+        //  somehow displayed; it also covers the CSS 'display: contents' case where the
+        //  node itself is hidden in place of its contents; and there's no need to search
+        //  up the hierarchy either
 
-        return width === 0 && height === 0;
+
+        return !node.getClientRects().length;
+      } else if (displayCheck === 'non-zero-area') {
+        return isZeroArea(node);
       }
 
       return false;
@@ -3837,29 +3878,21 @@
 
 
     var isDisabledFromFieldset = function isDisabledFromFieldset(node) {
-      if (isInput(node) || node.tagName === 'SELECT' || node.tagName === 'TEXTAREA' || node.tagName === 'BUTTON') {
-        var parentNode = node.parentElement;
+      if (/^(INPUT|BUTTON|SELECT|TEXTAREA)$/.test(node.tagName)) {
+        var parentNode = node.parentElement; // check if `node` is contained in a disabled <fieldset>
 
         while (parentNode) {
           if (parentNode.tagName === 'FIELDSET' && parentNode.disabled) {
-            // look for the first <legend> as an immediate child of the disabled
-            //  <fieldset>: if the node is in that legend, it'll be enabled even
-            //  though the fieldset is disabled; otherwise, the node is in a
-            //  secondary/subsequent legend, or somewhere else within the fieldset
-            //  (however deep nested) and it'll be disabled
+            // look for the first <legend> among the children of the disabled <fieldset>
             for (var i = 0; i < parentNode.children.length; i++) {
-              var child = parentNode.children.item(i);
+              var child = parentNode.children.item(i); // when the first <legend> (in document order) is found
 
               if (child.tagName === 'LEGEND') {
-                if (child.contains(node)) {
-                  return false;
-                } // the node isn't in the first legend (in doc order), so no matter
-                //  where it is now, it'll be disabled
-
-
-                return true;
+                // if its parent <fieldset> is not nested in another disabled <fieldset>,
+                // return whether `node` is a descendant of its first <legend>
+                return matches.call(parentNode, 'fieldset[disabled] *') ? true : !child.contains(node);
               }
-            } // the node isn't in a legend, so no matter where it is now, it'll be disabled
+            } // the disabled <fieldset> containing `node` has no <legend>
 
 
             return true;
@@ -3875,7 +3908,7 @@
     };
 
     var isNodeMatchingSelectorFocusable = function isNodeMatchingSelectorFocusable(options, node) {
-      if (node.disabled || isHiddenInput(node) || isHidden(node, options.displayCheck) || // For a details element with a summary, the summary element gets the focus
+      if (node.disabled || isHiddenInput(node) || isHidden(node, options) || // For a details element with a summary, the summary element gets the focus
       isDetailsWithSummary(node) || isDisabledFromFieldset(node)) {
         return false;
       }
@@ -5254,7 +5287,9 @@
       document.$blockingElements = new BlockingElementsImpl();
     })();
 
-    const blockingElements = document.$blockingElements;
+    function blockingElements() {
+      return document.$blockingElements;
+    }
     /**
      * Allows an element to trap focus by applying the "inert" attribute to all sibling, aunt, and uncle nodes.
      *
@@ -5268,16 +5303,16 @@
       /**
        * Push/pop the element from the blockingElements stack.
        */
-      h$1(() => {
+      d$1(() => {
         if (target) {
           // Sometimes blockingElements will fail if, for example,
           // the target element isn't connected to document.body.
           // This is rare, but it's better to fail silently with weird tabbing behavior
           // than to crash the entire application.
           try {
-            blockingElements.push(target);
+            blockingElements().push(target);
             return () => {
-              blockingElements.remove(target);
+              blockingElements().remove(target);
             };
           } catch (ex) {
             // Well, semi-silently.
@@ -5287,7 +5322,7 @@
       }, [target]);
     }
     function getTopElement() {
-      return blockingElements.top;
+      return blockingElements().top;
     }
 
     const elementsToRestoreFocusTo = new Map();
@@ -5311,7 +5346,7 @@
       } = useActiveElement({}); // When the trap becomes active, before we let the blockingElements hook run,
       // keep track of whatever's currently focused and save it.
 
-      h$1(() => {
+      d$1(() => {
         if (trapActive && element) {
           var _getLastActiveElement;
 
@@ -5330,7 +5365,7 @@
        * tracked in elementsToRestoreFocusTo if not)
        */
 
-      h$1(() => {
+      d$1(() => {
         if (trapActive && element) {
           let rafHandle = requestAnimationFrame(() => {
             // TODO: This extra queueMicrotask is needed for
@@ -5894,8 +5929,8 @@
         labelPrefix: "label-",
         inputPrefix: "input-"
       };
-      const [labelElement, setLabelElement] = l$2(null);
-      const [inputElement, setInputElement] = l$2(null);
+      const [labelElement, setLabelElement] = m$1(null);
+      const [inputElement, setInputElement] = m$1(null);
       const {
         getElement: getLabelElement,
         useRefElementProps: useLabelRefElementProps
@@ -7161,8 +7196,8 @@
       /*const useMenuSubmenuItem = useCallback((args: UseMenuSubmenuItemParameters) => {
           const { useMenuProps, useMenuButton } = useAriaMenu<HTMLElement, ChildElement, I>(args);
           const { useMenuButtonProps } = useMenuButton<E>({ tag: "li" as any });
-           const { getElement, useRefElementProps } = useRefElement<any>({ onElementChange: setOpenerElement as OnPassiveStateChange<any> });
-           return {
+            const { getElement, useRefElementProps } = useRefElement<any>({ onElementChange: setOpenerElement as OnPassiveStateChange<any> });
+            return {
               getElement,
               useMenuProps,
               useMenuSubmenuItemProps: function <P extends h.JSX.HTMLAttributes<E>>({ ...props }: P) {
@@ -7629,7 +7664,7 @@
       useStableGetter(name); //const getSelectedIndex = useCallback((selectedValue: V) => { return byName.current.get(selectedValue) ?? 0 }, [])
 
       const [selectedIndex, setSelectedIndex] = useState(0);
-      const byName = s$2(new Map());
+      const byName = h$1(new Map());
       const stableOnInput = useStableCallback(onInput);
       const [anyRadiosFocused, setAnyRadiosFocused, getAnyRadiosFocused] = useState(false);
       const {
@@ -7708,7 +7743,7 @@
           onInput,
           role: "radio"
         });
-        h$1(() => {
+        d$1(() => {
           byName.current.set(value, index);
           return () => {
             byName.current.delete(value);
@@ -7814,8 +7849,8 @@
           max: maxOverride,
           ...rest
         } = _ref2;
-        const [minParentCopy, setMinParentCopy] = l$2(minParent);
-        const [maxParentCopy, setMaxParentCopy] = l$2(maxParent);
+        const [minParentCopy, setMinParentCopy] = m$1(minParent);
+        const [maxParentCopy, setMaxParentCopy] = m$1(maxParent);
         const {
           getElement,
           useManagedChildProps
@@ -7957,7 +7992,7 @@
           prefix: "toast-"
         }); //const [toastId, setToastId] = useState(() => generateRandomId("toast-"));
 
-        h$1(() => {
+        d$1(() => {
           setPoliteness(politeness !== null && politeness !== void 0 ? politeness : "polite");
         }, [politeness]);
         const focus = A$2(() => {
@@ -8236,7 +8271,7 @@
 
             const [sortDirection, setSortDirection, getSortDirection] = useState(null);
             const [isTheSortedColumn, setIsTheSortedColumn] = useState(false);
-            const random = s$2(generateRandomId());
+            const random = h$1(generateRandomId());
             const {
               getElement,
               useManagedChildProps
@@ -8408,13 +8443,13 @@
       };
     }
 
-    function S(n, t) {
+    function C$1(n, t) {
       for (var e in t) n[e] = t[e];
 
       return n;
     }
 
-    function C$1(n, t) {
+    function S(n, t) {
       for (var e in n) if ("__source" !== e && !(e in t)) return !0;
 
       for (var r in t) if ("__source" !== r && n[r] !== t[r]) return !0;
@@ -8430,7 +8465,7 @@
       function e(n) {
         var e = this.props.ref,
             r = e == n.ref;
-        return !r && e && (e.call ? e(null) : e.current = null), t ? !t(this.props, n) || !r : C$1(this.props, n);
+        return !r && e && (e.call ? e(null) : e.current = null), t ? !t(this.props, n) || !r : S(this.props, n);
       }
 
       function r(t) {
@@ -8440,8 +8475,8 @@
       return r.displayName = "Memo(" + (n.displayName || n.name) + ")", r.prototype.isReactComponent = !0, r.__f = !0, r;
     }
 
-    (E.prototype = new _$1()).isPureReactComponent = !0, E.prototype.shouldComponentUpdate = function (n, t) {
-      return C$1(this.props, n) || C$1(this.state, t);
+    (E.prototype = new _$2()).isPureReactComponent = !0, E.prototype.shouldComponentUpdate = function (n, t) {
+      return S(this.props, n) || S(this.state, t);
     };
     var w$1 = l$3.__b;
 
@@ -8452,9 +8487,9 @@
     var R = "undefined" != typeof Symbol && Symbol.for && Symbol.for("react.forward_ref") || 3911;
 
     function x$1(n) {
-      function t(t, e) {
-        var r = S({}, t);
-        return delete r.ref, n(r, (e = t.ref || e) && ("object" != typeof e || "current" in e) ? e : null);
+      function t(t) {
+        var e = C$1({}, t);
+        return delete e.ref, n(e, t.ref || null);
       }
 
       return t.$$typeof = R, t.render = t, t.prototype.isReactComponent = t.__f = !0, t.displayName = "ForwardRef(" + (n.displayName || n.name) + ")", t;
@@ -8462,9 +8497,9 @@
 
     var A$1 = l$3.__e;
 
-    l$3.__e = function (n, t, e) {
-      if (n.then) for (var r, u = t; u = u.__;) if ((r = u.__c) && r.__c) return null == t.__e && (t.__e = e.__e, t.__k = e.__k), r.__c(n, t);
-      A$1(n, t, e);
+    l$3.__e = function (n, t, e, r) {
+      if (n.then) for (var u, o = t; o = o.__;) if ((u = o.__c) && u.__c) return null == t.__e && (t.__e = e.__e, t.__k = e.__k), u.__c(n, t);
+      A$1(n, t, e, r);
     };
 
     var O = l$3.unmount;
@@ -8485,7 +8520,7 @@
     l$3.unmount = function (n) {
       var t = n.__c;
       t && t.__R && t.__R(), t && !0 === n.__h && (n.type = null), O && O(n);
-    }, (L$1.prototype = new _$1()).__c = function (n, t) {
+    }, (L$1.prototype = new _$2()).__c = function (n, t) {
       var e = t.__c,
           r = this;
       null == r.t && (r.t = []), r.t.push(e);
@@ -8517,9 +8552,9 @@
           }); t = r.t.pop();) t.forceUpdate();
         }
       },
-          c = !0 === t.__h;
+          f = !0 === t.__h;
 
-      r.__u++ || c || r.setState({
+      r.__u++ || f || r.setState({
         __e: r.__b = r.__v.__k[0]
       }), n.then(i, i);
     }, L$1.prototype.componentWillUnmount = function () {
@@ -8533,7 +8568,7 @@
           this.__v.__k[0] = function n(t, e, r) {
             return t && (t.__c && t.__c.__H && (t.__c.__H.__.forEach(function (n) {
               "function" == typeof n.__c && n.__c();
-            }), t.__c.__H = null), null != (t = S({}, t)).__c && (t.__c.__P === r && (t.__c.__P = e), t.__c = null), t.__k = t.__k && t.__k.map(function (t) {
+            }), t.__c.__H = null), null != (t = C$1({}, t)).__c && (t.__c.__P === r && (t.__c.__P = e), t.__c = null), t.__k = t.__k && t.__k.map(function (t) {
               return n(t, e, r);
             })), t;
           }(this.__b, e, r.__O = r.__P);
@@ -8591,7 +8626,7 @@
       });
     }
 
-    (M$1.prototype = new _$1()).__e = function (n) {
+    (M$1.prototype = new _$2()).__e = function (n) {
       var t = this,
           e = U(t.__v),
           r = t.o.get(n);
@@ -8617,15 +8652,15 @@
       });
     };
 
-    var j$1 = "undefined" != typeof Symbol && Symbol.for && Symbol.for("react.element") || 60103,
-        P$1 = /^(?:accent|alignment|arabic|baseline|cap|clip(?!PathU)|color|dominant|fill|flood|font|glyph(?!R)|horiz|marker(?!H|W|U)|overline|paint|stop|strikethrough|stroke|text(?!L)|underline|unicode|units|v|vector|vert|word|writing|x(?!C))[A-Z]/,
-        V = "undefined" != typeof document,
+    var P$1 = "undefined" != typeof Symbol && Symbol.for && Symbol.for("react.element") || 60103,
+        V = /^(?:accent|alignment|arabic|baseline|cap|clip(?!PathU)|color|dominant|fill|flood|font|glyph(?!R)|horiz|marker(?!H|W|U)|overline|paint|stop|strikethrough|stroke|text(?!L)|underline|unicode|units|v|vector|vert|word|writing|x(?!C))[A-Z]/,
+        j$1 = "undefined" != typeof document,
         z$1 = function (n) {
       return ("undefined" != typeof Symbol && "symbol" == typeof Symbol() ? /fil|che|rad/i : /fil|che|ra/i).test(n);
     };
 
-    _$1.prototype.isReactComponent = {}, ["componentWillMount", "componentWillReceiveProps", "componentWillUpdate"].forEach(function (n) {
-      Object.defineProperty(_$1.prototype, n, {
+    _$2.prototype.isReactComponent = {}, ["componentWillMount", "componentWillReceiveProps", "componentWillUpdate"].forEach(function (n) {
+      Object.defineProperty(_$2.prototype, n, {
         configurable: !0,
         get: function () {
           return this["UNSAFE_" + n];
@@ -8673,7 +8708,7 @@
 
         for (var o in r = {}, e) {
           var i = e[o];
-          V && "children" === o && "noscript" === t || "value" === o && "defaultValue" in e && null == i || ("defaultValue" === o && "value" in e && null == e.value ? o = "value" : "download" === o && !0 === i ? i = "" : /ondoubleclick/i.test(o) ? o = "ondblclick" : /^onchange(textarea|input)/i.test(o + t) && !z$1(e.type) ? o = "oninput" : /^onfocus$/i.test(o) ? o = "onfocusin" : /^onblur$/i.test(o) ? o = "onfocusout" : /^on(Ani|Tra|Tou|BeforeInp)/.test(o) ? o = o.toLowerCase() : u && P$1.test(o) ? o = o.replace(/[A-Z0-9]/, "-$&").toLowerCase() : null === i && (i = void 0), r[o] = i);
+          j$1 && "children" === o && "noscript" === t || "value" === o && "defaultValue" in e && null == i || ("defaultValue" === o && "value" in e && null == e.value ? o = "value" : "download" === o && !0 === i ? i = "" : /ondoubleclick/i.test(o) ? o = "ondblclick" : /^onchange(textarea|input)/i.test(o + t) && !z$1(e.type) ? o = "oninput" : /^onfocus$/i.test(o) ? o = "onfocusin" : /^onblur$/i.test(o) ? o = "onfocusout" : /^on(Ani|Tra|Tou|BeforeInp|Compo)/.test(o) ? o = o.toLowerCase() : u && V.test(o) ? o = o.replace(/[A-Z0-9]/, "-$&").toLowerCase() : null === i && (i = void 0), r[o] = i);
         }
 
         "select" == t && r.multiple && Array.isArray(r.value) && (r.value = A$3(e.children).forEach(function (n) {
@@ -8683,7 +8718,7 @@
         })), n.props = r, e.class != e.className && (J.enumerable = "className" in e, null != e.className && (r.class = e.className), Object.defineProperty(r, "className", J));
       }
 
-      n.$$typeof = j$1, K && K(n);
+      n.$$typeof = P$1, K && K(n);
     };
 
     var Q = l$3.__r;
@@ -8739,55 +8774,55 @@
         getElement,
         useRefElementProps
       } = useRefElement({});
-      const [phase, setPhase] = l$2(animateOnMount ? "init" : null);
-      const [direction, setDirection] = l$2(show == null ? null : show ? "enter" : "exit");
-      const [surfaceWidth, setSurfaceWidth] = l$2(null);
-      const [surfaceHeight, setSurfaceHeight] = l$2(null);
-      const [surfaceX, setSurfaceX] = l$2(null);
-      const [surfaceY, setSurfaceY] = l$2(null);
-      const [transitioningWidth, setTransitioningWidth] = l$2(null);
-      const [transitioningHeight, setTransitioningHeight] = l$2(null);
-      const [transitioningX, setTransitioningX] = l$2(null);
-      const [transitioningY, setTransitioningY] = l$2(null);
-      const [logicalDirectionInfo, setLogicalDirectionInfo] = l$2(null);
+      const [phase, setPhase] = m$1(animateOnMount ? "init" : null);
+      const [direction, setDirection] = m$1(show == null ? null : show ? "enter" : "exit");
+      const [surfaceWidth, setSurfaceWidth] = m$1(null);
+      const [surfaceHeight, setSurfaceHeight] = m$1(null);
+      const [surfaceX, setSurfaceX] = m$1(null);
+      const [surfaceY, setSurfaceY] = m$1(null);
+      const [transitioningWidth, setTransitioningWidth] = m$1(null);
+      const [transitioningHeight, setTransitioningHeight] = m$1(null);
+      const [transitioningX, setTransitioningX] = m$1(null);
+      const [transitioningY, setTransitioningY] = m$1(null);
+      const [logicalDirectionInfo, setLogicalDirectionInfo] = m$1(null);
       const {
         getLogicalDirectionInfo,
         useLogicalDirectionProps
       } = useLogicalDirection({
         onLogicalDirectionChange: setLogicalDirectionInfo
       });
-      const onTransitionUpdateRef = s$2(onTransitionUpdate);
-      const phaseRef = s$2(phase);
-      const directionRef = s$2(direction);
-      const durationRef = s$2(duration);
-      const tooEarlyTimeoutRef = s$2(null);
-      const tooEarlyValueRef = s$2(true);
-      const tooLateTimeoutRef = s$2(null);
+      const onTransitionUpdateRef = h$1(onTransitionUpdate);
+      const phaseRef = h$1(phase);
+      const directionRef = h$1(direction);
+      const durationRef = h$1(duration);
+      const tooEarlyTimeoutRef = h$1(null);
+      const tooEarlyValueRef = h$1(true);
+      const tooLateTimeoutRef = h$1(null);
       const onTransitionEnd = A$2(e => {
         if (e.target === getElement() && tooEarlyValueRef.current == false) {
           setPhase("finalize");
         }
       }, []);
-      h$1(() => {
+      d$1(() => {
         onTransitionUpdateRef.current = onTransitionUpdate;
       }, [onTransitionUpdate]);
-      h$1(() => {
+      d$1(() => {
         phaseRef.current = phase;
       }, [phase]);
-      h$1(() => {
+      d$1(() => {
         directionRef.current = direction;
       }, [direction]);
-      h$1(() => {
+      d$1(() => {
         durationRef.current = duration;
       }, [duration]);
-      h$1(() => {
+      d$1(() => {
         var _onTransitionUpdateRe;
 
         if (direction && phase) (_onTransitionUpdateRe = onTransitionUpdateRef.current) === null || _onTransitionUpdateRe === void 0 ? void 0 : _onTransitionUpdateRe.call(onTransitionUpdateRef, direction, phase);
       }, [direction, phase]); // Every time the phase changes to "transition", add our transition timeout timeouts
       // to catch any time onTransitionEnd fails to report for whatever reason to be safe
 
-      h$1(() => {
+      d$1(() => {
         if (phase == "transition") {
           var _durationRef$current;
 
@@ -8810,7 +8845,7 @@
       }, [phase]); // Any time "show" changes, update our direction and phase.
       // In addition, measure the size of the element if requested.
 
-      h$1(() => {
+      d$1(() => {
         const element = getElement();
 
         if (element && show != null) {
@@ -8860,7 +8895,7 @@
       }, [show, measure, classBase]); // Any time the phase changes to init, immediately before the screen is painted,
       // change the phase to "transition" and re-render ().
 
-      h$1(() => {
+      d$1(() => {
         const element = getElement();
 
         if (element && directionRef.current != null) {
@@ -8954,7 +8989,7 @@
         childMountBehavior,
         ...props
       } = _ref3;
-      const [hasShownOnce, setHasShownOnce] = l$2(false);
+      const [hasShownOnce, setHasShownOnce] = m$1(false);
       const shouldSetHasShownOnce = hasShownOnce === false && childMountBehavior === "mount-on-show" && show === true;
       y$1(() => {
         if (shouldSetHasShownOnce) setHasShownOnce(true);
@@ -9217,8 +9252,8 @@
         slideTargetBlock
       } = _ref;
       (_classBase = classBase) !== null && _classBase !== void 0 ? _classBase : classBase = "transition";
-      const lastValidTargetInline = s$2((_slideTargetInline = slideTargetInline) !== null && _slideTargetInline !== void 0 ? _slideTargetInline : 1);
-      const lastValidTargetBlock = s$2((_slideTargetBlock = slideTargetBlock) !== null && _slideTargetBlock !== void 0 ? _slideTargetBlock : 0);
+      const lastValidTargetInline = h$1((_slideTargetInline = slideTargetInline) !== null && _slideTargetInline !== void 0 ? _slideTargetInline : 1);
+      const lastValidTargetBlock = h$1((_slideTargetBlock = slideTargetBlock) !== null && _slideTargetBlock !== void 0 ? _slideTargetBlock : 0);
       y$1(() => {
         if (slideTargetInline) lastValidTargetInline.current = slideTargetInline;
       }, [slideTargetInline]);
@@ -9464,8 +9499,8 @@
         perspective
       } = _ref;
       (_classBase = classBase) !== null && _classBase !== void 0 ? _classBase : classBase = "transition";
-      const lastValidTargetInline = s$2((_flipAngleInline = flipAngleInline) !== null && _flipAngleInline !== void 0 ? _flipAngleInline : 180);
-      const lastValidTargetBlock = s$2((_flipAngleBlock = flipAngleBlock) !== null && _flipAngleBlock !== void 0 ? _flipAngleBlock : 0);
+      const lastValidTargetInline = h$1((_flipAngleInline = flipAngleInline) !== null && _flipAngleInline !== void 0 ? _flipAngleInline : 180);
+      const lastValidTargetBlock = h$1((_flipAngleBlock = flipAngleBlock) !== null && _flipAngleBlock !== void 0 ? _flipAngleBlock : 0);
       y$1(() => {
         if (flipAngleInline) lastValidTargetInline.current = flipAngleInline;
       }, [flipAngleInline]);
@@ -9575,8 +9610,8 @@
         u$1,
         t$1,
         i$1,
-        r$1,
         o$1,
+        r$1,
         f$1,
         e$1 = {},
         c$1 = [],
@@ -9588,29 +9623,29 @@
       return n;
     }
 
-    function v(n) {
+    function p$1(n) {
       var l = n.parentNode;
       l && l.removeChild(n);
     }
 
-    function h(l, u, t) {
+    function v(l, u, t) {
       var i,
-          r,
           o,
+          r,
           f = {};
 
-      for (o in u) "key" == o ? i = u[o] : "ref" == o ? r = u[o] : f[o] = u[o];
+      for (r in u) "key" == r ? i = u[r] : "ref" == r ? o = u[r] : f[r] = u[r];
 
-      if (arguments.length > 2 && (f.children = arguments.length > 3 ? n$2.call(arguments, 2) : t), "function" == typeof l && null != l.defaultProps) for (o in l.defaultProps) void 0 === f[o] && (f[o] = l.defaultProps[o]);
-      return p$1(l, f, i, r, null);
+      if (arguments.length > 2 && (f.children = arguments.length > 3 ? n$2.call(arguments, 2) : t), "function" == typeof l && null != l.defaultProps) for (r in l.defaultProps) void 0 === f[r] && (f[r] = l.defaultProps[r]);
+      return h(l, f, i, o, null);
     }
 
-    function p$1(n, t, i, r, o) {
+    function h(n, t, i, o, r) {
       var f = {
         type: n,
         props: t,
         key: i,
-        ref: r,
+        ref: o,
         __k: null,
         __: null,
         __b: 0,
@@ -9619,9 +9654,9 @@
         __c: null,
         __h: null,
         constructor: void 0,
-        __v: null == o ? ++u$1 : o
+        __v: null == r ? ++u$1 : r
       };
-      return null == o && null != l$1.vnode && l$1.vnode(f), f;
+      return null == r && null != l$1.vnode && l$1.vnode(f), f;
     }
 
     function y(n) {
@@ -9654,21 +9689,21 @@
     }
 
     function x(n) {
-      (!n.__d && (n.__d = !0) && i$1.push(n) && !b.__r++ || o$1 !== l$1.debounceRendering) && ((o$1 = l$1.debounceRendering) || r$1)(b);
+      (!n.__d && (n.__d = !0) && i$1.push(n) && !b.__r++ || r$1 !== l$1.debounceRendering) && ((r$1 = l$1.debounceRendering) || o$1)(b);
     }
 
     function b() {
       for (var n; b.__r = i$1.length;) n = i$1.sort(function (n, l) {
         return n.__v.__b - l.__v.__b;
       }), i$1 = [], n.some(function (n) {
-        var l, u, t, i, r, o;
-        n.__d && (r = (i = (l = n).__v).__e, (o = l.__P) && (u = [], (t = a$1({}, i)).__v = i.__v + 1, I(o, i, t, l.__n, void 0 !== o.ownerSVGElement, null != i.__h ? [r] : null, u, null == r ? _(i) : r, i.__h), T(u, i), i.__e != r && k(i)));
+        var l, u, t, i, o, r;
+        n.__d && (o = (i = (l = n).__v).__e, (r = l.__P) && (u = [], (t = a$1({}, i)).__v = i.__v + 1, I(r, i, t, l.__n, void 0 !== r.ownerSVGElement, null != i.__h ? [o] : null, u, null == o ? _(i) : o, i.__h), T(u, i), i.__e != o && k(i)));
       });
     }
 
-    function m(n, l, u, t, i, r, o, f, s, a) {
-      var v,
-          h,
+    function m(n, l, u, t, i, o, r, f, s, a) {
+      var p,
+          v,
           d,
           k,
           x,
@@ -9677,47 +9712,47 @@
           A = t && t.__k || c$1,
           P = A.length;
 
-      for (u.__k = [], v = 0; v < l.length; v++) if (null != (k = u.__k[v] = null == (k = l[v]) || "boolean" == typeof k ? null : "string" == typeof k || "number" == typeof k || "bigint" == typeof k ? p$1(null, k, null, null, k) : Array.isArray(k) ? p$1(y, {
+      for (u.__k = [], p = 0; p < l.length; p++) if (null != (k = u.__k[p] = null == (k = l[p]) || "boolean" == typeof k ? null : "string" == typeof k || "number" == typeof k || "bigint" == typeof k ? h(null, k, null, null, k) : Array.isArray(k) ? h(y, {
         children: k
-      }, null, null, null) : k.__b > 0 ? p$1(k.type, k.props, k.key, null, k.__v) : k)) {
-        if (k.__ = u, k.__b = u.__b + 1, null === (d = A[v]) || d && k.key == d.key && k.type === d.type) A[v] = void 0;else for (h = 0; h < P; h++) {
-          if ((d = A[h]) && k.key == d.key && k.type === d.type) {
-            A[h] = void 0;
+      }, null, null, null) : k.__b > 0 ? h(k.type, k.props, k.key, null, k.__v) : k)) {
+        if (k.__ = u, k.__b = u.__b + 1, null === (d = A[p]) || d && k.key == d.key && k.type === d.type) A[p] = void 0;else for (v = 0; v < P; v++) {
+          if ((d = A[v]) && k.key == d.key && k.type === d.type) {
+            A[v] = void 0;
             break;
           }
 
           d = null;
         }
-        I(n, k, d = d || e$1, i, r, o, f, s, a), x = k.__e, (h = k.ref) && d.ref != h && (m || (m = []), d.ref && m.push(d.ref, null, k), m.push(h, k.__c || x, k)), null != x ? (null == b && (b = x), "function" == typeof k.type && k.__k === d.__k ? k.__d = s = g(k, s, n) : s = w(n, k, d, A, x, s), "function" == typeof u.type && (u.__d = s)) : s && d.__e == s && s.parentNode != n && (s = _(d));
+        I(n, k, d = d || e$1, i, o, r, f, s, a), x = k.__e, (v = k.ref) && d.ref != v && (m || (m = []), d.ref && m.push(d.ref, null, k), m.push(v, k.__c || x, k)), null != x ? (null == b && (b = x), "function" == typeof k.type && k.__k === d.__k ? k.__d = s = g(k, s, n) : s = w(n, k, d, A, x, s), "function" == typeof u.type && (u.__d = s)) : s && d.__e == s && s.parentNode != n && (s = _(d));
       }
 
-      for (u.__e = b, v = P; v--;) null != A[v] && ("function" == typeof u.type && null != A[v].__e && A[v].__e == u.__d && (u.__d = _(t, v + 1)), L(A[v], A[v]));
+      for (u.__e = b, p = P; p--;) null != A[p] && ("function" == typeof u.type && null != A[p].__e && A[p].__e == u.__d && (u.__d = _(t, p + 1)), L(A[p], A[p]));
 
-      if (m) for (v = 0; v < m.length; v++) z(m[v], m[++v], m[++v]);
+      if (m) for (p = 0; p < m.length; p++) z(m[p], m[++p], m[++p]);
     }
 
     function g(n, l, u) {
-      for (var t, i = n.__k, r = 0; i && r < i.length; r++) (t = i[r]) && (t.__ = n, l = "function" == typeof t.type ? g(t, l, u) : w(u, t, t, i, t.__e, l));
+      for (var t, i = n.__k, o = 0; i && o < i.length; o++) (t = i[o]) && (t.__ = n, l = "function" == typeof t.type ? g(t, l, u) : w(u, t, t, i, t.__e, l));
 
       return l;
     }
 
-    function w(n, l, u, t, i, r) {
-      var o, f, e;
-      if (void 0 !== l.__d) o = l.__d, l.__d = void 0;else if (null == u || i != r || null == i.parentNode) n: if (null == r || r.parentNode !== n) n.appendChild(i), o = null;else {
-        for (f = r, e = 0; (f = f.nextSibling) && e < t.length; e += 2) if (f == i) break n;
+    function w(n, l, u, t, i, o) {
+      var r, f, e;
+      if (void 0 !== l.__d) r = l.__d, l.__d = void 0;else if (null == u || i != o || null == i.parentNode) n: if (null == o || o.parentNode !== n) n.appendChild(i), r = null;else {
+        for (f = o, e = 0; (f = f.nextSibling) && e < t.length; e += 2) if (f == i) break n;
 
-        n.insertBefore(i, r), o = r;
+        n.insertBefore(i, o), r = o;
       }
-      return void 0 !== o ? o : i.nextSibling;
+      return void 0 !== r ? r : i.nextSibling;
     }
 
     function A(n, l, u, t, i) {
-      var r;
+      var o;
 
-      for (r in u) "children" === r || "key" === r || r in l || C(n, r, null, u[r], t);
+      for (o in u) "children" === o || "key" === o || o in l || C(n, o, null, u[o], t);
 
-      for (r in l) i && "function" != typeof l[r] || "children" === r || "key" === r || "value" === r || "checked" === r || u[r] === l[r] || C(n, r, l[r], u[r], t);
+      for (o in l) i && "function" != typeof l[o] || "children" === o || "key" === o || "value" === o || "checked" === o || u[o] === l[o] || C(n, o, l[o], u[o], t);
     }
 
     function P(n, l, u) {
@@ -9725,15 +9760,15 @@
     }
 
     function C(n, l, u, t, i) {
-      var r;
+      var o;
 
       n: if ("style" === l) {
         if ("string" == typeof u) n.style.cssText = u;else {
           if ("string" == typeof t && (n.style.cssText = t = ""), t) for (l in t) u && l in u || P(n.style, l, "");
           if (u) for (l in u) t && u[l] === t[l] || P(n.style, l, u[l]);
         }
-      } else if ("o" === l[0] && "n" === l[1]) r = l !== (l = l.replace(/Capture$/, "")), l = l.toLowerCase() in n ? l.toLowerCase().slice(2) : l.slice(2), n.l || (n.l = {}), n.l[l + r] = u, u ? t || n.addEventListener(l, r ? H : $, r) : n.removeEventListener(l, r ? H : $, r);else if ("dangerouslySetInnerHTML" !== l) {
-        if (i) l = l.replace(/xlink[H:h]/, "h").replace(/sName$/, "s");else if ("href" !== l && "list" !== l && "form" !== l && "tabIndex" !== l && "download" !== l && l in n) try {
+      } else if ("o" === l[0] && "n" === l[1]) o = l !== (l = l.replace(/Capture$/, "")), l = l.toLowerCase() in n ? l.toLowerCase().slice(2) : l.slice(2), n.l || (n.l = {}), n.l[l + o] = u, u ? t || n.addEventListener(l, o ? H : $, o) : n.removeEventListener(l, o ? H : $, o);else if ("dangerouslySetInnerHTML" !== l) {
+        if (i) l = l.replace(/xlink(H|:h)/, "h").replace(/sName$/, "s");else if ("href" !== l && "list" !== l && "form" !== l && "tabIndex" !== l && "download" !== l && l in n) try {
           n[l] = null == u ? "" : u;
           break n;
         } catch (n) {}
@@ -9749,11 +9784,11 @@
       this.l[n.type + !0](l$1.event ? l$1.event(n) : n);
     }
 
-    function I(n, u, t, i, r, o, f, e, c) {
+    function I(n, u, t, i, o, r, f, e, c) {
       var s,
+          p,
           v,
           h,
-          p,
           _,
           k,
           x,
@@ -9764,28 +9799,28 @@
           P = u.type;
 
       if (void 0 !== u.constructor) return null;
-      null != t.__h && (c = t.__h, e = u.__e = t.__e, u.__h = null, o = [e]), (s = l$1.__b) && s(u);
+      null != t.__h && (c = t.__h, e = u.__e = t.__e, u.__h = null, r = [e]), (s = l$1.__b) && s(u);
 
       try {
         n: if ("function" == typeof P) {
-          if (b = u.props, g = (s = P.contextType) && i[s.__c], w = s ? g ? g.props.value : s.__ : i, t.__c ? x = (v = u.__c = t.__c).__ = v.__E : ("prototype" in P && P.prototype.render ? u.__c = v = new P(b, w) : (u.__c = v = new d(b, w), v.constructor = P, v.render = M), g && g.sub(v), v.props = b, v.state || (v.state = {}), v.context = w, v.__n = i, h = v.__d = !0, v.__h = []), null == v.__s && (v.__s = v.state), null != P.getDerivedStateFromProps && (v.__s == v.state && (v.__s = a$1({}, v.__s)), a$1(v.__s, P.getDerivedStateFromProps(b, v.__s))), p = v.props, _ = v.state, h) null == P.getDerivedStateFromProps && null != v.componentWillMount && v.componentWillMount(), null != v.componentDidMount && v.__h.push(v.componentDidMount);else {
-            if (null == P.getDerivedStateFromProps && b !== p && null != v.componentWillReceiveProps && v.componentWillReceiveProps(b, w), !v.__e && null != v.shouldComponentUpdate && !1 === v.shouldComponentUpdate(b, v.__s, w) || u.__v === t.__v) {
-              v.props = b, v.state = v.__s, u.__v !== t.__v && (v.__d = !1), v.__v = u, u.__e = t.__e, u.__k = t.__k, u.__k.forEach(function (n) {
+          if (b = u.props, g = (s = P.contextType) && i[s.__c], w = s ? g ? g.props.value : s.__ : i, t.__c ? x = (p = u.__c = t.__c).__ = p.__E : ("prototype" in P && P.prototype.render ? u.__c = p = new P(b, w) : (u.__c = p = new d(b, w), p.constructor = P, p.render = M), g && g.sub(p), p.props = b, p.state || (p.state = {}), p.context = w, p.__n = i, v = p.__d = !0, p.__h = []), null == p.__s && (p.__s = p.state), null != P.getDerivedStateFromProps && (p.__s == p.state && (p.__s = a$1({}, p.__s)), a$1(p.__s, P.getDerivedStateFromProps(b, p.__s))), h = p.props, _ = p.state, v) null == P.getDerivedStateFromProps && null != p.componentWillMount && p.componentWillMount(), null != p.componentDidMount && p.__h.push(p.componentDidMount);else {
+            if (null == P.getDerivedStateFromProps && b !== h && null != p.componentWillReceiveProps && p.componentWillReceiveProps(b, w), !p.__e && null != p.shouldComponentUpdate && !1 === p.shouldComponentUpdate(b, p.__s, w) || u.__v === t.__v) {
+              p.props = b, p.state = p.__s, u.__v !== t.__v && (p.__d = !1), p.__v = u, u.__e = t.__e, u.__k = t.__k, u.__k.forEach(function (n) {
                 n && (n.__ = u);
-              }), v.__h.length && f.push(v);
+              }), p.__h.length && f.push(p);
               break n;
             }
 
-            null != v.componentWillUpdate && v.componentWillUpdate(b, v.__s, w), null != v.componentDidUpdate && v.__h.push(function () {
-              v.componentDidUpdate(p, _, k);
+            null != p.componentWillUpdate && p.componentWillUpdate(b, p.__s, w), null != p.componentDidUpdate && p.__h.push(function () {
+              p.componentDidUpdate(h, _, k);
             });
           }
-          v.context = w, v.props = b, v.state = v.__s, (s = l$1.__r) && s(u), v.__d = !1, v.__v = u, v.__P = n, s = v.render(v.props, v.state, v.context), v.state = v.__s, null != v.getChildContext && (i = a$1(a$1({}, i), v.getChildContext())), h || null == v.getSnapshotBeforeUpdate || (k = v.getSnapshotBeforeUpdate(p, _)), A = null != s && s.type === y && null == s.key ? s.props.children : s, m(n, Array.isArray(A) ? A : [A], u, t, i, r, o, f, e, c), v.base = u.__e, u.__h = null, v.__h.length && f.push(v), x && (v.__E = v.__ = null), v.__e = !1;
-        } else null == o && u.__v === t.__v ? (u.__k = t.__k, u.__e = t.__e) : u.__e = j(t.__e, u, t, i, r, o, f, c);
+          p.context = w, p.props = b, p.state = p.__s, (s = l$1.__r) && s(u), p.__d = !1, p.__v = u, p.__P = n, s = p.render(p.props, p.state, p.context), p.state = p.__s, null != p.getChildContext && (i = a$1(a$1({}, i), p.getChildContext())), v || null == p.getSnapshotBeforeUpdate || (k = p.getSnapshotBeforeUpdate(h, _)), A = null != s && s.type === y && null == s.key ? s.props.children : s, m(n, Array.isArray(A) ? A : [A], u, t, i, o, r, f, e, c), p.base = u.__e, u.__h = null, p.__h.length && f.push(p), x && (p.__E = p.__ = null), p.__e = !1;
+        } else null == r && u.__v === t.__v ? (u.__k = t.__k, u.__e = t.__e) : u.__e = j(t.__e, u, t, i, o, r, f, c);
 
         (s = l$1.diffed) && s(u);
       } catch (n) {
-        u.__v = null, (c || null != o) && (u.__e = e, u.__h = !!c, o[o.indexOf(e)] = null), l$1.__e(n, u, t);
+        u.__v = null, (c || null != r) && (u.__e = e, u.__h = !!c, r[r.indexOf(e)] = null), l$1.__e(n, u, t);
       }
     }
 
@@ -9801,32 +9836,32 @@
       });
     }
 
-    function j(l, u, t, i, r, o, f, c) {
+    function j(l, u, t, i, o, r, f, c) {
       var s,
           a,
-          h,
-          p = t.props,
+          v,
+          h = t.props,
           y = u.props,
           d = u.type,
           k = 0;
-      if ("svg" === d && (r = !0), null != o) for (; k < o.length; k++) if ((s = o[k]) && "setAttribute" in s == !!d && (d ? s.localName === d : 3 === s.nodeType)) {
-        l = s, o[k] = null;
+      if ("svg" === d && (o = !0), null != r) for (; k < r.length; k++) if ((s = r[k]) && "setAttribute" in s == !!d && (d ? s.localName === d : 3 === s.nodeType)) {
+        l = s, r[k] = null;
         break;
       }
 
       if (null == l) {
         if (null === d) return document.createTextNode(y);
-        l = r ? document.createElementNS("http://www.w3.org/2000/svg", d) : document.createElement(d, y.is && y), o = null, c = !1;
+        l = o ? document.createElementNS("http://www.w3.org/2000/svg", d) : document.createElement(d, y.is && y), r = null, c = !1;
       }
 
-      if (null === d) p === y || c && l.data === y || (l.data = y);else {
-        if (o = o && n$2.call(l.childNodes), a = (p = t.props || e$1).dangerouslySetInnerHTML, h = y.dangerouslySetInnerHTML, !c) {
-          if (null != o) for (p = {}, k = 0; k < l.attributes.length; k++) p[l.attributes[k].name] = l.attributes[k].value;
-          (h || a) && (h && (a && h.__html == a.__html || h.__html === l.innerHTML) || (l.innerHTML = h && h.__html || ""));
+      if (null === d) h === y || c && l.data === y || (l.data = y);else {
+        if (r = r && n$2.call(l.childNodes), a = (h = t.props || e$1).dangerouslySetInnerHTML, v = y.dangerouslySetInnerHTML, !c) {
+          if (null != r) for (h = {}, k = 0; k < l.attributes.length; k++) h[l.attributes[k].name] = l.attributes[k].value;
+          (v || a) && (v && (a && v.__html == a.__html || v.__html === l.innerHTML) || (l.innerHTML = v && v.__html || ""));
         }
 
-        if (A(l, y, p, r, c), h) u.__k = [];else if (k = u.props.children, m(l, Array.isArray(k) ? k : [k], u, t, i, r && "foreignObject" !== d, o, f, o ? o[0] : t.__k && _(t, 0), c), null != o) for (k = o.length; k--;) null != o[k] && v(o[k]);
-        c || ("value" in y && void 0 !== (k = y.value) && (k !== p.value || k !== l.value || "progress" === d && !k) && C(l, "value", k, p.value, !1), "checked" in y && void 0 !== (k = y.checked) && k !== l.checked && C(l, "checked", k, p.checked, !1));
+        if (A(l, y, h, o, c), v) u.__k = [];else if (k = u.props.children, m(l, Array.isArray(k) ? k : [k], u, t, i, o && "foreignObject" !== d, r, f, r ? r[0] : t.__k && _(t, 0), c), null != r) for (k = r.length; k--;) null != r[k] && p$1(r[k]);
+        c || ("value" in y && void 0 !== (k = y.value) && (k !== l.value || "progress" === d && !k || "option" === d && k !== h.value) && C(l, "value", k, h.value, !1), "checked" in y && void 0 !== (k = y.checked) && k !== l.checked && C(l, "checked", k, h.checked, !1));
       }
       return l;
     }
@@ -9840,7 +9875,7 @@
     }
 
     function L(n, u, t) {
-      var i, r;
+      var i, o;
 
       if (l$1.unmount && l$1.unmount(n), (i = n.ref) && (i.current && i.current !== n.__e || z(i, null, u)), null != (i = n.__c)) {
         if (i.componentWillUnmount) try {
@@ -9851,8 +9886,8 @@
         i.base = i.__P = null;
       }
 
-      if (i = n.__k) for (r = 0; r < i.length; r++) i[r] && L(i[r], u, "function" != typeof n.type);
-      t || null == n.__e || v(n.__e), n.__e = n.__d = void 0;
+      if (i = n.__k) for (o = 0; o < i.length; o++) i[o] && L(i[o], u, "function" != typeof n.type);
+      t || null == n.__e || p$1(n.__e), n.__e = n.__d = void 0;
     }
 
     function M(n, l, u) {
@@ -9860,14 +9895,14 @@
     }
 
     function N(u, t, i) {
-      var r, o, f;
-      l$1.__ && l$1.__(u, t), o = (r = "function" == typeof i) ? null : i && i.__k || t.__k, f = [], I(t, u = (!r && i || t).__k = h(y, null, [u]), o || e$1, e$1, void 0 !== t.ownerSVGElement, !r && i ? [i] : o ? null : t.firstChild ? n$2.call(t.childNodes) : null, f, !r && i ? i : o ? o.__e : t.firstChild, r), T(f, u);
+      var o, r, f;
+      l$1.__ && l$1.__(u, t), r = (o = "function" == typeof i) ? null : i && i.__k || t.__k, f = [], I(t, u = (!o && i || t).__k = v(y, null, [u]), r || e$1, e$1, void 0 !== t.ownerSVGElement, !o && i ? [i] : r ? null : t.firstChild ? n$2.call(t.childNodes) : null, f, !o && i ? i : r ? r.__e : t.firstChild, o), T(f, u);
     }
 
     n$2 = c$1.slice, l$1 = {
-      __e: function (n, l) {
-        for (var u, t, i; l = l.__;) if ((u = l.__c) && !u.__) try {
-          if ((t = u.constructor) && null != t.getDerivedStateFromError && (u.setState(t.getDerivedStateFromError(n)), i = u.__d), null != u.componentDidCatch && (u.componentDidCatch(n), i = u.__d), i) return u.__E = u;
+      __e: function (n, l, u, t) {
+        for (var i, o, r; l = l.__;) if ((i = l.__c) && !i.__) try {
+          if ((o = i.constructor) && null != o.getDerivedStateFromError && (i.setState(o.getDerivedStateFromError(n)), r = i.__d), null != i.componentDidCatch && (i.componentDidCatch(n, t || {}), r = i.__d), r) return i.__E = i;
         } catch (l) {
           n = l;
         }
@@ -9881,21 +9916,21 @@
       u = null != this.__s && this.__s !== this.state ? this.__s : this.__s = a$1({}, this.state), "function" == typeof n && (n = n(a$1({}, u), this.props)), n && a$1(u, n), null != n && this.__v && (l && this.__h.push(l), x(this));
     }, d.prototype.forceUpdate = function (n) {
       this.__v && (this.__e = !0, n && this.__h.push(n), x(this));
-    }, d.prototype.render = y, i$1 = [], r$1 = "function" == typeof Promise ? Promise.prototype.then.bind(Promise.resolve()) : setTimeout, b.__r = 0, f$1 = 0, preact.render = N, preact.hydrate = function n(l, u) {
+    }, d.prototype.render = y, i$1 = [], o$1 = "function" == typeof Promise ? Promise.prototype.then.bind(Promise.resolve()) : setTimeout, b.__r = 0, f$1 = 0, preact.render = N, preact.hydrate = function n(l, u) {
       N(l, u, n);
-    }, preact.createElement = h, preact.h = h, preact.Fragment = y, preact.createRef = function () {
+    }, preact.createElement = v, preact.h = v, preact.Fragment = y, preact.createRef = function () {
       return {
         current: null
       };
     }, preact.isValidElement = t$1, preact.Component = d, preact.cloneElement = function (l, u, t) {
       var i,
-          r,
           o,
+          r,
           f = a$1({}, l.props);
 
-      for (o in u) "key" == o ? i = u[o] : "ref" == o ? r = u[o] : f[o] = u[o];
+      for (r in u) "key" == r ? i = u[r] : "ref" == r ? o = u[r] : f[r] = u[r];
 
-      return arguments.length > 2 && (f.children = arguments.length > 3 ? n$2.call(arguments, 2) : t), p$1(l.type, f, i || l.key, r || l.ref, null);
+      return arguments.length > 2 && (f.children = arguments.length > 3 ? n$2.call(arguments, 2) : t), h(l.type, f, i || l.key, o || l.ref, null);
     }, preact.createContext = function (n, l) {
       var u = {
         __c: l = "__cC" + f$1++,
@@ -9927,7 +9962,7 @@
     }, preact.options = l$1;
 
     var n$1 = preact;
-    "undefined" != typeof window && window.__PREACT_DEVTOOLS__ && window.__PREACT_DEVTOOLS__.attachPreact("10.6.4", n$1.options, {
+    "undefined" != typeof window && window.__PREACT_DEVTOOLS__ && window.__PREACT_DEVTOOLS__.attachPreact("10.7.1", n$1.options, {
       Fragment: n$1.Fragment,
       Component: n$1.Component
     });
@@ -10019,13 +10054,13 @@
         lazyPropTypes: new WeakMap()
       } : null,
           m = [];
-      n.options.__e = function (n, e, o) {
+      n.options.__e = function (n, e, o, r) {
         if (e && e.__c && "function" == typeof n.then) {
-          var r = n;
+          var a = n;
           n = new Error("Missing Suspense. The throwing component was: " + t(e));
 
-          for (var a = e; a; a = a.__) if (a.__c && a.__c.__c) {
-            n = r;
+          for (var i = e; i; i = i.__) if (i.__c && i.__c.__c) {
+            n = a;
             break;
           }
 
@@ -10033,7 +10068,7 @@
         }
 
         try {
-          d(n, e, o), "function" != typeof n.then && setTimeout(function () {
+          (r = r || {}).componentStack = c(e), d(n, e, o, r), "function" != typeof n.then && setTimeout(function () {
             throw n;
           });
         } catch (n) {
@@ -10172,9 +10207,9 @@
       };
     }();
 
-    "undefined" != typeof window && window.__PREACT_DEVTOOLS__ && window.__PREACT_DEVTOOLS__.attachPreact("10.6.4", l$3, {
+    "undefined" != typeof window && window.__PREACT_DEVTOOLS__ && window.__PREACT_DEVTOOLS__.attachPreact("10.7.1", l$3, {
       Fragment: d$2,
-      Component: _$1
+      Component: _$2
     });
 
     function forwardElementRef(component) {
@@ -10429,7 +10464,7 @@
         max,
         tag: "progress"
       });
-      h$1(() => {
+      d$1(() => {
         provideParentWithHook === null || provideParentWithHook === void 0 ? void 0 : provideParentWithHook(useReferencedElement);
       }, [useReferencedElement, provideParentWithHook]);
       return e$3("div", { ...useMergedProps()({
@@ -11021,7 +11056,7 @@
       let {
         children
       } = _ref3;
-      const id = s$2(null);
+      const id = h$1(null);
       const [portalElement, setPortalElement] = useState(null);
       const bodyPortalClass = F(BodyPortalClassContext);
       const container = useBodyPortalRoot();
@@ -11331,10 +11366,10 @@
           return index;
         }
       }, []);
-      h$1(() => {
+      d$1(() => {
         setPushDialog(_ => pushDialog);
       }, [pushDialog]);
-      h$1(() => {
+      d$1(() => {
         setUpdateDialog(_ => updateDialog);
       }, [updateDialog]);
       return e$3(BodyPortal, {
@@ -15347,7 +15382,7 @@
           };
         }
       }, [updating]);
-      const updateStateModifier = d$1(() => {
+      const updateStateModifier = _$1(() => {
         let modifier = {
           name: "updateState",
           enabled: true,
@@ -15631,7 +15666,7 @@
       }); // TODO: This is probably the most benign mutation during render issue ever
       // It's just used to preserve the last shown value when the tooltip is fading out because `tooltip` is null.
 
-      const lastUsedTooltipRef = s$2(tooltip);
+      const lastUsedTooltipRef = h$1(tooltip);
       lastUsedTooltipRef.current = tooltip || lastUsedTooltipRef.current;
       isOpen || (isOpen = !!forceOpen);
       isOpen && (isOpen = !!tooltip);
@@ -16192,10 +16227,10 @@
           return index;
         }
       }, []);
-      h$1(() => {
+      d$1(() => {
         setPushToast(_ => pushToast);
       }, [pushToast]);
-      h$1(() => {
+      d$1(() => {
         setUpdateToast(_ => updateToast);
       }, [updateToast]);
       return e$3(BodyPortal, {
@@ -16466,7 +16501,7 @@
         const [asyncFails, setAsyncFails] = useState(false);
         const [usesLinkButton, setUsesLinkButton] = useState(true);
         const pushToast = usePushToast();
-        const onPressSync = () => void (pushToast(e$3(Toast, { children: "Button was clicked" }, void 0)));
+        const onPressSync = () => void (pushToast(e$3(Toast, { children: "Button was clicked" })));
         const onPressAsync = async () => {
             await sleep$6(asyncTimeout ?? 0);
             if (asyncFails)
@@ -16483,8 +16518,8 @@
                 setToggleOn(b);
         };
         const onToggleInput = usesAsync ? onToggleInputAsync : setToggleOn;
-        return (e$3(ProvideDefaultButtonFill, { value: buttonsFill, children: e$3(ProvideDefaultButtonSize, { value: buttonsSize, children: e$3(ProvideDefaultButtonColor, { value: buttonsColor, children: e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Buttons" }, void 0), e$3(CardElement, { children: e$3(Button, { onPress: onPress, children: "I'm a button" }, void 0) }, void 0), e$3(CardElement, { children: ["A ", e$3("code", { children: "Button" }, void 0), " is a ", e$3("code", { children: "Button" }, void 0), " is a ", e$3("code", { children: "Button" }, void 0), " \u2013 you can click, tap, or Space-key it to activate it and do something.  If the given action is asynchronous, then the button will disable itself and display a spinner during the operation."] }, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Async inputs" }, void 0), e$3(CardElement, { children: ["The ", e$3("code", { children: "onPress" }, void 0), " event handler for buttons can be sync or async, and they will react appropriately if the operation takes long enough.", e$3(InputGrid, { children: [e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setUsesAsync, checked: usesAsync, labelPosition: "start", children: "Use async handler" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setAsyncFails, checked: asyncFails, labelPosition: "start", disabled: !usesAsync, children: "Async handler rejects" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Input, { width: "8ch", disabled: !usesAsync, type: "number", onValueChange: setAsyncTimeout, value: asyncTimeout, children: "Async timeout" }, void 0) }, void 0)] }, void 0)] }, void 0), e$3(CardElement, { children: e$3(Button, { onPress: onPress, children: "Click me" }, void 0) }, void 0), e$3(CardElement, { type: "paragraph", children: e$3("code", { children: `const onPress = ${usesAsync ? `async ` : ""}() => { ${usesAsync ? `await sleep(${asyncTimeout}); ` : ""}pushToast(<Toast ... />); }
-<Button onPress={onPress}>Click me</Button>` }, void 0) }, void 0), e$3("hr", {}, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Color, fill, & size" }, void 0), e$3(CardElement, { type: "paragraph", children: ["Buttons can be styled in different sizes, colors, and fill styles. You can provide a global default with ", e$3("code", { children: "Context" }, void 0), " objects, like ", e$3("code", { children: "<ProvideDefaultButtonFill>" }, void 0), "."] }, void 0), e$3(CardElement, { children: "All the normal Bootstrap colors are provided, albeit with adjustments to outlined buttons to ensure correct contrast ratios on the theme's body BG color.  Additionally, besides the `light` and `dark` colors, `subtle` and `contrast` are available as colors to use that simply map onto `light` or `dark` depending on the body BG color." }, void 0), e$3(CardElement, { children: e$3(ButtonGroup, { children: [e$3(ButtonGroupChild, { index: 0, onPressToggle: () => setButtonsSize("sm"), pressed: buttonsSize === "sm", children: "Small" }, void 0), e$3(ButtonGroupChild, { index: 1, onPressToggle: () => setButtonsSize("md"), pressed: buttonsSize === "md", children: "Medium" }, void 0), e$3(ButtonGroupChild, { index: 2, onPressToggle: () => setButtonsSize("lg"), pressed: buttonsSize === "lg", children: "Large" }, void 0)] }, void 0) }, void 0), e$3(CardElement, { children: e$3(ButtonGroup, { children: [e$3(ButtonGroupChild, { index: 0, onPressToggle: () => setButtonsFill("fill"), pressed: buttonsFill === "fill", children: "Fill" }, void 0), e$3(ButtonGroupChild, { index: 1, onPressToggle: () => setButtonsFill("outline"), pressed: buttonsFill === "outline", children: "Outline" }, void 0)] }, void 0) }, void 0), e$3(CardElement, { children: e$3(ButtonGroup, { wrap: true, children: [e$3(ButtonGroupChild, { index: 0, colorVariant: "primary", pressed: buttonsColor == "primary", onPressToggle: () => setButtonsColor("primary"), children: "Primary" }, void 0), e$3(ButtonGroupChild, { index: 1, colorVariant: "secondary", pressed: buttonsColor == "secondary", onPressToggle: () => setButtonsColor("secondary"), children: "Secondary" }, void 0), e$3(ButtonGroupChild, { index: 2, colorVariant: "success", pressed: buttonsColor == "success", onPressToggle: () => setButtonsColor("success"), children: "Success" }, void 0), e$3(ButtonGroupChild, { index: 3, colorVariant: "warning", pressed: buttonsColor == "warning", onPressToggle: () => setButtonsColor("warning"), children: "Warning" }, void 0), e$3(ButtonGroupChild, { index: 4, colorVariant: "danger", pressed: buttonsColor == "danger", onPressToggle: () => setButtonsColor("danger"), children: "Danger" }, void 0), e$3(ButtonGroupChild, { index: 5, colorVariant: "info", pressed: buttonsColor == "info", onPressToggle: () => setButtonsColor("info"), children: "Info" }, void 0), e$3(ButtonGroupChild, { index: 6, colorVariant: "light", pressed: buttonsColor == "light", onPressToggle: () => setButtonsColor("light"), children: "Light" }, void 0), e$3(ButtonGroupChild, { index: 7, colorVariant: "dark", pressed: buttonsColor == "dark", onPressToggle: () => setButtonsColor("dark"), children: "Dark" }, void 0), e$3(ButtonGroupChild, { index: 8, colorVariant: "contrast", pressed: buttonsColor == "contrast", onPressToggle: () => setButtonsColor("contrast"), children: "Contrast" }, void 0), e$3(ButtonGroupChild, { index: 9, colorVariant: "subtle", pressed: buttonsColor == "subtle", onPressToggle: () => setButtonsColor("subtle"), children: "Subtle" }, void 0)] }, void 0) }, void 0), e$3(CardElement, { children: e$3(Button, { onPress: onPress, children: [buttonsFill === "fill" ? "Filled" : "Outlined", " ", buttonsColor, " button"] }, void 0) }, void 0), e$3(CardElement, { children: e$3("code", { children: `<Button fillVariant="${buttonsFill}" colorVariant="${buttonsColor}">Variant button</Button>` }, void 0) }, void 0), e$3("hr", {}, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Link buttons" }, void 0), e$3(CardElement, { children: ["A link can be styled as a button while retaining native link functionality (middle clicks, etc.). These buttons have no ", e$3("code", { children: "onPress" }, void 0), " handler, instead taking ", e$3("code", { children: "href" }, void 0), " and the other ", e$3("code", { children: "<a>" }, void 0), " props."] }, void 0), e$3(CardElement, { children: ["A ", e$3("code", { children: "<Button>" }, void 0), " will use an anchor link internally if you provide it with an ", e$3("code", { children: "href" }, void 0), " prop, or optionally setting the ", e$3("code", { children: "tag" }, void 0), " prop to ", e$3("code", { children: "a" }, void 0), ".", e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setUsesLinkButton, checked: usesLinkButton, labelPosition: "start", children: "Use link button" }, void 0) }, void 0)] }, void 0), e$3(CardElement, { children: usesLinkButton ? e$3(Button, { target: "_blank", href: "https://www.example.com", children: ["example.com ", e$3("i", { class: "bi bi-box-arrow-up-right" }, void 0)] }, void 0) : e$3(Button, { onPress: onPress, children: "Regular button" }, void 0) }, void 0), e$3(CardElement, { type: "paragraph", children: e$3("code", { children: usesLinkButton ? `<Button href="https://www.example.com">Link button</Button>` : `<Button onPress={onPress}>Regular button</Button>` }, void 0) }, void 0), e$3(CardElement, { children: "Keep in mind that styling a link as a button can cause confusion even while being completely compliant (\"\uD83E\uDDD1\u200D\uD83D\uDCBB click on the link\" \"\uD83D\uDE21 what link??\"), so be sure to use with some level of consideration." }, void 0), e$3("hr", {}, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Toggle buttons" }, void 0), e$3(CardElement, { children: ["If given a ", e$3("code", { children: "pressed" }, void 0), " prop, a button will become a toggle button, with an off/on state.  It will style itself as outlined when unpressed, and filled when pressed, so they are best used in groups."] }, void 0), e$3(CardElement, { children: e$3(Button, { pressed: toggleOn, onPressToggle: onToggleInput, children: "Toggle button" }, void 0) }, void 0), e$3(CardElement, { type: "paragraph", children: e$3("code", { children: `<Button pressed={pressed} onPressToggle={onInput}>Toggle button</Button>` }, void 0) }, void 0), e$3("hr", {}, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Button Groups" }, void 0), e$3(CardElement, { children: ["A ", e$3("code", { children: "<ButtonGroup>" }, void 0), " can be used to group a set of ", e$3("code", { children: "<ButtonGroupChild>" }, void 0), " (which is the exact same as a ", e$3("code", { children: "<Button>" }, void 0), ", but with an ", e$3("code", { children: "index" }, void 0), " prop). This gives them keyboard navigation abilities."] }, void 0), e$3(CardElement, { children: e$3(ButtonGroup, { wrap: true, children: [e$3(ButtonGroupChild, { index: 0, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress, children: "First button" }, void 0), e$3(ButtonGroupChild, { index: 1, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress, children: "Second button" }, void 0), e$3(ButtonGroupChild, { index: 2, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress, children: "Third button" }, void 0), e$3(ButtonGroupChild, { index: 3, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress, children: "Fourth button" }, void 0)] }, void 0) }, void 0), e$3(CardElement, { type: "paragraph", children: e$3("code", { children: `<ButtonGroup wrap>
+        return (e$3(ProvideDefaultButtonFill, { value: buttonsFill, children: e$3(ProvideDefaultButtonSize, { value: buttonsSize, children: e$3(ProvideDefaultButtonColor, { value: buttonsColor, children: e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Buttons" }), e$3(CardElement, { children: e$3(Button, { onPress: onPress, children: "I'm a button" }) }), e$3(CardElement, { children: ["A ", e$3("code", { children: "Button" }), " is a ", e$3("code", { children: "Button" }), " is a ", e$3("code", { children: "Button" }), " \u2013 you can click, tap, or Space-key it to activate it and do something.  If the given action is asynchronous, then the button will disable itself and display a spinner during the operation."] }), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Async inputs" }), e$3(CardElement, { children: ["The ", e$3("code", { children: "onPress" }), " event handler for buttons can be sync or async, and they will react appropriately if the operation takes long enough.", e$3(InputGrid, { children: [e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setUsesAsync, checked: usesAsync, labelPosition: "start", children: "Use async handler" }) }), e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setAsyncFails, checked: asyncFails, labelPosition: "start", disabled: !usesAsync, children: "Async handler rejects" }) }), e$3(InputGroup, { children: e$3(Input, { width: "8ch", disabled: !usesAsync, type: "number", onValueChange: setAsyncTimeout, value: asyncTimeout, children: "Async timeout" }) })] })] }), e$3(CardElement, { children: e$3(Button, { onPress: onPress, children: "Click me" }) }), e$3(CardElement, { type: "paragraph", children: e$3("code", { children: `const onPress = ${usesAsync ? `async ` : ""}() => { ${usesAsync ? `await sleep(${asyncTimeout}); ` : ""}pushToast(<Toast ... />); }
+<Button onPress={onPress}>Click me</Button>` }) }), e$3("hr", {}), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Color, fill, & size" }), e$3(CardElement, { type: "paragraph", children: ["Buttons can be styled in different sizes, colors, and fill styles. You can provide a global default with ", e$3("code", { children: "Context" }), " objects, like ", e$3("code", { children: "<ProvideDefaultButtonFill>" }), "."] }), e$3(CardElement, { children: "All the normal Bootstrap colors are provided, albeit with adjustments to outlined buttons to ensure correct contrast ratios on the theme's body BG color.  Additionally, besides the `light` and `dark` colors, `subtle` and `contrast` are available as colors to use that simply map onto `light` or `dark` depending on the body BG color." }), e$3(CardElement, { children: e$3(ButtonGroup, { children: [e$3(ButtonGroupChild, { index: 0, onPressToggle: () => setButtonsSize("sm"), pressed: buttonsSize === "sm", children: "Small" }), e$3(ButtonGroupChild, { index: 1, onPressToggle: () => setButtonsSize("md"), pressed: buttonsSize === "md", children: "Medium" }), e$3(ButtonGroupChild, { index: 2, onPressToggle: () => setButtonsSize("lg"), pressed: buttonsSize === "lg", children: "Large" })] }) }), e$3(CardElement, { children: e$3(ButtonGroup, { children: [e$3(ButtonGroupChild, { index: 0, onPressToggle: () => setButtonsFill("fill"), pressed: buttonsFill === "fill", children: "Fill" }), e$3(ButtonGroupChild, { index: 1, onPressToggle: () => setButtonsFill("outline"), pressed: buttonsFill === "outline", children: "Outline" })] }) }), e$3(CardElement, { children: e$3(ButtonGroup, { wrap: true, children: [e$3(ButtonGroupChild, { index: 0, colorVariant: "primary", pressed: buttonsColor == "primary", onPressToggle: () => setButtonsColor("primary"), children: "Primary" }), e$3(ButtonGroupChild, { index: 1, colorVariant: "secondary", pressed: buttonsColor == "secondary", onPressToggle: () => setButtonsColor("secondary"), children: "Secondary" }), e$3(ButtonGroupChild, { index: 2, colorVariant: "success", pressed: buttonsColor == "success", onPressToggle: () => setButtonsColor("success"), children: "Success" }), e$3(ButtonGroupChild, { index: 3, colorVariant: "warning", pressed: buttonsColor == "warning", onPressToggle: () => setButtonsColor("warning"), children: "Warning" }), e$3(ButtonGroupChild, { index: 4, colorVariant: "danger", pressed: buttonsColor == "danger", onPressToggle: () => setButtonsColor("danger"), children: "Danger" }), e$3(ButtonGroupChild, { index: 5, colorVariant: "info", pressed: buttonsColor == "info", onPressToggle: () => setButtonsColor("info"), children: "Info" }), e$3(ButtonGroupChild, { index: 6, colorVariant: "light", pressed: buttonsColor == "light", onPressToggle: () => setButtonsColor("light"), children: "Light" }), e$3(ButtonGroupChild, { index: 7, colorVariant: "dark", pressed: buttonsColor == "dark", onPressToggle: () => setButtonsColor("dark"), children: "Dark" }), e$3(ButtonGroupChild, { index: 8, colorVariant: "contrast", pressed: buttonsColor == "contrast", onPressToggle: () => setButtonsColor("contrast"), children: "Contrast" }), e$3(ButtonGroupChild, { index: 9, colorVariant: "subtle", pressed: buttonsColor == "subtle", onPressToggle: () => setButtonsColor("subtle"), children: "Subtle" })] }) }), e$3(CardElement, { children: e$3(Button, { onPress: onPress, children: [buttonsFill === "fill" ? "Filled" : "Outlined", " ", buttonsColor, " button"] }) }), e$3(CardElement, { children: e$3("code", { children: `<Button fillVariant="${buttonsFill}" colorVariant="${buttonsColor}">Variant button</Button>` }) }), e$3("hr", {}), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Link buttons" }), e$3(CardElement, { children: ["A link can be styled as a button while retaining native link functionality (middle clicks, etc.). These buttons have no ", e$3("code", { children: "onPress" }), " handler, instead taking ", e$3("code", { children: "href" }), " and the other ", e$3("code", { children: "<a>" }), " props."] }), e$3(CardElement, { children: ["A ", e$3("code", { children: "<Button>" }), " will use an anchor link internally if you provide it with an ", e$3("code", { children: "href" }), " prop, or optionally setting the ", e$3("code", { children: "tag" }), " prop to ", e$3("code", { children: "a" }), ".", e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setUsesLinkButton, checked: usesLinkButton, labelPosition: "start", children: "Use link button" }) })] }), e$3(CardElement, { children: usesLinkButton ? e$3(Button, { target: "_blank", href: "https://www.example.com", children: ["example.com ", e$3("i", { class: "bi bi-box-arrow-up-right" })] }) : e$3(Button, { onPress: onPress, children: "Regular button" }) }), e$3(CardElement, { type: "paragraph", children: e$3("code", { children: usesLinkButton ? `<Button href="https://www.example.com">Link button</Button>` : `<Button onPress={onPress}>Regular button</Button>` }) }), e$3(CardElement, { children: "Keep in mind that styling a link as a button can cause confusion even while being completely compliant (\"\uD83E\uDDD1\u200D\uD83D\uDCBB click on the link\" \"\uD83D\uDE21 what link??\"), so be sure to use with some level of consideration." }), e$3("hr", {}), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Toggle buttons" }), e$3(CardElement, { children: ["If given a ", e$3("code", { children: "pressed" }), " prop, a button will become a toggle button, with an off/on state.  It will style itself as outlined when unpressed, and filled when pressed, so they are best used in groups."] }), e$3(CardElement, { children: e$3(Button, { pressed: toggleOn, onPressToggle: onToggleInput, children: "Toggle button" }) }), e$3(CardElement, { type: "paragraph", children: e$3("code", { children: `<Button pressed={pressed} onPressToggle={onInput}>Toggle button</Button>` }) }), e$3("hr", {}), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Button Groups" }), e$3(CardElement, { children: ["A ", e$3("code", { children: "<ButtonGroup>" }), " can be used to group a set of ", e$3("code", { children: "<ButtonGroupChild>" }), " (which is the exact same as a ", e$3("code", { children: "<Button>" }), ", but with an ", e$3("code", { children: "index" }), " prop). This gives them keyboard navigation abilities."] }), e$3(CardElement, { children: e$3(ButtonGroup, { wrap: true, children: [e$3(ButtonGroupChild, { index: 0, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress, children: "First button" }), e$3(ButtonGroupChild, { index: 1, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress, children: "Second button" }), e$3(ButtonGroupChild, { index: 2, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress, children: "Third button" }), e$3(ButtonGroupChild, { index: 3, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress, children: "Fourth button" })] }) }), e$3(CardElement, { type: "paragraph", children: e$3("code", { children: `<ButtonGroup wrap>
     <ButtonGroupChild index={0}>First button</ButtonGroupChild>
     <ButtonGroupChild index={1}>Second button</ButtonGroupChild>
     <ButtonGroupChild index={2}>Third button</ButtonGroupChild>
@@ -16493,7 +16528,7 @@
     <ButtonGroupChild index={5}>Sixth button</ButtonGroupChild>
     <ButtonGroupChild index={6}>Seventh button</ButtonGroupChild>
     <ButtonGroupChild index={7}>Eighth button</ButtonGroupChild>
-</ButtonGroup>` }, void 0) }, void 0)] }, void 0) }, void 0) }, void 0) }, void 0) }, void 0));
+</ButtonGroup>` }) })] }) }) }) }) }));
     }
     async function sleep$6(arg0) {
         return new Promise(resolve => setTimeout(resolve, arg0));
@@ -16520,25 +16555,25 @@
                 throw new Error("Attempt to change radio failed");
             setDemoRadio(value);
         }, [asyncTimeout, asyncFails]);
-        return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Checkboxes, switches, & radios" }, void 0), e$3(CardElement, { children: e$3(Checkbox, { checked: demoChecked, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked, children: "I'm a checkbox" }, void 0) }, void 0), e$3(CardElement, { children: ["Several components related to on/off togglable form-like selection controls are provided:", e$3("ul", { children: [e$3("li", { children: e$3("code", { children: "Checkbox" }, void 0) }, void 0), e$3("li", { children: e$3("code", { children: "Switch" }, void 0) }, void 0), e$3("li", { children: e$3("code", { children: "RadioGroup" }, void 0) }, void 0), e$3("li", { children: e$3("code", { children: "CheckboxGroup" }, void 0) }, void 0)] }, void 0), e$3("code", { children: "Checkbox" }, void 0), " and ", e$3("code", { children: "Switch" }, void 0), " work as you'd expect. ", e$3("code", { children: "RadioGroup" }, void 0), " is a parent around a set of ", e$3("code", { children: "Radio" }, void 0), " components that communicate with each other. The children ", e$3("code", { children: "Radio" }, void 0), " components can be any descendant of the parent ", e$3("code", { children: "RadioGroup" }, void 0), " \u2013 the DOM structure ", e$3("em", { children: "does not" }, void 0), " matter beyond requiring they be somewhere descendant. ", e$3("code", { children: "CheckboxGroup" }, void 0), " works similarly to ", e$3("code", { children: "RadioGroup" }, void 0), " in that way."] }, void 0), e$3(CardElement, { children: ["See Also: Single Select lists for an alternative to ", e$3("code", { children: "RadioGroup" }, void 0), ", and Multi Select lists for an alternative to ", e$3("code", { children: "CheckboxGroup" }, void 0), "."] }, void 0), e$3(CardElement, { children: "Like other components, the event handlers can be sync or async, and when disabled, all inputs remain focusable so that they can still be announced by screen readers, have tooltips via mouseover, etc." }, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Checkbox" }, void 0), e$3(CardElement, { children: e$3(Checkbox, { disabled: disabled, checked: demoChecked, labelPosition: labelPosition, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked, children: "Checkbox" }, void 0) }, void 0), e$3(CardElement, { children: ["The ", e$3("code", { children: "checked" }, void 0), " prop can be ", e$3("code", { children: "true" }, void 0), ", ", e$3("code", { children: "false" }, void 0), ", or ", e$3("code", { children: "mixed" }, void 0), ". The ", e$3("code", { children: "onCheck" }, void 0), " event fires when the user initiates a change."] }, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Switch" }, void 0), e$3(CardElement, { children: e$3(Switch, { disabled: disabled, checked: demoChecked, labelPosition: labelPosition, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked, children: "Switch" }, void 0) }, void 0), e$3(CardElement, { children: ["In terms of props (not use-case), largely identical to a ", e$3("code", { children: "Checkbox" }, void 0), ", though it cannot have a ", e$3("code", { children: "mixed" }, void 0), " state."] }, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Radio group" }, void 0), e$3(CardElement, { children: e$3(RadioGroup, { name: "radio-demo-0", selectedValue: demoRadio, onValueChange: usesAsync ? asyncRadioInput : setDemoRadio, children: Array.from(function* () {
+        return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Checkboxes, switches, & radios" }), e$3(CardElement, { children: e$3(Checkbox, { checked: demoChecked, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked, children: "I'm a checkbox" }) }), e$3(CardElement, { children: ["Several components related to on/off togglable form-like selection controls are provided:", e$3("ul", { children: [e$3("li", { children: e$3("code", { children: "Checkbox" }) }), e$3("li", { children: e$3("code", { children: "Switch" }) }), e$3("li", { children: e$3("code", { children: "RadioGroup" }) }), e$3("li", { children: e$3("code", { children: "CheckboxGroup" }) })] }), e$3("code", { children: "Checkbox" }), " and ", e$3("code", { children: "Switch" }), " work as you'd expect. ", e$3("code", { children: "RadioGroup" }), " is a parent around a set of ", e$3("code", { children: "Radio" }), " components that communicate with each other. The children ", e$3("code", { children: "Radio" }), " components can be any descendant of the parent ", e$3("code", { children: "RadioGroup" }), " \u2013 the DOM structure ", e$3("em", { children: "does not" }), " matter beyond requiring they be somewhere descendant. ", e$3("code", { children: "CheckboxGroup" }), " works similarly to ", e$3("code", { children: "RadioGroup" }), " in that way."] }), e$3(CardElement, { children: ["See Also: Single Select lists for an alternative to ", e$3("code", { children: "RadioGroup" }), ", and Multi Select lists for an alternative to ", e$3("code", { children: "CheckboxGroup" }), "."] }), e$3(CardElement, { children: "Like other components, the event handlers can be sync or async, and when disabled, all inputs remain focusable so that they can still be announced by screen readers, have tooltips via mouseover, etc." }), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Checkbox" }), e$3(CardElement, { children: e$3(Checkbox, { disabled: disabled, checked: demoChecked, labelPosition: labelPosition, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked, children: "Checkbox" }) }), e$3(CardElement, { children: ["The ", e$3("code", { children: "checked" }), " prop can be ", e$3("code", { children: "true" }), ", ", e$3("code", { children: "false" }), ", or ", e$3("code", { children: "mixed" }), ". The ", e$3("code", { children: "onCheck" }), " event fires when the user initiates a change."] }), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Switch" }), e$3(CardElement, { children: e$3(Switch, { disabled: disabled, checked: demoChecked, labelPosition: labelPosition, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked, children: "Switch" }) }), e$3(CardElement, { children: ["In terms of props (not use-case), largely identical to a ", e$3("code", { children: "Checkbox" }), ", though it cannot have a ", e$3("code", { children: "mixed" }), " state."] }), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Radio group" }), e$3(CardElement, { children: e$3(RadioGroup, { name: "radio-demo-0", selectedValue: demoRadio, onValueChange: usesAsync ? asyncRadioInput : setDemoRadio, children: Array.from(function* () {
                                 for (let i = 0; i < (radioCount ?? 0); ++i) {
                                     yield e$3(Radio, { disabled: disabled, labelPosition: labelPosition, index: i, value: i, children: ["Radio #", i + 1] }, i);
                                 }
-                            }()) }, void 0) }, void 0), e$3(CardElement, { children: ["The individual ", e$3("code", { children: "RadioButton" }, void 0), "s ", e$3("strong", { children: "do not" }, void 0), " accept a ", e$3("code", { children: "checked" }, void 0), " prop; instead, the parent ", e$3("code", { children: "RadioGroup" }, void 0), " accepts a ", e$3("code", { children: "selectedValue" }, void 0), ". Similarly, the ", e$3("code", { children: "onValueChange" }, void 0), " event handler lives on that parent ", e$3("code", { children: "RadioGroup" }, void 0), ". The individual child ", e$3("code", { children: "Radio" }, void 0), "s can be, e.g., marked as ", e$3("code", { children: "disabled" }, void 0), ", styled, etc. but all the logic happens with the parent."] }, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Demos" }, void 0), e$3(CardElement, { children: e$3(InputGrid, { children: [e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setUsesAsync, checked: usesAsync, labelPosition: "start", children: "Async event handler" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setAsyncFails, checked: asyncFails, labelPosition: "start", disabled: !usesAsync, children: "Async handler rejects" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Input, { disabled: !usesAsync, type: "number", onValueChange: setAsyncTimeout, value: asyncTimeout, children: "Async timeout" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Input, { type: "number", onValueChange: setRadioCount, value: radioCount, children: "# of radio buttons" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setDisabled, checked: disabled, labelPosition: "start", children: "Inputs disabled" }, void 0) }, void 0), e$3(RadioGroup, { name: "radio-demo-6", selectedValue: labelPosition, onValueChange: setLabelPosition, children: [e$3(InputGroup, { children: e$3(Radio, { index: 0, value: "start", labelPosition: "start", children: "Label before" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Radio, { index: 1, value: "end", labelPosition: "start", children: "Label after" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Radio, { index: 2, value: "hidden", labelPosition: "start", children: "Label hidden (still announced verbally)" }, void 0) }, void 0)] }, void 0)] }, void 0) }, void 0), e$3(GridStatic, { columns: 2, children: [e$3(CardElement, { children: [e$3(Checkbox, { disabled: disabled, checked: demoChecked, labelPosition: labelPosition, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked, children: "Checkbox" }, void 0), e$3(Switch, { disabled: disabled, checked: demoChecked, labelPosition: labelPosition, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked, children: "Switch" }, void 0), e$3(RadioGroup, { name: "radio-demo-1a", selectedValue: demoRadio, onValueChange: usesAsync ? asyncRadioInput : setDemoRadio, children: Array.from(function* () {
+                            }()) }) }), e$3(CardElement, { children: ["The individual ", e$3("code", { children: "RadioButton" }), "s ", e$3("strong", { children: "do not" }), " accept a ", e$3("code", { children: "checked" }), " prop; instead, the parent ", e$3("code", { children: "RadioGroup" }), " accepts a ", e$3("code", { children: "selectedValue" }), ". Similarly, the ", e$3("code", { children: "onValueChange" }), " event handler lives on that parent ", e$3("code", { children: "RadioGroup" }), ". The individual child ", e$3("code", { children: "Radio" }), "s can be, e.g., marked as ", e$3("code", { children: "disabled" }), ", styled, etc. but all the logic happens with the parent."] }), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Demos" }), e$3(CardElement, { children: e$3(InputGrid, { children: [e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setUsesAsync, checked: usesAsync, labelPosition: "start", children: "Async event handler" }) }), e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setAsyncFails, checked: asyncFails, labelPosition: "start", disabled: !usesAsync, children: "Async handler rejects" }) }), e$3(InputGroup, { children: e$3(Input, { disabled: !usesAsync, type: "number", onValueChange: setAsyncTimeout, value: asyncTimeout, children: "Async timeout" }) }), e$3(InputGroup, { children: e$3(Input, { type: "number", onValueChange: setRadioCount, value: radioCount, children: "# of radio buttons" }) }), e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setDisabled, checked: disabled, labelPosition: "start", children: "Inputs disabled" }) }), e$3(RadioGroup, { name: "radio-demo-6", selectedValue: labelPosition, onValueChange: setLabelPosition, children: [e$3(InputGroup, { children: e$3(Radio, { index: 0, value: "start", labelPosition: "start", children: "Label before" }) }), e$3(InputGroup, { children: e$3(Radio, { index: 1, value: "end", labelPosition: "start", children: "Label after" }) }), e$3(InputGroup, { children: e$3(Radio, { index: 2, value: "hidden", labelPosition: "start", children: "Label hidden (still announced verbally)" }) })] })] }) }), e$3(GridStatic, { columns: 2, children: [e$3(CardElement, { children: [e$3(Checkbox, { disabled: disabled, checked: demoChecked, labelPosition: labelPosition, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked, children: "Checkbox" }), e$3(Switch, { disabled: disabled, checked: demoChecked, labelPosition: labelPosition, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked, children: "Switch" }), e$3(RadioGroup, { name: "radio-demo-1a", selectedValue: demoRadio, onValueChange: usesAsync ? asyncRadioInput : setDemoRadio, children: Array.from(function* () {
                                             for (let i = 0; i < (radioCount ?? 0); ++i) {
                                                 yield e$3(Radio, { disabled: disabled, labelPosition: labelPosition, index: i, value: i, children: ["Radio #", i + 1] }, i);
                                             }
-                                        }()) }, void 0)] }, void 0), e$3(CardElement, { children: e$3(InputGrid, { children: [e$3(InputGroup, { children: e$3(Checkbox, { disabled: disabled, checked: demoChecked, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked, children: "Checkbox" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Switch, { disabled: disabled, checked: demoChecked, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked, children: "Switch" }, void 0) }, void 0), e$3(RadioGroup, { name: "radio-demo-1b", selectedValue: demoRadio, onValueChange: usesAsync ? asyncRadioInput : setDemoRadio, children: Array.from(function* () {
+                                        }()) })] }), e$3(CardElement, { children: e$3(InputGrid, { children: [e$3(InputGroup, { children: e$3(Checkbox, { disabled: disabled, checked: demoChecked, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked, children: "Checkbox" }) }), e$3(InputGroup, { children: e$3(Switch, { disabled: disabled, checked: demoChecked, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked, children: "Switch" }) }), e$3(RadioGroup, { name: "radio-demo-1b", selectedValue: demoRadio, onValueChange: usesAsync ? asyncRadioInput : setDemoRadio, children: Array.from(function* () {
                                                 for (let i = 0; i < (radioCount ?? 0); ++i) {
-                                                    yield e$3(InputGroup, { children: e$3(Radio, { disabled: disabled, labelPosition: labelPosition, index: i, value: i, children: ["Radio #", i + 1] }, i) }, void 0);
+                                                    yield e$3(InputGroup, { children: e$3(Radio, { disabled: disabled, labelPosition: labelPosition, index: i, value: i, children: ["Radio #", i + 1] }, i) });
                                                 }
-                                            }()) }, void 0)] }, void 0) }, void 0), e$3(CardElement, {}, void 0)] }, void 0), e$3(CardElement, { type: "paragraph", children: e$3("code", { children: `<Checkbox checked={checked} onInput={setChecked}>Checkbox</Checkbox>
+                                            }()) })] }) }), e$3(CardElement, {})] }), e$3(CardElement, { type: "paragraph", children: e$3("code", { children: `<Checkbox checked={checked} onInput={setChecked}>Checkbox</Checkbox>
 <Switch checked={checked} onInput={onInput}>Switch</Switch>
 <RadioGroup name="radio-demo-1" selectedValue={value} onInput={setValue}>
 <Radio index={0} value="value1">Radio #1</Radio>
 <Radio index={1} value="value2">Radio #2</Radio>
 <Radio index={2} value="value3">Radio #3</Radio>
-</RadioGroup>` }, void 0) }, void 0)] }, void 0) }, void 0));
+</RadioGroup>` }) })] }) }));
     }
     async function sleep$5(arg0) {
         return new Promise(resolve => setTimeout(resolve, arg0));
@@ -16555,8 +16590,8 @@
         useState(true);
         useState(true);
         const pushDialog = usePushDialog();
-        const onPressAsync = () => pushDialog(e$3(Dialog, { descriptive: false, children: "Dialog item was clicked" }, void 0));
-        return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Dialogs" }, void 0), e$3(CardElement, { children: e$3(Button, { onPress: () => pushDialog(e$3(Dialog, { descriptive: false, children: "This is a dialog!" }, void 0)), children: "Open a dialog" }, void 0) }, void 0), e$3(CardElement, { children: [e$3("code", { children: "<Dialog>" }, void 0), "s are a way to show the user (read: force the user to at least skim) some amount of information or other content. They can either be controlled or uncontrolled; controlled ", e$3("code", { children: "<Dialog>" }, void 0), "s take ", e$3("code", { children: "open" }, void 0), " and ", e$3("code", { children: "onClose" }, void 0), " props, while uncontrolled ", e$3("code", { children: "<Dialog>" }, void 0), "s give you a ", e$3("code", { children: "async show()" }, void 0), " function to call, or can be used from ", e$3("code", { children: "useShowDialog" }, void 0), "."] }, void 0), e$3(CardElement, { children: e$3(Button, { onPress: onPressAsync, children: e$3("code", { children: "usePushDialog" }, void 0) }, void 0) }, void 0), e$3(CardElement, { children: [e$3(Button, { onPress: show ?? undefined, children: e$3("code", { children: ["<Dialog provideShow=", "{provideShow}", " />"] }, void 0) }, void 0), e$3(Dialog, { descriptive: false, provideShow: setShow, children: "This is a dialog" }, void 0)] }, void 0), e$3(CardElement, { children: ["The easiest way to use them is via the ", e$3("code", { children: "useShowDialog" }, void 0), " hook. Pass the returned ", e$3("code", { children: "showDialog" }, void 0), " function a ", e$3("code", { children: "<Dialog>" }, void 0), " and it will be shown on the screen, with the function returning a promise that resolves when ", e$3("code", { children: "onClose" }, void 0), " would be called (if you pass your own ", e$3("code", { children: "onClose" }, void 0), " you will override this behavior which can be used if you need to prevent the dialog from closing when clicking the backdrop; use a ", e$3("code", { children: "<CloseDialogButton>" }, void 0), " or within your own component pass ", e$3("code", { children: "useCloseDialog" }, void 0), "'s returned function to close the dialog during your own ", e$3("code", { children: "onClose" }, void 0), ")."] }, void 0), e$3(CardElement, { children: "All components that use Portals to position themselves on the body will reposition themselves with the dialog as their parent instead, ensuring they still work as expected." }, void 0), e$3(CardElement, { children: e$3(Button, { onPress: () => pushDialog(e$3(Dialog, { descriptive: false, children: "This is a dialog!" }, void 0)), children: "Open a dialog" }, void 0) }, void 0)] }, void 0) }, void 0));
+        const onPressAsync = () => pushDialog(e$3(Dialog, { descriptive: false, children: "Dialog item was clicked" }));
+        return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Dialogs" }), e$3(CardElement, { children: e$3(Button, { onPress: () => pushDialog(e$3(Dialog, { descriptive: false, children: "This is a dialog!" })), children: "Open a dialog" }) }), e$3(CardElement, { children: [e$3("code", { children: "<Dialog>" }), "s are a way to show the user (read: force the user to at least skim) some amount of information or other content. They can either be controlled or uncontrolled; controlled ", e$3("code", { children: "<Dialog>" }), "s take ", e$3("code", { children: "open" }), " and ", e$3("code", { children: "onClose" }), " props, while uncontrolled ", e$3("code", { children: "<Dialog>" }), "s give you a ", e$3("code", { children: "async show()" }), " function to call, or can be used from ", e$3("code", { children: "useShowDialog" }), "."] }), e$3(CardElement, { children: e$3(Button, { onPress: onPressAsync, children: e$3("code", { children: "usePushDialog" }) }) }), e$3(CardElement, { children: [e$3(Button, { onPress: show ?? undefined, children: e$3("code", { children: ["<Dialog provideShow=", "{provideShow}", " />"] }) }), e$3(Dialog, { descriptive: false, provideShow: setShow, children: "This is a dialog" })] }), e$3(CardElement, { children: ["The easiest way to use them is via the ", e$3("code", { children: "useShowDialog" }), " hook. Pass the returned ", e$3("code", { children: "showDialog" }), " function a ", e$3("code", { children: "<Dialog>" }), " and it will be shown on the screen, with the function returning a promise that resolves when ", e$3("code", { children: "onClose" }), " would be called (if you pass your own ", e$3("code", { children: "onClose" }), " you will override this behavior which can be used if you need to prevent the dialog from closing when clicking the backdrop; use a ", e$3("code", { children: "<CloseDialogButton>" }), " or within your own component pass ", e$3("code", { children: "useCloseDialog" }), "'s returned function to close the dialog during your own ", e$3("code", { children: "onClose" }), ")."] }), e$3(CardElement, { children: "All components that use Portals to position themselves on the body will reposition themselves with the dialog as their parent instead, ensuring they still work as expected." }), e$3(CardElement, { children: e$3(Button, { onPress: () => pushDialog(e$3(Dialog, { descriptive: false, children: "This is a dialog!" })), children: "Open a dialog" }) })] }) }));
     }
 
     function DemoInputs() {
@@ -16580,21 +16615,21 @@
         }, [asyncTimeout, asyncFails]);
         const onTextInput = usesAsync ? asyncTextInput : setText;
         const onNumberInput = usesAsync ? asyncNumberInput : setNumber;
-        return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Text boxes" }, void 0), e$3(CardElement, { children: e$3("div", { class: "position-relative", children: e$3(Input, { type: "text", value: text, onValueChange: onTextInput, children: "I'm a text box" }, void 0) }, void 0) }, void 0), e$3(CardElement, { children: [e$3("code", { children: "<Input>" }, void 0), " components allow for inputting text, numbers, etc. and asyncronously saving it somewhere else as it's being typed."] }, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Async inputs" }, void 0), e$3(CardElement, { children: ["The ", e$3("code", { children: "onInput" }, void 0), " event handler for all types of inputs can be sync or async.", e$3(InputGrid, { children: [e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setUsesAsync, checked: usesAsync, labelPosition: "start", children: "Async event handler" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setAsyncFails, checked: asyncFails, labelPosition: "start", disabled: !usesAsync, children: "Async handler rejects" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Input, { disabled: !usesAsync, type: "number", onValueChange: setAsyncTimeout, value: asyncTimeout, children: "Async timeout" }, void 0) }, void 0)] }, void 0)] }, void 0), e$3(CardElement, { children: [e$3("div", { class: "position-relative", children: e$3(Input, { type: "text", value: text, onValueChange: onTextInput, children: "Text-based input" }, void 0) }, void 0), e$3("div", { class: "position-relative", children: e$3(Input, { type: "number", value: number, onValueChange: onNumberInput, min: -5, children: "Number-based input" }, void 0) }, void 0)] }, void 0), e$3(CardElement, { type: "paragraph", children: e$3("code", { children: `<Input type="text" value={text} onInput={onTextInput}>Text-based input</Input>
-<Input type="number" value={number} onInput={onNumberInput} min={-5}>Number-based input</Input>` }, void 0) }, void 0), e$3(CardElement, { type: "paragraph", children: ["When placed in an ", e$3("code", { children: "<InputGroup>" }, void 0), ", the styling will be significantly different:"] }, void 0), e$3(CardElement, { children: e$3(ButtonGroup, { children: [e$3(ButtonGroupChild, { index: 0, pressed: size == "sm", onPressToggle: e => setSize("sm"), children: "Small" }, void 0), e$3(ButtonGroupChild, { index: 1, pressed: size == "md", onPressToggle: e => setSize("md"), children: "Medium" }, void 0), e$3(ButtonGroupChild, { index: 2, pressed: size == "lg", onPressToggle: e => setSize("lg"), children: "Large" }, void 0)] }, void 0) }, void 0), e$3(CardElement, { children: e$3(InputGrid, { children: [e$3(InputGroup, { size: size, children: e$3(Input, { type: "text", value: text, onValueChange: onTextInput, children: "Text-based input" }, void 0) }, void 0), e$3(InputGroup, { size: size, children: e$3(Input, { type: "number", value: number, onValueChange: onNumberInput, min: -5, children: "Number-based input" }, void 0) }, void 0)] }, void 0) }, void 0), e$3(CardElement, { type: "paragraph", children: e$3("code", { children: `<InputGrid>
+        return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Text boxes" }), e$3(CardElement, { children: e$3("div", { class: "position-relative", children: e$3(Input, { type: "text", value: text, onValueChange: onTextInput, children: "I'm a text box" }) }) }), e$3(CardElement, { children: [e$3("code", { children: "<Input>" }), " components allow for inputting text, numbers, etc. and asyncronously saving it somewhere else as it's being typed."] }), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Async inputs" }), e$3(CardElement, { children: ["The ", e$3("code", { children: "onInput" }), " event handler for all types of inputs can be sync or async.", e$3(InputGrid, { children: [e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setUsesAsync, checked: usesAsync, labelPosition: "start", children: "Async event handler" }) }), e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setAsyncFails, checked: asyncFails, labelPosition: "start", disabled: !usesAsync, children: "Async handler rejects" }) }), e$3(InputGroup, { children: e$3(Input, { disabled: !usesAsync, type: "number", onValueChange: setAsyncTimeout, value: asyncTimeout, children: "Async timeout" }) })] })] }), e$3(CardElement, { children: [e$3("div", { class: "position-relative", children: e$3(Input, { type: "text", value: text, onValueChange: onTextInput, children: "Text-based input" }) }), e$3("div", { class: "position-relative", children: e$3(Input, { type: "number", value: number, onValueChange: onNumberInput, min: -5, children: "Number-based input" }) })] }), e$3(CardElement, { type: "paragraph", children: e$3("code", { children: `<Input type="text" value={text} onInput={onTextInput}>Text-based input</Input>
+<Input type="number" value={number} onInput={onNumberInput} min={-5}>Number-based input</Input>` }) }), e$3(CardElement, { type: "paragraph", children: ["When placed in an ", e$3("code", { children: "<InputGroup>" }), ", the styling will be significantly different:"] }), e$3(CardElement, { children: e$3(ButtonGroup, { children: [e$3(ButtonGroupChild, { index: 0, pressed: size == "sm", onPressToggle: e => setSize("sm"), children: "Small" }), e$3(ButtonGroupChild, { index: 1, pressed: size == "md", onPressToggle: e => setSize("md"), children: "Medium" }), e$3(ButtonGroupChild, { index: 2, pressed: size == "lg", onPressToggle: e => setSize("lg"), children: "Large" })] }) }), e$3(CardElement, { children: e$3(InputGrid, { children: [e$3(InputGroup, { size: size, children: e$3(Input, { type: "text", value: text, onValueChange: onTextInput, children: "Text-based input" }) }), e$3(InputGroup, { size: size, children: e$3(Input, { type: "number", value: number, onValueChange: onNumberInput, min: -5, children: "Number-based input" }) })] }) }), e$3(CardElement, { type: "paragraph", children: e$3("code", { children: `<InputGrid>
     <InputGroup size={size}><Input type="text" value={text} onInput={onTextInput}>Text-based input</Input></InputGroup>
     <InputGroup size={size}><Input type="number" value={number} onInput={onNumberInput} min={-5}>Number-based input</Input></InputGroup>
-</InputGrid>` }, void 0) }, void 0)] }, void 0) }, void 0));
+</InputGrid>` }) })] }) }));
     }
     async function sleep$4(arg0) {
         return new Promise(resolve => setTimeout(resolve, arg0));
     }
 
     function DemoLayout() {
-        return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Layout" }, void 0), e$3(CardElement, { children: "A number of utility components and CSS classes are provided to make it easier to create quick and dirty layouts." }, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Simple grids" }, void 0), e$3(CardElement, { children: ["Two different grid components are provided for two separate use cases:", e$3("ul", { children: [e$3("li", { children: ["<", e$3("code", { children: "GridResponsive" }, void 0), ">, which takes a minimum column size and fits as many columns as possible given that constraint"] }, void 0), e$3("li", { children: ["<", e$3("code", { children: "GridStatic" }, void 0), ">, which takes a minimum column count and fits that many columns in no matter the resulting size and/or jankiness"] }, void 0)] }, void 0)] }, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: [e$3("code", { children: "<InputGroup>" }, void 0), " & ", e$3("code", { children: "<InputGrid>" }, void 0)] }, void 0), e$3(CardElement, { children: ["All input types, from checkboxes to number inputs, can be placed within an ", e$3("code", { children: "<InputGrid>" }, void 0), " to give an alternate styling to the default \"free floating\" style."] }, void 0), e$3("div", { style: { display: "contents", "--static-grid-columns": "10em auto" }, children: [e$3(CardElement, { children: ["With an ", e$3("code", { children: "<InputGroup>" }, void 0), ":", e$3(GridStatic, { columns: 2, children: [e$3(InputGroup, { children: e$3(Checkbox, { disabled: true, checked: true, labelPosition: "start", children: "Checkbox" }, void 0) }, void 0), e$3("code", { children: `<InputGroup><Checkbox disabled checked={true} labelPosition="start">Checkbox</Checkbox></InputGroup>` }, void 0)] }, void 0)] }, void 0), e$3(CardElement, { children: ["Without an ", e$3("code", { children: "<InputGroup>" }, void 0), ":", e$3(GridStatic, { columns: 2, children: [e$3(Checkbox, { disabled: true, checked: true, labelPosition: "start", children: "Checkbox" }, void 0), e$3("code", { children: `<Checkbox disabled checked={true} labelPosition="start">Checkbox</Checkbox>` }, void 0)] }, void 0)] }, void 0)] }, void 0), e$3(CardElement, { children: ["In addition, to help with alignment, a set of ", e$3("code", { children: "InputGroup" }, void 0), "s can also be placed within an ", e$3("code", { children: "InputGrid" }, void 0), " to manage simple cases.", e$3("code", { children: `<InputGrid>
+        return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Layout" }), e$3(CardElement, { children: "A number of utility components and CSS classes are provided to make it easier to create quick and dirty layouts." }), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Simple grids" }), e$3(CardElement, { children: ["Two different grid components are provided for two separate use cases:", e$3("ul", { children: [e$3("li", { children: ["<", e$3("code", { children: "GridResponsive" }), ">, which takes a minimum column size and fits as many columns as possible given that constraint"] }), e$3("li", { children: ["<", e$3("code", { children: "GridStatic" }), ">, which takes a minimum column count and fits that many columns in no matter the resulting size and/or jankiness"] })] })] }), e$3(CardElement, { type: "subtitle", tag: "h3", children: [e$3("code", { children: "<InputGroup>" }), " & ", e$3("code", { children: "<InputGrid>" })] }), e$3(CardElement, { children: ["All input types, from checkboxes to number inputs, can be placed within an ", e$3("code", { children: "<InputGrid>" }), " to give an alternate styling to the default \"free floating\" style."] }), e$3("div", { style: { display: "contents", "--static-grid-columns": "10em auto" }, children: [e$3(CardElement, { children: ["With an ", e$3("code", { children: "<InputGroup>" }), ":", e$3(GridStatic, { columns: 2, children: [e$3(InputGroup, { children: e$3(Checkbox, { disabled: true, checked: true, labelPosition: "start", children: "Checkbox" }) }), e$3("code", { children: `<InputGroup><Checkbox disabled checked={true} labelPosition="start">Checkbox</Checkbox></InputGroup>` })] })] }), e$3(CardElement, { children: ["Without an ", e$3("code", { children: "<InputGroup>" }), ":", e$3(GridStatic, { columns: 2, children: [e$3(Checkbox, { disabled: true, checked: true, labelPosition: "start", children: "Checkbox" }), e$3("code", { children: `<Checkbox disabled checked={true} labelPosition="start">Checkbox</Checkbox>` })] })] })] }), e$3(CardElement, { children: ["In addition, to help with alignment, a set of ", e$3("code", { children: "InputGroup" }), "s can also be placed within an ", e$3("code", { children: "InputGrid" }), " to manage simple cases.", e$3("code", { children: `<InputGrid>
     <InputGroup><Checkbox disabled checked={true} labelPosition="start">Checkbox</Checkbox></InputGroup>
     {...}
-</InputGrid>` }, void 0)] }, void 0), e$3(CardElement, { children: ["With an ", e$3("code", { children: "<InputGrid>" }, void 0), ":", e$3(InputGrid, { children: [e$3(InputGroup, { children: e$3(Checkbox, { disabled: true, checked: true, labelPosition: "start", children: "Checkbox" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Checkbox, { disabled: true, checked: true, labelPosition: "start", children: "Another checkbox" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Input, { disabled: true, onValueChange: () => { }, type: "number", value: 0, children: "Numeric input" }, void 0) }, void 0)] }, void 0)] }, void 0), e$3(CardElement, { children: ["Without an ", e$3("code", { children: "<InputGrid>" }, void 0), ":", e$3(InputGroup, { children: e$3(Checkbox, { disabled: true, checked: true, labelPosition: "start", children: "Checkbox" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Checkbox, { disabled: true, checked: true, labelPosition: "start", children: "Another checkbox" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Input, { disabled: true, onValueChange: () => { }, type: "number", value: 0, children: "Numeric input" }, void 0) }, void 0)] }, void 0)] }, void 0) }, void 0));
+</InputGrid>` })] }), e$3(CardElement, { children: ["With an ", e$3("code", { children: "<InputGrid>" }), ":", e$3(InputGrid, { children: [e$3(InputGroup, { children: e$3(Checkbox, { disabled: true, checked: true, labelPosition: "start", children: "Checkbox" }) }), e$3(InputGroup, { children: e$3(Checkbox, { disabled: true, checked: true, labelPosition: "start", children: "Another checkbox" }) }), e$3(InputGroup, { children: e$3(Input, { disabled: true, onValueChange: () => { }, type: "number", value: 0, children: "Numeric input" }) })] })] }), e$3(CardElement, { children: ["Without an ", e$3("code", { children: "<InputGrid>" }), ":", e$3(InputGroup, { children: e$3(Checkbox, { disabled: true, checked: true, labelPosition: "start", children: "Checkbox" }) }), e$3(InputGroup, { children: e$3(Checkbox, { disabled: true, checked: true, labelPosition: "start", children: "Another checkbox" }) }), e$3(InputGroup, { children: e$3(Input, { disabled: true, onValueChange: () => { }, type: "number", value: 0, children: "Numeric input" }) })] })] }) }));
     }
 
     const Badge = g$1(forwardElementRef(function Badge(_ref, ref) {
@@ -16710,7 +16745,7 @@
         min,
         max
       });
-      let id = d$1(generateRandomId, []);
+      let id = _$1(generateRandomId, []);
       (_id = id) !== null && _id !== void 0 ? _id : id = "";
       (_step = step) !== null && _step !== void 0 ? _step : step = "any";
       let tickCount = step == "any" ? Infinity : Math.ceil(1 + (max - min) / step);
@@ -16810,13 +16845,13 @@
       const onValueChangeSync = getSyncHandler(onValueChangeAsync);
       value = currentCapture !== null && currentCapture !== void 0 ? currentCapture : value;
       const getValueText = F(GetValueTextContext);
-      const valueText = d$1(() => {
+      const valueText = _$1(() => {
         var _getValueText;
 
         return (_getValueText = getValueText === null || getValueText === void 0 ? void 0 : getValueText(value)) !== null && _getValueText !== void 0 ? _getValueText : value == null ? "" : `${value}`;
       }, [value, getValueText]);
       const orientation = F(OrientationContext);
-      const [inputHasFocus, setInputHasFocus] = l$2(false);
+      const [inputHasFocus, setInputHasFocus] = m$1(false);
       const {
         useHasFocusProps
       } = useHasFocus({
@@ -16824,8 +16859,8 @@
       });
       let usedStep = (_useContext = F(StepContext)) !== null && _useContext !== void 0 ? _useContext : 1;
       let userStep = usedStep;
-      const [lastSnappedValue, setLastSnappedValue] = l$2(null);
-      const [forceSnap, setForceSnap] = l$2(false);
+      const [lastSnappedValue, setLastSnappedValue] = m$1(null);
+      const [forceSnap, setForceSnap] = m$1(false);
       const snap = F(SnapContext); //const [snap, setSnap] = useState<boolean | null>(null);
 
       if (snap == "continuous" && !forceSnap) usedStep = "any";
@@ -16834,7 +16869,7 @@
       if (snap === true && step == "any")
           step = 1;*/
 
-      const snapTimeout = s$2(-1);
+      const snapTimeout = h$1(-1);
 
       function onValueChange(e) {
         const newValue = e[EventDetail].value;
@@ -16930,7 +16965,7 @@
         const [asyncFails, setAsyncFails] = useState(false);
         useState(true);
         const pushToast = usePushToast();
-        const onPressSync = () => void (pushToast(e$3(Toast, { children: "List item was clicked" }, void 0)));
+        const onPressSync = () => void (pushToast(e$3(Toast, { children: "List item was clicked" })));
         const onPressAsync = async () => {
             await sleep$3(asyncTimeout ?? 0);
             if (asyncFails)
@@ -16940,26 +16975,26 @@
         };
         function makeListItemLines(index) {
             if (lines === 1)
-                return e$3("span", { children: ["List Item #", index + 1] }, void 0);
+                return e$3("span", { children: ["List Item #", index + 1] });
             return e$3(d$2, { children: Array.from((function* () {
                     for (let i = 0; i < lines; ++i) {
                         if (i == 0)
-                            yield e$3("span", { class: "h4", children: ["List Item #", index + 1] }, void 0);
+                            yield e$3("span", { class: "h4", children: ["List Item #", index + 1] });
                         else
-                            yield e$3("span", { children: ["This is line #", i + 1] }, void 0);
+                            yield e$3("span", { children: ["This is line #", i + 1] });
                     }
-                })()) }, void 0);
+                })()) });
         }
         function makeListItems(maker) {
             return e$3(d$2, { children: Array.from((function* () {
                     for (let i = 0; i < 5; ++i) {
                         yield maker(i);
                     }
-                })()) }, void 0);
+                })()) });
         }
         const [value, setValue] = useState(0);
         useState(10);
-        return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Lists" }, void 0), e$3(CardElement, { children: e$3(Range, { orientation: "block", label: "Test range", step: 1, snap: "continuous", min: 0, max: 10, getValueText: A$2((n) => { return "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[Math.round(n)]; }, []), value: value, onValueChange: setValue }, void 0) }, void 0), e$3(CardElement, { children: e$3(List, { label: "Demo list", selectedIndex: selectedIndex, onSelect: setSelectedIndex, children: makeListItems(index => e$3(ListItemSingle, { index: index, disabled: index == 3, children: makeListItemLines(index) }, void 0)) }, void 0) }, void 0), e$3(CardElement, { children: ["A list is a way to provide a large number of selectable options in a way that's distinct from, say, a list of checkboxes or radio buttons. Lists can be ", e$3("strong", { children: "single-select" }, void 0), ", ", e$3("strong", { children: "multi-select" }, void 0), ", or ", e$3("strong", { children: "static" }, void 0), " (no selection, display only)."] }, void 0), e$3(CardElement, { children: ["All list types can have as many lines as needed; each e.g. ", e$3("code", { children: "<span>" }, void 0), " will create a new line. Format them however you like (i.e. making some larger or smaller, tinted different colors, etc.)", e$3(InputGroup, { children: e$3(Input, { type: "number", value: lines, onValueChange: setLines, children: "# of lines" }, void 0) }, void 0)] }, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Single select" }, void 0), e$3(CardElement, { children: ["For single-select lists, you provide the parent ", e$3("code", { children: "<List>" }, void 0), " with ", e$3("code", { children: "selectedIndex" }, void 0), " and ", e$3("code", { children: "onSelect" }, void 0), " props that control which ", e$3("code", { children: "<ListItemSingle>" }, void 0), " is the selected one."] }, void 0), e$3(CardElement, { children: ["As with most components, the ", e$3("code", { children: "onSelect" }, void 0), " prop can be an async function."] }, void 0), e$3(CardElement, { children: e$3(List, { label: "Single-select list demo", selectedIndex: selectedIndex, onSelect: async (i) => { await sleep$3(2000); setSelectedIndex(i); }, children: makeListItems(index => e$3(ListItemSingle, { index: index, disabled: index == 3, children: makeListItemLines(index) }, void 0)) }, void 0) }, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Multi select" }, void 0), e$3(CardElement, { children: ["Multi-select lists have a ", e$3("code", { children: "selected" }, void 0), " prop on each individual ", e$3("code", { children: "<ListItemMulti>" }, void 0), "."] }, void 0), e$3(CardElement, { children: ["As with most components, the ", e$3("code", { children: "onSelect" }, void 0), " prop can be an async function."] }, void 0), e$3(CardElement, { children: e$3(List, { label: "Multi-select list demo", select: "multi", children: makeListItems(index => e$3(ListItemMulti, { index: index, selected: selectedMulti.has(index), disabled: index == 3, onSelect: async (selected) => {
+        return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Lists" }), e$3(CardElement, { children: e$3(Range, { orientation: "block", label: "Test range", step: 1, snap: "continuous", min: 0, max: 10, getValueText: A$2((n) => { return "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[Math.round(n)]; }, []), value: value, onValueChange: setValue }) }), e$3(CardElement, { children: e$3(List, { label: "Demo list", selectedIndex: selectedIndex, onSelect: setSelectedIndex, children: makeListItems(index => e$3(ListItemSingle, { index: index, disabled: index == 3, children: makeListItemLines(index) })) }) }), e$3(CardElement, { children: ["A list is a way to provide a large number of selectable options in a way that's distinct from, say, a list of checkboxes or radio buttons. Lists can be ", e$3("strong", { children: "single-select" }), ", ", e$3("strong", { children: "multi-select" }), ", or ", e$3("strong", { children: "static" }), " (no selection, display only)."] }), e$3(CardElement, { children: ["All list types can have as many lines as needed; each e.g. ", e$3("code", { children: "<span>" }), " will create a new line. Format them however you like (i.e. making some larger or smaller, tinted different colors, etc.)", e$3(InputGroup, { children: e$3(Input, { type: "number", value: lines, onValueChange: setLines, children: "# of lines" }) })] }), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Single select" }), e$3(CardElement, { children: ["For single-select lists, you provide the parent ", e$3("code", { children: "<List>" }), " with ", e$3("code", { children: "selectedIndex" }), " and ", e$3("code", { children: "onSelect" }), " props that control which ", e$3("code", { children: "<ListItemSingle>" }), " is the selected one."] }), e$3(CardElement, { children: ["As with most components, the ", e$3("code", { children: "onSelect" }), " prop can be an async function."] }), e$3(CardElement, { children: e$3(List, { label: "Single-select list demo", selectedIndex: selectedIndex, onSelect: async (i) => { await sleep$3(2000); setSelectedIndex(i); }, children: makeListItems(index => e$3(ListItemSingle, { index: index, disabled: index == 3, children: makeListItemLines(index) })) }) }), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Multi select" }), e$3(CardElement, { children: ["Multi-select lists have a ", e$3("code", { children: "selected" }), " prop on each individual ", e$3("code", { children: "<ListItemMulti>" }), "."] }), e$3(CardElement, { children: ["As with most components, the ", e$3("code", { children: "onSelect" }), " prop can be an async function."] }), e$3(CardElement, { children: e$3(List, { label: "Multi-select list demo", select: "multi", children: makeListItems(index => e$3(ListItemMulti, { index: index, selected: selectedMulti.has(index), disabled: index == 3, onSelect: async (selected) => {
                                     await sleep$3(2000);
                                     setSelectedMulti(prev => {
                                         let ret = new Set(Array.from(prev));
@@ -16969,7 +17004,7 @@
                                             ret.delete(index);
                                         return ret;
                                     });
-                                }, children: makeListItemLines(index) }, void 0)) }, void 0) }, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Static lists" }, void 0), e$3(CardElement, { children: "All lists share the same basic styling of a static list, so all of these options can also be used on single- and multi-select lists." }, void 0), e$3(CardElement, { children: ["You can add an icon at the righthand side with ", e$3("code", { children: "iconEnd" }, void 0), ":"] }, void 0), e$3(CardElement, { children: e$3(List, { label: "List with icons at the end", children: makeListItems(index => e$3(ListItemActionable, { index: index, onPress: onPressAsync, disabled: index == 3, iconEnd: e$3(BootstrapIcon, { icon: "star", label: null }, void 0), children: makeListItemLines(index) }, void 0)) }, void 0) }, void 0), e$3(CardElement, { children: ["Or an icon on the left with ", e$3("code", { children: "iconStart" }, void 0), ", or a badge at the top-right with ", e$3("code", { children: "badge" }, void 0), ":"] }, void 0), e$3(CardElement, { children: e$3(List, { label: "List with icons at the start and badges", children: makeListItems(index => e$3(ListItemActionable, { index: index, onPress: onPressSync, disabled: index == 3, badge: e$3(Badge, { label: `Example value`, children: Math.floor(Math.abs(Math.sin((index + 7) * 7) * 20)) }, void 0), iconStart: e$3(BootstrapIcon, { icon: "star", label: null }, void 0), children: makeListItemLines(index) }, void 0)) }, void 0) }, void 0), e$3(CardElement, { children: ["All these will properly align themselves no matter how many lines the list item has. Keep in mind that a list's contents are always read out as one long string to screen readers, so not only should they ", e$3("em", { children: "not" }, void 0), " contain interactive content (beyond itself being selectable), any additional content, should be kept as terse as possible to avoid repeated content when reading each item one at a time."] }, void 0)] }, void 0) }, void 0));
+                                }, children: makeListItemLines(index) })) }) }), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Static lists" }), e$3(CardElement, { children: "All lists share the same basic styling of a static list, so all of these options can also be used on single- and multi-select lists." }), e$3(CardElement, { children: ["You can add an icon at the righthand side with ", e$3("code", { children: "iconEnd" }), ":"] }), e$3(CardElement, { children: e$3(List, { label: "List with icons at the end", children: makeListItems(index => e$3(ListItemActionable, { index: index, onPress: onPressAsync, disabled: index == 3, iconEnd: e$3(BootstrapIcon, { icon: "star", label: null }), children: makeListItemLines(index) })) }) }), e$3(CardElement, { children: ["Or an icon on the left with ", e$3("code", { children: "iconStart" }), ", or a badge at the top-right with ", e$3("code", { children: "badge" }), ":"] }), e$3(CardElement, { children: e$3(List, { label: "List with icons at the start and badges", children: makeListItems(index => e$3(ListItemActionable, { index: index, onPress: onPressSync, disabled: index == 3, badge: e$3(Badge, { label: `Example value`, children: Math.floor(Math.abs(Math.sin((index + 7) * 7) * 20)) }), iconStart: e$3(BootstrapIcon, { icon: "star", label: null }), children: makeListItemLines(index) })) }) }), e$3(CardElement, { children: ["All these will properly align themselves no matter how many lines the list item has. Keep in mind that a list's contents are always read out as one long string to screen readers, so not only should they ", e$3("em", { children: "not" }), " contain interactive content (beyond itself being selectable), any additional content, should be kept as terse as possible to avoid repeated content when reading each item one at a time."] })] }) }));
     }
     async function sleep$3(arg0) {
         return new Promise(resolve => setTimeout(resolve, arg0));
@@ -16985,7 +17020,7 @@
         useState(true);
         const [forceOpen, setForceOpen] = useState(true);
         const pushToast = usePushToast();
-        const onPressSync = () => pushToast(e$3(Toast, { children: "Menu item was clicked" }, void 0));
+        const onPressSync = () => pushToast(e$3(Toast, { children: "Menu item was clicked" }));
         const onPressAsync = async () => {
             await sleep$2(asyncTimeout);
             if (asyncFails)
@@ -16993,14 +17028,14 @@
             else
                 onPressSync();
         };
-        return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Menus" }, void 0), e$3(CardElement, { children: e$3(Menu, { anchor: e$3(Button, { children: "I'm a menu" }, void 0), children: [e$3(MenuItem, { index: 0, onPress: onPressAsync, children: "A: Item 1" }, void 0), e$3(MenuItem, { index: 1, onPress: onPressAsync, children: "B: Item 2" }, void 0), e$3(MenuItem, { index: 2, onPress: onPressAsync, children: "C: Item 3" }, void 0), e$3(MenuItem, { index: 3, children: "I'm static" }, void 0)] }, void 0) }, void 0), e$3(CardElement, { children: [e$3("code", { children: "<Menu>" }, void 0), "s are effectively popup ", e$3("code", { children: "<List>" }, void 0), "s. This gives them all the usual list stuff like keyboard navigation (either with the arrow keys or by typing the text content of the ", e$3("code", { children: "<MenuItem>" }, void 0), "), ", e$3(Tooltip, { side: "block-end", mouseoverDelay: 0, tooltip: "Just like this tooltip", children: ["with the popup logic handled by ", e$3("a", { href: "https://popper.js.org/", children: "Popper" }, void 0)] }, void 0), "."] }, void 0), e$3(CardElement, { children: e$3("code", { children: `<Menu anchor={<Button>I'm a menu</Button>}>
+        return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Menus" }), e$3(CardElement, { children: e$3(Menu, { anchor: e$3(Button, { children: "I'm a menu" }), children: [e$3(MenuItem, { index: 0, onPress: onPressAsync, children: "A: Item 1" }), e$3(MenuItem, { index: 1, onPress: onPressAsync, children: "B: Item 2" }), e$3(MenuItem, { index: 2, onPress: onPressAsync, children: "C: Item 3" }), e$3(MenuItem, { index: 3, children: "I'm static" })] }) }), e$3(CardElement, { children: [e$3("code", { children: "<Menu>" }), "s are effectively popup ", e$3("code", { children: "<List>" }), "s. This gives them all the usual list stuff like keyboard navigation (either with the arrow keys or by typing the text content of the ", e$3("code", { children: "<MenuItem>" }), "), ", e$3(Tooltip, { side: "block-end", mouseoverDelay: 0, tooltip: "Just like this tooltip", children: ["with the popup logic handled by ", e$3("a", { href: "https://popper.js.org/", children: "Popper" })] }), "."] }), e$3(CardElement, { children: e$3("code", { children: `<Menu anchor={<Button>I'm a menu</Button>}>
     <MenuItem index={0} onPress={onPress}>A: Item 1</MenuItem>
     <MenuItem index={1} onPress={onPress}>B: Item 2</MenuItem>
     <MenuItem index={2} onPress={onPress}>C: Item 3</MenuItem>
     <MenuItem index={3}>I'm static</MenuItem>
-</Menu>` }, void 0) }, void 0), e$3("hr", {}, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Structure" }, void 0), e$3(CardElement, { children: ["A ", e$3("code", { children: "<Menu>" }, void 0), " requires both a selection of ", e$3("code", { children: "<MenuItem>" }, void 0), "s and also an ", e$3("code", { children: "anchor" }, void 0), ", provided by the prop of the same name.  By default, it's assumed that this will be a component that acceps an ", e$3("code", { children: "onPress" }, void 0), " event handler, like ", e$3("code", { children: "<Button>" }, void 0), "s do.  If you need to use a different event handler (such as ", e$3("code", { children: "onClick" }, void 0), ", if your menu isn't tied to a ", e$3("code", { children: "<Button>" }, void 0), "), you can pass the name of the prop to use instead to ", e$3("code", { children: "<anchorEventName>" }, void 0)] }, void 0), e$3("hr", {}, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Positioning" }, void 0), e$3(CardElement, { type: "paragraph", children: ["A menu's position is, by default, at the start of the line and the bottom of the block (the bottom left corner for this writing mode). You can manipulate this with the ", e$3("code", { children: "side" }, void 0), " and ", e$3("code", { children: "align" }, void 0), " props."] }, void 0), e$3(CardElement, { type: "paragraph", children: "The menu will also automatically flip when reaching the edge of the viewport." }, void 0), e$3(CardElement, { children: [e$3(RadioGroup, { label: "Alignment", labelPosition: "start", name: "menu-demo-1-align", selectedValue: align, onValueChange: setAlign, children: e$3(InputGrid, { children: [e$3(InputGroup, { children: e$3(Radio, { index: 0, value: "start", children: "Start" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Radio, { index: 1, value: "end", children: "End" }, void 0) }, void 0)] }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Checkbox, { checked: forceOpen, onCheck: setForceOpen, children: "Keep menu open" }, void 0) }, void 0)] }, void 0), e$3(CardElement, { children: e$3(GridStatic, { columns: 3, children: [e$3("div", {}, void 0), e$3(Button, { colorVariant: "secondary", pressed: side === "block-start", onPressToggle: (pressed) => void (pressed && setSide("block-start")), children: "Block start" }, void 0), e$3("div", {}, void 0), e$3(Button, { colorVariant: "secondary", pressed: side === "inline-start", onPressToggle: (pressed) => void (pressed && setSide("inline-start")), children: "Inline start" }, void 0), e$3(Menu, { anchor: e$3(Button, { dropdownVariant: "combined", children: "Anchored menu" }, void 0), side: side, align: align, forceOpen: forceOpen, children: [e$3(MenuItem, { index: 0, onPress: onPressAsync, children: "A: Item 1" }, void 0), e$3(MenuItem, { index: 1, onPress: onPressAsync, children: "B: Item 2" }, void 0), e$3(MenuItem, { index: 2, onPress: onPressAsync, children: "C: Item 3" }, void 0), e$3(MenuItem, { index: 3, children: "I'm static" }, void 0)] }, void 0), e$3(Button, { colorVariant: "secondary", pressed: side === "inline-end", onPressToggle: (pressed) => void (pressed && setSide("inline-end")), children: "Inline end" }, void 0), e$3("div", {}, void 0), e$3(Button, { colorVariant: "secondary", pressed: side === "block-end", onPressToggle: (pressed) => void (pressed && setSide("block-end")), children: "Block end" }, void 0), e$3("div", {}, void 0)] }, void 0) }, void 0), e$3(CardElement, { children: e$3("code", { children: `<Menu anchor={<Button>Menu</Button>} side="${side}" align="${align}">
+</Menu>` }) }), e$3("hr", {}), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Structure" }), e$3(CardElement, { children: ["A ", e$3("code", { children: "<Menu>" }), " requires both a selection of ", e$3("code", { children: "<MenuItem>" }), "s and also an ", e$3("code", { children: "anchor" }), ", provided by the prop of the same name.  By default, it's assumed that this will be a component that acceps an ", e$3("code", { children: "onPress" }), " event handler, like ", e$3("code", { children: "<Button>" }), "s do.  If you need to use a different event handler (such as ", e$3("code", { children: "onClick" }), ", if your menu isn't tied to a ", e$3("code", { children: "<Button>" }), "), you can pass the name of the prop to use instead to ", e$3("code", { children: "<anchorEventName>" })] }), e$3("hr", {}), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Positioning" }), e$3(CardElement, { type: "paragraph", children: ["A menu's position is, by default, at the start of the line and the bottom of the block (the bottom left corner for this writing mode). You can manipulate this with the ", e$3("code", { children: "side" }), " and ", e$3("code", { children: "align" }), " props."] }), e$3(CardElement, { type: "paragraph", children: "The menu will also automatically flip when reaching the edge of the viewport." }), e$3(CardElement, { children: [e$3(RadioGroup, { label: "Alignment", labelPosition: "start", name: "menu-demo-1-align", selectedValue: align, onValueChange: setAlign, children: e$3(InputGrid, { children: [e$3(InputGroup, { children: e$3(Radio, { index: 0, value: "start", children: "Start" }) }), e$3(InputGroup, { children: e$3(Radio, { index: 1, value: "end", children: "End" }) })] }) }), e$3(InputGroup, { children: e$3(Checkbox, { checked: forceOpen, onCheck: setForceOpen, children: "Keep menu open" }) })] }), e$3(CardElement, { children: e$3(GridStatic, { columns: 3, children: [e$3("div", {}), e$3(Button, { colorVariant: "secondary", pressed: side === "block-start", onPressToggle: (pressed) => void (pressed && setSide("block-start")), children: "Block start" }), e$3("div", {}), e$3(Button, { colorVariant: "secondary", pressed: side === "inline-start", onPressToggle: (pressed) => void (pressed && setSide("inline-start")), children: "Inline start" }), e$3(Menu, { anchor: e$3(Button, { dropdownVariant: "combined", children: "Anchored menu" }), side: side, align: align, forceOpen: forceOpen, children: [e$3(MenuItem, { index: 0, onPress: onPressAsync, children: "A: Item 1" }), e$3(MenuItem, { index: 1, onPress: onPressAsync, children: "B: Item 2" }), e$3(MenuItem, { index: 2, onPress: onPressAsync, children: "C: Item 3" }), e$3(MenuItem, { index: 3, children: "I'm static" })] }), e$3(Button, { colorVariant: "secondary", pressed: side === "inline-end", onPressToggle: (pressed) => void (pressed && setSide("inline-end")), children: "Inline end" }), e$3("div", {}), e$3(Button, { colorVariant: "secondary", pressed: side === "block-end", onPressToggle: (pressed) => void (pressed && setSide("block-end")), children: "Block end" }), e$3("div", {})] }) }), e$3(CardElement, { children: e$3("code", { children: `<Menu anchor={<Button>Menu</Button>} side="${side}" align="${align}">
     {...}
-</Menu>` }, void 0) }, void 0), e$3("hr", {}, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "List-likes" }, void 0), e$3(CardElement, { tag: "div", children: ["Menu items inherit the same ", e$3("code", { children: "iconBefore" }, void 0), ", ", e$3("code", { children: "iconAfter" }, void 0), ", ", e$3("code", { children: "badge" }, void 0), ", and multiple line support from the various list item types."] }, void 0), e$3(CardElement, { children: e$3(Menu, { anchor: e$3(Button, { dropdownVariant: "combined", children: "Fancy menu items" }, void 0), side: side, align: align, children: [e$3(MenuItem, { index: 0, onPress: onPressAsync, iconStart: e$3(BootstrapIcon, { icon: "pencil", label: null }, void 0), children: [e$3("span", { class: "h5", children: "A: Item 1" }, void 0), e$3("span", { children: "Line #2" }, void 0)] }, void 0), e$3(MenuItem, { index: 1, onPress: onPressAsync, iconStart: e$3(BootstrapIcon, { icon: "pencil", label: null }, void 0), children: [e$3("span", { class: "h5", children: "B: Item 2" }, void 0), e$3("span", { children: "Line #2" }, void 0)] }, void 0), e$3(MenuItem, { index: 2, onPress: onPressAsync, iconStart: e$3(BootstrapIcon, { icon: "pencil", label: null }, void 0), children: [e$3("span", { class: "h5", children: "C: Item 3" }, void 0), e$3("span", { children: "Line #2" }, void 0)] }, void 0), e$3(MenuItem, { index: 3, children: "I'm still static" }, void 0)] }, void 0) }, void 0), e$3("hr", {}, void 0), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Transitions" }, void 0), e$3(CardElement, { tag: "div", children: ["By default, ", e$3("code", { children: "<Menu>" }, void 0), "s use a ", e$3("code", { children: "<ZoomFade>" }, void 0), " as their transition. This can be customized by doing the following:", e$3("ul", { children: [e$3("li", { children: ["Provide a ", e$3("code", { children: "Transition" }, void 0), " prop."] }, void 0), e$3("li", { children: ["The ", e$3("code", { children: "<Menu>" }, void 0), " now accepts the same props as the transition component you passed in, with some key differences:"] }, void 0), e$3("li", { children: ["Any props that this ", e$3("code", { children: "Transition" }, void 0), " takes with both inline and block components, like ", e$3("code", { children: "fooInline" }, void 0), " and ", e$3("code", { children: "fooBlock" }, void 0), ", are now replaced with ", e$3("code", { children: "fooDynamic" }, void 0), ", which is relative to the location of the anchor to the menu."] }, void 0), e$3("li", { children: ["The menu will, based on the position of the anchor and current position of the menu, turn ", e$3("code", { children: "fooDynamic" }, void 0), " into ", e$3("code", { children: "fooInline" }, void 0), " or ", e$3("code", { children: "fooBlock" }, void 0), ", optionally negated (", e$3("code", { children: "1 - fooDynamic" }, void 0), ") if the menu is flipped because it's near the edge of the viewport."] }, void 0)] }, void 0)] }, void 0)] }, void 0) }, void 0));
+</Menu>` }) }), e$3("hr", {}), e$3(CardElement, { type: "subtitle", tag: "h3", children: "List-likes" }), e$3(CardElement, { tag: "div", children: ["Menu items inherit the same ", e$3("code", { children: "iconBefore" }), ", ", e$3("code", { children: "iconAfter" }), ", ", e$3("code", { children: "badge" }), ", and multiple line support from the various list item types."] }), e$3(CardElement, { children: e$3(Menu, { anchor: e$3(Button, { dropdownVariant: "combined", children: "Fancy menu items" }), side: side, align: align, children: [e$3(MenuItem, { index: 0, onPress: onPressAsync, iconStart: e$3(BootstrapIcon, { icon: "pencil", label: null }), children: [e$3("span", { class: "h5", children: "A: Item 1" }), e$3("span", { children: "Line #2" })] }), e$3(MenuItem, { index: 1, onPress: onPressAsync, iconStart: e$3(BootstrapIcon, { icon: "pencil", label: null }), children: [e$3("span", { class: "h5", children: "B: Item 2" }), e$3("span", { children: "Line #2" })] }), e$3(MenuItem, { index: 2, onPress: onPressAsync, iconStart: e$3(BootstrapIcon, { icon: "pencil", label: null }), children: [e$3("span", { class: "h5", children: "C: Item 3" }), e$3("span", { children: "Line #2" })] }), e$3(MenuItem, { index: 3, children: "I'm still static" })] }) }), e$3("hr", {}), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Transitions" }), e$3(CardElement, { tag: "div", children: ["By default, ", e$3("code", { children: "<Menu>" }), "s use a ", e$3("code", { children: "<ZoomFade>" }), " as their transition. This can be customized by doing the following:", e$3("ul", { children: [e$3("li", { children: ["Provide a ", e$3("code", { children: "Transition" }), " prop."] }), e$3("li", { children: ["The ", e$3("code", { children: "<Menu>" }), " now accepts the same props as the transition component you passed in, with some key differences:"] }), e$3("li", { children: ["Any props that this ", e$3("code", { children: "Transition" }), " takes with both inline and block components, like ", e$3("code", { children: "fooInline" }), " and ", e$3("code", { children: "fooBlock" }), ", are now replaced with ", e$3("code", { children: "fooDynamic" }), ", which is relative to the location of the anchor to the menu."] }), e$3("li", { children: ["The menu will, based on the position of the anchor and current position of the menu, turn ", e$3("code", { children: "fooDynamic" }), " into ", e$3("code", { children: "fooInline" }), " or ", e$3("code", { children: "fooBlock" }), ", optionally negated (", e$3("code", { children: "1 - fooDynamic" }), ") if the menu is flipped because it's near the edge of the viewport."] })] })] })] }) }));
     }
     async function sleep$2(arg0) {
         return new Promise(resolve => setTimeout(resolve, arg0));
@@ -17349,12 +17384,12 @@
             await sleep$1(2000);
             setChecked(checked);
         }, []);
-        return (e$3(TableRow, { hidden: filterEvens && (((n ?? 0) & 1) == 0), index: index, children: [e$3(TableCell, { index: 0, value: n, colSpan: !w ? 2 : undefined, children: e$3(Input, { type: "number", width: "4ch", value: n, onValueChange: setN, labelPosition: "hidden", min: 0, children: "Numeric input" }, void 0) }, void 0), w && e$3(TableCell, { index: 1, value: w }, void 0), e$3(TableCell, { index: 2, value: d, children: formatter.format(d) }, void 0), e$3(TableCell, { index: 3, value: checked, children: e$3(Checkbox, { checked: checked, onCheck: onInput, labelPosition: "hidden", children: "Demo table checkbox" }, void 0) }, void 0)] }, void 0));
+        return (e$3(TableRow, { hidden: filterEvens && (((n ?? 0) & 1) == 0), index: index, children: [e$3(TableCell, { index: 0, value: n, colSpan: !w ? 2 : undefined, children: e$3(Input, { type: "number", width: "4ch", value: n, onValueChange: setN, labelPosition: "hidden", min: 0, children: "Numeric input" }) }), w && e$3(TableCell, { index: 1, value: w }), e$3(TableCell, { index: 2, value: d, children: formatter.format(d) }), e$3(TableCell, { index: 3, value: checked, children: e$3(Checkbox, { checked: checked, onCheck: onInput, labelPosition: "hidden", children: "Demo table checkbox" }) })] }));
     });
     function DemoTable() {
         const [rowCount, setRowCount] = useState(5);
         const [filterEvens, setFilterEvens] = useState(false);
-        return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Table" }, void 0), e$3(CardElement, { children: ["Tables allow for automatic display, navigation, sorting, and filtering of data. All data is provided by the children and you ", e$3("strong", { children: "don't need to provide a data structure" }, void 0), " to the parent ", e$3("code", { children: "Table" }, void 0), " element, and by default all columns are user-sortable."] }, void 0), e$3(CardElement, { children: ["Sorting and filtering are done by examining each ", e$3("code", { children: "TableCell" }, void 0), "'s child (or ", e$3("code", { children: "value" }, void 0), " prop, with ", e$3("code", { children: "value" }, void 0), " taking precidence). If the child of the ", e$3("code", { children: "TableCell" }, void 0), " is a simple number or string (and no ", e$3("code", { children: "value" }, void 0), " prop is provided), then that value will be used for sorting. If it's not a string (and again, if no ", e$3("code", { children: "value" }, void 0), " prop is provided), then it will be sorted as if its contents were just an empty string, so it's almost always beneficial to provide the ", e$3("code", { children: "value" }, void 0), " prop just in case."] }, void 0), e$3(CardElement, { children: ["A ", e$3("code", { children: "TableCell" }, void 0), " contain any content, including arbitrary HTML and other components. In terms of focus management (i.e. how using the arrow keys works within a table), a ", e$3("code", { children: "TableCell" }, void 0), " that just contains a simple string or number will focus itself when tabbed to, but a ", e$3("code", { children: "TableCell" }, void 0), " that contains other components ", e$3("strong", { children: "will delegate focus to its children instead" }, void 0), ":", e$3("code", { children: `// The table cell itself will receive focus:
+        return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Table" }), e$3(CardElement, { children: ["Tables allow for automatic display, navigation, sorting, and filtering of data. All data is provided by the children and you ", e$3("strong", { children: "don't need to provide a data structure" }), " to the parent ", e$3("code", { children: "Table" }), " element, and by default all columns are user-sortable."] }), e$3(CardElement, { children: ["Sorting and filtering are done by examining each ", e$3("code", { children: "TableCell" }), "'s child (or ", e$3("code", { children: "value" }), " prop, with ", e$3("code", { children: "value" }), " taking precidence). If the child of the ", e$3("code", { children: "TableCell" }), " is a simple number or string (and no ", e$3("code", { children: "value" }), " prop is provided), then that value will be used for sorting. If it's not a string (and again, if no ", e$3("code", { children: "value" }), " prop is provided), then it will be sorted as if its contents were just an empty string, so it's almost always beneficial to provide the ", e$3("code", { children: "value" }), " prop just in case."] }), e$3(CardElement, { children: ["A ", e$3("code", { children: "TableCell" }), " contain any content, including arbitrary HTML and other components. In terms of focus management (i.e. how using the arrow keys works within a table), a ", e$3("code", { children: "TableCell" }), " that just contains a simple string or number will focus itself when tabbed to, but a ", e$3("code", { children: "TableCell" }), " that contains other components ", e$3("strong", { children: "will delegate focus to its children instead" }), ":", e$3("code", { children: `// The table cell itself will receive focus:
 <TableCell>Text</TableCell>
 <TableCell>0</TableCell>
 <TableCell><>Text</></TableCell> // Fragments are treated as text for these purposes
@@ -17367,7 +17402,7 @@
 <TableCell>{(props) => <p>text</p>}</TableCell>
 
 // ✅ The cell can properly delegate all duties to the child DIV.
-<TableCell>{forwardRef((props, ref) => <p ref={ref} {...props}>text</p>)}</TableCell>` }, void 0)] }, void 0), e$3(CardElement, { children: ["Finally, your rows ", e$3("em", { children: "must" }, void 0), " be ", e$3("em", { children: "direct descendants" }, void 0), " of ", e$3("code", { children: "TableBody" }, void 0), " (and ", e$3("code", { children: "TableHead" }, void 0), " and ", e$3("code", { children: "TableFoot" }, void 0), ") so that it can properly call ", e$3("code", { children: "createElement" }, void 0), " with the expected results when sorting. It's okay if each row you provide is a wrapper component around a single ", e$3("code", { children: "TableRow" }, void 0), "\u2014the \"direct descendant\" doesn't need to be specifically a ", e$3("code", { children: "TableRow" }, void 0), " component\u2014it's just that the ", e$3("code", { children: "TableBody" }, void 0), " (etc.) needs ", e$3("em", { children: "specifically" }, void 0), " an array of children whose individual ", e$3("code", { children: "key" }, void 0), " props can be manipulated."] }, void 0), e$3(CardElement, { children: [e$3(Input, { type: "number", value: rowCount, min: 0, max: 999, onValueChange: setRowCount, children: "Row count" }, void 0), e$3(Checkbox, { checked: filterEvens, onCheck: setFilterEvens, children: "Filter out even numbers" }, void 0)] }, void 0), e$3(CardElement, { children: e$3(Table, { children: [e$3(TableHead, { children: e$3(TableRow, { hidden: false, index: 0, children: [e$3(TableHeaderCell, { index: 0, children: "Number" }, void 0), e$3(TableHeaderCell, { index: 1, children: "String" }, void 0), e$3(TableHeaderCell, { index: 2, children: "Date" }, void 0), e$3(TableHeaderCell, { index: 3, children: "Checkbox" }, void 0)] }, void 0) }, void 0), e$3(TableBody, { ...{ "data-test": filterEvens }, children: Array.from(function* () {
+<TableCell>{forwardRef((props, ref) => <p ref={ref} {...props}>text</p>)}</TableCell>` })] }), e$3(CardElement, { children: ["Finally, your rows ", e$3("em", { children: "must" }), " be ", e$3("em", { children: "direct descendants" }), " of ", e$3("code", { children: "TableBody" }), " (and ", e$3("code", { children: "TableHead" }), " and ", e$3("code", { children: "TableFoot" }), ") so that it can properly call ", e$3("code", { children: "createElement" }), " with the expected results when sorting. It's okay if each row you provide is a wrapper component around a single ", e$3("code", { children: "TableRow" }), "\u2014the \"direct descendant\" doesn't need to be specifically a ", e$3("code", { children: "TableRow" }), " component\u2014it's just that the ", e$3("code", { children: "TableBody" }), " (etc.) needs ", e$3("em", { children: "specifically" }), " an array of children whose individual ", e$3("code", { children: "key" }), " props can be manipulated."] }), e$3(CardElement, { children: [e$3(Input, { type: "number", value: rowCount, min: 0, max: 999, onValueChange: setRowCount, children: "Row count" }), e$3(Checkbox, { checked: filterEvens, onCheck: setFilterEvens, children: "Filter out even numbers" })] }), e$3(CardElement, { children: e$3(Table, { children: [e$3(TableHead, { children: e$3(TableRow, { hidden: false, index: 0, children: [e$3(TableHeaderCell, { index: 0, children: "Number" }), e$3(TableHeaderCell, { index: 1, children: "String" }), e$3(TableHeaderCell, { index: 2, children: "Date" }), e$3(TableHeaderCell, { index: 3, children: "Checkbox" })] }) }), e$3(TableBody, { ...{ "data-test": filterEvens }, children: Array.from(function* () {
                                         for (let i = 0; i < (rowCount ?? 0); ++i) {
                                             yield e$3(RandomRow, { index: i, filterEvens: filterEvens }, i);
                                             /*<TableRow index={1 + i}>
@@ -17377,7 +17412,7 @@
                                         </TableRow>*/
                                             //
                                         }
-                                    }()) }, void 0)] }, void 0) }, void 0), e$3(CardElement, { children: e$3("code", { children: `<Table>
+                                    }()) })] }) }), e$3(CardElement, { children: e$3("code", { children: `<Table>
     <TableHead>
         <TableRow index={0}>
             <TableHeaderCell index={0}>Number</TableHeaderCell>
@@ -17405,7 +17440,7 @@
     <TableFoot>
         <ACustomTableRow index={6} />
     </TableFoot>
-</Table>` }, void 0) }, void 0)] }, void 0) }, void 0));
+</Table>` }) })] }) }));
     }
     async function sleep$1(arg0) {
         return new Promise(resolve => setTimeout(resolve, arg0));
@@ -17413,32 +17448,32 @@
 
     const RandomWords = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.".split(" ");
     g$1(({ setActive, active, depth }) => {
-        return (e$3(d$2, { children: [e$3("button", { children: "Button 1" }, void 0), e$3("button", { children: "Button 2" }, void 0), e$3("button", { children: "Button 3" }, void 0), e$3("label", { children: ["Active: ", e$3("input", { type: "checkbox", checked: active, onInput: e => { e.preventDefault(); setActive(e.currentTarget.checked); } }, void 0)] }, void 0)] }, void 0));
+        return (e$3(d$2, { children: [e$3("button", { children: "Button 1" }), e$3("button", { children: "Button 2" }), e$3("button", { children: "Button 3" }), e$3("label", { children: ["Active: ", e$3("input", { type: "checkbox", checked: active, onInput: e => { e.preventDefault(); setActive(e.currentTarget.checked); } })] })] }));
     });
     const DemoDialog = g$1(() => {
         const onClose = (() => setOpen(false));
         const [open, setOpen] = useState(false);
-        return (e$3("div", { class: "demo", children: [e$3(Tooltip, { tooltip: "Open dialog", children: e$3(InputGroup, { children: e$3(Checkbox, { checked: open, onCheck: setOpen, children: "Open dialog" }, void 0) }, void 0) }, void 0), e$3(Dialog, { open: open, onClose: onClose, descriptive: false, title: "Dialog Title", footer: e$3("button", { onClick: onClose, children: "Close" }, void 0), children: [e$3("p", { tabIndex: -1, children: "Dialog body content" }, void 0), e$3(DemoMenus, {}, void 0), e$3("p", { children: RandomWords.join(" ") }, void 0), e$3("p", { children: RandomWords.join(" ") }, void 0), e$3("p", { children: RandomWords.join(" ") }, void 0), e$3("p", { children: RandomWords.join(" ") }, void 0), e$3("p", { children: RandomWords.join(" ") }, void 0)] }, void 0)] }, void 0));
+        return (e$3("div", { class: "demo", children: [e$3(Tooltip, { tooltip: "Open dialog", children: e$3(InputGroup, { children: e$3(Checkbox, { checked: open, onCheck: setOpen, children: "Open dialog" }) }) }), e$3(Dialog, { open: open, onClose: onClose, descriptive: false, title: "Dialog Title", footer: e$3("button", { onClick: onClose, children: "Close" }), children: [e$3("p", { tabIndex: -1, children: "Dialog body content" }), e$3(DemoMenus, {}), e$3("p", { children: RandomWords.join(" ") }), e$3("p", { children: RandomWords.join(" ") }), e$3("p", { children: RandomWords.join(" ") }), e$3("p", { children: RandomWords.join(" ") }), e$3("p", { children: RandomWords.join(" ") })] })] }));
     });
     const DemoDrawer = g$1(() => {
         const onClose = (() => setOpen(false));
         let [open, setOpen] = useState(false);
         //open = true;
-        return (e$3("div", { class: "demo", children: [e$3(Checkbox, { checked: open, onCheck: setOpen, children: "Open Drawer" }, void 0), e$3(Drawer, { open: open, onClose: onClose, descriptive: false, title: "Dialog Title", children: [e$3("p", { tabIndex: -1, children: "Dialog body content" }, void 0), e$3("p", { children: RandomWords.join(" ") }, void 0), e$3("p", { children: RandomWords.join(" ") }, void 0), e$3("p", { children: RandomWords.join(" ") }, void 0)] }, void 0)] }, void 0));
+        return (e$3("div", { class: "demo", children: [e$3(Checkbox, { checked: open, onCheck: setOpen, children: "Open Drawer" }), e$3(Drawer, { open: open, onClose: onClose, descriptive: false, title: "Dialog Title", children: [e$3("p", { tabIndex: -1, children: "Dialog body content" }), e$3("p", { children: RandomWords.join(" ") }), e$3("p", { children: RandomWords.join(" ") }), e$3("p", { children: RandomWords.join(" ") })] })] }));
     });
     const DemoMenu = g$1(() => {
-        return (e$3("div", { class: "demo", children: e$3(Menu, { Transition: ZoomFade, tag: "ul", anchor: e$3(Button, { dropdownVariant: "combined", children: "Open menu" }, void 0), children: [e$3(MenuItem, { index: 0, children: "AItem #1" }, void 0), e$3(MenuItem, { index: 1, children: "BItem #2" }, void 0), e$3(MenuItem, { index: 2, children: "CItem #3" }, void 0), e$3(MenuItem, { index: 3, children: "DItem #4" }, void 0)] }, void 0) }, void 0));
+        return (e$3("div", { class: "demo", children: e$3(Menu, { Transition: ZoomFade, tag: "ul", anchor: e$3(Button, { dropdownVariant: "combined", children: "Open menu" }), children: [e$3(MenuItem, { index: 0, children: "AItem #1" }), e$3(MenuItem, { index: 1, children: "BItem #2" }), e$3(MenuItem, { index: 2, children: "CItem #3" }), e$3(MenuItem, { index: 3, children: "DItem #4" })] }) }));
     });
     const DemoTabs = g$1(() => {
         const [selectedIndex, setSelectedIndex] = useState(0);
         const [selectionMode, setSelectionMode] = useState("activate");
-        return (e$3("div", { class: "demo", children: e$3("div", { children: e$3(Tabs, { orientation: "block", onSelect: setSelectedIndex, selectedIndex: selectedIndex, selectionMode: selectionMode, children: [e$3("ol", { children: [e$3(Tab, { index: 0, children: "Tab #1" }, void 0), e$3(Tab, { index: 1, children: "Tab #2" }, void 0), e$3(Tab, { index: 2, children: "Tab #3" }, void 0)] }, void 0), e$3(TabPanel, { index: 0, children: e$3("div", { children: RandomWords.slice(0, Math.floor((1 / 3) * RandomWords.length)).join(" ") }, void 0) }, void 0), e$3(TabPanel, { index: 1, children: e$3("div", { children: RandomWords.slice(0, Math.floor((2 / 3) * RandomWords.length)).join(" ") }, void 0) }, void 0), e$3(TabPanel, { index: 2, children: e$3("div", { children: RandomWords.slice(0, Math.floor((3 / 3) * RandomWords.length)).join(" ") }, void 0) }, void 0)] }, void 0) }, void 0) }, void 0));
+        return (e$3("div", { class: "demo", children: e$3("div", { children: e$3(Tabs, { orientation: "block", onSelect: setSelectedIndex, selectedIndex: selectedIndex, selectionMode: selectionMode, children: [e$3("ol", { children: [e$3(Tab, { index: 0, children: "Tab #1" }), e$3(Tab, { index: 1, children: "Tab #2" }), e$3(Tab, { index: 2, children: "Tab #3" })] }), e$3(TabPanel, { index: 0, children: e$3("div", { children: RandomWords.slice(0, Math.floor((1 / 3) * RandomWords.length)).join(" ") }) }), e$3(TabPanel, { index: 1, children: e$3("div", { children: RandomWords.slice(0, Math.floor((2 / 3) * RandomWords.length)).join(" ") }) }), e$3(TabPanel, { index: 2, children: e$3("div", { children: RandomWords.slice(0, Math.floor((3 / 3) * RandomWords.length)).join(" ") }) })] }) }) }));
     });
     g$1(() => {
         const { useTooltip, useTooltipTrigger, isOpen } = useAriaTooltip({});
         const { useTooltipProps } = useTooltip();
         const { useTooltipTriggerProps } = useTooltipTrigger();
-        return (e$3("div", { class: "demo", children: e$3("p", { children: ["This is a paragraph with a ", e$3("span", { ...useTooltipTriggerProps({}), children: "tooltip right here." }, void 0), e$3("span", { ...useTooltipProps({ hidden: !isOpen }), children: "This is the tooltip content." }, void 0)] }, void 0) }, void 0));
+        return (e$3("div", { class: "demo", children: e$3("p", { children: ["This is a paragraph with a ", e$3("span", { ...useTooltipTriggerProps({}), children: "tooltip right here." }), e$3("span", { ...useTooltipProps({ hidden: !isOpen }), children: "This is the tooltip content." })] }) }));
     });
     async function sleep(ms) {
         await new Promise(resolve => setTimeout(resolve, ms));
@@ -17486,11 +17521,11 @@
     });*/
     const DemoAccordion = g$1(() => {
         const [expandedIndex, setExpandedIndex] = useState(-1);
-        return (e$3("div", { class: "demo", children: e$3("div", { children: e$3(Accordion, { expandedIndex: expandedIndex, setExpandedIndex: setExpandedIndex, children: [e$3(AccordionSection, { index: 0, header: "Accordion Item #1", children: e$3("div", { children: [e$3("strong", { children: "This is the 1st item's accordion body." }, void 0), " It is visible by default, You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the ", e$3("code", { children: "AccordionSection" }, void 0), "."] }, void 0) }, void 0), e$3(AccordionSection, { index: 1, header: "Accordion Item #2", children: e$3("div", { children: [e$3("strong", { children: "This is the 2nd item's accordion body." }, void 0), " It is hidden by default,  You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the ", e$3("code", { children: "AccordionSection" }, void 0), "."] }, void 0) }, void 0), e$3(AccordionSection, { index: 2, header: "Accordion Item #3", children: e$3("div", { children: [e$3("strong", { children: "This is the 3rd item's accordion body." }, void 0), " It is hidden by default,  You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the ", e$3("code", { children: "AccordionSection" }, void 0), "."] }, void 0) }, void 0)] }, void 0) }, void 0) }, void 0));
+        return (e$3("div", { class: "demo", children: e$3("div", { children: e$3(Accordion, { expandedIndex: expandedIndex, setExpandedIndex: setExpandedIndex, children: [e$3(AccordionSection, { index: 0, header: "Accordion Item #1", children: e$3("div", { children: [e$3("strong", { children: "This is the 1st item's accordion body." }), " It is visible by default, You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the ", e$3("code", { children: "AccordionSection" }), "."] }) }), e$3(AccordionSection, { index: 1, header: "Accordion Item #2", children: e$3("div", { children: [e$3("strong", { children: "This is the 2nd item's accordion body." }), " It is hidden by default,  You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the ", e$3("code", { children: "AccordionSection" }), "."] }) }), e$3(AccordionSection, { index: 2, header: "Accordion Item #3", children: e$3("div", { children: [e$3("strong", { children: "This is the 3rd item's accordion body." }), " It is hidden by default,  You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the ", e$3("code", { children: "AccordionSection" }), "."] }) })] }) }) }));
     });
     const DemoList = g$1(() => {
         const [index, setIndex] = useState(0);
-        return (e$3("div", { class: "demo", children: ["Selected: ", index, e$3(ListSingle, { label: "Example list", select: "single", onSelect: setIndex, selectedIndex: index, selectionMode: "activate", tag: "ul", children: [e$3(ListItemSingle, { index: 0, children: "Primary" }, void 0), e$3(ListItemSingle, { index: 1, children: "Secondary" }, void 0), e$3(ListItemSingle, { index: 2, children: "Success" }, void 0), e$3(ListItemSingle, { index: 3, children: "Warning" }, void 0), e$3(ListItemSingle, { index: 4, children: "Danger" }, void 0), e$3(ListItemSingle, { index: 5, children: "Info" }, void 0), e$3(ListItemSingle, { index: 6, children: "Light" }, void 0), e$3(ListItemSingle, { index: 7, children: "Dark" }, void 0), e$3(ListItemSingle, { index: 8, children: "Link" }, void 0)] }, void 0)] }, void 0));
+        return (e$3("div", { class: "demo", children: ["Selected: ", index, e$3(ListSingle, { label: "Example list", select: "single", onSelect: setIndex, selectedIndex: index, selectionMode: "activate", tag: "ul", children: [e$3(ListItemSingle, { index: 0, children: "Primary" }), e$3(ListItemSingle, { index: 1, children: "Secondary" }), e$3(ListItemSingle, { index: 2, children: "Success" }), e$3(ListItemSingle, { index: 3, children: "Warning" }), e$3(ListItemSingle, { index: 4, children: "Danger" }), e$3(ListItemSingle, { index: 5, children: "Info" }), e$3(ListItemSingle, { index: 6, children: "Light" }), e$3(ListItemSingle, { index: 7, children: "Dark" }), e$3(ListItemSingle, { index: 8, children: "Link" })] })] }));
     });
     const DemoInput = g$1(() => {
         const [text, setText] = useState("");
@@ -17503,7 +17538,7 @@
             await sleep(5000);
             setRadioValue(value);
         }, [setRadioValue]);
-        return (e$3("div", { class: "demo", children: [e$3(InputGroup, { children: e$3(Input, { type: "text", onValueChange: onInput1, value: text, width: "100%", children: "Test input" }, void 0) }, void 0), e$3(RadioGroup, { selectedValue: radioValue, name: "demo-radio", onValueChange: onInput2, children: [e$3(InputGroup, { children: e$3(Radio, { index: 0, value: "ARadio" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Radio, { index: 1, value: "BRadio" }, void 0) }, void 0), e$3(InputGroup, { children: e$3(Radio, { index: 2, value: "CRadio" }, void 0) }, void 0)] }, void 0)] }, void 0));
+        return (e$3("div", { class: "demo", children: [e$3(InputGroup, { children: e$3(Input, { type: "text", onValueChange: onInput1, value: text, width: "100%", children: "Test input" }) }), e$3(RadioGroup, { selectedValue: radioValue, name: "demo-radio", onValueChange: onInput2, children: [e$3(InputGroup, { children: e$3(Radio, { index: 0, value: "ARadio" }) }), e$3(InputGroup, { children: e$3(Radio, { index: 1, value: "BRadio" }) }), e$3(InputGroup, { children: e$3(Radio, { index: 2, value: "CRadio" }) })] })] }));
     });
     function changeThemes(toTheme) {
         const fromTheme = (toTheme === "theme-dark" ? "theme-light" : "theme-dark");
@@ -17512,13 +17547,13 @@
     }
     const Component = () => {
         const [theme, setTheme] = useState("theme-dark");
-        h$1(() => changeThemes(theme), [theme]);
+        d$1(() => changeThemes(theme), [theme]);
         return e$3(d$2, { children: [e$3(Button, { colorVariant: theme == "theme-dark" ? "light" : "dark", style: { position: "fixed", insetBlockStart: "0.5em", insetInlineEnd: "0.5em", zIndex: 9999999 }, spinnerTimeout: 999999999, onPress: async () => {
                         setTheme(theme === "theme-dark" ? "theme-light" : "theme-dark");
-                    }, children: ["Switch theme to ", e$3("strong", { children: theme === "theme-dark" ? "light" : "dark" }, void 0)] }, void 0), e$3(GridResponsive, { minWidth: "35em", children: e$3(FocusVisibilityManager, { autoHideFocusRing: true, children: e$3(DebugUtilContext.Provider, { value: d$1(() => ({ logRender: new Set(["Table", "TableHead", "TableBody", "TableRow", "TableCell"]) }), []), children: e$3(ToastsProvider, { children: e$3(DialogsProvider, { children: [e$3(DemoTable, {}, void 0), e$3(DemoLists, {}, void 0), e$3(DemoMenus, {}, void 0), e$3(DemoDialogs, {}, void 0), e$3(DemoButtons, {}, void 0), e$3(DemoChecks, {}, void 0), e$3(DemoInputs, {}, void 0), e$3(DemoLayout, {}, void 0), e$3(DemoAccordion, {}, void 0), e$3(DemoDialog, {}, void 0), e$3(DemoDrawer, {}, void 0), e$3(DemoInput, {}, void 0), e$3(DemoList, {}, void 0), e$3(DemoTabs, {}, void 0), e$3(DemoMenu, {}, void 0)] }, void 0) }, void 0) }, void 0) }, void 0) }, void 0)] }, void 0);
+                    }, children: ["Switch theme to ", e$3("strong", { children: theme === "theme-dark" ? "light" : "dark" })] }), e$3(GridResponsive, { minWidth: "35em", children: e$3(FocusVisibilityManager, { autoHideFocusRing: true, children: e$3(DebugUtilContext.Provider, { value: _$1(() => ({ logRender: new Set(["Table", "TableHead", "TableBody", "TableRow", "TableCell"]) }), []), children: e$3(ToastsProvider, { children: e$3(DialogsProvider, { children: [e$3(DemoTable, {}), e$3(DemoLists, {}), e$3(DemoMenus, {}), e$3(DemoDialogs, {}), e$3(DemoButtons, {}), e$3(DemoChecks, {}), e$3(DemoInputs, {}), e$3(DemoLayout, {}), e$3(DemoAccordion, {}), e$3(DemoDialog, {}), e$3(DemoDrawer, {}), e$3(DemoInput, {}), e$3(DemoList, {}), e$3(DemoTabs, {}), e$3(DemoMenu, {})] }) }) }) }) })] });
     };
     requestAnimationFrame(() => {
-        S$1(e$3(Component, {}, void 0), document.getElementById("root"));
+        S$1(e$3(Component, {}), document.getElementById("root"));
     });
 
 })();

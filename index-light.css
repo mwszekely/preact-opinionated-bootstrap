@@ -14133,7 +14133,7 @@ table.table th > .th-spacing {
 }
 .form-range-container.form-range-vertical {
   grid-template-rows: auto 0.5rem repeat(var(--form-range-tick-count, 1), 1fr) 0.5rem;
-  grid-template-columns: 0.75rem 0.75rem 0.5rem;
+  grid-template-columns: 0.75rem 0.75rem auto;
 }
 .form-range-container > .form-range-label {
   grid-row: 1/span 1;
@@ -14165,6 +14165,12 @@ table.table th > .th-spacing {
   grid-column: 1/span 2;
   grid-row: 2/-1;
 }
+.form-range-container.form-range-vertical > .form-range-track-background > .form-range-tooltip-root, .form-range-container.form-range-vertical > .form-range-track-fill-background > .form-range-tooltip-root, .form-range-container.form-range-vertical > .form-range-tooltip-container > .form-range-tooltip-root {
+  left: 50%;
+  top: unset;
+  bottom: calc(var(--range-value) * 100% + -1rem * (var(--range-value) - 0.5));
+  height: 1px;
+}
 .form-range-container.form-range-vertical > .form-range-track-background, .form-range-container.form-range-vertical > .form-range-track-fill-background {
   margin-top: 0;
   margin-bottom: 0;
@@ -14175,6 +14181,16 @@ table.table th > .th-spacing {
   position: relative;
   grid-row: 2/span 2;
   grid-column: 1/-1;
+}
+.form-range-container > .form-range-tooltip-container > .form-range-tooltip-root {
+  position: absolute;
+  top: 0;
+  width: 0;
+  left: calc(var(--range-value) * 100% + -1rem * (var(--range-value) - 0.5));
+  height: 1.5rem;
+  background: none;
+  pointer-events: none;
+  contain: strict;
 }
 .form-range-container > .form-range-track-background {
   background: #b2b8c0;
@@ -14203,6 +14219,7 @@ table.table th > .th-spacing {
   margin-bottom: 0.37rem;
 }
 .form-range-container.form-range-vertical > .form-range-ticks {
+  display: none;
   grid-column: 2/span 2;
   grid-row: 3/-2;
   flex-direction: column;
@@ -14250,21 +14267,6 @@ table.table th > .th-spacing {
   bottom: 0;
   width: 1px;
   background: #d1d5da;
-}
-
-.form-range-tooltip-root {
-  position: absolute;
-  top: 0;
-  width: 0;
-  left: calc(var(--range-value) * 100% + -1rem * (var(--range-value) - 0.5));
-  height: 1.5rem;
-  background: none;
-  pointer-events: none;
-  contain: strict;
-}
-.form-range-tooltip-root.form-range-vertical {
-  left: 0;
-  top: calc(var(--range-value) * 100% + -1rem * (var(--range-value) - 0.5));
 }
 
 .transition-enter {
