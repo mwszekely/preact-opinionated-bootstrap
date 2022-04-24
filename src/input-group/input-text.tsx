@@ -34,7 +34,7 @@ function UnlabelledInputR(p: UnlabelledInputProps, ref?: Ref<any>): h.JSX.Elemen
         }, [])
     });
 
-    const { getSyncHandler, currentCapture, pending, hasError, settleCount, flushDebouncedPromise, currentType, ...asyncInfo } = useAsyncHandler<HTMLInputElement>()({
+    const { useSyncHandler, currentCapture, pending, hasError, settleCount, flushDebouncedPromise, currentType, ...asyncInfo } = useAsyncHandler<HTMLInputElement>()({
         capture: useStableCallback((e: h.JSX.TargetedEvent<HTMLInputElement, Event>) => {
             const ret = capture(e);
             if (ret == null) {
@@ -49,7 +49,7 @@ function UnlabelledInputR(p: UnlabelledInputProps, ref?: Ref<any>): h.JSX.Elemen
         }),
         debounce: type === "text" ? 1500 : undefined
     });
-    const onInputIfValid = getSyncHandler(disabled ? null : onInputAsync as any);
+    const onInputIfValid = useSyncHandler(disabled ? null : onInputAsync as any);
     const onInput = (e: h.JSX.TargetedEvent<HTMLInputElement>) => {
         const target = (e.currentTarget as HTMLInputElement | undefined);
         return onInputIfValid?.bind(target as never)(e);

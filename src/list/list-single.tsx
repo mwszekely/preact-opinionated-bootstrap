@@ -31,8 +31,8 @@ export const UseListboxSingleItemContext = createContext<UseListboxSingleItem<HT
 export const ListSingle = memo(forwardElementRef(function ListSingle<E extends HTMLUListElement | HTMLOListElement>(props: ListSingleProps<E>, ref: Ref<E>) {
     useLogRender("ListSingle", `Rendering ListSingle`);
     let { onSelect: onSelectAsync, selectedIndex, selectionMode, collator, keyNavigation, noTypeahead, noWrap, typeaheadTimeout, tag, select, labelPosition, label, ...domProps } = props;
-    const { getSyncHandler, pending, currentCapture } = useAsyncHandler<E>()({ capture: (e: any) => e[EventDetail].selectedIndex as number });
-    const onSelect = getSyncHandler(onSelectAsync);
+    const { useSyncHandler, pending, currentCapture } = useAsyncHandler<E>()({ capture: (e: any) => e[EventDetail].selectedIndex as number });
+    const onSelect = useSyncHandler(onSelectAsync);
     const { useListboxSingleItem, useListboxSingleLabel, useListboxSingleProps, managedChildren } = useAriaListboxSingle<E, HTMLLIElement, ListSingleItemInfo<HTMLLIElement>>({ onSelect, selectedIndex: selectedIndex, selectionMode: selectionMode ?? "activate", typeaheadTimeout, noWrap, noTypeahead, keyNavigation, collator });
     const { useListboxSingleLabelProps } = useListboxSingleLabel<any>()
 

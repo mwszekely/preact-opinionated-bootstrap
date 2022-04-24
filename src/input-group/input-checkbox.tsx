@@ -31,10 +31,10 @@ export const Checkbox = memo(forwardElementRef(function Checkbox({ checked, disa
 
     type I = { (event: CheckboxChangeEvent<h.JSX.TargetedEvent<HTMLInputElement, Event>>): void; (event: CheckboxChangeEvent<h.JSX.TargetedEvent<HTMLLabelElement, Event>>): void; };
 
-    const { getSyncHandler, pending, hasError, settleCount, hasCapture, currentCapture, currentType } = useAsyncHandler()({ capture });
+    const { useSyncHandler, pending, hasError, settleCount, hasCapture, currentCapture, currentType } = useAsyncHandler()({ capture });
     disabled ||= pending;
 
-    const onChecked = getSyncHandler(onCheckedAsync) as unknown as I;
+    const onChecked = useSyncHandler(onCheckedAsync) as unknown as I;
     const { useCheckboxInputElement, useCheckboxLabelElement } = useAriaCheckbox<HTMLInputElement, HTMLLabelElement | HTMLDivElement>({ checked: pending ? currentCapture! : ((checked as string) === "indeterminate" ? "mixed" : checked), disabled: disabled ?? false, onInput: onChecked, labelPosition: "separate" });
 
     const { useCheckboxInputElementProps } = useCheckboxInputElement({ tag: "input" });

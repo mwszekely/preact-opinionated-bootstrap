@@ -13917,16 +13917,6 @@ label.input-group-text:not(.disabled) {
     --popper-arrow-size: 0.5em;
   }
 
-  .tooltip::after {
-    content: "";
-    position: absolute;
-    left: calc(-2 * var(--popper-arrow-size));
-    right: calc(-2 * var(--popper-arrow-size));
-    top: calc(-2 * var(--popper-arrow-size));
-    bottom: calc(-2 * var(--popper-arrow-size));
-    z-index: -1;
-  }
-
   .tooltip-wrapper {
     position: absolute;
     z-index: 1080;
@@ -31303,17 +31293,6 @@ label.input-group-text:not(.disabled) {
   }
 }
 @media all and (prefers-color-scheme: light) {
-  .tooltip::after {
-    content: "";
-    position: absolute;
-    left: calc(-2 * var(--popper-arrow-size));
-    right: calc(-2 * var(--popper-arrow-size));
-    top: calc(-2 * var(--popper-arrow-size));
-    bottom: calc(-2 * var(--popper-arrow-size));
-    z-index: -1;
-  }
-}
-@media all and (prefers-color-scheme: light) {
   .tooltip-wrapper {
     position: absolute;
     z-index: 1080;
@@ -47438,16 +47417,6 @@ body.themed-scrollbars {
   --popper-arrow-size: 0.5em;
 }
 
-.set-theme.theme-light .tooltip::after {
-  content: "";
-  position: absolute;
-  left: calc(-2 * var(--popper-arrow-size));
-  right: calc(-2 * var(--popper-arrow-size));
-  top: calc(-2 * var(--popper-arrow-size));
-  bottom: calc(-2 * var(--popper-arrow-size));
-  z-index: -1;
-}
-
 .set-theme.theme-light .tooltip-wrapper {
   position: absolute;
   z-index: 1080;
@@ -63213,16 +63182,6 @@ body.themed-scrollbars {
   position: relative;
   --bs-body-bg: #fff;
   --popper-arrow-size: 0.5em;
-}
-
-.set-theme.theme-dark .tooltip::after {
-  content: "";
-  position: absolute;
-  left: calc(-2 * var(--popper-arrow-size));
-  right: calc(-2 * var(--popper-arrow-size));
-  top: calc(-2 * var(--popper-arrow-size));
-  bottom: calc(-2 * var(--popper-arrow-size));
-  z-index: -1;
 }
 
 .set-theme.theme-dark .tooltip-wrapper {

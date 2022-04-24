@@ -25,18 +25,6 @@
     --bs-body-bg: #{$tooltip-bg};
 
     --popper-arrow-size: 0.5em;
-
-    // Create a "padding" element that enables a wider mouseover target.
-    // This makes it earier to keep a mouseover from the source to the tooltip
-    &::after {
-        content: "";
-        position: absolute;
-        left: calc(-2 * var(--popper-arrow-size));
-        right: calc(-2 * var(--popper-arrow-size));
-        top: calc(-2 * var(--popper-arrow-size));
-        bottom: calc(-2 * var(--popper-arrow-size));
-        z-index: -1;
-    }
 }
 
 .tooltip-wrapper {

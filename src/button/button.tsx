@@ -104,10 +104,10 @@ const ButtonButton = forwardElementRef(function ButtonButton(p: Omit<ButtonButto
             dropdownVariant = "separate";
     }
 
-    const { getSyncHandler, pending, settleCount, hasError } = useAsyncHandler<HTMLButtonElement>()({ debounce, capture: useCallback(() => { return undefined!; }, []) });
+    const { useSyncHandler, pending, settleCount, hasError } = useAsyncHandler<HTMLButtonElement>()({ debounce, capture: useCallback(() => { return undefined!; }, []) });
     disabled ||= pending;
 
-    const onPress = getSyncHandler(pending ? null : onPressAsync);
+    const onPress = useSyncHandler(pending ? null : onPressAsync);
     const { useAriaButtonProps } = useAriaButton<HTMLButtonElement>({ tag: "button", onPress });
 
     const buttonStyleInfo = useButtonStyles<HTMLButtonElement>({ colorVariant, size, fillVariant, disabled }, "button");
@@ -147,14 +147,14 @@ export const ToggleButton = forwardElementRef(function ToggleButton(p: ToggleBut
     let { colorVariant, size, disabled, pressed, debounce, onPressToggle: onPressAsync, showAsyncSuccess, ...props } = p;
     const inButtonGroup = !!useContext(UseButtonGroupChild);
     const getPressed = useStableGetter(pressed);
-    const { getSyncHandler, pending, hasError, settleCount, hasCapture, currentCapture } = useAsyncHandler<HTMLButtonElement>()({ debounce, capture: useCallback(() => { return !getPressed(); }, []) });
+    const { useSyncHandler, pending, hasError, settleCount, hasCapture, currentCapture } = useAsyncHandler<HTMLButtonElement>()({ debounce, capture: useCallback(() => { return !getPressed(); }, []) });
     if (hasCapture && pending)
         pressed = !!currentCapture;
     disabled ||= pending;
 
     const fillVariant = pressed ? "fill" : "outline";
 
-    const onPress = getSyncHandler(pending ? null : onPressAsync);
+    const onPress = useSyncHandler(pending ? null : onPressAsync);
     const { useAriaButtonProps } = useAriaButton<HTMLButtonElement>({ tag: "button", pressed, onPress });
 
     const buttonStyleInfo = useButtonStyles<HTMLButtonElement>({ colorVariant, size, fillVariant, disabled }, "button");

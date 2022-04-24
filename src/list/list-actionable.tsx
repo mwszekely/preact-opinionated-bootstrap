@@ -43,11 +43,11 @@ export const ListItemActionable = memo(forwardElementRef(function ListItemAction
     const useListNavigationChild = useContext(ListActionableChildContext);
     const { useListNavigationChildProps } = useListNavigationChild({ index, text: childrenText, hidden })
 
-    const { pending, hasError, getSyncHandler } = useAsyncHandler<HTMLLIElement>()({ capture: returnVoid });
+    const { pending, hasError, useSyncHandler } = useAsyncHandler<HTMLLIElement>()({ capture: returnVoid });
 
     const domProps = useMergedProps<HTMLLIElement>()(
         { className: clsx("list-group-item-action", pending && "pending") },
-        useListNavigationChildProps(usePressEventHandlers<HTMLLIElement>(getSyncHandler((props.disabled || pending) ? undefined : onPress), undefined)(domPropsWithoutPress))) as ListItemStaticProps;
+        useListNavigationChildProps(usePressEventHandlers<HTMLLIElement>(useSyncHandler((props.disabled || pending) ? undefined : onPress), undefined)(domPropsWithoutPress))) as ListItemStaticProps;
     return (
         <ProgressCircular childrenPosition="child" mode={pending ? "pending" : null} colorVariant="info">
             <ListItemStatic {...domProps}>
