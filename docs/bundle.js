@@ -11034,6 +11034,7 @@
     const ButtonGroupChild = g$1(forwardElementRef(function ButtonGroupChild1(_ref, ref) {
       let {
         index,
+        tabIndex,
         ...buttonProps
       } = _ref;
       useLogRender("ButtonGroupChild", `Rendering ButtonGroupChild #${index}`); // This is more-or-less forced to be a separate component because of the index prop.
@@ -11053,6 +11054,7 @@
         ref
       }, { ...buttonProps
       }));
+      if (tabIndex != null) p.tabIndex = p;
       return e$3(Button, { ...p
       });
     }));

@@ -83,7 +83,7 @@ export interface ButtonGroupChildAnchorButtonProps extends AnchorButtonProps, Bu
 export type ButtonGroupChildProps = (ButtonGroupChildAnchorButtonProps | ButtonGroupChildButtonButtonProps | ButtonGroupChildToggleButtonProps);
 
 
-export const ButtonGroupChild = memo(forwardElementRef(function ButtonGroupChild1({ index, ...buttonProps }: ButtonGroupChildProps, ref?: Ref<HTMLButtonElement> | Ref<HTMLAnchorElement>): h.JSX.Element {
+export const ButtonGroupChild = memo(forwardElementRef(function ButtonGroupChild1({ index, tabIndex, ...buttonProps }: ButtonGroupChildProps, ref?: Ref<HTMLButtonElement> | Ref<HTMLAnchorElement>): h.JSX.Element {
     useLogRender("ButtonGroupChild", `Rendering ButtonGroupChild #${index}`);
 
     // This is more-or-less forced to be a separate component because of the index prop.
@@ -94,7 +94,10 @@ export const ButtonGroupChild = memo(forwardElementRef(function ButtonGroupChild
     const { tabbable, useListNavigationChildProps, useListNavigationSiblingProps } = useButtonGroupChild!({ index, text: null });
 
     const p = useListNavigationChildProps(useMergedProps<any>()({ ref }, { ...buttonProps as any }));
-    return <Button {...p as any} />
+    if (tabIndex != null)
+        (p as any).tabIndex = p;
+
+    return <Button {...p as any}  />
 }));
 
 () => {

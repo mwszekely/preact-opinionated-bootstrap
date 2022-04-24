@@ -30,7 +30,7 @@ export interface OptionalTagSensitiveProps<E extends EventTarget> {
 }
 
 
-export interface GlobalAttributes<E extends EventTarget> extends Pick<h.JSX.HTMLAttributes<E>, "class" | "className" | "hidden" | "id" | "style" | "ref" | "children"> {
+export interface GlobalAttributes<E extends EventTarget> extends Pick<h.JSX.HTMLAttributes<E>, "class" | "className" | "hidden" | "id" | "style" | "ref" | "children" | "tabIndex"> {
     "aria-labelledby"?: string;
     "aria-label"?: string;
 }
