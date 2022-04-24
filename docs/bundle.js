@@ -1847,6 +1847,161 @@
       };
     }
 
+    function useAsync(_ref) {
+      let {
+        debounce
+      } = _ref;
+      // Always represents whatever promise is currently being waited on, or null if none.
+      const [promise, setPromise, getPromise] = useState(null); // Keep track of how many times we've actually called the async handler
+
+      const [runCount, setRunCount] = useState(0);
+      const [resolveCount, setResolveCount] = useState(0);
+      const [rejectCount, setRejectCount] = useState(0); // Keep track of whether we're acting on a sync or async handler, just in case that's important.
+      // This can change if the handler switches between being sync or async, technically, and will be
+      // null until the first time the handler is called.
+
+      const [currentType, setCurrentType] = useState(null); // If we're set to use a debounce, then when the timeout finishes,
+      // the promise from this state object is transferred over to either 
+      // the current promise or the pending promise.
+
+      const [debouncedPromiseStarter, setDebouncedPromiseStarter, getDebouncedPromiseStarter] = useState(null); // When we want to start a new promise, we won't allow it to start if one is still running.
+      // In that case, we store the promise (or rather, a way to start the promise) in state.
+
+      const [pendingPromiseStarter, setPendingPromiseStarter, getPendingPromiseStarter] = useState(null); // We need to differentiate between `undefined` and "no error has been thrown",
+      // so we have two separate error state variables.
+
+      const [error, setError, getError] = useState(undefined);
+      const [hasError, setHasError, getHasError] = useState(false); // When the debounce timer is up (or the user manually requests the debounce to end)
+      // run the normal "please consider running this promise" routine that we would
+      // have just run immediately if we weren't debouncing our promises.
+
+      const onDebounceTimeUp = A$2(() => {
+        const debouncedPromiseStarter = getDebouncedPromiseStarter();
+        if (debouncedPromiseStarter) wantToStartANewPromise(debouncedPromiseStarter);
+        setDebouncedPromiseStarter(null);
+      }, [wantToStartANewPromise, setDebouncedPromiseStarter]); // Handle the debounce. Logically this happens before the main step as a sort of step 0.
+      // Resets the timeout any time the handler was requested to be called again
+      // and when it finishes, actually call the handler (or set it as the pending promise)
+
+      useTimeout({
+        timeout: debounce !== null && debounce !== void 0 ? debounce : null,
+        callback: onDebounceTimeUp,
+        triggerIndex: debouncedPromiseStarter
+      }); // See if we should set our current promise to be whatever the pending promise is
+      // (usually because the current promise finished and became null).
+
+      useLayoutEffect(() => {
+        // Our current promise just finished and there's one waiting?
+        if (promise == null && pendingPromiseStarter != null) {
+          wantToStartANewPromise(pendingPromiseStarter);
+          setPendingPromiseStarter(null);
+        }
+      }, [promise, pendingPromiseStarter]);
+      let ret = {
+        useSyncHandler,
+        callCount: runCount,
+        pending: promise != null,
+        hasError,
+        error,
+        resolveCount,
+        rejectCount,
+        flushDebouncedPromise: onDebounceTimeUp,
+        promise,
+        currentType,
+        settleCount: rejectCount + resolveCount
+      };
+      return ret; // Called any time the async handler is about to be called for whatever reason,
+      // except for debounce, which comes first, as a sort of "step 0".
+      // Handles all the necessary boilerplate related to choosing whether to
+      // run or set as pending, resetting state variables, etc.
+
+      function wantToStartANewPromise(startPromise) {
+        let alreadyRunningPromise = getPromise() != null; // Boilerplate wrapper around the given promise starter
+
+        let startPromiseWithBoilerplate = () => {
+          // When it starts, notify the caller
+          setRunCount(r => ++r); // When it completes, notify the caller
+          // When it fails, save the error and notify the caller
+          // When it settles, reset our state so we can run a pending promise if it exists
+
+          const onThen = value => {
+            setResolveCount(c => ++c);
+            return value;
+          };
+
+          const onCatch = ex => {
+            setError(ex);
+            setHasError(true);
+            setRejectCount(c => ++c);
+          };
+
+          const onFinally = () => {
+            setPromise(null);
+          }; // Handle the special case where the handler is synchronous
+
+
+          let result;
+
+          try {
+            result = startPromise();
+
+            if (result == null || !("then" in result)) {
+              // It's synchronous and returned successfully.
+              // Bail out early.
+              onThen(result);
+              onFinally();
+              setCurrentType("sync");
+            } else {
+              result.then(onThen).catch(onCatch).finally(onFinally);
+              setCurrentType("async");
+            }
+
+            return result; //console.assert("then" in (result as Promise<any>));
+          } catch (ex) {
+            // It's synchronous (or asynchronous but didn't await anything yet) and threw an error.
+            // Bail out early.
+            onCatch(ex);
+            onFinally();
+            setCurrentType("sync");
+            return;
+          } // The handler is asynchronous
+          //setCurrentType("async");
+          //return (async () => { await result; })().then(onThen).catch(onCatch).finally(onFinally);
+
+        };
+
+        if (!alreadyRunningPromise) {
+          // Start the promise immediately, because there wasn't one running already.
+          let nextPromise = startPromiseWithBoilerplate();
+
+          if (nextPromise == null || !("then" in nextPromise)) ; else {
+            setError(undefined);
+            setHasError(false);
+            setPromise(nextPromise);
+          }
+        } else {
+          // Don't start the promise yet, 
+          // and allow it to start in the future instead.
+          setPendingPromiseStarter(_ => startPromiseWithBoilerplate);
+        }
+      }
+
+      function useSyncHandler(asyncHandler) {
+        const syncHandler = useStableCallback(function syncHandler() {
+          if (asyncHandler == null) return;
+
+          const startPromise = () => asyncHandler();
+
+          if (debounce == null) {
+            wantToStartANewPromise(startPromise);
+          } else {
+            setDebouncedPromiseStarter(_ => startPromise);
+          }
+        });
+        return syncHandler;
+      }
+    }
+
     /**
      * Given an asyncronous event handler, returns a syncronous one that works on the DOM,
      * along with some other information related to the current state.
@@ -1865,7 +2020,7 @@
      * };
      * const {
      *     // When called, returns the synchronous event handler
-     *     getSyncHandler,
+     *     useSyncHandler,
      *     // True while the handler is running
      *     pending,
      *     // The error thrown, if any
@@ -1877,7 +2032,7 @@
      * } = useAsyncHandler<HTMLInputElement>()({
      *     // Pass in the capture function that saves event data
      *     // from being stale.  Note that the async event handler
-     *     // isn't passed here, it's passed to `getSyncHandler` above.
+     *     // isn't passed here, it's passed to `useSyncHandler` above.
      *     capture: e => {
      *         e.preventDefault();
      *
@@ -1886,9 +2041,9 @@
      *     }
      * });
      *
-     * const onInput = getSyncHandler(someAsyncFunction);
+     * const onInput = useSyncHandler(someAsyncFunction);
      * // OR the following, if you want the input entirely disabled while pending:
-     * const onInput = getSyncHandler(pending? null : someAsyncFunction);
+     * const onInput = useSyncHandler(pending? null : someAsyncFunction);
      * ```
      *
      * The handler is automatically throttled to only run one at a time.
@@ -1912,161 +2067,64 @@
           capture,
           debounce
         } = _ref;
-        // Always represents whatever promise is currently being waited on, or null if none.
-        const [promise, setPromise, getPromise] = useState(null); // Keep track of how many times we've actually called the async handler
-
-        const [runCount, setRunCount] = useState(0);
-        const [resolveCount, setResolveCount] = useState(0);
-        const [rejectCount, setRejectCount] = useState(0); // 
-
-        const [currentType, setCurrentType] = useState(null); // If we're set to use a debounce, then when the timeout finishes,
-        // the promise from this state object is transferred over to either 
-        // the current promise or the pending promise.
-
-        const [debouncedPromiseStarter, setDebouncedPromiseStarter, getDebouncedPromiseStarter] = useState(null); // When we want to start a new promise, we won't allow it to start if one is still running.
-        // In that case, we store the promise (or rather, a way to start the promise) in state.
-
-        const [pendingPromiseStarter, setPendingPromiseStarter, getPendingPromiseStarter] = useState(null); // We need to differentiate between `undefined` and "no error has been thrown".
-
-        const [error, setError, getError] = useState(undefined);
-        const [hasError, setHasError, getHasError] = useState(false); // Same thing, we need to differentiate between "nothing captured yet" and "`undefined` was captured"
+        const {
+          callCount,
+          currentType,
+          error,
+          flushDebouncedPromise,
+          useSyncHandler,
+          hasError,
+          pending,
+          rejectCount,
+          resolveCount,
+          settleCount,
+          promise
+        } = useAsync({
+          debounce
+        }); // We need to differentiate between "nothing captured yet" and "`undefined` was captured"
 
         const [currentCapture, setCurrentCapture, getCurrentCapture] = useState(undefined);
-        const [hasCapture, setHasCapture] = useState(false); // When the debounce timer is up (or we manually request the debounce to end)
-        // run the normal "please consider running this promise" routine that we would
-        // have just run immediately if we weren't debouncing our promises.
-
-        const onDebounceTimeUp = A$2(() => {
-          const debouncedPromiseStarter = getDebouncedPromiseStarter();
-          if (debouncedPromiseStarter) wantToStartANewPromise(debouncedPromiseStarter);
-          setDebouncedPromiseStarter(null);
-        }, [wantToStartANewPromise, setDebouncedPromiseStarter]); // Handle the debounce. Logically this happens before the main step as a sort of step 0.
-        // Resets the timeout any time the handler was requested to be called again
-        // and when it finishes, actually call the handler (or set it as the pending promise)
-
-        useTimeout({
-          timeout: debounce !== null && debounce !== void 0 ? debounce : null,
-          callback: onDebounceTimeUp,
-          triggerIndex: debouncedPromiseStarter
-        }); // See if we should set our current promise to be whatever the pending promise is
-        // (usually because the current promise finished and became null).
-
-        useLayoutEffect(() => {
-          // Our current promise just finished and there's one waiting?
-          if (promise == null && pendingPromiseStarter != null) {
-            wantToStartANewPromise(pendingPromiseStarter);
-            setPendingPromiseStarter(null);
-          }
-        }, [promise, pendingPromiseStarter]); // Called any time the async handler is about to be called for whatever reason,
-        // except for debounce, which comes first, as a sort of "step 0".
-        // Handles all the necessary boilerplate related to choosing whether to
-        // run or set as pending, resetting state variables, etc.
-
-        function wantToStartANewPromise(startPromise) {
-          let alreadyRunningPromise = getPromise() != null; // Boilerplate wrapper around the given promise starter
-
-          let startPromiseWithBoilerplate = () => {
-            // When it starts, notify the caller
-            setRunCount(r => ++r); // When it completes, notify the caller
-            // When it fails, save the error and notify the caller
-            // When it settles, reset our state so we can run a pending promise if it exists
-
-            const onThen = () => {
-              setResolveCount(c => ++c);
-            };
-
-            const onCatch = ex => {
-              setError(ex);
-              setHasError(true);
-              setRejectCount(c => ++c);
-            };
-
-            const onFinally = () => {
-              setPromise(null);
-            }; // Handle the special case where the handler is synchronous
-
-
-            let result;
-
-            try {
-              result = startPromise();
-
-              if (result == undefined) {
-                // It's synchronous and returned successfully.
-                // Bail out early.
-                onThen();
-                onFinally();
-                setCurrentType("sync");
-                return;
-              }
-
-              console.assert("then" in result);
-            } catch (ex) {
-              // It's synchronous (or asynchronous but didn't await anything yet) and threw an error.
-              // Bail out early.
-              onCatch(ex);
-              onFinally();
-              setCurrentType("sync");
-              return;
-            } // The handler is asynchronous
-
-
-            setCurrentType("async");
-            return (async () => {
-              await result;
-            })().then(onThen).catch(onCatch).finally(onFinally);
-          };
-
-          if (!alreadyRunningPromise) {
-            // Start the promise immediately, because there wasn't one running already.
-            let nextPromise = startPromiseWithBoilerplate();
-
-            if (nextPromise == undefined) ; else {
-              setError(undefined);
-              setHasError(false);
-              setPromise(nextPromise);
-            }
-          } else {
-            // Don't start the promise yet, 
-            // and allow it to start in the future instead.
-            setPendingPromiseStarter(_ => startPromiseWithBoilerplate);
-          }
-        }
-
+        const [hasCapture, setHasCapture] = useState(false);
         let ret = {
-          getSyncHandler,
+          useSyncHandler: useSyncHandler2,
           getCurrentCapture,
-          callCount: runCount,
+          callCount,
           currentCapture,
           hasCapture,
           pending: promise != null,
           hasError,
           error,
+          promise,
           currentType,
-          flushDebouncedPromise: onDebounceTimeUp,
+          flushDebouncedPromise,
           resolveCount,
           rejectCount,
           settleCount: rejectCount + resolveCount
         };
         return ret;
 
-        function getSyncHandler(asyncHandler) {
-          const syncHandler = useStableCallback(function syncHandler(event) {
-            if (asyncHandler == null) return; // Get the most significant information from the event at this time,
+        function useSyncHandler2(asyncHandler) {
+          let captured;
+          let event;
+          const syncHandler2 = useSyncHandler(asyncHandler == null ? asyncHandler : () => {
+            let ret = asyncHandler(captured, event);
+
+            if (!ret || !("then" in ret)) {
+              return captured;
+            } else {
+              return ret.then(_ => captured);
+            }
+          });
+          const syncHandler = useStableCallback(function syncHandler(e) {
+            // Get the most significant information from the event at this time,
             // which is necessary since the promise could actually be called much later
             // when the element's value (etc.) has changed.
-
-            const captured = capture(event);
+            captured = capture(e);
+            event = e;
+            if (syncHandler2 == null) return;
             setCurrentCapture(captured);
             setHasCapture(true);
-
-            const startPromise = () => asyncHandler(captured, event);
-
-            if (debounce == null) {
-              wantToStartANewPromise(startPromise);
-            } else {
-              setDebouncedPromiseStarter(_ => startPromise);
-            }
+            syncHandler2();
           });
           return syncHandler;
         }
@@ -2374,17 +2432,17 @@
               But roughly isn't good enough if there are multiple matches.
               To convert our sorted index to the unsorted index we need, we have to find the first
               element that matches us *and* (if any such exist) is *after* our current selection.
-                In other words, the only way typeahead moves backwards relative to our current
+               In other words, the only way typeahead moves backwards relative to our current
               position is if the only other option is behind us.
-                It's not specified in WAI-ARIA what to do in that case.  I suppose wrap back to the start?
+               It's not specified in WAI-ARIA what to do in that case.  I suppose wrap back to the start?
               Though there's also a case for just going upwards to the nearest to prevent jumpiness.
               But if you're already doing typeahead on an unsorted list, like, jumpiness can't be avoided.
               I dunno. Going back to the start is the simplist though.
-                Basically what this does: Starting from where we found ourselves after our binary search,
+               Basically what this does: Starting from where we found ourselves after our binary search,
               scan backwards and forwards through all adjacent entries that also compare equally so that
               we can find the one whose `unsortedIndex` is the lowest amongst all other equal strings
               (and also the lowest `unsortedIndex` yadda yadda except that it comes after us).
-                TODO: The binary search starts this off with a solid O(log n), but one-character
+               TODO: The binary search starts this off with a solid O(log n), but one-character
               searches are, thanks to pigeonhole principal, eventually guaranteed to become
               O(n*log n). This is annoying but probably not easily solvable? There could be an
               exception for one-character strings, but that's just kicking the can down
@@ -7196,8 +7254,8 @@
       /*const useMenuSubmenuItem = useCallback((args: UseMenuSubmenuItemParameters) => {
           const { useMenuProps, useMenuButton } = useAriaMenu<HTMLElement, ChildElement, I>(args);
           const { useMenuButtonProps } = useMenuButton<E>({ tag: "li" as any });
-            const { getElement, useRefElementProps } = useRefElement<any>({ onElementChange: setOpenerElement as OnPassiveStateChange<any> });
-            return {
+           const { getElement, useRefElementProps } = useRefElement<any>({ onElementChange: setOpenerElement as OnPassiveStateChange<any> });
+           return {
               getElement,
               useMenuProps,
               useMenuSubmenuItemProps: function <P extends h.JSX.HTMLAttributes<E>>({ ...props }: P) {
@@ -10781,7 +10839,7 @@
       }
 
       const {
-        getSyncHandler,
+        useSyncHandler,
         pending,
         settleCount,
         hasError
@@ -10792,7 +10850,7 @@
         }, [])
       });
       disabled || (disabled = pending);
-      const onPress = getSyncHandler(pending ? null : onPressAsync);
+      const onPress = useSyncHandler(pending ? null : onPressAsync);
       const {
         useAriaButtonProps
       } = useAriaButton({
@@ -10845,7 +10903,7 @@
       !!F(UseButtonGroupChild);
       const getPressed = useStableGetter(pressed);
       const {
-        getSyncHandler,
+        useSyncHandler,
         pending,
         hasError,
         settleCount,
@@ -10860,7 +10918,7 @@
       if (hasCapture && pending) pressed = !!currentCapture;
       disabled || (disabled = pending);
       const fillVariant = pressed ? "fill" : "outline";
-      const onPress = getSyncHandler(pending ? null : onPressAsync);
+      const onPress = useSyncHandler(pending ? null : onPressAsync);
       const {
         useAriaButtonProps
       } = useAriaButton({
@@ -11731,7 +11789,7 @@
       } = _ref;
       (_labelPosition = labelPosition) !== null && _labelPosition !== void 0 ? _labelPosition : labelPosition = "end";
       const {
-        getSyncHandler,
+        useSyncHandler,
         pending,
         hasError,
         settleCount,
@@ -11742,7 +11800,7 @@
         capture: capture$1
       });
       disabled || (disabled = pending);
-      const onChecked = getSyncHandler(onCheckedAsync);
+      const onChecked = useSyncHandler(onCheckedAsync);
       const {
         useCheckboxInputElement,
         useCheckboxLabelElement
@@ -11986,7 +12044,7 @@
         onValueChange: onInputAsync
       } = _ref;
       const {
-        getSyncHandler,
+        useSyncHandler,
         pending,
         hasError,
         settleCount,
@@ -11995,7 +12053,7 @@
       } = useAsyncHandler()({
         capture: e => e[EventDetail].selectedValue
       });
-      const onInput = getSyncHandler(onInputAsync);
+      const onInput = useSyncHandler(onInputAsync);
       const {
         useRadio,
         useRadioGroupProps,
@@ -12190,7 +12248,7 @@
       } = _ref;
       (_labelPosition = labelPosition) !== null && _labelPosition !== void 0 ? _labelPosition : labelPosition = "end";
       const {
-        getSyncHandler,
+        useSyncHandler,
         pending,
         currentType,
         hasError,
@@ -12201,7 +12259,7 @@
       });
       const asyncState = hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null;
       disabled || (disabled = pending);
-      const onInput = getSyncHandler(onInputAsync);
+      const onInput = useSyncHandler(onInputAsync);
       const {
         useCheckboxInputElement: useSwitchInputElement,
         useCheckboxLabelElement: useSwitchLabelElement
@@ -12345,7 +12403,7 @@
         }, [])
       });
       const {
-        getSyncHandler,
+        useSyncHandler,
         currentCapture,
         pending,
         hasError,
@@ -12365,7 +12423,7 @@
         }),
         debounce: type === "text" ? 1500 : undefined
       });
-      const onInputIfValid = getSyncHandler(disabled ? null : onInputAsync);
+      const onInputIfValid = useSyncHandler(disabled ? null : onInputAsync);
 
       const onInput = e => {
         const target = e.currentTarget;
@@ -12897,7 +12955,7 @@
       const useListItemMulti = F(UseListboxMultiItemContext);
       console.assert(!!useListItemMulti, "ListItemMulti is being used outside of a multi-select list. Did you mean to use a different kind of list, or a different kind of list item?");
       const {
-        getSyncHandler,
+        useSyncHandler,
         pending,
         currentCapture,
         hasError,
@@ -12905,7 +12963,7 @@
       } = useAsyncHandler()({
         capture: e => e[EventDetail].selected
       });
-      const onSelectSync = getSyncHandler(disabled ? null : onSelectAsync);
+      const onSelectSync = useSyncHandler(disabled ? null : onSelectAsync);
       const {
         tabbable,
         useListboxMultiItemProps
@@ -12951,13 +13009,13 @@
         ...domProps
       } = props;
       const {
-        getSyncHandler,
+        useSyncHandler,
         pending,
         currentCapture
       } = useAsyncHandler()({
         capture: e => e[EventDetail].selectedIndex
       });
-      const onSelect = getSyncHandler(onSelectAsync);
+      const onSelect = useSyncHandler(onSelectAsync);
       const {
         useListboxSingleItem,
         useListboxSingleLabel,
@@ -13096,13 +13154,13 @@
       const {
         pending,
         hasError,
-        getSyncHandler
+        useSyncHandler
       } = useAsyncHandler()({
         capture: returnVoid
       });
       const domProps = useMergedProps()({
         className: clsx("list-group-item-action", pending && "pending")
-      }, useListNavigationChildProps(usePressEventHandlers(getSyncHandler(props.disabled || pending ? undefined : onPress), undefined)(domPropsWithoutPress)));
+      }, useListNavigationChildProps(usePressEventHandlers(useSyncHandler(props.disabled || pending ? undefined : onPress), undefined)(domPropsWithoutPress)));
       return e$3(ProgressCircular, {
         childrenPosition: "child",
         mode: pending ? "pending" : null,
@@ -15978,7 +16036,7 @@
       });
       const onClose = F(OnCloseContext);
       const {
-        getSyncHandler,
+        useSyncHandler,
         pending,
         settleCount,
         hasError
@@ -15988,7 +16046,7 @@
         }, [])
       });
       disabled || (disabled = pending);
-      const onPress = getSyncHandler(disabled || !onPressAsync ? null : () => {
+      const onPress = useSyncHandler(disabled || !onPressAsync ? null : () => {
         var _onPressAsync;
 
         return onPressAsync === null || onPressAsync === void 0 ? void 0 : (_onPressAsync = onPressAsync()) === null || _onPressAsync === void 0 ? void 0 : _onPressAsync.then(() => onClose === null || onClose === void 0 ? void 0 : onClose());
@@ -16058,11 +16116,11 @@
 
       (_orientation = orientation) !== null && _orientation !== void 0 ? _orientation : orientation = "inline";
       const {
-        getSyncHandler
+        useSyncHandler
       } = useAsyncHandler()({
         capture: capture
       });
-      const onSelect = getSyncHandler(onSelectAsync);
+      const onSelect = useSyncHandler(onSelectAsync);
       const {
         useTab,
         useTabPanel,
@@ -16834,7 +16892,7 @@
       } = _ref3;
       const debounceSetting = F(DebounceContext);
       const {
-        getSyncHandler,
+        useSyncHandler,
         pending,
         hasError,
         currentCapture
@@ -16842,7 +16900,7 @@
         capture,
         debounce: debounceSetting == true ? 1500 : debounceSetting != false ? debounceSetting : undefined
       });
-      const onValueChangeSync = getSyncHandler(onValueChangeAsync);
+      const onValueChangeSync = useSyncHandler(onValueChangeAsync);
       value = currentCapture !== null && currentCapture !== void 0 ? currentCapture : value;
       const getValueText = F(GetValueTextContext);
       const valueText = _$1(() => {
