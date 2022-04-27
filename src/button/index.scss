@@ -85,7 +85,7 @@
   // adjusting their padding, which affects layout,
   // we force a certain height and disable layout shifting.
   contain: content;
-  height: calc(1.5em + (#{$btn-padding-y} * 2) + 2px);
+  height: calc((#{$line-height-base} * 1em) + (#{$btn-padding-y} * 2) + 2px);
 
   // Bootstrap also does this when $enable-button-pointers
   // but not for .pending
@@ -266,12 +266,12 @@
   }
 
   &.btn-lg {
-    height: calc(1.5em + (#{$btn-padding-y-lg} * 2) + 2px);
+    height: calc((#{$line-height-lg} * 1em) + (#{$btn-padding-y-lg} * 2) + 2px);
     padding-top: calc(#{$btn-padding-y-lg} * var(--press-effect-block-offset));
     padding-bottom: calc(#{$btn-padding-y-lg} * (2 - var(--press-effect-block-offset)));
   }
   &.btn-sm {
-    height: calc(1.5em + (#{$btn-padding-y-sm} * 2) + 2px);
+    height: calc((#{$line-height-sm} * 1em) + (#{$btn-padding-y-sm} * 2) + 2px);
     padding-top: calc(#{$btn-padding-y-sm} * var(--press-effect-block-offset));
     padding-bottom: calc(#{$btn-padding-y-sm} * (2 - var(--press-effect-block-offset)));
   }
