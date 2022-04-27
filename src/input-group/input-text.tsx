@@ -18,7 +18,7 @@ function UnlabelledInputR(props: UnlabelledInputNumberNonNullableProps, ref?: Re
 function UnlabelledInputR(props: UnlabelledInputProps, ref?: Ref<any>): h.JSX.Element;
 function UnlabelledInputR(p: UnlabelledInputProps, ref?: Ref<any>): h.JSX.Element {
 
-    let { type, disabled, value, onValueChange: onInputAsync, disabledVariant, readOnly, ...p2 } = (p as UnlabelledInputProps);
+    let { type, disabled, value, onValueChange: onInputAsync, disabledVariant, readOnly, spinnerTimeout, ...p2 } = (p as UnlabelledInputProps);
     let { nullable, ...p3 } = p2 as (UnlabelledInputNumberNonNullableProps | UnlabelledInputNumberNullableProps);
     const props = p3 as h.JSX.HTMLAttributes<HTMLInputElement>;
 
@@ -189,7 +189,7 @@ function UnlabelledInputR(p: UnlabelledInputProps, ref?: Ref<any>): h.JSX.Elemen
     }, [v]);
 
     return (
-        <ProgressCircular spinnerTimeout={10} mode={currentType === "async" ? asyncState : null} childrenPosition="after" colorVariant="info">
+        <ProgressCircular spinnerTimeout={spinnerTimeout ?? 10} mode={currentType === "async" ? asyncState : null} childrenPosition="after" colorVariant="info">
             <input {...useRefElementProps(useHasFocusProps(useMergedProps<HTMLInputElement>()(props, {
                 "aria-disabled": disabled ? "true" : undefined,
                 onKeyDown,

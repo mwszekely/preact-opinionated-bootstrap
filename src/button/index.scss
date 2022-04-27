@@ -264,19 +264,17 @@
       }
     }
   }
-}
-.btn-lg {
-  height: calc(1.5em + (#{$btn-padding-y-lg} * 2) + 2px);
-  padding-top: calc(#{$btn-padding-y-lg} * var(--press-effect-block-offset));
-  padding-bottom: calc(#{$btn-padding-y-lg} * (2 - var(--press-effect-block-offset)));
-}
-.btn-sm {
-  height: calc(1.5em + (#{$btn-padding-y-sm} * 2) + 2px);
-  padding-top: calc(#{$btn-padding-y-sm} * var(--press-effect-block-offset));
-  padding-bottom: calc(#{$btn-padding-y-sm} * (2 - var(--press-effect-block-offset)));
-}
 
-@each $color, $value in $theme-colors {
+  &.btn-lg {
+    height: calc(1.5em + (#{$btn-padding-y-lg} * 2) + 2px);
+    padding-top: calc(#{$btn-padding-y-lg} * var(--press-effect-block-offset));
+    padding-bottom: calc(#{$btn-padding-y-lg} * (2 - var(--press-effect-block-offset)));
+  }
+  &.btn-sm {
+    height: calc(1.5em + (#{$btn-padding-y-sm} * 2) + 2px);
+    padding-top: calc(#{$btn-padding-y-sm} * var(--press-effect-block-offset));
+    padding-bottom: calc(#{$btn-padding-y-sm} * (2 - var(--press-effect-block-offset)));
+  }
 }
 
 @media (prefers-reduced-motion) {

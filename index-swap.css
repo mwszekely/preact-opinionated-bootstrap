@@ -10436,12 +10436,12 @@
 .set-theme.theme-light .btn:active:focus.btn-outline-subtle, .set-theme.theme-light .btn.active:focus.btn-outline-subtle, .set-theme.theme-light .btn:not(:active):not(.active).pending:focus.btn-outline-subtle {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn-lg {
+.set-theme.theme-light .btn.btn-lg {
   height: calc(1.5em + 1rem + 2px);
   padding-top: calc(0.5rem * var(--press-effect-block-offset));
   padding-bottom: calc(0.5rem * (2 - var(--press-effect-block-offset)));
 }
-.set-theme.theme-light .btn-sm {
+.set-theme.theme-light .btn.btn-sm {
   height: calc(1.5em + 0.5rem + 2px);
   padding-top: calc(0.25rem * var(--press-effect-block-offset));
   padding-bottom: calc(0.25rem * (2 - var(--press-effect-block-offset)));
@@ -12160,18 +12160,20 @@
   background-color: var(--bs-body-bg, #fafbfb);
 }
 .set-theme.theme-light .table {
-  contain: content;
   vertical-align: middle;
-}
-.set-theme.theme-light .table tr {
-  height: 2.5em;
+  /*& tr {
+    height: 2.5em;
+  }*/
+  /*
+  &,
+  & tr,
+  & td {
+    contain: content;
+  }*/
 }
 .set-theme.theme-light .table td {
   padding-top: 0;
   padding-bottom: 0;
-}
-.set-theme.theme-light .table tr, .set-theme.theme-light .table td {
-  contain: content;
 }
 .set-theme.theme-light .table {
   position: relative;
@@ -23147,12 +23149,12 @@
 .set-theme.theme-dark .btn:active:focus.btn-outline-subtle, .set-theme.theme-dark .btn.active:focus.btn-outline-subtle, .set-theme.theme-dark .btn:not(:active):not(.active).pending:focus.btn-outline-subtle {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(109, 109, 110, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn-lg {
+.set-theme.theme-dark .btn.btn-lg {
   height: calc(1.5em + 1rem + 2px);
   padding-top: calc(0.5rem * var(--press-effect-block-offset));
   padding-bottom: calc(0.5rem * (2 - var(--press-effect-block-offset)));
 }
-.set-theme.theme-dark .btn-sm {
+.set-theme.theme-dark .btn.btn-sm {
   height: calc(1.5em + 0.5rem + 2px);
   padding-top: calc(0.25rem * var(--press-effect-block-offset));
   padding-bottom: calc(0.25rem * (2 - var(--press-effect-block-offset)));
@@ -24871,18 +24873,20 @@
   background-color: var(--bs-body-bg, #020203);
 }
 .set-theme.theme-dark .table {
-  contain: content;
   vertical-align: middle;
-}
-.set-theme.theme-dark .table tr {
-  height: 2.5em;
+  /*& tr {
+    height: 2.5em;
+  }*/
+  /*
+  &,
+  & tr,
+  & td {
+    contain: content;
+  }*/
 }
 .set-theme.theme-dark .table td {
   padding-top: 0;
   padding-bottom: 0;
-}
-.set-theme.theme-dark .table tr, .set-theme.theme-dark .table td {
-  contain: content;
 }
 .set-theme.theme-dark .table {
   position: relative;

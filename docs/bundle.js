@@ -12383,6 +12383,7 @@
         onValueChange: onInputAsync,
         disabledVariant,
         readOnly,
+        spinnerTimeout,
         ...p2
       } = p;
       let {
@@ -12559,7 +12560,7 @@
         }
       }, [v]);
       return e$3(ProgressCircular, {
-        spinnerTimeout: 10,
+        spinnerTimeout: spinnerTimeout !== null && spinnerTimeout !== void 0 ? spinnerTimeout : 10,
         mode: currentType === "async" ? asyncState : null,
         childrenPosition: "after",
         colorVariant: "info",

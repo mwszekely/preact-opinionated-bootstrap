@@ -10,6 +10,7 @@ interface BaseUnlabelledInputProps<T> {
     disabledVariant?: "hard" | "soft" | "text";
     placeholder?: string;
     onValueChange: (value: T, event: InputEvent) => (Promise<void> | void);
+    spinnerTimeout?: number;
 }
 
 

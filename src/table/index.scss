@@ -7,21 +7,22 @@
 @use "sass:list";
 
 .table {
-  contain: content;
   vertical-align: middle;
 
-  & tr {
+  /*& tr {
     height: 2.5em;
-  }
+  }*/
   & td {
     padding-top: 0;
     padding-bottom: 0;
   }
   
+  /*
+  &,
   & tr,
   & td {
     contain: content;
-  }
+  }*/
 }
 
 .table {
