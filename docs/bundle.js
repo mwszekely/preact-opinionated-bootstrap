@@ -11557,11 +11557,15 @@
      */
 
     function FocusVisibilityManager(_ref) {
+      var _body;
+
       let {
         children,
-        autoHideFocusRing
+        autoHideFocusRing,
+        body
       } = _ref;
-      const [usingPointer, setUsingPointer] = useState(false); // Any time the focus changes on the page, and we haven't moved the pointer in a bit,
+      const [usingPointer, setUsingPointer] = useState(false);
+      (_body = body) !== null && _body !== void 0 ? _body : body = document.body; // Any time the focus changes on the page, and we haven't moved the pointer in a bit,
       // we'll start showing the focus ring automatically.
       // While we can catch the Tab key and listen for that, it's tricker for components
       // that manually manage focus in whatever way.
@@ -11577,32 +11581,32 @@
           return () => clearInterval(handle);
         }
       }, []), returnFalse);
-      useGlobalHandler(document, "focusin", () => {
+      useGlobalHandler(body, "focusin", () => {
         if (getHadRecentKeyPress()) setUsingPointer(false);
       }, {
         capture: true,
         passive: true
       }); // Listen for different types of pointer events that would imply we're not using keyboard navigation
 
-      document.addEventListener("mousemove", ev => {
+      body.addEventListener("mousemove", ev => {
         setUsingPointer(true);
         setHadRecentKeyPress(false);
       }, {
         passive: true
       });
-      document.addEventListener("touchstart", ev => {
+      body.addEventListener("touchstart", ev => {
         setUsingPointer(true);
         setHadRecentKeyPress(false);
       }, {
         passive: true
       });
-      document.addEventListener("pointerdown", ev => {
+      body.addEventListener("pointerdown", ev => {
         setUsingPointer(true);
         setHadRecentKeyPress(false);
       }, {
         passive: true
       });
-      document.addEventListener("pointermove", ev => {
+      body.addEventListener("pointermove", ev => {
         setUsingPointer(true);
         setHadRecentKeyPress(false);
       }, {
@@ -11611,7 +11615,7 @@
       // the Tab key immediately re-activates the focus ring,
       // while other navigation keys only activate it when we're not in an <input>-ish element.
 
-      document.addEventListener("keydown", ev => {
+      body.addEventListener("keydown", ev => {
         if (ev.key == "Tab") setUsingPointer(false);
         if (NavigationKeys.includes(ev.key) && !(ev.target.tagName == "INPUT" || ev.target.tagName == "TEXTAREA")) setHadRecentKeyPress(true);
       }, {
@@ -11620,10 +11624,10 @@
       });
       y$1(() => {
         const hideFocusRing = !!autoHideFocusRing && usingPointer;
-        document.body.style.setProperty("--input-btn-focus-color-opacity", hideFocusRing ? "0" : "0.25");
-        document.body.style.setProperty("--btn-active-box-shadow-opacity", hideFocusRing ? "0" : "0.4");
-        document.body.style.setProperty("--input-btn-check-focus-color-opacity", hideFocusRing ? "0" : "0.5");
-      }, [usingPointer, !!autoHideFocusRing]);
+        body.style.setProperty("--input-btn-focus-color-opacity", hideFocusRing ? "0" : "0.25");
+        body.style.setProperty("--btn-active-box-shadow-opacity", hideFocusRing ? "0" : "0.4");
+        body.style.setProperty("--input-btn-check-focus-color-opacity", hideFocusRing ? "0" : "0.5");
+      }, [usingPointer, body, !!autoHideFocusRing]);
       return v$2(FocusModeContext.Provider, {
         value: usingPointer ? "mouse" : "keyboard",
         children
@@ -12640,6 +12644,8 @@
           children: IC === InputGroupText ? value : undefined,
           value: IC === InputGroupText ? undefined : value !== null && value !== void 0 ? value : undefined,
           placeholder: IC === InputGroupText ? undefined : placeholder,
+          disabled: IC === InputGroupText ? undefined : disabled,
+          disabledVariant: IC === InputGroupText ? undefined : disabledVariant,
           readOnly: IC === InputGroupText ? undefined : readOnly,
           className: clsx(IC === InputGroupText ? "form-control" : undefined)
         }, props)),

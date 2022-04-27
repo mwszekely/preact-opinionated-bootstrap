@@ -5,14 +5,14 @@
 //@forward "bootstrap-sass-variables/form-range-track-bg" with ($form-range-track-bg: $form-range-track-bg !default);
 @use "./bootstrap-shared" as *;
 @use "./bootstrap-variables/light/body-bg" as *;
-@forward "bootstrap-sass-variables/body-bg" with ($body-bg: $body-bg);
+@forward "bootstrap-sass-variables/body-bg" with ($body-bg: $body-bg !default);
 @use "./bootstrap-variables/light/body-color" as *;
-@forward "bootstrap-sass-variables/body-color" with ($body-color: $body-color);
+@forward "bootstrap-sass-variables/body-color" with ($body-color: $body-color !default);
 
 @use "./bootstrap-variables/list-group-active-color" as *;
-@forward "bootstrap-sass-variables/list-group-active-color" with ($list-group-active-color: $list-group-active-color);
+@forward "bootstrap-sass-variables/list-group-active-color" with ($list-group-active-color: $list-group-active-color !default);
 @use "./bootstrap-variables/progress-bar-transition" as *;
-@forward "bootstrap-sass-variables/progress-bar-transition" with ($progress-bar-transition: $progress-bar-transition);
+@forward "bootstrap-sass-variables/progress-bar-transition" with ($progress-bar-transition: $progress-bar-transition !default);
 
 @use "./bootstrap-variables/light/theme-colors" as *;
 @forward "bootstrap-sass-variables/theme-colors" with ($theme-colors: $theme-colors !default);
@@ -23,6 +23,6 @@
 @forward "bootstrap-sass-variables/btn-box-shadow" with ($btn-box-shadow: $btn-box-shadow !default);
 
 @use "./bootstrap-variables/form-range-track-bg" as *;
-@use "bootstrap-sass-variables/form-range-track-bg" with ($form-range-track-bg: $form-range-track-bg);
+@forward "bootstrap-sass-variables/form-range-track-bg" with ($form-range-track-bg: $form-range-track-bg !default);
 
 @use "bootstrap-sass-variables/bootstrap";

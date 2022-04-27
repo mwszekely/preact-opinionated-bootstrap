@@ -12137,7 +12137,7 @@ select {
     appearance: none;
     contain: content;
     height: calc(1.5em + 0.75rem + 2px);
-    --press-effect-block-offset: $btn-focus-width;
+    --press-effect-block-offset: calc(0.25rem / 2);
     padding-top: calc(0.375rem - var(--press-effect-block-offset));
     padding-bottom: calc(0.375rem + var(--press-effect-block-offset));
   }
@@ -12164,7 +12164,7 @@ select {
   }
 
   .btn:active, .btn.active, .btn.pending:not(.toggle-button) {
-    --press-effect-block-offset: calc(-0.25rem);
+    --press-effect-block-offset: calc(-1 * (0.25rem / 2));
   }
 
   .btn.btn-outline-primary {
@@ -12973,6 +12973,11 @@ select {
     height: calc(1.25em + 0.5rem + 2px);
     padding-top: calc(0.25rem - var(--press-effect-block-offset));
     padding-bottom: calc(0.25rem + var(--press-effect-block-offset));
+  }
+
+  .input-group > .btn, .input-group > .btn.btn-large, .input-group > .btn.btn-sm {
+    height: auto;
+    align-self: stretch;
   }
 
   @media (prefers-reduced-motion) {
@@ -29152,7 +29157,7 @@ select {
     appearance: none;
     contain: content;
     height: calc(1.5em + 0.75rem + 2px);
-    --press-effect-block-offset: $btn-focus-width;
+    --press-effect-block-offset: calc(0.25rem / 2);
     padding-top: calc(0.375rem - var(--press-effect-block-offset));
     padding-bottom: calc(0.375rem + var(--press-effect-block-offset));
   }
@@ -29184,7 +29189,7 @@ select {
 }
 @media all and (prefers-color-scheme: light) {
   .btn:active, .btn.active, .btn.pending:not(.toggle-button) {
-    --press-effect-block-offset: calc(-0.25rem);
+    --press-effect-block-offset: calc(-1 * (0.25rem / 2));
   }
 }
 @media all and (prefers-color-scheme: light) {
@@ -30178,6 +30183,12 @@ select {
     height: calc(1.25em + 0.5rem + 2px);
     padding-top: calc(0.25rem - var(--press-effect-block-offset));
     padding-bottom: calc(0.25rem + var(--press-effect-block-offset));
+  }
+}
+@media all and (prefers-color-scheme: light) {
+  .input-group > .btn, .input-group > .btn.btn-large, .input-group > .btn.btn-sm {
+    height: auto;
+    align-self: stretch;
   }
 }
 @media (prefers-color-scheme: light) and (prefers-reduced-motion) {
@@ -45629,7 +45640,7 @@ body.themed-scrollbars {
   appearance: none;
   contain: content;
   height: calc(1.5em + 0.75rem + 2px);
-  --press-effect-block-offset: $btn-focus-width;
+  --press-effect-block-offset: calc(0.25rem / 2);
   padding-top: calc(0.375rem - var(--press-effect-block-offset));
   padding-bottom: calc(0.375rem + var(--press-effect-block-offset));
 }
@@ -45656,7 +45667,7 @@ body.themed-scrollbars {
 }
 
 .set-theme.theme-light .btn:active, .set-theme.theme-light .btn.active, .set-theme.theme-light .btn.pending:not(.toggle-button) {
-  --press-effect-block-offset: calc(-0.25rem);
+  --press-effect-block-offset: calc(-1 * (0.25rem / 2));
 }
 
 .set-theme.theme-light .btn.btn-outline-primary {
@@ -46471,6 +46482,11 @@ body.themed-scrollbars {
   height: calc(1.25em + 0.5rem + 2px);
   padding-top: calc(0.25rem - var(--press-effect-block-offset));
   padding-bottom: calc(0.25rem + var(--press-effect-block-offset));
+}
+
+.set-theme.theme-light .input-group > .btn, .set-theme.theme-light .input-group > .btn.btn-large, .set-theme.theme-light .input-group > .btn.btn-sm {
+  height: auto;
+  align-self: stretch;
 }
 
 @media (prefers-reduced-motion) {
@@ -61402,7 +61418,7 @@ body.themed-scrollbars {
   appearance: none;
   contain: content;
   height: calc(1.5em + 0.75rem + 2px);
-  --press-effect-block-offset: $btn-focus-width;
+  --press-effect-block-offset: calc(0.25rem / 2);
   padding-top: calc(0.375rem - var(--press-effect-block-offset));
   padding-bottom: calc(0.375rem + var(--press-effect-block-offset));
 }
@@ -61429,7 +61445,7 @@ body.themed-scrollbars {
 }
 
 .set-theme.theme-dark .btn:active, .set-theme.theme-dark .btn.active, .set-theme.theme-dark .btn.pending:not(.toggle-button) {
-  --press-effect-block-offset: calc(-0.25rem);
+  --press-effect-block-offset: calc(-1 * (0.25rem / 2));
 }
 
 .set-theme.theme-dark .btn.btn-outline-primary {
@@ -62238,6 +62254,11 @@ body.themed-scrollbars {
   height: calc(1.25em + 0.5rem + 2px);
   padding-top: calc(0.25rem - var(--press-effect-block-offset));
   padding-bottom: calc(0.25rem + var(--press-effect-block-offset));
+}
+
+.set-theme.theme-dark .input-group > .btn, .set-theme.theme-dark .input-group > .btn.btn-large, .set-theme.theme-dark .input-group > .btn.btn-sm {
+  height: auto;
+  align-self: stretch;
 }
 
 @media (prefers-reduced-motion) {

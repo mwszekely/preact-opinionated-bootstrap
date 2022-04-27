@@ -32,6 +32,7 @@ $max-dark: -1 !default;
 @use "./bootstrap-variables/dark/theme-colors" as *;
 @forward "bootstrap-sass-variables/theme-colors" with ($theme-colors: $theme-colors !default);
 @use "./bootstrap-variables/form-range-track-bg" as *;
+@use "./bootstrap-variables/primary" as *;
 @use "bootstrap-sass-variables/theme-dark" with ($body-bg: $body-bg, $body-color: $body-color, $btn-box-shadow: $btn-box-shadow, $btn-active-box-shadow: $btn-active-box-shadow, $component-active-color: tint-color($primary, 80%), $form-range-track-bg: $form-range-track-bg);
 
 

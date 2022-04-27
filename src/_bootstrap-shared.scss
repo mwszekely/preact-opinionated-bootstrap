@@ -6,7 +6,6 @@
 @use "bootstrap-sass-variables/yellow" as *;
 @use "bootstrap-sass-variables/red" as *;
 @use "./bootstrap-variables/primary" as *;
-@forward "./bootstrap-variables/primary";
 @use "./bootstrap-variables/grays" as *;
 @forward "bootstrap-sass-variables/secondary" with ($secondary: $indigo !default);
 @forward "bootstrap-sass-variables/success" with ($success: $green !default);
