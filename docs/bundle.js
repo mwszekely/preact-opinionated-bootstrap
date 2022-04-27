@@ -1944,11 +1944,14 @@
 
           try {
             result = startPromise();
+            const isPromise = result != null && typeof result == "object" && "then" in result;
 
-            if (result == null || !("then" in result)) {
+            if (result == null || !isPromise) {
+              var _result;
+
               // It's synchronous and returned successfully.
               // Bail out early.
-              onThen(result);
+              onThen((_result = result) !== null && _result !== void 0 ? _result : undefined);
               onFinally();
               setCurrentType("sync");
             } else {
@@ -1973,8 +1976,9 @@
         if (!alreadyRunningPromise) {
           // Start the promise immediately, because there wasn't one running already.
           let nextPromise = startPromiseWithBoilerplate();
+          const isPromise = nextPromise != null && typeof nextPromise == "object" && "then" in nextPromise;
 
-          if (nextPromise == null || !("then" in nextPromise)) ; else {
+          if (nextPromise == null || !isPromise) ; else {
             setError(undefined);
             setHasError(false);
             setPromise(nextPromise);
@@ -3612,7 +3616,7 @@
       return true;
     }
 
-    function returnFalse$2() {
+    function returnFalse$1() {
       return false;
     }
 
@@ -3627,10 +3631,10 @@
         onWindowFocusedChange
       } = _ref;
       useEnsureStability(onFocusedChanged, onFocusedInnerChanged, onLastFocusedChanged, onLastFocusedInnerChanged, onLastActiveElementChange, onActiveElementChange, onWindowFocusedChange);
-      const [getFocused, setFocused] = usePassiveState(onFocusedChanged, returnFalse$2);
-      const [getFocusedInner, setFocusedInner] = usePassiveState(onFocusedInnerChanged, returnFalse$2);
-      const [getLastFocused, setLastFocused] = usePassiveState(onLastFocusedChanged, returnFalse$2);
-      const [getLastFocusedInner, setLastFocusedInner] = usePassiveState(onLastFocusedInnerChanged, returnFalse$2);
+      const [getFocused, setFocused] = usePassiveState(onFocusedChanged, returnFalse$1);
+      const [getFocusedInner, setFocusedInner] = usePassiveState(onFocusedInnerChanged, returnFalse$1);
+      const [getLastFocused, setLastFocused] = usePassiveState(onLastFocusedChanged, returnFalse$1);
+      const [getLastFocusedInner, setLastFocusedInner] = usePassiveState(onLastFocusedInnerChanged, returnFalse$1);
       const {
         getActiveElement,
         getLastActiveElement,
@@ -7556,7 +7560,7 @@
       };
     }
 
-    function returnFalse$1() {
+    function returnFalse() {
       return false;
     }
 
@@ -7604,7 +7608,7 @@
           let handle = setTimeout(() => setTriggerFocusedDelayCorrected(focused), focused ? focusDelay : 1);
           return () => clearTimeout(handle);
         }
-      }), returnFalse$1);
+      }), returnFalse);
       const [getTooltipFocused, setTooltipFocused] = usePassiveState(useStableCallback(focused => {
         const delay = focused ? focusDelay : 1;
 
@@ -7612,7 +7616,7 @@
           let handle = setTimeout(() => setTooltipFocusedDelayCorrected(focused), delay);
           return () => clearTimeout(handle);
         }
-      }), returnFalse$1);
+      }), returnFalse);
       const [getTriggerHover, setTriggerHover] = usePassiveState(useStableCallback(hovering => {
         const delay = hovering ? mouseoverDelay : mouseoutDelay;
 
@@ -7620,7 +7624,7 @@
           let handle = setTimeout(() => setTriggerHoverDelayCorrected(hovering), delay);
           return () => clearTimeout(handle);
         }
-      }), returnFalse$1);
+      }), returnFalse);
       const [getTooltipHover, setTooltipHover] = usePassiveState(useStableCallback(hovering => {
         const delay = hovering ? mouseoverDelay : mouseoutDelay;
 
@@ -7628,7 +7632,7 @@
           let handle = setTimeout(() => setTooltipHoverDelayCorrected(hovering), delay);
           return () => clearTimeout(handle);
         }
-      }), returnFalse$1);
+      }), returnFalse);
       const [triggerFocusedDelayCorrected, setTriggerFocusedDelayCorrected] = useState(false);
       const [triggerHoverDelayCorrected, setTriggerHoverDelayCorrected] = useState(false);
       const [tooltipFocusedDelayCorrected, setTooltipFocusedDelayCorrected] = useState(false);
@@ -11535,124 +11539,6 @@
       });
     }));
 
-    const FocusModeContext = D$1("keyboard");
-    /**
-     * Manages graphical effects related to focus management,
-     * and specifically how the user's input device can affect that.
-     *
-     * Certain components will use this information to slighly adjust
-     * how some small details are handled visually.  For example,
-     * this allows Tooltips to *not* show themselves when an
-     * element with one (that's tabbable, like an <input>) receives focus,
-     * but only when the user is using a mouse or other pointing device
-     * (i.e. when tabbed into, the Tooltip will still show).
-     *
-     * You can also provide `autoHideFocusRing`, which will cause the
-     * CSS focus ring to become invisible when the user is using
-     * a pointing device.  Ideally this should be a UI setting, because
-     * some users may prefer it even while using a mouse.
-     *
-     * @param param0
-     * @returns
-     */
-
-    function FocusVisibilityManager(_ref) {
-      var _body;
-
-      let {
-        children,
-        autoHideFocusRing,
-        body
-      } = _ref;
-      const [usingPointer, setUsingPointer] = useState(false);
-      (_body = body) !== null && _body !== void 0 ? _body : body = document.body; // Any time the focus changes on the page, and we haven't moved the pointer in a bit,
-      // we'll start showing the focus ring automatically.
-      // While we can catch the Tab key and listen for that, it's tricker for components
-      // that manually manage focus in whatever way.
-      // This is just a rough heuristic to see if any recent change in focus
-      // looked like it was mouse-initiated or not (with the acceptable caveat that
-      // unrelated mouse movement still counts just fine).
-
-      const [getHadRecentKeyPress, setHadRecentKeyPress] = usePassiveState(A$2(recentKeyPress => {
-        if (recentKeyPress) {
-          const handle = setTimeout(() => {
-            setHadRecentKeyPress(false);
-          }, 100);
-          return () => clearInterval(handle);
-        }
-      }, []), returnFalse);
-      useGlobalHandler(body, "focusin", () => {
-        if (getHadRecentKeyPress()) setUsingPointer(false);
-      }, {
-        capture: true,
-        passive: true
-      }); // Listen for different types of pointer events that would imply we're not using keyboard navigation
-
-      body.addEventListener("mousemove", ev => {
-        setUsingPointer(true);
-        setHadRecentKeyPress(false);
-      }, {
-        passive: true
-      });
-      body.addEventListener("touchstart", ev => {
-        setUsingPointer(true);
-        setHadRecentKeyPress(false);
-      }, {
-        passive: true
-      });
-      body.addEventListener("pointerdown", ev => {
-        setUsingPointer(true);
-        setHadRecentKeyPress(false);
-      }, {
-        passive: true
-      });
-      body.addEventListener("pointermove", ev => {
-        setUsingPointer(true);
-        setHadRecentKeyPress(false);
-      }, {
-        passive: true
-      }); // Key press events are handled differently--
-      // the Tab key immediately re-activates the focus ring,
-      // while other navigation keys only activate it when we're not in an <input>-ish element.
-
-      body.addEventListener("keydown", ev => {
-        if (ev.key == "Tab") setUsingPointer(false);
-        if (NavigationKeys.includes(ev.key) && !(ev.target.tagName == "INPUT" || ev.target.tagName == "TEXTAREA")) setHadRecentKeyPress(true);
-      }, {
-        capture: true,
-        passive: false
-      });
-      y$1(() => {
-        const hideFocusRing = !!autoHideFocusRing && usingPointer;
-        body.style.setProperty("--input-btn-focus-color-opacity", hideFocusRing ? "0" : "0.25");
-        body.style.setProperty("--btn-active-box-shadow-opacity", hideFocusRing ? "0" : "0.4");
-        body.style.setProperty("--input-btn-check-focus-color-opacity", hideFocusRing ? "0" : "0.5");
-      }, [usingPointer, body, !!autoHideFocusRing]);
-      return v$2(FocusModeContext.Provider, {
-        value: usingPointer ? "mouse" : "keyboard",
-        children
-      });
-    }
-    /**
-     * Returns whether it's more likely that the user is currently
-     * navigating with the keyboard or mouse.
-     *
-     * **FOR VISUAL EFFECTS ONLY.** There should be no actual logic
-     * that depends on this very rough heuristic. Tooltips, for example,
-     * use this to determine whether to show on focus (which otherwise
-     * only happens for focusable-but-not-tabbable elements)
-     */
-
-    function useFocusMode() {
-      return F(FocusModeContext);
-    }
-
-    function returnFalse() {
-      return false;
-    }
-
-    const NavigationKeys = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Home", "End", "PageUp", "PageDown"];
-
     const UseCheckboxGroupChildContext = D$1(null);
     const InInputGroupContext = D$1(false);
     const InInputGridContext = D$1(0);
@@ -13229,6 +13115,21 @@
         ref: ref
       });
     }));
+
+    const FocusModeContext = D$1("keyboard");
+    /**
+     * Returns whether it's more likely that the user is currently
+     * navigating with the keyboard or mouse.
+     *
+     * **FOR VISUAL EFFECTS ONLY.** There should be no actual logic
+     * that depends on this very rough heuristic. Tooltips, for example,
+     * use this to determine whether to show on focus (which otherwise
+     * only happens for focusable-but-not-tabbable elements)
+     */
+
+    function useFocusMode() {
+      return F(FocusModeContext);
+    }
 
     var _globalThis$process, _globalThis$process2, _globalThis$process2$, _globalThis$process$e, _globalThis$process$e2;
 
@@ -16586,7 +16487,7 @@
         };
         const onToggleInput = usesAsync ? onToggleInputAsync : setToggleOn;
         return (e$3(ProvideDefaultButtonFill, { value: buttonsFill, children: e$3(ProvideDefaultButtonSize, { value: buttonsSize, children: e$3(ProvideDefaultButtonColor, { value: buttonsColor, children: e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Buttons" }), e$3(CardElement, { children: e$3(Button, { onPress: onPress, children: "I'm a button" }) }), e$3(CardElement, { children: ["A ", e$3("code", { children: "Button" }), " is a ", e$3("code", { children: "Button" }), " is a ", e$3("code", { children: "Button" }), " \u2013 you can click, tap, or Space-key it to activate it and do something.  If the given action is asynchronous, then the button will disable itself and display a spinner during the operation."] }), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Async inputs" }), e$3(CardElement, { children: ["The ", e$3("code", { children: "onPress" }), " event handler for buttons can be sync or async, and they will react appropriately if the operation takes long enough.", e$3(InputGrid, { children: [e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setUsesAsync, checked: usesAsync, labelPosition: "start", children: "Use async handler" }) }), e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setAsyncFails, checked: asyncFails, labelPosition: "start", disabled: !usesAsync, children: "Async handler rejects" }) }), e$3(InputGroup, { children: e$3(Input, { width: "8ch", disabled: !usesAsync, type: "number", onValueChange: setAsyncTimeout, value: asyncTimeout, children: "Async timeout" }) })] })] }), e$3(CardElement, { children: e$3(Button, { onPress: onPress, children: "Click me" }) }), e$3(CardElement, { type: "paragraph", children: e$3("code", { children: `const onPress = ${usesAsync ? `async ` : ""}() => { ${usesAsync ? `await sleep(${asyncTimeout}); ` : ""}pushToast(<Toast ... />); }
-<Button onPress={onPress}>Click me</Button>` }) }), e$3("hr", {}), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Color, fill, & size" }), e$3(CardElement, { type: "paragraph", children: ["Buttons can be styled in different sizes, colors, and fill styles. You can provide a global default with ", e$3("code", { children: "Context" }), " objects, like ", e$3("code", { children: "<ProvideDefaultButtonFill>" }), "."] }), e$3(CardElement, { children: "All the normal Bootstrap colors are provided, albeit with adjustments to outlined buttons to ensure correct contrast ratios on the theme's body BG color.  Additionally, besides the `light` and `dark` colors, `subtle` and `contrast` are available as colors to use that simply map onto `light` or `dark` depending on the body BG color." }), e$3(CardElement, { children: e$3(ButtonGroup, { children: [e$3(ButtonGroupChild, { index: 0, onPressToggle: () => setButtonsSize("sm"), pressed: buttonsSize === "sm", children: "Small" }), e$3(ButtonGroupChild, { index: 1, onPressToggle: () => setButtonsSize("md"), pressed: buttonsSize === "md", children: "Medium" }), e$3(ButtonGroupChild, { index: 2, onPressToggle: () => setButtonsSize("lg"), pressed: buttonsSize === "lg", children: "Large" })] }) }), e$3(CardElement, { children: e$3(ButtonGroup, { children: [e$3(ButtonGroupChild, { index: 0, onPressToggle: () => setButtonsFill("fill"), pressed: buttonsFill === "fill", children: "Fill" }), e$3(ButtonGroupChild, { index: 1, onPressToggle: () => setButtonsFill("outline"), pressed: buttonsFill === "outline", children: "Outline" })] }) }), e$3(CardElement, { children: e$3(ButtonGroup, { wrap: true, children: [e$3(ButtonGroupChild, { index: 0, colorVariant: "primary", pressed: buttonsColor == "primary", onPressToggle: () => setButtonsColor("primary"), children: "Primary" }), e$3(ButtonGroupChild, { index: 1, colorVariant: "secondary", pressed: buttonsColor == "secondary", onPressToggle: () => setButtonsColor("secondary"), children: "Secondary" }), e$3(ButtonGroupChild, { index: 2, colorVariant: "success", pressed: buttonsColor == "success", onPressToggle: () => setButtonsColor("success"), children: "Success" }), e$3(ButtonGroupChild, { index: 3, colorVariant: "warning", pressed: buttonsColor == "warning", onPressToggle: () => setButtonsColor("warning"), children: "Warning" }), e$3(ButtonGroupChild, { index: 4, colorVariant: "danger", pressed: buttonsColor == "danger", onPressToggle: () => setButtonsColor("danger"), children: "Danger" }), e$3(ButtonGroupChild, { index: 5, colorVariant: "info", pressed: buttonsColor == "info", onPressToggle: () => setButtonsColor("info"), children: "Info" }), e$3(ButtonGroupChild, { index: 6, colorVariant: "light", pressed: buttonsColor == "light", onPressToggle: () => setButtonsColor("light"), children: "Light" }), e$3(ButtonGroupChild, { index: 7, colorVariant: "dark", pressed: buttonsColor == "dark", onPressToggle: () => setButtonsColor("dark"), children: "Dark" }), e$3(ButtonGroupChild, { index: 8, colorVariant: "contrast", pressed: buttonsColor == "contrast", onPressToggle: () => setButtonsColor("contrast"), children: "Contrast" }), e$3(ButtonGroupChild, { index: 9, colorVariant: "subtle", pressed: buttonsColor == "subtle", onPressToggle: () => setButtonsColor("subtle"), children: "Subtle" })] }) }), e$3(CardElement, { children: e$3(Button, { onPress: onPress, children: [buttonsFill === "fill" ? "Filled" : "Outlined", " ", buttonsColor, " button"] }) }), e$3(CardElement, { children: e$3("code", { children: `<Button fillVariant="${buttonsFill}" colorVariant="${buttonsColor}">Variant button</Button>` }) }), e$3("hr", {}), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Link buttons" }), e$3(CardElement, { children: ["A link can be styled as a button while retaining native link functionality (middle clicks, etc.). These buttons have no ", e$3("code", { children: "onPress" }), " handler, instead taking ", e$3("code", { children: "href" }), " and the other ", e$3("code", { children: "<a>" }), " props."] }), e$3(CardElement, { children: ["A ", e$3("code", { children: "<Button>" }), " will use an anchor link internally if you provide it with an ", e$3("code", { children: "href" }), " prop, or optionally setting the ", e$3("code", { children: "tag" }), " prop to ", e$3("code", { children: "a" }), ".", e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setUsesLinkButton, checked: usesLinkButton, labelPosition: "start", children: "Use link button" }) })] }), e$3(CardElement, { children: usesLinkButton ? e$3(Button, { target: "_blank", href: "https://www.example.com", children: ["example.com ", e$3("i", { class: "bi bi-box-arrow-up-right" })] }) : e$3(Button, { onPress: onPress, children: "Regular button" }) }), e$3(CardElement, { type: "paragraph", children: e$3("code", { children: usesLinkButton ? `<Button href="https://www.example.com">Link button</Button>` : `<Button onPress={onPress}>Regular button</Button>` }) }), e$3(CardElement, { children: "Keep in mind that styling a link as a button can cause confusion even while being completely compliant (\"\uD83E\uDDD1\u200D\uD83D\uDCBB click on the link\" \"\uD83D\uDE21 what link??\"), so be sure to use with some level of consideration." }), e$3("hr", {}), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Toggle buttons" }), e$3(CardElement, { children: ["If given a ", e$3("code", { children: "pressed" }), " prop, a button will become a toggle button, with an off/on state.  It will style itself as outlined when unpressed, and filled when pressed, so they are best used in groups."] }), e$3(CardElement, { children: e$3(Button, { pressed: toggleOn, onPressToggle: onToggleInput, children: "Toggle button" }) }), e$3(CardElement, { type: "paragraph", children: e$3("code", { children: `<Button pressed={pressed} onPressToggle={onInput}>Toggle button</Button>` }) }), e$3("hr", {}), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Button Groups" }), e$3(CardElement, { children: ["A ", e$3("code", { children: "<ButtonGroup>" }), " can be used to group a set of ", e$3("code", { children: "<ButtonGroupChild>" }), " (which is the exact same as a ", e$3("code", { children: "<Button>" }), ", but with an ", e$3("code", { children: "index" }), " prop). This gives them keyboard navigation abilities."] }), e$3(CardElement, { children: e$3(ButtonGroup, { wrap: true, children: [e$3(ButtonGroupChild, { index: 0, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress, children: "First button" }), e$3(ButtonGroupChild, { index: 1, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress, children: "Second button" }), e$3(ButtonGroupChild, { index: 2, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress, children: "Third button" }), e$3(ButtonGroupChild, { index: 3, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress, children: "Fourth button" })] }) }), e$3(CardElement, { type: "paragraph", children: e$3("code", { children: `<ButtonGroup wrap>
+<Button onPress={onPress}>Click me</Button>` }) }), e$3("hr", {}), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Color, fill, & size" }), e$3(CardElement, { type: "paragraph", children: ["Buttons can be styled in different sizes, colors, and fill styles. You can provide a global default with ", e$3("code", { children: "Context" }), " objects, like ", e$3("code", { children: "<ProvideDefaultButtonFill>" }), "."] }), e$3(CardElement, { children: "All the normal Bootstrap colors are provided, albeit with adjustments to outlined buttons to ensure correct contrast ratios on the theme's body BG color.  Additionally, besides the `light` and `dark` colors, `subtle` and `contrast` are available as colors to use that simply map onto `light` or `dark` depending on the body BG color." }), e$3(CardElement, { children: e$3(ButtonGroup, { children: [e$3(ButtonGroupChild, { index: 0, onPressToggle: () => setButtonsSize("sm"), pressed: buttonsSize === "sm", children: "Small" }), e$3(ButtonGroupChild, { index: 1, onPressToggle: () => setButtonsSize("md"), pressed: buttonsSize === "md", children: "Medium" }), e$3(ButtonGroupChild, { index: 2, onPressToggle: () => setButtonsSize("lg"), pressed: buttonsSize === "lg", children: "Large" })] }) }), e$3(CardElement, { children: e$3(ButtonGroup, { children: [e$3(ButtonGroupChild, { index: 0, onPressToggle: () => setButtonsFill("fill"), pressed: buttonsFill === "fill", children: "Fill" }), e$3(ButtonGroupChild, { index: 1, onPressToggle: () => setButtonsFill("outline"), pressed: buttonsFill === "outline", children: "Outline" })] }) }), e$3(CardElement, { children: e$3(ButtonGroup, { wrap: true, children: [e$3(ButtonGroupChild, { index: 0, colorVariant: "primary", pressed: buttonsColor == "primary", onPressToggle: () => setButtonsColor("primary"), children: "Primary" }), e$3(ButtonGroupChild, { index: 1, colorVariant: "secondary", pressed: buttonsColor == "secondary", onPressToggle: () => setButtonsColor("secondary"), children: "Secondary" }), e$3(ButtonGroupChild, { index: 2, colorVariant: "success", pressed: buttonsColor == "success", onPressToggle: () => setButtonsColor("success"), children: "Success" }), e$3(ButtonGroupChild, { index: 3, colorVariant: "warning", pressed: buttonsColor == "warning", onPressToggle: () => setButtonsColor("warning"), children: "Warning" }), e$3(ButtonGroupChild, { index: 4, colorVariant: "danger", pressed: buttonsColor == "danger", onPressToggle: () => setButtonsColor("danger"), children: "Danger" }), e$3(ButtonGroupChild, { index: 5, colorVariant: "info", pressed: buttonsColor == "info", onPressToggle: () => setButtonsColor("info"), children: "Info" }), e$3(ButtonGroupChild, { index: 6, colorVariant: "light", pressed: buttonsColor == "light", onPressToggle: () => setButtonsColor("light"), children: "Light" }), e$3(ButtonGroupChild, { index: 7, colorVariant: "dark", pressed: buttonsColor == "dark", onPressToggle: () => setButtonsColor("dark"), children: "Dark" }), e$3(ButtonGroupChild, { index: 8, colorVariant: "contrast", pressed: buttonsColor == "contrast", onPressToggle: () => setButtonsColor("contrast"), children: "Contrast" }), e$3(ButtonGroupChild, { index: 9, colorVariant: "subtle", pressed: buttonsColor == "subtle", onPressToggle: () => setButtonsColor("subtle"), children: "Subtle" })] }) }), e$3(CardElement, { children: e$3(Button, { onPress: onPress, children: [buttonsFill === "fill" ? "Filled" : "Outlined", " ", buttonsColor, " button"] }) }), e$3(CardElement, { children: e$3("code", { children: `<Button fillVariant="${buttonsFill}" colorVariant="${buttonsColor}">Variant button</Button>` }) }), e$3("hr", {}), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Link buttons" }), e$3(CardElement, { children: ["A link can be styled as a button while retaining native link functionality (middle clicks, etc.). These buttons have no ", e$3("code", { children: "onPress" }), " handler, instead taking ", e$3("code", { children: "href" }), " and the other ", e$3("code", { children: "<a>" }), " props."] }), e$3(CardElement, { children: ["A ", e$3("code", { children: "<Button>" }), " will use an anchor link internally if you provide it with an ", e$3("code", { children: "href" }), " prop, or optionally setting the ", e$3("code", { children: "tag" }), " prop to ", e$3("code", { children: "a" }), ".", e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setUsesLinkButton, checked: usesLinkButton, labelPosition: "start", children: "Use link button" }) })] }), e$3(CardElement, { children: usesLinkButton ? e$3(Button, { target: "_blank", href: "https://www.example.com", fillVariant: buttonsFill, children: ["example.com ", e$3("i", { class: "bi bi-box-arrow-up-right" })] }) : e$3(Button, { onPress: onPress, fillVariant: buttonsFill, children: "Regular button" }) }), e$3(CardElement, { type: "paragraph", children: e$3("code", { children: usesLinkButton ? `<Button href="https://www.example.com">Link button</Button>` : `<Button onPress={onPress}>Regular button</Button>` }) }), e$3(CardElement, { children: "Keep in mind that styling a link as a button can cause confusion even while being completely compliant (\"\uD83E\uDDD1\u200D\uD83D\uDCBB click on the link\" \"\uD83D\uDE16 what link??\"), so be sure to use with a decent amount of caution." }), e$3("hr", {}), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Toggle buttons" }), e$3(CardElement, { children: ["If given a ", e$3("code", { children: "pressed" }), " prop, a button will become a toggle button, with an off/on state.  It will style itself as outlined when unpressed, and filled when pressed, so they are best used in groups."] }), e$3(CardElement, { children: e$3(Button, { pressed: toggleOn, onPressToggle: onToggleInput, children: "Toggle button" }) }), e$3(CardElement, { type: "paragraph", children: e$3("code", { children: `<Button pressed={pressed} onPressToggle={onInput}>Toggle button</Button>` }) }), e$3("hr", {}), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Button Groups" }), e$3(CardElement, { children: ["A ", e$3("code", { children: "<ButtonGroup>" }), " can be used to group a set of ", e$3("code", { children: "<ButtonGroupChild>" }), " (which is the exact same as a ", e$3("code", { children: "<Button>" }), ", but with an ", e$3("code", { children: "index" }), " prop). This gives them keyboard navigation abilities."] }), e$3(CardElement, { children: e$3(ButtonGroup, { wrap: true, children: [e$3(ButtonGroupChild, { index: 0, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress, children: "First button" }), e$3(ButtonGroupChild, { index: 1, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress, children: "Second button" }), e$3(ButtonGroupChild, { index: 2, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress, children: "Third button" }), e$3(ButtonGroupChild, { index: 3, fillVariant: buttonsFill, colorVariant: buttonsColor, onPress: onPress, children: "Fourth button" })] }) }), e$3(CardElement, { type: "paragraph", children: e$3("code", { children: `<ButtonGroup wrap>
     <ButtonGroupChild index={0}>First button</ButtonGroupChild>
     <ButtonGroupChild index={1}>Second button</ButtonGroupChild>
     <ButtonGroupChild index={2}>Third button</ButtonGroupChild>
@@ -17617,7 +17518,7 @@
         d$1(() => changeThemes(theme), [theme]);
         return e$3(d$2, { children: [e$3(Button, { colorVariant: theme == "theme-dark" ? "light" : "dark", style: { position: "fixed", insetBlockStart: "0.5em", insetInlineEnd: "0.5em", zIndex: 9999999 }, spinnerTimeout: 999999999, onPress: async () => {
                         setTheme(theme === "theme-dark" ? "theme-light" : "theme-dark");
-                    }, children: ["Switch theme to ", e$3("strong", { children: theme === "theme-dark" ? "light" : "dark" })] }), e$3(GridResponsive, { minWidth: "35em", children: e$3(FocusVisibilityManager, { autoHideFocusRing: true, children: e$3(DebugUtilContext.Provider, { value: _$1(() => ({ logRender: new Set(["Table", "TableHead", "TableBody", "TableRow", "TableCell"]) }), []), children: e$3(ToastsProvider, { children: e$3(DialogsProvider, { children: [e$3(DemoTable, {}), e$3(DemoLists, {}), e$3(DemoMenus, {}), e$3(DemoDialogs, {}), e$3(DemoButtons, {}), e$3(DemoChecks, {}), e$3(DemoInputs, {}), e$3(DemoLayout, {}), e$3(DemoAccordion, {}), e$3(DemoDialog, {}), e$3(DemoDrawer, {}), e$3(DemoInput, {}), e$3(DemoList, {}), e$3(DemoTabs, {}), e$3(DemoMenu, {})] }) }) }) }) })] });
+                    }, children: ["Switch theme to ", e$3("strong", { children: theme === "theme-dark" ? "light" : "dark" })] }), e$3(GridResponsive, { minWidth: "35em", children: e$3(DebugUtilContext.Provider, { value: _$1(() => ({ logRender: new Set(["Table", "TableHead", "TableBody", "TableRow", "TableCell"]) }), []), children: e$3(ToastsProvider, { children: e$3(DialogsProvider, { children: [e$3(DemoTable, {}), e$3(DemoLists, {}), e$3(DemoMenus, {}), e$3(DemoDialogs, {}), e$3(DemoButtons, {}), e$3(DemoChecks, {}), e$3(DemoInputs, {}), e$3(DemoLayout, {}), e$3(DemoAccordion, {}), e$3(DemoDialog, {}), e$3(DemoDrawer, {}), e$3(DemoInput, {}), e$3(DemoList, {}), e$3(DemoTabs, {}), e$3(DemoMenu, {})] }) }) }) })] });
     };
     requestAnimationFrame(() => {
         S$1(e$3(Component, {}), document.getElementById("root"));

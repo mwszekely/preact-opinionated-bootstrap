@@ -114,7 +114,7 @@
   // When, when hoving or focused, they're level with the page
   &:hover:not(.active):not(:active),
   &:focus:not(.active):not(:active) {
-    --press-effect-block-offset: 0;
+    --press-effect-block-offset: 0rem;
   }
 
   // And when pressed, they're inset into the page.
@@ -127,6 +127,9 @@
 
   @each $color-name, $color-value in $theme-colors {
     &.btn-outline-#{$color-name} {
+      &:not(:active):not(.active):not(.pending.toggle-button){
+        --press-effect-block-offset: 0rem;
+      }
 
       // Make outline button styles a bit less flashy
       // by only partially fading in the background
@@ -180,7 +183,8 @@
     }
     &.btn-outline-#{$color-name} {
       @include box-shadow(
-        inset 0 -3px 0 0 rgba(ensure-contrasting-color($body-bg, $color-value), 80%),
+        //inset 0 -3px 0 0 rgba(ensure-contrasting-color($body-bg, $color-value), 80%),
+        inset 0 0 0 0 rgba(ensure-contrasting-color($body-bg, $color-value), 80%),
         0 0 0 0 rgba(tint-color($color-value, 40%), $input-btn-focus-color-opacity)
       );
     }

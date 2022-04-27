@@ -5,6 +5,7 @@ export { Card, CardElement, CardElementProps } from "./card";
 export { Dialog, DialogProps, DialogsProvider, PushDialog, usePushDialog, UpdateDialog, useUpdateDialog, useCloseDialog, CloseDialog, CloseDialogButton } from "./dialog";
 export { Drawer, DrawerProps } from "./drawer";
 export { Figure, FigureProps } from "./figure";
+export { Heading, HeadingProps } from "./heading";
 export { Checkbox, CheckboxGroup, CheckboxGroupChild, CheckboxGroupChildProps, CheckboxGroupParent, CheckboxGroupProps, CheckboxProps, Input, InputGrid, InputGridProps, InputGroup, InputGroupProps, InputGroupText, InputGroupTextProps, InputProps, Radio, RadioGroup, RadioGroupProps, RadioProps, Switch, SwitchProps } from "./input-group";
 export { GridResponsive, GridStatic } from "./layout";
 export { ListItemSingle, ListSingle, ListSingleProps, ListItemSingleProps, ListItemMulti, ListMulti, ListMultiProps, ListItemMultiProps, ListItemStatic, ListStatic, ListStaticProps, ListItemStaticProps, List, ListItem, ListProps, ListItemProps } from "./list";

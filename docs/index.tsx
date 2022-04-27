@@ -275,36 +275,34 @@ const Component = () => {
             setTheme(theme === "theme-dark" ? "theme-light" : "theme-dark");
         }}>Switch theme to <strong>{theme === "theme-dark" ? "light" : "dark"}</strong></Button>
         <GridResponsive minWidth="35em">
-            <FocusVisibilityManager autoHideFocusRing={true}>
-                <DebugUtilContext.Provider value={useMemo(() => ({ logRender: new Set<LogRenderType>(["Table", "TableHead", "TableBody", "TableRow", "TableCell"]) }), [])}>
-                    <ToastsProvider>
-                        <DialogsProvider>
+            <DebugUtilContext.Provider value={useMemo(() => ({ logRender: new Set<LogRenderType>(["Table", "TableHead", "TableBody", "TableRow", "TableCell"]) }), [])}>
+                <ToastsProvider>
+                    <DialogsProvider>
 
-                            <DemoTable />
-                            <DemoLists />
-                            <DemoMenus />
-                            <DemoDialogs />
-                            <DemoButtons />
-                            <DemoChecks />
-                            <DemoInputs />
-                            <DemoLayout />
-                            <DemoAccordion />
-                            <DemoDialog />
-                            <DemoDrawer />
-                            <DemoInput />
-                            <DemoList />
-                            <DemoTabs />
-                            <DemoMenu />
-                            {/*<DemoFocus />
+                        <DemoTable />
+                        <DemoLists />
+                        <DemoMenus />
+                        <DemoDialogs />
+                        <DemoButtons />
+                        <DemoChecks />
+                        <DemoInputs />
+                        <DemoLayout />
+                        <DemoAccordion />
+                        <DemoDialog />
+                        <DemoDrawer />
+                        <DemoInput />
+                        <DemoList />
+                        <DemoTabs />
+                        <DemoMenu />
+                        {/*<DemoFocus />
             <DemoUseTimeout />
             <DemoUseInterval />
             <DemoUseFocusTrap />
             <DemoUseFocusTrap />
             <input />*/}
-                        </DialogsProvider>
-                    </ToastsProvider>
-                </DebugUtilContext.Provider>
-            </FocusVisibilityManager>
+                    </DialogsProvider>
+                </ToastsProvider>
+            </DebugUtilContext.Provider>
         </GridResponsive>
     </>
 }

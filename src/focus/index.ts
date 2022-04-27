@@ -70,6 +70,18 @@ export function FocusVisibilityManager({ children, autoHideFocusRing, body }: { 
         body!.style.setProperty("--input-btn-focus-color-opacity", hideFocusRing ? "0" : "0.25");
         body!.style.setProperty("--btn-active-box-shadow-opacity", hideFocusRing ? "0" : "0.4");
         body!.style.setProperty("--input-btn-check-focus-color-opacity", hideFocusRing ? "0" : "0.5");
+        if (hideFocusRing)
+            body!.classList.add("hide-focus-ring");
+        else
+            body!.classList.remove("hide-focus-ring");
+
+        return () => {
+            body!.style.removeProperty("--input-btn-focus-color-opacity");
+            body!.style.removeProperty("--btn-active-box-shadow-opacity");
+            body!.style.removeProperty("--input-btn-check-focus-color-opacity");
+            if (hideFocusRing)
+                body!.classList.remove("hide-focus-ring");
+        }
     }, [usingPointer, body, !!autoHideFocusRing]);
 
     return h(FocusModeContext.Provider, { value: usingPointer ? "mouse" : "keyboard", children });

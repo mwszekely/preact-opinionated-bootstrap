@@ -121,11 +121,11 @@ export function DemoButtons() {
                                 <InputGroup><Checkbox onCheck={setUsesLinkButton} checked={usesLinkButton} labelPosition="start">Use link button</Checkbox></InputGroup>
                             </CardElement>
                             <CardElement>
-                                {usesLinkButton ? <Button target="_blank" href="https://www.example.com">example.com <i class="bi bi-box-arrow-up-right"></i></Button> : <Button onPress={onPress}>Regular button</Button>}
+                                {usesLinkButton ? <Button target="_blank" href="https://www.example.com" fillVariant={buttonsFill}>example.com <i class="bi bi-box-arrow-up-right"></i></Button> : <Button onPress={onPress} fillVariant={buttonsFill}>Regular button</Button>}
                             </CardElement>
 
                             <CardElement type="paragraph"><code>{usesLinkButton ? `<Button href="https://www.example.com">Link button</Button>` : `<Button onPress={onPress}>Regular button</Button>`}</code></CardElement>
-                            <CardElement>Keep in mind that styling a link as a button can cause confusion even while being completely compliant ("🧑‍💻 click on the link" "😡 what link??"), so be sure to use with some level of consideration.</CardElement>
+                            <CardElement>Keep in mind that styling a link as a button can cause confusion even while being completely compliant ("🧑‍💻 click on the link" "😖 what link??"), so be sure to use with a decent amount of caution.</CardElement>
                             
 
 
