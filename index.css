@@ -12137,9 +12137,9 @@ select {
     appearance: none;
     contain: content;
     height: calc(1.5em + 0.75rem + 2px);
-    --press-effect-block-offset: 0.75;
-    padding-top: calc(0.375rem * var(--press-effect-block-offset));
-    padding-bottom: calc(0.375rem * (2 - var(--press-effect-block-offset)));
+    --press-effect-block-offset: $btn-focus-width;
+    padding-top: calc(0.375rem - var(--press-effect-block-offset));
+    padding-bottom: calc(0.375rem + var(--press-effect-block-offset));
   }
 
   .btn:not(.disabled):not(:disabled):not(.pending) {
@@ -12160,11 +12160,11 @@ select {
   }
 
   .btn:hover:not(.active):not(:active), .btn:focus:not(.active):not(:active) {
-    --press-effect-block-offset: 1;
+    --press-effect-block-offset: 0;
   }
 
   .btn:active, .btn.active, .btn.pending:not(.toggle-button) {
-    --press-effect-block-offset: 1.5;
+    --press-effect-block-offset: calc(-0.25rem);
   }
 
   .btn.btn-outline-primary {
@@ -12965,8 +12965,8 @@ select {
 
   .btn.btn-lg {
     height: calc(2em + 1rem + 2px);
-    padding-top: calc(0.5rem * var(--press-effect-block-offset));
-    padding-bottom: calc(0.5rem * (2 - var(--press-effect-block-offset)));
+    padding-top: max(1px, 0.5rem * var(--press-effect-block-offset));
+    padding-bottom: max(1px, 0.5rem * (2 - var(--press-effect-block-offset)));
   }
 
   .btn.btn-sm {
@@ -29152,9 +29152,9 @@ select {
     appearance: none;
     contain: content;
     height: calc(1.5em + 0.75rem + 2px);
-    --press-effect-block-offset: 0.75;
-    padding-top: calc(0.375rem * var(--press-effect-block-offset));
-    padding-bottom: calc(0.375rem * (2 - var(--press-effect-block-offset)));
+    --press-effect-block-offset: $btn-focus-width;
+    padding-top: calc(0.375rem - var(--press-effect-block-offset));
+    padding-bottom: calc(0.375rem + var(--press-effect-block-offset));
   }
 }
 @media all and (prefers-color-scheme: light) {
@@ -29179,12 +29179,12 @@ select {
 }
 @media all and (prefers-color-scheme: light) {
   .btn:hover:not(.active):not(:active), .btn:focus:not(.active):not(:active) {
-    --press-effect-block-offset: 1;
+    --press-effect-block-offset: 0;
   }
 }
 @media all and (prefers-color-scheme: light) {
   .btn:active, .btn.active, .btn.pending:not(.toggle-button) {
-    --press-effect-block-offset: 1.5;
+    --press-effect-block-offset: calc(-0.25rem);
   }
 }
 @media all and (prefers-color-scheme: light) {
@@ -30169,8 +30169,8 @@ select {
 @media all and (prefers-color-scheme: light) {
   .btn.btn-lg {
     height: calc(2em + 1rem + 2px);
-    padding-top: calc(0.5rem * var(--press-effect-block-offset));
-    padding-bottom: calc(0.5rem * (2 - var(--press-effect-block-offset)));
+    padding-top: max(1px, 0.5rem * var(--press-effect-block-offset));
+    padding-bottom: max(1px, 0.5rem * (2 - var(--press-effect-block-offset)));
   }
 }
 @media all and (prefers-color-scheme: light) {
@@ -45629,9 +45629,9 @@ body.themed-scrollbars {
   appearance: none;
   contain: content;
   height: calc(1.5em + 0.75rem + 2px);
-  --press-effect-block-offset: 0.75;
-  padding-top: calc(0.375rem * var(--press-effect-block-offset));
-  padding-bottom: calc(0.375rem * (2 - var(--press-effect-block-offset)));
+  --press-effect-block-offset: $btn-focus-width;
+  padding-top: calc(0.375rem - var(--press-effect-block-offset));
+  padding-bottom: calc(0.375rem + var(--press-effect-block-offset));
 }
 
 .set-theme.theme-light .btn:not(.disabled):not(:disabled):not(.pending) {
@@ -45652,11 +45652,11 @@ body.themed-scrollbars {
 }
 
 .set-theme.theme-light .btn:hover:not(.active):not(:active), .set-theme.theme-light .btn:focus:not(.active):not(:active) {
-  --press-effect-block-offset: 1;
+  --press-effect-block-offset: 0;
 }
 
 .set-theme.theme-light .btn:active, .set-theme.theme-light .btn.active, .set-theme.theme-light .btn.pending:not(.toggle-button) {
-  --press-effect-block-offset: 1.5;
+  --press-effect-block-offset: calc(-0.25rem);
 }
 
 .set-theme.theme-light .btn.btn-outline-primary {
@@ -46463,8 +46463,8 @@ body.themed-scrollbars {
 
 .set-theme.theme-light .btn.btn-lg {
   height: calc(2em + 1rem + 2px);
-  padding-top: calc(0.5rem * var(--press-effect-block-offset));
-  padding-bottom: calc(0.5rem * (2 - var(--press-effect-block-offset)));
+  padding-top: max(1px, 0.5rem * var(--press-effect-block-offset));
+  padding-bottom: max(1px, 0.5rem * (2 - var(--press-effect-block-offset)));
 }
 
 .set-theme.theme-light .btn.btn-sm {
@@ -61402,9 +61402,9 @@ body.themed-scrollbars {
   appearance: none;
   contain: content;
   height: calc(1.5em + 0.75rem + 2px);
-  --press-effect-block-offset: 0.75;
-  padding-top: calc(0.375rem * var(--press-effect-block-offset));
-  padding-bottom: calc(0.375rem * (2 - var(--press-effect-block-offset)));
+  --press-effect-block-offset: $btn-focus-width;
+  padding-top: calc(0.375rem - var(--press-effect-block-offset));
+  padding-bottom: calc(0.375rem + var(--press-effect-block-offset));
 }
 
 .set-theme.theme-dark .btn:not(.disabled):not(:disabled):not(.pending) {
@@ -61425,11 +61425,11 @@ body.themed-scrollbars {
 }
 
 .set-theme.theme-dark .btn:hover:not(.active):not(:active), .set-theme.theme-dark .btn:focus:not(.active):not(:active) {
-  --press-effect-block-offset: 1;
+  --press-effect-block-offset: 0;
 }
 
 .set-theme.theme-dark .btn:active, .set-theme.theme-dark .btn.active, .set-theme.theme-dark .btn.pending:not(.toggle-button) {
-  --press-effect-block-offset: 1.5;
+  --press-effect-block-offset: calc(-0.25rem);
 }
 
 .set-theme.theme-dark .btn.btn-outline-primary {
@@ -62230,8 +62230,8 @@ body.themed-scrollbars {
 
 .set-theme.theme-dark .btn.btn-lg {
   height: calc(2em + 1rem + 2px);
-  padding-top: calc(0.5rem * var(--press-effect-block-offset));
-  padding-bottom: calc(0.5rem * (2 - var(--press-effect-block-offset)));
+  padding-top: max(1px, 0.5rem * var(--press-effect-block-offset));
+  padding-bottom: max(1px, 0.5rem * (2 - var(--press-effect-block-offset)));
 }
 
 .set-theme.theme-dark .btn.btn-sm {

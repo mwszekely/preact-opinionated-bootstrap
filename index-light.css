@@ -11533,9 +11533,9 @@ textarea.form-control-lg {
   appearance: none;
   contain: content;
   height: calc((1.5 * 1em) + (0.375rem * 2) + 2px);
-  --press-effect-block-offset: 0.75;
-  padding-top: calc(0.375rem * var(--press-effect-block-offset));
-  padding-bottom: calc(0.375rem * (2 - var(--press-effect-block-offset)));
+  --press-effect-block-offset: $btn-focus-width;
+  padding-top: calc(0.375rem - var(--press-effect-block-offset));
+  padding-bottom: calc(0.375rem + var(--press-effect-block-offset));
 }
 .btn:not(.disabled):not(:disabled):not(.pending) {
   cursor: pointer;
@@ -11552,10 +11552,10 @@ textarea.form-control-lg {
   bottom: 0;
 }
 .btn:hover:not(.active):not(:active), .btn:focus:not(.active):not(:active) {
-  --press-effect-block-offset: 1;
+  --press-effect-block-offset: 0;
 }
 .btn:active, .btn.active, .btn.pending:not(.toggle-button) {
-  --press-effect-block-offset: 1.5;
+  --press-effect-block-offset: calc(-0.25rem);
 }
 .btn.btn-outline-primary {
   color: #0d6efd;
@@ -12184,8 +12184,8 @@ textarea.form-control-lg {
 }
 .btn.btn-lg {
   height: calc((2 * 1em) + (0.5rem * 2) + 2px);
-  padding-top: calc(0.5rem * var(--press-effect-block-offset));
-  padding-bottom: calc(0.5rem * (2 - var(--press-effect-block-offset)));
+  padding-top: max(1px, 0.5rem * var(--press-effect-block-offset));
+  padding-bottom: max(1px, 0.5rem * (2 - var(--press-effect-block-offset)));
 }
 .btn.btn-sm {
   height: calc((1.25 * 1em) + (0.25rem * 2) + 2px);
