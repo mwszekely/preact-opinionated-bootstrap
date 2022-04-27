@@ -266,13 +266,13 @@
 
   &.btn-lg {
     height: calc((#{$line-height-lg} * 1em) + (#{$btn-padding-y-lg} * 2) + 2px);
-    padding-top: calc(max(1px, #{$btn-padding-y-lg} * var(--press-effect-block-offset)));
-    padding-bottom: calc(max(1px, #{$btn-padding-y-lg} * (2 - var(--press-effect-block-offset))));
+    padding-top: calc(#{$btn-padding-y-lg} - var(--press-effect-block-offset));
+    padding-bottom: calc(#{$btn-padding-y-lg} + var(--press-effect-block-offset));
   }
   &.btn-sm {
     height: calc((#{$line-height-sm} * 1em) + (#{$btn-padding-y-sm} * 2) + 2px);
-    padding-top: calc(#{$btn-padding-y-sm} * var(--press-effect-block-offset));
-    padding-bottom: calc(#{$btn-padding-y-sm} * (2 - var(--press-effect-block-offset)));
+    padding-top: calc(#{$btn-padding-y-sm}  - var(--press-effect-block-offset));
+    padding-bottom: calc(#{$btn-padding-y-sm} + var(--press-effect-block-offset));
   }
 }
 

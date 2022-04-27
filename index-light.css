@@ -12184,13 +12184,13 @@ textarea.form-control-lg {
 }
 .btn.btn-lg {
   height: calc((2 * 1em) + (0.5rem * 2) + 2px);
-  padding-top: max(1px, 0.5rem * var(--press-effect-block-offset));
-  padding-bottom: max(1px, 0.5rem * (2 - var(--press-effect-block-offset)));
+  padding-top: calc(0.5rem - var(--press-effect-block-offset));
+  padding-bottom: calc(0.5rem + var(--press-effect-block-offset));
 }
 .btn.btn-sm {
   height: calc((1.25 * 1em) + (0.25rem * 2) + 2px);
-  padding-top: calc(0.25rem * var(--press-effect-block-offset));
-  padding-bottom: calc(0.25rem * (2 - var(--press-effect-block-offset)));
+  padding-top: calc(0.25rem - var(--press-effect-block-offset));
+  padding-bottom: calc(0.25rem + var(--press-effect-block-offset));
 }
 
 @media (prefers-reduced-motion) {

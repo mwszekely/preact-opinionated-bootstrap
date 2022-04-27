@@ -12965,14 +12965,14 @@ select {
 
   .btn.btn-lg {
     height: calc(2em + 1rem + 2px);
-    padding-top: max(1px, 0.5rem * var(--press-effect-block-offset));
-    padding-bottom: max(1px, 0.5rem * (2 - var(--press-effect-block-offset)));
+    padding-top: calc(0.5rem - var(--press-effect-block-offset));
+    padding-bottom: calc(0.5rem + var(--press-effect-block-offset));
   }
 
   .btn.btn-sm {
     height: calc(1.25em + 0.5rem + 2px);
-    padding-top: calc(0.25rem * var(--press-effect-block-offset));
-    padding-bottom: calc(0.25rem * (2 - var(--press-effect-block-offset)));
+    padding-top: calc(0.25rem - var(--press-effect-block-offset));
+    padding-bottom: calc(0.25rem + var(--press-effect-block-offset));
   }
 
   @media (prefers-reduced-motion) {
@@ -30169,15 +30169,15 @@ select {
 @media all and (prefers-color-scheme: light) {
   .btn.btn-lg {
     height: calc(2em + 1rem + 2px);
-    padding-top: max(1px, 0.5rem * var(--press-effect-block-offset));
-    padding-bottom: max(1px, 0.5rem * (2 - var(--press-effect-block-offset)));
+    padding-top: calc(0.5rem - var(--press-effect-block-offset));
+    padding-bottom: calc(0.5rem + var(--press-effect-block-offset));
   }
 }
 @media all and (prefers-color-scheme: light) {
   .btn.btn-sm {
     height: calc(1.25em + 0.5rem + 2px);
-    padding-top: calc(0.25rem * var(--press-effect-block-offset));
-    padding-bottom: calc(0.25rem * (2 - var(--press-effect-block-offset)));
+    padding-top: calc(0.25rem - var(--press-effect-block-offset));
+    padding-bottom: calc(0.25rem + var(--press-effect-block-offset));
   }
 }
 @media (prefers-color-scheme: light) and (prefers-reduced-motion) {
@@ -46463,14 +46463,14 @@ body.themed-scrollbars {
 
 .set-theme.theme-light .btn.btn-lg {
   height: calc(2em + 1rem + 2px);
-  padding-top: max(1px, 0.5rem * var(--press-effect-block-offset));
-  padding-bottom: max(1px, 0.5rem * (2 - var(--press-effect-block-offset)));
+  padding-top: calc(0.5rem - var(--press-effect-block-offset));
+  padding-bottom: calc(0.5rem + var(--press-effect-block-offset));
 }
 
 .set-theme.theme-light .btn.btn-sm {
   height: calc(1.25em + 0.5rem + 2px);
-  padding-top: calc(0.25rem * var(--press-effect-block-offset));
-  padding-bottom: calc(0.25rem * (2 - var(--press-effect-block-offset)));
+  padding-top: calc(0.25rem - var(--press-effect-block-offset));
+  padding-bottom: calc(0.25rem + var(--press-effect-block-offset));
 }
 
 @media (prefers-reduced-motion) {
@@ -62230,14 +62230,14 @@ body.themed-scrollbars {
 
 .set-theme.theme-dark .btn.btn-lg {
   height: calc(2em + 1rem + 2px);
-  padding-top: max(1px, 0.5rem * var(--press-effect-block-offset));
-  padding-bottom: max(1px, 0.5rem * (2 - var(--press-effect-block-offset)));
+  padding-top: calc(0.5rem - var(--press-effect-block-offset));
+  padding-bottom: calc(0.5rem + var(--press-effect-block-offset));
 }
 
 .set-theme.theme-dark .btn.btn-sm {
   height: calc(1.25em + 0.5rem + 2px);
-  padding-top: calc(0.25rem * var(--press-effect-block-offset));
-  padding-bottom: calc(0.25rem * (2 - var(--press-effect-block-offset)));
+  padding-top: calc(0.25rem - var(--press-effect-block-offset));
+  padding-bottom: calc(0.25rem + var(--press-effect-block-offset));
 }
 
 @media (prefers-reduced-motion) {
