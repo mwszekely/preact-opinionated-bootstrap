@@ -269,12 +269,12 @@
   }
 
   &.btn-lg {
-    height: calc((#{$line-height-lg} * 1em) + (#{$btn-padding-y-lg} * 2) + 2px);
+    height: calc((#{$line-height-base} * 1em) + (#{$btn-padding-y-lg} * 2) + 2px);
     padding-top: calc(#{$btn-padding-y-lg} - var(--press-effect-block-offset));
     padding-bottom: calc(#{$btn-padding-y-lg} + var(--press-effect-block-offset));
   }
   &.btn-sm {
-    height: calc((#{$line-height-sm} * 1em) + (#{$btn-padding-y-sm} * 2) + 2px);
+    height: calc((#{$line-height-base} * 1em) + (#{$btn-padding-y-sm} * 2) + 2px);
     padding-top: calc(#{$btn-padding-y-sm}  - var(--press-effect-block-offset));
     padding-bottom: calc(#{$btn-padding-y-sm} + var(--press-effect-block-offset));
   }
@@ -282,9 +282,6 @@
 
 .input-group > .btn {
   &, &.btn-large, &.btn-sm {
-    // When buttons are part of an input group, ensure they always take up the full height
-    // instead of their normal fixed height.
-    height: auto;
     align-self: stretch;
   }
 }

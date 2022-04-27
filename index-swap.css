@@ -10467,18 +10467,14 @@
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-light .btn.btn-lg {
-  height: calc(2em + 1rem + 2px);
+  height: calc(1.5em + 1rem + 2px);
   padding-top: calc(0.5rem - var(--press-effect-block-offset));
   padding-bottom: calc(0.5rem + var(--press-effect-block-offset));
 }
 .set-theme.theme-light .btn.btn-sm {
-  height: calc(1.25em + 0.5rem + 2px);
+  height: calc(1.5em + 0.5rem + 2px);
   padding-top: calc(0.25rem - var(--press-effect-block-offset));
   padding-bottom: calc(0.25rem + var(--press-effect-block-offset));
-}
-.set-theme.theme-light .input-group > .btn, .set-theme.theme-light .input-group > .btn.btn-large, .set-theme.theme-light .input-group > .btn.btn-sm {
-  height: auto;
-  align-self: stretch;
 }
 @media (prefers-reduced-motion) {
   .set-theme.theme-light .btn {
@@ -23220,18 +23216,14 @@
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(109, 109, 110, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-dark .btn.btn-lg {
-  height: calc(2em + 1rem + 2px);
+  height: calc(1.5em + 1rem + 2px);
   padding-top: calc(0.5rem - var(--press-effect-block-offset));
   padding-bottom: calc(0.5rem + var(--press-effect-block-offset));
 }
 .set-theme.theme-dark .btn.btn-sm {
-  height: calc(1.25em + 0.5rem + 2px);
+  height: calc(1.5em + 0.5rem + 2px);
   padding-top: calc(0.25rem - var(--press-effect-block-offset));
   padding-bottom: calc(0.25rem + var(--press-effect-block-offset));
-}
-.set-theme.theme-dark .input-group > .btn, .set-theme.theme-dark .input-group > .btn.btn-large, .set-theme.theme-dark .input-group > .btn.btn-sm {
-  height: auto;
-  align-self: stretch;
 }
 @media (prefers-reduced-motion) {
   .set-theme.theme-dark .btn {
