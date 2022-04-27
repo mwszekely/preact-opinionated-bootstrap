@@ -15305,17 +15305,38 @@
           }));
         }
       }, [followMouse, useArrow, side, align, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight, logicalDirection, childSelector]);
+      const [hasAllElements, setHasAllElements] = useState(false);
+      y$1(() => {
+        if (hasAllElements) resetPopperInstance(getSourceElement(), getPopperElement());
+      }, [hasAllElements]);
+      const [getAllElements, setAllElements] = usePassiveState(A$2(_ref2 => {
+        let {
+          sourceElement,
+          popperElement
+        } = _ref2;
+
+        if (sourceElement && popperElement) {
+          setHasAllElements(true);
+        }
+      }, []), A$2(() => ({
+        sourceElement: null,
+        popperElement: null
+      }), []));
       const {
         getElement: getSourceElement,
         useRefElementProps: useSourceElementRefProps
       } = useRefElement({
-        onElementChange: A$2(e => resetPopperInstance(e, getPopperElement()), [])
+        onElementChange: A$2(e => setAllElements(elements => ({ ...elements,
+          sourceElement: e
+        })), [])
       });
       const {
         getElement: getPopperElement,
         useRefElementProps: usePopperElementRefProps
       } = useRefElement({
-        onElementChange: A$2(e => resetPopperInstance(getSourceElement(), e), [])
+        onElementChange: A$2(e => setAllElements(elements => ({ ...elements,
+          popperElement: e
+        })), [])
       });
       const {
         getElement: getArrowElement,
@@ -15332,9 +15353,9 @@
           let rafHandle = 0;
 
           function raf() {
-            var _ref2, _getPopperInstance3;
+            var _ref3, _getPopperInstance3;
 
-            let p = (_ref2 = closed ? Promise.resolve() : (_getPopperInstance3 = getPopperInstance()) === null || _getPopperInstance3 === void 0 ? void 0 : _getPopperInstance3.update()) !== null && _ref2 !== void 0 ? _ref2 : Promise.resolve();
+            let p = (_ref3 = closed ? Promise.resolve() : (_getPopperInstance3 = getPopperInstance()) === null || _getPopperInstance3 === void 0 ? void 0 : _getPopperInstance3.update()) !== null && _ref3 !== void 0 ? _ref3 : Promise.resolve();
             p.then(_ => {
               if (rafHandle != 0) {
                 rafHandle = requestAnimationFrame(raf);
@@ -15355,13 +15376,13 @@
           name: "updateState",
           enabled: true,
           phase: "write",
-          fn: _ref3 => {
+          fn: _ref4 => {
             let {
               state,
               options,
               name,
               instance
-            } = _ref3;
+            } = _ref4;
             let usedPlacement = state.placement;
             if (usedPlacement.includes("-")) usedPlacement = usedPlacement.substr(0, usedPlacement.indexOf("-"));
             setUsedSide(convertToLogicalSide(usedPlacement));
@@ -15400,10 +15421,10 @@
         };
       }
 
-      function usePopperPopup(_ref4) {
+      function usePopperPopup(_ref5) {
         let {
           open
-        } = _ref4;
+        } = _ref5;
 
         function usePopperPopupProps(props) {
           let style = { ...popperStyle,

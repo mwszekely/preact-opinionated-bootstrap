@@ -1,9 +1,10 @@
 import "./popper-config";
 import { BasePlacement, createPopper, Instance, Modifier, Placement, PositioningStrategy, State, StrictModifiers } from "@popperjs/core";
 import { h } from "preact";
-import { LogicalDirectionInfo, useActiveElement, useGlobalHandler, useLogicalDirection, useMergedProps, usePassiveState, useRefElement, useState, useTimeout } from "preact-prop-helpers";
+import { LogicalDirectionInfo, useActiveElement, useGlobalHandler, useLogicalDirection, useMergedProps, usePassiveState, useRefElement, useStableCallback, useState, useTimeout } from "preact-prop-helpers";
 import { useCallback, useEffect, useMemo } from "preact/hooks";
 import { ZoomFade, Clip, ClipFade, Collapse, Zoom, SlideZoom, Fade, SlideFade, CollapseFade, SlideZoomFade, Flip, Slide } from "preact-transition";
+import { OnPassiveStateChange, PassiveStateUpdater } from "preact-prop-helpers/use-passive-state";
 
 function returnNull() { return null; }
 
@@ -13,8 +14,8 @@ export function usePopperApi({ updating, align, side, useArrow, followMouse, ski
     const [usedSide, setUsedSide] = useState<typeof side>(side);
     const [logicalDirection, setLogicalDirection] = useState<LogicalDirectionInfo | null>(null);
     const { useLogicalDirectionProps, convertToLogicalSide, convertToPhysicalSide } = useLogicalDirection<any>({ onLogicalDirectionChange: setLogicalDirection });
-    useEffect(() => { 
-        resetPopperInstance(getSourceElement() as any, getPopperElement() as any); 
+    useEffect(() => {
+        resetPopperInstance(getSourceElement() as any, getPopperElement() as any);
     }, [side, align, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight, logicalDirection]);
 
     useArrow ??= false;
@@ -159,8 +160,20 @@ export function usePopperApi({ updating, align, side, useArrow, followMouse, ski
         }
     }, [followMouse, useArrow, side, align, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight, logicalDirection, childSelector]);
 
-    const { getElement: getSourceElement, useRefElementProps: useSourceElementRefProps } = useRefElement<Element>({ onElementChange: useCallback((e: any) => resetPopperInstance(e, (getPopperElement as any)()!), []) } as any);
-    const { getElement: getPopperElement, useRefElementProps: usePopperElementRefProps } = useRefElement<HTMLElement>({ onElementChange: useCallback((e: HTMLElement | null) => resetPopperInstance((getSourceElement as any)()!, e), []) });
+    type I = { sourceElement: Element | null, popperElement: HTMLElement | null };
+    const [hasAllElements, setHasAllElements] = useState(false);
+    useEffect(() => {
+        if (hasAllElements)
+            resetPopperInstance(getSourceElement(), getPopperElement());
+    }, [hasAllElements]);
+    const [getAllElements, setAllElements] = usePassiveState<I>(useCallback<OnPassiveStateChange<I>>(({ sourceElement, popperElement }) => {
+        if (sourceElement && popperElement) {
+            setHasAllElements(true);
+        }
+    }, []), useCallback(() => ({ sourceElement: null, popperElement: null }), []));
+
+    const { getElement: getSourceElement, useRefElementProps: useSourceElementRefProps } = useRefElement<Element>({ onElementChange: useCallback((e: any) => setAllElements(elements => ({ ...elements, sourceElement: e } as I)), []) } as any);
+    const { getElement: getPopperElement, useRefElementProps: usePopperElementRefProps } = useRefElement<HTMLElement>({ onElementChange: useCallback((e: HTMLElement | null) => setAllElements(elements => ({ ...elements, popperElement: e } as I)), []) });
     const { getElement: getArrowElement, useRefElementProps: useArrowElementRefProps } = useRefElement<Element>({});
 
     const [sourceStyle, setSourceStyle] = useState<Partial<Omit<CSSStyleDeclaration, typeof Symbol["iterator"]>> | null>(null);
