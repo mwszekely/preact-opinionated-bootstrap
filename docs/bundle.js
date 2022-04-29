@@ -12580,7 +12580,9 @@
     /**
      * Very simple, easy responsive grid that guarantees each column is the minimum size.
      *
-     * Use leftover to control what happens when there's space leftover
+     * Use leftover to control what happens when there's more space than minimally required.
+     * * "fill" to have each element expand equally to fill the remaining space
+     * * "shrink" to keep as many elements on one line as possible
      *
      * Easy one-liners all around here!
      */
@@ -12599,7 +12601,9 @@
         className: "responsive-grid",
         style: minWidth ? {
           "--grid-min-width": `${minWidth}`,
-          "--grid-auto-behavior": leftover ? `auto-${leftover == "shrink" ? "fit" : leftover}` : undefined
+          ...{
+            "--grid-auto-behavior": leftover ? `auto-${leftover == "shrink" ? "fit" : leftover}` : undefined
+          }
         } : {},
         ref
       }, props);
