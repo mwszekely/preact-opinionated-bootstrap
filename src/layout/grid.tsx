@@ -7,10 +7,14 @@ import { forwardElementRef, GlobalAttributes } from "../props";
 /**
  * Very simple, easy responsive grid that guarantees each column is the minimum size.
  * 
+ * Use leftover to control what happens when there's more space than minimally required.
+ * * "fill" to have each element expand equally to fill the remaining space
+ * * "shrink" to keep as many elements on one line as possible
+ * 
  * Easy one-liners all around here!
  */
-export const GridResponsive = memo(forwardElementRef(function ResponsiveGrid<E extends Element>({ tag, minWidth, children, ...props }: { minWidth: `${string}em`, tag?: "passthrough" } & Partial<TagSensitiveProps<E>> & GlobalAttributes<E>, ref: Ref<E>) {
-    const mergedProps = useMergedProps<E>()({ className: "responsive-grid", style: minWidth ? { "--grid-min-width": `${minWidth}` } : {}, ref }, props);
+export const GridResponsive = memo(forwardElementRef(function ResponsiveGrid<E extends Element>({ tag, minWidth, leftover, children, ...props }: { leftover?: "fill" | "shrink", minWidth: `${string}em`, tag?: "passthrough" } & Partial<TagSensitiveProps<E>> & GlobalAttributes<E>, ref: Ref<E>) {
+    const mergedProps = useMergedProps<E>()({ className: "responsive-grid", style: minWidth ? { "--grid-min-width": `${minWidth}`, "--grid-auto-behavior": leftover? `auto-${leftover == "shrink"? "fit" : leftover}` : undefined } : {}, ref }, props);
     const passthroughProps = useMergedProps<E>()(mergedProps, (children as VNode<any>)?.props?.children ?? {});
 
     if (tag === "passthrough")

@@ -13015,6 +13015,10 @@ select {
     padding-bottom: calc(0.25rem + var(--press-effect-block-offset));
   }
 
+  .input-group > .btn, .input-group > .btn.btn-large, .input-group > .btn.btn-sm {
+    align-self: stretch;
+  }
+
   @media (prefers-reduced-motion) {
     .btn {
       --press-effect-block-offset: 1 !important;
@@ -13319,7 +13323,7 @@ label.input-group-text:not(.disabled) {
 
   .input-grid {
     display: grid;
-    grid-template-columns: repeat(var(--input-grid-columns, 1), max-content auto);
+    grid-template-columns: repeat(var(--input-grid-columns, 1), 1fr auto);
     grid-auto-rows: auto;
     row-gap: 0.5em;
   }
@@ -14292,7 +14296,16 @@ label.input-group-text:not(.disabled) {
   .responsive-grid {
     display: grid;
     gap: 0.5em;
-    grid-template-columns: repeat(auto-fill, minmax(min(90vw, var(--grid-min-width)), 1fr));
+    grid-template-columns: repeat(var(--grid-auto-behavior), minmax(min(90vw, var(--grid-min-width)), 1fr));
+    --grid-auto-behavior: auto-fill;
+  }
+
+  .responsive-grid.fit {
+    --grid-auto-behavior: auto-fit;
+  }
+
+  .responsive-grid.fill {
+    --grid-auto-behavior: auto-fill;
   }
 
   .static-grid {
@@ -30277,6 +30290,11 @@ select {
     padding-bottom: calc(0.25rem + var(--press-effect-block-offset));
   }
 }
+@media all and (prefers-color-scheme: light) {
+  .input-group > .btn, .input-group > .btn.btn-large, .input-group > .btn.btn-sm {
+    align-self: stretch;
+  }
+}
 @media (prefers-color-scheme: light) and (prefers-reduced-motion) {
   .btn {
     --press-effect-block-offset: 1 !important;
@@ -30630,7 +30648,7 @@ label.input-group-text:not(.disabled) {
 @media all and (prefers-color-scheme: light) {
   .input-grid {
     display: grid;
-    grid-template-columns: repeat(var(--input-grid-columns, 1), max-content auto);
+    grid-template-columns: repeat(var(--input-grid-columns, 1), 1fr auto);
     grid-auto-rows: auto;
     row-gap: 0.5em;
   }
@@ -31793,7 +31811,18 @@ label.input-group-text:not(.disabled) {
   .responsive-grid {
     display: grid;
     gap: 0.5em;
-    grid-template-columns: repeat(auto-fill, minmax(min(90vw, var(--grid-min-width)), 1fr));
+    grid-template-columns: repeat(var(--grid-auto-behavior), minmax(min(90vw, var(--grid-min-width)), 1fr));
+    --grid-auto-behavior: auto-fill;
+  }
+}
+@media all and (prefers-color-scheme: light) {
+  .responsive-grid.fit {
+    --grid-auto-behavior: auto-fit;
+  }
+}
+@media all and (prefers-color-scheme: light) {
+  .responsive-grid.fill {
+    --grid-auto-behavior: auto-fill;
   }
 }
 @media all and (prefers-color-scheme: light) {
@@ -46618,6 +46647,10 @@ body.themed-scrollbars {
   padding-bottom: calc(0.25rem + var(--press-effect-block-offset));
 }
 
+.set-theme.theme-light .input-group > .btn, .set-theme.theme-light .input-group > .btn.btn-large, .set-theme.theme-light .input-group > .btn.btn-sm {
+  align-self: stretch;
+}
+
 @media (prefers-reduced-motion) {
   .set-theme.theme-light .btn {
     --press-effect-block-offset: 1 !important;
@@ -46922,7 +46955,7 @@ body.themed-scrollbars {
 
 .set-theme.theme-light .input-grid {
   display: grid;
-  grid-template-columns: repeat(var(--input-grid-columns, 1), max-content auto);
+  grid-template-columns: repeat(var(--input-grid-columns, 1), 1fr auto);
   grid-auto-rows: auto;
   row-gap: 0.5em;
 }
@@ -47895,7 +47928,16 @@ body.themed-scrollbars {
 .set-theme.theme-light .responsive-grid {
   display: grid;
   gap: 0.5em;
-  grid-template-columns: repeat(auto-fill, minmax(min(90vw, var(--grid-min-width)), 1fr));
+  grid-template-columns: repeat(var(--grid-auto-behavior), minmax(min(90vw, var(--grid-min-width)), 1fr));
+  --grid-auto-behavior: auto-fill;
+}
+
+.set-theme.theme-light .responsive-grid.fit {
+  --grid-auto-behavior: auto-fit;
+}
+
+.set-theme.theme-light .responsive-grid.fill {
+  --grid-auto-behavior: auto-fill;
 }
 
 .set-theme.theme-light .static-grid {
@@ -62432,6 +62474,10 @@ body.themed-scrollbars {
   padding-bottom: calc(0.25rem + var(--press-effect-block-offset));
 }
 
+.set-theme.theme-dark .input-group > .btn, .set-theme.theme-dark .input-group > .btn.btn-large, .set-theme.theme-dark .input-group > .btn.btn-sm {
+  align-self: stretch;
+}
+
 @media (prefers-reduced-motion) {
   .set-theme.theme-dark .btn {
     --press-effect-block-offset: 1 !important;
@@ -62736,7 +62782,7 @@ body.themed-scrollbars {
 
 .set-theme.theme-dark .input-grid {
   display: grid;
-  grid-template-columns: repeat(var(--input-grid-columns, 1), max-content auto);
+  grid-template-columns: repeat(var(--input-grid-columns, 1), 1fr auto);
   grid-auto-rows: auto;
   row-gap: 0.5em;
 }
@@ -63709,7 +63755,16 @@ body.themed-scrollbars {
 .set-theme.theme-dark .responsive-grid {
   display: grid;
   gap: 0.5em;
-  grid-template-columns: repeat(auto-fill, minmax(min(90vw, var(--grid-min-width)), 1fr));
+  grid-template-columns: repeat(var(--grid-auto-behavior), minmax(min(90vw, var(--grid-min-width)), 1fr));
+  --grid-auto-behavior: auto-fill;
+}
+
+.set-theme.theme-dark .responsive-grid.fit {
+  --grid-auto-behavior: auto-fit;
+}
+
+.set-theme.theme-dark .responsive-grid.fill {
+  --grid-auto-behavior: auto-fill;
 }
 
 .set-theme.theme-dark .static-grid {

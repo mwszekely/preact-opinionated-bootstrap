@@ -80,10 +80,22 @@ export function CheckboxGroupParent(props: OmitStrong<CheckboxProps, "checked" |
 
 
 
-export interface CheckboxGroupChildProps extends OmitStrong<CheckboxProps, "onCheck"> {
+interface CheckboxGroupChildProps1 extends OmitStrong<CheckboxProps, "onCheck"> {
     index: number;
+
+    // It's rare for onCheck to be called with "mixed"--it will ONLY happen
+    // when the checkbox was already "mixed", then the parent was toggled,
+    // which changes this checkbox from mixed to off to mixed again.
     onCheck(checked: boolean | "mixed", event: null | h.JSX.TargetedEvent<HTMLInputElement>): (void | Promise<void>);
 }
+
+interface CheckboxGroupChildProps2 extends OmitStrong<CheckboxProps, "onCheck"> {
+    index: number;
+    
+    onCheck(checked: boolean, event: null | h.JSX.TargetedEvent<HTMLInputElement>): (void | Promise<void>);
+}
+
+export type CheckboxGroupChildProps = CheckboxGroupChildProps1 | CheckboxGroupChildProps2;
 
 /**
  * This is a child checkbox of a `CheckboxGroup`.
@@ -108,7 +120,7 @@ export const CheckboxGroupChild = memo(forwardElementRef(function CheckboxGroupC
     const useCheckboxGroupChild = useContext(UseCheckboxGroupChildContext)!;
 
     let setChecked = (checked: boolean | "mixed") => {
-        return onCheck(checked, null);
+        return onCheck(checked as any, null);
     }
 
 

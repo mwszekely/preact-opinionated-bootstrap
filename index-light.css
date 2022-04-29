@@ -12223,6 +12223,10 @@ textarea.form-control-lg {
   padding-bottom: calc(0.25rem + var(--press-effect-block-offset));
 }
 
+.input-group > .btn, .input-group > .btn.btn-large, .input-group > .btn.btn-sm {
+  align-self: stretch;
+}
+
 @media (prefers-reduced-motion) {
   .btn {
     --press-effect-block-offset: 1 !important;
@@ -12503,7 +12507,7 @@ label.input-group-text:not(.disabled) {
 
 .input-grid {
   display: grid;
-  grid-template-columns: repeat(var(--input-grid-columns, 1), max-content auto);
+  grid-template-columns: repeat(var(--input-grid-columns, 1), 1fr auto);
   grid-auto-rows: auto;
   row-gap: 0.5em;
 }
@@ -13392,7 +13396,14 @@ html.document-scroll-hidden .toasts-container {
 .responsive-grid {
   display: grid;
   gap: 0.5em;
-  grid-template-columns: repeat(auto-fill, minmax(min(90vw, var(--grid-min-width)), 1fr));
+  grid-template-columns: repeat(var(--grid-auto-behavior), minmax(min(90vw, var(--grid-min-width)), 1fr));
+  --grid-auto-behavior: auto-fill;
+}
+.responsive-grid.fit {
+  --grid-auto-behavior: auto-fit;
+}
+.responsive-grid.fill {
+  --grid-auto-behavior: auto-fill;
 }
 
 .static-grid {

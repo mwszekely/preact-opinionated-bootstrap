@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { ComponentChildren, createContext, Fragment, h, Ref } from "preact";
 import { EventDetail, RadioChangeEvent, useAriaRadioGroup, UseAriaRadioGroupParameters, UseAriaRadioInfo, UseAriaRadioParameters, useGenericLabel, UseRadio } from "preact-aria-widgets";
-import { useAsyncHandler, useEffect, useState } from "preact-prop-helpers";
+import { useAsyncHandler, useEffect, useRandomId, useState } from "preact-prop-helpers";
 import { memo } from "preact/compat";
 import { useContext } from "preact/hooks";
 import { ProgressCircular } from "../progress";
@@ -9,11 +9,12 @@ import { forwardElementRef, OmitStrong } from "../props";
 import { OptionallyInputGroup } from "./input-checkbox";
 import { InInputGroupContext } from "./props";
 
-export interface RadioGroupProps<V extends string | number> extends OmitStrong<UseAriaRadioGroupParameters<V>, "onInput"> {
+export interface RadioGroupProps<V extends string | number> extends OmitStrong<UseAriaRadioGroupParameters<V>, "onInput" | "name"> {
     children?: ComponentChildren;
     label?: ComponentChildren;
     labelPosition?: "start" | "end" | "hidden";
     onValueChange(value: V, event: h.JSX.TargetedEvent<HTMLInputElement | HTMLLabelElement>): (void | Promise<void>);
+    name?: string;
 }
 
 export interface RadioProps<V extends string | number, I extends Element, L extends Element> extends OmitStrong<UseAriaRadioParameters<V, I, L, RadioInfo>, "labelPosition" | "text" | "disabled" | "setAsyncState"> {
@@ -37,6 +38,8 @@ export const RadioGroup = memo(forwardElementRef(function RadioGroup<V extends s
     const { useSyncHandler, pending, hasError, settleCount, currentCapture, currentType } = useAsyncHandler<HTMLInputElement | HTMLLabelElement>()({ capture: (e) => (e as RadioChangeEvent<any>)[EventDetail].selectedValue as V });
     const onInput = useSyncHandler(onInputAsync);
 
+    const { randomId: backupName } = useRandomId({ prefix: "radio-" });
+    name ??= backupName;
     const { useRadio, useRadioGroupProps, managedChildren, selectedIndex } = useAriaRadioGroup<V, HTMLDivElement, HTMLInputElement, HTMLLabelElement, RadioInfo>({ name, selectedValue: pending ? currentCapture! : selectedValue, onInput: onInput as any });
 
     let stringLabel: string | undefined = undefined;
@@ -51,11 +54,11 @@ export const RadioGroup = memo(forwardElementRef(function RadioGroup<V extends s
 
     // Debugging check -- multiple groups with the same name can cause weird glitches from native radio selection behavior.
     useEffect(() => {
-        if (knownNames.has(name)) {
+        if (knownNames.has(name!)) {
             console.error(`Multiple radio groups with the name "${name}" exist on the same page at the same time!`);
         }
-        knownNames.add(name);
-        return () => knownNames.delete(name);
+        knownNames.add(name!);
+        return () => knownNames.delete(name!);
     }, [name])
 
 

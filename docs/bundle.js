@@ -11927,6 +11927,8 @@
     const CurrentHandlerTypeContext = D$1("sync");
     const RadioGroupContext = D$1(null);
     const RadioGroup = g$1(forwardElementRef(function RadioGroup(_ref, ref) {
+      var _name;
+
       let {
         children,
         name,
@@ -11946,6 +11948,12 @@
         capture: e => e[EventDetail].selectedValue
       });
       const onInput = useSyncHandler(onInputAsync);
+      const {
+        randomId: backupName
+      } = useRandomId({
+        prefix: "radio-"
+      });
+      (_name = name) !== null && _name !== void 0 ? _name : name = backupName;
       const {
         useRadio,
         useRadioGroupProps,
@@ -12572,6 +12580,8 @@
     /**
      * Very simple, easy responsive grid that guarantees each column is the minimum size.
      *
+     * Use leftover to control what happens when there's space leftover
+     *
      * Easy one-liners all around here!
      */
 
@@ -12581,13 +12591,15 @@
       let {
         tag,
         minWidth,
+        leftover,
         children,
         ...props
       } = _ref;
       const mergedProps = useMergedProps()({
         className: "responsive-grid",
         style: minWidth ? {
-          "--grid-min-width": `${minWidth}`
+          "--grid-min-width": `${minWidth}`,
+          "--grid-auto-behavior": leftover ? `auto-${leftover == "shrink" ? "fit" : leftover}` : undefined
         } : {},
         ref
       }, props);
