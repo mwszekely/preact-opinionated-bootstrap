@@ -215,7 +215,7 @@ const UnlabelledInput = forwardElementRef(UnlabelledInputR);
 
 
 
-export const Input = memo(forwardElementRef(function Input({ children, value, width, readOnly, labelPosition, placeholder, disabled, disabledVariant, size, className, class: classs, ...props }: InputProps, ref?: Ref<any>) {
+export const Input = memo(forwardElementRef(function Input({ children, value, width, readOnly, labelPosition, placeholder, disabled, disabledVariant, size, className, prefix, suffix, class: classs, ...props }: InputProps, ref?: Ref<any>) {
     labelPosition ??= "start";
     size ??= "md";
 
@@ -241,6 +241,13 @@ export const Input = memo(forwardElementRef(function Input({ children, value, wi
     const IC = (disabled && disabledVariant === "text" ? InputGroupText : UnlabelledInput);
 
     const labelJsx = <label {...useInputLabelLabelProps({ class: clsx(disabledVariant !== "text" && disabled && "disabled", isInInputGroup ? "input-group-text" : labelPosition != "floating" ? "form-label" : "") })}>{children}</label>
+
+    if (labelPosition == "prefix")
+        prefix = <>{labelJsx}{prefix}</>;
+    if (labelPosition == "suffix")
+        suffix = <>{labelJsx}{prefix}</>;
+
+
     let inputJsx = <IC
         {...useInputLabelInputProps(useMergedProps<any>()({
             children: IC === InputGroupText ? value : undefined,
@@ -249,6 +256,8 @@ export const Input = memo(forwardElementRef(function Input({ children, value, wi
             disabled: (IC === InputGroupText ? undefined : disabled),
             disabledVariant: (IC === InputGroupText ? undefined : disabledVariant),
             readOnly: (IC === InputGroupText ? undefined : readOnly),
+            prefix: (IC === InputGroupText? undefined : prefix as string),
+            suffix: (IC === InputGroupText? undefined : suffix as string),
             className: clsx(IC === InputGroupText ? "form-control" : undefined),
         }, props as any)) as any as UnlabelledInputTextProps} {...{ ref } as never} {...{ [IC == InputGroupText ? "children" : "value"]: value }} children={IC == InputGroupText ? value : undefined} />;
 
@@ -270,6 +279,7 @@ export const Input = memo(forwardElementRef(function Input({ children, value, wi
         )} style={width?.endsWith("ch") ? { "--form-control-width": (width ?? "20ch") } as any : width ? { width } : undefined}>{inputJsx}</div>
     }
     // }
+
 
     const inputWithLabel = (
         <>

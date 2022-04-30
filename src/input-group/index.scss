@@ -48,7 +48,7 @@
 // one that handles "I control the styling of
 // the actual <input> element.
 .form-control.faux-form-control-inner {
-  width: 100%;
+  width: var(--form-control-width, 100%);
   height: 100%;
   border: none;
   border-radius: 0;
@@ -56,6 +56,9 @@
   padding: 0;
   background: transparent;
   font-size: unset;
+  max-height: 1.5em;
+  align-self: center;
+
 
   &.form-control {
     background: transparent;
@@ -68,9 +71,6 @@
 .form-control.faux-form-control-outer {
   position: relative;
   overflow: hidden;
-  max-width: calc(
-    #{2 * $input-padding-x} + 15px + var(--form-control-width, 9999ch)
-  );
 
   @include box-shadow($input-box-shadow);
 }
@@ -261,6 +261,17 @@ designed to allow a "wrapper" that we can position: relative.
     }
   }
 }
+
+.faux-form-control-outer {
+  &>.form-control-suffix,
+  &>.form-control-prefix {
+      &>.input-group-text {
+        background: none;
+        border: none;
+    }
+  }
+}
+
 
 .form-control.faux-form-control-outer {
   display: grid;

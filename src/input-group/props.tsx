@@ -26,7 +26,7 @@ export type UnlabelledInputProps = UnlabelledInputTextProps | UnlabelledInputNum
 
 export type InputProps = UnlabelledInputProps & {
     children: ComponentChildren,
-    labelPosition?: "start" | "end" | "floating" | "hidden" | "placeholder" | "tooltip";
+    labelPosition?: "start" | "end" | "floating" | "hidden" | "placeholder" | "tooltip" | "prefix" | "suffix";
     size?: "sm" | "md" | "lg";
 
     width?: `${number}ch` | `100%`;

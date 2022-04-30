@@ -1992,9 +1992,13 @@
 
       function useSyncHandler(asyncHandler) {
         const syncHandler = useStableCallback(function syncHandler() {
+          for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+          }
+
           if (asyncHandler == null) return;
 
-          const startPromise = () => asyncHandler();
+          const startPromise = () => asyncHandler(...args);
 
           if (debounce == null) {
             wantToStartANewPromise(startPromise);
@@ -2090,7 +2094,7 @@
         const [currentCapture, setCurrentCapture, getCurrentCapture] = useState(undefined);
         const [hasCapture, setHasCapture] = useState(false);
         let ret = {
-          useSyncHandler: useSyncHandler2,
+          useSyncHandler: useSyncHandlerWithCapture,
           getCurrentCapture,
           callCount,
           currentCapture,
@@ -2107,28 +2111,17 @@
         };
         return ret;
 
-        function useSyncHandler2(asyncHandler) {
-          let captured;
-          let event;
-          const syncHandler2 = useSyncHandler(asyncHandler == null ? asyncHandler : () => {
-            let ret = asyncHandler(captured, event);
-
-            if (!ret || !("then" in ret)) {
-              return captured;
-            } else {
-              return ret.then(_ => captured);
-            }
-          });
+        function useSyncHandlerWithCapture(asyncHandler) {
+          const syncHandlerWrapper = useSyncHandler(asyncHandler);
           const syncHandler = useStableCallback(function syncHandler(e) {
             // Get the most significant information from the event at this time,
             // which is necessary since the promise could actually be called much later
             // when the element's value (etc.) has changed.
-            captured = capture(e);
-            event = e;
-            if (syncHandler2 == null) return;
+            let captured = capture(e);
+            if (syncHandlerWrapper == null) return;
             setCurrentCapture(captured);
             setHasCapture(true);
-            syncHandler2();
+            syncHandlerWrapper(captured, e);
           });
           return syncHandler;
         }
@@ -8990,7 +8983,7 @@
       let almostDone = useRefElementProps(useLogicalDirectionProps({
         ref,
         style: removeEmpty({
-          [`--${classBase}-duration`]: duration,
+          [`--${classBase}-duration`]: duration ? `${duration}ms` : undefined,
           [`--${classBase}-surface-x`]: surfaceX,
           [`--${classBase}-surface-y`]: surfaceY,
           [`--${classBase}-surface-width`]: surfaceWidth,
@@ -15166,6 +15159,8 @@
         disabledVariant,
         size,
         className,
+        prefix,
+        suffix,
         class: classs,
         ...props
       } = _ref;
@@ -15207,6 +15202,13 @@
         children: children
       });
 
+      if (labelPosition == "prefix") prefix = e$3(d$2, {
+        children: [labelJsx, prefix]
+      });
+      if (labelPosition == "suffix") suffix = e$3(d$2, {
+        children: [labelJsx, prefix]
+      });
+
       let inputJsx = e$3(IC, { ...useInputLabelInputProps(useMergedProps()({
           children: IC === InputGroupText ? value : undefined,
           value: IC === InputGroupText ? undefined : value !== null && value !== void 0 ? value : undefined,
@@ -15214,6 +15216,8 @@
           disabled: IC === InputGroupText ? undefined : disabled,
           disabledVariant: IC === InputGroupText ? undefined : disabledVariant,
           readOnly: IC === InputGroupText ? undefined : readOnly,
+          prefix: IC === InputGroupText ? undefined : prefix,
+          suffix: IC === InputGroupText ? undefined : suffix,
           className: clsx(IC === InputGroupText ? "form-control" : undefined)
         }, props)),
         ...{

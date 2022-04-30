@@ -13216,7 +13216,7 @@ select {
   }
 
   .form-control.faux-form-control-inner {
-    width: 100%;
+    width: var(--form-control-width, 100%);
     height: 100%;
     border: none;
     border-radius: 0;
@@ -13224,6 +13224,8 @@ select {
     padding: 0;
     background: transparent;
     font-size: unset;
+    max-height: 1.5em;
+    align-self: center;
   }
 
   .form-control.faux-form-control-inner.form-control {
@@ -13237,7 +13239,6 @@ select {
   .form-control.faux-form-control-outer {
     position: relative;
     overflow: hidden;
-    max-width: calc(1.5rem + 15px + var(--form-control-width, 9999ch));
     box-shadow: 0 0 0 rgba(128, 134, 223, var(--input-btn-focus-color-opacity, 0.4)), inset 0 0 0 rgba(0, 0, 0, 0.4);
   }
 
@@ -13432,6 +13433,11 @@ label.input-group-text:not(.disabled) {
     justify-content: flex-end;
     align-items: center;
     inset-inline-end: 0.5em;
+  }
+
+  .faux-form-control-outer > .form-control-suffix > .input-group-text, .faux-form-control-outer > .form-control-prefix > .input-group-text {
+    background: none;
+    border: none;
   }
 
   .form-control.faux-form-control-outer {
@@ -30541,7 +30547,7 @@ select {
 }
 @media all and (prefers-color-scheme: light) {
   .form-control.faux-form-control-inner {
-    width: 100%;
+    width: var(--form-control-width, 100%);
     height: 100%;
     border: none;
     border-radius: 0;
@@ -30549,6 +30555,8 @@ select {
     padding: 0;
     background: transparent;
     font-size: unset;
+    max-height: 1.5em;
+    align-self: center;
   }
 }
 @media all and (prefers-color-scheme: light) {
@@ -30565,7 +30573,6 @@ select {
   .form-control.faux-form-control-outer {
     position: relative;
     overflow: hidden;
-    max-width: calc(1.5rem + 15px + var(--form-control-width, 9999ch));
     box-shadow: 0 0 0 rgba(110, 168, 254, var(--input-btn-focus-color-opacity, 0.4)), inset 0 0 0 rgba(0, 0, 0, 0.4);
   }
 }
@@ -30796,6 +30803,12 @@ label.input-group-text:not(.disabled) {
     justify-content: flex-end;
     align-items: center;
     inset-inline-end: 0.5em;
+  }
+}
+@media all and (prefers-color-scheme: light) {
+  .faux-form-control-outer > .form-control-suffix > .input-group-text, .faux-form-control-outer > .form-control-prefix > .input-group-text {
+    background: none;
+    border: none;
   }
 }
 @media all and (prefers-color-scheme: light) {
@@ -46886,7 +46899,7 @@ body.themed-scrollbars {
 }
 
 .set-theme.theme-light .form-control.faux-form-control-inner {
-  width: 100%;
+  width: var(--form-control-width, 100%);
   height: 100%;
   border: none;
   border-radius: 0;
@@ -46894,6 +46907,8 @@ body.themed-scrollbars {
   padding: 0;
   background: transparent;
   font-size: unset;
+  max-height: 1.5em;
+  align-self: center;
 }
 
 .set-theme.theme-light .form-control.faux-form-control-inner.form-control {
@@ -46907,7 +46922,6 @@ body.themed-scrollbars {
 .set-theme.theme-light .form-control.faux-form-control-outer {
   position: relative;
   overflow: hidden;
-  max-width: calc(1.5rem + 15px + var(--form-control-width, 9999ch));
   box-shadow: 0 0 0 rgba(110, 168, 254, var(--input-btn-focus-color-opacity, 0.4)), inset 0 0 0 rgba(0, 0, 0, 0.4);
 }
 
@@ -47102,6 +47116,11 @@ body.themed-scrollbars {
   justify-content: flex-end;
   align-items: center;
   inset-inline-end: 0.5em;
+}
+
+.set-theme.theme-light .faux-form-control-outer > .form-control-suffix > .input-group-text, .set-theme.theme-light .faux-form-control-outer > .form-control-prefix > .input-group-text {
+  background: none;
+  border: none;
 }
 
 .set-theme.theme-light .form-control.faux-form-control-outer {
@@ -62730,7 +62749,7 @@ body.themed-scrollbars {
 }
 
 .set-theme.theme-dark .form-control.faux-form-control-inner {
-  width: 100%;
+  width: var(--form-control-width, 100%);
   height: 100%;
   border: none;
   border-radius: 0;
@@ -62738,6 +62757,8 @@ body.themed-scrollbars {
   padding: 0;
   background: transparent;
   font-size: unset;
+  max-height: 1.5em;
+  align-self: center;
 }
 
 .set-theme.theme-dark .form-control.faux-form-control-inner.form-control {
@@ -62751,7 +62772,6 @@ body.themed-scrollbars {
 .set-theme.theme-dark .form-control.faux-form-control-outer {
   position: relative;
   overflow: hidden;
-  max-width: calc(1.5rem + 15px + var(--form-control-width, 9999ch));
   box-shadow: 0 0 0 rgba(128, 134, 223, var(--input-btn-focus-color-opacity, 0.4)), inset 0 0 0 rgba(0, 0, 0, 0.4);
 }
 
@@ -62946,6 +62966,11 @@ body.themed-scrollbars {
   justify-content: flex-end;
   align-items: center;
   inset-inline-end: 0.5em;
+}
+
+.set-theme.theme-dark .faux-form-control-outer > .form-control-suffix > .input-group-text, .set-theme.theme-dark .faux-form-control-outer > .form-control-prefix > .input-group-text {
+  background: none;
+  border: none;
 }
 
 .set-theme.theme-dark .form-control.faux-form-control-outer {
