@@ -9805,10 +9805,10 @@
   top: 0;
   bottom: 0;
 }
-.set-theme.theme-light .btn:hover:not(.active):not(:active), .set-theme.theme-light .btn:focus:not(.active):not(:active) {
+.set-theme.theme-light .btn.pending:hover:not(.active):not(:active), .set-theme.theme-light .btn.pending:focus:not(.active):not(:active), .set-theme.theme-light .btn:not(:disabled):not(.disabled):hover:not(.active):not(:active), .set-theme.theme-light .btn:not(:disabled):not(.disabled):focus:not(.active):not(:active) {
   --press-effect-block-offset: 0rem;
 }
-.set-theme.theme-light .btn:active, .set-theme.theme-light .btn.active, .set-theme.theme-light .btn.pending:not(.toggle-button) {
+.set-theme.theme-light .btn.pending:active, .set-theme.theme-light .btn.pending.active, .set-theme.theme-light .btn.pending.pending:not(.toggle-button), .set-theme.theme-light .btn.toggle-button:active, .set-theme.theme-light .btn.toggle-button.active, .set-theme.theme-light .btn.toggle-button.pending:not(.toggle-button), .set-theme.theme-light .btn:not(:disabled):not(.disabled):active, .set-theme.theme-light .btn:not(:disabled):not(.disabled).active, .set-theme.theme-light .btn:not(:disabled):not(.disabled).pending:not(.toggle-button) {
   --press-effect-block-offset: calc(-1 * (0.25rem / 2));
 }
 .set-theme.theme-light .btn.btn-outline-primary {
@@ -9855,27 +9855,33 @@
   box-shadow: inset 0 0 0 0 rgba(13, 107, 245, 0.8), 0 0 0 0 rgba(110, 168, 254, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-light .btn:focus:not(.active):not(:active):not(.pending).btn-primary {
-  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(110, 168, 254, var(--input-btn-focus-color-opacity, 0.4));
+  box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(110, 168, 254, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-light .btn:focus:not(.active):not(:active):not(.pending).btn-outline-primary {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(110, 168, 254, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:hover:not(.active):not(:active):not(.pending).btn-primary {
+.set-theme.theme-light .btn:focus:not(.active):not(:active):not(.pending):not(:disabled):not(.disabled).btn-primary {
+  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(110, 168, 254, var(--input-btn-focus-color-opacity, 0.4));
+}
+.set-theme.theme-light .btn:focus:not(.active):not(:active):not(.pending):not(:disabled):not(.disabled).btn-outline-primary {
+  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(110, 168, 254, var(--input-btn-focus-color-opacity, 0.4));
+}
+.set-theme.theme-light .btn:not(:disabled):not(.disabled):hover:not(.active):not(:active):not(.pending).btn-primary, .set-theme.theme-light .btn.toggle-button:hover:not(.active):not(:active):not(.pending).btn-primary, .set-theme.theme-light .btn.pending:hover:not(.active):not(:active):not(.pending).btn-primary {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(110, 168, 254, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:hover:not(.active):not(:active):not(.pending).btn-outline-primary {
+.set-theme.theme-light .btn:not(:disabled):not(.disabled):hover:not(.active):not(:active):not(.pending).btn-outline-primary, .set-theme.theme-light .btn.toggle-button:hover:not(.active):not(:active):not(.pending).btn-outline-primary, .set-theme.theme-light .btn.pending:hover:not(.active):not(:active):not(.pending).btn-outline-primary {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(110, 168, 254, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:active:not(:focus).btn-primary, .set-theme.theme-light .btn.active:not(:focus).btn-primary, .set-theme.theme-light .btn:not(:active):not(.active).pending:not(:focus).btn-primary {
+.set-theme.theme-light .btn:not(:disabled):not(.disabled):active:not(:focus).btn-primary, .set-theme.theme-light .btn:not(:disabled):not(.disabled).active:not(:focus).btn-primary, .set-theme.theme-light .btn:not(:disabled):not(.disabled):not(:active):not(.active).pending:not(:focus).btn-primary, .set-theme.theme-light .btn.toggle-button:active:not(:focus).btn-primary, .set-theme.theme-light .btn.toggle-button.active:not(:focus).btn-primary, .set-theme.theme-light .btn.toggle-button:not(:active):not(.active).pending:not(:focus).btn-primary, .set-theme.theme-light .btn.pending:active:not(:focus).btn-primary, .set-theme.theme-light .btn.pending.active:not(:focus).btn-primary, .set-theme.theme-light .btn.pending:not(:active):not(.active).pending:not(:focus).btn-primary {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(110, 168, 254, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:active:not(:focus).btn-outline-primary, .set-theme.theme-light .btn.active:not(:focus).btn-outline-primary, .set-theme.theme-light .btn:not(:active):not(.active).pending:not(:focus).btn-outline-primary {
+.set-theme.theme-light .btn:not(:disabled):not(.disabled):active:not(:focus).btn-outline-primary, .set-theme.theme-light .btn:not(:disabled):not(.disabled).active:not(:focus).btn-outline-primary, .set-theme.theme-light .btn:not(:disabled):not(.disabled):not(:active):not(.active).pending:not(:focus).btn-outline-primary, .set-theme.theme-light .btn.toggle-button:active:not(:focus).btn-outline-primary, .set-theme.theme-light .btn.toggle-button.active:not(:focus).btn-outline-primary, .set-theme.theme-light .btn.toggle-button:not(:active):not(.active).pending:not(:focus).btn-outline-primary, .set-theme.theme-light .btn.pending:active:not(:focus).btn-outline-primary, .set-theme.theme-light .btn.pending.active:not(:focus).btn-outline-primary, .set-theme.theme-light .btn.pending:not(:active):not(.active).pending:not(:focus).btn-outline-primary {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(110, 168, 254, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:active:focus.btn-primary, .set-theme.theme-light .btn.active:focus.btn-primary, .set-theme.theme-light .btn:not(:active):not(.active).pending:focus.btn-primary {
+.set-theme.theme-light .btn:active:focus:not(:disabled):not(.disabled).btn-primary, .set-theme.theme-light .btn.active:focus:not(:disabled):not(.disabled).btn-primary, .set-theme.theme-light .btn:not(:active):not(.active).pending:focus.btn-primary {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(110, 168, 254, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:active:focus.btn-outline-primary, .set-theme.theme-light .btn.active:focus.btn-outline-primary, .set-theme.theme-light .btn:not(:active):not(.active).pending:focus.btn-outline-primary {
+.set-theme.theme-light .btn:active:focus:not(:disabled):not(.disabled).btn-outline-primary, .set-theme.theme-light .btn.active:focus:not(:disabled):not(.disabled).btn-outline-primary, .set-theme.theme-light .btn:not(:active):not(.active).pending:focus.btn-outline-primary {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(110, 168, 254, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-light .btn.btn-outline-secondary {
@@ -9917,27 +9923,33 @@
   box-shadow: inset 0 0 0 0 rgba(102, 16, 242, 0.8), 0 0 0 0 rgba(163, 112, 247, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-light .btn:focus:not(.active):not(:active):not(.pending).btn-secondary {
-  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(163, 112, 247, var(--input-btn-focus-color-opacity, 0.4));
+  box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(163, 112, 247, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-light .btn:focus:not(.active):not(:active):not(.pending).btn-outline-secondary {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(163, 112, 247, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:hover:not(.active):not(:active):not(.pending).btn-secondary {
+.set-theme.theme-light .btn:focus:not(.active):not(:active):not(.pending):not(:disabled):not(.disabled).btn-secondary {
+  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(163, 112, 247, var(--input-btn-focus-color-opacity, 0.4));
+}
+.set-theme.theme-light .btn:focus:not(.active):not(:active):not(.pending):not(:disabled):not(.disabled).btn-outline-secondary {
+  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(163, 112, 247, var(--input-btn-focus-color-opacity, 0.4));
+}
+.set-theme.theme-light .btn:not(:disabled):not(.disabled):hover:not(.active):not(:active):not(.pending).btn-secondary, .set-theme.theme-light .btn.toggle-button:hover:not(.active):not(:active):not(.pending).btn-secondary, .set-theme.theme-light .btn.pending:hover:not(.active):not(:active):not(.pending).btn-secondary {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(163, 112, 247, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:hover:not(.active):not(:active):not(.pending).btn-outline-secondary {
+.set-theme.theme-light .btn:not(:disabled):not(.disabled):hover:not(.active):not(:active):not(.pending).btn-outline-secondary, .set-theme.theme-light .btn.toggle-button:hover:not(.active):not(:active):not(.pending).btn-outline-secondary, .set-theme.theme-light .btn.pending:hover:not(.active):not(:active):not(.pending).btn-outline-secondary {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(163, 112, 247, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:active:not(:focus).btn-secondary, .set-theme.theme-light .btn.active:not(:focus).btn-secondary, .set-theme.theme-light .btn:not(:active):not(.active).pending:not(:focus).btn-secondary {
+.set-theme.theme-light .btn:not(:disabled):not(.disabled):active:not(:focus).btn-secondary, .set-theme.theme-light .btn:not(:disabled):not(.disabled).active:not(:focus).btn-secondary, .set-theme.theme-light .btn:not(:disabled):not(.disabled):not(:active):not(.active).pending:not(:focus).btn-secondary, .set-theme.theme-light .btn.toggle-button:active:not(:focus).btn-secondary, .set-theme.theme-light .btn.toggle-button.active:not(:focus).btn-secondary, .set-theme.theme-light .btn.toggle-button:not(:active):not(.active).pending:not(:focus).btn-secondary, .set-theme.theme-light .btn.pending:active:not(:focus).btn-secondary, .set-theme.theme-light .btn.pending.active:not(:focus).btn-secondary, .set-theme.theme-light .btn.pending:not(:active):not(.active).pending:not(:focus).btn-secondary {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(163, 112, 247, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:active:not(:focus).btn-outline-secondary, .set-theme.theme-light .btn.active:not(:focus).btn-outline-secondary, .set-theme.theme-light .btn:not(:active):not(.active).pending:not(:focus).btn-outline-secondary {
+.set-theme.theme-light .btn:not(:disabled):not(.disabled):active:not(:focus).btn-outline-secondary, .set-theme.theme-light .btn:not(:disabled):not(.disabled).active:not(:focus).btn-outline-secondary, .set-theme.theme-light .btn:not(:disabled):not(.disabled):not(:active):not(.active).pending:not(:focus).btn-outline-secondary, .set-theme.theme-light .btn.toggle-button:active:not(:focus).btn-outline-secondary, .set-theme.theme-light .btn.toggle-button.active:not(:focus).btn-outline-secondary, .set-theme.theme-light .btn.toggle-button:not(:active):not(.active).pending:not(:focus).btn-outline-secondary, .set-theme.theme-light .btn.pending:active:not(:focus).btn-outline-secondary, .set-theme.theme-light .btn.pending.active:not(:focus).btn-outline-secondary, .set-theme.theme-light .btn.pending:not(:active):not(.active).pending:not(:focus).btn-outline-secondary {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(163, 112, 247, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:active:focus.btn-secondary, .set-theme.theme-light .btn.active:focus.btn-secondary, .set-theme.theme-light .btn:not(:active):not(.active).pending:focus.btn-secondary {
+.set-theme.theme-light .btn:active:focus:not(:disabled):not(.disabled).btn-secondary, .set-theme.theme-light .btn.active:focus:not(:disabled):not(.disabled).btn-secondary, .set-theme.theme-light .btn:not(:active):not(.active).pending:focus.btn-secondary {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(163, 112, 247, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:active:focus.btn-outline-secondary, .set-theme.theme-light .btn.active:focus.btn-outline-secondary, .set-theme.theme-light .btn:not(:active):not(.active).pending:focus.btn-outline-secondary {
+.set-theme.theme-light .btn:active:focus:not(:disabled):not(.disabled).btn-outline-secondary, .set-theme.theme-light .btn.active:focus:not(:disabled):not(.disabled).btn-outline-secondary, .set-theme.theme-light .btn:not(:active):not(.active).pending:focus.btn-outline-secondary {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(163, 112, 247, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-light .btn.btn-outline-success {
@@ -9984,27 +9996,33 @@
   box-shadow: inset 0 0 0 0 rgba(25, 132, 82, 0.8), 0 0 0 0 rgba(117, 183, 152, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-light .btn:focus:not(.active):not(:active):not(.pending).btn-success {
-  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(117, 183, 152, var(--input-btn-focus-color-opacity, 0.4));
+  box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(117, 183, 152, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-light .btn:focus:not(.active):not(:active):not(.pending).btn-outline-success {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(117, 183, 152, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:hover:not(.active):not(:active):not(.pending).btn-success {
+.set-theme.theme-light .btn:focus:not(.active):not(:active):not(.pending):not(:disabled):not(.disabled).btn-success {
+  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(117, 183, 152, var(--input-btn-focus-color-opacity, 0.4));
+}
+.set-theme.theme-light .btn:focus:not(.active):not(:active):not(.pending):not(:disabled):not(.disabled).btn-outline-success {
+  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(117, 183, 152, var(--input-btn-focus-color-opacity, 0.4));
+}
+.set-theme.theme-light .btn:not(:disabled):not(.disabled):hover:not(.active):not(:active):not(.pending).btn-success, .set-theme.theme-light .btn.toggle-button:hover:not(.active):not(:active):not(.pending).btn-success, .set-theme.theme-light .btn.pending:hover:not(.active):not(:active):not(.pending).btn-success {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(117, 183, 152, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:hover:not(.active):not(:active):not(.pending).btn-outline-success {
+.set-theme.theme-light .btn:not(:disabled):not(.disabled):hover:not(.active):not(:active):not(.pending).btn-outline-success, .set-theme.theme-light .btn.toggle-button:hover:not(.active):not(:active):not(.pending).btn-outline-success, .set-theme.theme-light .btn.pending:hover:not(.active):not(:active):not(.pending).btn-outline-success {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(117, 183, 152, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:active:not(:focus).btn-success, .set-theme.theme-light .btn.active:not(:focus).btn-success, .set-theme.theme-light .btn:not(:active):not(.active).pending:not(:focus).btn-success {
+.set-theme.theme-light .btn:not(:disabled):not(.disabled):active:not(:focus).btn-success, .set-theme.theme-light .btn:not(:disabled):not(.disabled).active:not(:focus).btn-success, .set-theme.theme-light .btn:not(:disabled):not(.disabled):not(:active):not(.active).pending:not(:focus).btn-success, .set-theme.theme-light .btn.toggle-button:active:not(:focus).btn-success, .set-theme.theme-light .btn.toggle-button.active:not(:focus).btn-success, .set-theme.theme-light .btn.toggle-button:not(:active):not(.active).pending:not(:focus).btn-success, .set-theme.theme-light .btn.pending:active:not(:focus).btn-success, .set-theme.theme-light .btn.pending.active:not(:focus).btn-success, .set-theme.theme-light .btn.pending:not(:active):not(.active).pending:not(:focus).btn-success {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(117, 183, 152, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:active:not(:focus).btn-outline-success, .set-theme.theme-light .btn.active:not(:focus).btn-outline-success, .set-theme.theme-light .btn:not(:active):not(.active).pending:not(:focus).btn-outline-success {
+.set-theme.theme-light .btn:not(:disabled):not(.disabled):active:not(:focus).btn-outline-success, .set-theme.theme-light .btn:not(:disabled):not(.disabled).active:not(:focus).btn-outline-success, .set-theme.theme-light .btn:not(:disabled):not(.disabled):not(:active):not(.active).pending:not(:focus).btn-outline-success, .set-theme.theme-light .btn.toggle-button:active:not(:focus).btn-outline-success, .set-theme.theme-light .btn.toggle-button.active:not(:focus).btn-outline-success, .set-theme.theme-light .btn.toggle-button:not(:active):not(.active).pending:not(:focus).btn-outline-success, .set-theme.theme-light .btn.pending:active:not(:focus).btn-outline-success, .set-theme.theme-light .btn.pending.active:not(:focus).btn-outline-success, .set-theme.theme-light .btn.pending:not(:active):not(.active).pending:not(:focus).btn-outline-success {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(117, 183, 152, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:active:focus.btn-success, .set-theme.theme-light .btn.active:focus.btn-success, .set-theme.theme-light .btn:not(:active):not(.active).pending:focus.btn-success {
+.set-theme.theme-light .btn:active:focus:not(:disabled):not(.disabled).btn-success, .set-theme.theme-light .btn.active:focus:not(:disabled):not(.disabled).btn-success, .set-theme.theme-light .btn:not(:active):not(.active).pending:focus.btn-success {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(117, 183, 152, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:active:focus.btn-outline-success, .set-theme.theme-light .btn.active:focus.btn-outline-success, .set-theme.theme-light .btn:not(:active):not(.active).pending:focus.btn-outline-success {
+.set-theme.theme-light .btn:active:focus:not(:disabled):not(.disabled).btn-outline-success, .set-theme.theme-light .btn.active:focus:not(:disabled):not(.disabled).btn-outline-success, .set-theme.theme-light .btn:not(:active):not(.active).pending:focus.btn-outline-success {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(117, 183, 152, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-light .btn.btn-outline-info {
@@ -10051,27 +10069,33 @@
   box-shadow: inset 0 0 0 0 rgba(8, 127, 151, 0.8), 0 0 0 0 rgba(110, 223, 246, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-light .btn:focus:not(.active):not(:active):not(.pending).btn-info {
-  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(110, 223, 246, var(--input-btn-focus-color-opacity, 0.4));
+  box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(110, 223, 246, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-light .btn:focus:not(.active):not(:active):not(.pending).btn-outline-info {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(110, 223, 246, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:hover:not(.active):not(:active):not(.pending).btn-info {
+.set-theme.theme-light .btn:focus:not(.active):not(:active):not(.pending):not(:disabled):not(.disabled).btn-info {
+  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(110, 223, 246, var(--input-btn-focus-color-opacity, 0.4));
+}
+.set-theme.theme-light .btn:focus:not(.active):not(:active):not(.pending):not(:disabled):not(.disabled).btn-outline-info {
+  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(110, 223, 246, var(--input-btn-focus-color-opacity, 0.4));
+}
+.set-theme.theme-light .btn:not(:disabled):not(.disabled):hover:not(.active):not(:active):not(.pending).btn-info, .set-theme.theme-light .btn.toggle-button:hover:not(.active):not(:active):not(.pending).btn-info, .set-theme.theme-light .btn.pending:hover:not(.active):not(:active):not(.pending).btn-info {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(110, 223, 246, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:hover:not(.active):not(:active):not(.pending).btn-outline-info {
+.set-theme.theme-light .btn:not(:disabled):not(.disabled):hover:not(.active):not(:active):not(.pending).btn-outline-info, .set-theme.theme-light .btn.toggle-button:hover:not(.active):not(:active):not(.pending).btn-outline-info, .set-theme.theme-light .btn.pending:hover:not(.active):not(:active):not(.pending).btn-outline-info {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(110, 223, 246, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:active:not(:focus).btn-info, .set-theme.theme-light .btn.active:not(:focus).btn-info, .set-theme.theme-light .btn:not(:active):not(.active).pending:not(:focus).btn-info {
+.set-theme.theme-light .btn:not(:disabled):not(.disabled):active:not(:focus).btn-info, .set-theme.theme-light .btn:not(:disabled):not(.disabled).active:not(:focus).btn-info, .set-theme.theme-light .btn:not(:disabled):not(.disabled):not(:active):not(.active).pending:not(:focus).btn-info, .set-theme.theme-light .btn.toggle-button:active:not(:focus).btn-info, .set-theme.theme-light .btn.toggle-button.active:not(:focus).btn-info, .set-theme.theme-light .btn.toggle-button:not(:active):not(.active).pending:not(:focus).btn-info, .set-theme.theme-light .btn.pending:active:not(:focus).btn-info, .set-theme.theme-light .btn.pending.active:not(:focus).btn-info, .set-theme.theme-light .btn.pending:not(:active):not(.active).pending:not(:focus).btn-info {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(110, 223, 246, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:active:not(:focus).btn-outline-info, .set-theme.theme-light .btn.active:not(:focus).btn-outline-info, .set-theme.theme-light .btn:not(:active):not(.active).pending:not(:focus).btn-outline-info {
+.set-theme.theme-light .btn:not(:disabled):not(.disabled):active:not(:focus).btn-outline-info, .set-theme.theme-light .btn:not(:disabled):not(.disabled).active:not(:focus).btn-outline-info, .set-theme.theme-light .btn:not(:disabled):not(.disabled):not(:active):not(.active).pending:not(:focus).btn-outline-info, .set-theme.theme-light .btn.toggle-button:active:not(:focus).btn-outline-info, .set-theme.theme-light .btn.toggle-button.active:not(:focus).btn-outline-info, .set-theme.theme-light .btn.toggle-button:not(:active):not(.active).pending:not(:focus).btn-outline-info, .set-theme.theme-light .btn.pending:active:not(:focus).btn-outline-info, .set-theme.theme-light .btn.pending.active:not(:focus).btn-outline-info, .set-theme.theme-light .btn.pending:not(:active):not(.active).pending:not(:focus).btn-outline-info {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(110, 223, 246, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:active:focus.btn-info, .set-theme.theme-light .btn.active:focus.btn-info, .set-theme.theme-light .btn:not(:active):not(.active).pending:focus.btn-info {
+.set-theme.theme-light .btn:active:focus:not(:disabled):not(.disabled).btn-info, .set-theme.theme-light .btn.active:focus:not(:disabled):not(.disabled).btn-info, .set-theme.theme-light .btn:not(:active):not(.active).pending:focus.btn-info {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(110, 223, 246, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:active:focus.btn-outline-info, .set-theme.theme-light .btn.active:focus.btn-outline-info, .set-theme.theme-light .btn:not(:active):not(.active).pending:focus.btn-outline-info {
+.set-theme.theme-light .btn:active:focus:not(:disabled):not(.disabled).btn-outline-info, .set-theme.theme-light .btn.active:focus:not(:disabled):not(.disabled).btn-outline-info, .set-theme.theme-light .btn:not(:active):not(.active).pending:focus.btn-outline-info {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(110, 223, 246, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-light .btn.btn-outline-warning {
@@ -10118,27 +10142,33 @@
   box-shadow: inset 0 0 0 0 rgba(145, 110, 4, 0.8), 0 0 0 0 rgba(255, 218, 106, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-light .btn:focus:not(.active):not(:active):not(.pending).btn-warning {
-  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(255, 218, 106, var(--input-btn-focus-color-opacity, 0.4));
+  box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(255, 218, 106, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-light .btn:focus:not(.active):not(:active):not(.pending).btn-outline-warning {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(255, 218, 106, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:hover:not(.active):not(:active):not(.pending).btn-warning {
+.set-theme.theme-light .btn:focus:not(.active):not(:active):not(.pending):not(:disabled):not(.disabled).btn-warning {
+  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(255, 218, 106, var(--input-btn-focus-color-opacity, 0.4));
+}
+.set-theme.theme-light .btn:focus:not(.active):not(:active):not(.pending):not(:disabled):not(.disabled).btn-outline-warning {
+  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(255, 218, 106, var(--input-btn-focus-color-opacity, 0.4));
+}
+.set-theme.theme-light .btn:not(:disabled):not(.disabled):hover:not(.active):not(:active):not(.pending).btn-warning, .set-theme.theme-light .btn.toggle-button:hover:not(.active):not(:active):not(.pending).btn-warning, .set-theme.theme-light .btn.pending:hover:not(.active):not(:active):not(.pending).btn-warning {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(255, 218, 106, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:hover:not(.active):not(:active):not(.pending).btn-outline-warning {
+.set-theme.theme-light .btn:not(:disabled):not(.disabled):hover:not(.active):not(:active):not(.pending).btn-outline-warning, .set-theme.theme-light .btn.toggle-button:hover:not(.active):not(:active):not(.pending).btn-outline-warning, .set-theme.theme-light .btn.pending:hover:not(.active):not(:active):not(.pending).btn-outline-warning {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(255, 218, 106, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:active:not(:focus).btn-warning, .set-theme.theme-light .btn.active:not(:focus).btn-warning, .set-theme.theme-light .btn:not(:active):not(.active).pending:not(:focus).btn-warning {
+.set-theme.theme-light .btn:not(:disabled):not(.disabled):active:not(:focus).btn-warning, .set-theme.theme-light .btn:not(:disabled):not(.disabled).active:not(:focus).btn-warning, .set-theme.theme-light .btn:not(:disabled):not(.disabled):not(:active):not(.active).pending:not(:focus).btn-warning, .set-theme.theme-light .btn.toggle-button:active:not(:focus).btn-warning, .set-theme.theme-light .btn.toggle-button.active:not(:focus).btn-warning, .set-theme.theme-light .btn.toggle-button:not(:active):not(.active).pending:not(:focus).btn-warning, .set-theme.theme-light .btn.pending:active:not(:focus).btn-warning, .set-theme.theme-light .btn.pending.active:not(:focus).btn-warning, .set-theme.theme-light .btn.pending:not(:active):not(.active).pending:not(:focus).btn-warning {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(255, 218, 106, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:active:not(:focus).btn-outline-warning, .set-theme.theme-light .btn.active:not(:focus).btn-outline-warning, .set-theme.theme-light .btn:not(:active):not(.active).pending:not(:focus).btn-outline-warning {
+.set-theme.theme-light .btn:not(:disabled):not(.disabled):active:not(:focus).btn-outline-warning, .set-theme.theme-light .btn:not(:disabled):not(.disabled).active:not(:focus).btn-outline-warning, .set-theme.theme-light .btn:not(:disabled):not(.disabled):not(:active):not(.active).pending:not(:focus).btn-outline-warning, .set-theme.theme-light .btn.toggle-button:active:not(:focus).btn-outline-warning, .set-theme.theme-light .btn.toggle-button.active:not(:focus).btn-outline-warning, .set-theme.theme-light .btn.toggle-button:not(:active):not(.active).pending:not(:focus).btn-outline-warning, .set-theme.theme-light .btn.pending:active:not(:focus).btn-outline-warning, .set-theme.theme-light .btn.pending.active:not(:focus).btn-outline-warning, .set-theme.theme-light .btn.pending:not(:active):not(.active).pending:not(:focus).btn-outline-warning {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(255, 218, 106, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:active:focus.btn-warning, .set-theme.theme-light .btn.active:focus.btn-warning, .set-theme.theme-light .btn:not(:active):not(.active).pending:focus.btn-warning {
+.set-theme.theme-light .btn:active:focus:not(:disabled):not(.disabled).btn-warning, .set-theme.theme-light .btn.active:focus:not(:disabled):not(.disabled).btn-warning, .set-theme.theme-light .btn:not(:active):not(.active).pending:focus.btn-warning {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(255, 218, 106, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:active:focus.btn-outline-warning, .set-theme.theme-light .btn.active:focus.btn-outline-warning, .set-theme.theme-light .btn:not(:active):not(.active).pending:focus.btn-outline-warning {
+.set-theme.theme-light .btn:active:focus:not(:disabled):not(.disabled).btn-outline-warning, .set-theme.theme-light .btn.active:focus:not(:disabled):not(.disabled).btn-outline-warning, .set-theme.theme-light .btn:not(:active):not(.active).pending:focus.btn-outline-warning {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(255, 218, 106, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-light .btn.btn-outline-danger {
@@ -10185,27 +10215,33 @@
   box-shadow: inset 0 0 0 0 rgba(216, 52, 68, 0.8), 0 0 0 0 rgba(234, 134, 143, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-light .btn:focus:not(.active):not(:active):not(.pending).btn-danger {
-  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(234, 134, 143, var(--input-btn-focus-color-opacity, 0.4));
+  box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(234, 134, 143, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-light .btn:focus:not(.active):not(:active):not(.pending).btn-outline-danger {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(234, 134, 143, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:hover:not(.active):not(:active):not(.pending).btn-danger {
+.set-theme.theme-light .btn:focus:not(.active):not(:active):not(.pending):not(:disabled):not(.disabled).btn-danger {
+  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(234, 134, 143, var(--input-btn-focus-color-opacity, 0.4));
+}
+.set-theme.theme-light .btn:focus:not(.active):not(:active):not(.pending):not(:disabled):not(.disabled).btn-outline-danger {
+  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(234, 134, 143, var(--input-btn-focus-color-opacity, 0.4));
+}
+.set-theme.theme-light .btn:not(:disabled):not(.disabled):hover:not(.active):not(:active):not(.pending).btn-danger, .set-theme.theme-light .btn.toggle-button:hover:not(.active):not(:active):not(.pending).btn-danger, .set-theme.theme-light .btn.pending:hover:not(.active):not(:active):not(.pending).btn-danger {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(234, 134, 143, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:hover:not(.active):not(:active):not(.pending).btn-outline-danger {
+.set-theme.theme-light .btn:not(:disabled):not(.disabled):hover:not(.active):not(:active):not(.pending).btn-outline-danger, .set-theme.theme-light .btn.toggle-button:hover:not(.active):not(:active):not(.pending).btn-outline-danger, .set-theme.theme-light .btn.pending:hover:not(.active):not(:active):not(.pending).btn-outline-danger {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(234, 134, 143, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:active:not(:focus).btn-danger, .set-theme.theme-light .btn.active:not(:focus).btn-danger, .set-theme.theme-light .btn:not(:active):not(.active).pending:not(:focus).btn-danger {
+.set-theme.theme-light .btn:not(:disabled):not(.disabled):active:not(:focus).btn-danger, .set-theme.theme-light .btn:not(:disabled):not(.disabled).active:not(:focus).btn-danger, .set-theme.theme-light .btn:not(:disabled):not(.disabled):not(:active):not(.active).pending:not(:focus).btn-danger, .set-theme.theme-light .btn.toggle-button:active:not(:focus).btn-danger, .set-theme.theme-light .btn.toggle-button.active:not(:focus).btn-danger, .set-theme.theme-light .btn.toggle-button:not(:active):not(.active).pending:not(:focus).btn-danger, .set-theme.theme-light .btn.pending:active:not(:focus).btn-danger, .set-theme.theme-light .btn.pending.active:not(:focus).btn-danger, .set-theme.theme-light .btn.pending:not(:active):not(.active).pending:not(:focus).btn-danger {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(234, 134, 143, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:active:not(:focus).btn-outline-danger, .set-theme.theme-light .btn.active:not(:focus).btn-outline-danger, .set-theme.theme-light .btn:not(:active):not(.active).pending:not(:focus).btn-outline-danger {
+.set-theme.theme-light .btn:not(:disabled):not(.disabled):active:not(:focus).btn-outline-danger, .set-theme.theme-light .btn:not(:disabled):not(.disabled).active:not(:focus).btn-outline-danger, .set-theme.theme-light .btn:not(:disabled):not(.disabled):not(:active):not(.active).pending:not(:focus).btn-outline-danger, .set-theme.theme-light .btn.toggle-button:active:not(:focus).btn-outline-danger, .set-theme.theme-light .btn.toggle-button.active:not(:focus).btn-outline-danger, .set-theme.theme-light .btn.toggle-button:not(:active):not(.active).pending:not(:focus).btn-outline-danger, .set-theme.theme-light .btn.pending:active:not(:focus).btn-outline-danger, .set-theme.theme-light .btn.pending.active:not(:focus).btn-outline-danger, .set-theme.theme-light .btn.pending:not(:active):not(.active).pending:not(:focus).btn-outline-danger {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(234, 134, 143, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:active:focus.btn-danger, .set-theme.theme-light .btn.active:focus.btn-danger, .set-theme.theme-light .btn:not(:active):not(.active).pending:focus.btn-danger {
+.set-theme.theme-light .btn:active:focus:not(:disabled):not(.disabled).btn-danger, .set-theme.theme-light .btn.active:focus:not(:disabled):not(.disabled).btn-danger, .set-theme.theme-light .btn:not(:active):not(.active).pending:focus.btn-danger {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(234, 134, 143, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:active:focus.btn-outline-danger, .set-theme.theme-light .btn.active:focus.btn-outline-danger, .set-theme.theme-light .btn:not(:active):not(.active).pending:focus.btn-outline-danger {
+.set-theme.theme-light .btn:active:focus:not(:disabled):not(.disabled).btn-outline-danger, .set-theme.theme-light .btn.active:focus:not(:disabled):not(.disabled).btn-outline-danger, .set-theme.theme-light .btn:not(:active):not(.active).pending:focus.btn-outline-danger {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(234, 134, 143, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-light .btn.btn-outline-light {
@@ -10252,27 +10288,33 @@
   box-shadow: inset 0 0 0 0 rgba(116, 116, 117, 0.8), 0 0 0 0 rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-light .btn:focus:not(.active):not(:active):not(.pending).btn-light {
-  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
+  box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-light .btn:focus:not(.active):not(:active):not(.pending).btn-outline-light {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:hover:not(.active):not(:active):not(.pending).btn-light {
+.set-theme.theme-light .btn:focus:not(.active):not(:active):not(.pending):not(:disabled):not(.disabled).btn-light {
+  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
+}
+.set-theme.theme-light .btn:focus:not(.active):not(:active):not(.pending):not(:disabled):not(.disabled).btn-outline-light {
+  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
+}
+.set-theme.theme-light .btn:not(:disabled):not(.disabled):hover:not(.active):not(:active):not(.pending).btn-light, .set-theme.theme-light .btn.toggle-button:hover:not(.active):not(:active):not(.pending).btn-light, .set-theme.theme-light .btn.pending:hover:not(.active):not(:active):not(.pending).btn-light {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:hover:not(.active):not(:active):not(.pending).btn-outline-light {
+.set-theme.theme-light .btn:not(:disabled):not(.disabled):hover:not(.active):not(:active):not(.pending).btn-outline-light, .set-theme.theme-light .btn.toggle-button:hover:not(.active):not(:active):not(.pending).btn-outline-light, .set-theme.theme-light .btn.pending:hover:not(.active):not(:active):not(.pending).btn-outline-light {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:active:not(:focus).btn-light, .set-theme.theme-light .btn.active:not(:focus).btn-light, .set-theme.theme-light .btn:not(:active):not(.active).pending:not(:focus).btn-light {
+.set-theme.theme-light .btn:not(:disabled):not(.disabled):active:not(:focus).btn-light, .set-theme.theme-light .btn:not(:disabled):not(.disabled).active:not(:focus).btn-light, .set-theme.theme-light .btn:not(:disabled):not(.disabled):not(:active):not(.active).pending:not(:focus).btn-light, .set-theme.theme-light .btn.toggle-button:active:not(:focus).btn-light, .set-theme.theme-light .btn.toggle-button.active:not(:focus).btn-light, .set-theme.theme-light .btn.toggle-button:not(:active):not(.active).pending:not(:focus).btn-light, .set-theme.theme-light .btn.pending:active:not(:focus).btn-light, .set-theme.theme-light .btn.pending.active:not(:focus).btn-light, .set-theme.theme-light .btn.pending:not(:active):not(.active).pending:not(:focus).btn-light {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:active:not(:focus).btn-outline-light, .set-theme.theme-light .btn.active:not(:focus).btn-outline-light, .set-theme.theme-light .btn:not(:active):not(.active).pending:not(:focus).btn-outline-light {
+.set-theme.theme-light .btn:not(:disabled):not(.disabled):active:not(:focus).btn-outline-light, .set-theme.theme-light .btn:not(:disabled):not(.disabled).active:not(:focus).btn-outline-light, .set-theme.theme-light .btn:not(:disabled):not(.disabled):not(:active):not(.active).pending:not(:focus).btn-outline-light, .set-theme.theme-light .btn.toggle-button:active:not(:focus).btn-outline-light, .set-theme.theme-light .btn.toggle-button.active:not(:focus).btn-outline-light, .set-theme.theme-light .btn.toggle-button:not(:active):not(.active).pending:not(:focus).btn-outline-light, .set-theme.theme-light .btn.pending:active:not(:focus).btn-outline-light, .set-theme.theme-light .btn.pending.active:not(:focus).btn-outline-light, .set-theme.theme-light .btn.pending:not(:active):not(.active).pending:not(:focus).btn-outline-light {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:active:focus.btn-light, .set-theme.theme-light .btn.active:focus.btn-light, .set-theme.theme-light .btn:not(:active):not(.active).pending:focus.btn-light {
+.set-theme.theme-light .btn:active:focus:not(:disabled):not(.disabled).btn-light, .set-theme.theme-light .btn.active:focus:not(:disabled):not(.disabled).btn-light, .set-theme.theme-light .btn:not(:active):not(.active).pending:focus.btn-light {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:active:focus.btn-outline-light, .set-theme.theme-light .btn.active:focus.btn-outline-light, .set-theme.theme-light .btn:not(:active):not(.active).pending:focus.btn-outline-light {
+.set-theme.theme-light .btn:active:focus:not(:disabled):not(.disabled).btn-outline-light, .set-theme.theme-light .btn.active:focus:not(:disabled):not(.disabled).btn-outline-light, .set-theme.theme-light .btn:not(:active):not(.active).pending:focus.btn-outline-light {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-light .btn.btn-outline-dark {
@@ -10314,27 +10356,33 @@
   box-shadow: inset 0 0 0 0 rgba(11, 13, 14, 0.8), 0 0 0 0 rgba(109, 110, 110, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-light .btn:focus:not(.active):not(:active):not(.pending).btn-dark {
-  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(109, 110, 110, var(--input-btn-focus-color-opacity, 0.4));
+  box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(109, 110, 110, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-light .btn:focus:not(.active):not(:active):not(.pending).btn-outline-dark {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(109, 110, 110, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:hover:not(.active):not(:active):not(.pending).btn-dark {
+.set-theme.theme-light .btn:focus:not(.active):not(:active):not(.pending):not(:disabled):not(.disabled).btn-dark {
+  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(109, 110, 110, var(--input-btn-focus-color-opacity, 0.4));
+}
+.set-theme.theme-light .btn:focus:not(.active):not(:active):not(.pending):not(:disabled):not(.disabled).btn-outline-dark {
+  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(109, 110, 110, var(--input-btn-focus-color-opacity, 0.4));
+}
+.set-theme.theme-light .btn:not(:disabled):not(.disabled):hover:not(.active):not(:active):not(.pending).btn-dark, .set-theme.theme-light .btn.toggle-button:hover:not(.active):not(:active):not(.pending).btn-dark, .set-theme.theme-light .btn.pending:hover:not(.active):not(:active):not(.pending).btn-dark {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(109, 110, 110, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:hover:not(.active):not(:active):not(.pending).btn-outline-dark {
+.set-theme.theme-light .btn:not(:disabled):not(.disabled):hover:not(.active):not(:active):not(.pending).btn-outline-dark, .set-theme.theme-light .btn.toggle-button:hover:not(.active):not(:active):not(.pending).btn-outline-dark, .set-theme.theme-light .btn.pending:hover:not(.active):not(:active):not(.pending).btn-outline-dark {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(109, 110, 110, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:active:not(:focus).btn-dark, .set-theme.theme-light .btn.active:not(:focus).btn-dark, .set-theme.theme-light .btn:not(:active):not(.active).pending:not(:focus).btn-dark {
+.set-theme.theme-light .btn:not(:disabled):not(.disabled):active:not(:focus).btn-dark, .set-theme.theme-light .btn:not(:disabled):not(.disabled).active:not(:focus).btn-dark, .set-theme.theme-light .btn:not(:disabled):not(.disabled):not(:active):not(.active).pending:not(:focus).btn-dark, .set-theme.theme-light .btn.toggle-button:active:not(:focus).btn-dark, .set-theme.theme-light .btn.toggle-button.active:not(:focus).btn-dark, .set-theme.theme-light .btn.toggle-button:not(:active):not(.active).pending:not(:focus).btn-dark, .set-theme.theme-light .btn.pending:active:not(:focus).btn-dark, .set-theme.theme-light .btn.pending.active:not(:focus).btn-dark, .set-theme.theme-light .btn.pending:not(:active):not(.active).pending:not(:focus).btn-dark {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(109, 110, 110, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:active:not(:focus).btn-outline-dark, .set-theme.theme-light .btn.active:not(:focus).btn-outline-dark, .set-theme.theme-light .btn:not(:active):not(.active).pending:not(:focus).btn-outline-dark {
+.set-theme.theme-light .btn:not(:disabled):not(.disabled):active:not(:focus).btn-outline-dark, .set-theme.theme-light .btn:not(:disabled):not(.disabled).active:not(:focus).btn-outline-dark, .set-theme.theme-light .btn:not(:disabled):not(.disabled):not(:active):not(.active).pending:not(:focus).btn-outline-dark, .set-theme.theme-light .btn.toggle-button:active:not(:focus).btn-outline-dark, .set-theme.theme-light .btn.toggle-button.active:not(:focus).btn-outline-dark, .set-theme.theme-light .btn.toggle-button:not(:active):not(.active).pending:not(:focus).btn-outline-dark, .set-theme.theme-light .btn.pending:active:not(:focus).btn-outline-dark, .set-theme.theme-light .btn.pending.active:not(:focus).btn-outline-dark, .set-theme.theme-light .btn.pending:not(:active):not(.active).pending:not(:focus).btn-outline-dark {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(109, 110, 110, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:active:focus.btn-dark, .set-theme.theme-light .btn.active:focus.btn-dark, .set-theme.theme-light .btn:not(:active):not(.active).pending:focus.btn-dark {
+.set-theme.theme-light .btn:active:focus:not(:disabled):not(.disabled).btn-dark, .set-theme.theme-light .btn.active:focus:not(:disabled):not(.disabled).btn-dark, .set-theme.theme-light .btn:not(:active):not(.active).pending:focus.btn-dark {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(109, 110, 110, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:active:focus.btn-outline-dark, .set-theme.theme-light .btn.active:focus.btn-outline-dark, .set-theme.theme-light .btn:not(:active):not(.active).pending:focus.btn-outline-dark {
+.set-theme.theme-light .btn:active:focus:not(:disabled):not(.disabled).btn-outline-dark, .set-theme.theme-light .btn.active:focus:not(:disabled):not(.disabled).btn-outline-dark, .set-theme.theme-light .btn:not(:active):not(.active).pending:focus.btn-outline-dark {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(109, 110, 110, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-light .btn.btn-outline-contrast {
@@ -10376,27 +10424,33 @@
   box-shadow: inset 0 0 0 0 rgba(11, 13, 14, 0.8), 0 0 0 0 rgba(109, 110, 110, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-light .btn:focus:not(.active):not(:active):not(.pending).btn-contrast {
-  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(109, 110, 110, var(--input-btn-focus-color-opacity, 0.4));
+  box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(109, 110, 110, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-light .btn:focus:not(.active):not(:active):not(.pending).btn-outline-contrast {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(109, 110, 110, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:hover:not(.active):not(:active):not(.pending).btn-contrast {
+.set-theme.theme-light .btn:focus:not(.active):not(:active):not(.pending):not(:disabled):not(.disabled).btn-contrast {
+  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(109, 110, 110, var(--input-btn-focus-color-opacity, 0.4));
+}
+.set-theme.theme-light .btn:focus:not(.active):not(:active):not(.pending):not(:disabled):not(.disabled).btn-outline-contrast {
+  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(109, 110, 110, var(--input-btn-focus-color-opacity, 0.4));
+}
+.set-theme.theme-light .btn:not(:disabled):not(.disabled):hover:not(.active):not(:active):not(.pending).btn-contrast, .set-theme.theme-light .btn.toggle-button:hover:not(.active):not(:active):not(.pending).btn-contrast, .set-theme.theme-light .btn.pending:hover:not(.active):not(:active):not(.pending).btn-contrast {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(109, 110, 110, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:hover:not(.active):not(:active):not(.pending).btn-outline-contrast {
+.set-theme.theme-light .btn:not(:disabled):not(.disabled):hover:not(.active):not(:active):not(.pending).btn-outline-contrast, .set-theme.theme-light .btn.toggle-button:hover:not(.active):not(:active):not(.pending).btn-outline-contrast, .set-theme.theme-light .btn.pending:hover:not(.active):not(:active):not(.pending).btn-outline-contrast {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(109, 110, 110, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:active:not(:focus).btn-contrast, .set-theme.theme-light .btn.active:not(:focus).btn-contrast, .set-theme.theme-light .btn:not(:active):not(.active).pending:not(:focus).btn-contrast {
+.set-theme.theme-light .btn:not(:disabled):not(.disabled):active:not(:focus).btn-contrast, .set-theme.theme-light .btn:not(:disabled):not(.disabled).active:not(:focus).btn-contrast, .set-theme.theme-light .btn:not(:disabled):not(.disabled):not(:active):not(.active).pending:not(:focus).btn-contrast, .set-theme.theme-light .btn.toggle-button:active:not(:focus).btn-contrast, .set-theme.theme-light .btn.toggle-button.active:not(:focus).btn-contrast, .set-theme.theme-light .btn.toggle-button:not(:active):not(.active).pending:not(:focus).btn-contrast, .set-theme.theme-light .btn.pending:active:not(:focus).btn-contrast, .set-theme.theme-light .btn.pending.active:not(:focus).btn-contrast, .set-theme.theme-light .btn.pending:not(:active):not(.active).pending:not(:focus).btn-contrast {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(109, 110, 110, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:active:not(:focus).btn-outline-contrast, .set-theme.theme-light .btn.active:not(:focus).btn-outline-contrast, .set-theme.theme-light .btn:not(:active):not(.active).pending:not(:focus).btn-outline-contrast {
+.set-theme.theme-light .btn:not(:disabled):not(.disabled):active:not(:focus).btn-outline-contrast, .set-theme.theme-light .btn:not(:disabled):not(.disabled).active:not(:focus).btn-outline-contrast, .set-theme.theme-light .btn:not(:disabled):not(.disabled):not(:active):not(.active).pending:not(:focus).btn-outline-contrast, .set-theme.theme-light .btn.toggle-button:active:not(:focus).btn-outline-contrast, .set-theme.theme-light .btn.toggle-button.active:not(:focus).btn-outline-contrast, .set-theme.theme-light .btn.toggle-button:not(:active):not(.active).pending:not(:focus).btn-outline-contrast, .set-theme.theme-light .btn.pending:active:not(:focus).btn-outline-contrast, .set-theme.theme-light .btn.pending.active:not(:focus).btn-outline-contrast, .set-theme.theme-light .btn.pending:not(:active):not(.active).pending:not(:focus).btn-outline-contrast {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(109, 110, 110, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:active:focus.btn-contrast, .set-theme.theme-light .btn.active:focus.btn-contrast, .set-theme.theme-light .btn:not(:active):not(.active).pending:focus.btn-contrast {
+.set-theme.theme-light .btn:active:focus:not(:disabled):not(.disabled).btn-contrast, .set-theme.theme-light .btn.active:focus:not(:disabled):not(.disabled).btn-contrast, .set-theme.theme-light .btn:not(:active):not(.active).pending:focus.btn-contrast {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(109, 110, 110, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:active:focus.btn-outline-contrast, .set-theme.theme-light .btn.active:focus.btn-outline-contrast, .set-theme.theme-light .btn:not(:active):not(.active).pending:focus.btn-outline-contrast {
+.set-theme.theme-light .btn:active:focus:not(:disabled):not(.disabled).btn-outline-contrast, .set-theme.theme-light .btn.active:focus:not(:disabled):not(.disabled).btn-outline-contrast, .set-theme.theme-light .btn:not(:active):not(.active).pending:focus.btn-outline-contrast {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(109, 110, 110, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-light .btn.btn-outline-subtle {
@@ -10443,27 +10497,33 @@
   box-shadow: inset 0 0 0 0 rgba(116, 116, 117, 0.8), 0 0 0 0 rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-light .btn:focus:not(.active):not(:active):not(.pending).btn-subtle {
-  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
+  box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-light .btn:focus:not(.active):not(:active):not(.pending).btn-outline-subtle {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:hover:not(.active):not(:active):not(.pending).btn-subtle {
+.set-theme.theme-light .btn:focus:not(.active):not(:active):not(.pending):not(:disabled):not(.disabled).btn-subtle {
+  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
+}
+.set-theme.theme-light .btn:focus:not(.active):not(:active):not(.pending):not(:disabled):not(.disabled).btn-outline-subtle {
+  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
+}
+.set-theme.theme-light .btn:not(:disabled):not(.disabled):hover:not(.active):not(:active):not(.pending).btn-subtle, .set-theme.theme-light .btn.toggle-button:hover:not(.active):not(:active):not(.pending).btn-subtle, .set-theme.theme-light .btn.pending:hover:not(.active):not(:active):not(.pending).btn-subtle {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:hover:not(.active):not(:active):not(.pending).btn-outline-subtle {
+.set-theme.theme-light .btn:not(:disabled):not(.disabled):hover:not(.active):not(:active):not(.pending).btn-outline-subtle, .set-theme.theme-light .btn.toggle-button:hover:not(.active):not(:active):not(.pending).btn-outline-subtle, .set-theme.theme-light .btn.pending:hover:not(.active):not(:active):not(.pending).btn-outline-subtle {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:active:not(:focus).btn-subtle, .set-theme.theme-light .btn.active:not(:focus).btn-subtle, .set-theme.theme-light .btn:not(:active):not(.active).pending:not(:focus).btn-subtle {
+.set-theme.theme-light .btn:not(:disabled):not(.disabled):active:not(:focus).btn-subtle, .set-theme.theme-light .btn:not(:disabled):not(.disabled).active:not(:focus).btn-subtle, .set-theme.theme-light .btn:not(:disabled):not(.disabled):not(:active):not(.active).pending:not(:focus).btn-subtle, .set-theme.theme-light .btn.toggle-button:active:not(:focus).btn-subtle, .set-theme.theme-light .btn.toggle-button.active:not(:focus).btn-subtle, .set-theme.theme-light .btn.toggle-button:not(:active):not(.active).pending:not(:focus).btn-subtle, .set-theme.theme-light .btn.pending:active:not(:focus).btn-subtle, .set-theme.theme-light .btn.pending.active:not(:focus).btn-subtle, .set-theme.theme-light .btn.pending:not(:active):not(.active).pending:not(:focus).btn-subtle {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:active:not(:focus).btn-outline-subtle, .set-theme.theme-light .btn.active:not(:focus).btn-outline-subtle, .set-theme.theme-light .btn:not(:active):not(.active).pending:not(:focus).btn-outline-subtle {
+.set-theme.theme-light .btn:not(:disabled):not(.disabled):active:not(:focus).btn-outline-subtle, .set-theme.theme-light .btn:not(:disabled):not(.disabled).active:not(:focus).btn-outline-subtle, .set-theme.theme-light .btn:not(:disabled):not(.disabled):not(:active):not(.active).pending:not(:focus).btn-outline-subtle, .set-theme.theme-light .btn.toggle-button:active:not(:focus).btn-outline-subtle, .set-theme.theme-light .btn.toggle-button.active:not(:focus).btn-outline-subtle, .set-theme.theme-light .btn.toggle-button:not(:active):not(.active).pending:not(:focus).btn-outline-subtle, .set-theme.theme-light .btn.pending:active:not(:focus).btn-outline-subtle, .set-theme.theme-light .btn.pending.active:not(:focus).btn-outline-subtle, .set-theme.theme-light .btn.pending:not(:active):not(.active).pending:not(:focus).btn-outline-subtle {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:active:focus.btn-subtle, .set-theme.theme-light .btn.active:focus.btn-subtle, .set-theme.theme-light .btn:not(:active):not(.active).pending:focus.btn-subtle {
+.set-theme.theme-light .btn:active:focus:not(:disabled):not(.disabled).btn-subtle, .set-theme.theme-light .btn.active:focus:not(:disabled):not(.disabled).btn-subtle, .set-theme.theme-light .btn:not(:active):not(.active).pending:focus.btn-subtle {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-light .btn:active:focus.btn-outline-subtle, .set-theme.theme-light .btn.active:focus.btn-outline-subtle, .set-theme.theme-light .btn:not(:active):not(.active).pending:focus.btn-outline-subtle {
+.set-theme.theme-light .btn:active:focus:not(:disabled):not(.disabled).btn-outline-subtle, .set-theme.theme-light .btn.active:focus:not(:disabled):not(.disabled).btn-outline-subtle, .set-theme.theme-light .btn:not(:active):not(.active).pending:focus.btn-outline-subtle {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-light .btn.btn-lg {
@@ -10735,9 +10795,10 @@
 }
 .set-theme.theme-light .input-grid {
   display: grid;
-  grid-template-columns: repeat(var(--input-grid-columns, 1), 1fr auto);
+  grid-template-columns: repeat(var(--input-grid-columns, 1), auto auto);
   grid-auto-rows: auto;
   row-gap: 0.5em;
+  justify-content: start;
 }
 .set-theme.theme-light .input-grid > [role=radiogroup] {
   display: contents;
@@ -22587,10 +22648,10 @@
   top: 0;
   bottom: 0;
 }
-.set-theme.theme-dark .btn:hover:not(.active):not(:active), .set-theme.theme-dark .btn:focus:not(.active):not(:active) {
+.set-theme.theme-dark .btn.pending:hover:not(.active):not(:active), .set-theme.theme-dark .btn.pending:focus:not(.active):not(:active), .set-theme.theme-dark .btn:not(:disabled):not(.disabled):hover:not(.active):not(:active), .set-theme.theme-dark .btn:not(:disabled):not(.disabled):focus:not(.active):not(:active) {
   --press-effect-block-offset: 0rem;
 }
-.set-theme.theme-dark .btn:active, .set-theme.theme-dark .btn.active, .set-theme.theme-dark .btn.pending:not(.toggle-button) {
+.set-theme.theme-dark .btn.pending:active, .set-theme.theme-dark .btn.pending.active, .set-theme.theme-dark .btn.pending.pending:not(.toggle-button), .set-theme.theme-dark .btn.toggle-button:active, .set-theme.theme-dark .btn.toggle-button.active, .set-theme.theme-dark .btn.toggle-button.pending:not(.toggle-button), .set-theme.theme-dark .btn:not(:disabled):not(.disabled):active, .set-theme.theme-dark .btn:not(:disabled):not(.disabled).active, .set-theme.theme-dark .btn:not(:disabled):not(.disabled).pending:not(.toggle-button) {
   --press-effect-block-offset: calc(-1 * (0.25rem / 2));
 }
 .set-theme.theme-dark .btn.btn-outline-primary {
@@ -22637,27 +22698,33 @@
   box-shadow: inset 0 0 0 0 rgba(102, 110, 217, 0.8), 0 0 0 0 rgba(128, 134, 223, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-dark .btn:focus:not(.active):not(:active):not(.pending).btn-primary {
-  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(128, 134, 223, var(--input-btn-focus-color-opacity, 0.4));
+  box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(128, 134, 223, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-dark .btn:focus:not(.active):not(:active):not(.pending).btn-outline-primary {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(128, 134, 223, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:hover:not(.active):not(:active):not(.pending).btn-primary {
+.set-theme.theme-dark .btn:focus:not(.active):not(:active):not(.pending):not(:disabled):not(.disabled).btn-primary {
+  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(128, 134, 223, var(--input-btn-focus-color-opacity, 0.4));
+}
+.set-theme.theme-dark .btn:focus:not(.active):not(:active):not(.pending):not(:disabled):not(.disabled).btn-outline-primary {
+  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(128, 134, 223, var(--input-btn-focus-color-opacity, 0.4));
+}
+.set-theme.theme-dark .btn:not(:disabled):not(.disabled):hover:not(.active):not(:active):not(.pending).btn-primary, .set-theme.theme-dark .btn.toggle-button:hover:not(.active):not(:active):not(.pending).btn-primary, .set-theme.theme-dark .btn.pending:hover:not(.active):not(:active):not(.pending).btn-primary {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(128, 134, 223, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:hover:not(.active):not(:active):not(.pending).btn-outline-primary {
+.set-theme.theme-dark .btn:not(:disabled):not(.disabled):hover:not(.active):not(:active):not(.pending).btn-outline-primary, .set-theme.theme-dark .btn.toggle-button:hover:not(.active):not(:active):not(.pending).btn-outline-primary, .set-theme.theme-dark .btn.pending:hover:not(.active):not(:active):not(.pending).btn-outline-primary {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(128, 134, 223, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:active:not(:focus).btn-primary, .set-theme.theme-dark .btn.active:not(:focus).btn-primary, .set-theme.theme-dark .btn:not(:active):not(.active).pending:not(:focus).btn-primary {
+.set-theme.theme-dark .btn:not(:disabled):not(.disabled):active:not(:focus).btn-primary, .set-theme.theme-dark .btn:not(:disabled):not(.disabled).active:not(:focus).btn-primary, .set-theme.theme-dark .btn:not(:disabled):not(.disabled):not(:active):not(.active).pending:not(:focus).btn-primary, .set-theme.theme-dark .btn.toggle-button:active:not(:focus).btn-primary, .set-theme.theme-dark .btn.toggle-button.active:not(:focus).btn-primary, .set-theme.theme-dark .btn.toggle-button:not(:active):not(.active).pending:not(:focus).btn-primary, .set-theme.theme-dark .btn.pending:active:not(:focus).btn-primary, .set-theme.theme-dark .btn.pending.active:not(:focus).btn-primary, .set-theme.theme-dark .btn.pending:not(:active):not(.active).pending:not(:focus).btn-primary {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(128, 134, 223, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:active:not(:focus).btn-outline-primary, .set-theme.theme-dark .btn.active:not(:focus).btn-outline-primary, .set-theme.theme-dark .btn:not(:active):not(.active).pending:not(:focus).btn-outline-primary {
+.set-theme.theme-dark .btn:not(:disabled):not(.disabled):active:not(:focus).btn-outline-primary, .set-theme.theme-dark .btn:not(:disabled):not(.disabled).active:not(:focus).btn-outline-primary, .set-theme.theme-dark .btn:not(:disabled):not(.disabled):not(:active):not(.active).pending:not(:focus).btn-outline-primary, .set-theme.theme-dark .btn.toggle-button:active:not(:focus).btn-outline-primary, .set-theme.theme-dark .btn.toggle-button.active:not(:focus).btn-outline-primary, .set-theme.theme-dark .btn.toggle-button:not(:active):not(.active).pending:not(:focus).btn-outline-primary, .set-theme.theme-dark .btn.pending:active:not(:focus).btn-outline-primary, .set-theme.theme-dark .btn.pending.active:not(:focus).btn-outline-primary, .set-theme.theme-dark .btn.pending:not(:active):not(.active).pending:not(:focus).btn-outline-primary {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(128, 134, 223, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:active:focus.btn-primary, .set-theme.theme-dark .btn.active:focus.btn-primary, .set-theme.theme-dark .btn:not(:active):not(.active).pending:focus.btn-primary {
+.set-theme.theme-dark .btn:active:focus:not(:disabled):not(.disabled).btn-primary, .set-theme.theme-dark .btn.active:focus:not(:disabled):not(.disabled).btn-primary, .set-theme.theme-dark .btn:not(:active):not(.active).pending:focus.btn-primary {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(128, 134, 223, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:active:focus.btn-outline-primary, .set-theme.theme-dark .btn.active:focus.btn-outline-primary, .set-theme.theme-dark .btn:not(:active):not(.active).pending:focus.btn-outline-primary {
+.set-theme.theme-dark .btn:active:focus:not(:disabled):not(.disabled).btn-outline-primary, .set-theme.theme-dark .btn.active:focus:not(:disabled):not(.disabled).btn-outline-primary, .set-theme.theme-dark .btn:not(:active):not(.active).pending:focus.btn-outline-primary {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(128, 134, 223, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-dark .btn.btn-outline-secondary {
@@ -22704,27 +22771,33 @@
   box-shadow: inset 0 0 0 0 rgba(128, 111, 169, 0.8), 0 0 0 0 rgba(124, 106, 166, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-dark .btn:focus:not(.active):not(:active):not(.pending).btn-secondary {
-  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(124, 106, 166, var(--input-btn-focus-color-opacity, 0.4));
+  box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(124, 106, 166, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-dark .btn:focus:not(.active):not(:active):not(.pending).btn-outline-secondary {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(124, 106, 166, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:hover:not(.active):not(:active):not(.pending).btn-secondary {
+.set-theme.theme-dark .btn:focus:not(.active):not(:active):not(.pending):not(:disabled):not(.disabled).btn-secondary {
+  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(124, 106, 166, var(--input-btn-focus-color-opacity, 0.4));
+}
+.set-theme.theme-dark .btn:focus:not(.active):not(:active):not(.pending):not(:disabled):not(.disabled).btn-outline-secondary {
+  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(124, 106, 166, var(--input-btn-focus-color-opacity, 0.4));
+}
+.set-theme.theme-dark .btn:not(:disabled):not(.disabled):hover:not(.active):not(:active):not(.pending).btn-secondary, .set-theme.theme-dark .btn.toggle-button:hover:not(.active):not(:active):not(.pending).btn-secondary, .set-theme.theme-dark .btn.pending:hover:not(.active):not(:active):not(.pending).btn-secondary {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(124, 106, 166, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:hover:not(.active):not(:active):not(.pending).btn-outline-secondary {
+.set-theme.theme-dark .btn:not(:disabled):not(.disabled):hover:not(.active):not(:active):not(.pending).btn-outline-secondary, .set-theme.theme-dark .btn.toggle-button:hover:not(.active):not(:active):not(.pending).btn-outline-secondary, .set-theme.theme-dark .btn.pending:hover:not(.active):not(:active):not(.pending).btn-outline-secondary {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(124, 106, 166, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:active:not(:focus).btn-secondary, .set-theme.theme-dark .btn.active:not(:focus).btn-secondary, .set-theme.theme-dark .btn:not(:active):not(.active).pending:not(:focus).btn-secondary {
+.set-theme.theme-dark .btn:not(:disabled):not(.disabled):active:not(:focus).btn-secondary, .set-theme.theme-dark .btn:not(:disabled):not(.disabled).active:not(:focus).btn-secondary, .set-theme.theme-dark .btn:not(:disabled):not(.disabled):not(:active):not(.active).pending:not(:focus).btn-secondary, .set-theme.theme-dark .btn.toggle-button:active:not(:focus).btn-secondary, .set-theme.theme-dark .btn.toggle-button.active:not(:focus).btn-secondary, .set-theme.theme-dark .btn.toggle-button:not(:active):not(.active).pending:not(:focus).btn-secondary, .set-theme.theme-dark .btn.pending:active:not(:focus).btn-secondary, .set-theme.theme-dark .btn.pending.active:not(:focus).btn-secondary, .set-theme.theme-dark .btn.pending:not(:active):not(.active).pending:not(:focus).btn-secondary {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(124, 106, 166, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:active:not(:focus).btn-outline-secondary, .set-theme.theme-dark .btn.active:not(:focus).btn-outline-secondary, .set-theme.theme-dark .btn:not(:active):not(.active).pending:not(:focus).btn-outline-secondary {
+.set-theme.theme-dark .btn:not(:disabled):not(.disabled):active:not(:focus).btn-outline-secondary, .set-theme.theme-dark .btn:not(:disabled):not(.disabled).active:not(:focus).btn-outline-secondary, .set-theme.theme-dark .btn:not(:disabled):not(.disabled):not(:active):not(.active).pending:not(:focus).btn-outline-secondary, .set-theme.theme-dark .btn.toggle-button:active:not(:focus).btn-outline-secondary, .set-theme.theme-dark .btn.toggle-button.active:not(:focus).btn-outline-secondary, .set-theme.theme-dark .btn.toggle-button:not(:active):not(.active).pending:not(:focus).btn-outline-secondary, .set-theme.theme-dark .btn.pending:active:not(:focus).btn-outline-secondary, .set-theme.theme-dark .btn.pending.active:not(:focus).btn-outline-secondary, .set-theme.theme-dark .btn.pending:not(:active):not(.active).pending:not(:focus).btn-outline-secondary {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(124, 106, 166, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:active:focus.btn-secondary, .set-theme.theme-dark .btn.active:focus.btn-secondary, .set-theme.theme-dark .btn:not(:active):not(.active).pending:focus.btn-secondary {
+.set-theme.theme-dark .btn:active:focus:not(:disabled):not(.disabled).btn-secondary, .set-theme.theme-dark .btn.active:focus:not(:disabled):not(.disabled).btn-secondary, .set-theme.theme-dark .btn:not(:active):not(.active).pending:focus.btn-secondary {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(124, 106, 166, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:active:focus.btn-outline-secondary, .set-theme.theme-dark .btn.active:focus.btn-outline-secondary, .set-theme.theme-dark .btn:not(:active):not(.active).pending:focus.btn-outline-secondary {
+.set-theme.theme-dark .btn:active:focus:not(:disabled):not(.disabled).btn-outline-secondary, .set-theme.theme-dark .btn.active:focus:not(:disabled):not(.disabled).btn-outline-secondary, .set-theme.theme-dark .btn:not(:active):not(.active).pending:focus.btn-outline-secondary {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(124, 106, 166, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-dark .btn.btn-outline-success {
@@ -22771,27 +22844,33 @@
   box-shadow: inset 0 0 0 0 rgba(71, 133, 86, 0.8), 0 0 0 0 rgba(110, 158, 122, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-dark .btn:focus:not(.active):not(:active):not(.pending).btn-success {
-  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(110, 158, 122, var(--input-btn-focus-color-opacity, 0.4));
+  box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(110, 158, 122, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-dark .btn:focus:not(.active):not(:active):not(.pending).btn-outline-success {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(110, 158, 122, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:hover:not(.active):not(:active):not(.pending).btn-success {
+.set-theme.theme-dark .btn:focus:not(.active):not(:active):not(.pending):not(:disabled):not(.disabled).btn-success {
+  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(110, 158, 122, var(--input-btn-focus-color-opacity, 0.4));
+}
+.set-theme.theme-dark .btn:focus:not(.active):not(:active):not(.pending):not(:disabled):not(.disabled).btn-outline-success {
+  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(110, 158, 122, var(--input-btn-focus-color-opacity, 0.4));
+}
+.set-theme.theme-dark .btn:not(:disabled):not(.disabled):hover:not(.active):not(:active):not(.pending).btn-success, .set-theme.theme-dark .btn.toggle-button:hover:not(.active):not(:active):not(.pending).btn-success, .set-theme.theme-dark .btn.pending:hover:not(.active):not(:active):not(.pending).btn-success {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(110, 158, 122, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:hover:not(.active):not(:active):not(.pending).btn-outline-success {
+.set-theme.theme-dark .btn:not(:disabled):not(.disabled):hover:not(.active):not(:active):not(.pending).btn-outline-success, .set-theme.theme-dark .btn.toggle-button:hover:not(.active):not(:active):not(.pending).btn-outline-success, .set-theme.theme-dark .btn.pending:hover:not(.active):not(:active):not(.pending).btn-outline-success {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(110, 158, 122, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:active:not(:focus).btn-success, .set-theme.theme-dark .btn.active:not(:focus).btn-success, .set-theme.theme-dark .btn:not(:active):not(.active).pending:not(:focus).btn-success {
+.set-theme.theme-dark .btn:not(:disabled):not(.disabled):active:not(:focus).btn-success, .set-theme.theme-dark .btn:not(:disabled):not(.disabled).active:not(:focus).btn-success, .set-theme.theme-dark .btn:not(:disabled):not(.disabled):not(:active):not(.active).pending:not(:focus).btn-success, .set-theme.theme-dark .btn.toggle-button:active:not(:focus).btn-success, .set-theme.theme-dark .btn.toggle-button.active:not(:focus).btn-success, .set-theme.theme-dark .btn.toggle-button:not(:active):not(.active).pending:not(:focus).btn-success, .set-theme.theme-dark .btn.pending:active:not(:focus).btn-success, .set-theme.theme-dark .btn.pending.active:not(:focus).btn-success, .set-theme.theme-dark .btn.pending:not(:active):not(.active).pending:not(:focus).btn-success {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(110, 158, 122, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:active:not(:focus).btn-outline-success, .set-theme.theme-dark .btn.active:not(:focus).btn-outline-success, .set-theme.theme-dark .btn:not(:active):not(.active).pending:not(:focus).btn-outline-success {
+.set-theme.theme-dark .btn:not(:disabled):not(.disabled):active:not(:focus).btn-outline-success, .set-theme.theme-dark .btn:not(:disabled):not(.disabled).active:not(:focus).btn-outline-success, .set-theme.theme-dark .btn:not(:disabled):not(.disabled):not(:active):not(.active).pending:not(:focus).btn-outline-success, .set-theme.theme-dark .btn.toggle-button:active:not(:focus).btn-outline-success, .set-theme.theme-dark .btn.toggle-button.active:not(:focus).btn-outline-success, .set-theme.theme-dark .btn.toggle-button:not(:active):not(.active).pending:not(:focus).btn-outline-success, .set-theme.theme-dark .btn.pending:active:not(:focus).btn-outline-success, .set-theme.theme-dark .btn.pending.active:not(:focus).btn-outline-success, .set-theme.theme-dark .btn.pending:not(:active):not(.active).pending:not(:focus).btn-outline-success {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(110, 158, 122, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:active:focus.btn-success, .set-theme.theme-dark .btn.active:focus.btn-success, .set-theme.theme-dark .btn:not(:active):not(.active).pending:focus.btn-success {
+.set-theme.theme-dark .btn:active:focus:not(:disabled):not(.disabled).btn-success, .set-theme.theme-dark .btn.active:focus:not(:disabled):not(.disabled).btn-success, .set-theme.theme-dark .btn:not(:active):not(.active).pending:focus.btn-success {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(110, 158, 122, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:active:focus.btn-outline-success, .set-theme.theme-dark .btn.active:focus.btn-outline-success, .set-theme.theme-dark .btn:not(:active):not(.active).pending:focus.btn-outline-success {
+.set-theme.theme-dark .btn:active:focus:not(:disabled):not(.disabled).btn-outline-success, .set-theme.theme-dark .btn.active:focus:not(:disabled):not(.disabled).btn-outline-success, .set-theme.theme-dark .btn:not(:active):not(.active).pending:focus.btn-outline-success {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(110, 158, 122, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-dark .btn.btn-outline-info {
@@ -22833,27 +22912,33 @@
   box-shadow: inset 0 0 0 0 rgba(0, 174, 209, 0.8), 0 0 0 0 rgba(102, 206, 227, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-dark .btn:focus:not(.active):not(:active):not(.pending).btn-info {
-  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(102, 206, 227, var(--input-btn-focus-color-opacity, 0.4));
+  box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(102, 206, 227, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-dark .btn:focus:not(.active):not(:active):not(.pending).btn-outline-info {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(102, 206, 227, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:hover:not(.active):not(:active):not(.pending).btn-info {
+.set-theme.theme-dark .btn:focus:not(.active):not(:active):not(.pending):not(:disabled):not(.disabled).btn-info {
+  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(102, 206, 227, var(--input-btn-focus-color-opacity, 0.4));
+}
+.set-theme.theme-dark .btn:focus:not(.active):not(:active):not(.pending):not(:disabled):not(.disabled).btn-outline-info {
+  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(102, 206, 227, var(--input-btn-focus-color-opacity, 0.4));
+}
+.set-theme.theme-dark .btn:not(:disabled):not(.disabled):hover:not(.active):not(:active):not(.pending).btn-info, .set-theme.theme-dark .btn.toggle-button:hover:not(.active):not(:active):not(.pending).btn-info, .set-theme.theme-dark .btn.pending:hover:not(.active):not(:active):not(.pending).btn-info {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(102, 206, 227, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:hover:not(.active):not(:active):not(.pending).btn-outline-info {
+.set-theme.theme-dark .btn:not(:disabled):not(.disabled):hover:not(.active):not(:active):not(.pending).btn-outline-info, .set-theme.theme-dark .btn.toggle-button:hover:not(.active):not(:active):not(.pending).btn-outline-info, .set-theme.theme-dark .btn.pending:hover:not(.active):not(:active):not(.pending).btn-outline-info {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(102, 206, 227, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:active:not(:focus).btn-info, .set-theme.theme-dark .btn.active:not(:focus).btn-info, .set-theme.theme-dark .btn:not(:active):not(.active).pending:not(:focus).btn-info {
+.set-theme.theme-dark .btn:not(:disabled):not(.disabled):active:not(:focus).btn-info, .set-theme.theme-dark .btn:not(:disabled):not(.disabled).active:not(:focus).btn-info, .set-theme.theme-dark .btn:not(:disabled):not(.disabled):not(:active):not(.active).pending:not(:focus).btn-info, .set-theme.theme-dark .btn.toggle-button:active:not(:focus).btn-info, .set-theme.theme-dark .btn.toggle-button.active:not(:focus).btn-info, .set-theme.theme-dark .btn.toggle-button:not(:active):not(.active).pending:not(:focus).btn-info, .set-theme.theme-dark .btn.pending:active:not(:focus).btn-info, .set-theme.theme-dark .btn.pending.active:not(:focus).btn-info, .set-theme.theme-dark .btn.pending:not(:active):not(.active).pending:not(:focus).btn-info {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(102, 206, 227, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:active:not(:focus).btn-outline-info, .set-theme.theme-dark .btn.active:not(:focus).btn-outline-info, .set-theme.theme-dark .btn:not(:active):not(.active).pending:not(:focus).btn-outline-info {
+.set-theme.theme-dark .btn:not(:disabled):not(.disabled):active:not(:focus).btn-outline-info, .set-theme.theme-dark .btn:not(:disabled):not(.disabled).active:not(:focus).btn-outline-info, .set-theme.theme-dark .btn:not(:disabled):not(.disabled):not(:active):not(.active).pending:not(:focus).btn-outline-info, .set-theme.theme-dark .btn.toggle-button:active:not(:focus).btn-outline-info, .set-theme.theme-dark .btn.toggle-button.active:not(:focus).btn-outline-info, .set-theme.theme-dark .btn.toggle-button:not(:active):not(.active).pending:not(:focus).btn-outline-info, .set-theme.theme-dark .btn.pending:active:not(:focus).btn-outline-info, .set-theme.theme-dark .btn.pending.active:not(:focus).btn-outline-info, .set-theme.theme-dark .btn.pending:not(:active):not(.active).pending:not(:focus).btn-outline-info {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(102, 206, 227, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:active:focus.btn-info, .set-theme.theme-dark .btn.active:focus.btn-info, .set-theme.theme-dark .btn:not(:active):not(.active).pending:focus.btn-info {
+.set-theme.theme-dark .btn:active:focus:not(:disabled):not(.disabled).btn-info, .set-theme.theme-dark .btn.active:focus:not(:disabled):not(.disabled).btn-info, .set-theme.theme-dark .btn:not(:active):not(.active).pending:focus.btn-info {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(102, 206, 227, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:active:focus.btn-outline-info, .set-theme.theme-dark .btn.active:focus.btn-outline-info, .set-theme.theme-dark .btn:not(:active):not(.active).pending:focus.btn-outline-info {
+.set-theme.theme-dark .btn:active:focus:not(:disabled):not(.disabled).btn-outline-info, .set-theme.theme-dark .btn.active:focus:not(:disabled):not(.disabled).btn-outline-info, .set-theme.theme-dark .btn:not(:active):not(.active).pending:focus.btn-outline-info {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(102, 206, 227, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-dark .btn.btn-outline-warning {
@@ -22895,27 +22980,33 @@
   box-shadow: inset 0 0 0 0 rgba(255, 179, 0, 0.8), 0 0 0 0 rgba(255, 209, 102, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-dark .btn:focus:not(.active):not(:active):not(.pending).btn-warning {
-  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(255, 209, 102, var(--input-btn-focus-color-opacity, 0.4));
+  box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(255, 209, 102, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-dark .btn:focus:not(.active):not(:active):not(.pending).btn-outline-warning {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(255, 209, 102, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:hover:not(.active):not(:active):not(.pending).btn-warning {
+.set-theme.theme-dark .btn:focus:not(.active):not(:active):not(.pending):not(:disabled):not(.disabled).btn-warning {
+  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(255, 209, 102, var(--input-btn-focus-color-opacity, 0.4));
+}
+.set-theme.theme-dark .btn:focus:not(.active):not(:active):not(.pending):not(:disabled):not(.disabled).btn-outline-warning {
+  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(255, 209, 102, var(--input-btn-focus-color-opacity, 0.4));
+}
+.set-theme.theme-dark .btn:not(:disabled):not(.disabled):hover:not(.active):not(:active):not(.pending).btn-warning, .set-theme.theme-dark .btn.toggle-button:hover:not(.active):not(:active):not(.pending).btn-warning, .set-theme.theme-dark .btn.pending:hover:not(.active):not(:active):not(.pending).btn-warning {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(255, 209, 102, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:hover:not(.active):not(:active):not(.pending).btn-outline-warning {
+.set-theme.theme-dark .btn:not(:disabled):not(.disabled):hover:not(.active):not(:active):not(.pending).btn-outline-warning, .set-theme.theme-dark .btn.toggle-button:hover:not(.active):not(:active):not(.pending).btn-outline-warning, .set-theme.theme-dark .btn.pending:hover:not(.active):not(:active):not(.pending).btn-outline-warning {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(255, 209, 102, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:active:not(:focus).btn-warning, .set-theme.theme-dark .btn.active:not(:focus).btn-warning, .set-theme.theme-dark .btn:not(:active):not(.active).pending:not(:focus).btn-warning {
+.set-theme.theme-dark .btn:not(:disabled):not(.disabled):active:not(:focus).btn-warning, .set-theme.theme-dark .btn:not(:disabled):not(.disabled).active:not(:focus).btn-warning, .set-theme.theme-dark .btn:not(:disabled):not(.disabled):not(:active):not(.active).pending:not(:focus).btn-warning, .set-theme.theme-dark .btn.toggle-button:active:not(:focus).btn-warning, .set-theme.theme-dark .btn.toggle-button.active:not(:focus).btn-warning, .set-theme.theme-dark .btn.toggle-button:not(:active):not(.active).pending:not(:focus).btn-warning, .set-theme.theme-dark .btn.pending:active:not(:focus).btn-warning, .set-theme.theme-dark .btn.pending.active:not(:focus).btn-warning, .set-theme.theme-dark .btn.pending:not(:active):not(.active).pending:not(:focus).btn-warning {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(255, 209, 102, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:active:not(:focus).btn-outline-warning, .set-theme.theme-dark .btn.active:not(:focus).btn-outline-warning, .set-theme.theme-dark .btn:not(:active):not(.active).pending:not(:focus).btn-outline-warning {
+.set-theme.theme-dark .btn:not(:disabled):not(.disabled):active:not(:focus).btn-outline-warning, .set-theme.theme-dark .btn:not(:disabled):not(.disabled).active:not(:focus).btn-outline-warning, .set-theme.theme-dark .btn:not(:disabled):not(.disabled):not(:active):not(.active).pending:not(:focus).btn-outline-warning, .set-theme.theme-dark .btn.toggle-button:active:not(:focus).btn-outline-warning, .set-theme.theme-dark .btn.toggle-button.active:not(:focus).btn-outline-warning, .set-theme.theme-dark .btn.toggle-button:not(:active):not(.active).pending:not(:focus).btn-outline-warning, .set-theme.theme-dark .btn.pending:active:not(:focus).btn-outline-warning, .set-theme.theme-dark .btn.pending.active:not(:focus).btn-outline-warning, .set-theme.theme-dark .btn.pending:not(:active):not(.active).pending:not(:focus).btn-outline-warning {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(255, 209, 102, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:active:focus.btn-warning, .set-theme.theme-dark .btn.active:focus.btn-warning, .set-theme.theme-dark .btn:not(:active):not(.active).pending:focus.btn-warning {
+.set-theme.theme-dark .btn:active:focus:not(:disabled):not(.disabled).btn-warning, .set-theme.theme-dark .btn.active:focus:not(:disabled):not(.disabled).btn-warning, .set-theme.theme-dark .btn:not(:active):not(.active).pending:focus.btn-warning {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(255, 209, 102, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:active:focus.btn-outline-warning, .set-theme.theme-dark .btn.active:focus.btn-outline-warning, .set-theme.theme-dark .btn:not(:active):not(.active).pending:focus.btn-outline-warning {
+.set-theme.theme-dark .btn:active:focus:not(:disabled):not(.disabled).btn-outline-warning, .set-theme.theme-dark .btn.active:focus:not(:disabled):not(.disabled).btn-outline-warning, .set-theme.theme-dark .btn:not(:active):not(.active).pending:focus.btn-outline-warning {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(255, 209, 102, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-dark .btn.btn-outline-danger {
@@ -22962,27 +23053,33 @@
   box-shadow: inset 0 0 0 0 rgba(184, 94, 103, 0.8), 0 0 0 0 rgba(195, 119, 127, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-dark .btn:focus:not(.active):not(:active):not(.pending).btn-danger {
-  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(195, 119, 127, var(--input-btn-focus-color-opacity, 0.4));
+  box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(195, 119, 127, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-dark .btn:focus:not(.active):not(:active):not(.pending).btn-outline-danger {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(195, 119, 127, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:hover:not(.active):not(:active):not(.pending).btn-danger {
+.set-theme.theme-dark .btn:focus:not(.active):not(:active):not(.pending):not(:disabled):not(.disabled).btn-danger {
+  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(195, 119, 127, var(--input-btn-focus-color-opacity, 0.4));
+}
+.set-theme.theme-dark .btn:focus:not(.active):not(:active):not(.pending):not(:disabled):not(.disabled).btn-outline-danger {
+  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(195, 119, 127, var(--input-btn-focus-color-opacity, 0.4));
+}
+.set-theme.theme-dark .btn:not(:disabled):not(.disabled):hover:not(.active):not(:active):not(.pending).btn-danger, .set-theme.theme-dark .btn.toggle-button:hover:not(.active):not(:active):not(.pending).btn-danger, .set-theme.theme-dark .btn.pending:hover:not(.active):not(:active):not(.pending).btn-danger {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(195, 119, 127, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:hover:not(.active):not(:active):not(.pending).btn-outline-danger {
+.set-theme.theme-dark .btn:not(:disabled):not(.disabled):hover:not(.active):not(:active):not(.pending).btn-outline-danger, .set-theme.theme-dark .btn.toggle-button:hover:not(.active):not(:active):not(.pending).btn-outline-danger, .set-theme.theme-dark .btn.pending:hover:not(.active):not(:active):not(.pending).btn-outline-danger {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(195, 119, 127, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:active:not(:focus).btn-danger, .set-theme.theme-dark .btn.active:not(:focus).btn-danger, .set-theme.theme-dark .btn:not(:active):not(.active).pending:not(:focus).btn-danger {
+.set-theme.theme-dark .btn:not(:disabled):not(.disabled):active:not(:focus).btn-danger, .set-theme.theme-dark .btn:not(:disabled):not(.disabled).active:not(:focus).btn-danger, .set-theme.theme-dark .btn:not(:disabled):not(.disabled):not(:active):not(.active).pending:not(:focus).btn-danger, .set-theme.theme-dark .btn.toggle-button:active:not(:focus).btn-danger, .set-theme.theme-dark .btn.toggle-button.active:not(:focus).btn-danger, .set-theme.theme-dark .btn.toggle-button:not(:active):not(.active).pending:not(:focus).btn-danger, .set-theme.theme-dark .btn.pending:active:not(:focus).btn-danger, .set-theme.theme-dark .btn.pending.active:not(:focus).btn-danger, .set-theme.theme-dark .btn.pending:not(:active):not(.active).pending:not(:focus).btn-danger {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(195, 119, 127, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:active:not(:focus).btn-outline-danger, .set-theme.theme-dark .btn.active:not(:focus).btn-outline-danger, .set-theme.theme-dark .btn:not(:active):not(.active).pending:not(:focus).btn-outline-danger {
+.set-theme.theme-dark .btn:not(:disabled):not(.disabled):active:not(:focus).btn-outline-danger, .set-theme.theme-dark .btn:not(:disabled):not(.disabled).active:not(:focus).btn-outline-danger, .set-theme.theme-dark .btn:not(:disabled):not(.disabled):not(:active):not(.active).pending:not(:focus).btn-outline-danger, .set-theme.theme-dark .btn.toggle-button:active:not(:focus).btn-outline-danger, .set-theme.theme-dark .btn.toggle-button.active:not(:focus).btn-outline-danger, .set-theme.theme-dark .btn.toggle-button:not(:active):not(.active).pending:not(:focus).btn-outline-danger, .set-theme.theme-dark .btn.pending:active:not(:focus).btn-outline-danger, .set-theme.theme-dark .btn.pending.active:not(:focus).btn-outline-danger, .set-theme.theme-dark .btn.pending:not(:active):not(.active).pending:not(:focus).btn-outline-danger {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(195, 119, 127, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:active:focus.btn-danger, .set-theme.theme-dark .btn.active:focus.btn-danger, .set-theme.theme-dark .btn:not(:active):not(.active).pending:focus.btn-danger {
+.set-theme.theme-dark .btn:active:focus:not(:disabled):not(.disabled).btn-danger, .set-theme.theme-dark .btn.active:focus:not(:disabled):not(.disabled).btn-danger, .set-theme.theme-dark .btn:not(:active):not(.active).pending:focus.btn-danger {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(195, 119, 127, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:active:focus.btn-outline-danger, .set-theme.theme-dark .btn.active:focus.btn-outline-danger, .set-theme.theme-dark .btn:not(:active):not(.active).pending:focus.btn-outline-danger {
+.set-theme.theme-dark .btn:active:focus:not(:disabled):not(.disabled).btn-outline-danger, .set-theme.theme-dark .btn.active:focus:not(:disabled):not(.disabled).btn-outline-danger, .set-theme.theme-dark .btn:not(:active):not(.active).pending:focus.btn-outline-danger {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(195, 119, 127, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-dark .btn.btn-outline-light {
@@ -23024,27 +23121,33 @@
   box-shadow: inset 0 0 0 0 rgba(241, 242, 243, 0.8), 0 0 0 0 rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-dark .btn:focus:not(.active):not(:active):not(.pending).btn-light {
-  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
+  box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-dark .btn:focus:not(.active):not(:active):not(.pending).btn-outline-light {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:hover:not(.active):not(:active):not(.pending).btn-light {
+.set-theme.theme-dark .btn:focus:not(.active):not(:active):not(.pending):not(:disabled):not(.disabled).btn-light {
+  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
+}
+.set-theme.theme-dark .btn:focus:not(.active):not(:active):not(.pending):not(:disabled):not(.disabled).btn-outline-light {
+  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
+}
+.set-theme.theme-dark .btn:not(:disabled):not(.disabled):hover:not(.active):not(:active):not(.pending).btn-light, .set-theme.theme-dark .btn.toggle-button:hover:not(.active):not(:active):not(.pending).btn-light, .set-theme.theme-dark .btn.pending:hover:not(.active):not(:active):not(.pending).btn-light {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:hover:not(.active):not(:active):not(.pending).btn-outline-light {
+.set-theme.theme-dark .btn:not(:disabled):not(.disabled):hover:not(.active):not(:active):not(.pending).btn-outline-light, .set-theme.theme-dark .btn.toggle-button:hover:not(.active):not(:active):not(.pending).btn-outline-light, .set-theme.theme-dark .btn.pending:hover:not(.active):not(:active):not(.pending).btn-outline-light {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:active:not(:focus).btn-light, .set-theme.theme-dark .btn.active:not(:focus).btn-light, .set-theme.theme-dark .btn:not(:active):not(.active).pending:not(:focus).btn-light {
+.set-theme.theme-dark .btn:not(:disabled):not(.disabled):active:not(:focus).btn-light, .set-theme.theme-dark .btn:not(:disabled):not(.disabled).active:not(:focus).btn-light, .set-theme.theme-dark .btn:not(:disabled):not(.disabled):not(:active):not(.active).pending:not(:focus).btn-light, .set-theme.theme-dark .btn.toggle-button:active:not(:focus).btn-light, .set-theme.theme-dark .btn.toggle-button.active:not(:focus).btn-light, .set-theme.theme-dark .btn.toggle-button:not(:active):not(.active).pending:not(:focus).btn-light, .set-theme.theme-dark .btn.pending:active:not(:focus).btn-light, .set-theme.theme-dark .btn.pending.active:not(:focus).btn-light, .set-theme.theme-dark .btn.pending:not(:active):not(.active).pending:not(:focus).btn-light {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:active:not(:focus).btn-outline-light, .set-theme.theme-dark .btn.active:not(:focus).btn-outline-light, .set-theme.theme-dark .btn:not(:active):not(.active).pending:not(:focus).btn-outline-light {
+.set-theme.theme-dark .btn:not(:disabled):not(.disabled):active:not(:focus).btn-outline-light, .set-theme.theme-dark .btn:not(:disabled):not(.disabled).active:not(:focus).btn-outline-light, .set-theme.theme-dark .btn:not(:disabled):not(.disabled):not(:active):not(.active).pending:not(:focus).btn-outline-light, .set-theme.theme-dark .btn.toggle-button:active:not(:focus).btn-outline-light, .set-theme.theme-dark .btn.toggle-button.active:not(:focus).btn-outline-light, .set-theme.theme-dark .btn.toggle-button:not(:active):not(.active).pending:not(:focus).btn-outline-light, .set-theme.theme-dark .btn.pending:active:not(:focus).btn-outline-light, .set-theme.theme-dark .btn.pending.active:not(:focus).btn-outline-light, .set-theme.theme-dark .btn.pending:not(:active):not(.active).pending:not(:focus).btn-outline-light {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:active:focus.btn-light, .set-theme.theme-dark .btn.active:focus.btn-light, .set-theme.theme-dark .btn:not(:active):not(.active).pending:focus.btn-light {
+.set-theme.theme-dark .btn:active:focus:not(:disabled):not(.disabled).btn-light, .set-theme.theme-dark .btn.active:focus:not(:disabled):not(.disabled).btn-light, .set-theme.theme-dark .btn:not(:active):not(.active).pending:focus.btn-light {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:active:focus.btn-outline-light, .set-theme.theme-dark .btn.active:focus.btn-outline-light, .set-theme.theme-dark .btn:not(:active):not(.active).pending:focus.btn-outline-light {
+.set-theme.theme-dark .btn:active:focus:not(:disabled):not(.disabled).btn-outline-light, .set-theme.theme-dark .btn.active:focus:not(:disabled):not(.disabled).btn-outline-light, .set-theme.theme-dark .btn:not(:active):not(.active).pending:focus.btn-outline-light {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-dark .btn.btn-outline-dark {
@@ -23091,27 +23194,33 @@
   box-shadow: inset 0 0 0 0 rgba(121, 121, 122, 0.8), 0 0 0 0 rgba(109, 109, 110, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-dark .btn:focus:not(.active):not(:active):not(.pending).btn-dark {
-  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(109, 109, 110, var(--input-btn-focus-color-opacity, 0.4));
+  box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(109, 109, 110, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-dark .btn:focus:not(.active):not(:active):not(.pending).btn-outline-dark {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(109, 109, 110, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:hover:not(.active):not(:active):not(.pending).btn-dark {
+.set-theme.theme-dark .btn:focus:not(.active):not(:active):not(.pending):not(:disabled):not(.disabled).btn-dark {
+  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(109, 109, 110, var(--input-btn-focus-color-opacity, 0.4));
+}
+.set-theme.theme-dark .btn:focus:not(.active):not(:active):not(.pending):not(:disabled):not(.disabled).btn-outline-dark {
+  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(109, 109, 110, var(--input-btn-focus-color-opacity, 0.4));
+}
+.set-theme.theme-dark .btn:not(:disabled):not(.disabled):hover:not(.active):not(:active):not(.pending).btn-dark, .set-theme.theme-dark .btn.toggle-button:hover:not(.active):not(:active):not(.pending).btn-dark, .set-theme.theme-dark .btn.pending:hover:not(.active):not(:active):not(.pending).btn-dark {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(109, 109, 110, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:hover:not(.active):not(:active):not(.pending).btn-outline-dark {
+.set-theme.theme-dark .btn:not(:disabled):not(.disabled):hover:not(.active):not(:active):not(.pending).btn-outline-dark, .set-theme.theme-dark .btn.toggle-button:hover:not(.active):not(:active):not(.pending).btn-outline-dark, .set-theme.theme-dark .btn.pending:hover:not(.active):not(:active):not(.pending).btn-outline-dark {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(109, 109, 110, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:active:not(:focus).btn-dark, .set-theme.theme-dark .btn.active:not(:focus).btn-dark, .set-theme.theme-dark .btn:not(:active):not(.active).pending:not(:focus).btn-dark {
+.set-theme.theme-dark .btn:not(:disabled):not(.disabled):active:not(:focus).btn-dark, .set-theme.theme-dark .btn:not(:disabled):not(.disabled).active:not(:focus).btn-dark, .set-theme.theme-dark .btn:not(:disabled):not(.disabled):not(:active):not(.active).pending:not(:focus).btn-dark, .set-theme.theme-dark .btn.toggle-button:active:not(:focus).btn-dark, .set-theme.theme-dark .btn.toggle-button.active:not(:focus).btn-dark, .set-theme.theme-dark .btn.toggle-button:not(:active):not(.active).pending:not(:focus).btn-dark, .set-theme.theme-dark .btn.pending:active:not(:focus).btn-dark, .set-theme.theme-dark .btn.pending.active:not(:focus).btn-dark, .set-theme.theme-dark .btn.pending:not(:active):not(.active).pending:not(:focus).btn-dark {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(109, 109, 110, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:active:not(:focus).btn-outline-dark, .set-theme.theme-dark .btn.active:not(:focus).btn-outline-dark, .set-theme.theme-dark .btn:not(:active):not(.active).pending:not(:focus).btn-outline-dark {
+.set-theme.theme-dark .btn:not(:disabled):not(.disabled):active:not(:focus).btn-outline-dark, .set-theme.theme-dark .btn:not(:disabled):not(.disabled).active:not(:focus).btn-outline-dark, .set-theme.theme-dark .btn:not(:disabled):not(.disabled):not(:active):not(.active).pending:not(:focus).btn-outline-dark, .set-theme.theme-dark .btn.toggle-button:active:not(:focus).btn-outline-dark, .set-theme.theme-dark .btn.toggle-button.active:not(:focus).btn-outline-dark, .set-theme.theme-dark .btn.toggle-button:not(:active):not(.active).pending:not(:focus).btn-outline-dark, .set-theme.theme-dark .btn.pending:active:not(:focus).btn-outline-dark, .set-theme.theme-dark .btn.pending.active:not(:focus).btn-outline-dark, .set-theme.theme-dark .btn.pending:not(:active):not(.active).pending:not(:focus).btn-outline-dark {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(109, 109, 110, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:active:focus.btn-dark, .set-theme.theme-dark .btn.active:focus.btn-dark, .set-theme.theme-dark .btn:not(:active):not(.active).pending:focus.btn-dark {
+.set-theme.theme-dark .btn:active:focus:not(:disabled):not(.disabled).btn-dark, .set-theme.theme-dark .btn.active:focus:not(:disabled):not(.disabled).btn-dark, .set-theme.theme-dark .btn:not(:active):not(.active).pending:focus.btn-dark {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(109, 109, 110, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:active:focus.btn-outline-dark, .set-theme.theme-dark .btn.active:focus.btn-outline-dark, .set-theme.theme-dark .btn:not(:active):not(.active).pending:focus.btn-outline-dark {
+.set-theme.theme-dark .btn:active:focus:not(:disabled):not(.disabled).btn-outline-dark, .set-theme.theme-dark .btn.active:focus:not(:disabled):not(.disabled).btn-outline-dark, .set-theme.theme-dark .btn:not(:active):not(.active).pending:focus.btn-outline-dark {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(109, 109, 110, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-dark .btn.btn-outline-contrast {
@@ -23153,27 +23262,33 @@
   box-shadow: inset 0 0 0 0 rgba(241, 242, 243, 0.8), 0 0 0 0 rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-dark .btn:focus:not(.active):not(:active):not(.pending).btn-contrast {
-  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
+  box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-dark .btn:focus:not(.active):not(:active):not(.pending).btn-outline-contrast {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:hover:not(.active):not(:active):not(.pending).btn-contrast {
+.set-theme.theme-dark .btn:focus:not(.active):not(:active):not(.pending):not(:disabled):not(.disabled).btn-contrast {
+  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
+}
+.set-theme.theme-dark .btn:focus:not(.active):not(:active):not(.pending):not(:disabled):not(.disabled).btn-outline-contrast {
+  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
+}
+.set-theme.theme-dark .btn:not(:disabled):not(.disabled):hover:not(.active):not(:active):not(.pending).btn-contrast, .set-theme.theme-dark .btn.toggle-button:hover:not(.active):not(:active):not(.pending).btn-contrast, .set-theme.theme-dark .btn.pending:hover:not(.active):not(:active):not(.pending).btn-contrast {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:hover:not(.active):not(:active):not(.pending).btn-outline-contrast {
+.set-theme.theme-dark .btn:not(:disabled):not(.disabled):hover:not(.active):not(:active):not(.pending).btn-outline-contrast, .set-theme.theme-dark .btn.toggle-button:hover:not(.active):not(:active):not(.pending).btn-outline-contrast, .set-theme.theme-dark .btn.pending:hover:not(.active):not(:active):not(.pending).btn-outline-contrast {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:active:not(:focus).btn-contrast, .set-theme.theme-dark .btn.active:not(:focus).btn-contrast, .set-theme.theme-dark .btn:not(:active):not(.active).pending:not(:focus).btn-contrast {
+.set-theme.theme-dark .btn:not(:disabled):not(.disabled):active:not(:focus).btn-contrast, .set-theme.theme-dark .btn:not(:disabled):not(.disabled).active:not(:focus).btn-contrast, .set-theme.theme-dark .btn:not(:disabled):not(.disabled):not(:active):not(.active).pending:not(:focus).btn-contrast, .set-theme.theme-dark .btn.toggle-button:active:not(:focus).btn-contrast, .set-theme.theme-dark .btn.toggle-button.active:not(:focus).btn-contrast, .set-theme.theme-dark .btn.toggle-button:not(:active):not(.active).pending:not(:focus).btn-contrast, .set-theme.theme-dark .btn.pending:active:not(:focus).btn-contrast, .set-theme.theme-dark .btn.pending.active:not(:focus).btn-contrast, .set-theme.theme-dark .btn.pending:not(:active):not(.active).pending:not(:focus).btn-contrast {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:active:not(:focus).btn-outline-contrast, .set-theme.theme-dark .btn.active:not(:focus).btn-outline-contrast, .set-theme.theme-dark .btn:not(:active):not(.active).pending:not(:focus).btn-outline-contrast {
+.set-theme.theme-dark .btn:not(:disabled):not(.disabled):active:not(:focus).btn-outline-contrast, .set-theme.theme-dark .btn:not(:disabled):not(.disabled).active:not(:focus).btn-outline-contrast, .set-theme.theme-dark .btn:not(:disabled):not(.disabled):not(:active):not(.active).pending:not(:focus).btn-outline-contrast, .set-theme.theme-dark .btn.toggle-button:active:not(:focus).btn-outline-contrast, .set-theme.theme-dark .btn.toggle-button.active:not(:focus).btn-outline-contrast, .set-theme.theme-dark .btn.toggle-button:not(:active):not(.active).pending:not(:focus).btn-outline-contrast, .set-theme.theme-dark .btn.pending:active:not(:focus).btn-outline-contrast, .set-theme.theme-dark .btn.pending.active:not(:focus).btn-outline-contrast, .set-theme.theme-dark .btn.pending:not(:active):not(.active).pending:not(:focus).btn-outline-contrast {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:active:focus.btn-contrast, .set-theme.theme-dark .btn.active:focus.btn-contrast, .set-theme.theme-dark .btn:not(:active):not(.active).pending:focus.btn-contrast {
+.set-theme.theme-dark .btn:active:focus:not(:disabled):not(.disabled).btn-contrast, .set-theme.theme-dark .btn.active:focus:not(:disabled):not(.disabled).btn-contrast, .set-theme.theme-dark .btn:not(:active):not(.active).pending:focus.btn-contrast {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:active:focus.btn-outline-contrast, .set-theme.theme-dark .btn.active:focus.btn-outline-contrast, .set-theme.theme-dark .btn:not(:active):not(.active).pending:focus.btn-outline-contrast {
+.set-theme.theme-dark .btn:active:focus:not(:disabled):not(.disabled).btn-outline-contrast, .set-theme.theme-dark .btn.active:focus:not(:disabled):not(.disabled).btn-outline-contrast, .set-theme.theme-dark .btn:not(:active):not(.active).pending:focus.btn-outline-contrast {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(247, 247, 248, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-dark .btn.btn-outline-subtle {
@@ -23220,27 +23335,33 @@
   box-shadow: inset 0 0 0 0 rgba(121, 121, 122, 0.8), 0 0 0 0 rgba(109, 109, 110, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-dark .btn:focus:not(.active):not(:active):not(.pending).btn-subtle {
-  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(109, 109, 110, var(--input-btn-focus-color-opacity, 0.4));
+  box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(109, 109, 110, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-dark .btn:focus:not(.active):not(:active):not(.pending).btn-outline-subtle {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(109, 109, 110, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:hover:not(.active):not(:active):not(.pending).btn-subtle {
+.set-theme.theme-dark .btn:focus:not(.active):not(:active):not(.pending):not(:disabled):not(.disabled).btn-subtle {
+  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(109, 109, 110, var(--input-btn-focus-color-opacity, 0.4));
+}
+.set-theme.theme-dark .btn:focus:not(.active):not(:active):not(.pending):not(:disabled):not(.disabled).btn-outline-subtle {
+  box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0.25rem rgba(109, 109, 110, var(--input-btn-focus-color-opacity, 0.4));
+}
+.set-theme.theme-dark .btn:not(:disabled):not(.disabled):hover:not(.active):not(:active):not(.pending).btn-subtle, .set-theme.theme-dark .btn.toggle-button:hover:not(.active):not(:active):not(.pending).btn-subtle, .set-theme.theme-dark .btn.pending:hover:not(.active):not(:active):not(.pending).btn-subtle {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(109, 109, 110, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:hover:not(.active):not(:active):not(.pending).btn-outline-subtle {
+.set-theme.theme-dark .btn:not(:disabled):not(.disabled):hover:not(.active):not(:active):not(.pending).btn-outline-subtle, .set-theme.theme-dark .btn.toggle-button:hover:not(.active):not(:active):not(.pending).btn-outline-subtle, .set-theme.theme-dark .btn.pending:hover:not(.active):not(:active):not(.pending).btn-outline-subtle {
   box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(109, 109, 110, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:active:not(:focus).btn-subtle, .set-theme.theme-dark .btn.active:not(:focus).btn-subtle, .set-theme.theme-dark .btn:not(:active):not(.active).pending:not(:focus).btn-subtle {
+.set-theme.theme-dark .btn:not(:disabled):not(.disabled):active:not(:focus).btn-subtle, .set-theme.theme-dark .btn:not(:disabled):not(.disabled).active:not(:focus).btn-subtle, .set-theme.theme-dark .btn:not(:disabled):not(.disabled):not(:active):not(.active).pending:not(:focus).btn-subtle, .set-theme.theme-dark .btn.toggle-button:active:not(:focus).btn-subtle, .set-theme.theme-dark .btn.toggle-button.active:not(:focus).btn-subtle, .set-theme.theme-dark .btn.toggle-button:not(:active):not(.active).pending:not(:focus).btn-subtle, .set-theme.theme-dark .btn.pending:active:not(:focus).btn-subtle, .set-theme.theme-dark .btn.pending.active:not(:focus).btn-subtle, .set-theme.theme-dark .btn.pending:not(:active):not(.active).pending:not(:focus).btn-subtle {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(109, 109, 110, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:active:not(:focus).btn-outline-subtle, .set-theme.theme-dark .btn.active:not(:focus).btn-outline-subtle, .set-theme.theme-dark .btn:not(:active):not(.active).pending:not(:focus).btn-outline-subtle {
+.set-theme.theme-dark .btn:not(:disabled):not(.disabled):active:not(:focus).btn-outline-subtle, .set-theme.theme-dark .btn:not(:disabled):not(.disabled).active:not(:focus).btn-outline-subtle, .set-theme.theme-dark .btn:not(:disabled):not(.disabled):not(:active):not(.active).pending:not(:focus).btn-outline-subtle, .set-theme.theme-dark .btn.toggle-button:active:not(:focus).btn-outline-subtle, .set-theme.theme-dark .btn.toggle-button.active:not(:focus).btn-outline-subtle, .set-theme.theme-dark .btn.toggle-button:not(:active):not(.active).pending:not(:focus).btn-outline-subtle, .set-theme.theme-dark .btn.pending:active:not(:focus).btn-outline-subtle, .set-theme.theme-dark .btn.pending.active:not(:focus).btn-outline-subtle, .set-theme.theme-dark .btn.pending:not(:active):not(.active).pending:not(:focus).btn-outline-subtle {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(109, 109, 110, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:active:focus.btn-subtle, .set-theme.theme-dark .btn.active:focus.btn-subtle, .set-theme.theme-dark .btn:not(:active):not(.active).pending:focus.btn-subtle {
+.set-theme.theme-dark .btn:active:focus:not(:disabled):not(.disabled).btn-subtle, .set-theme.theme-dark .btn.active:focus:not(:disabled):not(.disabled).btn-subtle, .set-theme.theme-dark .btn:not(:active):not(.active).pending:focus.btn-subtle {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(109, 109, 110, var(--input-btn-focus-color-opacity, 0.4));
 }
-.set-theme.theme-dark .btn:active:focus.btn-outline-subtle, .set-theme.theme-dark .btn.active:focus.btn-outline-subtle, .set-theme.theme-dark .btn:not(:active):not(.active).pending:focus.btn-outline-subtle {
+.set-theme.theme-dark .btn:active:focus:not(:disabled):not(.disabled).btn-outline-subtle, .set-theme.theme-dark .btn.active:focus:not(:disabled):not(.disabled).btn-outline-subtle, .set-theme.theme-dark .btn:not(:active):not(.active).pending:focus.btn-outline-subtle {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(109, 109, 110, var(--input-btn-focus-color-opacity, 0.4));
 }
 .set-theme.theme-dark .btn.btn-lg {
@@ -23512,9 +23633,10 @@
 }
 .set-theme.theme-dark .input-grid {
   display: grid;
-  grid-template-columns: repeat(var(--input-grid-columns, 1), 1fr auto);
+  grid-template-columns: repeat(var(--input-grid-columns, 1), auto auto);
   grid-auto-rows: auto;
   row-gap: 0.5em;
+  justify-content: start;
 }
 .set-theme.theme-dark .input-grid > [role=radiogroup] {
   display: contents;

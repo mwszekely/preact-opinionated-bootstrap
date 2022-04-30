@@ -1,9 +1,9 @@
 @use "sass:color";
 @use "sass:map";
 @use "sass:string";
-@use "./ensure-contrast.scss" as *;
+@use "./ensure-contrast.scss"as *;
 
-@use "../variables.scss" as *;
+@use "../variables.scss"as *;
 
 
 .btn-group {
@@ -16,56 +16,45 @@
 // Some of the button mixins are missing variables to adjust opacity of the focus ring,
 // so add that back in (basically just copied and pasted from the mixin with most lines removed).
 .btn {
-  @each $color, $value in $theme-colors {
+
+  @each $color,
+  $value in $theme-colors {
     &.btn-#{$color} {
-      .btn-check:focus + &,
+
+      .btn-check:focus+&,
       &:focus {
-        @include box-shadow(
-          $btn-box-shadow,
-          0 0 0 $btn-focus-width
-            rgba(mix($value, $value, 15%), $input-btn-check-focus-color-opacity)
-        );
+        @include box-shadow($btn-box-shadow,
+          0 0 0 $btn-focus-width rgba(mix($value, $value, 15%), $input-btn-check-focus-color-opacity));
       }
 
-      .btn-check:checked + &,
-      .btn-check:active + &,
+      .btn-check:checked+&,
+      .btn-check:active+&,
       &:active,
       &.active,
-      .show > &.dropdown-toggle {
+      .show>&.dropdown-toggle {
         &:focus {
-          @include box-shadow(
-            $btn-active-box-shadow,
-            0 0 0 $btn-focus-width
-              rgba(
-                mix($value, $value, 15%),
-                $input-btn-check-focus-color-opacity
-              )
-          );
+          @include box-shadow($btn-active-box-shadow,
+            0 0 0 $btn-focus-width rgba(mix($value, $value, 15%),
+              $input-btn-check-focus-color-opacity));
         }
       }
     }
 
     &.btn-outline-#{$color} {
-      .btn-check:focus + &,
+
+      .btn-check:focus+&,
       &:focus {
-        box-shadow: 0
-          0
-          0
-          $btn-focus-width
-          rgba($value, $input-btn-check-focus-color-opacity);
+        box-shadow: 0 0 0 $btn-focus-width rgba($value, $input-btn-check-focus-color-opacity);
       }
 
-      .btn-check:checked + &,
-      .btn-check:active + &,
+      .btn-check:checked+&,
+      .btn-check:active+&,
       &:active,
       &.active,
       &.dropdown-toggle.show {
         &:focus {
-          @include box-shadow(
-            $btn-active-box-shadow,
-            0 0 0 $btn-focus-width
-              rgba($value, $input-btn-check-focus-color-opacity)
-          );
+          @include box-shadow($btn-active-box-shadow,
+            0 0 0 $btn-focus-width rgba($value, $input-btn-check-focus-color-opacity));
         }
       }
     }
@@ -92,13 +81,14 @@
   &:not(.disabled):not(:disabled):not(.pending) {
     cursor: pointer;
   }
+
   &.pending {
     cursor: progress;
     pointer-events: auto;
   }
 
   // The reason buttons are position: relative
-  & > .circular-progress-container {
+  &>.circular-progress-container {
     position: absolute;
     left: 0;
     right: 0;
@@ -108,26 +98,36 @@
 
   --press-effect-block-offset: calc(#{$btn-focus-width} / 2);
 
-  padding-top: calc(#{$btn-padding-y}  - var(--press-effect-block-offset));
+  padding-top: calc(#{$btn-padding-y} - var(--press-effect-block-offset));
   padding-bottom: calc(#{$btn-padding-y} + var(--press-effect-block-offset));
 
-  // When, when hoving or focused, they're level with the page
-  &:hover:not(.active):not(:active),
-  &:focus:not(.active):not(:active) {
-    --press-effect-block-offset: 0rem;
+  // We never change the button "height" when it's disabled
+  // (also, as usual, pending and disabled mix oddly--
+  // we need it to change as normal while pending even if disabled)
+  &.pending, &:not(:disabled):not(.disabled) {
+
+    // When, when hoving or focused, they're level with the page
+    &:hover:not(.active):not(:active),
+    &:focus:not(.active):not(:active) {
+      --press-effect-block-offset: 0rem;
+    }
   }
 
-  // And when pressed, they're inset into the page.
-  &:active,
-  &.active,
-  &.pending:not(.toggle-button) {
-    --press-effect-block-offset: calc(-1 * (#{$btn-focus-width} / 2));
+  // Toggle buttons are also weird, because they can be active while disabled,
+  // while normal buttons are never active while disabled.
+  &.pending, &.toggle-button, &:not(:disabled):not(.disabled) {
+    // And when pressed, they're inset into the page.
+    &:active,
+    &.active,
+    &.pending:not(.toggle-button) {
+      --press-effect-block-offset: calc(-1 * (#{$btn-focus-width} / 2));
+    }
   }
 
 
   @each $color-name, $color-value in $theme-colors {
     &.btn-outline-#{$color-name} {
-      &:not(:active):not(.active):not(.pending.toggle-button){
+      &:not(:active):not(.active):not(.pending.toggle-button) {
         --press-effect-block-offset: 0rem;
       }
 
@@ -144,6 +144,7 @@
       // Make sure all colors are visible on the default body background
       // (Especially a problem for dark themes)
       $contrast-ratio: contrast-ratio($body-bg, $color-value);
+
       @if $contrast-ratio <= $min-contrast-ratio {
         $adjusted-color: ensure-contrasting-color($body-bg, $color-value);
         color: $adjusted-color;
@@ -178,92 +179,105 @@
       border-color: transparent;
       @include box-shadow(
         inset 0 -3px 0 0 rgba(0 0 0 / 40%),
-        0 0 0 0 rgba(tint-color($color-value, 40%), $input-btn-focus-color-opacity)
-      );
+        0 0 0 0 rgba(tint-color($color-value, 40%), $input-btn-focus-color-opacity));
     }
+
     &.btn-outline-#{$color-name} {
       @include box-shadow(
-        //inset 0 -3px 0 0 rgba(ensure-contrasting-color($body-bg, $color-value), 80%),
         inset 0 0 0 0 rgba(ensure-contrasting-color($body-bg, $color-value), 80%),
-        0 0 0 0 rgba(tint-color($color-value, 40%), $input-btn-focus-color-opacity)
-      );
+        0 0 0 0 rgba(tint-color($color-value, 40%), $input-btn-focus-color-opacity));
     }
 
     // Box shadow when focused, but not active:
     // (FYI: In most contexts, including this one, pending also counts as active)
-    // Flat, with a focus ring
     &:focus:not(.active):not(:active):not(.pending) {
+
+      // The default case hereassumes the button is disabled,
+      // in which case it's raised with a focus ring
       &.btn-#{$color-name} {
         @include box-shadow(
-          inset 0 0 0 0 rgba(0 0 0 / 30%),
-          0 0 0 $btn-focus-width
-            rgba(tint-color($color-value, 40%), $input-btn-focus-color-opacity)
-        );
+          inset 0 -3px 0 0 rgba(0 0 0 / 40%),
+          0 0 0 $btn-focus-width rgba(tint-color($color-value, 40%), 
+          $input-btn-focus-color-opacity));
       }
+
       &.btn-outline-#{$color-name} {
         @include box-shadow(
           inset 0 0 0 0 rgba(0 0 0 / 30%),
-          0 0 0 $btn-focus-width
-            rgba(tint-color($color-value, 40%), $input-btn-focus-color-opacity)
-        );
+          0 0 0 $btn-focus-width rgba(tint-color($color-value, 40%), $input-btn-focus-color-opacity));
+      }
+
+
+      // And when not disabled, flat with a focus ring
+      &:not(:disabled):not(.disabled) {
+        &.btn-#{$color-name} {
+          @include box-shadow(
+            inset 0 0 0 0 rgba(0 0 0 / 30%),
+            0 0 0 $btn-focus-width rgba(tint-color($color-value, 40%), $input-btn-focus-color-opacity));
+        }
+
+        &.btn-outline-#{$color-name} {
+          @include box-shadow(
+            inset 0 0 0 0 rgba(0 0 0 / 30%),
+            0 0 0 $btn-focus-width rgba(tint-color($color-value, 40%), $input-btn-focus-color-opacity));
+        }
       }
     }
 
-    // Box shadow when hovering, but not active:
-    // Flat, 0-width focus ring
-    &:hover:not(.active):not(:active):not(.pending) {
-      &.btn-#{$color-name} {
-        @include box-shadow(
-          inset 0 0 0 0 rgba(0 0 0 / 30%),
-          0 0 0 0 rgba(tint-color($color-value, 40%), $input-btn-focus-color-opacity)
-        );
+    &:not(:disabled):not(.disabled), &.toggle-button, &.pending {
+
+      // Box shadow when hovering, but not active:
+      // Flat, 0-width focus ring
+      &:hover:not(.active):not(:active):not(.pending) {
+        &.btn-#{$color-name} {
+          @include box-shadow(
+            inset 0 0 0 0 rgba(0 0 0 / 30%),
+            0 0 0 0 rgba(tint-color($color-value, 40%), $input-btn-focus-color-opacity));
+        }
+
+        &.btn-outline-#{$color-name} {
+          @include box-shadow(
+            inset 0 0 0 0 rgba(0 0 0 / 30%),
+            0 0 0 0 rgba(tint-color($color-value, 40%), $input-btn-focus-color-opacity));
+        }
       }
-      &.btn-outline-#{$color-name} {
-        @include box-shadow(
-          inset 0 0 0 0 rgba(0 0 0 / 30%),
-          0 0 0 0 rgba(tint-color($color-value, 40%), $input-btn-focus-color-opacity)
-        );
-      }
-    }
-    // Box shadow when active, but not focused
-    // (generally buttons can't be active without being focused,
-    // but e.g. checked buttons fall under this category)
-    // Depressed, 0-width focus ring
-    &:active:not(:focus),
-    &.active:not(:focus),
-    &:not(:active):not(.active).pending:not(:focus) {
-      &.btn-#{$color-name} {
-        @include box-shadow(
-          $btn-active-box-shadow,
-          0 0 0 0 rgba(tint-color($color-value, 40%), $input-btn-focus-color-opacity)
-        );
-      }
-      &.btn-outline-#{$color-name} {
-        @include box-shadow(
-          $btn-active-box-shadow,
-          0 0 0 0 rgba(tint-color($color-value, 40%), $input-btn-focus-color-opacity)
-        );
+
+      // Box shadow when active, but not focused
+      // (generally buttons can't be active without being focused,
+      // but e.g. checked buttons fall under this category)
+      // Depressed, 0-width focus ring
+      &:active:not(:focus),
+      &.active:not(:focus),
+      &:not(:active):not(.active).pending:not(:focus) {
+        &.btn-#{$color-name} {
+          @include box-shadow(
+            $btn-active-box-shadow,
+            0 0 0 0 rgba(tint-color($color-value, 40%), $input-btn-focus-color-opacity));
+        }
+
+        &.btn-outline-#{$color-name} {
+          @include box-shadow(
+            $btn-active-box-shadow,
+            0 0 0 0 rgba(tint-color($color-value, 40%), $input-btn-focus-color-opacity));
+        }
       }
     }
 
     // Box shadow when active and focused
     // Depressed, with a focus ring
-    &:active:focus,
-    &.active:focus,
+    &:active:focus:not(:disabled):not(.disabled),
+    &.active:focus:not(:disabled):not(.disabled),
     &:not(:active):not(.active).pending:focus {
       &.btn-#{$color-name} {
         @include box-shadow(
           $btn-active-box-shadow,
-          0 0 0 $btn-focus-width
-            rgba(tint-color($color-value, 40%), $input-btn-focus-color-opacity)
-        );
+          0 0 0 $btn-focus-width rgba(tint-color($color-value, 40%), $input-btn-focus-color-opacity));
       }
+
       &.btn-outline-#{$color-name} {
         @include box-shadow(
           $btn-active-box-shadow,
-          0 0 0 $btn-focus-width
-            rgba(tint-color($color-value, 40%), $input-btn-focus-color-opacity)
-        );
+          0 0 0 $btn-focus-width rgba(tint-color($color-value, 40%), $input-btn-focus-color-opacity));
       }
     }
   }
@@ -273,15 +287,19 @@
     padding-top: calc(#{$btn-padding-y-lg} - var(--press-effect-block-offset));
     padding-bottom: calc(#{$btn-padding-y-lg} + var(--press-effect-block-offset));
   }
+
   &.btn-sm {
     height: calc((#{$line-height-base} * 1em) + (#{$btn-padding-y-sm} * 2) + 2px);
-    padding-top: calc(#{$btn-padding-y-sm}  - var(--press-effect-block-offset));
+    padding-top: calc(#{$btn-padding-y-sm} - var(--press-effect-block-offset));
     padding-bottom: calc(#{$btn-padding-y-sm} + var(--press-effect-block-offset));
   }
 }
 
-.input-group > .btn {
-  &, &.btn-large, &.btn-sm {
+.input-group>.btn {
+
+  &,
+  &.btn-large,
+  &.btn-sm {
     align-self: stretch;
   }
 }

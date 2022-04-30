@@ -23,7 +23,7 @@ export interface UseAriaProgressBarParameters<E extends Element> extends TagSens
     valueText?: string;     // If the value isn't a linear, numeric percentage, but some other value, specify it here.
 }
 
-export interface CircularProgressProps extends GlobalAttributes<HTMLDivElement> {
+export interface CircularProgressProps extends GlobalAttributes<HTMLSpanElement> {
     colorVariant?: ProgressColorVariant;
     children?: VNode<any>;
     childrenPosition?: "child" | "before" | "after" | "merged";
@@ -183,9 +183,9 @@ interface Persistence {
     "circular-progress-gimmick-count": number;
 }
 
-export const ProgressCircular = forwardElementRef(function ({ loadingLabel, spinnerTimeout, mode, colorFill, childrenPosition, children, colorVariant, ...p }: CircularProgressProps, ref: Ref<HTMLDivElement>) {
+export const ProgressCircular = forwardElementRef(function ({ loadingLabel, spinnerTimeout, mode, colorFill, childrenPosition, children, colorVariant, ...p }: CircularProgressProps, ref: Ref<HTMLSpanElement>) {
     loadingLabel ??= "Operation pending";
-    const { useProgressProps, useReferencedElement } = useAriaProgressBar<HTMLDivElement>({ value: null, valueText: loadingLabel, max: 1, tag: "div" });
+    const { useProgressProps, useReferencedElement } = useAriaProgressBar<HTMLSpanElement>({ value: null, valueText: loadingLabel, max: 1, tag: "span" });
 
     //useLayoutEffect(() => { provideParentWithHook?.(useReferencedElement) }, [useReferencedElement, provideParentWithHook])
 
@@ -230,28 +230,28 @@ export const ProgressCircular = forwardElementRef(function ({ loadingLabel, spin
         children = <span>{children}</span>;
 
 
-    let progressProps = useMergedProps<HTMLDivElement>()({ ref, className: clsx("circular-progress-container") }, useMergedProps<HTMLDivElement>()(useProgressProps({ "aria-hidden": `${mode != "pending"}` }), p));
+    let progressProps = useMergedProps<HTMLSpanElement>()({ ref, className: clsx("circular-progress-container") }, useMergedProps<HTMLSpanElement>()(useProgressProps({ "aria-hidden": `${mode != "pending"}` }), p));
 
-    progressProps = useMergedProps<HTMLDivElement>()(progressProps, childrenPosition === "merged" ? { ...children?.props, ref: children?.ref } : {});
+    progressProps = useMergedProps<HTMLSpanElement>()(progressProps, childrenPosition === "merged" ? { ...children?.props, ref: children?.ref } : {});
 
-    let progressVnodeType = childrenPosition === "merged"? (children?.type ?? "div") : "div";
+    let progressVnodeType = childrenPosition === "merged"? (children?.type ?? "span") : "span";
 
     const progressElement = (
         h(progressVnodeType as any, progressProps, <>
-            {mode === "pending" && !!loadingLabel && <div role="alert" aria-live="assertive" class="visually-hidden">{loadingLabel}</div>}
-            {mode !== null && <Swappable>
-                <div className="circular-progress-swappable">
+            {mode === "pending" && !!loadingLabel && <span role="alert" aria-live="assertive" class="visually-hidden">{loadingLabel}</span>}
+            {mode !== null && <Swappable inline>
+                <span className="circular-progress-swappable">
                     <Fade show={mode === "pending" && showSpinner} exitVisibility="removed">
-                        <div style={{ "--count": gimmickCount, "--delay": delay } as any} className={clsx("circular-progress", colorVariant ? `circular-progress-${colorVariant}` : undefined, colorFill == "foreground" && "inverse-fill", colorFill === "foreground-only" && "no-fill")}>
+                        <span style={{ "--count": gimmickCount, "--delay": delay } as any} className={clsx("circular-progress", colorVariant ? `circular-progress-${colorVariant}` : undefined, colorFill == "foreground" && "inverse-fill", colorFill === "foreground-only" && "no-fill")}>
                             {Array.from(function* () {
                                 for (let i = 0; i < gimmickCount; ++i)
-                                    yield <div class={clsx("circular-progress-ball-origin", `circular-progress-ball-origin-${i}`)}><div class="circular-progress-ball" /></div>;
+                                    yield <span class={clsx("circular-progress-ball-origin", `circular-progress-ball-origin-${i}`)}><span class="circular-progress-ball" /></span>;
                             }())}
-                        </div>
+                        </span>
                     </Fade>
-                    <Fade show={!shownStatusLongEnough && mode === "succeeded" && succeededAfterFailure}><div class="circular-progress-succeeded"><Check /></div></Fade>
-                    <Fade show={!shownStatusLongEnough && mode === "failed"}><div class="circular-progress-failed"><Cross /></div></Fade>
-                </div>
+                    <Fade show={!shownStatusLongEnough && mode === "succeeded" && succeededAfterFailure}><span class="circular-progress-succeeded"><Check /></span></Fade>
+                    <Fade show={!shownStatusLongEnough && mode === "failed"}><span class="circular-progress-failed"><Cross /></span></Fade>
+                </span>
             </Swappable>}
         </>)
     );

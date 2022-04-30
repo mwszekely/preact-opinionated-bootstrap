@@ -1,6 +1,6 @@
 import { h } from "preact";
 import { useState } from "preact-prop-helpers";
-import { Button, ButtonColorVariant, ButtonGroup, ButtonGroupChild, ProvideDefaultButtonColor, ProvideDefaultButtonFill, ProvideDefaultButtonSize } from "../../button";
+import { Button, ButtonColorVariant, ButtonGroup, ButtonGroupChild, ProvideDefaultButtonColor, ProvideDefaultButtonDisabled, ProvideDefaultButtonFill, ProvideDefaultButtonSize } from "../../button";
 import { Card, CardElement } from "../../card/card";
 import { InputGrid, Checkbox, Input, InputGroup } from "../../input-group";
 import { Toast, usePushToast } from "../../toast";
@@ -9,6 +9,7 @@ export function DemoButtons() {
     const [buttonsFill, setButtonsFill] = useState<"fill" | "outline">("outline");
     const [buttonsSize, setButtonsSize] = useState<"sm" | "md" | "lg">("md");
     const [buttonsColor, setButtonsColor] = useState<ButtonColorVariant>("primary");
+    const [buttonsDisabled, setButtonsDisabled] = useState(false);
     const [toggleOn, setToggleOn] = useState(false);
 
     const [asyncTimeout, setAsyncTimeout] = useState<number | null>(3000);
@@ -90,6 +91,9 @@ export function DemoButtons() {
                                 </ButtonGroup>
                             </CardElement>
                             <CardElement>
+                                <Checkbox checked={!!buttonsDisabled} onCheck={setButtonsDisabled}>Disabled</Checkbox>
+                            </CardElement>
+                            <CardElement>
                                 <ButtonGroup wrap>
                                     <ButtonGroupChild index={0} colorVariant="primary" pressed={buttonsColor == "primary"} onPressToggle={() => setButtonsColor("primary")}>Primary</ButtonGroupChild>
                                     <ButtonGroupChild index={1} colorVariant="secondary" pressed={buttonsColor == "secondary"} onPressToggle={() => setButtonsColor("secondary")}>Secondary</ButtonGroupChild>
@@ -104,7 +108,7 @@ export function DemoButtons() {
                                 </ButtonGroup>
                             </CardElement>
                             <CardElement>
-                                <Button onPress={onPress}>{buttonsFill === "fill" ? "Filled" : "Outlined"} {buttonsColor} button</Button>
+                                <Button onPress={onPress} disabled={buttonsDisabled}>{buttonsFill === "fill" ? "Filled" : "Outlined"} {buttonsColor} button</Button>
                             </CardElement>
                             <CardElement><code>{`<Button fillVariant="${buttonsFill}" colorVariant="${buttonsColor}">Variant button</Button>`}</code></CardElement>
 
@@ -121,7 +125,7 @@ export function DemoButtons() {
                                 <InputGroup><Checkbox onCheck={setUsesLinkButton} checked={usesLinkButton} labelPosition="start">Use link button</Checkbox></InputGroup>
                             </CardElement>
                             <CardElement>
-                                {usesLinkButton ? <Button target="_blank" href="https://www.example.com" fillVariant={buttonsFill}>example.com <i class="bi bi-box-arrow-up-right"></i></Button> : <Button onPress={onPress} fillVariant={buttonsFill}>Regular button</Button>}
+                                {usesLinkButton ? <Button  disabled={buttonsDisabled} target="_blank" href="https://www.example.com" fillVariant={buttonsFill}>example.com <i class="bi bi-box-arrow-up-right"></i></Button> : <Button onPress={onPress}  disabled={buttonsDisabled} fillVariant={buttonsFill}>Regular button</Button>}
                             </CardElement>
 
                             <CardElement type="paragraph"><code>{usesLinkButton ? `<Button href="https://www.example.com">Link button</Button>` : `<Button onPress={onPress}>Regular button</Button>`}</code></CardElement>
@@ -137,7 +141,7 @@ export function DemoButtons() {
                                 If given a <code>pressed</code> prop, a button will become a toggle button, with an off/on state.  It will style itself as outlined when unpressed, and filled when pressed, so they are best used in groups.
                             </CardElement>
                             <CardElement>
-                                <Button pressed={toggleOn} onPressToggle={onToggleInput}>Toggle button</Button>
+                                <Button pressed={toggleOn} onPressToggle={onToggleInput} disabled={buttonsDisabled}>Toggle button</Button>
                             </CardElement>
 
                             <CardElement type="paragraph"><code>{`<Button pressed={pressed} onPressToggle={onInput}>Toggle button</Button>`}</code></CardElement>
@@ -151,10 +155,10 @@ export function DemoButtons() {
                             </CardElement>
                             <CardElement >
                                 <ButtonGroup wrap>
-                                    <ButtonGroupChild index={0} fillVariant={buttonsFill} colorVariant={buttonsColor} onPress={onPress}>First button</ButtonGroupChild>
-                                    <ButtonGroupChild index={1} fillVariant={buttonsFill} colorVariant={buttonsColor} onPress={onPress}>Second button</ButtonGroupChild>
-                                    <ButtonGroupChild index={2} fillVariant={buttonsFill} colorVariant={buttonsColor} onPress={onPress}>Third button</ButtonGroupChild>
-                                    <ButtonGroupChild index={3} fillVariant={buttonsFill} colorVariant={buttonsColor} onPress={onPress}>Fourth button</ButtonGroupChild>
+                                    <ButtonGroupChild index={0} disabled={buttonsDisabled} fillVariant={buttonsFill} colorVariant={buttonsColor} onPress={onPress}>First button</ButtonGroupChild>
+                                    <ButtonGroupChild index={1} disabled={buttonsDisabled} fillVariant={buttonsFill} colorVariant={buttonsColor} onPress={onPress}>Second button</ButtonGroupChild>
+                                    <ButtonGroupChild index={2} disabled={buttonsDisabled} fillVariant={buttonsFill} colorVariant={buttonsColor} onPress={onPress}>Third button</ButtonGroupChild>
+                                    <ButtonGroupChild index={3} disabled={buttonsDisabled} fillVariant={buttonsFill} colorVariant={buttonsColor} onPress={onPress}>Fourth button</ButtonGroupChild>
                                 </ButtonGroup>
                             </CardElement>
 

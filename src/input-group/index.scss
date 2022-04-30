@@ -160,9 +160,11 @@ label.input-group-text:not(.disabled) {
 }
 .input-grid {
   display: grid;
-  grid-template-columns: repeat(var(--input-grid-columns, 1), 1fr auto);
+  grid-template-columns: repeat(var(--input-grid-columns, 1), auto auto);
   grid-auto-rows: auto;
   row-gap: 0.5em;
+  justify-content: start;
+  
   & > [role="radiogroup"] {
     display: contents;
     & > .input-group {
