@@ -13434,6 +13434,23 @@ label.input-group-text:not(.disabled) {
     inset-inline-end: 0.5em;
   }
 
+  .form-control.faux-form-control-outer {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+  }
+
+  .faux-form-control-outer > .form-control-prefix {
+    grid-column: 1/span 1;
+  }
+
+  .form-control.faux-form-control-inner {
+    grid-column: 2/span 1;
+  }
+
+  .faux-form-control-outer > .form-control-suffix {
+    grid-column: 3/span 1;
+  }
+
   .faux-form-control-outer {
     position: relative;
   }
@@ -30782,6 +30799,27 @@ label.input-group-text:not(.disabled) {
   }
 }
 @media all and (prefers-color-scheme: light) {
+  .form-control.faux-form-control-outer {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+  }
+}
+@media all and (prefers-color-scheme: light) {
+  .faux-form-control-outer > .form-control-prefix {
+    grid-column: 1/span 1;
+  }
+}
+@media all and (prefers-color-scheme: light) {
+  .form-control.faux-form-control-inner {
+    grid-column: 2/span 1;
+  }
+}
+@media all and (prefers-color-scheme: light) {
+  .faux-form-control-outer > .form-control-suffix {
+    grid-column: 3/span 1;
+  }
+}
+@media all and (prefers-color-scheme: light) {
   .faux-form-control-outer {
     position: relative;
   }
@@ -47066,6 +47104,23 @@ body.themed-scrollbars {
   inset-inline-end: 0.5em;
 }
 
+.set-theme.theme-light .form-control.faux-form-control-outer {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+}
+
+.set-theme.theme-light .faux-form-control-outer > .form-control-prefix {
+  grid-column: 1/span 1;
+}
+
+.set-theme.theme-light .form-control.faux-form-control-inner {
+  grid-column: 2/span 1;
+}
+
+.set-theme.theme-light .faux-form-control-outer > .form-control-suffix {
+  grid-column: 3/span 1;
+}
+
 .set-theme.theme-light .faux-form-control-outer {
   position: relative;
 }
@@ -62891,6 +62946,23 @@ body.themed-scrollbars {
   justify-content: flex-end;
   align-items: center;
   inset-inline-end: 0.5em;
+}
+
+.set-theme.theme-dark .form-control.faux-form-control-outer {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+}
+
+.set-theme.theme-dark .faux-form-control-outer > .form-control-prefix {
+  grid-column: 1/span 1;
+}
+
+.set-theme.theme-dark .form-control.faux-form-control-inner {
+  grid-column: 2/span 1;
+}
+
+.set-theme.theme-dark .faux-form-control-outer > .form-control-suffix {
+  grid-column: 3/span 1;
 }
 
 .set-theme.theme-dark .faux-form-control-outer {

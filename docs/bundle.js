@@ -11657,1481 +11657,6 @@
       }, props), children);
     });
 
-    function capture$1(e) {
-      return e[EventDetail].checked;
-    }
-    /**
-     * TODO: When inside an InputGroup, Checkboxes don't forward any properties or refs because there's no one DOM element to attach to.
-     *
-     * Probably need separate `inputRef` & `labelRef` properties for that,
-     * but given there's also no easy way to forward props to just them a solution like that feels incomplete.
-     */
-
-
-    const Checkbox = g$1(forwardElementRef(function Checkbox(_ref, ref) {
-      var _labelPosition, _disabled;
-
-      let {
-        checked,
-        disabled,
-        onCheck: onCheckedAsync,
-        labelPosition,
-        children: label,
-        ...props
-      } = _ref;
-      (_labelPosition = labelPosition) !== null && _labelPosition !== void 0 ? _labelPosition : labelPosition = "end";
-      const {
-        useSyncHandler,
-        pending,
-        hasError,
-        settleCount,
-        hasCapture,
-        currentCapture,
-        currentType
-      } = useAsyncHandler()({
-        capture: capture$1
-      });
-      disabled || (disabled = pending);
-      const onChecked = useSyncHandler(onCheckedAsync);
-      const {
-        useCheckboxInputElement,
-        useCheckboxLabelElement
-      } = useAriaCheckbox({
-        checked: pending ? currentCapture : checked === "indeterminate" ? "mixed" : checked,
-        disabled: (_disabled = disabled) !== null && _disabled !== void 0 ? _disabled : false,
-        onInput: onChecked,
-        labelPosition: "separate"
-      });
-      const {
-        useCheckboxInputElementProps
-      } = useCheckboxInputElement({
-        tag: "input"
-      });
-      const {
-        useCheckboxLabelElementProps
-      } = useCheckboxLabelElement({
-        tag: "label"
-      });
-      const {
-        useCheckboxLabelElementProps: useWrapperLabelProps
-      } = useCheckboxLabelElement({
-        tag: "div"
-      });
-      const inInputGroup = F(InInputGroupContext);
-      let stringLabel = `${label}`;
-
-      if (label != null && labelPosition === "hidden" && !["string", "number", "boolean"].includes(typeof label)) {
-        console.error(`Hidden labels require a string-based label for the aria-label attribute.`);
-      }
-
-      const asyncState = hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null;
-      const propsForInput = useMergedProps()(props, useCheckboxInputElementProps({
-        ref,
-        type: "checkbox",
-        className: clsx("form-check-input", pending && "pending", disabled && "disabled", inInputGroup && "mt-0"),
-        "aria-label": labelPosition === "hidden" ? stringLabel : undefined
-      }));
-
-      const inputElement = e$3(OptionallyInputGroup$1, {
-        isInput: true,
-        tag: inInputGroup ? "div" : null,
-        ...useWrapperLabelProps({
-          disabled,
-          tabIndex: -1
-        }),
-        children: e$3(ProgressCircular, {
-          childrenPosition: "after",
-          colorFill: "foreground-only",
-          mode: currentType === "async" ? asyncState : null,
-          colorVariant: "info",
-          children: e$3("input", { ...propsForInput
-          })
-        })
-      });
-
-      const p2 = { ...useCheckboxLabelElementProps({
-          className: clsx(pending && "pending", disabled && "disabled", "form-check-label"),
-          "aria-hidden": "true"
-        })
-      };
-
-      const labelElement = e$3(d$2, {
-        children: label != null && e$3(OptionallyInputGroup$1, {
-          isInput: false,
-          tag: "label",
-          ...p2,
-          children: label
-        })
-      });
-
-      const ret = e$3(d$2, {
-        children: [labelPosition == "start" && labelElement, inputElement, labelPosition == "end" && labelElement]
-      });
-
-      if (!inInputGroup) return e$3("div", { ...useMergedProps()({}, {
-          class: "form-check"
-        }),
-        children: ret
-      });
-      return ret;
-    }));
-    const OptionallyInputGroup$1 = forwardElementRef(function OptionallyInputGroup(_ref2, ref) {
-      let {
-        tag,
-        children,
-        isInput,
-        ...props
-      } = _ref2;
-      const inInputGroup = F(InInputGroupContext);
-      const inInputGrid = !!F(InInputGridContext);
-      props = { ...props,
-        ref
-      };
-      if (!inInputGroup) return v$2(tag !== null && tag !== void 0 ? tag : d$2, props, children); // If we're in an InputGrid's InputGroup, then create a 
-      // new child that's, CSS-wise, the "true" input.
-      // The other one is used for its border styles and relative positioning.
-
-      if (inInputGrid && isInput) children = e$3("div", {
-        className: "input-group-text",
-        children: children
-      });
-      return e$3(InputGroupText, {
-        tag: tag !== null && tag !== void 0 ? tag : "div",
-        ...useMergedProps()({
-          className: clsx(isInput && inInputGrid && "faux-input-group-text")
-        }, props),
-        children: children
-      });
-    });
-
-    /**
-     * Utility function for a parent that quickly needs the text content of its children,
-     * ideally as the `children` prop, but will fall back to a mutation observer if necessary.
-     *
-     * Returns the text content, and the modified props to use for the parent.
-     *
-     * @param props
-     * @returns
-     */
-
-    function useChildrenTextProps(props) {
-      const children = props.children;
-      const childrenNotStringable = !childrenIsStringable(children);
-      const [text, setText] = useState(() => childrenNotStringable ? null : childrenToString(children));
-      const onElementUpdate = A$2(element => {
-        if (childrenNotStringable) {
-          var _element$textContent;
-
-          setText(((_element$textContent = element === null || element === void 0 ? void 0 : element.textContent) !== null && _element$textContent !== void 0 ? _element$textContent : "").trim());
-        }
-      }, [childrenNotStringable]);
-      const {
-        useRefElementProps,
-        getElement
-      } = useRefElement({
-        onElementChange: onElementUpdate
-      });
-      const {
-        useMutationObserverProps
-      } = useMutationObserver(childrenNotStringable ? {
-        subtree: true,
-        onCharacterData: info => onElementUpdate(getElement())
-      } : null);
-      y$1(() => {
-        if (!childrenNotStringable) {
-          setText(childrenToString(children));
-        }
-      }, [childrenNotStringable, childrenNotStringable ? null : children]);
-      return {
-        childrenText: text,
-        props: useMutationObserverProps(useRefElementProps(props))
-      };
-    }
-
-    function childrenToString(children) {
-      if (children == null) return "";else if (Array.isArray(children)) return children.map(child => childrenToString(child)).join("");else if (typeof children == "string") return children;else if (typeof children == "boolean") return "";
-      return `${children}`;
-    }
-
-    function childrenIsStringable(children) {
-      if (children == null) return true;else if (Array.isArray(children)) {
-        for (let child of children) {
-          if (!childrenIsStringable(child)) return false;
-        }
-
-        return true;
-      } else if (typeof children === "string") return true;else if (typeof children === "number") return true;else if (typeof children === "bigint") return true;else if (typeof children === "boolean") return true;
-      return false;
-    }
-
-    D$1(null);
-    D$1(false);
-    D$1(null);
-    /**
-     * This is a child checkbox of a `CheckboxGroup`.
-     *
-     * Effectively the only differences to a normal `Checkbox` are
-     * the addition of an `index` prop and the fact that your
-     * onCheck must be able to handle "mixed" as a value, which can
-     * occur if the child is set to be mixed, unset by the parent
-     * checkbox, and then "restored" by the parent checkbox a few
-     * clicks later.
-     *
-     * @param param0
-     * @returns
-     */
-
-    g$1(forwardElementRef(function CheckboxGroupChild(p, ref) {
-      var _id;
-
-      let {
-        childrenText,
-        props: {
-          index,
-          checked,
-          onCheck,
-          id,
-          ...props
-        }
-      } = useChildrenTextProps({ ...p,
-        ref
-      });
-      const randomId = generateRandomId("cbc-");
-      (_id = id) !== null && _id !== void 0 ? _id : id = randomId;
-      const useCheckboxGroupChild = F(UseCheckboxGroupChildContext);
-
-      let setChecked = checked => {
-        return onCheck(checked, null);
-      };
-
-      const {
-        tabbable,
-        useCheckboxGroupChildProps
-      } = useCheckboxGroupChild({
-        index,
-        checked,
-        text: childrenText,
-        id,
-        setChecked
-      });
-      return e$3(Checkbox, { ...useCheckboxGroupChildProps({
-          id,
-          ...props
-        }),
-        onCheck: onCheck,
-        checked: checked
-      });
-    }));
-
-    const knownNames = new Set();
-    const CurrentHandlerTypeContext = D$1("sync");
-    const RadioGroupContext = D$1(null);
-    const RadioGroup = g$1(forwardElementRef(function RadioGroup(_ref, ref) {
-      var _name;
-
-      let {
-        children,
-        name,
-        selectedValue,
-        label,
-        labelPosition,
-        onValueChange: onInputAsync
-      } = _ref;
-      const {
-        useSyncHandler,
-        pending,
-        hasError,
-        settleCount,
-        currentCapture,
-        currentType
-      } = useAsyncHandler()({
-        capture: e => e[EventDetail].selectedValue
-      });
-      const onInput = useSyncHandler(onInputAsync);
-      const {
-        randomId: backupName
-      } = useRandomId({
-        prefix: "radio-"
-      });
-      (_name = name) !== null && _name !== void 0 ? _name : name = backupName;
-      const {
-        useRadio,
-        useRadioGroupProps,
-        managedChildren,
-        selectedIndex
-      } = useAriaRadioGroup({
-        name,
-        selectedValue: pending ? currentCapture : selectedValue,
-        onInput: onInput
-      });
-      let stringLabel = undefined;
-
-      if (labelPosition === "hidden") {
-        if (label != null && !["string", "number", "boolean"].includes(typeof label)) {
-          console.error(`Hidden labels require a string-based label for the aria-label attribute.`);
-        } else {
-          stringLabel = `${label}`;
-        }
-      } // Debugging check -- multiple groups with the same name can cause weird glitches from native radio selection behavior.
-
-
-      useEffect(() => {
-        if (knownNames.has(name)) {
-          console.error(`Multiple radio groups with the name "${name}" exist on the same page at the same time!`);
-        }
-
-        knownNames.add(name);
-        return () => knownNames.delete(name);
-      }, [name]); //useChildFlag(selectedIndex, managedChildren.length, (index, isSelected) =>{ managedChildren[index]?.setAsyncState(isSelected? (hasError? "failed" : pending? "pending" :  "succeeded") : null )});
-      // Any time the selected index changes, let the previous radio button know that it shouldn't be displaying a spinner (if it was).
-
-      const currentCheckboxPendingState = hasError ? "failed" : pending ? "pending" : "succeeded";
-      useEffect(prev => {
-        if (prev) {
-          var _managedChildren$prev;
-
-          const [prevSelectedIndex] = prev;
-          if (prevSelectedIndex != null && prevSelectedIndex >= 0 && prevSelectedIndex < managedChildren.length) (_managedChildren$prev = managedChildren[prevSelectedIndex]) === null || _managedChildren$prev === void 0 ? void 0 : _managedChildren$prev.setAsyncState(null);
-        }
-      }, [selectedIndex]);
-      useEffect(() => {
-        var _managedChildren$sele;
-
-        if (selectedIndex != null && selectedIndex >= 0 && selectedIndex < managedChildren.length) (_managedChildren$sele = managedChildren[selectedIndex]) === null || _managedChildren$sele === void 0 ? void 0 : _managedChildren$sele.setAsyncState(currentCheckboxPendingState);
-      }, [selectedIndex, currentCheckboxPendingState]); // useChildFlag(pending ? capturedIndex : null, managedChildren.length, useCallback((index, isCaptured) => managedChildren[index].setPending(isCaptured? "in" : false), []));
-
-      const {
-        useGenericLabelLabel,
-        useGenericLabelInput,
-        useReferencedInputIdProps
-      } = useGenericLabel({
-        inputPrefix: "aria-radiogroup",
-        labelPrefix: "aria-radiogroup-label",
-        backupText: stringLabel
-      });
-      const {
-        useGenericLabelInputProps
-      } = useGenericLabelInput();
-      const {
-        useGenericLabelLabelProps
-      } = useGenericLabelLabel();
-
-      let labelJsx = e$3("label", { ...useGenericLabelLabelProps(useReferencedInputIdProps("for")({
-          children: label
-        }))
-      });
-
-      let groupJsx = e$3("div", { ...useGenericLabelInputProps(useRadioGroupProps({
-          ref,
-          "aria-label": labelPosition === "hidden" ? stringLabel : undefined
-        })),
-        children: children
-      });
-
-      return e$3(CurrentHandlerTypeContext.Provider, {
-        value: currentType !== null && currentType !== void 0 ? currentType : "sync",
-        children: e$3(RadioGroupContext.Provider, {
-          value: useRadio,
-          children: [labelPosition == "start" && labelJsx, groupJsx, labelPosition == "end" && labelJsx]
-        })
-      });
-    }));
-    const Radio = g$1(forwardElementRef(function Radio(_ref2, ref) {
-      var _labelPosition, _disabled, _label;
-
-      let {
-        disabled,
-        children: label,
-        index,
-        value,
-        labelPosition
-      } = _ref2;
-      const useAriaRadio = F(RadioGroupContext);
-      (_labelPosition = labelPosition) !== null && _labelPosition !== void 0 ? _labelPosition : labelPosition = "end";
-      const text = null;
-      const currentHandlerType = F(CurrentHandlerTypeContext);
-      const [asyncState, setAsyncState] = useState(null);
-      disabled || (disabled = asyncState === "pending");
-      const {
-        useRadioInput,
-        useRadioLabel
-      } = useAriaRadio({
-        disabled: (_disabled = disabled) !== null && _disabled !== void 0 ? _disabled : false,
-        labelPosition: "separate",
-        index,
-        text,
-        value,
-        setAsyncState
-      });
-      const {
-        useRadioInputProps
-      } = useRadioInput({
-        tag: "input"
-      });
-      const {
-        useRadioLabelProps
-      } = useRadioLabel({
-        tag: "label"
-      });
-      useRadioLabel({
-        tag: "div"
-      });
-      const inInputGroup = F(InInputGroupContext);
-      (_label = label) !== null && _label !== void 0 ? _label : label = value;
-      let stringLabel = `${label}`;
-
-      if (label != null && labelPosition === "hidden" && !["string", "number", "boolean"].includes(typeof label)) {
-        console.error(`Hidden labels require a string-based label for the aria-label attribute.`);
-      }
-
-      const inputElement = e$3(OptionallyInputGroup$1, {
-        isInput: true,
-        tag: inInputGroup ? "div" : null,
-        ...useRadioLabelProps({
-          disabled,
-          tabIndex: -1
-        }),
-        children: e$3(ProgressCircular, {
-          childrenPosition: "after",
-          colorFill: "foreground-only",
-          mode: currentHandlerType == "async" ? asyncState : null,
-          colorVariant: "info",
-          children: e$3("input", { ...useRadioInputProps({
-              ref,
-              type: "radio",
-              className: clsx(asyncState === "pending" && "pending", disabled && "disabled", "form-check-input"),
-              "aria-label": labelPosition === "hidden" ? stringLabel : undefined
-            })
-          })
-        })
-      });
-
-      const labelElement = e$3(d$2, {
-        children: label != null && e$3(OptionallyInputGroup$1, {
-          isInput: false,
-          tag: "label",
-          ...useRadioLabelProps({
-            className: clsx(asyncState === "pending" && "pending", disabled && "disabled", "form-check-label"),
-            "aria-hidden": "true"
-          }),
-          children: label
-        })
-      });
-
-      const ret = e$3(d$2, {
-        children: [labelPosition == "start" && labelElement, inputElement, labelPosition == "end" && labelElement]
-      });
-
-      if (!inInputGroup) return e$3("div", {
-        class: "form-check",
-        children: ret
-      });
-      return ret;
-    }));
-
-    /**
-     * @see Checkbox
-     * @param ref
-     * @returns
-     */
-
-    const Switch = g$1(forwardElementRef(function Switch(_ref, ref) {
-      var _labelPosition, _disabled;
-
-      let {
-        checked,
-        disabled,
-        onCheck: onInputAsync,
-        children: label,
-        labelPosition,
-        ...rest
-      } = _ref;
-      (_labelPosition = labelPosition) !== null && _labelPosition !== void 0 ? _labelPosition : labelPosition = "end";
-      const {
-        useSyncHandler,
-        pending,
-        currentType,
-        hasError,
-        settleCount,
-        currentCapture
-      } = useAsyncHandler()({
-        capture: e => e[EventDetail].checked
-      });
-      const asyncState = hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null;
-      disabled || (disabled = pending);
-      const onInput = useSyncHandler(onInputAsync);
-      const {
-        useCheckboxInputElement: useSwitchInputElement,
-        useCheckboxLabelElement: useSwitchLabelElement
-      } = useAriaCheckbox({
-        checked: pending ? currentCapture : checked,
-        disabled: (_disabled = disabled) !== null && _disabled !== void 0 ? _disabled : false,
-        onInput,
-        labelPosition: "separate"
-      });
-      const {
-        useCheckboxInputElementProps: useSwitchInputElementProps
-      } = useSwitchInputElement({
-        tag: "input"
-      });
-      const {
-        useCheckboxLabelElementProps: useSwitchLabelElementProps
-      } = useSwitchLabelElement({
-        tag: "label"
-      });
-      const {
-        useCheckboxLabelElementProps: useWrapperLabelProps
-      } = useSwitchLabelElement({
-        tag: "div"
-      });
-      const inInputGroup = F(InInputGroupContext);
-      let stringLabel = `${label}`;
-
-      if (label != null && labelPosition === "hidden" && !["string", "number", "boolean"].includes(typeof label)) {
-        console.error(`Hidden labels require a string-based label for the aria-label attribute.`);
-      }
-
-      const inputElement = e$3(OptionallyInputGroup, {
-        tag: inInputGroup ? "div" : null,
-        isInput: true,
-        ...useWrapperLabelProps({
-          disabled,
-          tabIndex: -1
-        }),
-        children: e$3(ProgressCircular, {
-          childrenPosition: "after",
-          colorFill: "foreground-only",
-          mode: currentType === "async" ? asyncState : null,
-          colorVariant: "info",
-          children: e$3("input", { ...useSwitchInputElementProps({
-              ref,
-              type: "checkbox",
-              className: clsx(pending && "pending", "form-check-input", disabled && "disabled"),
-              "aria-label": labelPosition === "hidden" ? stringLabel : undefined
-            })
-          })
-        })
-      });
-
-      const p2 = { ...useSwitchLabelElementProps({
-          className: clsx(pending && "pending", "form-check-label", disabled && "disabled"),
-          "aria-hidden": "true"
-        })
-      };
-
-      const labelElement = e$3(d$2, {
-        children: label != null && e$3(OptionallyInputGroup, {
-          tag: "label",
-          isInput: false,
-          ...p2,
-          children: label
-        })
-      });
-
-      const ret = e$3(d$2, {
-        children: [labelPosition == "start" && labelElement, inputElement, labelPosition == "end" && labelElement]
-      });
-
-      if (!inInputGroup) return e$3("div", { ...useMergedProps()(rest, {
-          class: "form-check form-switch"
-        }),
-        children: ret
-      });
-      return ret;
-    })); // Note: Slightly different from the others
-    // (^^^^ I'm really glad I left that there)
-
-    const OptionallyInputGroup = forwardElementRef(function OptionallyInputGroup(_ref2, ref) {
-      let {
-        tag,
-        isInput,
-        children,
-        ...props
-      } = _ref2;
-      const inInputGroup = F(InInputGroupContext);
-      const inInputGrid = F(InInputGridContext);
-      props = { ...props,
-        ref
-      };
-      if (!inInputGroup) return v$2(tag !== null && tag !== void 0 ? tag : d$2, props, children);
-      if (inInputGrid && isInput) children = e$3("div", {
-        className: clsx(isInput && inInputGrid && "form-switch", "input-group-text"),
-        children: children
-      });
-      return e$3(InputGroupText, {
-        tag: tag !== null && tag !== void 0 ? tag : "div",
-        ...useMergedProps()({
-          className: clsx("input-group-text", isInput && !inInputGrid && "form-switch", isInput && inInputGrid && "faux-input-group-text")
-        }, props),
-        children: children
-      });
-    });
-
-    function return0() {
-      return 0;
-    }
-
-    function UnlabelledInputR(p, ref) {
-      var _disabledVariant;
-
-      let {
-        type,
-        disabled,
-        value,
-        onValueChange: onInputAsync,
-        disabledVariant,
-        readOnly,
-        spinnerTimeout,
-        ...p2
-      } = p;
-      let {
-        nullable,
-        ...p3
-      } = p2;
-      const props = p3;
-      (_disabledVariant = disabledVariant) !== null && _disabledVariant !== void 0 ? _disabledVariant : disabledVariant = "soft";
-      const [focusedInner, setFocusedInner, getFocusedInner] = useState(false);
-      const {
-        capture,
-        uncapture
-      } = useInputCaptures(type, props.min, props.max);
-      const {
-        useHasFocusProps
-      } = useHasFocus({
-        onFocusedInnerChanged: setFocusedInner,
-        onFocusedChanged: A$2(focused => {
-          if (!focused) setLRImpatience(0);
-        }, [])
-      });
-      const {
-        useSyncHandler,
-        currentCapture,
-        pending,
-        hasError,
-        settleCount,
-        flushDebouncedPromise,
-        currentType,
-        ...asyncInfo
-      } = useAsyncHandler()({
-        capture: useStableCallback(e => {
-          const ret = capture(e);
-
-          if (ret == null) {
-            if (nullable) return ret;else return value;
-          } else {
-            return ret;
-          }
-        }),
-        debounce: type === "text" ? 1500 : undefined
-      });
-      const onInputIfValid = useSyncHandler(disabled ? null : onInputAsync);
-
-      const onInput = e => {
-        const target = e.currentTarget;
-        return onInputIfValid === null || onInputIfValid === void 0 ? void 0 : onInputIfValid.bind(target)(e);
-      }; // Until a better solution to "can't measure where the cursor is in input type=number" is found
-      // use this to keep track of if the user is hammering left/right trying to escape the text field 
-      // within a larger arrowkey-based navigation system. 
-
-
-      const [getLRImpatience, setLRImpatience] = usePassiveState(null, return0);
-      setInterval(() => {
-        if (getLRImpatience() == 0) {
-          setLRImpatience(prev => {
-            if (prev == null) prev = 0;else if (prev < 0) ++prev;else if (prev > 0) --prev;
-            return prev;
-          });
-        }
-      }, 1000);
-
-      const onKeyDown = e => {
-        if (e.currentTarget.type == "number") {
-          let prevValue = e.currentTarget.value;
-          let nextValue = null;
-          let arrowType = null;
-
-          switch (e.key) {
-            case "ArrowUp":
-              try {
-                e.currentTarget.stepUp();
-              } catch (ex) {
-                debugger;
-              }
-
-              nextValue = e.currentTarget.value;
-              e.currentTarget.value = prevValue;
-              arrowType = "vert";
-              break;
-
-            case "ArrowDown":
-              try {
-                e.currentTarget.stepDown();
-              } catch (ex) {
-                debugger;
-              }
-
-              nextValue = e.currentTarget.value;
-              e.currentTarget.value = prevValue;
-              arrowType = "vert";
-              break;
-
-            case "ArrowLeft":
-              setLRImpatience(prev => Math.max(-e.currentTarget.value.length + 1, (prev !== null && prev !== void 0 ? prev : 0) - 1));
-              arrowType = "horiz";
-              break;
-
-            case "ArrowRight":
-              setLRImpatience(prev => Math.min(e.currentTarget.value.length + 1, (prev !== null && prev !== void 0 ? prev : 0) + 1));
-              arrowType = "horiz";
-              break;
-          }
-
-          if (arrowType === "vert") {
-            // Only prevent anyone else from reacting to this event
-            // if this key press actually changed the value.
-            if (prevValue != nextValue) {
-              e.stopPropagation();
-            }
-          }
-
-          if (arrowType === "horiz") {
-            // No way to detect if we're at the start or end of the input element,
-            // unfortunately, at least when the type is number....
-            //
-            // So instead, we track the number of times the user has
-            // hammered the Left/Right arrows recently
-            // and if it's more than it takes to type the current value,
-            // as an escape we let the event through.
-            //
-            // This is mostly to prevent frustration, but
-            // TODO: really need a proper aria re-implementation of a number
-            // field as a text field (on non-mobile only??).
-            if (Math.abs(getLRImpatience()) <= e.currentTarget.value.length) e.stopPropagation();
-          }
-        }
-      };
-
-      const asyncState = hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null;
-      const onBlur = flushDebouncedPromise;
-      F(InInputGridContext);
-      const extraProps = type === "numeric" ? {
-        inputMode: "numeric",
-        pattern: "[0-9]*"
-      } : {};
-
-      if (type === "numeric") {
-        type = "text";
-      } // When typing numbers, they'll "autocorrect" to their
-      // most natural represented form when the input re-renders.
-      //
-      // This is a problem when typing, e.g., "-5", because
-      // when the user is typing character-by-character, 
-      // the closest number to "-" is "NaN", which makes it
-      // impossible to enter "-5" with the "-" as the first character.
-      //
-      // To fix this, we render the <input> as completely uncontrolled,
-      // and manually update the value during useEffect. If the value
-      // is null, whether it's because of valid or invalid user input,
-      // we'll just not update the value property on the element. We'll
-      // just leave it as it was last entered. Any time the value
-      // is NOT null, then we will take over again.
-      //
-      // TODO: Entering extremely large/small numbers is still rough.
-      //
-      // NOTE: When valueAsNumber is NaN, value is "".  That means
-      // that it's *NOT* possible to store the partially typed
-      // value anywhere -- it's completely hidden away.
-
-
-      const v = pending || focusedInner ? currentCapture : uncapture(value);
-      const {
-        getElement,
-        useRefElementProps
-      } = useRefElement({});
-      y$1(() => {
-        const element = getElement();
-
-        if (element) {
-          if (v != null) {
-            element.value = `${v}`;
-          }
-        }
-      }, [v]);
-      return e$3(ProgressCircular, {
-        spinnerTimeout: spinnerTimeout !== null && spinnerTimeout !== void 0 ? spinnerTimeout : 10,
-        mode: currentType === "async" ? asyncState : null,
-        childrenPosition: "after",
-        colorVariant: "info",
-        children: e$3("input", { ...useRefElementProps(useHasFocusProps(useMergedProps()(props, {
-            "aria-disabled": disabled ? "true" : undefined,
-            onKeyDown,
-            ref,
-            readOnly: readOnly || disabled && disabledVariant === "soft",
-            disabled: disabled && disabledVariant === "hard",
-            onBlur,
-            class: clsx("form-control", "faux-form-control-inner", disabled && "disabled", pending && "with-end-icon"),
-            type,
-            onInput,
-            ...extraProps
-          })))
-        })
-      });
-    }
-
-    const UnlabelledInput = forwardElementRef(UnlabelledInputR);
-    const Input = g$1(forwardElementRef(function Input(_ref, ref) {
-      var _labelPosition, _size;
-
-      let {
-        children,
-        value,
-        width,
-        readOnly,
-        labelPosition,
-        placeholder,
-        disabled,
-        disabledVariant,
-        size,
-        className,
-        class: classs,
-        ...props
-      } = _ref;
-      (_labelPosition = labelPosition) !== null && _labelPosition !== void 0 ? _labelPosition : labelPosition = "start";
-      (_size = size) !== null && _size !== void 0 ? _size : size = "md";
-      const {
-        inputId,
-        labelId,
-        useInputLabelInput,
-        useInputLabelLabel
-      } = useInputLabel({
-        inputPrefix: "input-",
-        labelPrefix: "input-label-"
-      });
-      const {
-        useInputLabelInputProps
-      } = useInputLabelInput();
-      const {
-        useInputLabelLabelProps
-      } = useInputLabelLabel({
-        tag: "label"
-      });
-      const isInInputGroup = F(InInputGroupContext);
-      F(InInputGridContext);
-      let stringLabel = `${children}`;
-
-      if (children != null && (labelPosition === "hidden" || labelPosition === "placeholder")) {
-        if (!["string", "number", "boolean"].includes(typeof children)) console.error(`Hidden labels require a string-based label for the aria-label attribute.`);else {
-          props["aria-label"] = stringLabel;
-          if (placeholder == null && labelPosition === "placeholder") placeholder = stringLabel;
-        }
-      }
-
-      const IC = disabled && disabledVariant === "text" ? InputGroupText : UnlabelledInput;
-
-      const labelJsx = e$3("label", { ...useInputLabelLabelProps({
-          class: clsx(disabledVariant !== "text" && disabled && "disabled", isInInputGroup ? "input-group-text" : labelPosition != "floating" ? "form-label" : "")
-        }),
-        children: children
-      });
-
-      let inputJsx = e$3(IC, { ...useInputLabelInputProps(useMergedProps()({
-          children: IC === InputGroupText ? value : undefined,
-          value: IC === InputGroupText ? undefined : value !== null && value !== void 0 ? value : undefined,
-          placeholder: IC === InputGroupText ? undefined : placeholder,
-          disabled: IC === InputGroupText ? undefined : disabled,
-          disabledVariant: IC === InputGroupText ? undefined : disabledVariant,
-          readOnly: IC === InputGroupText ? undefined : readOnly,
-          className: clsx(IC === InputGroupText ? "form-control" : undefined)
-        }, props)),
-        ...{
-          ref
-        },
-        ...{
-          [IC == InputGroupText ? "children" : "value"]: value
-        },
-        children: IC == InputGroupText ? value : undefined
-      });
-
-      const isEmpty = true ; //if (isInInputGrid) {
-
-      if (!(disabled && disabledVariant === "text")) {
-        inputJsx = e$3("div", {
-          class: clsx(labelPosition != "floating" && classs, labelPosition != "floating" && className, "form-control", "faux-form-control-outer", "elevation-depressed-2", "elevation-body-surface", "focusable-within", !isEmpty , disabled && disabledVariant !== "text" && "disabled", size != "md" && `form-control-${size}`),
-          style: width !== null && width !== void 0 && width.endsWith("ch") ? {
-            "--form-control-width": width !== null && width !== void 0 ? width : "20ch"
-          } : width ? {
-            width
-          } : undefined,
-          children: inputJsx
-        });
-      } // }
-
-
-      const inputWithLabel = e$3(d$2, {
-        children: [labelPosition === "start" && labelJsx, inputJsx, (labelPosition === "end" || labelPosition == "floating") && labelJsx]
-      });
-
-      if (labelPosition !== "floating") return inputWithLabel;else return e$3("div", {
-        class: clsx("form-floating", labelPosition == "floating" && classs, labelPosition === "floating" && className),
-        children: inputJsx
-      });
-    }));
-
-    /**
-     * Very simple, easy responsive grid that guarantees each column is the minimum size.
-     *
-     * Use leftover to control what happens when there's more space than minimally required.
-     * * "fill" to have each element expand equally to fill the remaining space
-     * * "shrink" to keep as many elements on one line as possible
-     *
-     * Easy one-liners all around here!
-     */
-
-    const GridResponsive = g$1(forwardElementRef(function ResponsiveGrid(_ref, ref) {
-      var _children$props$child, _children$props;
-
-      let {
-        tag,
-        minWidth,
-        leftover,
-        children,
-        ...props
-      } = _ref;
-      const mergedProps = useMergedProps()({
-        className: "responsive-grid",
-        style: minWidth ? {
-          "--grid-min-width": `${minWidth}`,
-          ...{
-            "--grid-auto-behavior": leftover ? `auto-${leftover == "shrink" ? "fit" : leftover}` : undefined
-          }
-        } : {},
-        ref
-      }, props);
-      const passthroughProps = useMergedProps()(mergedProps, (_children$props$child = children === null || children === void 0 ? void 0 : (_children$props = children.props) === null || _children$props === void 0 ? void 0 : _children$props.children) !== null && _children$props$child !== void 0 ? _children$props$child : {});
-      if (tag === "passthrough") return B(children, passthroughProps);else return v$2(tag !== null && tag !== void 0 ? tag : "div", mergedProps, children);
-    }));
-    /**
-     * Very simple, easy static grid that guarantees the number of columns is displayed,
-     * no matter how janky it looks.
-     */
-
-    const GridStatic = g$1(forwardElementRef(function ResponsiveGrid(_ref2, ref) {
-      var _children$props$child2, _children$props2;
-
-      let {
-        tag,
-        columns,
-        children,
-        ...props
-      } = _ref2;
-      const mergedProps = useMergedProps()({
-        className: "static-grid",
-        style: typeof columns === "string" ? {
-          "--static-grid-columns": columns
-        } : {
-          "--grid-column-count": columns
-        },
-        ref
-      }, props);
-      const passthroughProps = useMergedProps()(mergedProps, (_children$props$child2 = children === null || children === void 0 ? void 0 : (_children$props2 = children.props) === null || _children$props2 === void 0 ? void 0 : _children$props2.children) !== null && _children$props$child2 !== void 0 ? _children$props$child2 : {});
-      if (tag === "passthrough") return B(children, passthroughProps);else return v$2(tag !== null && tag !== void 0 ? tag : "div", mergedProps, children);
-    }));
-
-    /**
-     * Autocomplete access to the most common Bootstrap utility classes.
-     *
-     * Not necessary to use by any means -- just a reminder about what can be used when.
-     */
-    const UtilityClasses = {
-      position: {
-        relative: 'position-relative',
-        static: 'position-static',
-        absolute: 'position-absolute',
-        fixed: 'position-fixed',
-        sticky: 'position-sticky'
-      },
-      display: {
-        none: 'd-none',
-        flex: 'd-flex',
-        inlineFlex: 'd-inline-flex',
-        inline: 'd-inline',
-        inlineBlock: 'd-inline-block',
-        block: 'd-block',
-        grid: 'd-grid',
-        table: 'd-table',
-        tableRow: 'd-table-row',
-        tableCell: 'd-table-cell'
-      },
-      flex: {
-        parent: {
-          direction: {
-            row: 'flex-row',
-            rowReverse: 'flex-row-reverse',
-            column: 'flex-column',
-            columnReverse: 'flex-column-reverse'
-          },
-          justify: {
-            start: 'justify-content-start',
-            end: 'justify-content-end',
-            center: 'justify-content-center',
-            between: 'justify-content-between',
-            around: 'justify-content-around',
-            evenly: 'justify-content-evenly'
-          },
-          align: {
-            start: 'align-items-start',
-            end: 'align-items-end',
-            center: 'align-items-center',
-            baseline: 'align-items-baseline',
-            stretch: 'align-items-stretch '
-          }
-        },
-        children: {
-          align: {
-            start: 'align-self-start',
-            end: 'align-self-end',
-            center: 'align-self-center',
-            baseline: 'align-self-baseline',
-            stretch: 'align-self-stretch '
-          },
-          wrap: {
-            wrap: 'flex-wrap',
-            nowrap: 'flex-nowrap',
-            wrapReverse: 'flex-wrap-reverse'
-          }
-        }
-      },
-      userSelect: {
-        all: 'user-select-all',
-        auto: 'user-select-auto',
-        none: 'user-select-none'
-      },
-      pointerEvents: {
-        none: 'pe-none',
-        auto: 'pe-auto'
-      },
-      overflow: {
-        auto: 'overflow-auto',
-        hidden: 'overflow-hidden',
-        visible: 'overflow-visible',
-        scroll: 'overflow-scroll'
-      },
-      text: {
-        align: {
-          start: 'text-start',
-          center: 'text-center',
-          end: 'text-end'
-        },
-        wrapping: {
-          wrap: 'text-wrap',
-          nowrap: 'text-nowrap',
-          break: 'text-break',
-          truncate: 'text-truncate'
-        },
-        transform: {
-          uppercase: 'text-uppercase',
-          lowercase: 'text-lowercase',
-          capitalize: 'text-capitalize'
-        },
-        decoration: {
-          none: 'text-decoration-none',
-          underline: 'text-decoration-underline',
-          lineThrough: 'text-decoration-line-through'
-        }
-      }
-    };
-
-    const ListStatic = g$1(forwardElementRef(function ListStatic(props, ref) {
-      const {
-        tag,
-        label,
-        inline,
-        flush,
-        labelPosition,
-        ...domProps
-      } = props;
-      let labelVnode = typeof label == "string" ? e$3("label", {
-        children: label
-      }) : label;
-      return e$3(d$2, {
-        children: [labelPosition === "start" && labelVnode, v$2(tag !== null && tag !== void 0 ? tag : "ul", useMergedProps()({
-          class: clsx("list-group", flush && "list-group-flush", inline && UtilityClasses.display.inline),
-          ref,
-          "aria-hidden": labelPosition === "hidden" ? label : undefined
-        }, domProps)), labelPosition === "end" && labelVnode]
-      });
-    }));
-    const ListItemStatic = g$1(forwardElementRef(function ListItemStatic(props, ref) {
-      const {
-        children,
-        badge,
-        iconStart,
-        iconEnd,
-        disabled,
-        ...domProps
-      } = { ...props,
-        ref
-      };
-      return e$3("li", { ...usePseudoActive(useMergedProps()({
-          children: e$3(d$2, {
-            children: [iconStart && e$3("span", {
-              class: "list-group-item-start-icon",
-              children: iconStart
-            }), children, badge && e$3("span", {
-              class: "list-group-item-badge",
-              children: badge
-            }), iconEnd && e$3("span", {
-              className: "list-group-item-end-icon",
-              children: iconEnd
-            })]
-          }),
-          class: clsx("list-group-item list-group-item-multiline", disabled && "disabled text-muted", !!badge && "with-badge", !!iconStart && "with-start", !!(badge || iconEnd) && "with-end")
-        }, domProps))
-      });
-    }));
-
-    const UseListboxMultiItemContext = D$1(null);
-    const ListMulti = g$1(forwardElementRef(function ListMulti(props, ref) {
-      var _labelPosition;
-
-      useLogRender("ListMulti", `Rendering ListMulti`);
-      let {
-        collator,
-        keyNavigation,
-        noTypeahead,
-        noWrap,
-        typeaheadTimeout,
-        tag,
-        select,
-        label,
-        labelPosition,
-        ...domProps
-      } = props;
-      useAsyncHandler()({
-        capture: e => e[EventDetail].selectedIndex
-      });
-      const {
-        useListboxMultiItem,
-        useListboxMultiLabel,
-        useListboxMultiProps,
-        currentTypeahead,
-        focus,
-        invalidTypeahead,
-        tabbableIndex
-      } = useAriaListboxMulti({
-        typeaheadTimeout,
-        noWrap,
-        noTypeahead,
-        keyNavigation,
-        collator
-      });
-      const {
-        useListboxMultiLabelProps
-      } = useListboxMultiLabel();
-      (_labelPosition = labelPosition) !== null && _labelPosition !== void 0 ? _labelPosition : labelPosition = "start";
-      let labelProps = typeof label == "string" ? {} : label.props;
-      let clonedLabel = labelPosition != "hidden" ? B(typeof label == "string" ? e$3("label", {
-        children: label
-      }) : label, useListboxMultiLabelProps(labelProps)) : label;
-      console.assert(!(labelPosition == "hidden" && typeof label != "string"));
-      return e$3(UseListboxMultiItemContext.Provider, {
-        value: useListboxMultiItem,
-        children: e$3(ListStatic, {
-          tag: tag,
-          labelPosition: labelPosition,
-          label: clonedLabel,
-          ...useMergedProps()({
-            class: "list-group",
-            ref,
-            "aria-hidden": labelPosition === "hidden" ? label : undefined
-          }, useListboxMultiProps(domProps))
-        })
-      });
-    }));
-    const ListItemMulti = g$1(forwardElementRef(function ListItemMulti(p, ref) {
-      const {
-        childrenText,
-        props: {
-          index,
-          selected,
-          disabled,
-          onSelect: onSelectAsync,
-          children,
-          ...domProps
-        }
-      } = useChildrenTextProps({ ...p,
-        ref
-      });
-      useLogRender("ListMulti", `Rendering ListMultiItem #${index}`);
-      const useListItemMulti = F(UseListboxMultiItemContext);
-      console.assert(!!useListItemMulti, "ListItemMulti is being used outside of a multi-select list. Did you mean to use a different kind of list, or a different kind of list item?");
-      const {
-        useSyncHandler,
-        pending,
-        currentCapture,
-        hasError,
-        resolveCount
-      } = useAsyncHandler()({
-        capture: e => e[EventDetail].selected
-      });
-      const onSelectSync = useSyncHandler(disabled ? null : onSelectAsync);
-      const {
-        tabbable,
-        useListboxMultiItemProps
-      } = useListItemMulti({
-        index,
-        text: childrenText,
-        tag: "li",
-        selected: currentCapture !== null && currentCapture !== void 0 ? currentCapture : selected,
-        onSelect: onSelectSync,
-        disabled
-      });
-      return e$3(ProgressCircular, {
-        childrenPosition: "child",
-        mode: pending ? "pending" : hasError ? "failed" : resolveCount ? "succeeded" : null,
-        colorVariant: "info",
-        children: e$3(ListItemStatic, { ...usePseudoActive(useMergedProps()({
-            disabled,
-            class: clsx("list-group-item-action", selected && "active", pending && "pending")
-          }, useListboxMultiItemProps(domProps))),
-          children: children
-        })
-      });
-    }));
-
-    const UseListboxSingleItemContext = D$1(null);
-    const ListSingle = g$1(forwardElementRef(function ListSingle(props, ref) {
-      var _labelPosition;
-
-      useLogRender("ListSingle", `Rendering ListSingle`);
-      let {
-        onSelect: onSelectAsync,
-        selectedIndex,
-        selectionMode,
-        collator,
-        keyNavigation,
-        noTypeahead,
-        noWrap,
-        typeaheadTimeout,
-        tag,
-        select,
-        labelPosition,
-        label,
-        ...domProps
-      } = props;
-      const {
-        useSyncHandler,
-        pending,
-        currentCapture
-      } = useAsyncHandler()({
-        capture: e => e[EventDetail].selectedIndex
-      });
-      const onSelect = useSyncHandler(onSelectAsync);
-      const {
-        useListboxSingleItem,
-        useListboxSingleLabel,
-        useListboxSingleProps,
-        managedChildren
-      } = useAriaListboxSingle({
-        onSelect,
-        selectedIndex: selectedIndex,
-        selectionMode: selectionMode !== null && selectionMode !== void 0 ? selectionMode : "activate",
-        typeaheadTimeout,
-        noWrap,
-        noTypeahead,
-        keyNavigation,
-        collator
-      });
-      const {
-        useListboxSingleLabelProps
-      } = useListboxSingleLabel();
-      useChildFlag({
-        activatedIndex: pending ? currentCapture : null,
-        managedChildren,
-        getChildFlag: A$2(i => managedChildren[i].getPending(), []),
-        setChildFlag: A$2((i, set) => managedChildren[i].setPending(set), [])
-      });
-      (_labelPosition = labelPosition) !== null && _labelPosition !== void 0 ? _labelPosition : labelPosition = "start";
-      let labelProps = typeof label == "string" ? {} : label.props;
-      let clonedLabel = labelPosition != "hidden" ? B(typeof label == "string" ? e$3("label", {
-        children: label
-      }) : label, useListboxSingleLabelProps(labelProps)) : label;
-      console.assert(!(labelPosition == "hidden" && typeof label != "string"));
-      return e$3(UseListboxSingleItemContext.Provider, {
-        value: useListboxSingleItem,
-        children: e$3(ListStatic, {
-          tag: tag,
-          labelPosition: labelPosition,
-          label: clonedLabel,
-          ...useMergedProps()({
-            class: "list-group",
-            ref,
-            "aria-hidden": labelPosition === "hidden" ? label : undefined
-          }, useListboxSingleProps(domProps))
-        })
-      });
-    }));
-    const ListItemSingle = g$1(forwardElementRef(function ListItemSingle(p, ref) {
-      let {
-        childrenText,
-        props: {
-          index,
-          hidden,
-          disabled,
-          children,
-          ...domProps
-        }
-      } = useChildrenTextProps({ ...p,
-        ref
-      });
-      useLogRender("ListSingle", `Rendering ListSingleItem #${index}`);
-      const [pending, setPending, getPending] = useState(false);
-      const useListItemSingle = F(UseListboxSingleItemContext);
-      console.assert(!!useListItemSingle, "ListItemSingle is being used outside of a single-select list. Did you mean to use a different kind of list, or a different kind of list item?");
-      const {
-        getSelected,
-        tabbable,
-        selected,
-        useListboxSingleItemProps
-      } = useListItemSingle({
-        index,
-        text: childrenText,
-        tag: "li",
-        setPending,
-        getPending,
-        hidden,
-        disabled
-      });
-      return e$3(ProgressCircular, {
-        childrenPosition: "child",
-        mode: pending ? "pending" : null,
-        colorVariant: "info",
-        children: e$3(ListItemStatic, { ...usePseudoActive(useMergedProps()({
-            disabled,
-            class: clsx("list-group-item-action", selected && "active", pending && "pending")
-          }, useListboxSingleItemProps(domProps))),
-          children: children
-        })
-      });
-    }));
-
-    const ListActionableChildContext = D$1(null);
-    const ListActionable = g$1(forwardElementRef(function ListActionable(props, ref) {
-      const {
-        useHasFocusProps,
-        getFocusedInner
-      } = useHasFocus({});
-      const {
-        indicesByElement,
-        managedChildren,
-        useListNavigationProps,
-        useListNavigationChild,
-        navigateToIndex,
-        childCount
-      } = useListNavigation({
-        shouldFocusOnChange: getFocusedInner,
-        keyNavigation: "block"
-      });
-      const listStaticProps = useHasFocusProps(useListNavigationProps(props));
-      return e$3(ListActionableChildContext.Provider, {
-        value: useListNavigationChild,
-        children: e$3(ListStatic, {
-          role: childCount ? "toolbar" : undefined,
-          ...listStaticProps
-        })
-      });
-    }));
-    const ListItemActionable = g$1(forwardElementRef(function ListItemActionable(props, ref) {
-      const {
-        childrenText,
-        props: {
-          onPress,
-          index,
-          hidden,
-          children,
-          ...domPropsWithoutPress
-        }
-      } = useChildrenTextProps({ ...props,
-        ref
-      });
-      const useListNavigationChild = F(ListActionableChildContext);
-      const {
-        useListNavigationChildProps
-      } = useListNavigationChild({
-        index,
-        text: childrenText,
-        hidden
-      });
-      const {
-        pending,
-        hasError,
-        useSyncHandler
-      } = useAsyncHandler()({
-        capture: returnVoid
-      });
-      const domProps = useMergedProps()({
-        className: clsx("list-group-item-action", pending && "pending")
-      }, useListNavigationChildProps(usePressEventHandlers(useSyncHandler(props.disabled || pending ? undefined : onPress), undefined)(domPropsWithoutPress)));
-      return e$3(ProgressCircular, {
-        childrenPosition: "child",
-        mode: pending ? "pending" : null,
-        colorVariant: "info",
-        children: e$3(ListItemStatic, { ...domProps,
-          children: children
-        })
-      });
-    }));
-
-    function returnVoid() {
-      return undefined;
-    }
-
-    function isSingleProps(props) {
-      return props.select == "single" || props.onSelect != null;
-    }
-
-    function isMultiProps(props) {
-      return props.select == "multi";
-    }
-
-    function isSingleItemProps(props) {
-      return props.index != null && !isActionableItemProps(props);
-    }
-
-    function isMultiItemProps(props) {
-      return props.onSelect != null;
-    }
-
-    function isActionableItemProps(props) {
-      return props.onPress != null;
-    }
-
-    const List = g$1(forwardElementRef(function List(props, ref) {
-      if (isSingleProps(props)) return e$3(ListSingle, { ...props,
-        ref: ref
-      });else if (isMultiProps(props)) return e$3(ListMulti, { ...props,
-        ref: ref
-      }); // There's no meaningful distinction between an actionable list and a static one
-      // (on the outside at least)
-      // but also there's no harm in just always assuming an actionable list.
-      // It doesn't cost much to not use the list navigation after all.
-
-      return e$3(ListActionable, { ...props,
-        ref: ref
-      });
-    }));
-    g$1(forwardElementRef(function ListItem(props, ref) {
-      if (isSingleItemProps(props)) return e$3(ListItemSingle, { ...props,
-        ref: ref
-      });else if (isMultiItemProps(props)) return e$3(ListItemMulti, { ...props,
-        ref: ref
-      });else if (isActionableItemProps(props)) return e$3(ListItemActionable, { ...props,
-        ref: ref
-      });else return e$3(ListItemStatic, { ...props,
-        ref: ref
-      });
-    }));
-
     const FocusModeContext = D$1("keyboard");
     /**
      * Returns whether it's more likely that the user is currently
@@ -15780,6 +14305,1506 @@
             })
           })
         })]
+      });
+    }));
+
+    function capture$1(e) {
+      return e[EventDetail].checked;
+    }
+    /**
+     * TODO: When inside an InputGroup, Checkboxes don't forward any properties or refs because there's no one DOM element to attach to.
+     *
+     * Probably need separate `inputRef` & `labelRef` properties for that,
+     * but given there's also no easy way to forward props to just them a solution like that feels incomplete.
+     */
+
+
+    const Checkbox = g$1(forwardElementRef(function Checkbox(_ref, ref) {
+      var _labelPosition, _disabled;
+
+      let {
+        checked,
+        disabled,
+        onCheck: onCheckedAsync,
+        labelPosition,
+        children: label,
+        ...props
+      } = _ref;
+      (_labelPosition = labelPosition) !== null && _labelPosition !== void 0 ? _labelPosition : labelPosition = "end";
+      const {
+        useSyncHandler,
+        pending,
+        hasError,
+        settleCount,
+        hasCapture,
+        currentCapture,
+        currentType
+      } = useAsyncHandler()({
+        capture: capture$1
+      });
+      disabled || (disabled = pending);
+      const onChecked = useSyncHandler(onCheckedAsync);
+      const {
+        useCheckboxInputElement,
+        useCheckboxLabelElement
+      } = useAriaCheckbox({
+        checked: pending ? currentCapture : checked === "indeterminate" ? "mixed" : checked,
+        disabled: (_disabled = disabled) !== null && _disabled !== void 0 ? _disabled : false,
+        onInput: onChecked,
+        labelPosition: "separate"
+      });
+      const {
+        useCheckboxInputElementProps
+      } = useCheckboxInputElement({
+        tag: "input"
+      });
+      const {
+        useCheckboxLabelElementProps
+      } = useCheckboxLabelElement({
+        tag: "label"
+      });
+      const {
+        useCheckboxLabelElementProps: useWrapperLabelProps
+      } = useCheckboxLabelElement({
+        tag: "div"
+      });
+      const inInputGroup = F(InInputGroupContext);
+      let stringLabel = `${label}`;
+
+      if (label != null && labelPosition === "hidden" && !["string", "number", "boolean"].includes(typeof label)) {
+        console.error(`Hidden labels require a string-based label for the aria-label attribute.`);
+      }
+
+      const asyncState = hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null;
+      const propsForInput = useMergedProps()(props, useCheckboxInputElementProps({
+        ref,
+        type: "checkbox",
+        className: clsx("form-check-input", pending && "pending", disabled && "disabled", inInputGroup && "mt-0"),
+        "aria-label": labelPosition === "hidden" ? stringLabel : undefined
+      }));
+
+      const inputElement = e$3(OptionallyInputGroup$1, {
+        isInput: true,
+        tag: inInputGroup ? "div" : null,
+        ...useWrapperLabelProps({
+          disabled,
+          tabIndex: -1
+        }),
+        children: e$3(ProgressCircular, {
+          childrenPosition: "after",
+          colorFill: "foreground-only",
+          mode: currentType === "async" ? asyncState : null,
+          colorVariant: "info",
+          children: e$3("input", { ...propsForInput
+          })
+        })
+      });
+
+      const p2 = { ...useCheckboxLabelElementProps({
+          className: clsx(pending && "pending", disabled && "disabled", "form-check-label"),
+          "aria-hidden": "true"
+        })
+      };
+
+      const labelElement = e$3(d$2, {
+        children: label != null && e$3(OptionallyInputGroup$1, {
+          isInput: false,
+          tag: "label",
+          ...p2,
+          children: label
+        })
+      });
+
+      const inputWithLabel = e$3(d$2, {
+        children: [labelPosition == "start" && labelElement, inputElement, labelPosition == "end" && labelElement]
+      });
+
+      const inputWithInputGroup = !inInputGroup ? e$3("div", { ...useMergedProps()({}, {
+          class: "form-check"
+        }),
+        children: inputWithLabel
+      }) : inputWithLabel;
+      const inputWithTooltip = labelPosition == "tooltip" ? e$3(Tooltip, {
+        tooltip: labelElement,
+        children: inputWithInputGroup
+      }) : inputWithInputGroup;
+      return inputWithTooltip;
+    }));
+    const OptionallyInputGroup$1 = forwardElementRef(function OptionallyInputGroup(_ref2, ref) {
+      let {
+        tag,
+        children,
+        isInput,
+        ...props
+      } = _ref2;
+      const inInputGroup = F(InInputGroupContext);
+      const inInputGrid = !!F(InInputGridContext);
+      props = { ...props,
+        ref
+      };
+      if (!inInputGroup) return v$2(tag !== null && tag !== void 0 ? tag : d$2, props, children); // If we're in an InputGrid's InputGroup, then create a 
+      // new child that's, CSS-wise, the "true" input.
+      // The other one is used for its border styles and relative positioning.
+
+      if (inInputGrid && isInput) children = e$3("div", {
+        className: "input-group-text",
+        children: children
+      });
+      return e$3(InputGroupText, {
+        tag: tag !== null && tag !== void 0 ? tag : "div",
+        ...useMergedProps()({
+          className: clsx(isInput && inInputGrid && "faux-input-group-text")
+        }, props),
+        children: children
+      });
+    });
+
+    /**
+     * Utility function for a parent that quickly needs the text content of its children,
+     * ideally as the `children` prop, but will fall back to a mutation observer if necessary.
+     *
+     * Returns the text content, and the modified props to use for the parent.
+     *
+     * @param props
+     * @returns
+     */
+
+    function useChildrenTextProps(props) {
+      const children = props.children;
+      const childrenNotStringable = !childrenIsStringable(children);
+      const [text, setText] = useState(() => childrenNotStringable ? null : childrenToString(children));
+      const onElementUpdate = A$2(element => {
+        if (childrenNotStringable) {
+          var _element$textContent;
+
+          setText(((_element$textContent = element === null || element === void 0 ? void 0 : element.textContent) !== null && _element$textContent !== void 0 ? _element$textContent : "").trim());
+        }
+      }, [childrenNotStringable]);
+      const {
+        useRefElementProps,
+        getElement
+      } = useRefElement({
+        onElementChange: onElementUpdate
+      });
+      const {
+        useMutationObserverProps
+      } = useMutationObserver(childrenNotStringable ? {
+        subtree: true,
+        onCharacterData: info => onElementUpdate(getElement())
+      } : null);
+      y$1(() => {
+        if (!childrenNotStringable) {
+          setText(childrenToString(children));
+        }
+      }, [childrenNotStringable, childrenNotStringable ? null : children]);
+      return {
+        childrenText: text,
+        props: useMutationObserverProps(useRefElementProps(props))
+      };
+    }
+
+    function childrenToString(children) {
+      if (children == null) return "";else if (Array.isArray(children)) return children.map(child => childrenToString(child)).join("");else if (typeof children == "string") return children;else if (typeof children == "boolean") return "";
+      return `${children}`;
+    }
+
+    function childrenIsStringable(children) {
+      if (children == null) return true;else if (Array.isArray(children)) {
+        for (let child of children) {
+          if (!childrenIsStringable(child)) return false;
+        }
+
+        return true;
+      } else if (typeof children === "string") return true;else if (typeof children === "number") return true;else if (typeof children === "bigint") return true;else if (typeof children === "boolean") return true;
+      return false;
+    }
+
+    D$1(null);
+    D$1(false);
+    D$1(null);
+    /**
+     * This is a child checkbox of a `CheckboxGroup`.
+     *
+     * Effectively the only differences to a normal `Checkbox` are
+     * the addition of an `index` prop and the fact that your
+     * onCheck must be able to handle "mixed" as a value, which can
+     * occur if the child is set to be mixed, unset by the parent
+     * checkbox, and then "restored" by the parent checkbox a few
+     * clicks later.
+     *
+     * @param param0
+     * @returns
+     */
+
+    g$1(forwardElementRef(function CheckboxGroupChild(p, ref) {
+      var _id;
+
+      let {
+        childrenText,
+        props: {
+          index,
+          checked,
+          onCheck,
+          id,
+          ...props
+        }
+      } = useChildrenTextProps({ ...p,
+        ref
+      });
+      const randomId = generateRandomId("cbc-");
+      (_id = id) !== null && _id !== void 0 ? _id : id = randomId;
+      const useCheckboxGroupChild = F(UseCheckboxGroupChildContext);
+
+      let setChecked = checked => {
+        return onCheck(checked, null);
+      };
+
+      const {
+        tabbable,
+        useCheckboxGroupChildProps
+      } = useCheckboxGroupChild({
+        index,
+        checked,
+        text: childrenText,
+        id,
+        setChecked
+      });
+      return e$3(Checkbox, { ...useCheckboxGroupChildProps({
+          id,
+          ...props
+        }),
+        onCheck: onCheck,
+        checked: checked
+      });
+    }));
+
+    const knownNames = new Set();
+    const CurrentHandlerTypeContext = D$1("sync");
+    const RadioGroupContext = D$1(null);
+    const RadioGroup = g$1(forwardElementRef(function RadioGroup(_ref, ref) {
+      var _name;
+
+      let {
+        children,
+        name,
+        selectedValue,
+        label,
+        labelPosition,
+        onValueChange: onInputAsync
+      } = _ref;
+      const {
+        useSyncHandler,
+        pending,
+        hasError,
+        settleCount,
+        currentCapture,
+        currentType
+      } = useAsyncHandler()({
+        capture: e => e[EventDetail].selectedValue
+      });
+      const onInput = useSyncHandler(onInputAsync);
+      const {
+        randomId: backupName
+      } = useRandomId({
+        prefix: "radio-"
+      });
+      (_name = name) !== null && _name !== void 0 ? _name : name = backupName;
+      const {
+        useRadio,
+        useRadioGroupProps,
+        managedChildren,
+        selectedIndex
+      } = useAriaRadioGroup({
+        name,
+        selectedValue: pending ? currentCapture : selectedValue,
+        onInput: onInput
+      });
+      let stringLabel = undefined;
+
+      if (labelPosition === "hidden") {
+        if (label != null && !["string", "number", "boolean"].includes(typeof label)) {
+          console.error(`Hidden labels require a string-based label for the aria-label attribute.`);
+        } else {
+          stringLabel = `${label}`;
+        }
+      } // Debugging check -- multiple groups with the same name can cause weird glitches from native radio selection behavior.
+
+
+      useEffect(() => {
+        if (knownNames.has(name)) {
+          console.error(`Multiple radio groups with the name "${name}" exist on the same page at the same time!`);
+        }
+
+        knownNames.add(name);
+        return () => knownNames.delete(name);
+      }, [name]); //useChildFlag(selectedIndex, managedChildren.length, (index, isSelected) =>{ managedChildren[index]?.setAsyncState(isSelected? (hasError? "failed" : pending? "pending" :  "succeeded") : null )});
+      // Any time the selected index changes, let the previous radio button know that it shouldn't be displaying a spinner (if it was).
+
+      const currentCheckboxPendingState = hasError ? "failed" : pending ? "pending" : "succeeded";
+      useEffect(prev => {
+        if (prev) {
+          var _managedChildren$prev;
+
+          const [prevSelectedIndex] = prev;
+          if (prevSelectedIndex != null && prevSelectedIndex >= 0 && prevSelectedIndex < managedChildren.length) (_managedChildren$prev = managedChildren[prevSelectedIndex]) === null || _managedChildren$prev === void 0 ? void 0 : _managedChildren$prev.setAsyncState(null);
+        }
+      }, [selectedIndex]);
+      useEffect(() => {
+        var _managedChildren$sele;
+
+        if (selectedIndex != null && selectedIndex >= 0 && selectedIndex < managedChildren.length) (_managedChildren$sele = managedChildren[selectedIndex]) === null || _managedChildren$sele === void 0 ? void 0 : _managedChildren$sele.setAsyncState(currentCheckboxPendingState);
+      }, [selectedIndex, currentCheckboxPendingState]); // useChildFlag(pending ? capturedIndex : null, managedChildren.length, useCallback((index, isCaptured) => managedChildren[index].setPending(isCaptured? "in" : false), []));
+
+      const {
+        useGenericLabelLabel,
+        useGenericLabelInput,
+        useReferencedInputIdProps
+      } = useGenericLabel({
+        inputPrefix: "aria-radiogroup",
+        labelPrefix: "aria-radiogroup-label",
+        backupText: stringLabel
+      });
+      const {
+        useGenericLabelInputProps
+      } = useGenericLabelInput();
+      const {
+        useGenericLabelLabelProps
+      } = useGenericLabelLabel();
+
+      let labelJsx = e$3("label", { ...useGenericLabelLabelProps(useReferencedInputIdProps("for")({
+          children: label
+        }))
+      });
+
+      let groupJsx = e$3("div", { ...useGenericLabelInputProps(useRadioGroupProps({
+          ref,
+          "aria-label": labelPosition === "hidden" ? stringLabel : undefined
+        })),
+        children: children
+      });
+
+      return e$3(CurrentHandlerTypeContext.Provider, {
+        value: currentType !== null && currentType !== void 0 ? currentType : "sync",
+        children: e$3(RadioGroupContext.Provider, {
+          value: useRadio,
+          children: [labelPosition == "start" && labelJsx, groupJsx, labelPosition == "end" && labelJsx]
+        })
+      });
+    }));
+    const Radio = g$1(forwardElementRef(function Radio(_ref2, ref) {
+      var _labelPosition, _disabled, _label;
+
+      let {
+        disabled,
+        children: label,
+        index,
+        value,
+        labelPosition
+      } = _ref2;
+      const useAriaRadio = F(RadioGroupContext);
+      (_labelPosition = labelPosition) !== null && _labelPosition !== void 0 ? _labelPosition : labelPosition = "end";
+      const text = null;
+      const currentHandlerType = F(CurrentHandlerTypeContext);
+      const [asyncState, setAsyncState] = useState(null);
+      disabled || (disabled = asyncState === "pending");
+      const {
+        useRadioInput,
+        useRadioLabel
+      } = useAriaRadio({
+        disabled: (_disabled = disabled) !== null && _disabled !== void 0 ? _disabled : false,
+        labelPosition: "separate",
+        index,
+        text,
+        value,
+        setAsyncState
+      });
+      const {
+        useRadioInputProps
+      } = useRadioInput({
+        tag: "input"
+      });
+      const {
+        useRadioLabelProps
+      } = useRadioLabel({
+        tag: "label"
+      });
+      useRadioLabel({
+        tag: "div"
+      });
+      const inInputGroup = F(InInputGroupContext);
+      (_label = label) !== null && _label !== void 0 ? _label : label = value;
+      let stringLabel = `${label}`;
+
+      if (label != null && labelPosition === "hidden" && !["string", "number", "boolean"].includes(typeof label)) {
+        console.error(`Hidden labels require a string-based label for the aria-label attribute.`);
+      }
+
+      const inputElement = e$3(OptionallyInputGroup$1, {
+        isInput: true,
+        tag: inInputGroup ? "div" : null,
+        ...useRadioLabelProps({
+          disabled,
+          tabIndex: -1
+        }),
+        children: e$3(ProgressCircular, {
+          childrenPosition: "after",
+          colorFill: "foreground-only",
+          mode: currentHandlerType == "async" ? asyncState : null,
+          colorVariant: "info",
+          children: e$3("input", { ...useRadioInputProps({
+              ref,
+              type: "radio",
+              className: clsx(asyncState === "pending" && "pending", disabled && "disabled", "form-check-input"),
+              "aria-label": labelPosition === "hidden" ? stringLabel : undefined
+            })
+          })
+        })
+      });
+
+      const labelElement = e$3(d$2, {
+        children: label != null && e$3(OptionallyInputGroup$1, {
+          isInput: false,
+          tag: "label",
+          ...useRadioLabelProps({
+            className: clsx(asyncState === "pending" && "pending", disabled && "disabled", "form-check-label"),
+            "aria-hidden": "true"
+          }),
+          children: label
+        })
+      });
+
+      const inputWithLabel = e$3(d$2, {
+        children: [labelPosition == "start" && labelElement, inputElement, labelPosition == "end" && labelElement]
+      });
+
+      const inputWithInputGroup = !inInputGroup ? e$3("div", {
+        class: "form-check",
+        children: inputWithLabel
+      }) : inputWithLabel;
+      const inputWithTooltip = labelPosition == "tooltip" ? e$3(Tooltip, {
+        tooltip: labelElement,
+        children: inputWithInputGroup
+      }) : inputWithInputGroup;
+      return inputWithTooltip;
+    }));
+
+    /**
+     * @see Checkbox
+     * @param ref
+     * @returns
+     */
+
+    const Switch = g$1(forwardElementRef(function Switch(_ref, ref) {
+      var _labelPosition, _disabled;
+
+      let {
+        checked,
+        disabled,
+        onCheck: onInputAsync,
+        children: label,
+        labelPosition,
+        ...rest
+      } = _ref;
+      (_labelPosition = labelPosition) !== null && _labelPosition !== void 0 ? _labelPosition : labelPosition = "end";
+      const {
+        useSyncHandler,
+        pending,
+        currentType,
+        hasError,
+        settleCount,
+        currentCapture
+      } = useAsyncHandler()({
+        capture: e => e[EventDetail].checked
+      });
+      const asyncState = hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null;
+      disabled || (disabled = pending);
+      const onInput = useSyncHandler(onInputAsync);
+      const {
+        useCheckboxInputElement: useSwitchInputElement,
+        useCheckboxLabelElement: useSwitchLabelElement
+      } = useAriaCheckbox({
+        checked: pending ? currentCapture : checked,
+        disabled: (_disabled = disabled) !== null && _disabled !== void 0 ? _disabled : false,
+        onInput,
+        labelPosition: "separate"
+      });
+      const {
+        useCheckboxInputElementProps: useSwitchInputElementProps
+      } = useSwitchInputElement({
+        tag: "input"
+      });
+      const {
+        useCheckboxLabelElementProps: useSwitchLabelElementProps
+      } = useSwitchLabelElement({
+        tag: "label"
+      });
+      const {
+        useCheckboxLabelElementProps: useWrapperLabelProps
+      } = useSwitchLabelElement({
+        tag: "div"
+      });
+      const inInputGroup = F(InInputGroupContext);
+      let stringLabel = `${label}`;
+
+      if (label != null && labelPosition === "hidden" && !["string", "number", "boolean"].includes(typeof label)) {
+        console.error(`Hidden labels require a string-based label for the aria-label attribute.`);
+      }
+
+      const inputElement = e$3(OptionallyInputGroup, {
+        tag: inInputGroup ? "div" : null,
+        isInput: true,
+        ...useWrapperLabelProps({
+          disabled,
+          tabIndex: -1
+        }),
+        children: e$3(ProgressCircular, {
+          childrenPosition: "after",
+          colorFill: "foreground-only",
+          mode: currentType === "async" ? asyncState : null,
+          colorVariant: "info",
+          children: e$3("input", { ...useSwitchInputElementProps({
+              ref,
+              type: "checkbox",
+              className: clsx(pending && "pending", "form-check-input", disabled && "disabled"),
+              "aria-label": labelPosition === "hidden" ? stringLabel : undefined
+            })
+          })
+        })
+      });
+
+      const p2 = { ...useSwitchLabelElementProps({
+          className: clsx(pending && "pending", "form-check-label", disabled && "disabled"),
+          "aria-hidden": "true"
+        })
+      };
+
+      const labelElement = e$3(d$2, {
+        children: label != null && e$3(OptionallyInputGroup, {
+          tag: "label",
+          isInput: false,
+          ...p2,
+          children: label
+        })
+      });
+
+      const inputWithLabel = e$3(d$2, {
+        children: [labelPosition == "start" && labelElement, inputElement, labelPosition == "end" && labelElement]
+      });
+
+      const inputWithInputGroup = !inInputGroup ? e$3("div", { ...useMergedProps()(rest, {
+          class: "form-check form-switch"
+        }),
+        children: inputWithLabel
+      }) : inputWithLabel;
+      const inputWithTooltip = labelPosition == "tooltip" ? e$3(Tooltip, {
+        tooltip: labelElement,
+        children: inputWithInputGroup
+      }) : inputWithInputGroup;
+      return inputWithTooltip;
+    })); // Note: Slightly different from the others
+    // (^^^^ I'm really glad I left that there)
+
+    const OptionallyInputGroup = forwardElementRef(function OptionallyInputGroup(_ref2, ref) {
+      let {
+        tag,
+        isInput,
+        children,
+        ...props
+      } = _ref2;
+      const inInputGroup = F(InInputGroupContext);
+      const inInputGrid = F(InInputGridContext);
+      props = { ...props,
+        ref
+      };
+      if (!inInputGroup) return v$2(tag !== null && tag !== void 0 ? tag : d$2, props, children);
+      if (inInputGrid && isInput) children = e$3("div", {
+        className: clsx(isInput && inInputGrid && "form-switch", "input-group-text"),
+        children: children
+      });
+      return e$3(InputGroupText, {
+        tag: tag !== null && tag !== void 0 ? tag : "div",
+        ...useMergedProps()({
+          className: clsx("input-group-text", isInput && !inInputGrid && "form-switch", isInput && inInputGrid && "faux-input-group-text")
+        }, props),
+        children: children
+      });
+    });
+
+    function return0() {
+      return 0;
+    }
+
+    function UnlabelledInputR(p, ref) {
+      var _disabledVariant;
+
+      let {
+        type,
+        disabled,
+        value,
+        onValueChange: onInputAsync,
+        disabledVariant,
+        readOnly,
+        spinnerTimeout,
+        prefix,
+        suffix,
+        ...p2
+      } = p;
+      let {
+        nullable,
+        ...p3
+      } = p2;
+      const props = p3;
+      (_disabledVariant = disabledVariant) !== null && _disabledVariant !== void 0 ? _disabledVariant : disabledVariant = "soft";
+      const [focusedInner, setFocusedInner, getFocusedInner] = useState(false);
+      const {
+        capture,
+        uncapture
+      } = useInputCaptures(type, props.min, props.max);
+      const {
+        useHasFocusProps
+      } = useHasFocus({
+        onFocusedInnerChanged: setFocusedInner,
+        onFocusedChanged: A$2(focused => {
+          if (!focused) setLRImpatience(0);
+        }, [])
+      });
+      const {
+        useSyncHandler,
+        currentCapture,
+        pending,
+        hasError,
+        settleCount,
+        flushDebouncedPromise,
+        currentType,
+        ...asyncInfo
+      } = useAsyncHandler()({
+        capture: useStableCallback(e => {
+          const ret = capture(e);
+
+          if (ret == null) {
+            if (nullable) return ret;else return value;
+          } else {
+            return ret;
+          }
+        }),
+        debounce: type === "text" ? 1500 : undefined
+      });
+      const onInputIfValid = useSyncHandler(disabled ? null : onInputAsync);
+
+      const onInput = e => {
+        const target = e.currentTarget;
+        return onInputIfValid === null || onInputIfValid === void 0 ? void 0 : onInputIfValid.bind(target)(e);
+      }; // Until a better solution to "can't measure where the cursor is in input type=number" is found
+      // use this to keep track of if the user is hammering left/right trying to escape the text field 
+      // within a larger arrowkey-based navigation system. 
+
+
+      const [getLRImpatience, setLRImpatience] = usePassiveState(null, return0);
+      setInterval(() => {
+        if (getLRImpatience() == 0) {
+          setLRImpatience(prev => {
+            if (prev == null) prev = 0;else if (prev < 0) ++prev;else if (prev > 0) --prev;
+            return prev;
+          });
+        }
+      }, 1000);
+
+      const onKeyDown = e => {
+        if (e.currentTarget.type == "number") {
+          let prevValue = e.currentTarget.value;
+          let nextValue = null;
+          let arrowType = null;
+
+          switch (e.key) {
+            case "ArrowUp":
+              try {
+                e.currentTarget.stepUp();
+              } catch (ex) {
+                debugger;
+              }
+
+              nextValue = e.currentTarget.value;
+              e.currentTarget.value = prevValue;
+              arrowType = "vert";
+              break;
+
+            case "ArrowDown":
+              try {
+                e.currentTarget.stepDown();
+              } catch (ex) {
+                debugger;
+              }
+
+              nextValue = e.currentTarget.value;
+              e.currentTarget.value = prevValue;
+              arrowType = "vert";
+              break;
+
+            case "ArrowLeft":
+              setLRImpatience(prev => Math.max(-e.currentTarget.value.length + 1, (prev !== null && prev !== void 0 ? prev : 0) - 1));
+              arrowType = "horiz";
+              break;
+
+            case "ArrowRight":
+              setLRImpatience(prev => Math.min(e.currentTarget.value.length + 1, (prev !== null && prev !== void 0 ? prev : 0) + 1));
+              arrowType = "horiz";
+              break;
+          }
+
+          if (arrowType === "vert") {
+            // Only prevent anyone else from reacting to this event
+            // if this key press actually changed the value.
+            if (prevValue != nextValue) {
+              e.stopPropagation();
+            }
+          }
+
+          if (arrowType === "horiz") {
+            // No way to detect if we're at the start or end of the input element,
+            // unfortunately, at least when the type is number....
+            //
+            // So instead, we track the number of times the user has
+            // hammered the Left/Right arrows recently
+            // and if it's more than it takes to type the current value,
+            // as an escape we let the event through.
+            //
+            // This is mostly to prevent frustration, but
+            // TODO: really need a proper aria re-implementation of a number
+            // field as a text field (on non-mobile only??).
+            if (Math.abs(getLRImpatience()) <= e.currentTarget.value.length) e.stopPropagation();
+          }
+        }
+      };
+
+      const asyncState = hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null;
+      const onBlur = flushDebouncedPromise;
+      F(InInputGridContext);
+      const extraProps = type === "numeric" ? {
+        inputMode: "numeric",
+        pattern: "[0-9]*"
+      } : {};
+
+      if (type === "numeric") {
+        type = "text";
+      } // When typing numbers, they'll "autocorrect" to their
+      // most natural represented form when the input re-renders.
+      //
+      // This is a problem when typing, e.g., "-5", because
+      // when the user is typing character-by-character, 
+      // the closest number to "-" is "NaN", which makes it
+      // impossible to enter "-5" with the "-" as the first character.
+      //
+      // To fix this, we render the <input> as completely uncontrolled,
+      // and manually update the value during useEffect. If the value
+      // is null, whether it's because of valid or invalid user input,
+      // we'll just not update the value property on the element. We'll
+      // just leave it as it was last entered. Any time the value
+      // is NOT null, then we will take over again.
+      //
+      // TODO: Entering extremely large/small numbers is still rough.
+      //
+      // NOTE: When valueAsNumber is NaN, value is "".  That means
+      // that it's *NOT* possible to store the partially typed
+      // value anywhere -- it's completely hidden away.
+
+
+      const v = pending || focusedInner ? currentCapture : uncapture(value);
+      const {
+        getElement,
+        useRefElementProps
+      } = useRefElement({});
+      y$1(() => {
+        const element = getElement();
+
+        if (element) {
+          if (v != null) {
+            element.value = `${v}`;
+          }
+        }
+      }, [v]);
+      return e$3(d$2, {
+        children: [prefix && e$3("span", {
+          class: "form-control-prefix",
+          children: prefix
+        }), e$3(ProgressCircular, {
+          spinnerTimeout: spinnerTimeout !== null && spinnerTimeout !== void 0 ? spinnerTimeout : 10,
+          mode: currentType === "async" ? asyncState : null,
+          childrenPosition: "after",
+          colorVariant: "info",
+          children: e$3("input", { ...useRefElementProps(useHasFocusProps(useMergedProps()(props, {
+              "aria-disabled": disabled ? "true" : undefined,
+              onKeyDown,
+              ref,
+              readOnly: readOnly || disabled && disabledVariant === "soft",
+              disabled: disabled && disabledVariant === "hard",
+              onBlur,
+              class: clsx("form-control", "faux-form-control-inner", disabled && "disabled", pending && "with-end-icon"),
+              type,
+              onInput,
+              ...extraProps
+            })))
+          })
+        }), suffix && e$3("span", {
+          class: "form-control-suffix",
+          children: suffix
+        })]
+      });
+    }
+
+    const UnlabelledInput = forwardElementRef(UnlabelledInputR);
+    const Input = g$1(forwardElementRef(function Input(_ref, ref) {
+      var _labelPosition, _size;
+
+      let {
+        children,
+        value,
+        width,
+        readOnly,
+        labelPosition,
+        placeholder,
+        disabled,
+        disabledVariant,
+        size,
+        className,
+        class: classs,
+        ...props
+      } = _ref;
+      (_labelPosition = labelPosition) !== null && _labelPosition !== void 0 ? _labelPosition : labelPosition = "start";
+      (_size = size) !== null && _size !== void 0 ? _size : size = "md";
+      const {
+        inputId,
+        labelId,
+        useInputLabelInput,
+        useInputLabelLabel
+      } = useInputLabel({
+        inputPrefix: "input-",
+        labelPrefix: "input-label-"
+      });
+      const {
+        useInputLabelInputProps
+      } = useInputLabelInput();
+      const {
+        useInputLabelLabelProps
+      } = useInputLabelLabel({
+        tag: "label"
+      });
+      const isInInputGroup = F(InInputGroupContext);
+      F(InInputGridContext);
+      let stringLabel = `${children}`;
+
+      if (children != null && (labelPosition === "hidden" || labelPosition === "placeholder")) {
+        if (!["string", "number", "boolean"].includes(typeof children)) console.error(`Hidden labels require a string-based label for the aria-label attribute.`);else {
+          props["aria-label"] = stringLabel;
+          if (placeholder == null && labelPosition === "placeholder") placeholder = stringLabel;
+        }
+      }
+
+      const IC = disabled && disabledVariant === "text" ? InputGroupText : UnlabelledInput;
+
+      const labelJsx = e$3("label", { ...useInputLabelLabelProps({
+          class: clsx(disabledVariant !== "text" && disabled && "disabled", isInInputGroup ? "input-group-text" : labelPosition != "floating" ? "form-label" : "")
+        }),
+        children: children
+      });
+
+      let inputJsx = e$3(IC, { ...useInputLabelInputProps(useMergedProps()({
+          children: IC === InputGroupText ? value : undefined,
+          value: IC === InputGroupText ? undefined : value !== null && value !== void 0 ? value : undefined,
+          placeholder: IC === InputGroupText ? undefined : placeholder,
+          disabled: IC === InputGroupText ? undefined : disabled,
+          disabledVariant: IC === InputGroupText ? undefined : disabledVariant,
+          readOnly: IC === InputGroupText ? undefined : readOnly,
+          className: clsx(IC === InputGroupText ? "form-control" : undefined)
+        }, props)),
+        ...{
+          ref
+        },
+        ...{
+          [IC == InputGroupText ? "children" : "value"]: value
+        },
+        children: IC == InputGroupText ? value : undefined
+      });
+
+      const isEmpty = true ; //if (isInInputGrid) {
+
+      if (!(disabled && disabledVariant === "text")) {
+        inputJsx = e$3("div", {
+          class: clsx(labelPosition != "floating" && classs, labelPosition != "floating" && className, "form-control", "faux-form-control-outer", "elevation-depressed-2", "elevation-body-surface", "focusable-within", !isEmpty , disabled && disabledVariant !== "text" && "disabled", size != "md" && `form-control-${size}`),
+          style: width !== null && width !== void 0 && width.endsWith("ch") ? {
+            "--form-control-width": width !== null && width !== void 0 ? width : "20ch"
+          } : width ? {
+            width
+          } : undefined,
+          children: inputJsx
+        });
+      } // }
+
+
+      const inputWithLabel = e$3(d$2, {
+        children: [labelPosition === "start" && labelJsx, inputJsx, (labelPosition === "end" || labelPosition == "floating") && labelJsx]
+      });
+
+      const inputWithFloating = labelPosition !== "floating" ? inputWithLabel : e$3("div", {
+        class: clsx("form-floating", labelPosition == "floating" && classs, labelPosition === "floating" && className),
+        children: inputJsx
+      });
+      const inputWithTooltip = labelPosition == "tooltip" ? e$3(Tooltip, {
+        tooltip: labelJsx,
+        children: inputWithFloating
+      }) : inputWithFloating;
+      return inputWithTooltip;
+    }));
+
+    /**
+     * Very simple, easy responsive grid that guarantees each column is the minimum size.
+     *
+     * Use leftover to control what happens when there's more space than minimally required.
+     * * "fill" to have each element expand equally to fill the remaining space
+     * * "shrink" to keep as many elements on one line as possible
+     *
+     * Easy one-liners all around here!
+     */
+
+    const GridResponsive = g$1(forwardElementRef(function ResponsiveGrid(_ref, ref) {
+      var _children$props$child, _children$props;
+
+      let {
+        tag,
+        minWidth,
+        leftover,
+        children,
+        ...props
+      } = _ref;
+      const mergedProps = useMergedProps()({
+        className: "responsive-grid",
+        style: minWidth ? {
+          "--grid-min-width": `${minWidth}`,
+          "--grid-auto-behavior": leftover ? `auto-${leftover == "shrink" ? "fit" : leftover}` : ""
+        } : {},
+        ref
+      }, props);
+      const passthroughProps = useMergedProps()(mergedProps, (_children$props$child = children === null || children === void 0 ? void 0 : (_children$props = children.props) === null || _children$props === void 0 ? void 0 : _children$props.children) !== null && _children$props$child !== void 0 ? _children$props$child : {});
+      if (tag === "passthrough") return B(children, passthroughProps);else return v$2(tag !== null && tag !== void 0 ? tag : "div", mergedProps, children);
+    }));
+    /**
+     * Very simple, easy static grid that guarantees the number of columns is displayed,
+     * no matter how janky it looks.
+     */
+
+    const GridStatic = g$1(forwardElementRef(function ResponsiveGrid(_ref2, ref) {
+      var _children$props$child2, _children$props2;
+
+      let {
+        tag,
+        columns,
+        children,
+        ...props
+      } = _ref2;
+      const mergedProps = useMergedProps()({
+        className: "static-grid",
+        style: typeof columns === "string" ? {
+          "--static-grid-columns": columns
+        } : {
+          "--grid-column-count": columns
+        },
+        ref
+      }, props);
+      const passthroughProps = useMergedProps()(mergedProps, (_children$props$child2 = children === null || children === void 0 ? void 0 : (_children$props2 = children.props) === null || _children$props2 === void 0 ? void 0 : _children$props2.children) !== null && _children$props$child2 !== void 0 ? _children$props$child2 : {});
+      if (tag === "passthrough") return B(children, passthroughProps);else return v$2(tag !== null && tag !== void 0 ? tag : "div", mergedProps, children);
+    }));
+
+    /**
+     * Autocomplete access to the most common Bootstrap utility classes.
+     *
+     * Not necessary to use by any means -- just a reminder about what can be used when.
+     */
+    const UtilityClasses = {
+      position: {
+        relative: 'position-relative',
+        static: 'position-static',
+        absolute: 'position-absolute',
+        fixed: 'position-fixed',
+        sticky: 'position-sticky'
+      },
+      display: {
+        none: 'd-none',
+        flex: 'd-flex',
+        inlineFlex: 'd-inline-flex',
+        inline: 'd-inline',
+        inlineBlock: 'd-inline-block',
+        block: 'd-block',
+        grid: 'd-grid',
+        table: 'd-table',
+        tableRow: 'd-table-row',
+        tableCell: 'd-table-cell'
+      },
+      flex: {
+        parent: {
+          direction: {
+            row: 'flex-row',
+            rowReverse: 'flex-row-reverse',
+            column: 'flex-column',
+            columnReverse: 'flex-column-reverse'
+          },
+          justify: {
+            start: 'justify-content-start',
+            end: 'justify-content-end',
+            center: 'justify-content-center',
+            between: 'justify-content-between',
+            around: 'justify-content-around',
+            evenly: 'justify-content-evenly'
+          },
+          align: {
+            start: 'align-items-start',
+            end: 'align-items-end',
+            center: 'align-items-center',
+            baseline: 'align-items-baseline',
+            stretch: 'align-items-stretch '
+          }
+        },
+        children: {
+          align: {
+            start: 'align-self-start',
+            end: 'align-self-end',
+            center: 'align-self-center',
+            baseline: 'align-self-baseline',
+            stretch: 'align-self-stretch '
+          },
+          wrap: {
+            wrap: 'flex-wrap',
+            nowrap: 'flex-nowrap',
+            wrapReverse: 'flex-wrap-reverse'
+          }
+        }
+      },
+      userSelect: {
+        all: 'user-select-all',
+        auto: 'user-select-auto',
+        none: 'user-select-none'
+      },
+      pointerEvents: {
+        none: 'pe-none',
+        auto: 'pe-auto'
+      },
+      overflow: {
+        auto: 'overflow-auto',
+        hidden: 'overflow-hidden',
+        visible: 'overflow-visible',
+        scroll: 'overflow-scroll'
+      },
+      text: {
+        align: {
+          start: 'text-start',
+          center: 'text-center',
+          end: 'text-end'
+        },
+        wrapping: {
+          wrap: 'text-wrap',
+          nowrap: 'text-nowrap',
+          break: 'text-break',
+          truncate: 'text-truncate'
+        },
+        transform: {
+          uppercase: 'text-uppercase',
+          lowercase: 'text-lowercase',
+          capitalize: 'text-capitalize'
+        },
+        decoration: {
+          none: 'text-decoration-none',
+          underline: 'text-decoration-underline',
+          lineThrough: 'text-decoration-line-through'
+        }
+      }
+    };
+
+    const ListStatic = g$1(forwardElementRef(function ListStatic(props, ref) {
+      const {
+        tag,
+        label,
+        inline,
+        flush,
+        labelPosition,
+        ...domProps
+      } = props;
+      let labelVnode = typeof label == "string" ? e$3("label", {
+        children: label
+      }) : label;
+      return e$3(d$2, {
+        children: [labelPosition === "start" && labelVnode, v$2(tag !== null && tag !== void 0 ? tag : "ul", useMergedProps()({
+          class: clsx("list-group", flush && "list-group-flush", inline && UtilityClasses.display.inline),
+          ref,
+          "aria-hidden": labelPosition === "hidden" ? label : undefined
+        }, domProps)), labelPosition === "end" && labelVnode]
+      });
+    }));
+    const ListItemStatic = g$1(forwardElementRef(function ListItemStatic(props, ref) {
+      const {
+        children,
+        badge,
+        iconStart,
+        iconEnd,
+        disabled,
+        ...domProps
+      } = { ...props,
+        ref
+      };
+      return e$3("li", { ...usePseudoActive(useMergedProps()({
+          children: e$3(d$2, {
+            children: [iconStart && e$3("span", {
+              class: "list-group-item-start-icon",
+              children: iconStart
+            }), children, badge && e$3("span", {
+              class: "list-group-item-badge",
+              children: badge
+            }), iconEnd && e$3("span", {
+              className: "list-group-item-end-icon",
+              children: iconEnd
+            })]
+          }),
+          class: clsx("list-group-item list-group-item-multiline", disabled && "disabled text-muted", !!badge && "with-badge", !!iconStart && "with-start", !!(badge || iconEnd) && "with-end")
+        }, domProps))
+      });
+    }));
+
+    const UseListboxMultiItemContext = D$1(null);
+    const ListMulti = g$1(forwardElementRef(function ListMulti(props, ref) {
+      var _labelPosition;
+
+      useLogRender("ListMulti", `Rendering ListMulti`);
+      let {
+        collator,
+        keyNavigation,
+        noTypeahead,
+        noWrap,
+        typeaheadTimeout,
+        tag,
+        select,
+        label,
+        labelPosition,
+        ...domProps
+      } = props;
+      useAsyncHandler()({
+        capture: e => e[EventDetail].selectedIndex
+      });
+      const {
+        useListboxMultiItem,
+        useListboxMultiLabel,
+        useListboxMultiProps,
+        currentTypeahead,
+        focus,
+        invalidTypeahead,
+        tabbableIndex
+      } = useAriaListboxMulti({
+        typeaheadTimeout,
+        noWrap,
+        noTypeahead,
+        keyNavigation,
+        collator
+      });
+      const {
+        useListboxMultiLabelProps
+      } = useListboxMultiLabel();
+      (_labelPosition = labelPosition) !== null && _labelPosition !== void 0 ? _labelPosition : labelPosition = "start";
+      let labelProps = typeof label == "string" ? {} : label.props;
+      let clonedLabel = labelPosition != "hidden" ? B(typeof label == "string" ? e$3("label", {
+        children: label
+      }) : label, useListboxMultiLabelProps(labelProps)) : label;
+      console.assert(!(labelPosition == "hidden" && typeof label != "string"));
+      return e$3(UseListboxMultiItemContext.Provider, {
+        value: useListboxMultiItem,
+        children: e$3(ListStatic, {
+          tag: tag,
+          labelPosition: labelPosition,
+          label: clonedLabel,
+          ...useMergedProps()({
+            class: "list-group",
+            ref,
+            "aria-hidden": labelPosition === "hidden" ? label : undefined
+          }, useListboxMultiProps(domProps))
+        })
+      });
+    }));
+    const ListItemMulti = g$1(forwardElementRef(function ListItemMulti(p, ref) {
+      const {
+        childrenText,
+        props: {
+          index,
+          selected,
+          disabled,
+          onSelect: onSelectAsync,
+          children,
+          ...domProps
+        }
+      } = useChildrenTextProps({ ...p,
+        ref
+      });
+      useLogRender("ListMulti", `Rendering ListMultiItem #${index}`);
+      const useListItemMulti = F(UseListboxMultiItemContext);
+      console.assert(!!useListItemMulti, "ListItemMulti is being used outside of a multi-select list. Did you mean to use a different kind of list, or a different kind of list item?");
+      const {
+        useSyncHandler,
+        pending,
+        currentCapture,
+        hasError,
+        resolveCount
+      } = useAsyncHandler()({
+        capture: e => e[EventDetail].selected
+      });
+      const onSelectSync = useSyncHandler(disabled ? null : onSelectAsync);
+      const {
+        tabbable,
+        useListboxMultiItemProps
+      } = useListItemMulti({
+        index,
+        text: childrenText,
+        tag: "li",
+        selected: currentCapture !== null && currentCapture !== void 0 ? currentCapture : selected,
+        onSelect: onSelectSync,
+        disabled
+      });
+      return e$3(ProgressCircular, {
+        childrenPosition: "child",
+        mode: pending ? "pending" : hasError ? "failed" : resolveCount ? "succeeded" : null,
+        colorVariant: "info",
+        children: e$3(ListItemStatic, { ...usePseudoActive(useMergedProps()({
+            disabled,
+            class: clsx("list-group-item-action", selected && "active", pending && "pending")
+          }, useListboxMultiItemProps(domProps))),
+          children: children
+        })
+      });
+    }));
+
+    const UseListboxSingleItemContext = D$1(null);
+    const ListSingle = g$1(forwardElementRef(function ListSingle(props, ref) {
+      var _labelPosition;
+
+      useLogRender("ListSingle", `Rendering ListSingle`);
+      let {
+        onSelect: onSelectAsync,
+        selectedIndex,
+        selectionMode,
+        collator,
+        keyNavigation,
+        noTypeahead,
+        noWrap,
+        typeaheadTimeout,
+        tag,
+        select,
+        labelPosition,
+        label,
+        ...domProps
+      } = props;
+      const {
+        useSyncHandler,
+        pending,
+        currentCapture
+      } = useAsyncHandler()({
+        capture: e => e[EventDetail].selectedIndex
+      });
+      const onSelect = useSyncHandler(onSelectAsync);
+      const {
+        useListboxSingleItem,
+        useListboxSingleLabel,
+        useListboxSingleProps,
+        managedChildren
+      } = useAriaListboxSingle({
+        onSelect,
+        selectedIndex: selectedIndex,
+        selectionMode: selectionMode !== null && selectionMode !== void 0 ? selectionMode : "activate",
+        typeaheadTimeout,
+        noWrap,
+        noTypeahead,
+        keyNavigation,
+        collator
+      });
+      const {
+        useListboxSingleLabelProps
+      } = useListboxSingleLabel();
+      useChildFlag({
+        activatedIndex: pending ? currentCapture : null,
+        managedChildren,
+        getChildFlag: A$2(i => managedChildren[i].getPending(), []),
+        setChildFlag: A$2((i, set) => managedChildren[i].setPending(set), [])
+      });
+      (_labelPosition = labelPosition) !== null && _labelPosition !== void 0 ? _labelPosition : labelPosition = "start";
+      let labelProps = typeof label == "string" ? {} : label.props;
+      let clonedLabel = labelPosition != "hidden" ? B(typeof label == "string" ? e$3("label", {
+        children: label
+      }) : label, useListboxSingleLabelProps(labelProps)) : label;
+      console.assert(!(labelPosition == "hidden" && typeof label != "string"));
+      return e$3(UseListboxSingleItemContext.Provider, {
+        value: useListboxSingleItem,
+        children: e$3(ListStatic, {
+          tag: tag,
+          labelPosition: labelPosition,
+          label: clonedLabel,
+          ...useMergedProps()({
+            class: "list-group",
+            ref,
+            "aria-hidden": labelPosition === "hidden" ? label : undefined
+          }, useListboxSingleProps(domProps))
+        })
+      });
+    }));
+    const ListItemSingle = g$1(forwardElementRef(function ListItemSingle(p, ref) {
+      let {
+        childrenText,
+        props: {
+          index,
+          hidden,
+          disabled,
+          children,
+          ...domProps
+        }
+      } = useChildrenTextProps({ ...p,
+        ref
+      });
+      useLogRender("ListSingle", `Rendering ListSingleItem #${index}`);
+      const [pending, setPending, getPending] = useState(false);
+      const useListItemSingle = F(UseListboxSingleItemContext);
+      console.assert(!!useListItemSingle, "ListItemSingle is being used outside of a single-select list. Did you mean to use a different kind of list, or a different kind of list item?");
+      const {
+        getSelected,
+        tabbable,
+        selected,
+        useListboxSingleItemProps
+      } = useListItemSingle({
+        index,
+        text: childrenText,
+        tag: "li",
+        setPending,
+        getPending,
+        hidden,
+        disabled
+      });
+      return e$3(ProgressCircular, {
+        childrenPosition: "child",
+        mode: pending ? "pending" : null,
+        colorVariant: "info",
+        children: e$3(ListItemStatic, { ...usePseudoActive(useMergedProps()({
+            disabled,
+            class: clsx("list-group-item-action", selected && "active", pending && "pending")
+          }, useListboxSingleItemProps(domProps))),
+          children: children
+        })
+      });
+    }));
+
+    const ListActionableChildContext = D$1(null);
+    const ListActionable = g$1(forwardElementRef(function ListActionable(props, ref) {
+      const {
+        useHasFocusProps,
+        getFocusedInner
+      } = useHasFocus({});
+      const {
+        indicesByElement,
+        managedChildren,
+        useListNavigationProps,
+        useListNavigationChild,
+        navigateToIndex,
+        childCount
+      } = useListNavigation({
+        shouldFocusOnChange: getFocusedInner,
+        keyNavigation: "block"
+      });
+      const listStaticProps = useHasFocusProps(useListNavigationProps(props));
+      return e$3(ListActionableChildContext.Provider, {
+        value: useListNavigationChild,
+        children: e$3(ListStatic, {
+          role: childCount ? "toolbar" : undefined,
+          ...listStaticProps
+        })
+      });
+    }));
+    const ListItemActionable = g$1(forwardElementRef(function ListItemActionable(props, ref) {
+      const {
+        childrenText,
+        props: {
+          onPress,
+          index,
+          hidden,
+          children,
+          ...domPropsWithoutPress
+        }
+      } = useChildrenTextProps({ ...props,
+        ref
+      });
+      const useListNavigationChild = F(ListActionableChildContext);
+      const {
+        useListNavigationChildProps
+      } = useListNavigationChild({
+        index,
+        text: childrenText,
+        hidden
+      });
+      const {
+        pending,
+        hasError,
+        useSyncHandler
+      } = useAsyncHandler()({
+        capture: returnVoid
+      });
+      const domProps = useMergedProps()({
+        className: clsx("list-group-item-action", pending && "pending")
+      }, useListNavigationChildProps(usePressEventHandlers(useSyncHandler(props.disabled || pending ? undefined : onPress), undefined)(domPropsWithoutPress)));
+      return e$3(ProgressCircular, {
+        childrenPosition: "child",
+        mode: pending ? "pending" : null,
+        colorVariant: "info",
+        children: e$3(ListItemStatic, { ...domProps,
+          children: children
+        })
+      });
+    }));
+
+    function returnVoid() {
+      return undefined;
+    }
+
+    function isSingleProps(props) {
+      return props.select == "single" || props.onSelect != null;
+    }
+
+    function isMultiProps(props) {
+      return props.select == "multi";
+    }
+
+    function isSingleItemProps(props) {
+      return props.index != null && !isActionableItemProps(props);
+    }
+
+    function isMultiItemProps(props) {
+      return props.onSelect != null;
+    }
+
+    function isActionableItemProps(props) {
+      return props.onPress != null;
+    }
+
+    const List = g$1(forwardElementRef(function List(props, ref) {
+      if (isSingleProps(props)) return e$3(ListSingle, { ...props,
+        ref: ref
+      });else if (isMultiProps(props)) return e$3(ListMulti, { ...props,
+        ref: ref
+      }); // There's no meaningful distinction between an actionable list and a static one
+      // (on the outside at least)
+      // but also there's no harm in just always assuming an actionable list.
+      // It doesn't cost much to not use the list navigation after all.
+
+      return e$3(ListActionable, { ...props,
+        ref: ref
+      });
+    }));
+    g$1(forwardElementRef(function ListItem(props, ref) {
+      if (isSingleItemProps(props)) return e$3(ListItemSingle, { ...props,
+        ref: ref
+      });else if (isMultiItemProps(props)) return e$3(ListItemMulti, { ...props,
+        ref: ref
+      });else if (isActionableItemProps(props)) return e$3(ListItemActionable, { ...props,
+        ref: ref
+      });else return e$3(ListItemStatic, { ...props,
+        ref: ref
       });
     }));
 

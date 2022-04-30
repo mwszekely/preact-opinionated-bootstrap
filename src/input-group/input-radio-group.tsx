@@ -4,6 +4,7 @@ import { EventDetail, RadioChangeEvent, useAriaRadioGroup, UseAriaRadioGroupPara
 import { useAsyncHandler, useEffect, useRandomId, useState } from "preact-prop-helpers";
 import { memo } from "preact/compat";
 import { useContext } from "preact/hooks";
+import { Tooltip } from "../tooltip";
 import { ProgressCircular } from "../progress";
 import { forwardElementRef, OmitStrong } from "../props";
 import { OptionallyInputGroup } from "./input-checkbox";
@@ -21,7 +22,7 @@ export interface RadioProps<V extends string | number, I extends Element, L exte
     index: number;
     value: V;
     children?: ComponentChildren;
-    labelPosition?: "start" | "end" | "hidden";
+    labelPosition?: "start" | "end" | "hidden" | "tooltip";
     disabled?: boolean;
 }
 
@@ -140,7 +141,7 @@ export const Radio = memo(forwardElementRef(function Radio<V extends string | nu
     </OptionallyInputGroup>;
     const labelElement = <>{label != null && <OptionallyInputGroup isInput={false} tag={"label"} {...useRadioLabelProps({ className: clsx(asyncState === "pending" && "pending", disabled && "disabled", "form-check-label"), "aria-hidden": "true" })}>{label}</OptionallyInputGroup>}</>;
 
-    const ret = (
+    const inputWithLabel = (
         <>
             {labelPosition == "start" && labelElement}
             {inputElement}
@@ -148,9 +149,10 @@ export const Radio = memo(forwardElementRef(function Radio<V extends string | nu
         </>
     );
 
-    if (!inInputGroup)
-        return <div class="form-check">{ret}</div>
-    return ret;
+    const inputWithInputGroup = (!inInputGroup)? <div class="form-check">{inputWithLabel}</div> : inputWithLabel;
+    const inputWithTooltip = (labelPosition == "tooltip")? <Tooltip tooltip={labelElement}>{inputWithInputGroup}</Tooltip> : inputWithInputGroup;
+
+    return inputWithTooltip;
 
 }));
 

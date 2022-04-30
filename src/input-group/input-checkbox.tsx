@@ -4,6 +4,7 @@ import { CheckboxChangeEvent, EventDetail, useAriaCheckbox } from "preact-aria-w
 import { useAsyncHandler, useMergedProps } from "preact-prop-helpers";
 import { memo } from "preact/compat";
 import { useContext } from "preact/hooks";
+import { Tooltip } from "../tooltip";
 import { ProgressCircular } from "../progress/linear";
 import { forwardElementRef, GlobalAttributes, OmitStrong } from "../props";
 import { InputGroupText, InputGroupTextProps } from "./grouping";
@@ -13,7 +14,7 @@ export interface CheckboxProps extends GlobalAttributes<HTMLInputElement> {
     checked: boolean | "mixed";
     disabled?: boolean;
     onCheck?(checked: boolean, event: h.JSX.TargetedEvent<HTMLInputElement>): void | Promise<void>;
-    labelPosition?: "start" | "end" | "hidden";
+    labelPosition?: "start" | "end" | "hidden" | "tooltip";
 }
 
 function capture(e: h.JSX.TargetedEvent<HTMLInputElement>): boolean {
@@ -52,7 +53,7 @@ export const Checkbox = memo(forwardElementRef(function Checkbox({ checked, disa
 
     const propsForInput = useMergedProps<HTMLInputElement>()(props, useCheckboxInputElementProps({ ref, type: "checkbox", className: clsx("form-check-input", pending && "pending", disabled && "disabled", inInputGroup && "mt-0"), "aria-label": labelPosition === "hidden" ? stringLabel : undefined }));
     const inputElement =
-        <OptionallyInputGroup isInput tag={inInputGroup ? "div" : null} {...useWrapperLabelProps({disabled, tabIndex: -1})}>
+        <OptionallyInputGroup isInput tag={inInputGroup ? "div" : null} {...useWrapperLabelProps({ disabled, tabIndex: -1 })}>
             <ProgressCircular childrenPosition="after" colorFill="foreground-only" mode={currentType === "async" ? asyncState : null} colorVariant="info">
                 <input {...propsForInput} />
             </ProgressCircular>
@@ -61,7 +62,7 @@ export const Checkbox = memo(forwardElementRef(function Checkbox({ checked, disa
     const p2 = { ...useCheckboxLabelElementProps({ className: clsx(pending && "pending", disabled && "disabled", "form-check-label"), "aria-hidden": "true" }) };
     const labelElement = <>{label != null && <OptionallyInputGroup isInput={false} tag="label" {...p2}>{label}</OptionallyInputGroup>}</>;
 
-    const ret = (
+    const inputWithLabel = (
         <>
             {labelPosition == "start" && labelElement}
             {inputElement}
@@ -69,9 +70,9 @@ export const Checkbox = memo(forwardElementRef(function Checkbox({ checked, disa
         </>
     );
 
-    if (!inInputGroup)
-        return <div {...useMergedProps<HTMLDivElement>()({}, { class: "form-check" })}>{ret}</div>
-    return ret;
+    const inputWithInputGroup = (!inInputGroup) ? <div {...useMergedProps<HTMLDivElement>()({}, { class: "form-check" })}>{inputWithLabel}</div> : inputWithLabel;
+    const inputWithTooltip = (labelPosition == "tooltip")? <Tooltip tooltip={labelElement}>{inputWithInputGroup}</Tooltip> : inputWithInputGroup;
+    return inputWithTooltip;
 
 }));
 

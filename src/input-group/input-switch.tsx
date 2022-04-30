@@ -4,6 +4,7 @@ import { CheckboxChangeEvent, EventDetail, useAriaCheckbox } from "preact-aria-w
 import { useAsyncHandler, useMergedProps } from "preact-prop-helpers";
 import { memo } from "preact/compat";
 import { useContext } from "preact/hooks";
+import { Tooltip } from "../tooltip";
 import { ProgressCircular } from "../progress/linear";
 import { forwardElementRef } from "../props";
 import { InputGroupText, InputGroupTextProps } from "./grouping";
@@ -15,7 +16,7 @@ export interface SwitchProps {
     disabled?: boolean;
     onCheck?(checked: boolean): void | Promise<void>;
     children?: ComponentChildren;
-    labelPosition?: "start" | "end" | "hidden";
+    labelPosition?: "start" | "end" | "hidden" | "tooltip";
 }
 
 /**
@@ -53,7 +54,7 @@ export const Switch = memo(forwardElementRef(function Switch({ checked, disabled
     const p2 = { ...useSwitchLabelElementProps({ className: clsx(pending && "pending", "form-check-label", disabled && "disabled"), "aria-hidden": "true" }) };
     const labelElement = <>{label != null && <OptionallyInputGroup tag="label" isInput={false} {...p2}>{label}</OptionallyInputGroup>}</>;
 
-    const ret = (
+    const inputWithLabel = (
         <>
             {labelPosition == "start" && labelElement}
             {inputElement}
@@ -61,10 +62,10 @@ export const Switch = memo(forwardElementRef(function Switch({ checked, disabled
         </>
     );
 
-    if (!inInputGroup)
-        return <div {...useMergedProps<HTMLDivElement>()(rest, { class: "form-check form-switch" })}>{ret}</div>
+    const inputWithInputGroup = (!inInputGroup) ? <div {...useMergedProps<HTMLDivElement>()(rest, { class: "form-check form-switch" })}>{inputWithLabel}</div> : inputWithLabel;
+    const inputWithTooltip = (labelPosition == "tooltip")? <Tooltip tooltip={labelElement}>{inputWithInputGroup}</Tooltip> : inputWithInputGroup;
 
-    return ret
+    return inputWithTooltip;
 
 }));
 

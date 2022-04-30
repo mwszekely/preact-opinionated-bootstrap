@@ -11,6 +11,8 @@ interface BaseUnlabelledInputProps<T> {
     placeholder?: string;
     onValueChange: (value: T, event: InputEvent) => (Promise<void> | void);
     spinnerTimeout?: number;
+    prefix?: ComponentChildren;
+    suffix?: ComponentChildren;
 }
 
 
@@ -24,7 +26,7 @@ export type UnlabelledInputProps = UnlabelledInputTextProps | UnlabelledInputNum
 
 export type InputProps = UnlabelledInputProps & {
     children: ComponentChildren,
-    labelPosition?: "start" | "end" | "floating" | "hidden" | "placeholder";
+    labelPosition?: "start" | "end" | "floating" | "hidden" | "placeholder" | "tooltip";
     size?: "sm" | "md" | "lg";
 
     width?: `${number}ch` | `100%`;

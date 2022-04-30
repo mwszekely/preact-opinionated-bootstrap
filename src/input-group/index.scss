@@ -262,6 +262,20 @@ designed to allow a "wrapper" that we can position: relative.
   }
 }
 
+.form-control.faux-form-control-outer {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+}
+.faux-form-control-outer>.form-control-prefix {
+  grid-column: 1 / span 1;
+}
+.form-control.faux-form-control-inner {
+  grid-column: 2 / span 1;
+}
+.faux-form-control-outer>.form-control-suffix {
+  grid-column: 3 / span 1;
+}
+
 .faux-form-control-outer {
   position: relative;
 }

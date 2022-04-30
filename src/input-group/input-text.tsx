@@ -8,6 +8,7 @@ import { forwardElementRef } from "../props";
 import { ProgressCircular } from "../progress";
 import { InInputGridContext, InInputGroupContext, InputProps, UnlabelledInputNumberNonNullableProps, UnlabelledInputNumberNullableProps, UnlabelledInputProps, UnlabelledInputTextProps, useInputCaptures } from "./props";
 import { InputGroupText } from "./grouping";
+import { Tooltip } from "../tooltip";
 
 
 function return0() { return 0; }
@@ -18,7 +19,7 @@ function UnlabelledInputR(props: UnlabelledInputNumberNonNullableProps, ref?: Re
 function UnlabelledInputR(props: UnlabelledInputProps, ref?: Ref<any>): h.JSX.Element;
 function UnlabelledInputR(p: UnlabelledInputProps, ref?: Ref<any>): h.JSX.Element {
 
-    let { type, disabled, value, onValueChange: onInputAsync, disabledVariant, readOnly, spinnerTimeout, ...p2 } = (p as UnlabelledInputProps);
+    let { type, disabled, value, onValueChange: onInputAsync, disabledVariant, readOnly, spinnerTimeout, prefix, suffix, ...p2 } = (p as UnlabelledInputProps);
     let { nullable, ...p3 } = p2 as (UnlabelledInputNumberNonNullableProps | UnlabelledInputNumberNullableProps);
     const props = p3 as h.JSX.HTMLAttributes<HTMLInputElement>;
 
@@ -189,20 +190,24 @@ function UnlabelledInputR(p: UnlabelledInputProps, ref?: Ref<any>): h.JSX.Elemen
     }, [v]);
 
     return (
-        <ProgressCircular spinnerTimeout={spinnerTimeout ?? 10} mode={currentType === "async" ? asyncState : null} childrenPosition="after" colorVariant="info">
-            <input {...useRefElementProps(useHasFocusProps(useMergedProps<HTMLInputElement>()(props, {
-                "aria-disabled": disabled ? "true" : undefined,
-                onKeyDown,
-                ref,
-                readOnly: readOnly || (disabled && disabledVariant === "soft"),
-                disabled: (disabled && disabledVariant === "hard"),
-                onBlur,
-                class: clsx("form-control", "faux-form-control-inner", disabled && "disabled", pending && "with-end-icon"),
-                type,
-                onInput,
-                ...extraProps,
-            })))} />
-        </ProgressCircular>
+        <>
+            {prefix && <span class="form-control-prefix">{prefix}</span>}
+            <ProgressCircular spinnerTimeout={spinnerTimeout ?? 10} mode={currentType === "async" ? asyncState : null} childrenPosition="after" colorVariant="info">
+                <input {...useRefElementProps(useHasFocusProps(useMergedProps<HTMLInputElement>()(props, {
+                    "aria-disabled": disabled ? "true" : undefined,
+                    onKeyDown,
+                    ref,
+                    readOnly: readOnly || (disabled && disabledVariant === "soft"),
+                    disabled: (disabled && disabledVariant === "hard"),
+                    onBlur,
+                    class: clsx("form-control", "faux-form-control-inner", disabled && "disabled", pending && "with-end-icon"),
+                    type,
+                    onInput,
+                    ...extraProps,
+                })))} />
+            </ProgressCircular>
+            {suffix && <span class="form-control-suffix">{suffix}</span>}
+        </>
     )
 }
 
@@ -274,9 +279,12 @@ export const Input = memo(forwardElementRef(function Input({ children, value, wi
         </>
     );
 
-    if (labelPosition !== "floating")
-        return inputWithLabel;
-    else
-        return <div class={clsx("form-floating", labelPosition == "floating" && classs, labelPosition === "floating" && className)}>{inputJsx}</div>
+    const inputWithFloating = (labelPosition !== "floating") ? inputWithLabel :
+        <div class={clsx("form-floating", labelPosition == "floating" && classs, labelPosition === "floating" && className)}>{inputJsx}</div>;
+
+    const inputWithTooltip = (labelPosition == "tooltip") ? <Tooltip tooltip={labelJsx}>{inputWithFloating}</Tooltip> : inputWithFloating;
+
+    return inputWithTooltip;
+
 }));
 

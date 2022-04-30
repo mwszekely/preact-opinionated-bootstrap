@@ -10822,6 +10822,19 @@
   align-items: center;
   inset-inline-end: 0.5em;
 }
+.set-theme.theme-light .form-control.faux-form-control-outer {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+}
+.set-theme.theme-light .faux-form-control-outer > .form-control-prefix {
+  grid-column: 1/span 1;
+}
+.set-theme.theme-light .form-control.faux-form-control-inner {
+  grid-column: 2/span 1;
+}
+.set-theme.theme-light .faux-form-control-outer > .form-control-suffix {
+  grid-column: 3/span 1;
+}
 .set-theme.theme-light .faux-form-control-outer {
   position: relative;
 }
@@ -23580,6 +23593,19 @@
   justify-content: flex-end;
   align-items: center;
   inset-inline-end: 0.5em;
+}
+.set-theme.theme-dark .form-control.faux-form-control-outer {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+}
+.set-theme.theme-dark .faux-form-control-outer > .form-control-prefix {
+  grid-column: 1/span 1;
+}
+.set-theme.theme-dark .form-control.faux-form-control-inner {
+  grid-column: 2/span 1;
+}
+.set-theme.theme-dark .faux-form-control-outer > .form-control-suffix {
+  grid-column: 3/span 1;
 }
 .set-theme.theme-dark .faux-form-control-outer {
   position: relative;
