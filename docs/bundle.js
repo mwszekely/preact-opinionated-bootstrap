@@ -14376,7 +14376,7 @@
         "aria-label": labelPosition === "hidden" ? stringLabel : undefined
       }));
 
-      const inputElement = e$3(OptionallyInputGroup$1, {
+      let inputElement = e$3(OptionallyInputGroup$1, {
         isInput: true,
         tag: inInputGroup ? "div" : null,
         ...useWrapperLabelProps({
@@ -14408,20 +14408,20 @@
         })
       });
 
+      if (labelPosition == "tooltip") inputElement = e$3(Tooltip, {
+        tooltip: labelElement,
+        children: inputElement
+      });
+
       const inputWithLabel = e$3(d$2, {
         children: [labelPosition == "start" && labelElement, inputElement, labelPosition == "end" && labelElement]
       });
 
-      const inputWithInputGroup = !inInputGroup ? e$3("div", { ...useMergedProps()({}, {
+      return !inInputGroup ? e$3("div", { ...useMergedProps()({}, {
           class: "form-check"
         }),
         children: inputWithLabel
       }) : inputWithLabel;
-      const inputWithTooltip = labelPosition == "tooltip" ? e$3(Tooltip, {
-        tooltip: labelElement,
-        children: inputWithInputGroup
-      }) : inputWithInputGroup;
-      return inputWithTooltip;
     }));
     const OptionallyInputGroup$1 = forwardElementRef(function OptionallyInputGroup(_ref2, ref) {
       let {
@@ -14721,7 +14721,9 @@
       } = useRadioLabel({
         tag: "label"
       });
-      useRadioLabel({
+      const {
+        useRadioLabelProps: useWrapperLabelProps
+      } = useRadioLabel({
         tag: "div"
       });
       const inInputGroup = F(InInputGroupContext);
@@ -14732,7 +14734,7 @@
         console.error(`Hidden labels require a string-based label for the aria-label attribute.`);
       }
 
-      const inputElement = e$3(OptionallyInputGroup$1, {
+      let inputElement = e$3(OptionallyInputGroup$1, {
         isInput: true,
         tag: inInputGroup ? "div" : null,
         ...useRadioLabelProps({
@@ -14766,19 +14768,20 @@
         })
       });
 
+      if (labelPosition == "tooltip") inputElement = e$3(Tooltip, {
+        tooltip: labelElement,
+        children: inputElement
+      });
+
       const inputWithLabel = e$3(d$2, {
         children: [labelPosition == "start" && labelElement, inputElement, labelPosition == "end" && labelElement]
       });
 
-      const inputWithInputGroup = !inInputGroup ? e$3("div", {
-        class: "form-check",
+      return !inInputGroup ? e$3("div", { ...useWrapperLabelProps({
+          className: "form-check"
+        }),
         children: inputWithLabel
       }) : inputWithLabel;
-      const inputWithTooltip = labelPosition == "tooltip" ? e$3(Tooltip, {
-        tooltip: labelElement,
-        children: inputWithInputGroup
-      }) : inputWithInputGroup;
-      return inputWithTooltip;
     }));
 
     /**
@@ -14843,7 +14846,7 @@
         console.error(`Hidden labels require a string-based label for the aria-label attribute.`);
       }
 
-      const inputElement = e$3(OptionallyInputGroup, {
+      let inputElement = e$3(OptionallyInputGroup, {
         tag: inInputGroup ? "div" : null,
         isInput: true,
         ...useWrapperLabelProps({
@@ -14880,20 +14883,20 @@
         })
       });
 
+      if (labelPosition == "tooltip") inputElement = e$3(Tooltip, {
+        tooltip: labelElement,
+        children: inputElement
+      });
+
       const inputWithLabel = e$3(d$2, {
         children: [labelPosition == "start" && labelElement, inputElement, labelPosition == "end" && labelElement]
       });
 
-      const inputWithInputGroup = !inInputGroup ? e$3("div", { ...useMergedProps()(rest, {
+      return !inInputGroup ? e$3("div", { ...useMergedProps()(rest, {
           class: "form-check form-switch"
         }),
         children: inputWithLabel
       }) : inputWithLabel;
-      const inputWithTooltip = labelPosition == "tooltip" ? e$3(Tooltip, {
-        tooltip: labelElement,
-        children: inputWithInputGroup
-      }) : inputWithInputGroup;
-      return inputWithTooltip;
     })); // Note: Slightly different from the others
     // (^^^^ I'm really glad I left that there)
 
@@ -15244,19 +15247,16 @@
       } // }
 
 
-      const inputWithLabel = e$3(d$2, {
-        children: [labelPosition === "start" && labelJsx, inputJsx, (labelPosition === "end" || labelPosition == "floating") && labelJsx]
+      if (labelPosition == "tooltip") inputJsx = e$3(Tooltip, {
+        tooltip: labelJsx,
+        children: inputJsx
       });
-
-      const inputWithFloating = labelPosition !== "floating" ? inputWithLabel : e$3("div", {
+      return labelPosition !== "floating" ? e$3(d$2, {
+        children: [labelPosition === "start" && labelJsx, inputJsx, labelPosition === "end" && labelJsx]
+      }) : e$3("div", {
         class: clsx("form-floating", labelPosition == "floating" && classs, labelPosition === "floating" && className),
         children: inputJsx
       });
-      const inputWithTooltip = labelPosition == "tooltip" ? e$3(Tooltip, {
-        tooltip: labelJsx,
-        children: inputWithFloating
-      }) : inputWithFloating;
-      return inputWithTooltip;
     }));
 
     /**

@@ -134,12 +134,15 @@ export const Radio = memo(forwardElementRef(function Radio<V extends string | nu
         console.error(`Hidden labels require a string-based label for the aria-label attribute.`);
     }
 
-    const inputElement = <OptionallyInputGroup isInput tag={inInputGroup ? "div" : null} {...useRadioLabelProps({disabled, tabIndex: -1})}>
+    let inputElement = <OptionallyInputGroup isInput tag={inInputGroup ? "div" : null} {...useRadioLabelProps({disabled, tabIndex: -1})}>
         <ProgressCircular childrenPosition="after" colorFill="foreground-only" mode={currentHandlerType == "async" ? asyncState : null} colorVariant="info">
             <input {...useRadioInputProps({ ref, type: "radio", className: clsx(asyncState === "pending" && "pending", disabled && "disabled", "form-check-input"), "aria-label": labelPosition === "hidden" ? stringLabel : undefined })} />
         </ProgressCircular>
     </OptionallyInputGroup>;
     const labelElement = <>{label != null && <OptionallyInputGroup isInput={false} tag={"label"} {...useRadioLabelProps({ className: clsx(asyncState === "pending" && "pending", disabled && "disabled", "form-check-label"), "aria-hidden": "true" })}>{label}</OptionallyInputGroup>}</>;
+
+    if (labelPosition == "tooltip")
+        inputElement = <Tooltip tooltip={labelElement}>{inputElement}</Tooltip>;
 
     const inputWithLabel = (
         <>
@@ -149,10 +152,8 @@ export const Radio = memo(forwardElementRef(function Radio<V extends string | nu
         </>
     );
 
-    const inputWithInputGroup = (!inInputGroup)? <div class="form-check">{inputWithLabel}</div> : inputWithLabel;
-    const inputWithTooltip = (labelPosition == "tooltip")? <Tooltip tooltip={labelElement}>{inputWithInputGroup}</Tooltip> : inputWithInputGroup;
+    return (!inInputGroup)? <div {...useWrapperLabelProps({className:"form-check"}) as h.JSX.HTMLAttributes<HTMLDivElement>}>{inputWithLabel}</div> : inputWithLabel;
 
-    return inputWithTooltip;
 
 }));
 

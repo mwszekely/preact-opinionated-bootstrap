@@ -52,7 +52,7 @@ export const Checkbox = memo(forwardElementRef(function Checkbox({ checked, disa
     const asyncState = (hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null);
 
     const propsForInput = useMergedProps<HTMLInputElement>()(props, useCheckboxInputElementProps({ ref, type: "checkbox", className: clsx("form-check-input", pending && "pending", disabled && "disabled", inInputGroup && "mt-0"), "aria-label": labelPosition === "hidden" ? stringLabel : undefined }));
-    const inputElement =
+    let inputElement =
         <OptionallyInputGroup isInput tag={inInputGroup ? "div" : null} {...useWrapperLabelProps({ disabled, tabIndex: -1 })}>
             <ProgressCircular childrenPosition="after" colorFill="foreground-only" mode={currentType === "async" ? asyncState : null} colorVariant="info">
                 <input {...propsForInput} />
@@ -62,6 +62,9 @@ export const Checkbox = memo(forwardElementRef(function Checkbox({ checked, disa
     const p2 = { ...useCheckboxLabelElementProps({ className: clsx(pending && "pending", disabled && "disabled", "form-check-label"), "aria-hidden": "true" }) };
     const labelElement = <>{label != null && <OptionallyInputGroup isInput={false} tag="label" {...p2}>{label}</OptionallyInputGroup>}</>;
 
+    if (labelPosition == "tooltip")
+        inputElement = <Tooltip tooltip={labelElement}>{inputElement}</Tooltip>;
+
     const inputWithLabel = (
         <>
             {labelPosition == "start" && labelElement}
@@ -70,10 +73,7 @@ export const Checkbox = memo(forwardElementRef(function Checkbox({ checked, disa
         </>
     );
 
-    const inputWithInputGroup = (!inInputGroup) ? <div {...useMergedProps<HTMLDivElement>()({}, { class: "form-check" })}>{inputWithLabel}</div> : inputWithLabel;
-    const inputWithTooltip = (labelPosition == "tooltip")? <Tooltip tooltip={labelElement}>{inputWithInputGroup}</Tooltip> : inputWithInputGroup;
-    return inputWithTooltip;
-
+    return (!inInputGroup) ? <div {...useMergedProps<HTMLDivElement>()({}, { class: "form-check" })}>{inputWithLabel}</div> : inputWithLabel;
 }));
 
 export const OptionallyInputGroup = forwardElementRef(function OptionallyInputGroup<E extends Element>({ tag, children, isInput, ...props }: OmitStrong<InputGroupTextProps<E>, "tag"> & { isInput: boolean, tag: InputGroupTextProps<E>["tag"] | null }, ref?: Ref<any>) {

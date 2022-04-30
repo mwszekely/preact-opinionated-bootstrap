@@ -45,7 +45,7 @@ export const Switch = memo(forwardElementRef(function Switch({ checked, disabled
         console.error(`Hidden labels require a string-based label for the aria-label attribute.`);
     }
 
-    const inputElement = <OptionallyInputGroup tag={inInputGroup ? "div" : null} isInput={true} {...useWrapperLabelProps({ disabled, tabIndex: -1 })}>
+    let inputElement = <OptionallyInputGroup tag={inInputGroup ? "div" : null} isInput={true} {...useWrapperLabelProps({ disabled, tabIndex: -1 })}>
         <ProgressCircular childrenPosition="after" colorFill="foreground-only" mode={currentType === "async" ? asyncState : null} colorVariant="info">
             <input {...useSwitchInputElementProps({ ref, type: "checkbox", className: clsx(pending && "pending", "form-check-input", disabled && "disabled"), "aria-label": labelPosition === "hidden" ? stringLabel : undefined })} />
         </ProgressCircular>
@@ -53,6 +53,10 @@ export const Switch = memo(forwardElementRef(function Switch({ checked, disabled
 
     const p2 = { ...useSwitchLabelElementProps({ className: clsx(pending && "pending", "form-check-label", disabled && "disabled"), "aria-hidden": "true" }) };
     const labelElement = <>{label != null && <OptionallyInputGroup tag="label" isInput={false} {...p2}>{label}</OptionallyInputGroup>}</>;
+
+    if (labelPosition == "tooltip")
+        inputElement = <Tooltip tooltip={labelElement}>{inputElement}</Tooltip>
+
 
     const inputWithLabel = (
         <>
@@ -62,11 +66,7 @@ export const Switch = memo(forwardElementRef(function Switch({ checked, disabled
         </>
     );
 
-    const inputWithInputGroup = (!inInputGroup) ? <div {...useMergedProps<HTMLDivElement>()(rest, { class: "form-check form-switch" })}>{inputWithLabel}</div> : inputWithLabel;
-    const inputWithTooltip = (labelPosition == "tooltip")? <Tooltip tooltip={labelElement}>{inputWithInputGroup}</Tooltip> : inputWithInputGroup;
-
-    return inputWithTooltip;
-
+    return (!inInputGroup) ? <div {...useMergedProps<HTMLDivElement>()(rest, { class: "form-check form-switch" })}>{inputWithLabel}</div> : inputWithLabel;
 }));
 
 // Note: Slightly different from the others

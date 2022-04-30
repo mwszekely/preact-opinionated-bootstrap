@@ -256,8 +256,8 @@ export const Input = memo(forwardElementRef(function Input({ children, value, wi
             disabled: (IC === InputGroupText ? undefined : disabled),
             disabledVariant: (IC === InputGroupText ? undefined : disabledVariant),
             readOnly: (IC === InputGroupText ? undefined : readOnly),
-            prefix: (IC === InputGroupText? undefined : prefix as string),
-            suffix: (IC === InputGroupText? undefined : suffix as string),
+            prefix: (IC === InputGroupText ? undefined : prefix as string),
+            suffix: (IC === InputGroupText ? undefined : suffix as string),
             className: clsx(IC === InputGroupText ? "form-control" : undefined),
         }, props as any)) as any as UnlabelledInputTextProps} {...{ ref } as never} {...{ [IC == InputGroupText ? "children" : "value"]: value }} children={IC == InputGroupText ? value : undefined} />;
 
@@ -280,21 +280,18 @@ export const Input = memo(forwardElementRef(function Input({ children, value, wi
     }
     // }
 
+    if (labelPosition == "tooltip")
+        inputJsx = <Tooltip tooltip={labelJsx}>{inputJsx}</Tooltip>;
 
-    const inputWithLabel = (
+
+    return (labelPosition !== "floating") ?
         <>
             {labelPosition === "start" && labelJsx}
             {inputJsx}
-            {(labelPosition === "end" || labelPosition == "floating") && labelJsx}
+            {(labelPosition === "end") && labelJsx}
         </>
-    );
-
-    const inputWithFloating = (labelPosition !== "floating") ? inputWithLabel :
+        :
         <div class={clsx("form-floating", labelPosition == "floating" && classs, labelPosition === "floating" && className)}>{inputJsx}</div>;
-
-    const inputWithTooltip = (labelPosition == "tooltip") ? <Tooltip tooltip={labelJsx}>{inputWithFloating}</Tooltip> : inputWithFloating;
-
-    return inputWithTooltip;
 
 }));
 
