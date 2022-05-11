@@ -47,11 +47,11 @@ export const ListItem = memo(forwardElementRef(function ListItem(props: ListItem
     if (isSingleItemProps(props))
         return <ListItemSingle {...props} ref={ref} />;
     else if (isMultiItemProps(props))
-        return <ListItemMulti {...props} ref={ref} />;
+        return <ListItemMulti {...props as any} ref={ref} />;
     else if (isActionableItemProps(props))
-        return <ListItemActionable {...props} ref={ref} />;
+        return <ListItemActionable {...props as any} ref={ref} />;
     else
-        return <ListItemStatic {...props} ref={ref} />;
+        return <ListItemStatic {...props as any} ref={ref} />;
 }));
 
 export { ListMulti, ListMultiProps, ListItemMulti, ListItemMultiProps };

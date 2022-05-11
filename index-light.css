@@ -13151,6 +13151,10 @@ button.dropdown-item:not(:active):not(.active):focus {
   --popper-arrow-size: 0.5em;
 }
 
+.tooltip-inner {
+  white-space: break-spaces;
+}
+
 .tooltip-wrapper {
   position: absolute;
   z-index: 1080;
@@ -14348,7 +14352,7 @@ table.table th > .th-spacing {
 .form-range-container.form-range-vertical > .form-range-ticks > .form-range-tick::before {
   content: "";
   position: absolute;
-  background: #d1d5da;
+  background: currentColor;
   top: unset;
   bottom: unset;
   left: 0;
@@ -14357,30 +14361,28 @@ table.table th > .th-spacing {
 .form-range-container > .form-range-ticks {
   grid-row: 3/span 2;
   grid-column: 2/-2;
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: nowrap;
+  display: grid;
   pointer-events: none;
   z-index: -10;
   position: relative;
+  grid-template-columns: repeat(calc(var(--form-range-tick-count)), 1fr);
 }
 .form-range-container > .form-range-ticks > .form-range-tick {
   position: relative;
   background: none;
   padding: 0;
   margin: 0;
-  width: 0;
+  transform-origin: top center;
+  transform: translate(calc(var(--form-range-tick-percent) - 50%), 0);
+  text-align: center;
 }
-.form-range-container > .form-range-ticks > .form-range-tick:not(:first-child):not(:last-child)::before {
-  bottom: 33.33333333%;
+.form-range-container > .form-range-ticks > .form-range-tick.form-range-tick-only {
+  background: linear-gradient(90deg, transparent 0%, transparent calc(50% - 1px), currentColor calc(50% + 0px), transparent calc(50% + 1px));
+  opacity: 0.6;
+  transform: translate(calc(var(--form-range-tick-percent) - 50%), 0.375rem) scaleY(var(--form-tick-scale, 0.4));
 }
-.form-range-container > .form-range-ticks > .form-range-tick::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 1px;
-  background: #d1d5da;
+.form-range-container > .form-range-ticks > .form-range-tick.form-range-tick-only:first-child, .form-range-container > .form-range-ticks > .form-range-tick.form-range-tick-only:last-child {
+  --form-tick-scale: 0.8;
 }
 
 .hide-focus-ring *,

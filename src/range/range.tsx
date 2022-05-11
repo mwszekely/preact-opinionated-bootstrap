@@ -13,13 +13,22 @@ import clsx from "clsx";
 interface RangeBaseProps extends UseAriaSliderArguments, GlobalAttributes<HTMLDivElement> {
     debounce?: number | boolean;
     hideTicks?: boolean;
+    hideTickValues?: boolean | "auto";
     orientation?: "inline" | "block";
+    disabled?: boolean;
+    /**
+     * Allows you to override how the numeric value this Range uses is displayed/read as a string
+     */
+    getValueText?: (value: number) => string;
+    /**
+     * Defaults to the value of getValueText. Use this to further customize the tooltip that appears when hovering over the Range.
+     */
+    getTooltipText?: (value: number) => string;
 }
 
 interface RangeSingleProps extends RangeBaseProps {
     children?: never;
     value: number;
-    getValueText?: (value: number) => string;
     onValueChange: (value: number) => (void | Promise<void>);
     step?: number | null | "any";
     snap?: "discrete" | "continuous";   // "continuous" allows selecting values outside of the "step" restriction, but still prefers step values.
@@ -31,7 +40,6 @@ interface RangeMultiProps extends RangeBaseProps {
     children: ComponentChildren;
     debounce?: number | boolean;
     value?: number;
-    getValueText?: (value: number) => string;
     onValueChange?: (value: number) => (void | Promise<void>);
     step?: number | null | "any";
     snap?: "discrete" | "continuous";   // "continuous" allows selecting values outside of the "step" restriction, but still prefers step values.
@@ -43,6 +51,7 @@ export type RangeProps = RangeSingleProps | RangeMultiProps;
 export interface RangeThumbProps extends Omit<UseAriaSliderThumbArguments<HTMLInputElement>, "tag" | "onValueChange" | "valueText"> {
     onValueChange?: (value: number) => (void | Promise<void>);
     label: string;
+    disabled?: boolean;
 }
 
 const RangeThumbContext = createContext<UseAriaSliderThumb>(null!);
@@ -51,9 +60,10 @@ const GetValueTextContext = createContext<(n: number) => string>(null!);
 const GetListContext = createContext("");
 const StepContext = createContext<number | "any">(1);
 const SnapContext = createContext<"discrete" | "continuous">("discrete");
+const DisabledContext = createContext(false);
 const OrientationContext = createContext<"block" | "inline">("inline");
 
-export const Range = memo(forwardElementRef(function Range({ max, min, debounce, hideTicks, orientation, children, getValueText, value, onValueChange, step, snap, label, ...rest }: RangeProps, ref: Ref<HTMLDivElement>) {
+export const Range = memo(forwardElementRef(function Range({ max, min, debounce, hideTicks, hideTickValues, orientation, children, getValueText, getTooltipText, value, onValueChange, step, snap, label, disabled, ...rest }: RangeProps, ref: Ref<HTMLDivElement>) {
     const { useAriaSliderThumb } = useAriaSlider({ min, max });
     let id = useMemo(generateRandomId, []);
     id ??= "";
@@ -63,18 +73,22 @@ export const Range = memo(forwardElementRef(function Range({ max, min, debounce,
     return (
         <RangeThumbContext.Provider value={useAriaSliderThumb}>
             <DebounceContext.Provider value={debounce ?? false}>
-                <GetValueTextContext.Provider value={getValueText ?? defaultGetValueText}>
+                <GetValueTextContext.Provider value={getTooltipText ?? getValueText ?? defaultGetValueText}>
                     <GetListContext.Provider value={id}>
                         <StepContext.Provider value={step}>
                             <SnapContext.Provider value={snap ?? "discrete"}>
-                                <OrientationContext.Provider value={orientation ?? "inline"}>
-                                    {createElement((label ? "label" : "div") as any, (useMergedProps<HTMLDivElement>()({ class: clsx("form-range-container", orientation == "block" && "form-range-vertical"), ref, style: { "--form-range-tick-count": tickCount } }, rest)),
-                                        label && <div class="form-range-label">{label}</div>,
-                                        children ?? <RangeThumb index={0} value={value ?? 0} onValueChange={onValueChange} label={label ?? ""} />,
-                                        <div class="form-range-track-background" />,
-                                        <RangeTicks min={min} max={max} step={step} id={id} />
-                                    )}
-                                </OrientationContext.Provider>
+                                <DisabledContext.Provider value={disabled ?? false}>
+                                    <OrientationContext.Provider value={orientation ?? "inline"}>
+                                        {createElement((label ? "label" : "div") as any, (useMergedProps<HTMLDivElement>()({ class: clsx("form-range-container", orientation == "block" && "form-range-vertical"), ref, style: isFinite(tickCount) ? { "--form-range-tick-count": tickCount } : undefined }, rest)),
+                                            label && <div class="form-range-label">{label}</div>,
+                                            children ?? <RangeThumb index={0} min={min} max={max} value={value ?? 0} onValueChange={onValueChange} label={label ?? ""} />,
+                                            <div class="form-range-track-background" />,
+                                            <GetValueTextContext.Provider value={getValueText ?? defaultGetValueText}>
+                                                <RangeTicks min={min} max={max} step={step} id={id} hideTickValues={hideTickValues} />
+                                            </GetValueTextContext.Provider>
+                                        )}
+                                    </OrientationContext.Provider>
+                                </DisabledContext.Provider>
                             </SnapContext.Provider>
                         </StepContext.Provider>
                     </GetListContext.Provider>
@@ -88,22 +102,26 @@ function defaultGetValueText(number: number) {
     return `${number}`
 }
 
-const RangeTicks = memo(function RangeTicks({ step, min, max, id }: { id: string; step: number | "any", min: number, max: number }) {
+const RangeTicks = memo(function RangeTicks({ step, min, max, id, hideTickValues }: { id: string; step: number | "any", min: number, max: number, hideTickValues?: boolean | "auto" }) {
     if (step == "any")
         return null;
+    hideTickValues ??= "auto";
     const getValueText = useContext(GetValueTextContext);
     let children: ComponentChildren[] = [];
     for (let i = min; i <= max; i += step) {
-        children.push(<option value={getValueText(i)} class="form-range-tick" key={i} />)
+        const atEnds = (i == min || (i + step) > max);
+        const valuePercent = (i - min) / (max - min);
+        let shouldHide = (hideTickValues == "auto" ? !atEnds : hideTickValues);
+        children.push(<option value={i} class={clsx("form-range-tick", shouldHide && "form-range-tick-only")} key={i} style={{ "--form-range-tick-percent": `${valuePercent * 100}%` } as {}}>{shouldHide ? null : getValueText(i)}</option>)
     }
     return (
-        <datalist id={id} class="form-range-ticks">
+        <datalist id={id} class={clsx("form-range-ticks")}>
             {...children}
         </datalist>
     );
 });
 
-export const RangeThumb = memo(forwardElementRef(function RangeThumb({ index, value, max, min, onValueChange: onValueChangeAsync }: RangeThumbProps, ref: Ref<HTMLInputElement>) {
+export const RangeThumb = memo(forwardElementRef(function RangeThumb({ index, value, max, min, onValueChange: onValueChangeAsync, disabled }: RangeThumbProps, ref: Ref<HTMLInputElement>) {
     const debounceSetting = useContext(DebounceContext);
     const { useSyncHandler, pending, hasError, currentCapture } = useAsyncHandler()({ capture, debounce: debounceSetting == true ? 1500 : debounceSetting != false ? debounceSetting : undefined });
     const onValueChangeSync = useSyncHandler(onValueChangeAsync) as UseAriaSliderThumbArguments<HTMLInputElement>["onValueChange"];
@@ -111,6 +129,8 @@ export const RangeThumb = memo(forwardElementRef(function RangeThumb({ index, va
     const getValueText = useContext(GetValueTextContext);
     const valueText = useMemo(() => { return ((getValueText?.(value)) ?? (value == null ? "" : `${value}`)); }, [value, getValueText]);
     const orientation = useContext(OrientationContext);
+    let parentDisabled = useContext(DisabledContext);
+    disabled ||= parentDisabled;
 
     const [inputHasFocus, setInputHasFocus] = useState(false);
     const { useHasFocusProps } = useHasFocus<HTMLInputElement>({ onFocusedChanged: setInputHasFocus });
@@ -166,21 +186,23 @@ export const RangeThumb = memo(forwardElementRef(function RangeThumb({ index, va
         onValueChange
     });
     const valuePercent = (value - usedMin) / (usedMax - usedMin);
+    const clampedValuePercent = Math.max(0, Math.min(1, valuePercent));
 
     return (
         <>
-            <Tooltip side={orientation == "inline"? "block-end" : "inline-end"} forceOpen={inputHasFocus} tooltip={`${valueText}`} childSelector={useCallback(function (e: Element) { return e.nextElementSibling!.firstElementChild!; }, [])}>
+            <Tooltip side={orientation == "inline" ? "block-end" : "inline-end"} forceOpen={inputHasFocus} tooltip={`${valueText}`} childSelector={useCallback(function (e: Element) { return e.nextElementSibling!.firstElementChild!; }, [])}>
                 <input {...useAriaSliderThumbProps(useHasFocusProps({
                     ref,
                     ...({ orient: orientation == "block" ? "vertical" : undefined } as {}),
                     class: clsx("form-range", orientation == "block" && "form-range-vertical"),
+                    disabled,
                     tabIndex: 0,
                     step: usedStep,
                     list: useContext(GetListContext)
                 }))} />
             </Tooltip>
             <div class="form-range-tooltip-container"><div class="form-range-tooltip-root" style={{ "--range-value": `${valuePercent}` }} /></div>
-            <div class="form-range-track-fill-background" style={{ "--form-range-value-percent": valuePercent }} />
+            <div class="form-range-track-fill-background" style={{ "--form-range-value-percent": clampedValuePercent }} />
         </>
     );
 }));

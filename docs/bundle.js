@@ -16756,23 +16756,27 @@
     const GetListContext = D$1("");
     const StepContext = D$1(1);
     const SnapContext = D$1("discrete");
+    const DisabledContext = D$1(false);
     const OrientationContext = D$1("inline");
     const Range = g$1(forwardElementRef(function Range(_ref, ref) {
-      var _id, _step;
+      var _id, _step, _ref2;
 
       let {
         max,
         min,
         debounce,
         hideTicks,
+        hideTickValues,
         orientation,
         children,
         getValueText,
+        getTooltipText,
         value,
         onValueChange,
         step,
         snap,
         label,
+        disabled,
         ...rest
       } = _ref;
       const {
@@ -16790,37 +16794,46 @@
         children: e$3(DebounceContext.Provider, {
           value: debounce !== null && debounce !== void 0 ? debounce : false,
           children: e$3(GetValueTextContext.Provider, {
-            value: getValueText !== null && getValueText !== void 0 ? getValueText : defaultGetValueText,
+            value: (_ref2 = getTooltipText !== null && getTooltipText !== void 0 ? getTooltipText : getValueText) !== null && _ref2 !== void 0 ? _ref2 : defaultGetValueText,
             children: e$3(GetListContext.Provider, {
               value: id,
               children: e$3(StepContext.Provider, {
                 value: step,
                 children: e$3(SnapContext.Provider, {
                   value: snap !== null && snap !== void 0 ? snap : "discrete",
-                  children: e$3(OrientationContext.Provider, {
-                    value: orientation !== null && orientation !== void 0 ? orientation : "inline",
-                    children: v$2(label ? "label" : "div", useMergedProps()({
-                      class: clsx("form-range-container", orientation == "block" && "form-range-vertical"),
-                      ref,
-                      style: {
-                        "--form-range-tick-count": tickCount
-                      }
-                    }, rest), label && e$3("div", {
-                      class: "form-range-label",
-                      children: label
-                    }), children !== null && children !== void 0 ? children : e$3(RangeThumb, {
-                      index: 0,
-                      value: value !== null && value !== void 0 ? value : 0,
-                      onValueChange: onValueChange,
-                      label: label !== null && label !== void 0 ? label : ""
-                    }), e$3("div", {
-                      class: "form-range-track-background"
-                    }), e$3(RangeTicks, {
-                      min: min,
-                      max: max,
-                      step: step,
-                      id: id
-                    }))
+                  children: e$3(DisabledContext.Provider, {
+                    value: disabled !== null && disabled !== void 0 ? disabled : false,
+                    children: e$3(OrientationContext.Provider, {
+                      value: orientation !== null && orientation !== void 0 ? orientation : "inline",
+                      children: v$2(label ? "label" : "div", useMergedProps()({
+                        class: clsx("form-range-container", orientation == "block" && "form-range-vertical"),
+                        ref,
+                        style: isFinite(tickCount) ? {
+                          "--form-range-tick-count": tickCount
+                        } : undefined
+                      }, rest), label && e$3("div", {
+                        class: "form-range-label",
+                        children: label
+                      }), children !== null && children !== void 0 ? children : e$3(RangeThumb, {
+                        index: 0,
+                        min: min,
+                        max: max,
+                        value: value !== null && value !== void 0 ? value : 0,
+                        onValueChange: onValueChange,
+                        label: label !== null && label !== void 0 ? label : ""
+                      }), e$3("div", {
+                        class: "form-range-track-background"
+                      }), e$3(GetValueTextContext.Provider, {
+                        value: getValueText !== null && getValueText !== void 0 ? getValueText : defaultGetValueText,
+                        children: e$3(RangeTicks, {
+                          min: min,
+                          max: max,
+                          step: step,
+                          id: id,
+                          hideTickValues: hideTickValues
+                        })
+                      }))
+                    })
                   })
                 })
               })
@@ -16834,31 +16847,42 @@
       return `${number}`;
     }
 
-    const RangeTicks = g$1(function RangeTicks(_ref2) {
+    const RangeTicks = g$1(function RangeTicks(_ref3) {
+      var _hideTickValues;
+
       let {
         step,
         min,
         max,
-        id
-      } = _ref2;
+        id,
+        hideTickValues
+      } = _ref3;
       if (step == "any") return null;
+      (_hideTickValues = hideTickValues) !== null && _hideTickValues !== void 0 ? _hideTickValues : hideTickValues = "auto";
       const getValueText = F(GetValueTextContext);
       let children = [];
 
       for (let i = min; i <= max; i += step) {
+        const atEnds = i == min || i + step > max;
+        const valuePercent = (i - min) / (max - min);
+        let shouldHide = hideTickValues == "auto" ? !atEnds : hideTickValues;
         children.push(e$3("option", {
-          value: getValueText(i),
-          class: "form-range-tick"
+          value: i,
+          class: clsx("form-range-tick", shouldHide && "form-range-tick-only"),
+          style: {
+            "--form-range-tick-percent": `${valuePercent * 100}%`
+          },
+          children: shouldHide ? null : getValueText(i)
         }, i));
       }
 
       return e$3("datalist", {
         id: id,
-        class: "form-range-ticks",
+        class: clsx("form-range-ticks"),
         children: [...children]
       });
     });
-    const RangeThumb = g$1(forwardElementRef(function RangeThumb(_ref3, ref) {
+    const RangeThumb = g$1(forwardElementRef(function RangeThumb(_ref4, ref) {
       var _useContext;
 
       let {
@@ -16866,8 +16890,9 @@
         value,
         max,
         min,
-        onValueChange: onValueChangeAsync
-      } = _ref3;
+        onValueChange: onValueChangeAsync,
+        disabled
+      } = _ref4;
       const debounceSetting = F(DebounceContext);
       const {
         useSyncHandler,
@@ -16887,6 +16912,8 @@
         return (_getValueText = getValueText === null || getValueText === void 0 ? void 0 : getValueText(value)) !== null && _getValueText !== void 0 ? _getValueText : value == null ? "" : `${value}`;
       }, [value, getValueText]);
       const orientation = F(OrientationContext);
+      let parentDisabled = F(DisabledContext);
+      disabled || (disabled = parentDisabled);
       const [inputHasFocus, setInputHasFocus] = m$1(false);
       const {
         useHasFocusProps
@@ -16949,6 +16976,7 @@
         onValueChange
       });
       const valuePercent = (value - usedMin) / (usedMax - usedMin);
+      const clampedValuePercent = Math.max(0, Math.min(1, valuePercent));
       return e$3(d$2, {
         children: [e$3(Tooltip, {
           side: orientation == "inline" ? "block-end" : "inline-end",
@@ -16963,6 +16991,7 @@
                 orient: orientation == "block" ? "vertical" : undefined
               },
               class: clsx("form-range", orientation == "block" && "form-range-vertical"),
+              disabled,
               tabIndex: 0,
               step: usedStep,
               list: F(GetListContext)
@@ -16979,7 +17008,7 @@
         }), e$3("div", {
           class: "form-range-track-fill-background",
           style: {
-            "--form-range-value-percent": valuePercent
+            "--form-range-value-percent": clampedValuePercent
           }
         })]
       });

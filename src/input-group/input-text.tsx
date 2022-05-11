@@ -259,7 +259,7 @@ export const Input = memo(forwardElementRef(function Input({ children, value, wi
             prefix: (IC === InputGroupText ? undefined : prefix as string),
             suffix: (IC === InputGroupText ? undefined : suffix as string),
             className: clsx(IC === InputGroupText ? "form-control" : undefined),
-        }, props as any)) as any as UnlabelledInputTextProps} {...{ ref } as never} {...{ [IC == InputGroupText ? "children" : "value"]: value }} children={IC == InputGroupText ? value : undefined} />;
+        }, props as any)) as any as UnlabelledInputTextProps} {...{ ref } as any} {...{ [IC == InputGroupText ? "children" : "value"]: value }} children={IC == InputGroupText ? value : undefined} />;
 
 
     const isEmpty = true || (((value as number) !== 0 && value == ""));

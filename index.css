@@ -14065,6 +14065,10 @@ label.input-group-text:not(.disabled) {
     --popper-arrow-size: 0.5em;
   }
 
+  .tooltip-inner {
+    white-space: break-spaces;
+  }
+
   .tooltip-wrapper {
     position: absolute;
     z-index: 1080;
@@ -15455,7 +15459,7 @@ td:focus-visible {
   .form-range-container.form-range-vertical > .form-range-ticks > .form-range-tick::before {
     content: "";
     position: absolute;
-    background: #27272c;
+    background: currentColor;
     top: unset;
     bottom: unset;
     left: 0;
@@ -15465,12 +15469,11 @@ td:focus-visible {
   .form-range-container > .form-range-ticks {
     grid-row: 3/span 2;
     grid-column: 2/-2;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: nowrap;
+    display: grid;
     pointer-events: none;
     z-index: -10;
     position: relative;
+    grid-template-columns: repeat(calc(var(--form-range-tick-count)), 1fr);
   }
 
   .form-range-container > .form-range-ticks > .form-range-tick {
@@ -15478,20 +15481,19 @@ td:focus-visible {
     background: none;
     padding: 0;
     margin: 0;
-    width: 0;
+    transform-origin: top center;
+    transform: translate(calc(var(--form-range-tick-percent) - 50%), 0);
+    text-align: center;
   }
 
-  .form-range-container > .form-range-ticks > .form-range-tick:not(:first-child):not(:last-child)::before {
-    bottom: 33.33333333%;
+  .form-range-container > .form-range-ticks > .form-range-tick.form-range-tick-only {
+    background: linear-gradient(90deg, transparent 0%, transparent calc(50% - 1px), currentColor calc(50% + 0px), transparent calc(50% + 1px));
+    opacity: 0.6;
+    transform: translate(calc(var(--form-range-tick-percent) - 50%), 0.375rem) scaleY(var(--form-tick-scale, 0.4));
   }
 
-  .form-range-container > .form-range-ticks > .form-range-tick::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 1px;
-    background: #27272c;
+  .form-range-container > .form-range-ticks > .form-range-tick.form-range-tick-only:first-child, .form-range-container > .form-range-ticks > .form-range-tick.form-range-tick-only:last-child {
+    --form-tick-scale: 0.8;
   }
 
   .hide-focus-ring *,
@@ -31641,6 +31643,11 @@ label.input-group-text:not(.disabled) {
   }
 }
 @media all and (prefers-color-scheme: light) {
+  .tooltip-inner {
+    white-space: break-spaces;
+  }
+}
+@media all and (prefers-color-scheme: light) {
   .tooltip-wrapper {
     position: absolute;
     z-index: 1080;
@@ -33295,7 +33302,7 @@ td:focus-visible {
   .form-range-container.form-range-vertical > .form-range-ticks > .form-range-tick::before {
     content: "";
     position: absolute;
-    background: #d1d5da;
+    background: currentColor;
     top: unset;
     bottom: unset;
     left: 0;
@@ -33306,12 +33313,11 @@ td:focus-visible {
   .form-range-container > .form-range-ticks {
     grid-row: 3/span 2;
     grid-column: 2/-2;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: nowrap;
+    display: grid;
     pointer-events: none;
     z-index: -10;
     position: relative;
+    grid-template-columns: repeat(calc(var(--form-range-tick-count)), 1fr);
   }
 }
 @media all and (prefers-color-scheme: light) {
@@ -33320,22 +33326,21 @@ td:focus-visible {
     background: none;
     padding: 0;
     margin: 0;
-    width: 0;
+    transform-origin: top center;
+    transform: translate(calc(var(--form-range-tick-percent) - 50%), 0);
+    text-align: center;
   }
 }
 @media all and (prefers-color-scheme: light) {
-  .form-range-container > .form-range-ticks > .form-range-tick:not(:first-child):not(:last-child)::before {
-    bottom: 33.33333333%;
+  .form-range-container > .form-range-ticks > .form-range-tick.form-range-tick-only {
+    background: linear-gradient(90deg, transparent 0%, transparent calc(50% - 1px), currentColor calc(50% + 0px), transparent calc(50% + 1px));
+    opacity: 0.6;
+    transform: translate(calc(var(--form-range-tick-percent) - 50%), 0.375rem) scaleY(var(--form-tick-scale, 0.4));
   }
 }
 @media all and (prefers-color-scheme: light) {
-  .form-range-container > .form-range-ticks > .form-range-tick::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 1px;
-    background: #d1d5da;
+  .form-range-container > .form-range-ticks > .form-range-tick.form-range-tick-only:first-child, .form-range-container > .form-range-ticks > .form-range-tick.form-range-tick-only:last-child {
+    --form-tick-scale: 0.8;
   }
 }
 @media all and (prefers-color-scheme: light) {
@@ -47930,6 +47935,10 @@ body.themed-scrollbars {
   --popper-arrow-size: 0.5em;
 }
 
+.set-theme.theme-light .tooltip-inner {
+  white-space: break-spaces;
+}
+
 .set-theme.theme-light .tooltip-wrapper {
   position: absolute;
   z-index: 1080;
@@ -49320,7 +49329,7 @@ body.themed-scrollbars {
 .set-theme.theme-light .form-range-container.form-range-vertical > .form-range-ticks > .form-range-tick::before {
   content: "";
   position: absolute;
-  background: #d1d5da;
+  background: currentColor;
   top: unset;
   bottom: unset;
   left: 0;
@@ -49330,12 +49339,11 @@ body.themed-scrollbars {
 .set-theme.theme-light .form-range-container > .form-range-ticks {
   grid-row: 3/span 2;
   grid-column: 2/-2;
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: nowrap;
+  display: grid;
   pointer-events: none;
   z-index: -10;
   position: relative;
+  grid-template-columns: repeat(calc(var(--form-range-tick-count)), 1fr);
 }
 
 .set-theme.theme-light .form-range-container > .form-range-ticks > .form-range-tick {
@@ -49343,20 +49351,19 @@ body.themed-scrollbars {
   background: none;
   padding: 0;
   margin: 0;
-  width: 0;
+  transform-origin: top center;
+  transform: translate(calc(var(--form-range-tick-percent) - 50%), 0);
+  text-align: center;
 }
 
-.set-theme.theme-light .form-range-container > .form-range-ticks > .form-range-tick:not(:first-child):not(:last-child)::before {
-  bottom: 33.33333333%;
+.set-theme.theme-light .form-range-container > .form-range-ticks > .form-range-tick.form-range-tick-only {
+  background: linear-gradient(90deg, transparent 0%, transparent calc(50% - 1px), currentColor calc(50% + 0px), transparent calc(50% + 1px));
+  opacity: 0.6;
+  transform: translate(calc(var(--form-range-tick-percent) - 50%), 0.375rem) scaleY(var(--form-tick-scale, 0.4));
 }
 
-.set-theme.theme-light .form-range-container > .form-range-ticks > .form-range-tick::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 1px;
-  background: #d1d5da;
+.set-theme.theme-light .form-range-container > .form-range-ticks > .form-range-tick.form-range-tick-only:first-child, .set-theme.theme-light .form-range-container > .form-range-ticks > .form-range-tick.form-range-tick-only:last-child {
+  --form-tick-scale: 0.8;
 }
 
 .set-theme.theme-light .hide-focus-ring *,
@@ -63861,6 +63868,10 @@ body.themed-scrollbars {
   --popper-arrow-size: 0.5em;
 }
 
+.set-theme.theme-dark .tooltip-inner {
+  white-space: break-spaces;
+}
+
 .set-theme.theme-dark .tooltip-wrapper {
   position: absolute;
   z-index: 1080;
@@ -65251,7 +65262,7 @@ body.themed-scrollbars {
 .set-theme.theme-dark .form-range-container.form-range-vertical > .form-range-ticks > .form-range-tick::before {
   content: "";
   position: absolute;
-  background: #27272c;
+  background: currentColor;
   top: unset;
   bottom: unset;
   left: 0;
@@ -65261,12 +65272,11 @@ body.themed-scrollbars {
 .set-theme.theme-dark .form-range-container > .form-range-ticks {
   grid-row: 3/span 2;
   grid-column: 2/-2;
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: nowrap;
+  display: grid;
   pointer-events: none;
   z-index: -10;
   position: relative;
+  grid-template-columns: repeat(calc(var(--form-range-tick-count)), 1fr);
 }
 
 .set-theme.theme-dark .form-range-container > .form-range-ticks > .form-range-tick {
@@ -65274,20 +65284,19 @@ body.themed-scrollbars {
   background: none;
   padding: 0;
   margin: 0;
-  width: 0;
+  transform-origin: top center;
+  transform: translate(calc(var(--form-range-tick-percent) - 50%), 0);
+  text-align: center;
 }
 
-.set-theme.theme-dark .form-range-container > .form-range-ticks > .form-range-tick:not(:first-child):not(:last-child)::before {
-  bottom: 33.33333333%;
+.set-theme.theme-dark .form-range-container > .form-range-ticks > .form-range-tick.form-range-tick-only {
+  background: linear-gradient(90deg, transparent 0%, transparent calc(50% - 1px), currentColor calc(50% + 0px), transparent calc(50% + 1px));
+  opacity: 0.6;
+  transform: translate(calc(var(--form-range-tick-percent) - 50%), 0.375rem) scaleY(var(--form-tick-scale, 0.4));
 }
 
-.set-theme.theme-dark .form-range-container > .form-range-ticks > .form-range-tick::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 1px;
-  background: #27272c;
+.set-theme.theme-dark .form-range-container > .form-range-ticks > .form-range-tick.form-range-tick-only:first-child, .set-theme.theme-dark .form-range-container > .form-range-ticks > .form-range-tick.form-range-tick-only:last-child {
+  --form-tick-scale: 0.8;
 }
 
 .set-theme.theme-dark .hide-focus-ring *,
