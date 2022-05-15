@@ -5,11 +5,11 @@ import { useMergedProps } from "preact-prop-helpers";
 import { memo } from "preact/compat";
 import { useContext } from "preact/hooks";
 import { forwardElementRef, GlobalAttributes } from "../props";
-import { InInputGridContext, InInputGroupContext } from "./props";
+import { DefaultInputSize, InInputGridContext, InInputGroupContext } from "./props";
 
 export interface InputGroupProps<E extends Element> extends Partial<TagSensitiveProps<E>>, GlobalAttributes<E> {
     size?: "sm" | "md" | "lg";
-    
+
     /**
      * Only within an InputGrid; allows a control to take up more than 1 column.
      */
@@ -21,12 +21,12 @@ export interface InputGridProps<E extends Element> extends Partial<TagSensitiveP
 }
 
 export interface InputGroupTextProps<E extends Element> extends Partial<TagSensitiveProps<E>>, Omit<h.JSX.HTMLAttributes<E>, "children"> {
-    children: ComponentChildren;
+    children?: ComponentChildren;
     disabled?: boolean;
 }
 
 export const InputGrid = memo(forwardElementRef(function InputGrid<E extends Element>({ tag, children, columns, ...props }: InputGridProps<E>, ref: Ref<E>) {
-    return createElement(tag ?? "div" as any, useMergedProps<E>()({ class: "input-grid", style: columns? { "--input-grid-columns": columns } as {} : {}, ref }, props),
+    return createElement(tag ?? "div" as any, useMergedProps<E>()({ class: "input-grid", style: columns ? { "--input-grid-columns": columns } as {} : {}, ref }, props),
         <InInputGridContext.Provider value={useContext(InInputGridContext) + 1}>{children}</InInputGridContext.Provider>
     );
 }));
@@ -40,7 +40,9 @@ export const InputGroup = memo(forwardElementRef(function InputGroup<E extends E
     return (
         createElement(tag ?? "div" as any, useMergedProps<E>()({ class: clsx("input-group", size && size != "md" && `input-group-${size}`, colSpan && `input-grid-span-${colSpan}`), ref }, props),
             <InInputGroupContext.Provider value={true}>
-                {children}
+                <DefaultInputSize.Provider value={size}>
+                    {children}
+                </DefaultInputSize.Provider>
             </InInputGroupContext.Provider>
         )
     );

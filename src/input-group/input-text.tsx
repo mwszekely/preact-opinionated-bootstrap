@@ -6,9 +6,10 @@ import { memo } from "preact/compat";
 import { useCallback, useContext, useEffect } from "preact/hooks";
 import { forwardElementRef } from "../props";
 import { ProgressCircular } from "../progress";
-import { InInputGridContext, InInputGroupContext, InputProps, UnlabelledInputNumberNonNullableProps, UnlabelledInputNumberNullableProps, UnlabelledInputProps, UnlabelledInputTextProps, useInputCaptures } from "./props";
+import { DefaultInputSize, InInputGridContext, InInputGroupContext, InputProps, UnlabelledInputNumberNonNullableProps, UnlabelledInputNumberNullableProps, UnlabelledInputProps, UnlabelledInputTextProps, useInputCaptures } from "./props";
 import { InputGroupText } from "./grouping";
 import { Tooltip } from "../tooltip";
+import { ProvideDefaultButtonSize } from "../button";
 
 
 function return0() { return 0; }
@@ -19,8 +20,9 @@ function UnlabelledInputR(props: UnlabelledInputNumberNonNullableProps, ref?: Re
 function UnlabelledInputR(props: UnlabelledInputProps, ref?: Ref<any>): h.JSX.Element;
 function UnlabelledInputR(p: UnlabelledInputProps, ref?: Ref<any>): h.JSX.Element {
 
-    let { type, disabled, value, onValueChange: onInputAsync, disabledVariant, readOnly, spinnerTimeout, prefix, suffix, ...p2 } = (p as UnlabelledInputProps);
-    let { nullable, ...p3 } = p2 as (UnlabelledInputNumberNonNullableProps | UnlabelledInputNumberNullableProps);
+    let { type, disabled, value, onValueChange: onInputAsync, disabledVariant, readOnly, spinnerTimeout, prefix, suffix, sizeClass, ...p2 } = (p as UnlabelledInputProps & { sizeClass?: string | null });
+    let { nonNullable, ...p3 } = p2 as (UnlabelledInputNumberNonNullableProps | UnlabelledInputNumberNullableProps);
+    let nullable = !nonNullable;
     const props = p3 as h.JSX.HTMLAttributes<HTMLInputElement>;
 
     disabledVariant ??= "soft";
@@ -50,6 +52,8 @@ function UnlabelledInputR(p: UnlabelledInputProps, ref?: Ref<any>): h.JSX.Elemen
         }),
         debounce: type === "text" ? 1500 : undefined
     });
+    if (!focusedInner && pending)
+        disabled = true;
     const onInputIfValid = useSyncHandler(disabled ? null : onInputAsync as any);
     const onInput = (e: h.JSX.TargetedEvent<HTMLInputElement>) => {
         const target = (e.currentTarget as HTMLInputElement | undefined);
@@ -178,34 +182,49 @@ function UnlabelledInputR(p: UnlabelledInputProps, ref?: Ref<any>): h.JSX.Elemen
     // NOTE: When valueAsNumber is NaN, value is "".  That means
     // that it's *NOT* possible to store the partially typed
     // value anywhere -- it's completely hidden away.
-    const v = ((pending || focusedInner) ? currentCapture : uncapture(value));
+    const v = (((pending || focusedInner || hasError) ? currentCapture : undefined) ?? uncapture(value));
     const { getElement, useRefElementProps } = useRefElement<HTMLInputElement>({});
     useEffect(() => {
         const element = getElement();
         if (element) {
-            if (v != null) {
+            if (!focusedInner && v != null) {
                 element.value = `${v}`;
             }
         }
-    }, [v]);
+    }, [focusedInner, v]);
+
+    let measure: string | number | h.JSX.Element
+
+    if (type == "number") {
+        measure = "0".repeat((v as number).toString().length);
+    }
+    else {
+        measure = v || <>&nbsp;</>;
+    }
 
     return (
         <>
             {prefix && <span class="form-control-prefix">{prefix}</span>}
-            <ProgressCircular spinnerTimeout={spinnerTimeout ?? 10} mode={currentType === "async" ? asyncState : null} childrenPosition="after" colorVariant="info">
-                <input {...useRefElementProps(useHasFocusProps(useMergedProps<HTMLInputElement>()(props, {
-                    "aria-disabled": disabled ? "true" : undefined,
-                    onKeyDown,
-                    ref,
-                    readOnly: readOnly || (disabled && disabledVariant === "soft"),
-                    disabled: (disabled && disabledVariant === "hard"),
-                    onBlur,
-                    class: clsx("form-control", "faux-form-control-inner", disabled && "disabled", pending && "with-end-icon"),
-                    type,
-                    onInput,
-                    ...extraProps,
-                })))} />
-            </ProgressCircular>
+            <span class={clsx("form-control", "faux-form-control-measure", "form-control", sizeClass)}>
+                <span>{measure}{currentType == "async" ? <span class="d-inline-block user-select-none" style={{ width: "2em" }} /> : null}</span>
+            </span>
+            <label class={clsx("form-control form-control-input-container", sizeClass)}>
+                <ProgressCircular spinnerTimeout={spinnerTimeout ?? 10} mode={currentType === "async" ? asyncState : null} childrenPosition="after" colorVariant="info">
+                    <input {...useRefElementProps(useHasFocusProps(useMergedProps<HTMLInputElement>()(props, {
+                        "aria-disabled": disabled ? "true" : undefined,
+                        onKeyDown,
+                        ref,
+                        readOnly: readOnly || (disabled && disabledVariant === "soft"),
+                        disabled: (disabled && disabledVariant === "hard"),
+                        onBlur,
+                        class: clsx("form-control", "faux-form-control-inner", disabled && "disabled", "form-control", sizeClass),
+                        type,
+                        onInput,
+                        ...extraProps,
+                    })))} />
+                </ProgressCircular>
+            </label>
+
             {suffix && <span class="form-control-suffix">{suffix}</span>}
         </>
     )
@@ -217,7 +236,8 @@ const UnlabelledInput = forwardElementRef(UnlabelledInputR);
 
 export const Input = memo(forwardElementRef(function Input({ children, value, width, readOnly, labelPosition, placeholder, disabled, disabledVariant, size, className, prefix, suffix, class: classs, ...props }: InputProps, ref?: Ref<any>) {
     labelPosition ??= "start";
-    size ??= "md";
+    let parentSize = useContext(DefaultInputSize);
+    size ??= (parentSize ?? "md");
 
 
     const { inputId, labelId, useInputLabelInput, useInputLabelLabel } = useInputLabel({ inputPrefix: "input-", labelPrefix: "input-label-" });
@@ -242,12 +262,7 @@ export const Input = memo(forwardElementRef(function Input({ children, value, wi
 
     const labelJsx = <label {...useInputLabelLabelProps({ class: clsx(disabledVariant !== "text" && disabled && "disabled", isInInputGroup ? "input-group-text" : labelPosition != "floating" ? "form-label" : "") })}>{children}</label>
 
-    if (labelPosition == "prefix")
-        prefix = <>{labelJsx}{prefix}</>;
-    if (labelPosition == "suffix")
-        suffix = <>{labelJsx}{prefix}</>;
-
-
+    const sizeClass = (size != "md" && `form-control-${size}`);
     let inputJsx = <IC
         {...useInputLabelInputProps(useMergedProps<any>()({
             children: IC === InputGroupText ? value : undefined,
@@ -256,10 +271,18 @@ export const Input = memo(forwardElementRef(function Input({ children, value, wi
             disabled: (IC === InputGroupText ? undefined : disabled),
             disabledVariant: (IC === InputGroupText ? undefined : disabledVariant),
             readOnly: (IC === InputGroupText ? undefined : readOnly),
-            prefix: (IC === InputGroupText ? undefined : prefix as string),
-            suffix: (IC === InputGroupText ? undefined : suffix as string),
-            className: clsx(IC === InputGroupText ? "form-control" : undefined),
-        }, props as any)) as any as UnlabelledInputTextProps} {...{ ref } as any} {...{ [IC == InputGroupText ? "children" : "value"]: value }} children={IC == InputGroupText ? value : undefined} />;
+
+            className: clsx(IC === InputGroupText ? "form-control" : undefined, sizeClass),
+        }, props as any)) as any as UnlabelledInputTextProps}
+        {...(IC === InputGroupText ? {} : {
+            sizeClass,
+            prefix: (prefix as string),
+            suffix: (suffix as string),
+        } as any)}
+        {...{ ref } as any}
+        {...{ [IC == InputGroupText ? "children" : "value"]: value }}
+        children={IC == InputGroupText ? value : undefined}
+    />;
 
 
     const isEmpty = true || (((value as number) !== 0 && value == ""));
@@ -272,10 +295,10 @@ export const Input = memo(forwardElementRef(function Input({ children, value, wi
             "faux-form-control-outer",
             "elevation-depressed-2",
             "elevation-body-surface",
-            "focusable-within",
+            //"focusable-within",
+            sizeClass,
             !isEmpty && "focus-within-only",
             disabled && disabledVariant !== "text" && "disabled",
-            size != "md" && `form-control-${size}`,
         )} style={width?.endsWith("ch") ? { "--form-control-width": (width ?? "20ch") } as any : width ? { width } : undefined}>{inputJsx}</div>
     }
     // }
@@ -284,14 +307,18 @@ export const Input = memo(forwardElementRef(function Input({ children, value, wi
         inputJsx = <Tooltip tooltip={labelJsx}>{inputJsx}</Tooltip>;
 
 
-    return (labelPosition !== "floating") ?
-        <>
-            {labelPosition === "start" && labelJsx}
-            {inputJsx}
-            {(labelPosition === "end") && labelJsx}
-        </>
-        :
-        <div class={clsx("form-floating", labelPosition == "floating" && classs, labelPosition === "floating" && className)}>{inputJsx}</div>;
+    return (
+        <ProvideDefaultButtonSize value={size ?? "md"}>
 
+            {(labelPosition !== "floating") ?
+                <>
+                    {labelPosition === "start" && labelJsx}
+                    {inputJsx}
+                    {(labelPosition === "end") && labelJsx}
+                </>
+                :
+                <div class={clsx("form-floating", labelPosition == "floating" && classs, labelPosition === "floating" && className)}>{inputJsx}</div>}
+        </ProvideDefaultButtonSize>
+    );
 }));
 

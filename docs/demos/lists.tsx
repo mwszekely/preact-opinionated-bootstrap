@@ -84,7 +84,7 @@ export function DemoLists() {
 
                 <CardElement>
                     All list types can have as many lines as needed; each e.g. <code>&lt;span&gt;</code> will create a new line. Format them however you like (i.e. making some larger or smaller, tinted different colors, etc.)
-                    <InputGroup><Input type="number" value={lines} onValueChange={setLines}># of lines</Input></InputGroup>
+                    <InputGroup><Input type="number" nonNullable value={lines} onValueChange={setLines}># of lines</Input></InputGroup>
                 </CardElement>
 
                 <CardElement type="subtitle" tag="h3">Single select</CardElement>

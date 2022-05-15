@@ -7834,7 +7834,7 @@
             } = useCheckboxLikeInputElement({
               tag
             });
-            return useMergedProps()(useListNavigationChildProps(useCheckboxLikeInputElementProps({})), props);
+            return useListNavigationChildProps(useCheckboxLikeInputElementProps(useMergedProps()({}, props)));
           };
 
           return {
@@ -10424,7 +10424,8 @@
 
         gimmickCount = (_getFromLocalStorage2 = getFromLocalStorage()("circular-progress-gimmick-count", JSON.parse)) !== null && _getFromLocalStorage2 !== void 0 ? _getFromLocalStorage2 : 8;
       }
-    })();
+    })(); // TODO: useChildManager
+
 
     function useAriaProgressBar(_ref) {
       let {
@@ -10613,9 +10614,9 @@
       let progressProps = useMergedProps()({
         ref,
         className: clsx("circular-progress-container")
-      }, useMergedProps()(useProgressProps({
+      }, useProgressProps(useMergedProps()({
         "aria-hidden": `${mode != "pending"}`
-      }), p));
+      }, p)));
       progressProps = useMergedProps()(progressProps, childrenPosition === "merged" ? { ...((_children = children) === null || _children === void 0 ? void 0 : _children.props),
         ref: (_children2 = children) === null || _children2 === void 0 ? void 0 : _children2.ref
       } : {});
@@ -11536,6 +11537,7 @@
     const UseCheckboxGroupChildContext = D$1(null);
     const InInputGroupContext = D$1(false);
     const InInputGridContext = D$1(0);
+    const DefaultInputSize = D$1(null);
 
     function max$1(value, max) {
       if (max == null) return value;
@@ -11629,7 +11631,10 @@
         ref
       }, props), e$3(InInputGroupContext.Provider, {
         value: true,
-        children: children
+        children: e$3(DefaultInputSize.Provider, {
+          value: size,
+          children: children
+        })
       }));
     }));
     /**
@@ -14302,7 +14307,172 @@
       });
     }));
 
-    function capture$1(e) {
+    /**
+     * A Checkbox-Like is a checkbox, radio button, switch, etc.
+     *
+     * It has an input element, a label value, and a position for that label (e.g. "after", "tooltip", etc.).
+     *
+     * It displays itself differently depending on if it's within an InputGroup or not.
+     *
+     * It can also display an async state.
+     */
+
+    function CheckboxLike(_ref) {
+      var _labelPosition;
+
+      let {
+        labelPosition,
+        currentHandlerType,
+        asyncState,
+        inputProps,
+        labelProps,
+        wrapperProps,
+        label,
+        disabled,
+        type
+      } = _ref;
+      (_labelPosition = labelPosition) !== null && _labelPosition !== void 0 ? _labelPosition : labelPosition = "end";
+      const inInputGroup = !!F(InInputGroupContext);
+      !!F(InInputGridContext);
+      let stringLabel = `${label}`;
+
+      if (label != null && labelPosition === "hidden" && !["string", "number", "boolean"].includes(typeof label)) {
+        console.error(`Hidden labels require a string-based label for the aria-label attribute.`);
+      } //if (labelPosition == "hidden" || labelPosition == "tooltip")
+      //    label = null;
+
+
+      let temp = useMergedProps()({
+        "aria-label": stringLabel
+      }, inputProps);
+      if (inInputGroup) inputProps = temp;
+
+      if (inInputGroup) {
+        return e$3(InputGroupCheckboxLike, {
+          type: type,
+          labelPosition: labelPosition,
+          disabled: disabled,
+          asyncState: asyncState,
+          currentHandlerType: currentHandlerType,
+          label: label,
+          inputProps: inputProps,
+          labelProps: labelProps
+        });
+      } else {
+        return e$3(NormalCheckboxLike, {
+          labelPosition: labelPosition,
+          disabled: disabled,
+          asyncState: asyncState,
+          currentHandlerType: currentHandlerType,
+          label: label,
+          inputProps: inputProps,
+          labelProps: labelProps,
+          wrapperProps: wrapperProps
+        });
+      }
+    }
+
+    function CheckboxLikeOnly(_ref2) {
+      var _ref3;
+
+      let {
+        label,
+        inputProps,
+        asyncState,
+        currentHandlerType,
+        disabled,
+        labelPosition
+      } = _ref2;
+
+      let inputElement = e$3("input", { ...useMergedProps()({
+          class: clsx("form-check-input", disabled && "disabled")
+        }, inputProps)
+      });
+
+      inputElement = e$3(Tooltip, {
+        tooltip: labelPosition == "tooltip" ? label : null,
+        children: inputElement
+      });
+      inputElement = e$3(ProgressCircular, {
+        childrenPosition: "after",
+        colorFill: "foreground-only",
+        mode: (_ref3 = currentHandlerType === "async" ? asyncState : null) !== null && _ref3 !== void 0 ? _ref3 : null,
+        colorVariant: "info",
+        children: inputElement
+      });
+      return inputElement;
+    }
+
+    function InputGroupCheckboxLike(_ref4) {
+      let {
+        inputProps,
+        labelProps,
+        label,
+        asyncState,
+        currentHandlerType,
+        disabled,
+        labelPosition,
+        type
+      } = _ref4;
+
+      const labelElement = label != null && (labelPosition == "start" || labelPosition == "end") && e$3(InputGroupText, {
+        tag: "label",
+        ...useMergedProps()({
+          class: clsx("input-group-text", disabled && "disabled"),
+          children: label
+        }, labelProps)
+      });
+
+      return e$3(d$2, {
+        children: [labelPosition == "start" && labelElement, e$3(InputGroupText, {
+          tag: "div",
+          disabled: disabled,
+          class: clsx(type == "switch" ? "form-switch" : null),
+          children: e$3(CheckboxLikeOnly, {
+            labelPosition: labelPosition,
+            disabled: disabled,
+            inputProps: inputProps,
+            label: label,
+            asyncState: asyncState,
+            currentHandlerType: currentHandlerType
+          })
+        }), labelPosition == "end" && labelElement]
+      });
+    }
+
+    function NormalCheckboxLike(_ref5) {
+      let {
+        inputProps,
+        labelProps,
+        wrapperProps,
+        label,
+        asyncState,
+        currentHandlerType,
+        disabled,
+        labelPosition
+      } = _ref5;
+
+      const labelElement = (labelPosition == "start" || labelPosition == "end") && e$3("label", { ...useMergedProps()({
+          class: clsx("form-check-label", disabled && "disabled"),
+          children: label
+        }, labelProps)
+      });
+
+      return e$3("div", { ...useMergedProps()({
+          class: clsx("form-check", disabled && "disabled")
+        }, wrapperProps),
+        children: [labelPosition == "start" && labelElement, e$3(CheckboxLikeOnly, {
+          disabled: disabled,
+          inputProps: inputProps,
+          labelPosition: labelPosition,
+          label: label,
+          asyncState: asyncState,
+          currentHandlerType: currentHandlerType
+        }), labelPosition == "end" && labelElement]
+      });
+    }
+
+    function capture$2(e) {
       return e[EventDetail].checked;
     }
     /**
@@ -14314,121 +14484,79 @@
 
 
     const Checkbox = g$1(forwardElementRef(function Checkbox(_ref, ref) {
-      var _labelPosition, _disabled;
-
       let {
         checked,
         disabled,
         onCheck: onCheckedAsync,
         labelPosition,
         children: label,
+        tabIndex,
         ...props
       } = _ref;
-      (_labelPosition = labelPosition) !== null && _labelPosition !== void 0 ? _labelPosition : labelPosition = "end";
-      const {
-        useSyncHandler,
-        pending,
-        hasError,
-        settleCount,
-        hasCapture,
-        currentCapture,
-        currentType
-      } = useAsyncHandler()({
-        capture: capture$1
-      });
-      disabled || (disabled = pending);
-      const onChecked = useSyncHandler(onCheckedAsync);
-      const {
-        useCheckboxInputElement,
-        useCheckboxLabelElement
-      } = useAriaCheckbox({
-        checked: pending ? currentCapture : checked === "indeterminate" ? "mixed" : checked,
-        disabled: (_disabled = disabled) !== null && _disabled !== void 0 ? _disabled : false,
-        onInput: onChecked,
-        labelPosition: "separate"
-      });
-      const {
-        useCheckboxInputElementProps
-      } = useCheckboxInputElement({
-        tag: "input"
-      });
-      const {
-        useCheckboxLabelElementProps
-      } = useCheckboxLabelElement({
-        tag: "label"
-      });
-      const {
-        useCheckboxLabelElementProps: useWrapperLabelProps
-      } = useCheckboxLabelElement({
-        tag: "div"
-      });
-      const inInputGroup = F(InInputGroupContext);
-      let stringLabel = `${label}`;
 
-      if (label != null && labelPosition === "hidden" && !["string", "number", "boolean"].includes(typeof label)) {
-        console.error(`Hidden labels require a string-based label for the aria-label attribute.`);
+      {
+        var _disabled;
+
+        const inInputGroup = F(InInputGroupContext);
+        const {
+          useSyncHandler,
+          pending,
+          hasError,
+          settleCount,
+          hasCapture,
+          currentCapture,
+          currentType
+        } = useAsyncHandler()({
+          capture: capture$2
+        });
+        disabled || (disabled = pending);
+        const asyncState = hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null;
+        const onChecked = useSyncHandler(onCheckedAsync);
+        const {
+          useCheckboxInputElement,
+          useCheckboxLabelElement
+        } = useAriaCheckbox({
+          checked: pending ? currentCapture : checked === "indeterminate" ? "mixed" : checked,
+          disabled: (_disabled = disabled) !== null && _disabled !== void 0 ? _disabled : false,
+          onInput: onChecked,
+          labelPosition: "separate"
+        });
+        const {
+          useCheckboxInputElementProps
+        } = useCheckboxInputElement({
+          tag: "input"
+        });
+        const {
+          useCheckboxLabelElementProps
+        } = useCheckboxLabelElement({
+          tag: "label"
+        }); //const { useCheckboxLabelElementProps: useWrapperLabelProps } = useCheckboxLabelElement({ tag: "div" });
+
+        return e$3(CheckboxLike, {
+          type: "check",
+          disabled: disabled,
+          asyncState: asyncState,
+          currentHandlerType: currentType,
+          labelPosition: labelPosition,
+          inputProps: useCheckboxInputElementProps({
+            ref: ref,
+            className: clsx(pending && "pending", inInputGroup && "mt-0"),
+            tabIndex: tabIndex !== null && tabIndex !== void 0 ? tabIndex : 0
+          }),
+          labelProps: useCheckboxLabelElementProps({
+            class: clsx(pending && "pending")
+          }),
+          wrapperProps: useMergedProps()({}, props),
+          label: label
+        });
       }
-
-      const asyncState = hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null;
-      const propsForInput = useMergedProps()(props, useCheckboxInputElementProps({
-        ref,
-        type: "checkbox",
-        className: clsx("form-check-input", pending && "pending", disabled && "disabled", inInputGroup && "mt-0"),
-        "aria-label": labelPosition === "hidden" ? stringLabel : undefined
-      }));
-
-      let inputElement = e$3(OptionallyInputGroup$1, {
-        isInput: true,
-        tag: inInputGroup ? "div" : null,
-        ...useWrapperLabelProps({
-          disabled,
-          tabIndex: -1
-        }),
-        children: e$3(ProgressCircular, {
-          childrenPosition: "after",
-          colorFill: "foreground-only",
-          mode: currentType === "async" ? asyncState : null,
-          colorVariant: "info",
-          children: e$3("input", { ...propsForInput
-          })
-        })
-      });
-
-      const p2 = { ...useCheckboxLabelElementProps({
-          className: clsx(pending && "pending", disabled && "disabled", "form-check-label"),
-          "aria-hidden": "true"
-        })
-      };
-
-      const labelElement = e$3(d$2, {
-        children: label != null && e$3(OptionallyInputGroup$1, {
-          isInput: false,
-          tag: "label",
-          ...p2,
-          children: label
-        })
-      });
-
-      if (labelPosition == "tooltip") inputElement = e$3(Tooltip, {
-        tooltip: labelElement,
-        children: inputElement
-      });
-
-      const inputWithLabel = e$3(d$2, {
-        children: [labelPosition == "start" && labelElement, inputElement, labelPosition == "end" && labelElement]
-      });
-
-      return !inInputGroup ? e$3("div", { ...useMergedProps()({}, {
-          class: "form-check"
-        }),
-        children: inputWithLabel
-      }) : inputWithLabel;
     }));
-    const OptionallyInputGroup$1 = forwardElementRef(function OptionallyInputGroup(_ref2, ref) {
+    forwardElementRef(function OptionallyInputGroup(_ref2, ref) {
       let {
         tag,
         children,
         isInput,
+        isTooltip,
         ...props
       } = _ref2;
       const inInputGroup = F(InInputGroupContext);
@@ -14436,12 +14564,18 @@
       props = { ...props,
         ref
       };
-      if (!inInputGroup) return v$2(tag !== null && tag !== void 0 ? tag : d$2, props, children); // If we're in an InputGrid's InputGroup, then create a 
+      props = useMergedProps()(props, (!inInputGroup || isTooltip) && !tag ? children.props : {});
+
+      if (!inInputGroup || isTooltip) {
+        if (tag) return v$2(tag, props, children);else return B(children, props);
+      } // If we're in an InputGrid's InputGroup, then create a 
       // new child that's, CSS-wise, the "true" input.
       // The other one is used for its border styles and relative positioning.
 
-      if (inInputGrid && isInput) children = e$3("div", {
-        className: "input-group-text",
+
+      if (inInputGrid && isInput) children = e$3("div", { ...useMergedProps()(props, {
+          className: "input-group-text"
+        }),
         children: children
       });
       return e$3(InputGroupText, {
@@ -14685,245 +14819,174 @@
         })
       });
     }));
-    const Radio = g$1(forwardElementRef(function Radio(_ref2, ref) {
-      var _labelPosition, _disabled, _label;
 
+    const Radio = g$1(forwardElementRef(function Radio(_ref2, ref) {
       let {
         disabled,
         children: label,
         index,
         value,
-        labelPosition
+        labelPosition,
+        ...rest
       } = _ref2;
-      const useAriaRadio = F(RadioGroupContext);
-      (_labelPosition = labelPosition) !== null && _labelPosition !== void 0 ? _labelPosition : labelPosition = "end";
-      const text = null;
-      const currentHandlerType = F(CurrentHandlerTypeContext);
-      const [asyncState, setAsyncState] = useState(null);
-      disabled || (disabled = asyncState === "pending");
-      const {
-        useRadioInput,
-        useRadioLabel
-      } = useAriaRadio({
-        disabled: (_disabled = disabled) !== null && _disabled !== void 0 ? _disabled : false,
-        labelPosition: "separate",
-        index,
-        text,
-        value,
-        setAsyncState
-      });
-      const {
-        useRadioInputProps
-      } = useRadioInput({
-        tag: "input"
-      });
-      const {
-        useRadioLabelProps
-      } = useRadioLabel({
-        tag: "label"
-      });
-      const {
-        useRadioLabelProps: useWrapperLabelProps
-      } = useRadioLabel({
-        tag: "div"
-      });
-      const inInputGroup = F(InInputGroupContext);
-      (_label = label) !== null && _label !== void 0 ? _label : label = value;
-      let stringLabel = `${label}`;
 
-      if (label != null && labelPosition === "hidden" && !["string", "number", "boolean"].includes(typeof label)) {
-        console.error(`Hidden labels require a string-based label for the aria-label attribute.`);
-      }
+      {
+        var _disabled;
 
-      let inputElement = e$3(OptionallyInputGroup$1, {
-        isInput: true,
-        tag: inInputGroup ? "div" : null,
-        ...useRadioLabelProps({
-          disabled,
-          tabIndex: -1
-        }),
-        children: e$3(ProgressCircular, {
-          childrenPosition: "after",
-          colorFill: "foreground-only",
-          mode: currentHandlerType == "async" ? asyncState : null,
-          colorVariant: "info",
-          children: e$3("input", { ...useRadioInputProps({
-              ref,
-              type: "radio",
-              className: clsx(asyncState === "pending" && "pending", disabled && "disabled", "form-check-input"),
-              "aria-label": labelPosition === "hidden" ? stringLabel : undefined
-            })
-          })
-        })
-      });
+        const currentHandlerType = F(CurrentHandlerTypeContext);
+        const [asyncState, setAsyncState] = useState(null);
+        disabled || (disabled = asyncState === "pending");
+        const useAriaRadio = F(RadioGroupContext);
+        const {
+          useRadioInput,
+          useRadioLabel
+        } = useAriaRadio({
+          disabled: (_disabled = disabled) !== null && _disabled !== void 0 ? _disabled : false,
+          labelPosition: "separate",
+          index,
+          text: null,
+          value,
+          setAsyncState
+        });
+        const {
+          useRadioInputProps
+        } = useRadioInput({
+          tag: "input"
+        });
+        const {
+          useRadioLabelProps
+        } = useRadioLabel({
+          tag: "label"
+        }); //const { useCheckboxLabelElementProps: useWrapperLabelProps } = useCheckboxLabelElement({ tag: "div" });
 
-      const labelElement = e$3(d$2, {
-        children: label != null && e$3(OptionallyInputGroup$1, {
-          isInput: false,
-          tag: "label",
-          ...useRadioLabelProps({
-            className: clsx(asyncState === "pending" && "pending", disabled && "disabled", "form-check-label"),
-            "aria-hidden": "true"
+        return e$3(CheckboxLike, {
+          type: "radio",
+          disabled: disabled,
+          asyncState: asyncState,
+          currentHandlerType: currentHandlerType,
+          labelPosition: labelPosition,
+          inputProps: useRadioInputProps({
+            ref,
+            type: "radio",
+            className: clsx()
           }),
-          children: label
-        })
-      });
-
-      if (labelPosition == "tooltip") inputElement = e$3(Tooltip, {
-        tooltip: labelElement,
-        children: inputElement
-      });
-
-      const inputWithLabel = e$3(d$2, {
-        children: [labelPosition == "start" && labelElement, inputElement, labelPosition == "end" && labelElement]
-      });
-
-      return !inInputGroup ? e$3("div", { ...useWrapperLabelProps({
-          className: "form-check"
-        }),
-        children: inputWithLabel
-      }) : inputWithLabel;
+          labelProps: useRadioLabelProps({
+            class: clsx()
+          }),
+          wrapperProps: useMergedProps()({
+            class: ""
+          }, rest),
+          label: label
+        });
+      }
     }));
 
+    function capture$1(e) {
+      return e[EventDetail].checked;
+    }
     /**
      * @see Checkbox
      * @param ref
      * @returns
      */
 
-    const Switch = g$1(forwardElementRef(function Switch(_ref, ref) {
-      var _labelPosition, _disabled;
 
+    const Switch = g$1(forwardElementRef(function Switch(_ref, ref) {
       let {
         checked,
         disabled,
         onCheck: onInputAsync,
         children: label,
         labelPosition,
+        tabIndex,
         ...rest
       } = _ref;
-      (_labelPosition = labelPosition) !== null && _labelPosition !== void 0 ? _labelPosition : labelPosition = "end";
-      const {
-        useSyncHandler,
-        pending,
-        currentType,
-        hasError,
-        settleCount,
-        currentCapture
-      } = useAsyncHandler()({
-        capture: e => e[EventDetail].checked
-      });
-      const asyncState = hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null;
-      disabled || (disabled = pending);
-      const onInput = useSyncHandler(onInputAsync);
-      const {
-        useCheckboxInputElement: useSwitchInputElement,
-        useCheckboxLabelElement: useSwitchLabelElement
-      } = useAriaCheckbox({
-        checked: pending ? currentCapture : checked,
-        disabled: (_disabled = disabled) !== null && _disabled !== void 0 ? _disabled : false,
-        onInput,
-        labelPosition: "separate"
-      });
-      const {
-        useCheckboxInputElementProps: useSwitchInputElementProps
-      } = useSwitchInputElement({
-        tag: "input"
-      });
-      const {
-        useCheckboxLabelElementProps: useSwitchLabelElementProps
-      } = useSwitchLabelElement({
-        tag: "label"
-      });
-      const {
-        useCheckboxLabelElementProps: useWrapperLabelProps
-      } = useSwitchLabelElement({
-        tag: "div"
-      });
-      const inInputGroup = F(InInputGroupContext);
-      let stringLabel = `${label}`;
 
-      if (label != null && labelPosition === "hidden" && !["string", "number", "boolean"].includes(typeof label)) {
-        console.error(`Hidden labels require a string-based label for the aria-label attribute.`);
+      {
+        var _ref2, _disabled;
+
+        const {
+          useSyncHandler,
+          pending,
+          hasError,
+          settleCount,
+          hasCapture,
+          currentCapture,
+          currentType
+        } = useAsyncHandler()({
+          capture: capture$1
+        });
+        disabled || (disabled = pending);
+        const asyncState = hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null;
+        const onChecked = useSyncHandler(onInputAsync);
+        const {
+          useCheckboxInputElement: useSwitchInputElement,
+          useCheckboxLabelElement: useSwitchLabelElement
+        } = useAriaCheckbox({
+          checked: (_ref2 = pending ? currentCapture : checked) !== null && _ref2 !== void 0 ? _ref2 : false,
+          disabled: (_disabled = disabled) !== null && _disabled !== void 0 ? _disabled : false,
+          onInput: onChecked,
+          labelPosition: "separate"
+        });
+        const {
+          useCheckboxInputElementProps: useSwitchInputElementProps
+        } = useSwitchInputElement({
+          tag: "input"
+        });
+        const {
+          useCheckboxLabelElementProps: useSwitchLabelElementProps
+        } = useSwitchLabelElement({
+          tag: "label"
+        }); //const { useCheckboxLabelElementProps: useWrapperLabelProps } = useCheckboxLabelElement({ tag: "div" });
+
+        return e$3(CheckboxLike, {
+          type: "switch",
+          disabled: disabled,
+          asyncState: asyncState,
+          currentHandlerType: currentType,
+          labelPosition: labelPosition,
+          inputProps: useSwitchInputElementProps({
+            ref: ref,
+            class: clsx(),
+            tabIndex: tabIndex !== null && tabIndex !== void 0 ? tabIndex : 0
+          }),
+          labelProps: useSwitchLabelElementProps({
+            class: clsx()
+          }),
+          wrapperProps: useMergedProps()({
+            class: "form-switch"
+          }, rest),
+          label: label
+        });
       }
-
-      let inputElement = e$3(OptionallyInputGroup, {
-        tag: inInputGroup ? "div" : null,
-        isInput: true,
-        ...useWrapperLabelProps({
-          disabled,
-          tabIndex: -1
-        }),
-        children: e$3(ProgressCircular, {
-          childrenPosition: "after",
-          colorFill: "foreground-only",
-          mode: currentType === "async" ? asyncState : null,
-          colorVariant: "info",
-          children: e$3("input", { ...useSwitchInputElementProps({
-              ref,
-              type: "checkbox",
-              className: clsx(pending && "pending", "form-check-input", disabled && "disabled"),
-              "aria-label": labelPosition === "hidden" ? stringLabel : undefined
-            })
-          })
-        })
-      });
-
-      const p2 = { ...useSwitchLabelElementProps({
-          className: clsx(pending && "pending", "form-check-label", disabled && "disabled"),
-          "aria-hidden": "true"
-        })
-      };
-
-      const labelElement = e$3(d$2, {
-        children: label != null && e$3(OptionallyInputGroup, {
-          tag: "label",
-          isInput: false,
-          ...p2,
-          children: label
-        })
-      });
-
-      if (labelPosition == "tooltip") inputElement = e$3(Tooltip, {
-        tooltip: labelElement,
-        children: inputElement
-      });
-
-      const inputWithLabel = e$3(d$2, {
-        children: [labelPosition == "start" && labelElement, inputElement, labelPosition == "end" && labelElement]
-      });
-
-      return !inInputGroup ? e$3("div", { ...useMergedProps()(rest, {
-          class: "form-check form-switch"
-        }),
-        children: inputWithLabel
-      }) : inputWithLabel;
     })); // Note: Slightly different from the others
     // (^^^^ I'm really glad I left that there)
 
-    const OptionallyInputGroup = forwardElementRef(function OptionallyInputGroup(_ref2, ref) {
+    forwardElementRef(function OptionallyInputGroup(_ref3, ref) {
       let {
         tag,
         isInput,
+        isTooltip,
         children,
         ...props
-      } = _ref2;
+      } = _ref3;
       const inInputGroup = F(InInputGroupContext);
       const inInputGrid = F(InInputGridContext);
       props = { ...props,
         ref
       };
-      if (!inInputGroup) return v$2(tag !== null && tag !== void 0 ? tag : d$2, props, children);
-      if (inInputGrid && isInput) children = e$3("div", {
-        className: clsx(isInput && inInputGrid && "form-switch", "input-group-text"),
-        children: children
+      if (!inInputGroup || isTooltip) return v$2(tag !== null && tag !== void 0 ? tag : d$2, props, children);
+      if (inInputGrid && isInput) children = e$3("div", { ...useMergedProps()(props, {
+          children,
+          className: clsx(isInput && inInputGrid && "form-switch", "input-group-text")
+        })
       });
       return e$3(InputGroupText, {
         tag: tag !== null && tag !== void 0 ? tag : "div",
         ...useMergedProps()({
+          children,
           className: clsx("input-group-text", isInput && !inInputGrid && "form-switch", isInput && inInputGrid && "faux-input-group-text")
-        }, props),
-        children: children
+        }, props)
       });
     });
 
@@ -14932,7 +14995,7 @@
     }
 
     function UnlabelledInputR(p, ref) {
-      var _disabledVariant;
+      var _disabledVariant, _ref;
 
       let {
         type,
@@ -14944,12 +15007,14 @@
         spinnerTimeout,
         prefix,
         suffix,
+        sizeClass,
         ...p2
       } = p;
       let {
-        nullable,
+        nonNullable,
         ...p3
       } = p2;
+      let nullable = !nonNullable;
       const props = p3;
       (_disabledVariant = disabledVariant) !== null && _disabledVariant !== void 0 ? _disabledVariant : disabledVariant = "soft";
       const [focusedInner, setFocusedInner, getFocusedInner] = useState(false);
@@ -14986,6 +15051,7 @@
         }),
         debounce: type === "text" ? 1500 : undefined
       });
+      if (!focusedInner && pending) disabled = true;
       const onInputIfValid = useSyncHandler(disabled ? null : onInputAsync);
 
       const onInput = e => {
@@ -15105,7 +15171,7 @@
       // value anywhere -- it's completely hidden away.
 
 
-      const v = pending || focusedInner ? currentCapture : uncapture(value);
+      const v = (_ref = pending || focusedInner || hasError ? currentCapture : undefined) !== null && _ref !== void 0 ? _ref : uncapture(value);
       const {
         getElement,
         useRefElementProps
@@ -15114,32 +15180,55 @@
         const element = getElement();
 
         if (element) {
-          if (v != null) {
+          if (!focusedInner && v != null) {
             element.value = `${v}`;
           }
         }
-      }, [v]);
+      }, [focusedInner, v]);
+      let measure;
+
+      if (type == "number") {
+        measure = "0".repeat(v.toString().length);
+      } else {
+        measure = v || e$3(d$2, {
+          children: "\u00A0"
+        });
+      }
+
       return e$3(d$2, {
         children: [prefix && e$3("span", {
           class: "form-control-prefix",
           children: prefix
-        }), e$3(ProgressCircular, {
-          spinnerTimeout: spinnerTimeout !== null && spinnerTimeout !== void 0 ? spinnerTimeout : 10,
-          mode: currentType === "async" ? asyncState : null,
-          childrenPosition: "after",
-          colorVariant: "info",
-          children: e$3("input", { ...useRefElementProps(useHasFocusProps(useMergedProps()(props, {
-              "aria-disabled": disabled ? "true" : undefined,
-              onKeyDown,
-              ref,
-              readOnly: readOnly || disabled && disabledVariant === "soft",
-              disabled: disabled && disabledVariant === "hard",
-              onBlur,
-              class: clsx("form-control", "faux-form-control-inner", disabled && "disabled", pending && "with-end-icon"),
-              type,
-              onInput,
-              ...extraProps
-            })))
+        }), e$3("span", {
+          class: clsx("form-control", "faux-form-control-measure", "form-control", sizeClass),
+          children: e$3("span", {
+            children: [measure, currentType == "async" ? e$3("span", {
+              class: "d-inline-block user-select-none",
+              style: {
+                width: "2em"
+              }
+            }) : null]
+          })
+        }), e$3("label", {
+          class: clsx("form-control form-control-input-container", sizeClass),
+          children: e$3(ProgressCircular, {
+            spinnerTimeout: spinnerTimeout !== null && spinnerTimeout !== void 0 ? spinnerTimeout : 10,
+            mode: currentType === "async" ? asyncState : null,
+            childrenPosition: "after",
+            colorVariant: "info",
+            children: e$3("input", { ...useRefElementProps(useHasFocusProps(useMergedProps()(props, {
+                "aria-disabled": disabled ? "true" : undefined,
+                onKeyDown,
+                ref,
+                readOnly: readOnly || disabled && disabledVariant === "soft",
+                disabled: disabled && disabledVariant === "hard",
+                onBlur,
+                class: clsx("form-control", "faux-form-control-inner", disabled && "disabled", "form-control", sizeClass),
+                type,
+                onInput,
+                ...extraProps
+              })))
+            })
           })
         }), suffix && e$3("span", {
           class: "form-control-suffix",
@@ -15149,8 +15238,8 @@
     }
 
     const UnlabelledInput = forwardElementRef(UnlabelledInputR);
-    const Input = g$1(forwardElementRef(function Input(_ref, ref) {
-      var _labelPosition, _size;
+    const Input = g$1(forwardElementRef(function Input(_ref2, ref) {
+      var _labelPosition, _size, _size2;
 
       let {
         children,
@@ -15167,9 +15256,10 @@
         suffix,
         class: classs,
         ...props
-      } = _ref;
+      } = _ref2;
       (_labelPosition = labelPosition) !== null && _labelPosition !== void 0 ? _labelPosition : labelPosition = "start";
-      (_size = size) !== null && _size !== void 0 ? _size : size = "md";
+      let parentSize = F(DefaultInputSize);
+      (_size = size) !== null && _size !== void 0 ? _size : size = parentSize !== null && parentSize !== void 0 ? parentSize : "md";
       const {
         inputId,
         labelId,
@@ -15206,12 +15296,7 @@
         children: children
       });
 
-      if (labelPosition == "prefix") prefix = e$3(d$2, {
-        children: [labelJsx, prefix]
-      });
-      if (labelPosition == "suffix") suffix = e$3(d$2, {
-        children: [labelJsx, prefix]
-      });
+      const sizeClass = size != "md" && `form-control-${size}`;
 
       let inputJsx = e$3(IC, { ...useInputLabelInputProps(useMergedProps()({
           children: IC === InputGroupText ? value : undefined,
@@ -15220,10 +15305,13 @@
           disabled: IC === InputGroupText ? undefined : disabled,
           disabledVariant: IC === InputGroupText ? undefined : disabledVariant,
           readOnly: IC === InputGroupText ? undefined : readOnly,
-          prefix: IC === InputGroupText ? undefined : prefix,
-          suffix: IC === InputGroupText ? undefined : suffix,
-          className: clsx(IC === InputGroupText ? "form-control" : undefined)
+          className: clsx(IC === InputGroupText ? "form-control" : undefined, sizeClass)
         }, props)),
+        ...(IC === InputGroupText ? {} : {
+          sizeClass,
+          prefix: prefix,
+          suffix: suffix
+        }),
         ...{
           ref
         },
@@ -15237,7 +15325,8 @@
 
       if (!(disabled && disabledVariant === "text")) {
         inputJsx = e$3("div", {
-          class: clsx(labelPosition != "floating" && classs, labelPosition != "floating" && className, "form-control", "faux-form-control-outer", "elevation-depressed-2", "elevation-body-surface", "focusable-within", !isEmpty , disabled && disabledVariant !== "text" && "disabled", size != "md" && `form-control-${size}`),
+          class: clsx(labelPosition != "floating" && classs, labelPosition != "floating" && className, "form-control", "faux-form-control-outer", "elevation-depressed-2", "elevation-body-surface", //"focusable-within",
+          sizeClass, !isEmpty , disabled && disabledVariant !== "text" && "disabled"),
           style: width !== null && width !== void 0 && width.endsWith("ch") ? {
             "--form-control-width": width !== null && width !== void 0 ? width : "20ch"
           } : width ? {
@@ -15252,11 +15341,14 @@
         tooltip: labelJsx,
         children: inputJsx
       });
-      return labelPosition !== "floating" ? e$3(d$2, {
-        children: [labelPosition === "start" && labelJsx, inputJsx, labelPosition === "end" && labelJsx]
-      }) : e$3("div", {
-        class: clsx("form-floating", labelPosition == "floating" && classs, labelPosition === "floating" && className),
-        children: inputJsx
+      return e$3(ProvideDefaultButtonSize, {
+        value: (_size2 = size) !== null && _size2 !== void 0 ? _size2 : "md",
+        children: labelPosition !== "floating" ? e$3(d$2, {
+          children: [labelPosition === "start" && labelJsx, inputJsx, labelPosition === "end" && labelJsx]
+        }) : e$3("div", {
+          class: clsx("form-floating", labelPosition == "floating" && classs, labelPosition === "floating" && className),
+          children: inputJsx
+        })
       });
     }));
 
@@ -16595,11 +16687,11 @@
                                 for (let i = 0; i < (radioCount ?? 0); ++i) {
                                     yield e$3(Radio, { disabled: disabled, labelPosition: labelPosition, index: i, value: i, children: ["Radio #", i + 1] }, i);
                                 }
-                            }()) }) }), e$3(CardElement, { children: ["The individual ", e$3("code", { children: "RadioButton" }), "s ", e$3("strong", { children: "do not" }), " accept a ", e$3("code", { children: "checked" }), " prop; instead, the parent ", e$3("code", { children: "RadioGroup" }), " accepts a ", e$3("code", { children: "selectedValue" }), ". Similarly, the ", e$3("code", { children: "onValueChange" }), " event handler lives on that parent ", e$3("code", { children: "RadioGroup" }), ". The individual child ", e$3("code", { children: "Radio" }), "s can be, e.g., marked as ", e$3("code", { children: "disabled" }), ", styled, etc. but all the logic happens with the parent."] }), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Demos" }), e$3(CardElement, { children: e$3(InputGrid, { children: [e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setUsesAsync, checked: usesAsync, labelPosition: "start", children: "Async event handler" }) }), e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setAsyncFails, checked: asyncFails, labelPosition: "start", disabled: !usesAsync, children: "Async handler rejects" }) }), e$3(InputGroup, { children: e$3(Input, { disabled: !usesAsync, type: "number", onValueChange: setAsyncTimeout, value: asyncTimeout, children: "Async timeout" }) }), e$3(InputGroup, { children: e$3(Input, { type: "number", onValueChange: setRadioCount, value: radioCount, children: "# of radio buttons" }) }), e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setDisabled, checked: disabled, labelPosition: "start", children: "Inputs disabled" }) }), e$3(RadioGroup, { name: "radio-demo-6", selectedValue: labelPosition, onValueChange: setLabelPosition, children: [e$3(InputGroup, { children: e$3(Radio, { index: 0, value: "start", labelPosition: "start", children: "Label before" }) }), e$3(InputGroup, { children: e$3(Radio, { index: 1, value: "end", labelPosition: "start", children: "Label after" }) }), e$3(InputGroup, { children: e$3(Radio, { index: 2, value: "hidden", labelPosition: "start", children: "Label hidden (still announced verbally)" }) })] })] }) }), e$3(GridStatic, { columns: 2, children: [e$3(CardElement, { children: [e$3(Checkbox, { disabled: disabled, checked: demoChecked, labelPosition: labelPosition, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked, children: "Checkbox" }), e$3(Switch, { disabled: disabled, checked: demoChecked, labelPosition: labelPosition, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked, children: "Switch" }), e$3(RadioGroup, { name: "radio-demo-1a", selectedValue: demoRadio, onValueChange: usesAsync ? asyncRadioInput : setDemoRadio, children: Array.from(function* () {
+                            }()) }) }), e$3(CardElement, { children: ["The individual ", e$3("code", { children: "RadioButton" }), "s ", e$3("strong", { children: "do not" }), " accept a ", e$3("code", { children: "checked" }), " prop; instead, the parent ", e$3("code", { children: "RadioGroup" }), " accepts a ", e$3("code", { children: "selectedValue" }), ". Similarly, the ", e$3("code", { children: "onValueChange" }), " event handler lives on that parent ", e$3("code", { children: "RadioGroup" }), ". The individual child ", e$3("code", { children: "Radio" }), "s can be, e.g., marked as ", e$3("code", { children: "disabled" }), ", styled, etc. but all the logic happens with the parent."] }), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Demos" }), e$3(CardElement, { children: e$3(InputGrid, { children: [e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setUsesAsync, checked: usesAsync, labelPosition: "start", children: "Async event handler" }) }), e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setAsyncFails, checked: asyncFails, labelPosition: "start", disabled: !usesAsync, children: "Async handler rejects" }) }), e$3(InputGroup, { children: e$3(Input, { disabled: !usesAsync, type: "number", onValueChange: setAsyncTimeout, value: asyncTimeout, children: "Async timeout" }) }), e$3(InputGroup, { children: e$3(Input, { type: "number", onValueChange: setRadioCount, value: radioCount, children: "# of radio buttons" }) }), e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setDisabled, checked: disabled, labelPosition: "start", children: "Inputs disabled" }) }), e$3(RadioGroup, { name: "radio-demo-6", selectedValue: labelPosition, onValueChange: setLabelPosition, children: [e$3(InputGroup, { children: e$3(Radio, { index: 0, value: "start", labelPosition: "start", children: "Label before" }) }), e$3(InputGroup, { children: e$3(Radio, { index: 1, value: "end", labelPosition: "start", children: "Label after" }) }), e$3(InputGroup, { children: e$3(Radio, { index: 2, value: "hidden", labelPosition: "start", children: "Label hidden" }) }), e$3(InputGroup, { children: e$3(Radio, { index: 3, value: "tooltip", labelPosition: "start", children: "Tooltip label" }) })] })] }) }), e$3(GridStatic, { columns: 2, children: [e$3(CardElement, { children: [e$3(Checkbox, { disabled: disabled, checked: demoChecked, labelPosition: labelPosition, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked, children: "Checkbox" }), e$3(Switch, { disabled: disabled, checked: demoChecked, labelPosition: labelPosition, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked, children: "Switch" }), e$3(RadioGroup, { name: "radio-demo-1a", selectedValue: demoRadio, onValueChange: usesAsync ? asyncRadioInput : setDemoRadio, children: Array.from(function* () {
                                             for (let i = 0; i < (radioCount ?? 0); ++i) {
                                                 yield e$3(Radio, { disabled: disabled, labelPosition: labelPosition, index: i, value: i, children: ["Radio #", i + 1] }, i);
                                             }
-                                        }()) })] }), e$3(CardElement, { children: e$3(InputGrid, { children: [e$3(InputGroup, { children: e$3(Checkbox, { disabled: disabled, checked: demoChecked, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked, children: "Checkbox" }) }), e$3(InputGroup, { children: e$3(Switch, { disabled: disabled, checked: demoChecked, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked, children: "Switch" }) }), e$3(RadioGroup, { name: "radio-demo-1b", selectedValue: demoRadio, onValueChange: usesAsync ? asyncRadioInput : setDemoRadio, children: Array.from(function* () {
+                                        }()) })] }), e$3(CardElement, { children: e$3(InputGrid, { children: [e$3(InputGroup, { children: e$3(Checkbox, { disabled: disabled, labelPosition: labelPosition, checked: demoChecked, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked, children: "Checkbox" }) }), e$3(InputGroup, { children: e$3(Switch, { disabled: disabled, labelPosition: labelPosition, checked: demoChecked, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked, children: "Switch" }) }), e$3(RadioGroup, { name: "radio-demo-1b", selectedValue: demoRadio, onValueChange: usesAsync ? asyncRadioInput : setDemoRadio, children: Array.from(function* () {
                                                 for (let i = 0; i < (radioCount ?? 0); ++i) {
                                                     yield e$3(InputGroup, { children: e$3(Radio, { disabled: disabled, labelPosition: labelPosition, index: i, value: i, children: ["Radio #", i + 1] }, i) });
                                                 }
@@ -16629,59 +16721,6 @@
         const onPressAsync = () => pushDialog(e$3(Dialog, { descriptive: false, children: "Dialog item was clicked" }));
         return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Dialogs" }), e$3(CardElement, { children: e$3(Button, { onPress: () => pushDialog(e$3(Dialog, { descriptive: false, children: "This is a dialog!" })), children: "Open a dialog" }) }), e$3(CardElement, { children: [e$3("code", { children: "<Dialog>" }), "s are a way to show the user (read: force the user to at least skim) some amount of information or other content. They can either be controlled or uncontrolled; controlled ", e$3("code", { children: "<Dialog>" }), "s take ", e$3("code", { children: "open" }), " and ", e$3("code", { children: "onClose" }), " props, while uncontrolled ", e$3("code", { children: "<Dialog>" }), "s give you a ", e$3("code", { children: "async show()" }), " function to call, or can be used from ", e$3("code", { children: "useShowDialog" }), "."] }), e$3(CardElement, { children: e$3(Button, { onPress: onPressAsync, children: e$3("code", { children: "usePushDialog" }) }) }), e$3(CardElement, { children: [e$3(Button, { onPress: show ?? undefined, children: e$3("code", { children: ["<Dialog provideShow=", "{provideShow}", " />"] }) }), e$3(Dialog, { descriptive: false, provideShow: setShow, children: "This is a dialog" })] }), e$3(CardElement, { children: ["The easiest way to use them is via the ", e$3("code", { children: "useShowDialog" }), " hook. Pass the returned ", e$3("code", { children: "showDialog" }), " function a ", e$3("code", { children: "<Dialog>" }), " and it will be shown on the screen, with the function returning a promise that resolves when ", e$3("code", { children: "onClose" }), " would be called (if you pass your own ", e$3("code", { children: "onClose" }), " you will override this behavior which can be used if you need to prevent the dialog from closing when clicking the backdrop; use a ", e$3("code", { children: "<CloseDialogButton>" }), " or within your own component pass ", e$3("code", { children: "useCloseDialog" }), "'s returned function to close the dialog during your own ", e$3("code", { children: "onClose" }), ")."] }), e$3(CardElement, { children: "All components that use Portals to position themselves on the body will reposition themselves with the dialog as their parent instead, ensuring they still work as expected." }), e$3(CardElement, { children: e$3(Button, { onPress: () => pushDialog(e$3(Dialog, { descriptive: false, children: "This is a dialog!" })), children: "Open a dialog" }) })] }) }));
     }
-
-    function DemoInputs() {
-        const [asyncFails, setAsyncFails] = useState(false);
-        const [asyncTimeout, setAsyncTimeout] = useState(3000);
-        const [usesAsync, setUsesAsync] = useState(true);
-        const [text, setText] = useState("");
-        const [number, setNumber] = useState(0);
-        const [size, setSize] = useState("md");
-        const asyncTextInput = A$2(async (text) => {
-            await sleep$4(asyncTimeout ?? 0);
-            if (asyncFails)
-                throw new Error("Attempt to change text failed");
-            setText(text);
-        }, [asyncTimeout, asyncFails]);
-        const asyncNumberInput = A$2(async (value) => {
-            await sleep$4(asyncTimeout ?? 0);
-            if (asyncFails)
-                throw new Error("Attempt to change number failed");
-            setNumber(value);
-        }, [asyncTimeout, asyncFails]);
-        const onTextInput = usesAsync ? asyncTextInput : setText;
-        const onNumberInput = usesAsync ? asyncNumberInput : setNumber;
-        return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Text boxes" }), e$3(CardElement, { children: e$3("div", { class: "position-relative", children: e$3(Input, { type: "text", value: text, onValueChange: onTextInput, children: "I'm a text box" }) }) }), e$3(CardElement, { children: [e$3("code", { children: "<Input>" }), " components allow for inputting text, numbers, etc. and asyncronously saving it somewhere else as it's being typed."] }), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Async inputs" }), e$3(CardElement, { children: ["The ", e$3("code", { children: "onInput" }), " event handler for all types of inputs can be sync or async.", e$3(InputGrid, { children: [e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setUsesAsync, checked: usesAsync, labelPosition: "start", children: "Async event handler" }) }), e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setAsyncFails, checked: asyncFails, labelPosition: "start", disabled: !usesAsync, children: "Async handler rejects" }) }), e$3(InputGroup, { children: e$3(Input, { disabled: !usesAsync, type: "number", onValueChange: setAsyncTimeout, value: asyncTimeout, children: "Async timeout" }) })] })] }), e$3(CardElement, { children: [e$3("div", { class: "position-relative", children: e$3(Input, { type: "text", value: text, onValueChange: onTextInput, children: "Text-based input" }) }), e$3("div", { class: "position-relative", children: e$3(Input, { type: "number", value: number, onValueChange: onNumberInput, min: -5, children: "Number-based input" }) })] }), e$3(CardElement, { type: "paragraph", children: e$3("code", { children: `<Input type="text" value={text} onInput={onTextInput}>Text-based input</Input>
-<Input type="number" value={number} onInput={onNumberInput} min={-5}>Number-based input</Input>` }) }), e$3(CardElement, { type: "paragraph", children: ["When placed in an ", e$3("code", { children: "<InputGroup>" }), ", the styling will be significantly different:"] }), e$3(CardElement, { children: e$3(ButtonGroup, { children: [e$3(ButtonGroupChild, { index: 0, pressed: size == "sm", onPressToggle: e => setSize("sm"), children: "Small" }), e$3(ButtonGroupChild, { index: 1, pressed: size == "md", onPressToggle: e => setSize("md"), children: "Medium" }), e$3(ButtonGroupChild, { index: 2, pressed: size == "lg", onPressToggle: e => setSize("lg"), children: "Large" })] }) }), e$3(CardElement, { children: e$3(InputGrid, { children: [e$3(InputGroup, { size: size, children: e$3(Input, { type: "text", value: text, onValueChange: onTextInput, children: "Text-based input" }) }), e$3(InputGroup, { size: size, children: e$3(Input, { type: "number", value: number, onValueChange: onNumberInput, min: -5, children: "Number-based input" }) })] }) }), e$3(CardElement, { type: "paragraph", children: e$3("code", { children: `<InputGrid>
-    <InputGroup size={size}><Input type="text" value={text} onInput={onTextInput}>Text-based input</Input></InputGroup>
-    <InputGroup size={size}><Input type="number" value={number} onInput={onNumberInput} min={-5}>Number-based input</Input></InputGroup>
-</InputGrid>` }) })] }) }));
-    }
-    async function sleep$4(arg0) {
-        return new Promise(resolve => setTimeout(resolve, arg0));
-    }
-
-    function DemoLayout() {
-        return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Layout" }), e$3(CardElement, { children: "A number of utility components and CSS classes are provided to make it easier to create quick and dirty layouts." }), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Simple grids" }), e$3(CardElement, { children: ["Two different grid components are provided for two separate use cases:", e$3("ul", { children: [e$3("li", { children: ["<", e$3("code", { children: "GridResponsive" }), ">, which takes a minimum column size and fits as many columns as possible given that constraint"] }), e$3("li", { children: ["<", e$3("code", { children: "GridStatic" }), ">, which takes a minimum column count and fits that many columns in no matter the resulting size and/or jankiness"] })] })] }), e$3(CardElement, { type: "subtitle", tag: "h3", children: [e$3("code", { children: "<InputGroup>" }), " & ", e$3("code", { children: "<InputGrid>" })] }), e$3(CardElement, { children: ["All input types, from checkboxes to number inputs, can be placed within an ", e$3("code", { children: "<InputGrid>" }), " to give an alternate styling to the default \"free floating\" style."] }), e$3("div", { style: { display: "contents", "--static-grid-columns": "10em auto" }, children: [e$3(CardElement, { children: ["With an ", e$3("code", { children: "<InputGroup>" }), ":", e$3(GridStatic, { columns: 2, children: [e$3(InputGroup, { children: e$3(Checkbox, { disabled: true, checked: true, labelPosition: "start", children: "Checkbox" }) }), e$3("code", { children: `<InputGroup><Checkbox disabled checked={true} labelPosition="start">Checkbox</Checkbox></InputGroup>` })] })] }), e$3(CardElement, { children: ["Without an ", e$3("code", { children: "<InputGroup>" }), ":", e$3(GridStatic, { columns: 2, children: [e$3(Checkbox, { disabled: true, checked: true, labelPosition: "start", children: "Checkbox" }), e$3("code", { children: `<Checkbox disabled checked={true} labelPosition="start">Checkbox</Checkbox>` })] })] })] }), e$3(CardElement, { children: ["In addition, to help with alignment, a set of ", e$3("code", { children: "InputGroup" }), "s can also be placed within an ", e$3("code", { children: "InputGrid" }), " to manage simple cases.", e$3("code", { children: `<InputGrid>
-    <InputGroup><Checkbox disabled checked={true} labelPosition="start">Checkbox</Checkbox></InputGroup>
-    {...}
-</InputGrid>` })] }), e$3(CardElement, { children: ["With an ", e$3("code", { children: "<InputGrid>" }), ":", e$3(InputGrid, { children: [e$3(InputGroup, { children: e$3(Checkbox, { disabled: true, checked: true, labelPosition: "start", children: "Checkbox" }) }), e$3(InputGroup, { children: e$3(Checkbox, { disabled: true, checked: true, labelPosition: "start", children: "Another checkbox" }) }), e$3(InputGroup, { children: e$3(Input, { disabled: true, onValueChange: () => { }, type: "number", value: 0, children: "Numeric input" }) })] })] }), e$3(CardElement, { children: ["Without an ", e$3("code", { children: "<InputGrid>" }), ":", e$3(InputGroup, { children: e$3(Checkbox, { disabled: true, checked: true, labelPosition: "start", children: "Checkbox" }) }), e$3(InputGroup, { children: e$3(Checkbox, { disabled: true, checked: true, labelPosition: "start", children: "Another checkbox" }) }), e$3(InputGroup, { children: e$3(Input, { disabled: true, onValueChange: () => { }, type: "number", value: 0, children: "Numeric input" }) })] })] }) }));
-    }
-
-    const Badge = g$1(forwardElementRef(function Badge(_ref, ref) {
-      let {
-        colorVariant,
-        roundedPill,
-        label,
-        ...props
-      } = _ref;
-      return e$3("span", { ...useMergedProps()({
-          ref,
-          "aria-label": label,
-          className: clsx("badge", roundedPill && "rounded-pill", `bg-${colorVariant !== null && colorVariant !== void 0 ? colorVariant : "secondary"}`)
-        }, props)
-      });
-    }));
 
     const Icon = g$1(forwardElementRef(function Icon(_ref, ref2) {
       let {
@@ -16749,6 +16788,63 @@
         ref: ref
       });
     })); // Probably a better way to get all these names
+
+    function DemoInputs() {
+        const [asyncFails, setAsyncFails] = useState(false);
+        const [asyncTimeout, setAsyncTimeout] = useState(3000);
+        const [usesAsync, setUsesAsync] = useState(true);
+        const [text, setText] = useState("");
+        const [number, setNumber] = useState(0);
+        const [size, setSize] = useState("md");
+        const asyncTextInput = A$2(async (text) => {
+            await sleep$4(asyncTimeout ?? 0);
+            if (asyncFails)
+                throw new Error("Attempt to change text failed");
+            setText(text);
+        }, [asyncTimeout, asyncFails]);
+        const asyncNumberInput = A$2(async (value) => {
+            await sleep$4(asyncTimeout ?? 0);
+            if (asyncFails)
+                throw new Error("Attempt to change number failed");
+            setNumber(value);
+        }, [asyncTimeout, asyncFails]);
+        const [prefix, setPrefix] = useState(null);
+        const [suffix, setSuffix] = useState(null);
+        const onTextInput = usesAsync ? asyncTextInput : setText;
+        const onNumberInput = usesAsync ? asyncNumberInput : setNumber;
+        const p = (prefix == "icon" ? e$3(BootstrapIcon, { icon: "pencil", label: "Edit" }) : prefix == "button" ? e$3(Button, { colorVariant: "subtle", children: e$3(BootstrapIcon, { icon: "pencil", label: "Edit" }) }) : null);
+        const s = (suffix == "icon" ? e$3(BootstrapIcon, { icon: "check", label: "Correct" }) : suffix == "button" ? e$3(Button, { colorVariant: "subtle", children: e$3(BootstrapIcon, { icon: "check", label: "Correct" }) }) : null);
+        return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Text boxes" }), e$3(CardElement, { children: e$3("div", { class: "position-relative", children: e$3(Input, { type: "text", value: text, onValueChange: onTextInput, children: "I'm a text box" }) }) }), e$3(CardElement, { children: [e$3("code", { children: "<Input>" }), " components allow for inputting text, numbers, etc. and asyncronously saving it somewhere else as it's being typed."] }), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Async inputs" }), e$3(CardElement, { children: ["The ", e$3("code", { children: "onInput" }), " event handler for all types of inputs can be sync or async.", e$3(InputGrid, { children: [e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setUsesAsync, checked: usesAsync, labelPosition: "start", children: "Async event handler" }) }), e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setAsyncFails, checked: asyncFails, labelPosition: "start", disabled: !usesAsync, children: "Async handler rejects" }) }), e$3(InputGroup, { children: e$3(Input, { disabled: !usesAsync, type: "number", onValueChange: setAsyncTimeout, value: asyncTimeout, prefix: p, suffix: s, children: "Async timeout" }) })] })] }), e$3(CardElement, { children: [e$3("div", { class: "position-relative", children: e$3(Input, { type: "text", value: text, onValueChange: onTextInput, prefix: p, suffix: s, children: "Text-based input" }) }), e$3("div", { class: "position-relative", children: e$3(Input, { type: "number", value: number, onValueChange: onNumberInput, prefix: p, suffix: s, min: -5, children: "Number-based input" }) })] }), e$3(CardElement, { type: "paragraph", children: e$3("code", { children: `<Input type="text" value={text} onInput={onTextInput}>Text-based input</Input>
+<Input type="number" value={number} onInput={onNumberInput} min={-5}>Number-based input</Input>` }) }), e$3(CardElement, { children: "Icons or other content can be placed at the start or end of the input:" }), e$3(CardElement, { children: [e$3(ButtonGroup, { children: [e$3(ButtonGroupChild, { pressed: prefix == null, onPressToggle: () => setPrefix(null), index: 0, children: "No prefix" }), e$3(ButtonGroupChild, { pressed: prefix == "icon", onPressToggle: () => setPrefix("icon"), index: 1, children: "Icon" }), e$3(ButtonGroupChild, { pressed: prefix == "button", onPressToggle: () => setPrefix("button"), index: 2, children: "Button" })] }), e$3(ButtonGroup, { children: [e$3(ButtonGroupChild, { pressed: suffix == null, onPressToggle: () => setSuffix(null), index: 0, children: "No prefix" }), e$3(ButtonGroupChild, { pressed: suffix == "icon", onPressToggle: () => setSuffix("icon"), index: 1, children: "Icon" }), e$3(ButtonGroupChild, { pressed: suffix == "button", onPressToggle: () => setSuffix("button"), index: 2, children: "Button" })] })] }), e$3(CardElement, { type: "paragraph", children: ["When placed in an ", e$3("code", { children: "<InputGroup>" }), ", the styling will be significantly different:"] }), e$3(CardElement, { children: e$3(ButtonGroup, { children: [e$3(ButtonGroupChild, { index: 0, pressed: size == "sm", onPressToggle: e => setSize("sm"), children: "Small" }), e$3(ButtonGroupChild, { index: 1, pressed: size == "md", onPressToggle: e => setSize("md"), children: "Medium" }), e$3(ButtonGroupChild, { index: 2, pressed: size == "lg", onPressToggle: e => setSize("lg"), children: "Large" })] }) }), e$3(CardElement, { children: e$3(InputGrid, { children: [e$3(InputGroup, { size: size, children: e$3(Input, { type: "text", value: text, onValueChange: onTextInput, prefix: p, suffix: s, children: "Text-based input" }) }), e$3(InputGroup, { size: size, children: e$3(Input, { type: "number", value: number, onValueChange: onNumberInput, prefix: p, suffix: s, min: -5, children: "Number-based input" }) })] }) }), e$3(CardElement, { type: "paragraph", children: e$3("code", { children: `<InputGrid>
+    <InputGroup size={size}><Input type="text" value={text} onInput={onTextInput}>Text-based input</Input></InputGroup>
+    <InputGroup size={size}><Input type="number" value={number} onInput={onNumberInput} min={-5}>Number-based input</Input></InputGroup>
+</InputGrid>` }) })] }) }));
+    }
+    async function sleep$4(arg0) {
+        return new Promise(resolve => setTimeout(resolve, arg0));
+    }
+
+    function DemoLayout() {
+        return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Layout" }), e$3(CardElement, { children: "A number of utility components and CSS classes are provided to make it easier to create quick and dirty layouts." }), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Simple grids" }), e$3(CardElement, { children: ["Two different grid components are provided for two separate use cases:", e$3("ul", { children: [e$3("li", { children: ["<", e$3("code", { children: "GridResponsive" }), ">, which takes a minimum column size and fits as many columns as possible given that constraint"] }), e$3("li", { children: ["<", e$3("code", { children: "GridStatic" }), ">, which takes a minimum column count and fits that many columns in no matter the resulting size and/or jankiness"] })] })] }), e$3(CardElement, { type: "subtitle", tag: "h3", children: [e$3("code", { children: "<InputGroup>" }), " & ", e$3("code", { children: "<InputGrid>" })] }), e$3(CardElement, { children: ["All input types, from checkboxes to number inputs, can be placed within an ", e$3("code", { children: "<InputGrid>" }), " to give an alternate styling to the default \"free floating\" style."] }), e$3("div", { style: { display: "contents", "--static-grid-columns": "10em auto" }, children: [e$3(CardElement, { children: ["With an ", e$3("code", { children: "<InputGroup>" }), ":", e$3(GridStatic, { columns: 2, children: [e$3(InputGroup, { children: e$3(Checkbox, { disabled: true, checked: true, labelPosition: "start", children: "Checkbox" }) }), e$3("code", { children: `<InputGroup><Checkbox disabled checked={true} labelPosition="start">Checkbox</Checkbox></InputGroup>` })] })] }), e$3(CardElement, { children: ["Without an ", e$3("code", { children: "<InputGroup>" }), ":", e$3(GridStatic, { columns: 2, children: [e$3(Checkbox, { disabled: true, checked: true, labelPosition: "start", children: "Checkbox" }), e$3("code", { children: `<Checkbox disabled checked={true} labelPosition="start">Checkbox</Checkbox>` })] })] })] }), e$3(CardElement, { children: ["In addition, to help with alignment, a set of ", e$3("code", { children: "InputGroup" }), "s can also be placed within an ", e$3("code", { children: "InputGrid" }), " to manage simple cases.", e$3("code", { children: `<InputGrid>
+    <InputGroup><Checkbox disabled checked={true} labelPosition="start">Checkbox</Checkbox></InputGroup>
+    {...}
+</InputGrid>` })] }), e$3(CardElement, { children: ["With an ", e$3("code", { children: "<InputGrid>" }), ":", e$3(InputGrid, { children: [e$3(InputGroup, { children: e$3(Checkbox, { disabled: true, checked: true, labelPosition: "start", children: "Checkbox" }) }), e$3(InputGroup, { children: e$3(Checkbox, { disabled: true, checked: true, labelPosition: "start", children: "Another checkbox" }) }), e$3(InputGroup, { children: e$3(Input, { disabled: true, onValueChange: () => { }, type: "number", value: 0, children: "Numeric input" }) })] })] }), e$3(CardElement, { children: ["Without an ", e$3("code", { children: "<InputGrid>" }), ":", e$3(InputGroup, { children: e$3(Checkbox, { disabled: true, checked: true, labelPosition: "start", children: "Checkbox" }) }), e$3(InputGroup, { children: e$3(Checkbox, { disabled: true, checked: true, labelPosition: "start", children: "Another checkbox" }) }), e$3(InputGroup, { children: e$3(Input, { disabled: true, onValueChange: () => { }, type: "number", value: 0, children: "Numeric input" }) })] })] }) }));
+    }
+
+    const Badge = g$1(forwardElementRef(function Badge(_ref, ref) {
+      let {
+        colorVariant,
+        roundedPill,
+        label,
+        ...props
+      } = _ref;
+      return e$3("span", { ...useMergedProps()({
+          ref,
+          "aria-label": label,
+          className: clsx("badge", roundedPill && "rounded-pill", `bg-${colorVariant !== null && colorVariant !== void 0 ? colorVariant : "secondary"}`)
+        }, props)
+      });
+    }));
 
     const RangeThumbContext = D$1(null);
     const DebounceContext = D$1(false);
@@ -17059,7 +17155,7 @@
         }
         const [value, setValue] = useState(0);
         useState(10);
-        return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Lists" }), e$3(CardElement, { children: e$3(Range, { orientation: "block", label: "Test range", step: 1, snap: "continuous", min: 0, max: 10, getValueText: A$2((n) => { return "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[Math.round(n)]; }, []), value: value, onValueChange: setValue }) }), e$3(CardElement, { children: e$3(List, { label: "Demo list", selectedIndex: selectedIndex, onSelect: setSelectedIndex, children: makeListItems(index => e$3(ListItemSingle, { index: index, disabled: index == 3, children: makeListItemLines(index) })) }) }), e$3(CardElement, { children: ["A list is a way to provide a large number of selectable options in a way that's distinct from, say, a list of checkboxes or radio buttons. Lists can be ", e$3("strong", { children: "single-select" }), ", ", e$3("strong", { children: "multi-select" }), ", or ", e$3("strong", { children: "static" }), " (no selection, display only)."] }), e$3(CardElement, { children: ["All list types can have as many lines as needed; each e.g. ", e$3("code", { children: "<span>" }), " will create a new line. Format them however you like (i.e. making some larger or smaller, tinted different colors, etc.)", e$3(InputGroup, { children: e$3(Input, { type: "number", value: lines, onValueChange: setLines, children: "# of lines" }) })] }), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Single select" }), e$3(CardElement, { children: ["For single-select lists, you provide the parent ", e$3("code", { children: "<List>" }), " with ", e$3("code", { children: "selectedIndex" }), " and ", e$3("code", { children: "onSelect" }), " props that control which ", e$3("code", { children: "<ListItemSingle>" }), " is the selected one."] }), e$3(CardElement, { children: ["As with most components, the ", e$3("code", { children: "onSelect" }), " prop can be an async function."] }), e$3(CardElement, { children: e$3(List, { label: "Single-select list demo", selectedIndex: selectedIndex, onSelect: async (i) => { await sleep$3(2000); setSelectedIndex(i); }, children: makeListItems(index => e$3(ListItemSingle, { index: index, disabled: index == 3, children: makeListItemLines(index) })) }) }), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Multi select" }), e$3(CardElement, { children: ["Multi-select lists have a ", e$3("code", { children: "selected" }), " prop on each individual ", e$3("code", { children: "<ListItemMulti>" }), "."] }), e$3(CardElement, { children: ["As with most components, the ", e$3("code", { children: "onSelect" }), " prop can be an async function."] }), e$3(CardElement, { children: e$3(List, { label: "Multi-select list demo", select: "multi", children: makeListItems(index => e$3(ListItemMulti, { index: index, selected: selectedMulti.has(index), disabled: index == 3, onSelect: async (selected) => {
+        return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Lists" }), e$3(CardElement, { children: e$3(Range, { orientation: "block", label: "Test range", step: 1, snap: "continuous", min: 0, max: 10, getValueText: A$2((n) => { return "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[Math.round(n)]; }, []), value: value, onValueChange: setValue }) }), e$3(CardElement, { children: e$3(List, { label: "Demo list", selectedIndex: selectedIndex, onSelect: setSelectedIndex, children: makeListItems(index => e$3(ListItemSingle, { index: index, disabled: index == 3, children: makeListItemLines(index) })) }) }), e$3(CardElement, { children: ["A list is a way to provide a large number of selectable options in a way that's distinct from, say, a list of checkboxes or radio buttons. Lists can be ", e$3("strong", { children: "single-select" }), ", ", e$3("strong", { children: "multi-select" }), ", or ", e$3("strong", { children: "static" }), " (no selection, display only)."] }), e$3(CardElement, { children: ["All list types can have as many lines as needed; each e.g. ", e$3("code", { children: "<span>" }), " will create a new line. Format them however you like (i.e. making some larger or smaller, tinted different colors, etc.)", e$3(InputGroup, { children: e$3(Input, { type: "number", nonNullable: true, value: lines, onValueChange: setLines, children: "# of lines" }) })] }), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Single select" }), e$3(CardElement, { children: ["For single-select lists, you provide the parent ", e$3("code", { children: "<List>" }), " with ", e$3("code", { children: "selectedIndex" }), " and ", e$3("code", { children: "onSelect" }), " props that control which ", e$3("code", { children: "<ListItemSingle>" }), " is the selected one."] }), e$3(CardElement, { children: ["As with most components, the ", e$3("code", { children: "onSelect" }), " prop can be an async function."] }), e$3(CardElement, { children: e$3(List, { label: "Single-select list demo", selectedIndex: selectedIndex, onSelect: async (i) => { await sleep$3(2000); setSelectedIndex(i); }, children: makeListItems(index => e$3(ListItemSingle, { index: index, disabled: index == 3, children: makeListItemLines(index) })) }) }), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Multi select" }), e$3(CardElement, { children: ["Multi-select lists have a ", e$3("code", { children: "selected" }), " prop on each individual ", e$3("code", { children: "<ListItemMulti>" }), "."] }), e$3(CardElement, { children: ["As with most components, the ", e$3("code", { children: "onSelect" }), " prop can be an async function."] }), e$3(CardElement, { children: e$3(List, { label: "Multi-select list demo", select: "multi", children: makeListItems(index => e$3(ListItemMulti, { index: index, selected: selectedMulti.has(index), disabled: index == 3, onSelect: async (selected) => {
                                     await sleep$3(2000);
                                     setSelectedMulti(prev => {
                                         let ret = new Set(Array.from(prev));

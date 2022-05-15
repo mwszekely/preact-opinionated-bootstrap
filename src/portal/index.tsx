@@ -2,7 +2,7 @@ import { ComponentChildren, createContext, VNode, h } from "preact";
 import { generateRandomId, useRefElement, useState } from "preact-prop-helpers";
 import { createPortal, memo } from "preact/compat";
 import { useContext, useEffect, useRef } from "preact/hooks";
-import { forwardElementRef } from "props";
+import { forwardElementRef } from "../props";
 
 const baseId = generateRandomId("render-portal-container-")
 

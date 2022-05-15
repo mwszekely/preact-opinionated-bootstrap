@@ -20,8 +20,8 @@ export const UseCheckboxGroupChildContext = createContext<UseCheckboxGroupChild<
 
 export interface UnlabelledInputTextProps extends BaseUnlabelledInputProps<string> { type: "text"; maxLength?: number; }
 export interface UnlabelledInputNumericProps extends BaseUnlabelledInputProps<string> { type: "numeric"; maxLength?: number; }
-export interface UnlabelledInputNumberNullableProps extends BaseUnlabelledInputProps<number> { type: "number"; min?: number; max?: number; step?: number; nullable?: false; }
-export interface UnlabelledInputNumberNonNullableProps extends BaseUnlabelledInputProps<number | null> { type: "number"; min?: number; max?: number; step?: number; nullable: true; }
+export interface UnlabelledInputNumberNonNullableProps extends BaseUnlabelledInputProps<number> { type: "number"; min?: number; max?: number; step?: number; nonNullable: true; }
+export interface UnlabelledInputNumberNullableProps extends BaseUnlabelledInputProps<number | null> { type: "number"; min?: number; max?: number; step?: number; nonNullable?: false; }
 export type UnlabelledInputProps = UnlabelledInputTextProps | UnlabelledInputNumberNullableProps | UnlabelledInputNumberNonNullableProps | UnlabelledInputNumericProps;
 
 export type InputProps = UnlabelledInputProps & {
@@ -37,6 +37,7 @@ export type InputProps = UnlabelledInputProps & {
 
 export const InInputGroupContext = createContext(false);
 export const InInputGridContext = createContext(0);
+export const DefaultInputSize = createContext<"sm" | "md" | "lg" | null | undefined>(null);
 
 
 export interface CheckboxGroupChildInfo extends UseCheckboxGroupChildInfo {

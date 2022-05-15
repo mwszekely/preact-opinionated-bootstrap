@@ -68,6 +68,7 @@ let gimmickCount = 8;
 
 })();
 
+// TODO: useChildManager
 export function useAriaProgressBar<ProgressElement extends Element>({ tag, max, value, valueText }: UseAriaProgressBarParameters<ProgressElement>) {
 
     //const { inputId, labelId, useGenericLabelInput, useGenericLabelLabel, useReferencedInputIdProps, useReferencedLabelIdProps } = useGenericLabel({ inputPrefix: "progressbar-", labelPrefix: "progressbar-reference-" });
@@ -91,7 +92,7 @@ export function useAriaProgressBar<ProgressElement extends Element>({ tag, max, 
                 role: "progressbar"
             };
 
-        return useRandomIdProps(useMergedProps<ProgressElement>()(extraProps, p))
+        return useRandomIdProps(useMergedProps<ProgressElement>()(extraProps, p));
     }
 
     const useReferencedElement = useCallback(function useReferencedElement<ReferencedElement extends Element>() {
@@ -230,11 +231,11 @@ export const ProgressCircular = forwardElementRef(function ({ loadingLabel, spin
         children = <span>{children}</span>;
 
 
-    let progressProps = useMergedProps<HTMLSpanElement>()({ ref, className: clsx("circular-progress-container") }, useMergedProps<HTMLSpanElement>()(useProgressProps({ "aria-hidden": `${mode != "pending"}` }), p));
+    let progressProps = useMergedProps<HTMLSpanElement>()({ ref, className: clsx("circular-progress-container") }, useProgressProps(useMergedProps<HTMLSpanElement>()({ "aria-hidden": `${mode != "pending"}` }, p)));
 
     progressProps = useMergedProps<HTMLSpanElement>()(progressProps, childrenPosition === "merged" ? { ...children?.props, ref: children?.ref } : {});
 
-    let progressVnodeType = childrenPosition === "merged"? (children?.type ?? "span") : "span";
+    let progressVnodeType = childrenPosition === "merged" ? (children?.type ?? "span") : "span";
 
     const progressElement = (
         h(progressVnodeType as any, progressProps, <>

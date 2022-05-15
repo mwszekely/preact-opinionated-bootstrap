@@ -96,7 +96,8 @@ export function DemoChecks() {
                         <RadioGroup<LabelPosition> name="radio-demo-6" selectedValue={labelPosition} onValueChange={setLabelPosition}>
                             <InputGroup><Radio<LabelPosition> index={0} value={"start"} labelPosition="start">Label before</Radio></InputGroup>
                             <InputGroup><Radio<LabelPosition> index={1} value={"end"} labelPosition="start">Label after</Radio></InputGroup>
-                            <InputGroup><Radio<LabelPosition> index={2} value={"hidden"} labelPosition="start">Label hidden (still announced verbally)</Radio></InputGroup>
+                            <InputGroup><Radio<LabelPosition> index={2} value={"hidden"} labelPosition="start">Label hidden</Radio></InputGroup>
+                            <InputGroup><Radio<LabelPosition> index={3} value={"tooltip"} labelPosition="start">Tooltip label</Radio></InputGroup>
                         </RadioGroup>
                     </InputGrid>
                 </CardElement>
@@ -114,8 +115,8 @@ export function DemoChecks() {
                     </CardElement>
                     <CardElement>
                         <InputGrid>
-                            <InputGroup><Checkbox disabled={disabled} checked={demoChecked} onCheck={usesAsync ? asyncCheckboxInput : setDemoChecked}>Checkbox</Checkbox></InputGroup>
-                            <InputGroup><Switch disabled={disabled} checked={demoChecked} onCheck={usesAsync ? asyncCheckboxInput : setDemoChecked}>Switch</Switch></InputGroup>
+                            <InputGroup><Checkbox disabled={disabled} labelPosition={labelPosition} checked={demoChecked} onCheck={usesAsync ? asyncCheckboxInput : setDemoChecked}>Checkbox</Checkbox></InputGroup>
+                            <InputGroup><Switch disabled={disabled} labelPosition={labelPosition} checked={demoChecked} onCheck={usesAsync ? asyncCheckboxInput : setDemoChecked}>Switch</Switch></InputGroup>
 
                             <RadioGroup<number> name="radio-demo-1b" selectedValue={demoRadio} onValueChange={usesAsync ? asyncRadioInput : setDemoRadio}>
                                 {Array.from(function* () {

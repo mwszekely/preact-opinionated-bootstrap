@@ -1,7 +1,7 @@
 import { createContext, h } from "preact";
 import { useGridNavigation, UseGridNavigationCell, UseGridNavigationRow, UseGridNavigationRowParameters, useHasFocus } from "preact-prop-helpers";
 import { useContext } from "preact/hooks";
-import { GlobalAttributes } from "props";
+import { GlobalAttributes } from "../props";
 
 export function useListCombo() {
 
