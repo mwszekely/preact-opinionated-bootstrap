@@ -65,17 +65,11 @@ export function DemoLists() {
             }
         })())}</>
     }
-
-    const [value, setValue] = useState(0);
-    const [value2, setValue2] = useState(10);
-
+    
     return (
         <div class="demo">
             <Card>
                 <CardElement type="title" tag="h2">Lists</CardElement>
-                <CardElement>
-                    <Range orientation="block" label="Test range" step={1} snap="continuous" min={0} max={10} getValueText={useCallback((n: number) => { return "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[Math.round(n)]; }, [])} value={value} onValueChange={setValue} />
-                </CardElement>
                 <CardElement><List label="Demo list" selectedIndex={selectedIndex} onSelect={setSelectedIndex}>{makeListItems(index => <ListItemSingle index={index} disabled={index == 3}>{makeListItemLines(index)}</ListItemSingle>)}</List></CardElement>
 
                 <CardElement>

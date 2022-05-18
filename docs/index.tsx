@@ -26,6 +26,7 @@ import { DemoInputs } from "./demos/inputs";
 import { DemoLayout } from "./demos/layout";
 import { DemoLists } from "./demos/lists";
 import { DemoMenus } from "./demos/menus";
+import { DemoRanges } from "./demos/range";
 import { DemoTable } from "./demos/tables";
 
 
@@ -279,6 +280,7 @@ const Component = () => {
                 <ToastsProvider>
                     <DialogsProvider>
 
+                        <DemoRanges />
                         <DemoTable />
                         <DemoLists />
                         <DemoMenus />

@@ -20,7 +20,7 @@ function UnlabelledInputR(props: UnlabelledInputNumberNonNullableProps, ref?: Re
 function UnlabelledInputR(props: UnlabelledInputProps, ref?: Ref<any>): h.JSX.Element;
 function UnlabelledInputR(p: UnlabelledInputProps, ref?: Ref<any>): h.JSX.Element {
 
-    let { type, disabled, value, onValueChange: onInputAsync, disabledVariant, readOnly, spinnerTimeout, prefix, suffix, sizeClass, ...p2 } = (p as UnlabelledInputProps & { sizeClass?: string | null });
+    let { type, disabled, value, onValueChange: onInputAsync, disabledVariant, readOnly, spinnerTimeout, prefix, suffix, sizeClass, debounce, ...p2 } = (p as UnlabelledInputProps & { sizeClass?: string | null });
     let { nonNullable, ...p3 } = p2 as (UnlabelledInputNumberNonNullableProps | UnlabelledInputNumberNullableProps);
     let nullable = !nonNullable;
     const props = p3 as h.JSX.HTMLAttributes<HTMLInputElement>;
@@ -50,7 +50,7 @@ function UnlabelledInputR(p: UnlabelledInputProps, ref?: Ref<any>): h.JSX.Elemen
                 return ret;
             }
         }),
-        debounce: type === "text" ? 1500 : undefined
+        debounce: debounce ?? (type === "text" ? 1500 : undefined)
     });
     if (!focusedInner && pending)
         disabled = true;
@@ -234,7 +234,7 @@ const UnlabelledInput = forwardElementRef(UnlabelledInputR);
 
 
 
-export const Input = memo(forwardElementRef(function Input({ children, value, width, readOnly, labelPosition, placeholder, disabled, disabledVariant, size, className, prefix, suffix, class: classs, ...props }: InputProps, ref?: Ref<any>) {
+export const Input = memo(forwardElementRef(function Input({ children, value, width, readOnly, labelPosition, placeholder, disabled, disabledVariant, size, className, prefix, suffix, debounce, class: classs, ...props }: InputProps, ref?: Ref<any>) {
     labelPosition ??= "start";
     let parentSize = useContext(DefaultInputSize);
     size ??= (parentSize ?? "md");
@@ -271,6 +271,7 @@ export const Input = memo(forwardElementRef(function Input({ children, value, wi
             disabled: (IC === InputGroupText ? undefined : disabled),
             disabledVariant: (IC === InputGroupText ? undefined : disabledVariant),
             readOnly: (IC === InputGroupText ? undefined : readOnly),
+            debounce: (IC === InputGroupText ? undefined : debounce),
 
             className: clsx(IC === InputGroupText ? "form-control" : undefined, sizeClass),
         }, props as any)) as any as UnlabelledInputTextProps}

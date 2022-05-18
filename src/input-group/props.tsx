@@ -13,6 +13,7 @@ interface BaseUnlabelledInputProps<T> {
     spinnerTimeout?: number;
     prefix?: ComponentChildren;
     suffix?: ComponentChildren;
+    debounce?: number;
 }
 
 

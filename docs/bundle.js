@@ -15008,6 +15008,7 @@
         prefix,
         suffix,
         sizeClass,
+        debounce,
         ...p2
       } = p;
       let {
@@ -15049,7 +15050,7 @@
             return ret;
           }
         }),
-        debounce: type === "text" ? 1500 : undefined
+        debounce: debounce !== null && debounce !== void 0 ? debounce : type === "text" ? 1500 : undefined
       });
       if (!focusedInner && pending) disabled = true;
       const onInputIfValid = useSyncHandler(disabled ? null : onInputAsync);
@@ -15254,6 +15255,7 @@
         className,
         prefix,
         suffix,
+        debounce,
         class: classs,
         ...props
       } = _ref2;
@@ -15305,6 +15307,7 @@
           disabled: IC === InputGroupText ? undefined : disabled,
           disabledVariant: IC === InputGroupText ? undefined : disabledVariant,
           readOnly: IC === InputGroupText ? undefined : readOnly,
+          debounce: IC === InputGroupText ? undefined : debounce,
           className: clsx(IC === InputGroupText ? "form-control" : undefined, sizeClass)
         }, props)),
         ...(IC === InputGroupText ? {} : {
@@ -16846,6 +16849,92 @@
       });
     }));
 
+    function DemoLists() {
+        const [selectedIndex, setSelectedIndex] = useState(0);
+        useState("outline");
+        useState("md");
+        useState(false);
+        const [lines, setLines] = useState(1);
+        const [selectedMulti, setSelectedMulti] = useState(new Set());
+        const [asyncTimeout, setAsyncTimeout] = useState(3000);
+        useState(true);
+        const [asyncFails, setAsyncFails] = useState(false);
+        useState(true);
+        const pushToast = usePushToast();
+        const onPressSync = () => void (pushToast(e$3(Toast, { children: "List item was clicked" })));
+        const onPressAsync = async () => {
+            await sleep$3(asyncTimeout ?? 0);
+            if (asyncFails)
+                throw new Error("List operation failed.");
+            else
+                onPressSync();
+        };
+        function makeListItemLines(index) {
+            if (lines === 1)
+                return e$3("span", { children: ["List Item #", index + 1] });
+            return e$3(d$2, { children: Array.from((function* () {
+                    for (let i = 0; i < lines; ++i) {
+                        if (i == 0)
+                            yield e$3("span", { class: "h4", children: ["List Item #", index + 1] });
+                        else
+                            yield e$3("span", { children: ["This is line #", i + 1] });
+                    }
+                })()) });
+        }
+        function makeListItems(maker) {
+            return e$3(d$2, { children: Array.from((function* () {
+                    for (let i = 0; i < 5; ++i) {
+                        yield maker(i);
+                    }
+                })()) });
+        }
+        return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Lists" }), e$3(CardElement, { children: e$3(List, { label: "Demo list", selectedIndex: selectedIndex, onSelect: setSelectedIndex, children: makeListItems(index => e$3(ListItemSingle, { index: index, disabled: index == 3, children: makeListItemLines(index) })) }) }), e$3(CardElement, { children: ["A list is a way to provide a large number of selectable options in a way that's distinct from, say, a list of checkboxes or radio buttons. Lists can be ", e$3("strong", { children: "single-select" }), ", ", e$3("strong", { children: "multi-select" }), ", or ", e$3("strong", { children: "static" }), " (no selection, display only)."] }), e$3(CardElement, { children: ["All list types can have as many lines as needed; each e.g. ", e$3("code", { children: "<span>" }), " will create a new line. Format them however you like (i.e. making some larger or smaller, tinted different colors, etc.)", e$3(InputGroup, { children: e$3(Input, { type: "number", nonNullable: true, value: lines, onValueChange: setLines, children: "# of lines" }) })] }), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Single select" }), e$3(CardElement, { children: ["For single-select lists, you provide the parent ", e$3("code", { children: "<List>" }), " with ", e$3("code", { children: "selectedIndex" }), " and ", e$3("code", { children: "onSelect" }), " props that control which ", e$3("code", { children: "<ListItemSingle>" }), " is the selected one."] }), e$3(CardElement, { children: ["As with most components, the ", e$3("code", { children: "onSelect" }), " prop can be an async function."] }), e$3(CardElement, { children: e$3(List, { label: "Single-select list demo", selectedIndex: selectedIndex, onSelect: async (i) => { await sleep$3(2000); setSelectedIndex(i); }, children: makeListItems(index => e$3(ListItemSingle, { index: index, disabled: index == 3, children: makeListItemLines(index) })) }) }), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Multi select" }), e$3(CardElement, { children: ["Multi-select lists have a ", e$3("code", { children: "selected" }), " prop on each individual ", e$3("code", { children: "<ListItemMulti>" }), "."] }), e$3(CardElement, { children: ["As with most components, the ", e$3("code", { children: "onSelect" }), " prop can be an async function."] }), e$3(CardElement, { children: e$3(List, { label: "Multi-select list demo", select: "multi", children: makeListItems(index => e$3(ListItemMulti, { index: index, selected: selectedMulti.has(index), disabled: index == 3, onSelect: async (selected) => {
+                                    await sleep$3(2000);
+                                    setSelectedMulti(prev => {
+                                        let ret = new Set(Array.from(prev));
+                                        if (selected)
+                                            ret.add(index);
+                                        else
+                                            ret.delete(index);
+                                        return ret;
+                                    });
+                                }, children: makeListItemLines(index) })) }) }), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Static lists" }), e$3(CardElement, { children: "All lists share the same basic styling of a static list, so all of these options can also be used on single- and multi-select lists." }), e$3(CardElement, { children: ["You can add an icon at the righthand side with ", e$3("code", { children: "iconEnd" }), ":"] }), e$3(CardElement, { children: e$3(List, { label: "List with icons at the end", children: makeListItems(index => e$3(ListItemActionable, { index: index, onPress: onPressAsync, disabled: index == 3, iconEnd: e$3(BootstrapIcon, { icon: "star", label: null }), children: makeListItemLines(index) })) }) }), e$3(CardElement, { children: ["Or an icon on the left with ", e$3("code", { children: "iconStart" }), ", or a badge at the top-right with ", e$3("code", { children: "badge" }), ":"] }), e$3(CardElement, { children: e$3(List, { label: "List with icons at the start and badges", children: makeListItems(index => e$3(ListItemActionable, { index: index, onPress: onPressSync, disabled: index == 3, badge: e$3(Badge, { label: `Example value`, children: Math.floor(Math.abs(Math.sin((index + 7) * 7) * 20)) }), iconStart: e$3(BootstrapIcon, { icon: "star", label: null }), children: makeListItemLines(index) })) }) }), e$3(CardElement, { children: ["All these will properly align themselves no matter how many lines the list item has. Keep in mind that a list's contents are always read out as one long string to screen readers, so not only should they ", e$3("em", { children: "not" }), " contain interactive content (beyond itself being selectable), any additional content, should be kept as terse as possible to avoid repeated content when reading each item one at a time."] })] }) }));
+    }
+    async function sleep$3(arg0) {
+        return new Promise(resolve => setTimeout(resolve, arg0));
+    }
+
+    function DemoMenus() {
+        const [align, setAlign] = useState("start");
+        const [side, setSide] = useState("block-end");
+        useState(false);
+        const [asyncTimeout, setAsyncTimeout] = useState(3000);
+        useState(true);
+        const [asyncFails, setAsyncFails] = useState(false);
+        useState(true);
+        const [forceOpen, setForceOpen] = useState(true);
+        const pushToast = usePushToast();
+        const onPressSync = () => pushToast(e$3(Toast, { children: "Menu item was clicked" }));
+        const onPressAsync = async () => {
+            await sleep$2(asyncTimeout);
+            if (asyncFails)
+                throw new Error("Button operation failed.");
+            else
+                onPressSync();
+        };
+        return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Menus" }), e$3(CardElement, { children: e$3(Menu, { anchor: e$3(Button, { children: "I'm a menu" }), children: [e$3(MenuItem, { index: 0, onPress: onPressAsync, children: "A: Item 1" }), e$3(MenuItem, { index: 1, onPress: onPressAsync, children: "B: Item 2" }), e$3(MenuItem, { index: 2, onPress: onPressAsync, children: "C: Item 3" }), e$3(MenuItem, { index: 3, children: "I'm static" })] }) }), e$3(CardElement, { children: [e$3("code", { children: "<Menu>" }), "s are effectively popup ", e$3("code", { children: "<List>" }), "s. This gives them all the usual list stuff like keyboard navigation (either with the arrow keys or by typing the text content of the ", e$3("code", { children: "<MenuItem>" }), "), ", e$3(Tooltip, { side: "block-end", mouseoverDelay: 0, tooltip: "Just like this tooltip", children: ["with the popup logic handled by ", e$3("a", { href: "https://popper.js.org/", children: "Popper" })] }), "."] }), e$3(CardElement, { children: e$3("code", { children: `<Menu anchor={<Button>I'm a menu</Button>}>
+    <MenuItem index={0} onPress={onPress}>A: Item 1</MenuItem>
+    <MenuItem index={1} onPress={onPress}>B: Item 2</MenuItem>
+    <MenuItem index={2} onPress={onPress}>C: Item 3</MenuItem>
+    <MenuItem index={3}>I'm static</MenuItem>
+</Menu>` }) }), e$3("hr", {}), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Structure" }), e$3(CardElement, { children: ["A ", e$3("code", { children: "<Menu>" }), " requires both a selection of ", e$3("code", { children: "<MenuItem>" }), "s and also an ", e$3("code", { children: "anchor" }), ", provided by the prop of the same name.  By default, it's assumed that this will be a component that acceps an ", e$3("code", { children: "onPress" }), " event handler, like ", e$3("code", { children: "<Button>" }), "s do.  If you need to use a different event handler (such as ", e$3("code", { children: "onClick" }), ", if your menu isn't tied to a ", e$3("code", { children: "<Button>" }), "), you can pass the name of the prop to use instead to ", e$3("code", { children: "<anchorEventName>" })] }), e$3("hr", {}), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Positioning" }), e$3(CardElement, { type: "paragraph", children: ["A menu's position is, by default, at the start of the line and the bottom of the block (the bottom left corner for this writing mode). You can manipulate this with the ", e$3("code", { children: "side" }), " and ", e$3("code", { children: "align" }), " props."] }), e$3(CardElement, { type: "paragraph", children: "The menu will also automatically flip when reaching the edge of the viewport." }), e$3(CardElement, { children: [e$3(RadioGroup, { label: "Alignment", labelPosition: "start", name: "menu-demo-1-align", selectedValue: align, onValueChange: setAlign, children: e$3(InputGrid, { children: [e$3(InputGroup, { children: e$3(Radio, { index: 0, value: "start", children: "Start" }) }), e$3(InputGroup, { children: e$3(Radio, { index: 1, value: "end", children: "End" }) })] }) }), e$3(InputGroup, { children: e$3(Checkbox, { checked: forceOpen, onCheck: setForceOpen, children: "Keep menu open" }) })] }), e$3(CardElement, { children: e$3(GridStatic, { columns: 3, children: [e$3("div", {}), e$3(Button, { colorVariant: "secondary", pressed: side === "block-start", onPressToggle: (pressed) => void (pressed && setSide("block-start")), children: "Block start" }), e$3("div", {}), e$3(Button, { colorVariant: "secondary", pressed: side === "inline-start", onPressToggle: (pressed) => void (pressed && setSide("inline-start")), children: "Inline start" }), e$3(Menu, { anchor: e$3(Button, { dropdownVariant: "combined", children: "Anchored menu" }), side: side, align: align, forceOpen: forceOpen, children: [e$3(MenuItem, { index: 0, onPress: onPressAsync, children: "A: Item 1" }), e$3(MenuItem, { index: 1, onPress: onPressAsync, children: "B: Item 2" }), e$3(MenuItem, { index: 2, onPress: onPressAsync, children: "C: Item 3" }), e$3(MenuItem, { index: 3, children: "I'm static" })] }), e$3(Button, { colorVariant: "secondary", pressed: side === "inline-end", onPressToggle: (pressed) => void (pressed && setSide("inline-end")), children: "Inline end" }), e$3("div", {}), e$3(Button, { colorVariant: "secondary", pressed: side === "block-end", onPressToggle: (pressed) => void (pressed && setSide("block-end")), children: "Block end" }), e$3("div", {})] }) }), e$3(CardElement, { children: e$3("code", { children: `<Menu anchor={<Button>Menu</Button>} side="${side}" align="${align}">
+    {...}
+</Menu>` }) }), e$3("hr", {}), e$3(CardElement, { type: "subtitle", tag: "h3", children: "List-likes" }), e$3(CardElement, { tag: "div", children: ["Menu items inherit the same ", e$3("code", { children: "iconBefore" }), ", ", e$3("code", { children: "iconAfter" }), ", ", e$3("code", { children: "badge" }), ", and multiple line support from the various list item types."] }), e$3(CardElement, { children: e$3(Menu, { anchor: e$3(Button, { dropdownVariant: "combined", children: "Fancy menu items" }), side: side, align: align, children: [e$3(MenuItem, { index: 0, onPress: onPressAsync, iconStart: e$3(BootstrapIcon, { icon: "pencil", label: null }), children: [e$3("span", { class: "h5", children: "A: Item 1" }), e$3("span", { children: "Line #2" })] }), e$3(MenuItem, { index: 1, onPress: onPressAsync, iconStart: e$3(BootstrapIcon, { icon: "pencil", label: null }), children: [e$3("span", { class: "h5", children: "B: Item 2" }), e$3("span", { children: "Line #2" })] }), e$3(MenuItem, { index: 2, onPress: onPressAsync, iconStart: e$3(BootstrapIcon, { icon: "pencil", label: null }), children: [e$3("span", { class: "h5", children: "C: Item 3" }), e$3("span", { children: "Line #2" })] }), e$3(MenuItem, { index: 3, children: "I'm still static" })] }) }), e$3("hr", {}), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Transitions" }), e$3(CardElement, { tag: "div", children: ["By default, ", e$3("code", { children: "<Menu>" }), "s use a ", e$3("code", { children: "<ZoomFade>" }), " as their transition. This can be customized by doing the following:", e$3("ul", { children: [e$3("li", { children: ["Provide a ", e$3("code", { children: "Transition" }), " prop."] }), e$3("li", { children: ["The ", e$3("code", { children: "<Menu>" }), " now accepts the same props as the transition component you passed in, with some key differences:"] }), e$3("li", { children: ["Any props that this ", e$3("code", { children: "Transition" }), " takes with both inline and block components, like ", e$3("code", { children: "fooInline" }), " and ", e$3("code", { children: "fooBlock" }), ", are now replaced with ", e$3("code", { children: "fooDynamic" }), ", which is relative to the location of the anchor to the menu."] }), e$3("li", { children: ["The menu will, based on the position of the anchor and current position of the menu, turn ", e$3("code", { children: "fooDynamic" }), " into ", e$3("code", { children: "fooInline" }), " or ", e$3("code", { children: "fooBlock" }), ", optionally negated (", e$3("code", { children: "1 - fooDynamic" }), ") if the menu is flipped because it's near the edge of the viewport."] })] })] })] }) }));
+    }
+    async function sleep$2(arg0) {
+        return new Promise(resolve => setTimeout(resolve, arg0));
+    }
+
     const RangeThumbContext = D$1(null);
     const DebounceContext = D$1(false);
     const GetValueTextContext = D$1(null);
@@ -17114,92 +17203,15 @@
       return e[EventDetail].value;
     }
 
-    function DemoLists() {
-        const [selectedIndex, setSelectedIndex] = useState(0);
-        useState("outline");
-        useState("md");
-        useState(false);
-        const [lines, setLines] = useState(1);
-        const [selectedMulti, setSelectedMulti] = useState(new Set());
-        const [asyncTimeout, setAsyncTimeout] = useState(3000);
-        useState(true);
-        const [asyncFails, setAsyncFails] = useState(false);
-        useState(true);
-        const pushToast = usePushToast();
-        const onPressSync = () => void (pushToast(e$3(Toast, { children: "List item was clicked" })));
-        const onPressAsync = async () => {
-            await sleep$3(asyncTimeout ?? 0);
-            if (asyncFails)
-                throw new Error("List operation failed.");
-            else
-                onPressSync();
-        };
-        function makeListItemLines(index) {
-            if (lines === 1)
-                return e$3("span", { children: ["List Item #", index + 1] });
-            return e$3(d$2, { children: Array.from((function* () {
-                    for (let i = 0; i < lines; ++i) {
-                        if (i == 0)
-                            yield e$3("span", { class: "h4", children: ["List Item #", index + 1] });
-                        else
-                            yield e$3("span", { children: ["This is line #", i + 1] });
-                    }
-                })()) });
-        }
-        function makeListItems(maker) {
-            return e$3(d$2, { children: Array.from((function* () {
-                    for (let i = 0; i < 5; ++i) {
-                        yield maker(i);
-                    }
-                })()) });
-        }
+    function DemoRanges() {
+        const [min, setMin] = useState(0);
+        const [max, setMax] = useState(10);
+        const [step, setStep] = useState(1);
+        const [snap, setSnap] = useState("discrete");
+        const [vt, setVt] = useState(false);
         const [value, setValue] = useState(0);
-        useState(10);
-        return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Lists" }), e$3(CardElement, { children: e$3(Range, { orientation: "block", label: "Test range", step: 1, snap: "continuous", min: 0, max: 10, getValueText: A$2((n) => { return "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[Math.round(n)]; }, []), value: value, onValueChange: setValue }) }), e$3(CardElement, { children: e$3(List, { label: "Demo list", selectedIndex: selectedIndex, onSelect: setSelectedIndex, children: makeListItems(index => e$3(ListItemSingle, { index: index, disabled: index == 3, children: makeListItemLines(index) })) }) }), e$3(CardElement, { children: ["A list is a way to provide a large number of selectable options in a way that's distinct from, say, a list of checkboxes or radio buttons. Lists can be ", e$3("strong", { children: "single-select" }), ", ", e$3("strong", { children: "multi-select" }), ", or ", e$3("strong", { children: "static" }), " (no selection, display only)."] }), e$3(CardElement, { children: ["All list types can have as many lines as needed; each e.g. ", e$3("code", { children: "<span>" }), " will create a new line. Format them however you like (i.e. making some larger or smaller, tinted different colors, etc.)", e$3(InputGroup, { children: e$3(Input, { type: "number", nonNullable: true, value: lines, onValueChange: setLines, children: "# of lines" }) })] }), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Single select" }), e$3(CardElement, { children: ["For single-select lists, you provide the parent ", e$3("code", { children: "<List>" }), " with ", e$3("code", { children: "selectedIndex" }), " and ", e$3("code", { children: "onSelect" }), " props that control which ", e$3("code", { children: "<ListItemSingle>" }), " is the selected one."] }), e$3(CardElement, { children: ["As with most components, the ", e$3("code", { children: "onSelect" }), " prop can be an async function."] }), e$3(CardElement, { children: e$3(List, { label: "Single-select list demo", selectedIndex: selectedIndex, onSelect: async (i) => { await sleep$3(2000); setSelectedIndex(i); }, children: makeListItems(index => e$3(ListItemSingle, { index: index, disabled: index == 3, children: makeListItemLines(index) })) }) }), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Multi select" }), e$3(CardElement, { children: ["Multi-select lists have a ", e$3("code", { children: "selected" }), " prop on each individual ", e$3("code", { children: "<ListItemMulti>" }), "."] }), e$3(CardElement, { children: ["As with most components, the ", e$3("code", { children: "onSelect" }), " prop can be an async function."] }), e$3(CardElement, { children: e$3(List, { label: "Multi-select list demo", select: "multi", children: makeListItems(index => e$3(ListItemMulti, { index: index, selected: selectedMulti.has(index), disabled: index == 3, onSelect: async (selected) => {
-                                    await sleep$3(2000);
-                                    setSelectedMulti(prev => {
-                                        let ret = new Set(Array.from(prev));
-                                        if (selected)
-                                            ret.add(index);
-                                        else
-                                            ret.delete(index);
-                                        return ret;
-                                    });
-                                }, children: makeListItemLines(index) })) }) }), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Static lists" }), e$3(CardElement, { children: "All lists share the same basic styling of a static list, so all of these options can also be used on single- and multi-select lists." }), e$3(CardElement, { children: ["You can add an icon at the righthand side with ", e$3("code", { children: "iconEnd" }), ":"] }), e$3(CardElement, { children: e$3(List, { label: "List with icons at the end", children: makeListItems(index => e$3(ListItemActionable, { index: index, onPress: onPressAsync, disabled: index == 3, iconEnd: e$3(BootstrapIcon, { icon: "star", label: null }), children: makeListItemLines(index) })) }) }), e$3(CardElement, { children: ["Or an icon on the left with ", e$3("code", { children: "iconStart" }), ", or a badge at the top-right with ", e$3("code", { children: "badge" }), ":"] }), e$3(CardElement, { children: e$3(List, { label: "List with icons at the start and badges", children: makeListItems(index => e$3(ListItemActionable, { index: index, onPress: onPressSync, disabled: index == 3, badge: e$3(Badge, { label: `Example value`, children: Math.floor(Math.abs(Math.sin((index + 7) * 7) * 20)) }), iconStart: e$3(BootstrapIcon, { icon: "star", label: null }), children: makeListItemLines(index) })) }) }), e$3(CardElement, { children: ["All these will properly align themselves no matter how many lines the list item has. Keep in mind that a list's contents are always read out as one long string to screen readers, so not only should they ", e$3("em", { children: "not" }), " contain interactive content (beyond itself being selectable), any additional content, should be kept as terse as possible to avoid repeated content when reading each item one at a time."] })] }) }));
-    }
-    async function sleep$3(arg0) {
-        return new Promise(resolve => setTimeout(resolve, arg0));
-    }
-
-    function DemoMenus() {
-        const [align, setAlign] = useState("start");
-        const [side, setSide] = useState("block-end");
-        useState(false);
-        const [asyncTimeout, setAsyncTimeout] = useState(3000);
-        useState(true);
-        const [asyncFails, setAsyncFails] = useState(false);
-        useState(true);
-        const [forceOpen, setForceOpen] = useState(true);
-        const pushToast = usePushToast();
-        const onPressSync = () => pushToast(e$3(Toast, { children: "Menu item was clicked" }));
-        const onPressAsync = async () => {
-            await sleep$2(asyncTimeout);
-            if (asyncFails)
-                throw new Error("Button operation failed.");
-            else
-                onPressSync();
-        };
-        return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Menus" }), e$3(CardElement, { children: e$3(Menu, { anchor: e$3(Button, { children: "I'm a menu" }), children: [e$3(MenuItem, { index: 0, onPress: onPressAsync, children: "A: Item 1" }), e$3(MenuItem, { index: 1, onPress: onPressAsync, children: "B: Item 2" }), e$3(MenuItem, { index: 2, onPress: onPressAsync, children: "C: Item 3" }), e$3(MenuItem, { index: 3, children: "I'm static" })] }) }), e$3(CardElement, { children: [e$3("code", { children: "<Menu>" }), "s are effectively popup ", e$3("code", { children: "<List>" }), "s. This gives them all the usual list stuff like keyboard navigation (either with the arrow keys or by typing the text content of the ", e$3("code", { children: "<MenuItem>" }), "), ", e$3(Tooltip, { side: "block-end", mouseoverDelay: 0, tooltip: "Just like this tooltip", children: ["with the popup logic handled by ", e$3("a", { href: "https://popper.js.org/", children: "Popper" })] }), "."] }), e$3(CardElement, { children: e$3("code", { children: `<Menu anchor={<Button>I'm a menu</Button>}>
-    <MenuItem index={0} onPress={onPress}>A: Item 1</MenuItem>
-    <MenuItem index={1} onPress={onPress}>B: Item 2</MenuItem>
-    <MenuItem index={2} onPress={onPress}>C: Item 3</MenuItem>
-    <MenuItem index={3}>I'm static</MenuItem>
-</Menu>` }) }), e$3("hr", {}), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Structure" }), e$3(CardElement, { children: ["A ", e$3("code", { children: "<Menu>" }), " requires both a selection of ", e$3("code", { children: "<MenuItem>" }), "s and also an ", e$3("code", { children: "anchor" }), ", provided by the prop of the same name.  By default, it's assumed that this will be a component that acceps an ", e$3("code", { children: "onPress" }), " event handler, like ", e$3("code", { children: "<Button>" }), "s do.  If you need to use a different event handler (such as ", e$3("code", { children: "onClick" }), ", if your menu isn't tied to a ", e$3("code", { children: "<Button>" }), "), you can pass the name of the prop to use instead to ", e$3("code", { children: "<anchorEventName>" })] }), e$3("hr", {}), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Positioning" }), e$3(CardElement, { type: "paragraph", children: ["A menu's position is, by default, at the start of the line and the bottom of the block (the bottom left corner for this writing mode). You can manipulate this with the ", e$3("code", { children: "side" }), " and ", e$3("code", { children: "align" }), " props."] }), e$3(CardElement, { type: "paragraph", children: "The menu will also automatically flip when reaching the edge of the viewport." }), e$3(CardElement, { children: [e$3(RadioGroup, { label: "Alignment", labelPosition: "start", name: "menu-demo-1-align", selectedValue: align, onValueChange: setAlign, children: e$3(InputGrid, { children: [e$3(InputGroup, { children: e$3(Radio, { index: 0, value: "start", children: "Start" }) }), e$3(InputGroup, { children: e$3(Radio, { index: 1, value: "end", children: "End" }) })] }) }), e$3(InputGroup, { children: e$3(Checkbox, { checked: forceOpen, onCheck: setForceOpen, children: "Keep menu open" }) })] }), e$3(CardElement, { children: e$3(GridStatic, { columns: 3, children: [e$3("div", {}), e$3(Button, { colorVariant: "secondary", pressed: side === "block-start", onPressToggle: (pressed) => void (pressed && setSide("block-start")), children: "Block start" }), e$3("div", {}), e$3(Button, { colorVariant: "secondary", pressed: side === "inline-start", onPressToggle: (pressed) => void (pressed && setSide("inline-start")), children: "Inline start" }), e$3(Menu, { anchor: e$3(Button, { dropdownVariant: "combined", children: "Anchored menu" }), side: side, align: align, forceOpen: forceOpen, children: [e$3(MenuItem, { index: 0, onPress: onPressAsync, children: "A: Item 1" }), e$3(MenuItem, { index: 1, onPress: onPressAsync, children: "B: Item 2" }), e$3(MenuItem, { index: 2, onPress: onPressAsync, children: "C: Item 3" }), e$3(MenuItem, { index: 3, children: "I'm static" })] }), e$3(Button, { colorVariant: "secondary", pressed: side === "inline-end", onPressToggle: (pressed) => void (pressed && setSide("inline-end")), children: "Inline end" }), e$3("div", {}), e$3(Button, { colorVariant: "secondary", pressed: side === "block-end", onPressToggle: (pressed) => void (pressed && setSide("block-end")), children: "Block end" }), e$3("div", {})] }) }), e$3(CardElement, { children: e$3("code", { children: `<Menu anchor={<Button>Menu</Button>} side="${side}" align="${align}">
-    {...}
-</Menu>` }) }), e$3("hr", {}), e$3(CardElement, { type: "subtitle", tag: "h3", children: "List-likes" }), e$3(CardElement, { tag: "div", children: ["Menu items inherit the same ", e$3("code", { children: "iconBefore" }), ", ", e$3("code", { children: "iconAfter" }), ", ", e$3("code", { children: "badge" }), ", and multiple line support from the various list item types."] }), e$3(CardElement, { children: e$3(Menu, { anchor: e$3(Button, { dropdownVariant: "combined", children: "Fancy menu items" }), side: side, align: align, children: [e$3(MenuItem, { index: 0, onPress: onPressAsync, iconStart: e$3(BootstrapIcon, { icon: "pencil", label: null }), children: [e$3("span", { class: "h5", children: "A: Item 1" }), e$3("span", { children: "Line #2" })] }), e$3(MenuItem, { index: 1, onPress: onPressAsync, iconStart: e$3(BootstrapIcon, { icon: "pencil", label: null }), children: [e$3("span", { class: "h5", children: "B: Item 2" }), e$3("span", { children: "Line #2" })] }), e$3(MenuItem, { index: 2, onPress: onPressAsync, iconStart: e$3(BootstrapIcon, { icon: "pencil", label: null }), children: [e$3("span", { class: "h5", children: "C: Item 3" }), e$3("span", { children: "Line #2" })] }), e$3(MenuItem, { index: 3, children: "I'm still static" })] }) }), e$3("hr", {}), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Transitions" }), e$3(CardElement, { tag: "div", children: ["By default, ", e$3("code", { children: "<Menu>" }), "s use a ", e$3("code", { children: "<ZoomFade>" }), " as their transition. This can be customized by doing the following:", e$3("ul", { children: [e$3("li", { children: ["Provide a ", e$3("code", { children: "Transition" }), " prop."] }), e$3("li", { children: ["The ", e$3("code", { children: "<Menu>" }), " now accepts the same props as the transition component you passed in, with some key differences:"] }), e$3("li", { children: ["Any props that this ", e$3("code", { children: "Transition" }), " takes with both inline and block components, like ", e$3("code", { children: "fooInline" }), " and ", e$3("code", { children: "fooBlock" }), ", are now replaced with ", e$3("code", { children: "fooDynamic" }), ", which is relative to the location of the anchor to the menu."] }), e$3("li", { children: ["The menu will, based on the position of the anchor and current position of the menu, turn ", e$3("code", { children: "fooDynamic" }), " into ", e$3("code", { children: "fooInline" }), " or ", e$3("code", { children: "fooBlock" }), ", optionally negated (", e$3("code", { children: "1 - fooDynamic" }), ") if the menu is flipped because it's near the edge of the viewport."] })] })] })] }) }));
-    }
-    async function sleep$2(arg0) {
-        return new Promise(resolve => setTimeout(resolve, arg0));
+        const getValueText = A$2((n) => { return "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[Math.round(n)]; }, []);
+        return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Ranges" }), e$3(CardElement, { children: e$3(Range, { label: "Test range", step: step, snap: snap, min: min, max: max, value: value, onValueChange: setValue, getValueText: vt ? getValueText : undefined }) }), e$3(CardElement, { children: "A range allows for selection of a number between some minimum and maximum values. Ranges can optionally have a step value that determines which numbers within the [min, max] range are acceptable, and this can be optional, allowing a continuous selection of values with only an initial snap to those preferred values." }), e$3(CardElement, { children: ["The ", e$3("code", { children: "snap" }), " prop can be set to either ", e$3("code", { children: "\"discrete\"" }), " (default) or ", e$3("code", { children: "\"continuous\"" }), ". The former allows selection ", e$3("em", { children: "only" }), " of values that match the ", e$3("code", { children: "step" }), " prop. The latter will ", e$3("em", { children: "prefer" }), " selection of those values, but will allow any number within the range."] }), e$3(CardElement, { children: ["The range is linear by default, but you can use the ", e$3("code", { children: "getValueText" }), " prop to show other number scales, such as logarithmic scales, text-based scales, etc. The ", e$3("code", { children: "getTooltipText" }), " prop is similar, defaulting to whatever", e$3("code", { children: "getValueText" }), " is, and is the value displayed by the tooltip itself (", e$3("code", { children: "getValueText" }), " is used by the tick markers and assistive technologies)."] }), e$3(CardElement, { children: [e$3(ButtonGroup, { children: [e$3(ButtonGroupChild, { index: 0, pressed: snap == "discrete", onPressToggle: p => { p && setSnap("discrete"); }, children: "Discrete" }), e$3(ButtonGroupChild, { index: 1, pressed: snap == "continuous", onPressToggle: p => { p && setSnap("continuous"); }, children: "Continuous" })] }), e$3(Input, { type: "number", value: step, onValueChange: setStep, nonNullable: true, children: "Step" }), e$3(Checkbox, { checked: vt, onCheck: setVt, children: "Use text label instead" })] })] }) }));
     }
 
     const TableHeadContext = D$1(null);
@@ -17711,7 +17723,7 @@
         d$1(() => changeThemes(theme), [theme]);
         return e$3(d$2, { children: [e$3(Button, { colorVariant: theme == "theme-dark" ? "light" : "dark", style: { position: "fixed", insetBlockStart: "0.5em", insetInlineEnd: "0.5em", zIndex: 9999999 }, spinnerTimeout: 999999999, onPress: async () => {
                         setTheme(theme === "theme-dark" ? "theme-light" : "theme-dark");
-                    }, children: ["Switch theme to ", e$3("strong", { children: theme === "theme-dark" ? "light" : "dark" })] }), e$3(GridResponsive, { minWidth: "35em", children: e$3(DebugUtilContext.Provider, { value: _$1(() => ({ logRender: new Set(["Table", "TableHead", "TableBody", "TableRow", "TableCell"]) }), []), children: e$3(ToastsProvider, { children: e$3(DialogsProvider, { children: [e$3(DemoTable, {}), e$3(DemoLists, {}), e$3(DemoMenus, {}), e$3(DemoDialogs, {}), e$3(DemoButtons, {}), e$3(DemoChecks, {}), e$3(DemoInputs, {}), e$3(DemoLayout, {}), e$3(DemoAccordion, {}), e$3(DemoDialog, {}), e$3(DemoDrawer, {}), e$3(DemoInput, {}), e$3(DemoList, {}), e$3(DemoTabs, {}), e$3(DemoMenu, {})] }) }) }) })] });
+                    }, children: ["Switch theme to ", e$3("strong", { children: theme === "theme-dark" ? "light" : "dark" })] }), e$3(GridResponsive, { minWidth: "35em", children: e$3(DebugUtilContext.Provider, { value: _$1(() => ({ logRender: new Set(["Table", "TableHead", "TableBody", "TableRow", "TableCell"]) }), []), children: e$3(ToastsProvider, { children: e$3(DialogsProvider, { children: [e$3(DemoRanges, {}), e$3(DemoTable, {}), e$3(DemoLists, {}), e$3(DemoMenus, {}), e$3(DemoDialogs, {}), e$3(DemoButtons, {}), e$3(DemoChecks, {}), e$3(DemoInputs, {}), e$3(DemoLayout, {}), e$3(DemoAccordion, {}), e$3(DemoDialog, {}), e$3(DemoDrawer, {}), e$3(DemoInput, {}), e$3(DemoList, {}), e$3(DemoTabs, {}), e$3(DemoMenu, {})] }) }) }) })] });
     };
     requestAnimationFrame(() => {
         S$1(e$3(Component, {}), document.getElementById("root"));
