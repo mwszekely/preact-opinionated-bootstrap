@@ -67,28 +67,29 @@ const DialogControlled = memo(forwardElementRef(function DialogControlled<T exte
         <BodyPortal>
             <CloseDialogContext.Provider value={useStableCallback(() => onClose?.(undefined))}>
                 <div class="modal-portal-container">
-                    <Fade show={open}>
-                        <div {...useDialogBackdropProps({ class: "modal-backdrop backdrop-filter-transition" })} />
-                    </Fade>
-                    <Transition {...{ ref, show: open, ...rest } as any}>
-                        <div {...useDialogProps({ class: clsx("modal-dialog modal-dialog-scrollable", align == "center" ? "modal-dialog-centered" : "", maxWidth && `modal-${maxWidth}`, fullscreen === true ? "modal-fullscreen" : fullscreen ? `modal-fullscreen-${fullscreen}` : ""), })}>
-                            <BodyPortalRoot>
-                                <Fade show={open}>
-                                    <div class={clsx("modal-content elevation-body-surface elevation-raised-6", align == "fill"? "modal-content-fill" : "")}>
-                                        {title != null && <div {...useDialogTitleProps({ class: "modal-header" })}>
-                                            <h1 class="modal-title">{title}</h1>
-                                        </div>}
-                                        <div {...useDialogBodyProps({ class: "modal-body" })}>
-                                            {children}
+
+                    <div {...useDialogProps({ class: clsx("modal"), style: { display: "block" } })}>
+                        <Transition {...{ ref, show: open, ...rest } as any}>
+                            <div {...{ class: clsx("modal-dialog modal-dialog-scrollable", align == "center" ? "modal-dialog-centered" : "", maxWidth && `modal-${maxWidth}`, fullscreen === true ? "modal-fullscreen" : fullscreen ? `modal-fullscreen-${fullscreen}` : ""), }}>
+                                <BodyPortalRoot>
+                                    <Fade show={open}>
+                                        <div class={clsx("modal-content elevation-body-surface elevation-raised-6", align == "fill" ? "modal-content-fill" : "")}>
+                                            {title != null && <div {...useDialogTitleProps({ class: "modal-header" })}>
+                                                <h1 class="modal-title">{title}</h1>
+                                            </div>}
+                                            <div {...useDialogBodyProps({ class: "modal-body" })}>
+                                                {children}
+                                            </div>
+                                            {footer != null && <div class="modal-footer">
+                                                {footer}
+                                            </div>}
                                         </div>
-                                        {footer != null && <div class="modal-footer">
-                                            {footer}
-                                        </div>}
-                                    </div>
-                                </Fade>
-                            </BodyPortalRoot>
-                        </div>
-                    </Transition>
+                                    </Fade>
+                                </BodyPortalRoot>
+                            </div>
+                        </Transition>
+                        <div {...useDialogBackdropProps({ class: clsx("modal-backdrop backdrop-filter-transition", open ? "transition-enter-finalize" : "transition-exit-finalize") })} />
+                    </div>
                 </div>
             </CloseDialogContext.Provider>
         </BodyPortal >

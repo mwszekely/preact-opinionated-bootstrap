@@ -1156,6 +1156,12 @@
       };
     }
 
+    function getDocument(element) {
+      var _ref, _ref2, _element$ownerDocumen;
+
+      return (_ref = (_ref2 = (_element$ownerDocumen = element === null || element === void 0 ? void 0 : element.ownerDocument) !== null && _element$ownerDocumen !== void 0 ? _element$ownerDocumen : document) !== null && _ref2 !== void 0 ? _ref2 : window.document) !== null && _ref !== void 0 ? _ref : globalThis.document;
+    }
+
     function returnNull$2() {
       return null;
     }
@@ -1170,7 +1176,7 @@
       const currentObserveBox = h$1(undefined);
       const needANewObserver = A$2((element, observeBox) => {
         if (element) {
-          const document = element.ownerDocument;
+          const document = getDocument(element);
           const window = document.defaultView;
 
           const handleUpdate = () => {
@@ -3832,7 +3838,7 @@
     }
 
     /*!
-    * tabbable 5.3.1
+    * tabbable 5.3.2
     * @license MIT, https://github.com/focus-trap/tabbable/blob/master/LICENSE
     */
     var candidateSelectors = ['input', 'select', 'textarea', 'a[href]', 'button', '[tabindex]:not(slot)', 'audio[controls]', 'video[controls]', '[contenteditable]:not([contenteditable="false"])', 'details>summary:first-of-type', 'details'];
@@ -3869,7 +3875,11 @@
 
     var isHidden = function isHidden(node, _ref) {
       var displayCheck = _ref.displayCheck,
-          getShadowRoot = _ref.getShadowRoot;
+          getShadowRoot = _ref.getShadowRoot; // NOTE: visibility will be `undefined` if node is detached from the document
+      //  (see notes about this further down), which means we will consider it visible
+      //  (this is legacy behavior from a very long way back)
+      // NOTE: we check this regardless of `displayCheck="none"` because this is a
+      //  _visibility_ check, not a _display_ check
 
       if (getComputedStyle(node).visibility === 'hidden') {
         return true;
@@ -3880,7 +3890,27 @@
 
       if (matches.call(nodeUnderDetails, 'details:not([open]) *')) {
         return true;
-      }
+      } // The root node is the shadow root if the node is in a shadow DOM; some document otherwise
+      //  (but NOT _the_ document; see second 'If' comment below for more).
+      // If rootNode is shadow root, it'll have a host, which is the element to which the shadow
+      //  is attached, and the one we need to check if it's in the document or not (because the
+      //  shadow, and all nodes it contains, is never considered in the document since shadows
+      //  behave like self-contained DOMs; but if the shadow's HOST, which is part of the document,
+      //  is hidden, or is not in the document itself but is detached, it will affect the shadow's
+      //  visibility, including all the nodes it contains). The host could be any normal node,
+      //  or a custom element (i.e. web component). Either way, that's the one that is considered
+      //  part of the document, not the shadow root, nor any of its children (i.e. the node being
+      //  tested).
+      // If rootNode is not a shadow root, it won't have a host, and so rootNode should be the
+      //  document (per the docs) and while it's a Document-type object, that document does not
+      //  appear to be the same as the node's `ownerDocument` for some reason, so it's safer
+      //  to ignore the rootNode at this point, and use `node.ownerDocument`. Otherwise,
+      //  using `rootNode.contains(node)` will _always_ be true we'll get false-positives when
+      //  node is actually detached.
+
+
+      var nodeRootHost = getRootNode(node).host;
+      var nodeIsAttached = (nodeRootHost === null || nodeRootHost === void 0 ? void 0 : nodeRootHost.ownerDocument.contains(nodeRootHost)) || node.ownerDocument.contains(node);
 
       if (!displayCheck || displayCheck === 'full') {
         if (typeof getShadowRoot === 'function') {
@@ -3913,18 +3943,42 @@
         } // else, `getShadowRoot` might be true, but all that does is enable shadow DOM support
         //  (i.e. it does not also presume that all nodes might have undisclosed shadows); or
         //  it might be a falsy value, which means shadow DOM support is disabled
-        // didn't find it sitting in an undisclosed shadow (or shadows are disabled) so now we
-        //  can just test to see if it would normally be visible or not
-        // this works wherever the node is: if there's at least one client rect, it's
-        //  somehow displayed; it also covers the CSS 'display: contents' case where the
-        //  node itself is hidden in place of its contents; and there's no need to search
-        //  up the hierarchy either
+        // Since we didn't find it sitting in an undisclosed shadow (or shadows are disabled)
+        //  now we can just test to see if it would normally be visible or not, provided it's
+        //  attached to the main document.
+        // NOTE: We must consider case where node is inside a shadow DOM and given directly to
+        //  `isTabbable()` or `isFocusable()` -- regardless of `getShadowRoot` option setting.
 
 
-        return !node.getClientRects().length;
+        if (nodeIsAttached) {
+          // this works wherever the node is: if there's at least one client rect, it's
+          //  somehow displayed; it also covers the CSS 'display: contents' case where the
+          //  node itself is hidden in place of its contents; and there's no need to search
+          //  up the hierarchy either
+          return !node.getClientRects().length;
+        } // Else, the node isn't attached to the document, which means the `getClientRects()`
+        //  API will __always__ return zero rects (this can happen, for example, if React
+        //  is used to render nodes onto a detached tree, as confirmed in this thread:
+        //  https://github.com/facebook/react/issues/9117#issuecomment-284228870)
+        //
+        // It also means that even window.getComputedStyle(node).display will return `undefined`
+        //  because styles are only computed for nodes that are in the document.
+        //
+        // NOTE: THIS HAS BEEN THE CASE FOR YEARS. It is not new, nor is it caused by tabbable
+        //  somehow. Though it was never stated officially, anyone who has ever used tabbable
+        //  APIs on nodes in detached containers has actually implicitly used tabbable in what
+        //  was later (as of v5.2.0 on Apr 9, 2021) called `displayCheck="none"` mode -- essentially
+        //  considering __everything__ to be visible because of the innability to determine styles.
+
       } else if (displayCheck === 'non-zero-area') {
+        // NOTE: Even though this tests that the node's client rect is non-zero to determine
+        //  whether it's displayed, and that a detached node will __always__ have a zero-area
+        //  client rect, we don't special-case for whether the node is attached or not. In
+        //  this mode, we do want to consider nodes that have a zero area to be hidden at all
+        //  times, and that includes attached or not.
         return isZeroArea(node);
-      }
+      } // visible, as far as we can tell, or per current `displayCheck` mode
+
 
       return false;
     }; // form fields (nested) inside a disabled fieldset are not focusable/tabbable
@@ -5343,7 +5397,7 @@
     })();
 
     function blockingElements() {
-      return document.$blockingElements;
+      return getDocument().$blockingElements;
     }
     /**
      * Allows an element to trap focus by applying the "inert" attribute to all sibling, aunt, and uncle nodes.
@@ -5405,7 +5459,7 @@
         if (trapActive && element) {
           var _getLastActiveElement;
 
-          const document = element.ownerDocument;
+          const document = getDocument(element);
           document.defaultView; // Save the currently focused element
           // to whatever's currently at the top of the stack
 
@@ -7834,7 +7888,7 @@
             } = useCheckboxLikeInputElement({
               tag
             });
-            return useListNavigationChildProps(useCheckboxLikeInputElementProps(useMergedProps()({}, props)));
+            return useMergedProps()(useListNavigationChildProps(useCheckboxLikeInputElementProps({})), props);
           };
 
           return {
@@ -11106,8 +11160,14 @@
         onElementChange: setElement
       });
       return e$3(BodyPortalRootContext.Provider, {
-        value: getElement,
-        children: [children, e$3("div", { ...useRefElementProps({})
+        value: A$2(() => {
+          var _getElement$parentEle, _getElement;
+
+          return (_getElement$parentEle = (_getElement = getElement()) === null || _getElement === void 0 ? void 0 : _getElement.parentElement) !== null && _getElement$parentEle !== void 0 ? _getElement$parentEle : null;
+        }, []),
+        children: [children, e$3("div", { ...useRefElementProps({
+            hidden: true
+          })
         })]
       });
     }
@@ -11196,45 +11256,49 @@
           }),
           children: e$3("div", {
             class: "modal-portal-container",
-            children: [e$3(Fade, {
-              show: open,
-              children: e$3("div", { ...useDialogBackdropProps({
-                  class: "modal-backdrop backdrop-filter-transition"
-                })
-              })
-            }), e$3(Transition, { ...{
-                ref,
-                show: open,
-                ...rest
-              },
-              children: e$3("div", { ...useDialogProps({
-                  class: clsx("modal-dialog modal-dialog-scrollable", align == "center" ? "modal-dialog-centered" : "", maxWidth && `modal-${maxWidth}`, fullscreen === true ? "modal-fullscreen" : fullscreen ? `modal-fullscreen-${fullscreen}` : "")
-                }),
-                children: e$3(BodyPortalRoot, {
-                  children: e$3(Fade, {
-                    show: open,
-                    children: e$3("div", {
-                      class: clsx("modal-content elevation-body-surface elevation-raised-6", align == "fill" ? "modal-content-fill" : ""),
-                      children: [title != null && e$3("div", { ...useDialogTitleProps({
-                          class: "modal-header"
-                        }),
-                        children: e$3("h1", {
-                          class: "modal-title",
-                          children: title
-                        })
-                      }), e$3("div", { ...useDialogBodyProps({
-                          class: "modal-body"
-                        }),
-                        children: children
-                      }), footer != null && e$3("div", {
-                        class: "modal-footer",
-                        children: footer
-                      })]
+            children: e$3("div", { ...useDialogProps({
+                class: clsx("modal"),
+                style: {
+                  display: "block"
+                }
+              }),
+              children: [e$3(Transition, { ...{
+                  ref,
+                  show: open,
+                  ...rest
+                },
+                children: e$3("div", { ...{
+                    class: clsx("modal-dialog modal-dialog-scrollable", align == "center" ? "modal-dialog-centered" : "", maxWidth && `modal-${maxWidth}`, fullscreen === true ? "modal-fullscreen" : fullscreen ? `modal-fullscreen-${fullscreen}` : "")
+                  },
+                  children: e$3(BodyPortalRoot, {
+                    children: e$3(Fade, {
+                      show: open,
+                      children: e$3("div", {
+                        class: clsx("modal-content elevation-body-surface elevation-raised-6", align == "fill" ? "modal-content-fill" : ""),
+                        children: [title != null && e$3("div", { ...useDialogTitleProps({
+                            class: "modal-header"
+                          }),
+                          children: e$3("h1", {
+                            class: "modal-title",
+                            children: title
+                          })
+                        }), e$3("div", { ...useDialogBodyProps({
+                            class: "modal-body"
+                          }),
+                          children: children
+                        }), footer != null && e$3("div", {
+                          class: "modal-footer",
+                          children: footer
+                        })]
+                      })
                     })
                   })
                 })
-              })
-            })]
+              }), e$3("div", { ...useDialogBackdropProps({
+                  class: clsx("modal-backdrop backdrop-filter-transition", open ? "transition-enter-finalize" : "transition-exit-finalize")
+                })
+              })]
+            })
           })
         })
       });
@@ -14329,7 +14393,8 @@
         wrapperProps,
         label,
         disabled,
-        type
+        type,
+        inline
       } = _ref;
       (_labelPosition = labelPosition) !== null && _labelPosition !== void 0 ? _labelPosition : labelPosition = "end";
       const inInputGroup = !!F(InInputGroupContext);
@@ -14347,7 +14412,16 @@
       }, inputProps);
       if (inInputGroup) inputProps = temp;
 
-      if (inInputGroup) {
+      if (labelPosition == "button") {
+        return e$3(ButtonCheckboxLike, {
+          disabled: disabled,
+          asyncState: asyncState,
+          currentHandlerType: currentHandlerType,
+          label: label,
+          inputProps: inputProps,
+          labelProps: labelProps
+        });
+      } else if (inInputGroup) {
         return e$3(InputGroupCheckboxLike, {
           type: type,
           labelPosition: labelPosition,
@@ -14362,6 +14436,7 @@
         return e$3(NormalCheckboxLike, {
           labelPosition: labelPosition,
           disabled: disabled,
+          inline: inline,
           asyncState: asyncState,
           currentHandlerType: currentHandlerType,
           label: label,
@@ -14372,8 +14447,38 @@
       }
     }
 
-    function CheckboxLikeOnly(_ref2) {
+    function ButtonCheckboxLike(_ref2) {
       var _ref3;
+
+      let {
+        inputProps,
+        labelProps,
+        label,
+        asyncState,
+        currentHandlerType,
+        disabled
+      } = _ref2;
+      const buttonColor = useButtonColorVariant() || "primary";
+      return e$3(d$2, {
+        children: [e$3("input", { ...useMergedProps()({
+            class: clsx("btn-check", disabled && "disabled")
+          }, inputProps)
+        }), e$3(ProgressCircular, {
+          childrenPosition: "child",
+          colorFill: "foreground-only",
+          mode: (_ref3 = currentHandlerType === "async" ? asyncState : null) !== null && _ref3 !== void 0 ? _ref3 : null,
+          colorVariant: "info",
+          children: e$3("label", { ...useMergedProps()({
+              class: clsx("btn", `btn-${buttonColor}`, disabled && disabled, inputProps.checked && "active"),
+              children: label
+            }, labelProps)
+          })
+        })]
+      });
+    }
+
+    function CheckboxLikeOnly(_ref4) {
+      var _ref5;
 
       let {
         label,
@@ -14382,7 +14487,7 @@
         currentHandlerType,
         disabled,
         labelPosition
-      } = _ref2;
+      } = _ref4;
 
       let inputElement = e$3("input", { ...useMergedProps()({
           class: clsx("form-check-input", disabled && "disabled")
@@ -14396,14 +14501,14 @@
       inputElement = e$3(ProgressCircular, {
         childrenPosition: "after",
         colorFill: "foreground-only",
-        mode: (_ref3 = currentHandlerType === "async" ? asyncState : null) !== null && _ref3 !== void 0 ? _ref3 : null,
+        mode: (_ref5 = currentHandlerType === "async" ? asyncState : null) !== null && _ref5 !== void 0 ? _ref5 : null,
         colorVariant: "info",
         children: inputElement
       });
       return inputElement;
     }
 
-    function InputGroupCheckboxLike(_ref4) {
+    function InputGroupCheckboxLike(_ref6) {
       let {
         inputProps,
         labelProps,
@@ -14413,9 +14518,9 @@
         disabled,
         labelPosition,
         type
-      } = _ref4;
+      } = _ref6;
 
-      const labelElement = label != null && (labelPosition == "start" || labelPosition == "end") && e$3(InputGroupText, {
+      let labelElement = e$3(InputGroupText, {
         tag: "label",
         ...useMergedProps()({
           class: clsx("input-group-text", disabled && "disabled"),
@@ -14423,6 +14528,7 @@
         }, labelProps)
       });
 
+      labelElement = label != null && (labelPosition == "start" || labelPosition == "end") && labelElement || null;
       return e$3(d$2, {
         children: [labelPosition == "start" && labelElement, e$3(InputGroupText, {
           tag: "div",
@@ -14440,7 +14546,7 @@
       });
     }
 
-    function NormalCheckboxLike(_ref5) {
+    function NormalCheckboxLike(_ref7) {
       let {
         inputProps,
         labelProps,
@@ -14449,8 +14555,9 @@
         asyncState,
         currentHandlerType,
         disabled,
-        labelPosition
-      } = _ref5;
+        labelPosition,
+        inline
+      } = _ref7;
 
       const labelElement = (labelPosition == "start" || labelPosition == "end") && e$3("label", { ...useMergedProps()({
           class: clsx("form-check-label", disabled && "disabled"),
@@ -14459,7 +14566,7 @@
       });
 
       return e$3("div", { ...useMergedProps()({
-          class: clsx("form-check", disabled && "disabled")
+          class: clsx("form-check", disabled && "disabled", inline && "form-check-inline")
         }, wrapperProps),
         children: [labelPosition == "start" && labelElement, e$3(CheckboxLikeOnly, {
           disabled: disabled,
@@ -14484,72 +14591,73 @@
 
 
     const Checkbox = g$1(forwardElementRef(function Checkbox(_ref, ref) {
+      var _disabled;
+
       let {
         checked,
         disabled,
+        inline,
         onCheck: onCheckedAsync,
         labelPosition,
         children: label,
         tabIndex,
         ...props
       } = _ref;
+      const inInputGroup = F(InInputGroupContext);
+      const {
+        useSyncHandler,
+        pending,
+        hasError,
+        settleCount,
+        hasCapture,
+        currentCapture,
+        currentType
+      } = useAsyncHandler()({
+        capture: capture$2
+      });
+      disabled || (disabled = pending);
+      const asyncState = hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null;
+      const onChecked = useSyncHandler(onCheckedAsync);
+      const {
+        useCheckboxInputElement,
+        useCheckboxLabelElement
+      } = useAriaCheckbox({
+        checked: pending ? currentCapture : checked === "indeterminate" ? "mixed" : checked,
+        disabled: (_disabled = disabled) !== null && _disabled !== void 0 ? _disabled : false,
+        onInput: onChecked,
+        labelPosition: "separate"
+      });
+      const {
+        useCheckboxInputElementProps
+      } = useCheckboxInputElement({
+        tag: "input"
+      });
+      const {
+        useCheckboxLabelElementProps
+      } = useCheckboxLabelElement({
+        tag: "label"
+      }); //const { useCheckboxLabelElementProps: useWrapperLabelProps } = useCheckboxLabelElement({ tag: "div" });
 
-      {
-        var _disabled;
-
-        const inInputGroup = F(InInputGroupContext);
-        const {
-          useSyncHandler,
-          pending,
-          hasError,
-          settleCount,
-          hasCapture,
-          currentCapture,
-          currentType
-        } = useAsyncHandler()({
-          capture: capture$2
-        });
-        disabled || (disabled = pending);
-        const asyncState = hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null;
-        const onChecked = useSyncHandler(onCheckedAsync);
-        const {
-          useCheckboxInputElement,
-          useCheckboxLabelElement
-        } = useAriaCheckbox({
-          checked: pending ? currentCapture : checked === "indeterminate" ? "mixed" : checked,
-          disabled: (_disabled = disabled) !== null && _disabled !== void 0 ? _disabled : false,
-          onInput: onChecked,
-          labelPosition: "separate"
-        });
-        const {
-          useCheckboxInputElementProps
-        } = useCheckboxInputElement({
-          tag: "input"
-        });
-        const {
-          useCheckboxLabelElementProps
-        } = useCheckboxLabelElement({
-          tag: "label"
-        }); //const { useCheckboxLabelElementProps: useWrapperLabelProps } = useCheckboxLabelElement({ tag: "div" });
-
-        return e$3(CheckboxLike, {
-          type: "check",
-          disabled: disabled,
-          asyncState: asyncState,
-          currentHandlerType: currentType,
-          labelPosition: labelPosition,
-          inputProps: useCheckboxInputElementProps({
-            ref: ref,
-            className: clsx(pending && "pending", inInputGroup && "mt-0"),
-            tabIndex: tabIndex !== null && tabIndex !== void 0 ? tabIndex : 0
-          }),
-          labelProps: useCheckboxLabelElementProps({
-            class: clsx(pending && "pending")
-          }),
-          wrapperProps: useMergedProps()({}, props),
-          label: label
-        });
-      }
+      let baseInputProps = {
+        ref: ref,
+        className: clsx(pending && "pending", inInputGroup && "mt-0"),
+        tabIndex: tabIndex !== null && tabIndex !== void 0 ? tabIndex : 0
+      };
+      let baseLabelProps = {
+        class: clsx(pending && "pending")
+      };
+      return e$3(CheckboxLike, {
+        type: "check",
+        disabled: disabled,
+        asyncState: asyncState,
+        currentHandlerType: currentType,
+        labelPosition: labelPosition,
+        inputProps: useCheckboxInputElementProps(baseInputProps),
+        labelProps: useCheckboxLabelElementProps(baseLabelProps),
+        inline: inline !== null && inline !== void 0 ? inline : false,
+        wrapperProps: useMergedProps()({}, props),
+        label: label
+      });
     }));
     forwardElementRef(function OptionallyInputGroup(_ref2, ref) {
       let {
@@ -14821,64 +14929,62 @@
     }));
 
     const Radio = g$1(forwardElementRef(function Radio(_ref2, ref) {
+      var _disabled;
+
       let {
         disabled,
+        inline,
         children: label,
         index,
         value,
         labelPosition,
         ...rest
       } = _ref2;
-
-      {
-        var _disabled;
-
-        const currentHandlerType = F(CurrentHandlerTypeContext);
-        const [asyncState, setAsyncState] = useState(null);
-        disabled || (disabled = asyncState === "pending");
-        const useAriaRadio = F(RadioGroupContext);
-        const {
-          useRadioInput,
-          useRadioLabel
-        } = useAriaRadio({
-          disabled: (_disabled = disabled) !== null && _disabled !== void 0 ? _disabled : false,
-          labelPosition: "separate",
-          index,
-          text: null,
-          value,
-          setAsyncState
-        });
-        const {
-          useRadioInputProps
-        } = useRadioInput({
-          tag: "input"
-        });
-        const {
-          useRadioLabelProps
-        } = useRadioLabel({
-          tag: "label"
-        }); //const { useCheckboxLabelElementProps: useWrapperLabelProps } = useCheckboxLabelElement({ tag: "div" });
-
-        return e$3(CheckboxLike, {
+      const currentHandlerType = F(CurrentHandlerTypeContext);
+      const [asyncState, setAsyncState] = useState(null);
+      disabled || (disabled = asyncState === "pending");
+      const useAriaRadio = F(RadioGroupContext);
+      const {
+        useRadioInput,
+        useRadioLabel
+      } = useAriaRadio({
+        disabled: (_disabled = disabled) !== null && _disabled !== void 0 ? _disabled : false,
+        labelPosition: "separate",
+        index,
+        text: null,
+        value,
+        setAsyncState
+      });
+      const {
+        useRadioInputProps
+      } = useRadioInput({
+        tag: "input"
+      });
+      const {
+        useRadioLabelProps
+      } = useRadioLabel({
+        tag: "label"
+      });
+      return e$3(CheckboxLike, {
+        type: "radio",
+        disabled: disabled,
+        asyncState: asyncState,
+        currentHandlerType: currentHandlerType,
+        labelPosition: labelPosition,
+        inputProps: useRadioInputProps({
+          ref,
           type: "radio",
-          disabled: disabled,
-          asyncState: asyncState,
-          currentHandlerType: currentHandlerType,
-          labelPosition: labelPosition,
-          inputProps: useRadioInputProps({
-            ref,
-            type: "radio",
-            className: clsx()
-          }),
-          labelProps: useRadioLabelProps({
-            class: clsx()
-          }),
-          wrapperProps: useMergedProps()({
-            class: ""
-          }, rest),
-          label: label
-        });
-      }
+          className: clsx()
+        }),
+        labelProps: useRadioLabelProps({
+          class: clsx()
+        }),
+        wrapperProps: useMergedProps()({
+          class: ""
+        }, rest),
+        inline: inline !== null && inline !== void 0 ? inline : false,
+        label: label
+      });
     }));
 
     function capture$1(e) {
@@ -14892,73 +14998,72 @@
 
 
     const Switch = g$1(forwardElementRef(function Switch(_ref, ref) {
+      var _ref2, _disabled;
+
       let {
         checked,
         disabled,
+        inline,
         onCheck: onInputAsync,
         children: label,
         labelPosition,
         tabIndex,
         ...rest
       } = _ref;
+      const {
+        useSyncHandler,
+        pending,
+        hasError,
+        settleCount,
+        hasCapture,
+        currentCapture,
+        currentType
+      } = useAsyncHandler()({
+        capture: capture$1
+      });
+      disabled || (disabled = pending);
+      const asyncState = hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null;
+      const onChecked = useSyncHandler(onInputAsync);
+      const {
+        useCheckboxInputElement: useSwitchInputElement,
+        useCheckboxLabelElement: useSwitchLabelElement
+      } = useAriaCheckbox({
+        checked: (_ref2 = pending ? currentCapture : checked) !== null && _ref2 !== void 0 ? _ref2 : false,
+        disabled: (_disabled = disabled) !== null && _disabled !== void 0 ? _disabled : false,
+        onInput: onChecked,
+        labelPosition: "separate"
+      });
+      const {
+        useCheckboxInputElementProps: useSwitchInputElementProps
+      } = useSwitchInputElement({
+        tag: "input"
+      });
+      const {
+        useCheckboxLabelElementProps: useSwitchLabelElementProps
+      } = useSwitchLabelElement({
+        tag: "label"
+      }); //const { useCheckboxLabelElementProps: useWrapperLabelProps } = useCheckboxLabelElement({ tag: "div" });
 
-      {
-        var _ref2, _disabled;
-
-        const {
-          useSyncHandler,
-          pending,
-          hasError,
-          settleCount,
-          hasCapture,
-          currentCapture,
-          currentType
-        } = useAsyncHandler()({
-          capture: capture$1
-        });
-        disabled || (disabled = pending);
-        const asyncState = hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null;
-        const onChecked = useSyncHandler(onInputAsync);
-        const {
-          useCheckboxInputElement: useSwitchInputElement,
-          useCheckboxLabelElement: useSwitchLabelElement
-        } = useAriaCheckbox({
-          checked: (_ref2 = pending ? currentCapture : checked) !== null && _ref2 !== void 0 ? _ref2 : false,
-          disabled: (_disabled = disabled) !== null && _disabled !== void 0 ? _disabled : false,
-          onInput: onChecked,
-          labelPosition: "separate"
-        });
-        const {
-          useCheckboxInputElementProps: useSwitchInputElementProps
-        } = useSwitchInputElement({
-          tag: "input"
-        });
-        const {
-          useCheckboxLabelElementProps: useSwitchLabelElementProps
-        } = useSwitchLabelElement({
-          tag: "label"
-        }); //const { useCheckboxLabelElementProps: useWrapperLabelProps } = useCheckboxLabelElement({ tag: "div" });
-
-        return e$3(CheckboxLike, {
-          type: "switch",
-          disabled: disabled,
-          asyncState: asyncState,
-          currentHandlerType: currentType,
-          labelPosition: labelPosition,
-          inputProps: useSwitchInputElementProps({
-            ref: ref,
-            class: clsx(),
-            tabIndex: tabIndex !== null && tabIndex !== void 0 ? tabIndex : 0
-          }),
-          labelProps: useSwitchLabelElementProps({
-            class: clsx()
-          }),
-          wrapperProps: useMergedProps()({
-            class: "form-switch"
-          }, rest),
-          label: label
-        });
-      }
+      return e$3(CheckboxLike, {
+        type: "switch",
+        disabled: disabled,
+        asyncState: asyncState,
+        currentHandlerType: currentType,
+        labelPosition: labelPosition,
+        inputProps: useSwitchInputElementProps({
+          ref: ref,
+          class: clsx(),
+          tabIndex: tabIndex !== null && tabIndex !== void 0 ? tabIndex : 0
+        }),
+        labelProps: useSwitchLabelElementProps({
+          class: clsx()
+        }),
+        wrapperProps: useMergedProps()({
+          class: "form-switch"
+        }, rest),
+        inline: inline !== null && inline !== void 0 ? inline : false,
+        label: label
+      });
     })); // Note: Slightly different from the others
     // (^^^^ I'm really glad I left that there)
 
@@ -16690,7 +16795,7 @@
                                 for (let i = 0; i < (radioCount ?? 0); ++i) {
                                     yield e$3(Radio, { disabled: disabled, labelPosition: labelPosition, index: i, value: i, children: ["Radio #", i + 1] }, i);
                                 }
-                            }()) }) }), e$3(CardElement, { children: ["The individual ", e$3("code", { children: "RadioButton" }), "s ", e$3("strong", { children: "do not" }), " accept a ", e$3("code", { children: "checked" }), " prop; instead, the parent ", e$3("code", { children: "RadioGroup" }), " accepts a ", e$3("code", { children: "selectedValue" }), ". Similarly, the ", e$3("code", { children: "onValueChange" }), " event handler lives on that parent ", e$3("code", { children: "RadioGroup" }), ". The individual child ", e$3("code", { children: "Radio" }), "s can be, e.g., marked as ", e$3("code", { children: "disabled" }), ", styled, etc. but all the logic happens with the parent."] }), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Demos" }), e$3(CardElement, { children: e$3(InputGrid, { children: [e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setUsesAsync, checked: usesAsync, labelPosition: "start", children: "Async event handler" }) }), e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setAsyncFails, checked: asyncFails, labelPosition: "start", disabled: !usesAsync, children: "Async handler rejects" }) }), e$3(InputGroup, { children: e$3(Input, { disabled: !usesAsync, type: "number", onValueChange: setAsyncTimeout, value: asyncTimeout, children: "Async timeout" }) }), e$3(InputGroup, { children: e$3(Input, { type: "number", onValueChange: setRadioCount, value: radioCount, children: "# of radio buttons" }) }), e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setDisabled, checked: disabled, labelPosition: "start", children: "Inputs disabled" }) }), e$3(RadioGroup, { name: "radio-demo-6", selectedValue: labelPosition, onValueChange: setLabelPosition, children: [e$3(InputGroup, { children: e$3(Radio, { index: 0, value: "start", labelPosition: "start", children: "Label before" }) }), e$3(InputGroup, { children: e$3(Radio, { index: 1, value: "end", labelPosition: "start", children: "Label after" }) }), e$3(InputGroup, { children: e$3(Radio, { index: 2, value: "hidden", labelPosition: "start", children: "Label hidden" }) }), e$3(InputGroup, { children: e$3(Radio, { index: 3, value: "tooltip", labelPosition: "start", children: "Tooltip label" }) })] })] }) }), e$3(GridStatic, { columns: 2, children: [e$3(CardElement, { children: [e$3(Checkbox, { disabled: disabled, checked: demoChecked, labelPosition: labelPosition, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked, children: "Checkbox" }), e$3(Switch, { disabled: disabled, checked: demoChecked, labelPosition: labelPosition, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked, children: "Switch" }), e$3(RadioGroup, { name: "radio-demo-1a", selectedValue: demoRadio, onValueChange: usesAsync ? asyncRadioInput : setDemoRadio, children: Array.from(function* () {
+                            }()) }) }), e$3(CardElement, { children: ["The individual ", e$3("code", { children: "RadioButton" }), "s ", e$3("strong", { children: "do not" }), " accept a ", e$3("code", { children: "checked" }), " prop; instead, the parent ", e$3("code", { children: "RadioGroup" }), " accepts a ", e$3("code", { children: "selectedValue" }), ". Similarly, the ", e$3("code", { children: "onValueChange" }), " event handler lives on that parent ", e$3("code", { children: "RadioGroup" }), ". The individual child ", e$3("code", { children: "Radio" }), "s can be, e.g., marked as ", e$3("code", { children: "disabled" }), ", styled, etc. but all the logic happens with the parent."] }), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Demos" }), e$3(CardElement, { children: e$3(InputGrid, { children: [e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setUsesAsync, checked: usesAsync, labelPosition: "start", children: "Async event handler" }) }), e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setAsyncFails, checked: asyncFails, labelPosition: "start", disabled: !usesAsync, children: "Async handler rejects" }) }), e$3(InputGroup, { children: e$3(Input, { disabled: !usesAsync, type: "number", onValueChange: setAsyncTimeout, value: asyncTimeout, children: "Async timeout" }) }), e$3(InputGroup, { children: e$3(Input, { type: "number", onValueChange: setRadioCount, value: radioCount, children: "# of radio buttons" }) }), e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setDisabled, checked: disabled, labelPosition: "start", children: "Inputs disabled" }) }), e$3(RadioGroup, { name: "radio-demo-6", selectedValue: labelPosition, onValueChange: setLabelPosition, children: [e$3(InputGroup, { children: e$3(Radio, { index: 0, value: "start", labelPosition: "start", children: "Label before" }) }), e$3(InputGroup, { children: e$3(Radio, { index: 1, value: "end", labelPosition: "start", children: "Label after" }) }), e$3(InputGroup, { children: e$3(Radio, { index: 2, value: "hidden", labelPosition: "start", children: "Label hidden" }) }), e$3(InputGroup, { children: e$3(Radio, { index: 3, value: "tooltip", labelPosition: "start", children: "Tooltip label" }) }), e$3(InputGroup, { children: e$3(Radio, { index: 4, value: "button", labelPosition: "start", children: "Button" }) })] })] }) }), e$3(GridStatic, { columns: 2, children: [e$3(CardElement, { children: [e$3(Checkbox, { disabled: disabled, checked: demoChecked, labelPosition: labelPosition, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked, children: "Checkbox" }), e$3(Switch, { disabled: disabled, checked: demoChecked, labelPosition: labelPosition, onCheck: usesAsync ? asyncCheckboxInput : setDemoChecked, children: "Switch" }), e$3(RadioGroup, { name: "radio-demo-1a", selectedValue: demoRadio, onValueChange: usesAsync ? asyncRadioInput : setDemoRadio, children: Array.from(function* () {
                                             for (let i = 0; i < (radioCount ?? 0); ++i) {
                                                 yield e$3(Radio, { disabled: disabled, labelPosition: labelPosition, index: i, value: i, children: ["Radio #", i + 1] }, i);
                                             }

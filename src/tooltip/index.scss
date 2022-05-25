@@ -23,8 +23,6 @@
     // Used by the popper arrow, which relies on knowing the body background color
     // (which black in a light theme and white in a dark theme)
     --bs-body-bg: #{$tooltip-bg};
-
-    --popper-arrow-size: 0.5em;
 }
 
 // Allow for easy newlines when more complex children aren't allowed

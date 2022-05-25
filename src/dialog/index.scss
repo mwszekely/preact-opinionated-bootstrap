@@ -2,9 +2,20 @@
 @forward "../variables";
 @use "sass:math";
 
+.modal {
+  pointer-events: none;
+  &>.modal-backdrop { pointer-events: all; }
+  &>.modal-dialog { pointer-events: all; }
+}
+
+.modal>.modal-backdrop {
+  background: none;
+  z-index: -10;
+}
+
 // A lot of styles are applied by the outermost .modal class by itself, which we skip using.
 // So re-apply some of the stuff we lost.
-.modal-dialog {
+/*.modal-dialog {
   position: fixed;
   top: 0;
   left: 0;
@@ -45,19 +56,21 @@
   .modal-backdrop {
     background: rgba(0, 0, 0, 0.4);
   }
-}
+}*/
 
 // Quickly make a transition that fades the backdrop filter blur in/out
 .backdrop-filter-transition {
+  transition: filter 0.25 ease-in-out;
   &.transition-enter-init,
   &.transition-exit-transition,
   &.transition-exit-finalize {
     backdrop-filter: blur(0px);
+    pointer-events: none;
   }
   &.transition-exit-init,
   &.transition-enter-transition,
   &.transition-enter-finalize {
-    backdrop-filter: var(--transition-backdrop-filter-blur, blur(4px));
+    backdrop-filter: blur(var(--transition-backdrop-filter-blur, 4px));
   }
 }
 

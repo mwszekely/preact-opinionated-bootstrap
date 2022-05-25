@@ -4,12 +4,8 @@ import { EventDetail, RadioChangeEvent, useAriaRadioGroup, UseAriaRadioGroupPara
 import { useAsyncHandler, useEffect, useMergedProps, useRandomId, useState } from "preact-prop-helpers";
 import { memo } from "preact/compat";
 import { useContext } from "preact/hooks";
-import { ProgressCircular } from "../progress";
 import { forwardElementRef, OmitStrong } from "../props";
-import { Tooltip } from "../tooltip";
 import { CheckboxLike } from "./checkbox-like";
-import { OptionallyInputGroup } from "./input-checkbox";
-import { InInputGroupContext } from "./props";
 
 export interface RadioGroupProps<V extends string | number> extends OmitStrong<UseAriaRadioGroupParameters<V>, "onInput" | "name"> {
     children?: ComponentChildren;
@@ -23,8 +19,9 @@ export interface RadioProps<V extends string | number, I extends Element, L exte
     index: number;
     value: V;
     children?: ComponentChildren;
-    labelPosition?: "start" | "end" | "hidden" | "tooltip";
+    labelPosition?: "start" | "end" | "hidden" | "tooltip" | "button";
     disabled?: boolean;
+    inline?: boolean;
 }
 
 interface RadioInfo extends UseAriaRadioInfo {
@@ -118,85 +115,32 @@ function LabelTest() {
     );
 }
 
-export const Radio = memo(forwardElementRef(function Radio<V extends string | number>({ disabled, children: label, index, value, labelPosition, ...rest }: RadioProps<V, HTMLInputElement, HTMLLabelElement>, ref?: Ref<HTMLInputElement>) {
+export const Radio = memo(forwardElementRef(function Radio<V extends string | number>({ disabled, inline, children: label, index, value, labelPosition, ...rest }: RadioProps<V, HTMLInputElement, HTMLLabelElement>, ref?: Ref<HTMLInputElement>) {
 
-    if (true) {
-        const currentHandlerType = useContext(CurrentHandlerTypeContext);
-        const [asyncState, setAsyncState] = useState<null | "pending" | "succeeded" | "failed">(null);
-        disabled ||= (asyncState === "pending");
-
-        
-        const useAriaRadio = useContext(RadioGroupContext) as UseRadio<V, HTMLInputElement, HTMLLabelElement | HTMLDivElement, RadioInfo>;
-        const { useRadioInput, useRadioLabel } = useAriaRadio({ disabled: disabled ?? false, labelPosition: "separate", index, text: null, value, setAsyncState });
-
-        const { useRadioInputProps } = useRadioInput({ tag: "input" });
-        const { useRadioLabelProps } = useRadioLabel({ tag: "label" });
-        //const { useCheckboxLabelElementProps: useWrapperLabelProps } = useCheckboxLabelElement({ tag: "div" });
+    const currentHandlerType = useContext(CurrentHandlerTypeContext);
+    const [asyncState, setAsyncState] = useState<null | "pending" | "succeeded" | "failed">(null);
+    disabled ||= (asyncState === "pending");
 
 
-        return (<CheckboxLike
-            type="radio"
-            disabled={disabled}
-            asyncState={asyncState}
-            currentHandlerType={currentHandlerType}
-            labelPosition={labelPosition}
-            inputProps={ useRadioInputProps({ ref, type: "radio", className: clsx() })}
-            labelProps={useRadioLabelProps({ class: clsx() })}
-            wrapperProps={useMergedProps<HTMLDivElement>()({ class: "" }, rest)}
-            label={label}
-        />);
+    const useAriaRadio = useContext(RadioGroupContext) as UseRadio<V, HTMLInputElement, HTMLLabelElement | HTMLDivElement, RadioInfo>;
+    const { useRadioInput, useRadioLabel } = useAriaRadio({ disabled: disabled ?? false, labelPosition: "separate", index, text: null, value, setAsyncState });
 
-        
-    }
-    else {
+    const { useRadioInputProps } = useRadioInput({ tag: "input" });
+    const { useRadioLabelProps } = useRadioLabel({ tag: "label" });
 
-        labelPosition ??= "end";
+    return (<CheckboxLike
+        type="radio"
+        disabled={disabled}
+        asyncState={asyncState}
+        currentHandlerType={currentHandlerType}
+        labelPosition={labelPosition}
+        inputProps={useRadioInputProps({ ref, type: "radio", className: clsx() })}
+        labelProps={useRadioLabelProps({ class: clsx() })}
+        wrapperProps={useMergedProps<HTMLDivElement>()({ class: "" }, rest)}
+        inline={inline ?? false}
+        label={label}
+    />);
 
-        const useAriaRadio = useContext(RadioGroupContext) as UseRadio<V, HTMLInputElement, HTMLLabelElement | HTMLDivElement, RadioInfo>;
-
-        const text = null;
-        const currentHandlerType = useContext(CurrentHandlerTypeContext);
-        const [asyncState, setAsyncState] = useState<null | "pending" | "succeeded" | "failed">(null);
-        disabled ||= (asyncState === "pending");
-
-        const { useRadioInput, useRadioLabel } = useAriaRadio({ disabled: disabled ?? false, labelPosition: "separate", index, text, value, setAsyncState });
-
-        const { useRadioInputProps } = useRadioInput({ tag: "input" });
-        const { useRadioLabelProps } = useRadioLabel({ tag: "label" });
-        const { useRadioLabelProps: useWrapperLabelProps } = useRadioLabel({ tag: "div" });
-
-
-        const inInputGroup = useContext(InInputGroupContext);
-
-        label ??= value;
-
-        let stringLabel = `${label}`;
-        if (label != null && labelPosition === "hidden" && !["string", "number", "boolean"].includes(typeof label)) {
-            console.error(`Hidden labels require a string-based label for the aria-label attribute.`);
-        }
-
-        const propsForInput = useRadioInputProps({ ref, type: "radio", className: clsx(asyncState === "pending" && "pending", disabled && "disabled", "form-check-input"), "aria-label": labelPosition === "hidden" ? stringLabel : undefined });
-
-        let inputElement = <OptionallyInputGroup isInput isTooltip={false} tag={inInputGroup ? "div" : null} {...useRadioLabelProps({ disabled, tabIndex: -1 })}>
-            <ProgressCircular childrenPosition="after" colorFill="foreground-only" mode={currentHandlerType === "async" ? asyncState : null} colorVariant="info">
-                <input {...propsForInput} />
-            </ProgressCircular>
-        </OptionallyInputGroup>;
-        const labelElement = label != null ? <OptionallyInputGroup isTooltip={labelPosition == "tooltip"} isInput={false} tag={"label"} {...useRadioLabelProps({ className: clsx(asyncState === "pending" && "pending", disabled && "disabled", "form-check-label"), "aria-hidden": "true" })}>{label}</OptionallyInputGroup> : null;
-
-        if (labelPosition == "tooltip")
-            inputElement = <Tooltip tooltip={labelElement}>{inputElement}</Tooltip>;
-
-        const inputWithLabel = (
-            <>
-                {labelPosition == "start" && labelElement}
-                {inputElement}
-                {labelPosition == "end" && labelElement}
-            </>
-        );
-
-        return (!inInputGroup) ? <div {...useWrapperLabelProps({ className: "form-check" }) as h.JSX.HTMLAttributes<HTMLDivElement>}>{inputWithLabel}</div> : inputWithLabel;
-    }
 
 }));
 

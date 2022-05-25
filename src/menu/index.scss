@@ -43,8 +43,8 @@
 .popper-arrow::before ,
 .popper-arrow::after {
   position: absolute;
-  width: var(--popper-arrow-size);
-  height:var(--popper-arrow-size);
+  width: var(--bs-tooltip-arrow-height);
+  height:var(--bs-tooltip-arrow-height);
   background: inherit;
 }
 
@@ -75,7 +75,7 @@
 
 // Adjust the position and rotation of the arrow depending on the final placement
 [data-popper-placement^='top'].popper-arrow {
-  bottom: calc(-0.5 * var(--popper-arrow-size));
+  bottom: calc(0.5 * var(--bs-tooltip-arrow-height));
 
   &::before, &::after {
     transform: rotate(225deg);
@@ -83,7 +83,7 @@
 }
 
 [data-popper-placement^='bottom'].popper-arrow {
-  top: calc(-0.5 * var(--popper-arrow-size));
+  top: calc(0.5 * var(--bs-tooltip-arrow-height));
 
   &::before, &::after {
     transform: rotate(45deg);
@@ -91,7 +91,7 @@
 }
 
 [data-popper-placement^='left'].popper-arrow {
-  right: calc(-0.5 * var(--popper-arrow-size));
+  right: calc(0.5 * var(--bs-tooltip-arrow-height));
 
   &::before, &::after {
     transform: rotate(-225deg);
@@ -99,7 +99,7 @@
 }
 
 [data-popper-placement^='right'].popper-arrow {
-  left: calc(-0.5 * var(--popper-arrow-size));
+  left: calc(0.5 * var(--bs-tooltip-arrow-height));
 
   &::before, &::after {
     transform: rotate(-45deg);

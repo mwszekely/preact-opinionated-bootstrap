@@ -98,6 +98,7 @@ export function DemoChecks() {
                             <InputGroup><Radio<LabelPosition> index={1} value={"end"} labelPosition="start">Label after</Radio></InputGroup>
                             <InputGroup><Radio<LabelPosition> index={2} value={"hidden"} labelPosition="start">Label hidden</Radio></InputGroup>
                             <InputGroup><Radio<LabelPosition> index={3} value={"tooltip"} labelPosition="start">Tooltip label</Radio></InputGroup>
+                            <InputGroup><Radio<LabelPosition> index={4} value={"button"} labelPosition="start">Button</Radio></InputGroup>
                         </RadioGroup>
                     </InputGrid>
                 </CardElement>

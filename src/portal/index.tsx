@@ -1,7 +1,7 @@
 import { ComponentChildren, createContext, VNode, h } from "preact";
 import { generateRandomId, useRefElement, useState } from "preact-prop-helpers";
 import { createPortal, memo } from "preact/compat";
-import { useContext, useEffect, useRef } from "preact/hooks";
+import { useCallback, useContext, useEffect, useRef } from "preact/hooks";
 import { forwardElementRef } from "../props";
 
 const baseId = generateRandomId("render-portal-container-")
@@ -40,7 +40,7 @@ export function BodyPortalRoot({ children }: { children: VNode<{}> }) {
     const [element, setElement, getElement] = useState<HTMLElement | null>(null);
     const { useRefElementProps } = useRefElement<HTMLDivElement>({ onElementChange: setElement })
     return (
-        <BodyPortalRootContext.Provider value={getElement}>{children}<div {...useRefElementProps({})} /></BodyPortalRootContext.Provider>
+        <BodyPortalRootContext.Provider value={useCallback(() => (getElement()?.parentElement ?? null), [])}>{children}<div {...useRefElementProps({ hidden: true })} /></BodyPortalRootContext.Provider>
     )
 }
 

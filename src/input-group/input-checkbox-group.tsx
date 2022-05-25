@@ -1,13 +1,13 @@
 
 import { ComponentChildren, createContext, h, Ref } from "preact";
 import { CheckboxGroupChangeEvent, EventDetail, useCheckboxGroup, UseCheckboxGroupParentProps } from "preact-aria-widgets";
-import { generateRandomId, useAsyncHandler, useHasFocus, useLayoutEffect, useRefElement, useState } from "preact-prop-helpers";
+import { generateRandomId, useAsyncHandler } from "preact-prop-helpers";
+import { memo } from "preact/compat";
 import { useContext } from "preact/hooks";
+import { useChildrenTextProps } from "../list/utility";
 import { forwardElementRef, OmitStrong } from "../props";
 import { Checkbox, CheckboxProps } from "./input-checkbox";
 import { CheckboxGroupChildInfo, UseCheckboxGroupChildContext } from "./props";
-import { useChildrenTextProps } from "../list/utility";
-import { memo } from "preact/compat";
 
 
 
@@ -20,8 +20,9 @@ export interface CheckboxGroupProps {
     children?: ComponentChildren;
 }
 
+export function returnFalse() { return false; }
+
 export function CheckboxGroup({ children }: CheckboxGroupProps) {
-    const { useHasFocusProps, getFocusedInner } = useHasFocus<HTMLDivElement>({})
 
     const onUpdateChildrenAsync = (value: boolean | Map<number, boolean | "mixed">): (Promise<void> | void) => {
         let results = managedCheckboxes.map((child, index) => child.setChecked(typeof value === "boolean" ? value : (value.get(index) ?? false))).filter(r => !!r);
@@ -37,7 +38,7 @@ export function CheckboxGroup({ children }: CheckboxGroupProps) {
 
     const onUpdateChildrenSync = useSyncHandler(pending ? () => { } : onUpdateChildrenAsync);
 
-    const { managedCheckboxes, currentTypeahead, focus, invalidTypeahead, onCheckboxGroupParentInput, tabbableIndex, useCheckboxGroupChild, useCheckboxGroupParentProps, parentIsChecked, parentPercentChecked } = useCheckboxGroup<HTMLInputElement, CheckboxGroupChildInfo>({ shouldFocusOnChange: getFocusedInner, onUpdateChildren: onUpdateChildrenSync! })
+    const { managedCheckboxes, currentTypeahead, focus, invalidTypeahead, onCheckboxGroupParentInput, tabbableIndex, useCheckboxGroupChild, useCheckboxGroupParentProps, parentIsChecked, parentPercentChecked } = useCheckboxGroup<HTMLInputElement, CheckboxGroupChildInfo>({ shouldFocusOnChange: returnFalse, onUpdateChildren: onUpdateChildrenSync! })
 
 
     return (
@@ -45,9 +46,7 @@ export function CheckboxGroup({ children }: CheckboxGroupProps) {
             <CheckboxGroupParentCheckedContext.Provider value={parentIsChecked}>
                 <UseCheckboxGroupParentPropsContext.Provider value={useCheckboxGroupParentProps}>
                     <UseCheckboxGroupChildContext.Provider value={useCheckboxGroupChild}>
-                        <div {...useHasFocusProps({ class: "checkbox-group" })}>
                             {children}
-                        </div>
                     </UseCheckboxGroupChildContext.Provider>
                 </UseCheckboxGroupParentPropsContext.Provider>
             </CheckboxGroupParentCheckedContext.Provider>
