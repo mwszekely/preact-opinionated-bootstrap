@@ -1,6 +1,7 @@
 @use "../variables.scss" as *;
 @use "../button/ensure-contrast.scss" as *;
 
+// Ensure that badge text has an appropriate contrast no matter the background color.
 .badge {
   @each $color, $value in $theme-colors {
     &.bg-#{$color} {

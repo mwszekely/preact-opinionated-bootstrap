@@ -10383,7 +10383,7 @@
       });
       return e$3("div", { ...useMergedProps()({
           ref,
-          className: "accordion elevation-raised-1 elevation-body-surface"
+          className: "accordion"
         }, props),
         children: e$3(UseAriaAccordionSectionContext.Provider, {
           value: useAriaAccordionSection,
@@ -10815,11 +10815,21 @@
       fillVariant = useButtonFillVariant(fillVariant);
       disabled = useButtonDisabled(disabled);
 
-      const useButtonStylesProps = props => useMergedProps()({
-        type: tag === "button" ? "button" : undefined,
-        "aria-disabled": disabled ? "true" : undefined,
-        className: clsx(disabled && "disabled", "btn", `btn-${fillVariant == "outline" ? `outline-` : ``}${colorVariant}`, `btn-${size}`, disabled && "disabled")
-      }, props);
+      const useButtonStylesProps = _ref6 => {
+        let {
+          children,
+          ...props
+        } = _ref6;
+        return useMergedProps()({
+          type: tag === "button" ? "button" : undefined,
+          "aria-disabled": disabled ? "true" : undefined,
+          className: clsx(disabled && "disabled", "btn", `btn-${fillVariant == "outline" ? `outline-` : ``}${colorVariant}`, `btn-${size}`, disabled && "disabled"),
+          children: e$3("span", {
+            class: "btn-text-contents",
+            children: children
+          })
+        }, props);
+      };
 
       return {
         colorVariant,
@@ -10994,7 +11004,7 @@
         childrenPosition: "child",
         colorFill: fillVariant == "fill" ? "foreground" : "background",
         children: e$3("button", { ...usePseudoActive(useAriaButtonProps(useButtonStylesProps({ ...useMergedProps()({
-              className: clsx("toggle-button", pressed && "active"),
+              className: clsx("toggle-button", disabled && "disabled", pressed && "active", pending && "pending"),
               ref
             }, props)
           })))
@@ -11626,6 +11636,7 @@
 
         switch (type) {
           case "text":
+          case "textarea":
           case "numeric":
             ret = max$1(min$1(event.currentTarget.value, min2), max2);
             break;
@@ -11644,6 +11655,7 @@
       const uncapture = A$2(value => {
         switch (type) {
           case "text":
+          case "textarea":
           case "numeric":
             return value;
 
@@ -14470,7 +14482,10 @@
           colorVariant: "info",
           children: e$3("label", { ...useMergedProps()({
               class: clsx("btn", `btn-${buttonColor}`, disabled && disabled, inputProps.checked && "active"),
-              children: label
+              children: e$3("span", {
+                class: "btn-text-contents",
+                children: label
+              })
             }, labelProps)
           })
         })]
@@ -15301,6 +15316,18 @@
         });
       }
 
+      const inputProps = useRefElementProps(useHasFocusProps(useMergedProps()(props, {
+        "aria-disabled": disabled ? "true" : undefined,
+        onKeyDown,
+        ref,
+        readOnly: readOnly || disabled && disabledVariant === "soft",
+        disabled: disabled && disabledVariant === "hard",
+        onBlur,
+        class: clsx("form-control", "faux-form-control-inner", disabled && "disabled", "form-control", sizeClass),
+        type: type == "textarea" ? undefined : type,
+        onInput,
+        ...extraProps
+      })));
       return e$3(d$2, {
         children: [prefix && e$3("span", {
           class: "form-control-prefix",
@@ -15322,19 +15349,7 @@
             mode: currentType === "async" ? asyncState : null,
             childrenPosition: "after",
             colorVariant: "info",
-            children: e$3("input", { ...useRefElementProps(useHasFocusProps(useMergedProps()(props, {
-                "aria-disabled": disabled ? "true" : undefined,
-                onKeyDown,
-                ref,
-                readOnly: readOnly || disabled && disabledVariant === "soft",
-                disabled: disabled && disabledVariant === "hard",
-                onBlur,
-                class: clsx("form-control", "faux-form-control-inner", disabled && "disabled", "form-control", sizeClass),
-                type,
-                onInput,
-                ...extraProps
-              })))
-            })
+            children: v$2(type == "textarea" ? "textarea" : "input", inputProps)
           })
         }), suffix && e$3("span", {
           class: "form-control-suffix",
@@ -16518,6 +16533,7 @@
       let {
         timeout,
         politeness,
+        colorVariant,
         children
       } = _ref3;
       const useToast = F(UseToastContext);
@@ -16539,7 +16555,7 @@
           animateOnMount: show,
           exitVisibility: "removed",
           children: e$3("div", { ...useToastProps({
-              class: "toast show"
+              class: clsx("toast show", colorVariant && `text-bg-${colorVariant}`)
             }),
             children: e$3("div", {
               class: "d-flex",
@@ -16922,8 +16938,8 @@
         const onNumberInput = usesAsync ? asyncNumberInput : setNumber;
         const p = (prefix == "icon" ? e$3(BootstrapIcon, { icon: "pencil", label: "Edit" }) : prefix == "button" ? e$3(Button, { colorVariant: "subtle", children: e$3(BootstrapIcon, { icon: "pencil", label: "Edit" }) }) : null);
         const s = (suffix == "icon" ? e$3(BootstrapIcon, { icon: "check", label: "Correct" }) : suffix == "button" ? e$3(Button, { colorVariant: "subtle", children: e$3(BootstrapIcon, { icon: "check", label: "Correct" }) }) : null);
-        return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Text boxes" }), e$3(CardElement, { children: e$3("div", { class: "position-relative", children: e$3(Input, { type: "text", value: text, onValueChange: onTextInput, children: "I'm a text box" }) }) }), e$3(CardElement, { children: [e$3("code", { children: "<Input>" }), " components allow for inputting text, numbers, etc. and asyncronously saving it somewhere else as it's being typed."] }), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Async inputs" }), e$3(CardElement, { children: ["The ", e$3("code", { children: "onInput" }), " event handler for all types of inputs can be sync or async.", e$3(InputGrid, { children: [e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setUsesAsync, checked: usesAsync, labelPosition: "start", children: "Async event handler" }) }), e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setAsyncFails, checked: asyncFails, labelPosition: "start", disabled: !usesAsync, children: "Async handler rejects" }) }), e$3(InputGroup, { children: e$3(Input, { disabled: !usesAsync, type: "number", onValueChange: setAsyncTimeout, value: asyncTimeout, prefix: p, suffix: s, children: "Async timeout" }) })] })] }), e$3(CardElement, { children: [e$3("div", { class: "position-relative", children: e$3(Input, { type: "text", value: text, onValueChange: onTextInput, prefix: p, suffix: s, children: "Text-based input" }) }), e$3("div", { class: "position-relative", children: e$3(Input, { type: "number", value: number, onValueChange: onNumberInput, prefix: p, suffix: s, min: -5, children: "Number-based input" }) })] }), e$3(CardElement, { type: "paragraph", children: e$3("code", { children: `<Input type="text" value={text} onInput={onTextInput}>Text-based input</Input>
-<Input type="number" value={number} onInput={onNumberInput} min={-5}>Number-based input</Input>` }) }), e$3(CardElement, { children: "Icons or other content can be placed at the start or end of the input:" }), e$3(CardElement, { children: [e$3(ButtonGroup, { children: [e$3(ButtonGroupChild, { pressed: prefix == null, onPressToggle: () => setPrefix(null), index: 0, children: "No prefix" }), e$3(ButtonGroupChild, { pressed: prefix == "icon", onPressToggle: () => setPrefix("icon"), index: 1, children: "Icon" }), e$3(ButtonGroupChild, { pressed: prefix == "button", onPressToggle: () => setPrefix("button"), index: 2, children: "Button" })] }), e$3(ButtonGroup, { children: [e$3(ButtonGroupChild, { pressed: suffix == null, onPressToggle: () => setSuffix(null), index: 0, children: "No prefix" }), e$3(ButtonGroupChild, { pressed: suffix == "icon", onPressToggle: () => setSuffix("icon"), index: 1, children: "Icon" }), e$3(ButtonGroupChild, { pressed: suffix == "button", onPressToggle: () => setSuffix("button"), index: 2, children: "Button" })] })] }), e$3(CardElement, { type: "paragraph", children: ["When placed in an ", e$3("code", { children: "<InputGroup>" }), ", the styling will be significantly different:"] }), e$3(CardElement, { children: e$3(ButtonGroup, { children: [e$3(ButtonGroupChild, { index: 0, pressed: size == "sm", onPressToggle: e => setSize("sm"), children: "Small" }), e$3(ButtonGroupChild, { index: 1, pressed: size == "md", onPressToggle: e => setSize("md"), children: "Medium" }), e$3(ButtonGroupChild, { index: 2, pressed: size == "lg", onPressToggle: e => setSize("lg"), children: "Large" })] }) }), e$3(CardElement, { children: e$3(InputGrid, { children: [e$3(InputGroup, { size: size, children: e$3(Input, { type: "text", value: text, onValueChange: onTextInput, prefix: p, suffix: s, children: "Text-based input" }) }), e$3(InputGroup, { size: size, children: e$3(Input, { type: "number", value: number, onValueChange: onNumberInput, prefix: p, suffix: s, min: -5, children: "Number-based input" }) })] }) }), e$3(CardElement, { type: "paragraph", children: e$3("code", { children: `<InputGrid>
+        return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Text boxes" }), e$3(CardElement, { children: e$3("div", { class: "position-relative", children: e$3(Input, { type: "text", value: text, onValueChange: onTextInput, children: "I'm a text box" }) }) }), e$3(CardElement, { children: [e$3("code", { children: "<Input>" }), " components allow for inputting text, numbers, etc. and asyncronously saving it somewhere else as it's being typed."] }), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Async inputs" }), e$3(CardElement, { children: ["The ", e$3("code", { children: "onInput" }), " event handler for all types of inputs can be sync or async.", e$3(InputGrid, { children: [e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setUsesAsync, checked: usesAsync, labelPosition: "start", children: "Async event handler" }) }), e$3(InputGroup, { children: e$3(Checkbox, { onCheck: setAsyncFails, checked: asyncFails, labelPosition: "start", disabled: !usesAsync, children: "Async handler rejects" }) }), e$3(InputGroup, { children: e$3(Input, { disabled: !usesAsync, type: "number", onValueChange: setAsyncTimeout, value: asyncTimeout, prefix: p, suffix: s, children: "Async timeout" }) })] })] }), e$3(CardElement, { children: [e$3("div", { class: "position-relative", children: e$3(Input, { type: "text", value: text, onValueChange: onTextInput, prefix: p, suffix: s, children: "Text-based input" }) }), e$3("div", { class: "position-relative", children: e$3(Input, { type: "number", value: number, onValueChange: onNumberInput, prefix: p, suffix: s, min: -5, children: "Number-based input" }) }), e$3("div", { class: "position-relative", children: e$3(Input, { type: "textarea", value: text, onValueChange: onTextInput, prefix: p, suffix: s, rows: 5, children: "Textarea" }) })] }), e$3(CardElement, { type: "paragraph", children: e$3("code", { children: `<Input type="text" value={text} onInput={onTextInput}>Text-based input</Input>
+<Input type="number" value={number} onInput={onNumberInput} min={-5}>Number-based input</Input>` }) }), e$3(CardElement, { children: "Icons or other content can be placed at the start or end of the input:" }), e$3(CardElement, { children: [e$3(ButtonGroup, { children: [e$3(ButtonGroupChild, { pressed: prefix == null, onPressToggle: () => setPrefix(null), index: 0, children: "No prefix" }), e$3(ButtonGroupChild, { pressed: prefix == "icon", onPressToggle: () => setPrefix("icon"), index: 1, children: "Icon" }), e$3(ButtonGroupChild, { pressed: prefix == "button", onPressToggle: () => setPrefix("button"), index: 2, children: "Button" })] }), e$3(ButtonGroup, { children: [e$3(ButtonGroupChild, { pressed: suffix == null, onPressToggle: () => setSuffix(null), index: 0, children: "No prefix" }), e$3(ButtonGroupChild, { pressed: suffix == "icon", onPressToggle: () => setSuffix("icon"), index: 1, children: "Icon" }), e$3(ButtonGroupChild, { pressed: suffix == "button", onPressToggle: () => setSuffix("button"), index: 2, children: "Button" })] })] }), e$3(CardElement, { type: "paragraph", children: ["When placed in an ", e$3("code", { children: "<InputGroup>" }), ", the styling will be significantly different:"] }), e$3(CardElement, { children: e$3(ButtonGroup, { children: [e$3(ButtonGroupChild, { index: 0, pressed: size == "sm", onPressToggle: e => setSize("sm"), children: "Small" }), e$3(ButtonGroupChild, { index: 1, pressed: size == "md", onPressToggle: e => setSize("md"), children: "Medium" }), e$3(ButtonGroupChild, { index: 2, pressed: size == "lg", onPressToggle: e => setSize("lg"), children: "Large" })] }) }), e$3(CardElement, { children: e$3(InputGrid, { children: [e$3(InputGroup, { size: size, children: e$3(Input, { type: "text", value: text, onValueChange: onTextInput, prefix: p, suffix: s, children: "Text-based input" }) }), e$3(InputGroup, { size: size, children: e$3(Input, { type: "number", value: number, onValueChange: onNumberInput, prefix: p, suffix: s, min: -5, children: "Number-based input" }) }), e$3(InputGroup, { size: size, children: e$3(Input, { type: "textarea", value: text, onValueChange: onTextInput, prefix: p, suffix: s, rows: 5, children: "Textarea" }) })] }) }), e$3(CardElement, { type: "paragraph", children: e$3("code", { children: `<InputGrid>
     <InputGroup size={size}><Input type="text" value={text} onInput={onTextInput}>Text-based input</Input></InputGroup>
     <InputGroup size={size}><Input type="number" value={number} onInput={onNumberInput} min={-5}>Number-based input</Input></InputGroup>
 </InputGrid>` }) })] }) }));

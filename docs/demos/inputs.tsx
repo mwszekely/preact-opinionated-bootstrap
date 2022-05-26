@@ -60,6 +60,7 @@ export function DemoInputs() {
                 <CardElement>
                     <div class="position-relative"><Input type="text" value={text} onValueChange={onTextInput} prefix={p} suffix={s}>Text-based input</Input></div>
                     <div class="position-relative"><Input type="number" value={number} onValueChange={onNumberInput} prefix={p} suffix={s} min={-5}>Number-based input</Input></div>
+                    <div class="position-relative"><Input type="textarea" value={text} onValueChange={onTextInput} prefix={p} suffix={s} rows={5}>Textarea</Input></div>
                 </CardElement>
                 <CardElement type="paragraph">
                     <code>{`<Input type="text" value={text} onInput={onTextInput}>Text-based input</Input>
@@ -98,6 +99,7 @@ export function DemoInputs() {
                     <InputGrid>
                         <InputGroup size={size}><Input type="text" value={text} onValueChange={onTextInput} prefix={p} suffix={s}>Text-based input</Input></InputGroup>
                         <InputGroup size={size}><Input type="number" value={number} onValueChange={onNumberInput} prefix={p} suffix={s} min={-5}>Number-based input</Input></InputGroup>
+                        <InputGroup size={size}><Input type="textarea" value={text} onValueChange={onTextInput} prefix={p} suffix={s} rows={5}>Textarea</Input></InputGroup>
                     </InputGrid>
                 </CardElement>
                 <CardElement type="paragraph">

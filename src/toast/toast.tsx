@@ -1,3 +1,4 @@
+import { ButtonColorVariant } from "../button";
 import { cloneElement, ComponentChildren, createContext, Fragment, h } from "preact";
 import { UseToast, UseToastParameters, useToasts } from "preact-aria-widgets";
 import { generateRandomId, useMergedProps, useMutationObserver, useStableCallback, useState } from "preact-prop-helpers";
@@ -6,6 +7,7 @@ import { useCallback, useContext, useEffect, useErrorBoundary, useLayoutEffect }
 import { Button } from "../button/button";
 import { BodyPortal } from "../portal";
 import { GlobalAttributes } from "../props";
+import clsx from "clsx";
 
 
 export type StateUpdater<S> = (value: ((prevState: S) => S)) => void;
@@ -89,7 +91,7 @@ function ToastsProviderHelper({ setPushToast, setUpdateToast }: { setPushToast: 
     )
 }
 
-export interface ToastProps extends Omit<UseToastParameters, "timeout"> { children: ComponentChildren; timeout?: number; }
+export interface ToastProps extends Omit<UseToastParameters, "timeout"> { children: ComponentChildren; timeout?: number; colorVariant?: ButtonColorVariant }
 interface ToastsContainerProps extends GlobalAttributes<HTMLDivElement> { }
 
 const ToastsContainerChildrenContext = createContext<h.JSX.Element[]>([]);
@@ -133,7 +135,7 @@ function oppositeTheme() {
 }
 
 const ToastDismissContext = createContext<() => void>(null!);
-export function Toast({ timeout, politeness, children }: ToastProps) {
+export function Toast({ timeout, politeness, colorVariant, children }: ToastProps) {
     const useToast = useContext(UseToastContext);
     const defaultTimeout = useContext(DefaultToastTimeout);
     const { useToastProps, dismiss, status } = useToast<HTMLDivElement>({ timeout: timeout ?? defaultTimeout, politeness });
@@ -143,7 +145,7 @@ export function Toast({ timeout, politeness, children }: ToastProps) {
     return (
         <ToastDismissContext.Provider value={dismiss}>
             <SlideFade show={show} slideTargetInline={1} animateOnMount={show} exitVisibility="removed">
-                <div {...useToastProps({ class: "toast show" })} >
+                <div {...useToastProps({ class: clsx("toast show", colorVariant && `text-bg-${colorVariant}`) })} >
                     <div class="d-flex">
                         <div class="toast-body">
                             {children}

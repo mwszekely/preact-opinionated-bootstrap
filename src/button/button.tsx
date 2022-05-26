@@ -166,7 +166,17 @@ export const ToggleButton = forwardElementRef(function ToggleButton(p: ToggleBut
 
     return (
         <ProgressCircular mode={hasError ? "failed" : pending ? "pending" : (settleCount && showAsyncSuccess) ? "succeeded" : null} childrenPosition="child" colorFill={fillVariant == "fill" ? "foreground" : "background"}>
-            <button {...usePseudoActive(useAriaButtonProps(useButtonStylesProps({ ...useMergedProps<HTMLButtonElement>()({ className: clsx("toggle-button", (pressed) && "active"), ref }, props) })))} />
+            <button {...usePseudoActive(useAriaButtonProps(useButtonStylesProps({
+                ...useMergedProps<HTMLButtonElement>()({
+                    className: clsx(
+                        "toggle-button",
+                        disabled && "disabled",
+                        (pressed) && "active",
+                        pending && "pending"
+                    ),
+                    ref
+                }, props)
+            })))} />
         </ProgressCircular>
     );
 })

@@ -35,7 +35,7 @@ export const Accordion = memo(forwardElementRef(function Accordion({ expandedInd
     const { useAriaAccordionSection } = useAriaAccordion<HTMLDivElement, HTMLButtonElement>({ expandedIndex, setExpandedIndex });
 
     return (
-        <div {...useMergedProps<HTMLDivElement>()({ ref, className: "accordion elevation-raised-1 elevation-body-surface" }, props)}>
+        <div {...useMergedProps<HTMLDivElement>()({ ref, className: "accordion" }, props)}>
             <UseAriaAccordionSectionContext.Provider value={useAriaAccordionSection}>{children}</UseAriaAccordionSectionContext.Provider>
         </div>
     );

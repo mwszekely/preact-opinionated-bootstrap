@@ -1,12 +1,12 @@
 import clsx from "clsx";
-import { Fragment, h, Ref } from "preact";
+import { createElement, Fragment, h, Ref } from "preact";
 import { useInputLabel } from "preact-aria-widgets";
 import { storeToLocalStorage, useAsyncHandler, useHasFocus, useMergedProps, usePassiveState, useRefElement, useStableCallback, useStableGetter, useState } from "preact-prop-helpers";
 import { memo } from "preact/compat";
 import { useCallback, useContext, useEffect } from "preact/hooks";
 import { forwardElementRef } from "../props";
 import { ProgressCircular } from "../progress";
-import { DefaultInputSize, InInputGridContext, InInputGroupContext, InputProps, UnlabelledInputNumberNonNullableProps, UnlabelledInputNumberNullableProps, UnlabelledInputProps, UnlabelledInputTextProps, useInputCaptures } from "./props";
+import { DefaultInputSize, InInputGridContext, InInputGroupContext, InputProps, UnlabelledInputNumberNonNullableProps, UnlabelledInputNumberNullableProps, UnlabelledInputProps, UnlabelledInputTextareaProps, UnlabelledInputTextProps, useInputCaptures } from "./props";
 import { InputGroupText } from "./grouping";
 import { Tooltip } from "../tooltip";
 import { ProvideDefaultButtonSize } from "../button";
@@ -15,6 +15,7 @@ import { ProvideDefaultButtonSize } from "../button";
 function return0() { return 0; }
 
 function UnlabelledInputR(props: UnlabelledInputTextProps, ref?: Ref<any>): h.JSX.Element;
+function UnlabelledInputR(props: UnlabelledInputTextareaProps, ref?: Ref<any>): h.JSX.Element;
 function UnlabelledInputR(props: UnlabelledInputNumberNullableProps, ref?: Ref<any>): h.JSX.Element;
 function UnlabelledInputR(props: UnlabelledInputNumberNonNullableProps, ref?: Ref<any>): h.JSX.Element;
 function UnlabelledInputR(props: UnlabelledInputProps, ref?: Ref<any>): h.JSX.Element;
@@ -202,6 +203,20 @@ function UnlabelledInputR(p: UnlabelledInputProps, ref?: Ref<any>): h.JSX.Elemen
         measure = v || <>&nbsp;</>;
     }
 
+    const inputProps = useRefElementProps(useHasFocusProps(useMergedProps<HTMLInputElement>()(props, {
+        "aria-disabled": disabled ? "true" : undefined,
+        onKeyDown,
+        ref,
+        readOnly: readOnly || (disabled && disabledVariant === "soft"),
+        disabled: (disabled && disabledVariant === "hard"),
+        onBlur,
+        class: clsx("form-control", "faux-form-control-inner", disabled && "disabled", "form-control", sizeClass),
+        type: type == "textarea"? undefined : type,
+        onInput,
+        ...extraProps,
+    })));
+
+
     return (
         <>
             {prefix && <span class="form-control-prefix">{prefix}</span>}
@@ -210,18 +225,7 @@ function UnlabelledInputR(p: UnlabelledInputProps, ref?: Ref<any>): h.JSX.Elemen
             </span>
             <label class={clsx("form-control form-control-input-container", sizeClass)}>
                 <ProgressCircular spinnerTimeout={spinnerTimeout ?? 10} mode={currentType === "async" ? asyncState : null} childrenPosition="after" colorVariant="info">
-                    <input {...useRefElementProps(useHasFocusProps(useMergedProps<HTMLInputElement>()(props, {
-                        "aria-disabled": disabled ? "true" : undefined,
-                        onKeyDown,
-                        ref,
-                        readOnly: readOnly || (disabled && disabledVariant === "soft"),
-                        disabled: (disabled && disabledVariant === "hard"),
-                        onBlur,
-                        class: clsx("form-control", "faux-form-control-inner", disabled && "disabled", "form-control", sizeClass),
-                        type,
-                        onInput,
-                        ...extraProps,
-                    })))} />
+                   {createElement(type == "textarea"? "textarea" : "input", inputProps as any)}
                 </ProgressCircular>
             </label>
 

@@ -1,9 +1,0 @@
-@use "../variables.scss" as *;
-@use "sass:color";
-@use "sass:map";
-@use "sass:string";
-
-.accordion {
-    border-radius: $accordion-border-radius;
-    overflow: hidden;
-}

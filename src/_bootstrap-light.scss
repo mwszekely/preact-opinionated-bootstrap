@@ -18,7 +18,7 @@
 @forward "bootstrap-sass-variables/theme-colors" with ($theme-colors: $theme-colors !default);
 
 @use "./bootstrap-variables/btn-active-box-shadow" as *;
-@forward "bootstrap-sass-variables/btn-active-box-shadow" with ($btn-active-box-shadow: $btn-active-box-shadow !default);
+@forward "../node_modules/bootstrap-sass-variables/_btn-active-box-shadow.scss" with ($btn-active-box-shadow: $btn-active-box-shadow !default);
 @use "./bootstrap-variables/btn-box-shadow" as *;
 @forward "bootstrap-sass-variables/btn-box-shadow" with ($btn-box-shadow: $btn-box-shadow !default);
 

@@ -20,10 +20,11 @@ interface BaseUnlabelledInputProps<T> {
 export const UseCheckboxGroupChildContext = createContext<UseCheckboxGroupChild<HTMLInputElement, CheckboxGroupChildInfo> | null>(null);
 
 export interface UnlabelledInputTextProps extends BaseUnlabelledInputProps<string> { type: "text"; maxLength?: number; }
+export interface UnlabelledInputTextareaProps extends Omit<UnlabelledInputTextProps, "type"> { type: "textarea"; rows: number | null; cols?: number | null; }
 export interface UnlabelledInputNumericProps extends BaseUnlabelledInputProps<string> { type: "numeric"; maxLength?: number; }
 export interface UnlabelledInputNumberNonNullableProps extends BaseUnlabelledInputProps<number> { type: "number"; min?: number; max?: number; step?: number; nonNullable: true; }
 export interface UnlabelledInputNumberNullableProps extends BaseUnlabelledInputProps<number | null> { type: "number"; min?: number; max?: number; step?: number; nonNullable?: false; }
-export type UnlabelledInputProps = UnlabelledInputTextProps | UnlabelledInputNumberNullableProps | UnlabelledInputNumberNonNullableProps | UnlabelledInputNumericProps;
+export type UnlabelledInputProps = UnlabelledInputTextProps | UnlabelledInputTextareaProps | UnlabelledInputNumberNullableProps | UnlabelledInputNumberNonNullableProps | UnlabelledInputNumericProps;
 
 export type InputProps = UnlabelledInputProps & {
     children: ComponentChildren,
@@ -64,12 +65,13 @@ function min<T extends number | string | Date>(value: T, min?: T) {
 export function useInputCaptures<T>(type: "text", min2: string, max2: string):
 export function useInputCaptures<T>(type: "text" | "number", min2: number, max2: number)
 export function useInputCaptures<T>(type: "text" | "number", min2: T, max2: T)*/
-export function useInputCaptures<T>(type: "text" | "number" | "numeric", min2?: T, max2?: T) {
+export function useInputCaptures<T>(type: "text" | "textarea" | "number" | "numeric", min2?: T, max2?: T) {
 
     const capture = useCallback((event: h.JSX.TargetedEvent<HTMLInputElement>): T => {
         let ret: T;
         switch (type) {
             case "text":
+            case "textarea":
             case "numeric":
                 ret = max(min(event.currentTarget.value, min2 as any), max2 as any) as T;
                 break;
@@ -88,6 +90,7 @@ export function useInputCaptures<T>(type: "text" | "number" | "numeric", min2?: 
     const uncapture = useCallback((value: InputProps["value"]): string => {
         switch (type) {
             case "text":
+            case "textarea":
             case "numeric":
                 return value as string;
 

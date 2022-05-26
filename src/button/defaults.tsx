@@ -55,6 +55,11 @@ export function useButtonStyles<E extends Element>(p: Pick<ButtonPropsBase<E>, "
     fillVariant = useButtonFillVariant(fillVariant);
     disabled = useButtonDisabled(disabled);
 
-    const useButtonStylesProps = <P extends h.JSX.HTMLAttributes<E>>(props: P) => useMergedProps<E>()({ type: tag === "button"? "button" : undefined, "aria-disabled": disabled? "true" : undefined, className: clsx(disabled && "disabled", "btn", `btn-${fillVariant == "outline" ? `outline-` : ``}${colorVariant}`, `btn-${size}`, disabled && "disabled") }, props);
+    const useButtonStylesProps = <P extends h.JSX.HTMLAttributes<E>>({ children, ...props }: P) => useMergedProps<E>()({ 
+        type: tag === "button"? "button" : undefined, 
+        "aria-disabled": disabled? "true" : undefined, 
+        className: clsx(disabled && "disabled", "btn", `btn-${fillVariant == "outline" ? `outline-` : ``}${colorVariant}`, `btn-${size}`, disabled && "disabled"),
+        children: <span class="btn-text-contents">{children}</span>
+    }, props);
     return { colorVariant, size, fillVariant, disabled, useButtonStylesProps };
 }

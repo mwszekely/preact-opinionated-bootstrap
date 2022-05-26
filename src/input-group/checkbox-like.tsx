@@ -54,7 +54,7 @@ function ButtonCheckboxLike({ inputProps, labelProps, label, asyncState, current
         <>
             <input {...useMergedProps<HTMLInputElement>()({ class: clsx("btn-check", disabled && "disabled") }, inputProps)} />
             <ProgressCircular childrenPosition="child" colorFill="foreground-only" mode={(currentHandlerType === "async" ? asyncState : null) ?? null} colorVariant="info">
-                <label {...useMergedProps<HTMLLabelElement>()({ class: clsx("btn", `btn-${buttonColor}`, disabled && disabled, inputProps.checked && "active"), children: label }, labelProps)} />
+                <label {...useMergedProps<HTMLLabelElement>()({ class: clsx("btn", `btn-${buttonColor}`, disabled && disabled, inputProps.checked && "active"), children: <span class="btn-text-contents">{label}</span> }, labelProps)} />
             </ProgressCircular>
         </>
     );
