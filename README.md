@@ -3,6 +3,19 @@
 
 Preact widgets like buttons, menus, form fields, etc. Priorities on ARIA compliance (including user-friendly keyboard & assistive technology navigation), looking pleasant, and having an simple (one might say opinionated) API that removes the most common boilerplate (e.g. allowing inputs such as checkboxes to take an async `onInput` handler and adapt accordingly).
 
+
+
+```tsx
+
+// Function to wait 5 seconds. Most components wait 1 second to show a spinner.
+const sleep = () => new Promise(resolve => setTimeout(resolve, 5000));
+
+// Button will start showing a spinner after 1 second of waiting
+<Button onClick={sleep}>Click me</Button>
+```
+
+**This library is Unlicenced into the public domain.** Just take anything interesting you like from it&mdash;it's mostly a personal project.
+
 [See a demo of various components together on a page here.](https://mwszekely.github.io/preact-opinionated-bootstrap/)
 
 * Accordion
@@ -16,7 +29,7 @@ Preact widgets like buttons, menus, form fields, etc. Priorities on ARIA complia
     * Checkbox group
     * Radio group
     * Switch
-* Single-select Listbox
+* Listbox (single select, multi select, actionable items)
 * Menu (dropdown)
 * Spinner (as an internal component used by Inputs during long async handlers)
 * Tabs
@@ -60,6 +73,12 @@ No documentation, lots of TODOs!
 
 ## Theming
 
+See the various implementations of the [Bootswatch themes](https://bootswatch.com/) in the `docs` folder for examples of how to create a theme using SASS modules and Bootstrap.
+
+Previous instructions below for now:
+
+```tsx
+/*
 By default, light and dark themes are provided.  To make your own theme, do the following:
 
 1. Create `index-${theme}.scss` with the following contents
@@ -68,15 +87,17 @@ By default, light and dark themes are provided.  To make your own theme, do the 
 ```scss
 @use "~preact-opinionated-bootstrap/src/bootstrap-light.scss" with (REPLACEMENTS HERE);
 @use "~preact-opinionated-bootstrap/src/index-helper.scss" as *;
-```
+``
 *
   * Or start from scratch:
-```scss
+``scss
 // You could also copy/paste from the default themes and modify them like this:
 @use "~preact-opinionated-bootstrap/src/bootstrap/bootstrap" with (REPLACEMENTS HERE);
 @use "~preact-opinionated-bootstrap/src/index-helper.scss" as *;
-```
+``
 3. If you want the default font too, include this:
-```scss
+``scss
 @use "~preact-opinionated-bootstrap/src/fonts.scss" as *;
+``
+*/
 ```
