@@ -1,0 +1,2 @@
+@use "../blue" as *;
+@forward "bootstrap-sass-variables/primary" with ($primary: $blue !default);

@@ -1,5 +1,5 @@
 @use "bootstrap-sass-variables/functions/tint-color" as *;
 @use "bootstrap-sass-variables/component-active-bg" as *;
-@use "bootstrap-sass-variables/input-btn-focus-color-opacity" as *;
+@use "./input-btn-focus-color-opacity" as *;
 
-$input-btn-focus-color: rgba(tint-color($component-active-bg, 40%),$input-btn-focus-color-opacity) !default;
+@forward "bootstrap-sass-variables/input-btn-focus-color" with ($input-btn-focus-color: rgba(tint-color($component-active-bg, 40%),$input-btn-focus-color-opacity) !default);

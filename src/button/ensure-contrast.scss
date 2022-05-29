@@ -1,4 +1,8 @@
-@use "../variables.scss" as *;
+//@use "../variables.scss" as *;
+@use "bootstrap-sass-variables/functions/contrast-ratio" as *;
+@use "bootstrap-sass-variables/functions/tint-color" as *;
+@use "bootstrap-sass-variables/functions/shade-color" as *;
+@use "bootstrap-sass-variables/min-contrast-ratio" as *;
 @use "sass:color";
 @use "sass:map";
 @use "sass:math";

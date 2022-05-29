@@ -1,0 +1,33 @@
+@use "../variables.scss" as *;
+@forward "../variables";
+@use "sass:color";
+@use "sass:map";
+@use "sass:string";
+@use "sass:list";
+
+$toast-close-btn-padding: 0.5em;
+
+// Higher than modal, lower than tooltip.
+$zindex-toast: 1060 !default;
+
+.toasts-container {
+  & > .toast {
+    & .btn.btn-close {
+      width: 1em;
+      height: 1em;
+      align-self: center;
+      /* height: 1em; */
+      padding: $toast-close-btn-padding;
+      &:active, &.active {
+        background-position-y: $toast-close-btn-padding + $toast-close-btn-padding * 0.5;
+        padding-bottom: $toast-close-btn-padding * 0.5;
+        padding-top: $toast-close-btn-padding + $toast-close-btn-padding * 0.5;
+      }
+    }
+  }
+}
+
+.toast {
+  background: $body-bg;
+  color: $body-color;
+}

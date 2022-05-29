@@ -1,1 +1,1 @@
-$btn-close-padding-y: 0 !default;
+@forward "bootstrap-sass-variables/btn-close-padding-y" with ($btn-close-padding-y: 0 !default);

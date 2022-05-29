@@ -1,1 +1,1 @@
-$enable-shadows: true !default;
+@forward "bootstrap-sass-variables/enable-shadows" with ($enable-shadows: true !default);

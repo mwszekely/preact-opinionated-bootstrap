@@ -1,1 +1,1 @@
-$progress-bar-transition: #{width, clip-path 0.6s ease} !default;
+@forward "bootstrap-sass-variables/progress-bar-transition" with ($progress-bar-transition: #{width, clip-path 0.6s ease} !default);

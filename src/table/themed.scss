@@ -1,0 +1,15 @@
+@use "../variables.scss" as *;
+@use "../elevation.scss";
+@forward "../variables";
+@use "sass:color";
+@use "sass:map";
+@use "sass:string";
+@use "sass:list";
+
+.table {
+  vertical-align: middle;
+  & td {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}

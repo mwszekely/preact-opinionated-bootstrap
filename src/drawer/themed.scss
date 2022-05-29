@@ -1,0 +1,20 @@
+@use "../variables.scss" as *;
+@forward "../variables";
+
+$offcanvas-close-btn-padding: 0.75em;
+
+.offcanvas {    
+    & .btn.btn-close {
+        --size: 1em;
+        width:  var(--size);
+        height: var(--size);
+        align-self: center;
+        padding: $offcanvas-close-btn-padding;
+        &:active, &.active {
+          background-position-y: $offcanvas-close-btn-padding + $offcanvas-close-btn-padding * 0.5;
+          padding-bottom: $offcanvas-close-btn-padding * 0.5;
+          padding-top: $offcanvas-close-btn-padding + $offcanvas-close-btn-padding * 0.5;
+        }
+      }
+}
+

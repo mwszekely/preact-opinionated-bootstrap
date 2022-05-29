@@ -1,3 +1,3 @@
 @use "sass:color";
 @use "bootstrap-sass-variables/component-active-bg" as *;
-$list-group-active-bg: color.adjust($component-active-bg, $alpha: -0.83) !default;
+@forward "bootstrap-sass-variables/list-group-active-bg" with ($list-group-active-bg: color.adjust($component-active-bg, $alpha: -0.83) !default);

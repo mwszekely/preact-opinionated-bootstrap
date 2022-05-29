@@ -1,0 +1,21 @@
+@use "../variables.scss"as *;
+@forward "../variables";
+
+.offcanvas-backdrop {
+    background-color: scale-color($color: $body-bg, $alpha: -60%);
+}
+
+.offcanvas {
+    visibility: visible;
+
+    &.transition-slide, &.transition-slide.transition-enter {
+        z-index: $zindex-offcanvas;
+    }
+}
+
+.offcanvas-start,
+.offcanvas-end,
+.offcanvas-top,
+.offcanvas-bottom {
+    transform: none;
+}

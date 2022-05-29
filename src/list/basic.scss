@@ -1,0 +1,13 @@
+@use "../variables" as *;
+@use "sass:color";
+@use "sass:map";
+@use "sass:string";
+@use "./mixins.scss" as *;
+@forward "../variables";
+
+
+.list-group {
+    font-family: $font-family-sans-serif;
+}
+
+@include list-group-item-ish($name: list-group-item);

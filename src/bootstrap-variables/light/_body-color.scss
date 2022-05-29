@@ -1,2 +1,2 @@
-@use "bootstrap-sass-variables/gray-900" as *;
-$body-color: $gray-900 !default;
+@use "../grays" as *;
+@forward "bootstrap-sass-variables/body-color" with ($body-color: $gray-900 !default);

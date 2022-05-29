@@ -1,3 +1,2 @@
-@use "bootstrap-sass-variables/list-group-active-bg" as *;
-
-$list-group-active-border-color: $list-group-active-bg !default;
+@use "./list-group-active-bg" as *;
+@forward "bootstrap-sass-variables/list-group-active-border-color" with ($list-group-active-border-color: $list-group-active-bg !default);

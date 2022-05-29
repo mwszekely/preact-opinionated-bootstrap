@@ -1,0 +1,258 @@
+@use "../variables.scss"as *;
+@use "sass:color";
+@use "sass:map";
+@use "sass:string";
+
+
+// Fix some things related to switches and alignment.
+// Namely we run into problems because switches are wider than radios or checks...
+.input-group-text.form-switch {
+    // Shrink the usual padding to make switches fill the same space as a checkbox or radio
+    padding-left: 0.25em;
+    padding-right: 0.25em;
+
+    &>.form-check-input {
+        margin-inline-start: 0;
+    }
+}
+
+
+
+// Set up InputGrid
+.input-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--input-grid-columns, 1), auto 1fr);
+    row-gap: 0.5em;
+
+    // Please. Anyone. Support subgrid along with Firefox.
+    // It's been so, so long
+    // Please
+    // Please
+    // Please
+    // Please
+    &,
+    &>[role=radiogroup] {
+        &>.input-group {
+            display: contents;
+
+            &>*:first-child {
+                justify-self: end;
+                text-align: end
+            }
+
+            &>*:last-child {
+                justify-self: start;
+                text-align: start;
+                max-width: 100%;
+                //overflow-x: auto;
+                scrollbar-width: none;
+            }
+        }
+    }
+
+    &>[role=radiogroup] {
+        display: contents;
+    }
+}
+
+
+
+
+// We do some silly things to make text fields have start/end icons.
+// The outer form-control is NOT the <input> element, and is for style only,
+// and to set up the display grid.
+// The inner form-control is the <input> element and actually handles input.
+// there's also a measure control that is used to help the <input> behave like an inline element.
+.form-control {
+
+    // The outer form-control is a grid where every child is on the same row
+    // so that, if necessary, the pending spinner overlaps with the start/end icon.
+    &.faux-form-control-outer {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        width: auto;
+        padding: 0;
+
+        &>.form-control-prefix {
+            grid-column: 1 / span 1;
+            align-self: center;
+
+            &>.icon {
+                padding-inline-start: 0.5em;
+            }
+
+            &>.btn {
+                border-start-start-radius: 0;
+                border-end-start-radius: 0;
+            }
+        }
+
+        &>.form-control-suffix {
+            grid-column: 3 / span 1;
+            align-self: center;
+
+            &>.icon {
+                padding-inline-end: 0.5em;
+            }
+
+            &>.btn {
+                border-start-end-radius: 0;
+                border-end-end-radius: 0;
+            }
+        }
+
+        &>* {
+            grid-row: 1 / span 1;
+        }
+    }
+
+    // The actual control itself (and the dummy element used to measure its ideal size)
+    // are placed in the center of the control. 
+    &.faux-form-control-measure,
+    &.form-control-input-container {
+        grid-column: 2 / span 1;
+        grid-row: 1 / span 1;
+        position: relative;
+    }
+
+    // The <input> element does not contribute to layout at all.
+    // Only the measurement element does.
+    &.form-control-input-container {
+
+        &>.circular-progress-container {
+            text-align: end;
+            inset-inline-end: 0.5em;
+            top: 0;
+        }
+
+        &>* {
+            position: absolute;
+            height: 100%;
+
+            &:not(.circular-progress-container) {
+                inset: 0;
+                width: 100%;
+            }
+        }
+    }
+
+    // We remove most visual indicators of the actual control and the measurer, 
+    // like their background, padding, and focus shadow, since the outer
+    // form-control takes care of all of that.
+    &.faux-form-control-measure,
+    &.faux-form-control-inner,
+    &.form-control-input-container {
+        border: none;
+        box-shadow: none;
+        background: none;
+    }
+
+    &.form-control-input-container {
+        &:focus-within {
+            box-shadow: $input-focus-box-shadow;
+        }
+    }
+
+    // The dummy element used to measure the ideal size of the <input>
+    // based on its content. Not visible, just takes up space.
+    &.faux-form-control-measure {
+        visibility: hidden;
+        pointer-events: none;
+        user-select: none;
+        white-space: pre;
+        z-index: -100;
+
+        &>span::after {
+            content: "";
+            width: 0.5em;
+            display: inline-block;
+        }
+    }
+}
+
+// The form-control-sm and -lg classes are normally not used inside input-groups,
+// but they're used in this library for sizing purposes.
+// We need to remove the min-height those classes come with to prevent then interfering
+// with the normal height of the parent input-group.
+.form-control-sm,
+.form-control-lg,
+.form-control-md {
+
+    &.form-control-input-container,
+    .form-control-input-container>&,
+    &.faux-form-control-measure {
+        min-height: unset;
+    }
+}
+
+
+
+// Needed for proper spinner alignment
+.form-check {
+    position: relative;
+}
+
+// Make sure that any input pseudo elements are always centered on it
+.form-check-input {
+    position: relative;
+    &::before, &::after {
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        inset: 0;
+    }
+}
+
+
+// Fix radios being mis-aligned in an input-text-group
+.input-group-text>.form-check-input {
+    margin-top: 0;
+}
+
+
+.form-check-label,
+.form-check-input {
+    // TODO: Necessary?
+    touch-action: manipulation;
+}
+
+// "Polyfill" disabled controls
+.form-check-input.disabled,
+.form-check-input:disabled,
+.form-check-label.disabled,
+.input-group-text.disabled,
+.form-control.disabled,
+.form-control:disabled {
+    opacity: $form-check-label-disabled-opacity;
+
+    /*&:not(.pending) {
+      cursor: default;
+    }*/
+}
+
+.form-check-input.pending,
+.form-check-label.pending,
+.form-control.pending {
+    cursor: progress;
+}
+
+.form-check-input:not(.disabled).form-check-input:not(:disabled),
+.form-check-label:not(.disabled),
+label.form-check-label:not(.disabled),
+label.input-group-text:not(.disabled) {
+    touch-action: manipulation;
+    cursor: pointer;
+}
+
+// Progress indicators are removed from the flow to appear on top of the checkbox, switch, etc.
+.input-group-text>.circular-progress-container {
+    position: absolute;
+    inset: 0;
+}
+
+.form-check>.circular-progress-container {
+    position: absolute;
+    inset-inline-start: 0;
+    inset-block-start: 0.25em;
+}

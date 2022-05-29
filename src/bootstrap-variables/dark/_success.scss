@@ -1,0 +1,2 @@
+@use "../green" as *;
+@forward "bootstrap-sass-variables/success" with ($success: $green !default);

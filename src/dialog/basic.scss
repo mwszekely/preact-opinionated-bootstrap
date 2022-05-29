@@ -1,0 +1,39 @@
+@use "../variables.scss"as *;
+@forward "../variables";
+@use "sass:math";
+
+.modal {
+    pointer-events: none;
+
+    &>.modal-backdrop {
+        pointer-events: all;
+    }
+
+    &>.modal-dialog {
+        pointer-events: all;
+    }
+}
+
+:root.document-scroll-hidden {
+    /*
+    position: fixed is awkward because we have to finagle with scrolling
+  
+    but it's the ONLY solution that works on iOS Safari
+  
+    This would be solved easily with overscroll-behavior
+    but surprise surprise, the only browser needs it doesn't support it :/
+  
+    */
+    position: fixed;
+    overflow: hidden;
+    max-width: calc(100% - var(--root-scrollbar-width, 0px));
+    max-height: calc(100% - var(--root-scrollbar-height, 0px));
+    top: calc(-1 * var(--root-scrollstop-top));
+    left: calc(-1 * var(--root-scrollstop-left));
+}
+
+
+.modal>.modal-backdrop {
+    background: rgba(0 0 0 / 0.6);
+    z-index: -10;
+}

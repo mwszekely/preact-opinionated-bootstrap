@@ -1,0 +1,26 @@
+
+.tabs-container {
+    display: flex;
+    & > .nav {
+      display: flex;
+    }
+    &.tabs-orientation-inline {
+      flex-direction: column;
+      & > .nav {
+        flex-direction: row;
+      }
+    }
+  
+    // Add support for vertical tabs by adjusting borders and such.
+    // TODO: RTL support
+    &.tabs-orientation-block {
+      flex-direction: row;
+      & > .nav {
+        flex-direction: column;
+  
+        &.nav-tabs {
+          justify-content: center;
+        }
+      }
+    }
+  }

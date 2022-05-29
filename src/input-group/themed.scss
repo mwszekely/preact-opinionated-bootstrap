@@ -1,0 +1,48 @@
+@use "../variables.scss"as *;
+@use "sass:color";
+@use "sass:map";
+@use "sass:string";
+
+
+.form-check:not(.input-group-text).form-switch {
+  padding-left: $form-check-padding-start;
+}
+
+:not(.faux-input-group-text)>.input-group-text {
+  position: relative;
+}
+
+
+// Remove the borders of the various form controls.
+// TODO: I still want to style these better.
+.form-control {
+  border-color: transparent;
+}
+
+.input-group-text {
+  border-top-color: transparent;
+  border-bottom: transparent;
+
+  &:first-child {
+    border-inline-start-color: transparent;
+  }
+
+  &:last-child {
+    border-inline-end-color: transparent;
+  }
+}
+
+
+
+// Hide spin buttons always, unless explicitly enabled with .show-spin-buttons
+input.form-control:not(.show-spin-buttons) {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+input[type="number"]:not(.show-spin-buttons)::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  display: none;
+  margin: 0;
+}

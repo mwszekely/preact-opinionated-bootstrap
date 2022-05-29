@@ -1,2 +1,2 @@
-@use "bootstrap-sass-variables/info" as *;
-$link-color: $info !default;
+@use "./info" as *;
+@forward "bootstrap-sass-variables/link-color" with ($link-color: $info !default);

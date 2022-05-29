@@ -1246,7 +1246,7 @@
       };
     }
 
-    function capitalize(str) {
+    function capitalize$1(str) {
       return str[0].toUpperCase() + str.substr(1);
     }
     /**
@@ -1408,12 +1408,12 @@
             blockDirection
           } = direction; // Size is relatively simple
 
-          let clientInlineSize = elementSize[`client${capitalize(inlineSize)}`];
-          let clientBlockSize = elementSize[`client${capitalize(blockSize)}`];
-          let offsetInlineSize = elementSize[`offset${capitalize(inlineSize)}`];
-          let offsetBlockSize = elementSize[`offset${capitalize(blockSize)}`];
-          let scrollInlineSize = elementSize[`scroll${capitalize(inlineSize)}`];
-          let scrollBlockSize = elementSize[`scroll${capitalize(blockSize)}`]; // Position requires us to sometimes use one property (like `left`)
+          let clientInlineSize = elementSize[`client${capitalize$1(inlineSize)}`];
+          let clientBlockSize = elementSize[`client${capitalize$1(blockSize)}`];
+          let offsetInlineSize = elementSize[`offset${capitalize$1(inlineSize)}`];
+          let offsetBlockSize = elementSize[`offset${capitalize$1(blockSize)}`];
+          let scrollInlineSize = elementSize[`scroll${capitalize$1(inlineSize)}`];
+          let scrollBlockSize = elementSize[`scroll${capitalize$1(blockSize)}`]; // Position requires us to sometimes use one property (like `left`)
           // or sometimes two (like `left` + `width`)
 
           function getPhysicalLeftTop(dir) {
@@ -1431,12 +1431,12 @@
           const f2 = getPhysicalRightBottom(inlineDirection);
           const f3 = getPhysicalLeftTop(blockDirection);
           const f4 = getPhysicalRightBottom(blockDirection);
-          let clientInlineInset = elementSize[`client${capitalize(f1)}`] + (!f2 ? 0 : elementSize[`client${capitalize(f2)}`]);
-          let scrollInlineInset = elementSize[`scroll${capitalize(f1)}`] + (!f2 ? 0 : elementSize[`scroll${capitalize(f2)}`]);
-          let offsetInlineInset = elementSize[`offset${capitalize(f1)}`] == undefined ? undefined : elementSize[`offset${capitalize(f1)}`] + (!f2 ? 0 : elementSize[`offset${capitalize(f2)}`]);
-          let clientBlockInset = elementSize[`client${capitalize(f3)}`] + (!f4 ? 0 : elementSize[`client${capitalize(f4)}`]);
-          let scrollBlockInset = elementSize[`scroll${capitalize(f3)}`] + (!f4 ? 0 : elementSize[`scroll${capitalize(f4)}`]);
-          let offsetBlockInset = elementSize[`offset${capitalize(f3)}`] == undefined ? undefined : elementSize[`offset${capitalize(f3)}`] + (!f4 ? 0 : elementSize[`offset${capitalize(f4)}`]);
+          let clientInlineInset = elementSize[`client${capitalize$1(f1)}`] + (!f2 ? 0 : elementSize[`client${capitalize$1(f2)}`]);
+          let scrollInlineInset = elementSize[`scroll${capitalize$1(f1)}`] + (!f2 ? 0 : elementSize[`scroll${capitalize$1(f2)}`]);
+          let offsetInlineInset = elementSize[`offset${capitalize$1(f1)}`] == undefined ? undefined : elementSize[`offset${capitalize$1(f1)}`] + (!f2 ? 0 : elementSize[`offset${capitalize$1(f2)}`]);
+          let clientBlockInset = elementSize[`client${capitalize$1(f3)}`] + (!f4 ? 0 : elementSize[`client${capitalize$1(f4)}`]);
+          let scrollBlockInset = elementSize[`scroll${capitalize$1(f3)}`] + (!f4 ? 0 : elementSize[`scroll${capitalize$1(f4)}`]);
+          let offsetBlockInset = elementSize[`offset${capitalize$1(f3)}`] == undefined ? undefined : elementSize[`offset${capitalize$1(f3)}`] + (!f4 ? 0 : elementSize[`offset${capitalize$1(f4)}`]);
           return {
             clientInlineSize,
             scrollInlineSize,
@@ -17740,6 +17740,530 @@
         return new Promise(resolve => setTimeout(resolve, arg0));
     }
 
+    /** Detect free variable `global` from Node.js. */
+    var freeGlobal$1 = typeof commonjsGlobal == 'object' && commonjsGlobal && commonjsGlobal.Object === Object && commonjsGlobal;
+    var _freeGlobal = freeGlobal$1;
+
+    var freeGlobal = _freeGlobal;
+    /** Detect free variable `self`. */
+
+    var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
+    /** Used as a reference to the global object. */
+
+    var root$1 = freeGlobal || freeSelf || Function('return this')();
+    var _root = root$1;
+
+    var root = _root;
+    /** Built-in value references. */
+
+    var Symbol$4 = root.Symbol;
+    var _Symbol = Symbol$4;
+
+    /**
+     * A specialized version of `_.map` for arrays without support for iteratee
+     * shorthands.
+     *
+     * @private
+     * @param {Array} [array] The array to iterate over.
+     * @param {Function} iteratee The function invoked per iteration.
+     * @returns {Array} Returns the new mapped array.
+     */
+
+    function arrayMap$1(array, iteratee) {
+      var index = -1,
+          length = array == null ? 0 : array.length,
+          result = Array(length);
+
+      while (++index < length) {
+        result[index] = iteratee(array[index], index, array);
+      }
+
+      return result;
+    }
+
+    var _arrayMap = arrayMap$1;
+
+    /**
+     * Checks if `value` is classified as an `Array` object.
+     *
+     * @static
+     * @memberOf _
+     * @since 0.1.0
+     * @category Lang
+     * @param {*} value The value to check.
+     * @returns {boolean} Returns `true` if `value` is an array, else `false`.
+     * @example
+     *
+     * _.isArray([1, 2, 3]);
+     * // => true
+     *
+     * _.isArray(document.body.children);
+     * // => false
+     *
+     * _.isArray('abc');
+     * // => false
+     *
+     * _.isArray(_.noop);
+     * // => false
+     */
+    var isArray$1 = Array.isArray;
+    var isArray_1 = isArray$1;
+
+    var Symbol$3 = _Symbol;
+    /** Used for built-in method references. */
+
+    var objectProto$1 = Object.prototype;
+    /** Used to check objects for own properties. */
+
+    var hasOwnProperty = objectProto$1.hasOwnProperty;
+    /**
+     * Used to resolve the
+     * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+     * of values.
+     */
+
+    var nativeObjectToString$1 = objectProto$1.toString;
+    /** Built-in value references. */
+
+    var symToStringTag$1 = Symbol$3 ? Symbol$3.toStringTag : undefined;
+    /**
+     * A specialized version of `baseGetTag` which ignores `Symbol.toStringTag` values.
+     *
+     * @private
+     * @param {*} value The value to query.
+     * @returns {string} Returns the raw `toStringTag`.
+     */
+
+    function getRawTag$1(value) {
+      var isOwn = hasOwnProperty.call(value, symToStringTag$1),
+          tag = value[symToStringTag$1];
+
+      try {
+        value[symToStringTag$1] = undefined;
+        var unmasked = true;
+      } catch (e) {}
+
+      var result = nativeObjectToString$1.call(value);
+
+      if (unmasked) {
+        if (isOwn) {
+          value[symToStringTag$1] = tag;
+        } else {
+          delete value[symToStringTag$1];
+        }
+      }
+
+      return result;
+    }
+
+    var _getRawTag = getRawTag$1;
+
+    /** Used for built-in method references. */
+    var objectProto = Object.prototype;
+    /**
+     * Used to resolve the
+     * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+     * of values.
+     */
+
+    var nativeObjectToString = objectProto.toString;
+    /**
+     * Converts `value` to a string using `Object.prototype.toString`.
+     *
+     * @private
+     * @param {*} value The value to convert.
+     * @returns {string} Returns the converted string.
+     */
+
+    function objectToString$1(value) {
+      return nativeObjectToString.call(value);
+    }
+
+    var _objectToString = objectToString$1;
+
+    var Symbol$2 = _Symbol,
+        getRawTag = _getRawTag,
+        objectToString = _objectToString;
+    /** `Object#toString` result references. */
+
+    var nullTag = '[object Null]',
+        undefinedTag = '[object Undefined]';
+    /** Built-in value references. */
+
+    var symToStringTag = Symbol$2 ? Symbol$2.toStringTag : undefined;
+    /**
+     * The base implementation of `getTag` without fallbacks for buggy environments.
+     *
+     * @private
+     * @param {*} value The value to query.
+     * @returns {string} Returns the `toStringTag`.
+     */
+
+    function baseGetTag$1(value) {
+      if (value == null) {
+        return value === undefined ? undefinedTag : nullTag;
+      }
+
+      return symToStringTag && symToStringTag in Object(value) ? getRawTag(value) : objectToString(value);
+    }
+
+    var _baseGetTag = baseGetTag$1;
+
+    /**
+     * Checks if `value` is object-like. A value is object-like if it's not `null`
+     * and has a `typeof` result of "object".
+     *
+     * @static
+     * @memberOf _
+     * @since 4.0.0
+     * @category Lang
+     * @param {*} value The value to check.
+     * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+     * @example
+     *
+     * _.isObjectLike({});
+     * // => true
+     *
+     * _.isObjectLike([1, 2, 3]);
+     * // => true
+     *
+     * _.isObjectLike(_.noop);
+     * // => false
+     *
+     * _.isObjectLike(null);
+     * // => false
+     */
+
+    function isObjectLike$1(value) {
+      return value != null && typeof value == 'object';
+    }
+
+    var isObjectLike_1 = isObjectLike$1;
+
+    var baseGetTag = _baseGetTag,
+        isObjectLike = isObjectLike_1;
+    /** `Object#toString` result references. */
+
+    var symbolTag = '[object Symbol]';
+    /**
+     * Checks if `value` is classified as a `Symbol` primitive or object.
+     *
+     * @static
+     * @memberOf _
+     * @since 4.0.0
+     * @category Lang
+     * @param {*} value The value to check.
+     * @returns {boolean} Returns `true` if `value` is a symbol, else `false`.
+     * @example
+     *
+     * _.isSymbol(Symbol.iterator);
+     * // => true
+     *
+     * _.isSymbol('abc');
+     * // => false
+     */
+
+    function isSymbol$1(value) {
+      return typeof value == 'symbol' || isObjectLike(value) && baseGetTag(value) == symbolTag;
+    }
+
+    var isSymbol_1 = isSymbol$1;
+
+    var Symbol$1 = _Symbol,
+        arrayMap = _arrayMap,
+        isArray = isArray_1,
+        isSymbol = isSymbol_1;
+    /** Used as references for various `Number` constants. */
+
+    var INFINITY = 1 / 0;
+    /** Used to convert symbols to primitives and strings. */
+
+    var symbolProto = Symbol$1 ? Symbol$1.prototype : undefined,
+        symbolToString = symbolProto ? symbolProto.toString : undefined;
+    /**
+     * The base implementation of `_.toString` which doesn't convert nullish
+     * values to empty strings.
+     *
+     * @private
+     * @param {*} value The value to process.
+     * @returns {string} Returns the string.
+     */
+
+    function baseToString$1(value) {
+      // Exit early for strings to avoid a performance hit in some environments.
+      if (typeof value == 'string') {
+        return value;
+      }
+
+      if (isArray(value)) {
+        // Recursively convert values (susceptible to call stack limits).
+        return arrayMap(value, baseToString$1) + '';
+      }
+
+      if (isSymbol(value)) {
+        return symbolToString ? symbolToString.call(value) : '';
+      }
+
+      var result = value + '';
+      return result == '0' && 1 / value == -INFINITY ? '-0' : result;
+    }
+
+    var _baseToString = baseToString$1;
+
+    var baseToString = _baseToString;
+    /**
+     * Converts `value` to a string. An empty string is returned for `null`
+     * and `undefined` values. The sign of `-0` is preserved.
+     *
+     * @static
+     * @memberOf _
+     * @since 4.0.0
+     * @category Lang
+     * @param {*} value The value to convert.
+     * @returns {string} Returns the converted string.
+     * @example
+     *
+     * _.toString(null);
+     * // => ''
+     *
+     * _.toString(-0);
+     * // => '-0'
+     *
+     * _.toString([1, 2, 3]);
+     * // => '1,2,3'
+     */
+
+    function toString$2(value) {
+      return value == null ? '' : baseToString(value);
+    }
+
+    var toString_1 = toString$2;
+
+    /**
+     * The base implementation of `_.slice` without an iteratee call guard.
+     *
+     * @private
+     * @param {Array} array The array to slice.
+     * @param {number} [start=0] The start position.
+     * @param {number} [end=array.length] The end position.
+     * @returns {Array} Returns the slice of `array`.
+     */
+
+    function baseSlice$1(array, start, end) {
+      var index = -1,
+          length = array.length;
+
+      if (start < 0) {
+        start = -start > length ? 0 : length + start;
+      }
+
+      end = end > length ? length : end;
+
+      if (end < 0) {
+        end += length;
+      }
+
+      length = start > end ? 0 : end - start >>> 0;
+      start >>>= 0;
+      var result = Array(length);
+
+      while (++index < length) {
+        result[index] = array[index + start];
+      }
+
+      return result;
+    }
+
+    var _baseSlice = baseSlice$1;
+
+    var baseSlice = _baseSlice;
+    /**
+     * Casts `array` to a slice if it's needed.
+     *
+     * @private
+     * @param {Array} array The array to inspect.
+     * @param {number} start The start position.
+     * @param {number} [end=array.length] The end position.
+     * @returns {Array} Returns the cast slice.
+     */
+
+    function castSlice$1(array, start, end) {
+      var length = array.length;
+      end = end === undefined ? length : end;
+      return !start && end >= length ? array : baseSlice(array, start, end);
+    }
+
+    var _castSlice = castSlice$1;
+
+    /** Used to compose unicode character classes. */
+    var rsAstralRange$1 = '\\ud800-\\udfff',
+        rsComboMarksRange$1 = '\\u0300-\\u036f',
+        reComboHalfMarksRange$1 = '\\ufe20-\\ufe2f',
+        rsComboSymbolsRange$1 = '\\u20d0-\\u20ff',
+        rsComboRange$1 = rsComboMarksRange$1 + reComboHalfMarksRange$1 + rsComboSymbolsRange$1,
+        rsVarRange$1 = '\\ufe0e\\ufe0f';
+    /** Used to compose unicode capture groups. */
+
+    var rsZWJ$1 = '\\u200d';
+    /** Used to detect strings with [zero-width joiners or code points from the astral planes](http://eev.ee/blog/2015/09/12/dark-corners-of-unicode/). */
+
+    var reHasUnicode = RegExp('[' + rsZWJ$1 + rsAstralRange$1 + rsComboRange$1 + rsVarRange$1 + ']');
+    /**
+     * Checks if `string` contains Unicode symbols.
+     *
+     * @private
+     * @param {string} string The string to inspect.
+     * @returns {boolean} Returns `true` if a symbol is found, else `false`.
+     */
+
+    function hasUnicode$2(string) {
+      return reHasUnicode.test(string);
+    }
+
+    var _hasUnicode = hasUnicode$2;
+
+    /**
+     * Converts an ASCII `string` to an array.
+     *
+     * @private
+     * @param {string} string The string to convert.
+     * @returns {Array} Returns the converted array.
+     */
+
+    function asciiToArray$1(string) {
+      return string.split('');
+    }
+
+    var _asciiToArray = asciiToArray$1;
+
+    /** Used to compose unicode character classes. */
+    var rsAstralRange = '\\ud800-\\udfff',
+        rsComboMarksRange = '\\u0300-\\u036f',
+        reComboHalfMarksRange = '\\ufe20-\\ufe2f',
+        rsComboSymbolsRange = '\\u20d0-\\u20ff',
+        rsComboRange = rsComboMarksRange + reComboHalfMarksRange + rsComboSymbolsRange,
+        rsVarRange = '\\ufe0e\\ufe0f';
+    /** Used to compose unicode capture groups. */
+
+    var rsAstral = '[' + rsAstralRange + ']',
+        rsCombo = '[' + rsComboRange + ']',
+        rsFitz = '\\ud83c[\\udffb-\\udfff]',
+        rsModifier = '(?:' + rsCombo + '|' + rsFitz + ')',
+        rsNonAstral = '[^' + rsAstralRange + ']',
+        rsRegional = '(?:\\ud83c[\\udde6-\\uddff]){2}',
+        rsSurrPair = '[\\ud800-\\udbff][\\udc00-\\udfff]',
+        rsZWJ = '\\u200d';
+    /** Used to compose unicode regexes. */
+
+    var reOptMod = rsModifier + '?',
+        rsOptVar = '[' + rsVarRange + ']?',
+        rsOptJoin = '(?:' + rsZWJ + '(?:' + [rsNonAstral, rsRegional, rsSurrPair].join('|') + ')' + rsOptVar + reOptMod + ')*',
+        rsSeq = rsOptVar + reOptMod + rsOptJoin,
+        rsSymbol = '(?:' + [rsNonAstral + rsCombo + '?', rsCombo, rsRegional, rsSurrPair, rsAstral].join('|') + ')';
+    /** Used to match [string symbols](https://mathiasbynens.be/notes/javascript-unicode). */
+
+    var reUnicode = RegExp(rsFitz + '(?=' + rsFitz + ')|' + rsSymbol + rsSeq, 'g');
+    /**
+     * Converts a Unicode `string` to an array.
+     *
+     * @private
+     * @param {string} string The string to convert.
+     * @returns {Array} Returns the converted array.
+     */
+
+    function unicodeToArray$1(string) {
+      return string.match(reUnicode) || [];
+    }
+
+    var _unicodeToArray = unicodeToArray$1;
+
+    var asciiToArray = _asciiToArray,
+        hasUnicode$1 = _hasUnicode,
+        unicodeToArray = _unicodeToArray;
+    /**
+     * Converts `string` to an array.
+     *
+     * @private
+     * @param {string} string The string to convert.
+     * @returns {Array} Returns the converted array.
+     */
+
+    function stringToArray$1(string) {
+      return hasUnicode$1(string) ? unicodeToArray(string) : asciiToArray(string);
+    }
+
+    var _stringToArray = stringToArray$1;
+
+    var castSlice = _castSlice,
+        hasUnicode = _hasUnicode,
+        stringToArray = _stringToArray,
+        toString$1 = toString_1;
+    /**
+     * Creates a function like `_.lowerFirst`.
+     *
+     * @private
+     * @param {string} methodName The name of the `String` case method to use.
+     * @returns {Function} Returns the new case function.
+     */
+
+    function createCaseFirst$1(methodName) {
+      return function (string) {
+        string = toString$1(string);
+        var strSymbols = hasUnicode(string) ? stringToArray(string) : undefined;
+        var chr = strSymbols ? strSymbols[0] : string.charAt(0);
+        var trailing = strSymbols ? castSlice(strSymbols, 1).join('') : string.slice(1);
+        return chr[methodName]() + trailing;
+      };
+    }
+
+    var _createCaseFirst = createCaseFirst$1;
+
+    var createCaseFirst = _createCaseFirst;
+    /**
+     * Converts the first character of `string` to upper case.
+     *
+     * @static
+     * @memberOf _
+     * @since 4.0.0
+     * @category String
+     * @param {string} [string=''] The string to convert.
+     * @returns {string} Returns the converted string.
+     * @example
+     *
+     * _.upperFirst('fred');
+     * // => 'Fred'
+     *
+     * _.upperFirst('FRED');
+     * // => 'FRED'
+     */
+
+    var upperFirst$1 = createCaseFirst('toUpperCase');
+    var upperFirst_1 = upperFirst$1;
+
+    var toString = toString_1,
+        upperFirst = upperFirst_1;
+    /**
+     * Converts the first character of `string` to upper case and the remaining
+     * to lower case.
+     *
+     * @static
+     * @memberOf _
+     * @since 3.0.0
+     * @category String
+     * @param {string} [string=''] The string to capitalize.
+     * @returns {string} Returns the capitalized string.
+     * @example
+     *
+     * _.capitalize('FRED');
+     * // => 'Fred'
+     */
+
+    function capitalize(string) {
+      return upperFirst(toString(string).toLowerCase());
+    }
+
+    var capitalize_1 = capitalize;
+
     const RandomWords = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.".split(" ");
     g$1(({ setActive, active, depth }) => {
         return (e$3(d$2, { children: [e$3("button", { children: "Button 1" }), e$3("button", { children: "Button 2" }), e$3("button", { children: "Button 3" }), e$3("label", { children: ["Active: ", e$3("input", { type: "checkbox", checked: active, onInput: e => { e.preventDefault(); setActive(e.currentTarget.checked); } })] })] }));
@@ -17834,17 +18358,45 @@
         }, [setRadioValue]);
         return (e$3("div", { class: "demo", children: [e$3(InputGroup, { children: e$3(Input, { type: "text", onValueChange: onInput1, value: text, width: "100%", children: "Test input" }) }), e$3(RadioGroup, { selectedValue: radioValue, name: "demo-radio", onValueChange: onInput2, children: [e$3(InputGroup, { children: e$3(Radio, { index: 0, value: "ARadio" }) }), e$3(InputGroup, { children: e$3(Radio, { index: 1, value: "BRadio" }) }), e$3(InputGroup, { children: e$3(Radio, { index: 2, value: "CRadio" }) })] })] }));
     });
-    function changeThemes(toTheme) {
-        const fromTheme = (toTheme === "theme-dark" ? "theme-light" : "theme-dark");
+    function changeThemes(fromTheme, toTheme) {
+        //const fromTheme = (toTheme === "theme-dark" ? "theme-light" : "theme-dark");
         document.getElementById(toTheme).media = "all";
-        document.getElementById(fromTheme).media = "screen and (max-width: 1px)";
+        if (fromTheme)
+            document.getElementById(fromTheme).media = "screen and (max-width: 1px)";
     }
+    const AllThemes = [
+        "cerulean",
+        "cosmo",
+        "cyborg",
+        "darkly",
+        "flatly",
+        "journal",
+        "litera",
+        "lumen",
+        "lux",
+        "materia",
+        "minty",
+        "morph",
+        "pulse",
+        "quartz",
+        "regent",
+        "sandstone",
+        "simplex",
+        "sketchy",
+        "slate",
+        "solar",
+        "spacelab",
+        "superhero",
+        "united",
+        "vapor",
+        "yeti",
+        "zephyr",
+    ];
     const Component = () => {
         const [theme, setTheme] = useState("theme-dark");
-        d$1(() => changeThemes(theme), [theme]);
-        return e$3(d$2, { children: [e$3(Button, { colorVariant: theme == "theme-dark" ? "light" : "dark", style: { position: "fixed", insetBlockStart: "0.5em", insetInlineEnd: "0.5em", zIndex: 9999999 }, spinnerTimeout: 999999999, onPress: async () => {
-                        setTheme(theme === "theme-dark" ? "theme-light" : "theme-dark");
-                    }, children: ["Switch theme to ", e$3("strong", { children: theme === "theme-dark" ? "light" : "dark" })] }), e$3(GridResponsive, { minWidth: "35em", children: e$3(DebugUtilContext.Provider, { value: _$1(() => ({ logRender: new Set(["Table", "TableHead", "TableBody", "TableRow", "TableCell"]) }), []), children: e$3(ToastsProvider, { children: e$3(DialogsProvider, { children: [e$3(DemoRanges, {}), e$3(DemoTable, {}), e$3(DemoLists, {}), e$3(DemoMenus, {}), e$3(DemoDialogs, {}), e$3(DemoButtons, {}), e$3(DemoChecks, {}), e$3(DemoInputs, {}), e$3(DemoLayout, {}), e$3(DemoAccordion, {}), e$3(DemoDialog, {}), e$3(DemoDrawer, {}), e$3(DemoInput, {}), e$3(DemoList, {}), e$3(DemoTabs, {}), e$3(DemoMenu, {})] }) }) }) })] });
+        const [themeName, setThemeName] = useState("Dark");
+        useLayoutEffect((prevArgs) => changeThemes((prevArgs ?? [])[0], theme), [theme]);
+        return e$3(d$2, { children: [e$3(Menu, { TransitionProps: { maxHeight: "70vh", overflow: "auto" }, anchor: e$3(Button, { dropdownVariant: "combined", style: { position: "fixed", insetBlockStart: "0.5em", insetInlineEnd: "0.5em", zIndex: 9999999 }, spinnerTimeout: 999999999, children: ["Theme: ", themeName] }), children: [e$3(MenuItem, { index: 0, onPress: async () => { setTheme(`theme-light`); setThemeName("Light"); }, children: "Light" }), e$3(MenuItem, { index: 1, onPress: async () => { setTheme(`theme-dark`); setThemeName("Dark"); }, children: "Dark" }), e$3(ListItemStatic, { children: e$3("a", { href: "https://bootswatch.com/", children: "Bootswatch themes" }) }), AllThemes.map((theme, index) => e$3(MenuItem, { index: index + 2, onPress: async () => { setTheme(`theme-${theme}`); setThemeName(capitalize_1(theme)); }, children: capitalize_1(theme) }))] }), e$3(GridResponsive, { minWidth: "35em", children: e$3(DebugUtilContext.Provider, { value: _$1(() => ({ logRender: new Set(["Table", "TableHead", "TableBody", "TableRow", "TableCell"]) }), []), children: e$3(ToastsProvider, { children: e$3(DialogsProvider, { children: [e$3(DemoRanges, {}), e$3(DemoTable, {}), e$3(DemoLists, {}), e$3(DemoMenus, {}), e$3(DemoDialogs, {}), e$3(DemoButtons, {}), e$3(DemoChecks, {}), e$3(DemoInputs, {}), e$3(DemoLayout, {}), e$3(DemoAccordion, {}), e$3(DemoDialog, {}), e$3(DemoDrawer, {}), e$3(DemoInput, {}), e$3(DemoList, {}), e$3(DemoTabs, {}), e$3(DemoMenu, {})] }) }) }) })] });
     };
     requestAnimationFrame(() => {
         S$1(e$3(Component, {}), document.getElementById("root"));

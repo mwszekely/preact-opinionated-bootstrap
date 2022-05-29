@@ -1,1 +1,1 @@
-$input-btn-focus-width: 0.25rem !default;
+@forward "bootstrap-sass-variables/input-btn-focus-width" with ($input-btn-focus-width: 0.25rem !default);

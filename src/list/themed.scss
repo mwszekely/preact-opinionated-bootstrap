@@ -1,0 +1,101 @@
+@use "../variables" as *;
+@use "sass:color";
+@use "sass:map";
+@use "sass:string";
+@forward "../variables";
+
+.list-group-item-action,
+.list-group-item[tabindex="0"] {
+  outline: none;
+  transition: $inset-press-transition;
+
+  &:not(.disabled):not(.pending) {
+    cursor: pointer;
+  }
+  &.disabled {
+    cursor: default;
+  }
+  &.pending {
+    cursor: progress;
+  }
+
+  &:active:not(.pending),
+  &.active:not(.pending),
+  &:not(:active):not(.active).pending {
+    color: $list-group-active-color;
+    background-color: $list-group-active-bg;
+    border-color: $list-group-active-border-color;
+  }
+
+  &:not(.active):not(:active):not(.pending),
+  &:active.pending,
+  &.active.pending {
+    background-color: var(--bs-body-bg);
+    border-color: $list-group-border-color;
+    color: $body-color;
+  }
+
+  // When we're active,
+  // or when we're not active but pending to become active,
+  // use the "depressed text" box-shadow.
+  &:active:not(.pending):not(:focus),
+  &.active:not(.pending):not(:focus),
+  &:not(:active):not(.active).pending:not(:focus) {
+    box-shadow: $btn-active-box-shadow;
+  }
+
+  &:focus {
+    // When we're focused, we show *just* the focus ring
+    // (and not the text-depression effect) when we're
+    // * not active (and also not pending to become active), and
+    // * active, but also pending to become *inactive*
+    &:not(:active):not(.active):not(.pending),
+    &:active.pending,
+    &.active.pending {
+      box-shadow: $input-focus-box-shadow;
+    }
+
+    // When we're focused, we show the "text-depressed" and focus ring effects
+    // * when we're also active but not pending to become inactive OR
+    // * not active but pending to become active.
+    &:active:not(.pending),
+    &.active:not(.pending),
+    &:not(:active).pending,
+    &:not(.active).pending {
+      box-shadow: $input-focus-box-shadow, $btn-active-box-shadow;
+    }
+  }
+
+  // When we're active and also not pending to become inactive,
+  // or when we're not active but pending to become active,
+  // use the "depressed text" padding (depending on size).
+  &:active:not(.pending),
+  &.active:not(.pending),
+  &:not(:active):not(.active).pending {
+    padding-bottom: $list-group-item-padding-y * 0.5;
+    padding-top: $list-group-item-padding-y + $list-group-item-padding-y * 0.5;
+    background-position-y: $list-group-item-padding-y * 0.5;
+  }
+  background-position-y: 0;
+}
+
+// Undo the above if the user prefers less motion
+@media (prefers-reduced-motion) {
+  .actionable.list-group-item,
+  .list-group-item[tabindex="0"] {
+    &:active,
+    &.active,
+    &.pending {
+      padding-bottom: $list-group-item-padding-y;
+      padding-top: $list-group-item-padding-y;
+    }
+  }
+  .nav-link {
+    &:active,
+    &.active,
+    &.pending {
+      padding-bottom: $nav-link-padding-y;
+      padding-top: $nav-link-padding-y;
+    }
+  }
+}

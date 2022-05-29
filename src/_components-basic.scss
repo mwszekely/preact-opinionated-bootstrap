@@ -1,0 +1,126 @@
+// If you include just this file instead of index-light or index-dark,
+// you can configure the bootstrap SASS variables via
+// `@use "" with ()` by including that configuration before this one.
+
+//@use "./badge/basic" as *;
+@use "./button/basic" as *;
+//@use "./card/basic/" as *;
+@use "./list/basic" as *;
+@use "./input-group/basic" as *;
+@use "./tabs/basic" as *;
+@use "./dialog/basic" as *;
+@use "./menu/basic" as *;
+@use "./drawer/basic" as *;
+@use "./tooltip/basic" as *;
+@use "./toast/basic" as *;
+@use "./progress/basic" as *;
+@use "./layout/basic" as *;
+@use "./table/basic" as *;
+@use "./icon/basic" as *;
+@use "./portal/basic" as *;
+@use "./range/basic" as *;
+@use "./focus/basic" as *;
+
+@use "preact-transition/src/index.scss";
+
+/*@forward "./badge/basic";
+@forward "./button/basic";
+@forward "./card/basic/";
+@forward "./list/basic";
+@forward "./input/basic-group";
+@forward "./tabs/basic";
+@forward "./dialog/basic";
+@forward "./menu/basic";
+@forward "./drawer/basic";
+@forward "./tooltip/basic";
+@forward "./toast/basic";
+@forward "./progress/basic/";
+@forward "./layout/basic/";
+@forward "./table/basic/";
+@forward "./icon/basic/";
+@forward "./portal/basic/";
+@forward "./range/basic/";*/
+
+@use "./button/ensure-contrast.scss" as *;
+@use "./elevation.scss";
+@use "sass:color";
+
+@use "preact-aria-widgets/src/modal.css";
+
+$scrollbar-track-background: ensure-contrasting-color($body-bg, $body-bg, 4.5);
+$scrollbar-thumb-background: ensure-contrasting-color(
+  color.mix($body-bg, $scrollbar-track-background),
+  $secondary,
+  4.5
+);
+$scrollbar-thumb-active-background: color-contrast($body-bg);
+
+code {
+  font-family: $font-family-monospace;
+  background-color: change-color($color: $green, $alpha: 0.2);
+  color: $body-color;
+}
+
+*::-webkit-scrollbar {
+  .themed-scrollbars &,
+  &.themed-scrollbars {
+    width: 11px;
+    height: 11px;
+  }
+}
+
+*::-webkit-scrollbar:hover {
+  .themed-scrollbars &,
+  &.themed-scrollbars {
+    &::-webkit-scrollbar-thumb {
+      background-color: #{color-contrast($body-bg)};
+    }
+  }
+}
+
+*::-webkit-scrollbar-track {
+  .themed-scrollbars &,
+  &.themed-scrollbars {
+    background: var(--scrollbar-background-color, #{$scrollbar-track-background});
+  }
+}
+*::-webkit-scrollbar-thumb {
+  .themed-scrollbars &,
+  &.themed-scrollbars {
+    background-color: var(--scrollbar-thumb-color, #{$scrollbar-thumb-background});
+    border-radius: 6px;
+    &:active {
+      background-color: #{$scrollbar-thumb-active-background};
+    }
+  }
+}
+
+*,
+html,
+body {
+  .themed-scrollbars &,
+  &.themed-scrollbars {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb-color, #{$scrollbar-thumb-background})
+      var(--scrollbar-color, #{$scrollbar-track-background});
+  }
+}
+
+body.scroll-snap {
+  scroll-snap-type: block mandatory;
+  scroll-snap-align: center;
+
+  & .scroll-snap-target {
+    scroll-snap-align: center;
+  }
+}
+
+body {
+  font-family: $font-family-sans-serif;
+}
+
+body {
+  background-color: $body-bg;
+  color: $body-color;
+  text-align: $body-text-align;
+}

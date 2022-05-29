@@ -1,0 +1,2 @@
+@use "../grays" as *;
+@forward "bootstrap-sass-variables/light" with ($light: $gray-100 !default);

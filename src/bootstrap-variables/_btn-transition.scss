@@ -1,1 +1,1 @@
-$btn-transition: box-shadow 0.1s cubic-bezier(0, 1, 0.33, 1), text-shadow 0.1s cubic-bezier(0, 1, 0.33, 1), color 0.15s ease-in-out, background-color 0.15s ease-in-out,border-color 0.15s ease-in-out !default;
+@forward "bootstrap-sass-variables/btn-transition" with ($btn-transition: #{box-shadow 0.1s cubic-bezier(0, 1, 0.33, 1), text-shadow 0.1s cubic-bezier(0, 1, 0.33, 1), color 0.15s ease-in-out, background-color 0.15s ease-in-out,border-color 0.15s ease-in-out} !default);

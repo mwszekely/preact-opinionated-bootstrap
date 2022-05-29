@@ -1,0 +1,70 @@
+@use "../variables.scss"as *;
+@use "../list/mixins.scss"as *;
+@forward "../variables";
+
+
+
+// We need these features without using a parent class
+.dropdown-toggle {
+  &.dropup {
+    @include caret(up);
+  }
+
+  &.dropdown {
+    @include caret(down);
+  }
+
+  &.dropstart {
+    @include caret(start);
+
+    &::before {
+      vertical-align: 0;
+      margin-inline-end: 0.75em; // ??? Not in Bootstrap
+    }
+  }
+
+  &.dropend {
+    @include caret(end);
+
+    &::after {
+      vertical-align: 0;
+    }
+  }
+}
+
+.dropdown-menu {
+  display: revert;
+  position: relative;
+}
+
+.dropdown-menu-popper {
+  z-index: $zindex-popover;
+  max-height: 50vh;
+  overflow: auto;
+}
+
+button.dropdown-item {
+  position: relative;
+  & > .circular-progress-container {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+  }
+  &.pending {
+    cursor: progress;
+    pointer-events: auto;
+  }
+}
+
+
+.btn {
+  &.dropdown-toggle.dropstart::before,
+  &.dropdown-toggle.dropend::after,
+  &.dropdown-toggle.dropup::after,
+  &.dropdown-toggle.dropdown::after {
+    display: block;
+    align-self: center;
+  }
+}

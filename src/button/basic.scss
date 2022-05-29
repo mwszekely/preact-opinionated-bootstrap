@@ -1,0 +1,38 @@
+@use "sass:color";
+@use "sass:map";
+@use "sass:string";
+@use "bootstrap-sass-variables/enable-button-pointers" as *;
+@use "./ensure-contrast.scss" as *;
+
+.btn-group {
+    &.wrap {
+        flex-wrap: wrap;
+        row-gap: 0.25em;
+    }
+}
+
+.btn {
+
+    // Bootstrap also does this when $enable-button-pointers
+    // but not for .pending
+    @if $enable-button-pointers {
+        &:not(.disabled):not(:disabled):not(.pending) {
+            cursor: pointer;
+        }
+
+        &.pending {
+            cursor: progress;
+            pointer-events: all;
+        }
+    }
+
+    // Ensure that the text content and the spinner appear in the center of the button, overlapping.
+    display: inline-grid;
+    grid-template-columns: 1fr auto;
+
+    &>* {
+        grid-area: 1 / 1 / span 1 / span 1;
+        justify-self: center;
+        align-self: center;
+    }
+}

@@ -1,0 +1,2 @@
+@use "../grays" as *;
+@forward "bootstrap-sass-variables/dark/dropdown-link-color" with ($dropdown-link-color: $gray-100);

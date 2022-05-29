@@ -1,0 +1,102 @@
+@use "../variables.scss" as *;
+@use "../list/mixins.scss" as *;
+@forward "../variables";
+
+
+
+// With a border, the popper arrow is off by that width in pixels.
+.dropdown-menu.elevation-body-surface {
+  border: none;
+}
+
+.typeahead-tooltip {
+  white-space: pre-wrap;
+}
+
+.popper-arrow,
+.popper-arrow::before ,
+.popper-arrow::after {
+  position: absolute;
+  width: var(--bs-tooltip-arrow-height);
+  height:var(--bs-tooltip-arrow-height);
+  background: inherit;
+}
+
+.popper-arrow,
+.popper-arrow::before {
+
+  // TODO: We need the elevation overlay for its background-color
+  // in dark themes, but we explicitly don't want its shadow,
+  // since it appears on top.
+  box-shadow: none !important;
+  filter: none !important;
+}
+
+.popper-arrow {
+  visibility: hidden;
+  z-index: $zindex-dropdown + 1;
+}
+
+.popper-arrow::before, .popper-arrow::after {
+  visibility: visible;
+  content: '';
+
+  // This is a square--rotate it to make a diamond.
+  // We'll then make half of it transparent so it looks like a triangle.
+  transform: rotate(45deg); // Overridden by the different directions, but a good default anyway
+  background: linear-gradient(135deg, var(--bs-body-bg) 0%, var(--bs-body-bg) 60%, transparent 60%, transparent 100%);
+}
+
+// Adjust the position and rotation of the arrow depending on the final placement
+[data-popper-placement^='top'].popper-arrow {
+  bottom: calc(0.5 * var(--bs-tooltip-arrow-height));
+
+  &::before, &::after {
+    transform: rotate(225deg);
+  }
+}
+
+[data-popper-placement^='bottom'].popper-arrow {
+  top: calc(0.5 * var(--bs-tooltip-arrow-height));
+
+  &::before, &::after {
+    transform: rotate(45deg);
+  }
+}
+
+[data-popper-placement^='left'].popper-arrow {
+  right: calc(0.5 * var(--bs-tooltip-arrow-height));
+
+  &::before, &::after {
+    transform: rotate(-225deg);
+  }
+}
+
+[data-popper-placement^='right'].popper-arrow {
+  left: calc(0.5 * var(--bs-tooltip-arrow-height));
+
+  &::before, &::after {
+    transform: rotate(-45deg);
+  }
+}
+
+
+@include list-group-item-ish($name: dropdown-item);
+
+button.dropdown-item {
+  outline: none;
+  transition: $inset-press-transition;
+  &:active:not(:focus),
+  &.active:not(:focus) {
+    box-shadow: $btn-active-box-shadow;
+  }
+  &:active:focus,
+  &.active:focus {
+    box-shadow: $input-focus-box-shadow, $btn-active-box-shadow;
+    padding-bottom: $dropdown-item-padding-y * 0.5;
+    padding-top: $dropdown-item-padding-y + $dropdown-item-padding-y * 0.5;
+  }
+  &:not(:active):not(.active):focus {
+    box-shadow: $input-focus-box-shadow;
+  }
+}

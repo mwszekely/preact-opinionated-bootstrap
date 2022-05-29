@@ -1,0 +1,126 @@
+@use "../variables.scss" as *;
+@use "../button/ensure-contrast.scss" as *;
+@forward "../variables";
+@use "sass:color";
+@use "sass:map";
+@use "sass:string";
+@use "sass:list";
+
+$active-tab-background-color: $body-bg;
+
+@if (luminance($body-bg) < 0.5) {
+  $active-tab-background-color: #{shade-color($body-bg, 30%)};
+}
+
+.nav-tabs {
+  // Make sure the tabs appear on top of the panels
+  // to hide the inset box shadow of the panel for this tab.
+  position: relative;
+  z-index: 1;
+}
+
+.tabs-container {
+  
+  
+  &.tabs-orientation-inline {
+    
+    & > .nav {
+      // Needed to hide the "anti-inset" effect against the right/left edges, where it doesn't apply.
+      padding-inline-start: 12px;
+      padding-inline-end: 12px;
+    }
+
+    & .nav-link {
+      &.active,
+      &:active {
+        background-color: $active-tab-background-color;
+      }
+
+      &:not(:active):focus,
+      &:not(.active):focus {
+        box-shadow: 0px 0px 0px 0px $active-tab-background-color,
+          inset 0px 0px 0px 0px $active-tab-background-color,
+          0 0 0 0.25rem rgba(13, 110, 253, $input-btn-focus-color-opacity),
+          inset 0px 0px 0px rgba(0, 0, 0, 0.4);
+      }
+      &:active:not(:focus),
+      &.active:not(:focus) {
+        box-shadow: 0px 9px 0px 0px $active-tab-background-color,
+          inset 0px -2px 0px 0px $active-tab-background-color,
+          0 0 0 0 rgba(13, 110, 253, $input-btn-focus-color-opacity),
+          inset 0px 3px 5px rgba(0, 0, 0, 0.4);
+      }
+      &:active:focus,
+      &.active:focus {
+        box-shadow: 0px 9px 0px 0px $active-tab-background-color,
+          inset 0px -2px 0px 0px $active-tab-background-color,
+          0 0 0 0.25rem rgba(13, 110, 253, $input-btn-focus-color-opacity),
+          inset 0px 3px 5px rgba(0, 0, 0, 0.4);
+      }
+    }
+  }
+
+  // Add support for vertical tabs by adjusting borders and such.
+  // TODO: RTL support
+  &.tabs-orientation-block {
+    & > .nav {
+      // Needed to hide the "anti-inset" effect against the right/left edges, where it doesn't apply.
+      padding-block-start: 12px;
+      padding-block-end: 12px;
+
+      &.nav-tabs {
+        & .nav-link {
+          border-top-right-radius: 0rem;
+          border-top-left-radius: 0.25rem;
+          border-bottom-left-radius: 0.25rem;
+          border: none;
+          &.active,
+          &:active {
+            background-color: $active-tab-background-color;
+          }
+        }
+      }
+    }
+
+    & .nav-link {
+      white-space: nowrap;
+      &:not(:active):focus,
+      &:not(.active):focus {
+        box-shadow: 0px 0px 0px 0px $active-tab-background-color,
+          inset 0px 0px 0px 0px $active-tab-background-color,
+          0 0 0 0.25rem rgba(13, 110, 253, $input-btn-focus-color-opacity),
+          inset 0px 0px 0px rgba(0, 0, 0, 0.4);
+      }
+      &:active:not(:focus),
+      &.active:not(:focus) {
+        box-shadow: 9px 0px 0px 0px $active-tab-background-color,
+          inset -2px 0px 0px 0px $active-tab-background-color,
+          0 0 0 0 rgba(13, 110, 253, $input-btn-focus-color-opacity),
+          inset 3px 0px 5px rgba(0, 0, 0, 0.4);
+      }
+      &:active:focus,
+      &.active:focus {
+        box-shadow: 9px 0px 0px 0px $active-tab-background-color,
+          inset -2px 0px 0px 0px $active-tab-background-color,
+          0 0 0 0.25rem rgba(13, 110, 253, $input-btn-focus-color-opacity),
+          inset 3px 0px 5px rgba(0, 0, 0, 0.4);
+      }
+    }
+  }
+}
+
+.nav-link {
+  outline: none;
+  transition: $inset-press-transition;
+  &:active,
+  &.active {
+    padding-bottom: $list-group-item-padding-y * 0.5;
+    padding-top: $list-group-item-padding-y + $list-group-item-padding-y * 0.5;
+  }
+}
+
+.tab-content {
+  background-color: $active-tab-background-color;
+  //box-shadow: inset 0px 3px 5px rgba(0, 0, 0, 0.4);
+  padding: 0.5em;
+}

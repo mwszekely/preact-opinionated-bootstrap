@@ -1,3 +1,2 @@
 @use "bootstrap-sass-variables/body-color" as *;
-
-$list-group-active-color: $body-color !default;
+@forward "bootstrap-sass-variables/list-group-active-color" with ($list-group-active-color: $body-color !default);

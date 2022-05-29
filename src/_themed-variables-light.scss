@@ -1,0 +1,35 @@
+@use "sass:color";
+@use "sass:math";
+@use "sass:meta";
+
+// Compare to _bootstrap-dark.scss.
+// The two are mostly identical, but this lacks the dark overrides.
+
+// Load the themed colors.
+// secondary depends on gray depends on primary, hence the weird order.
+@forward "./bootstrap-variables/light/primary";
+@forward "./bootstrap-variables/grays";
+@forward "./bootstrap-variables/light/secondary";
+@forward "./bootstrap-variables/light/success";
+@forward "./bootstrap-variables/light/warning";
+@forward "./bootstrap-variables/light/info";
+@forward "./bootstrap-variables/light/danger";
+@forward "./bootstrap-variables/light/light";
+@forward "./bootstrap-variables/light/dark";
+
+// These are separate because, e.g., btn-box-shadow
+// has a different dark version in bootstrap-sass-variables,
+// and we can't provide a value to two defaults at once...
+// It's a bit of a hack, but it's still waaay cleaner than before
+// and official dark mode support is coming soon anyway
+@forward "./bootstrap-variables/light/btn-active-box-shadow";
+@forward "./bootstrap-variables/light/btn-box-shadow";
+@forward "./bootstrap-variables/light/body-bg";
+@forward "./bootstrap-variables/light/body-color";
+@forward "./bootstrap-variables/light/form-range-tick";
+@forward "./bootstrap-variables/light/form-range-track-bg";
+@forward "./bootstrap-variables/light/link-color";
+
+
+@forward "./themed-variables-shared";
+//@use "bootstrap-sass-variables/bootstrap";
