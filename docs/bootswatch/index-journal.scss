@@ -1,0 +1,5 @@
+@use ".././bootswatch/docs/5/journal/variables";
+@use "bootstrap-sass-variables/bootstrap";
+@forward "../../src/components-basic";
+@use "./../bootswatch/docs/5/journal/bootswatch";
+@import "./../index-shared.scss";

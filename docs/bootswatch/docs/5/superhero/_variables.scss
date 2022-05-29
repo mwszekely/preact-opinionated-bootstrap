@@ -1,0 +1,177 @@
+// Superhero 5.1.3
+// Bootswatch
+@use "sass:color";
+
+$theme: "superhero" !default;
+
+//
+// Color system
+//
+
+@forward "../../../../../src/bootstrap-variables/blue" with ($blue:    #4c9be8 !default);
+@forward "../../../../../src/bootstrap-variables/indigo" with ($indigo:  #6610f2 !default);
+@forward "../../../../../src/bootstrap-variables/purple" with ($purple:  #6f42c1 !default);
+@forward "../../../../../src/bootstrap-variables/pink" with ($pink:    #e83e8c !default);
+@forward "../../../../../src/bootstrap-variables/red" with ($red:     #d9534f !default);
+@forward "../../../../../src/bootstrap-variables/orange" with ($orange:  #f0ad4e !default);
+@forward "../../../../../src/bootstrap-variables/yellow" with ($yellow:  #ffc107 !default);
+@forward "../../../../../src/bootstrap-variables/green" with ($green:   #5cb85c !default);
+@forward "../../../../../src/bootstrap-variables/teal" with ($teal:    #20c997 !default);
+@forward "../../../../../src/bootstrap-variables/cyan" with ($cyan:    #5bc0de !default);
+
+@use "bootstrap-sass-variables/blue" as *;
+@forward "../../../../../src/bootstrap-variables/light/primary" with ($primary:       $blue !default);
+@use "../../../../../src/bootstrap-variables/grays" as *;
+@forward "../../../../../src/bootstrap-variables/light/secondary" with ($secondary:     $gray-200 !default);
+@use "bootstrap-sass-variables/green" as *;
+@forward "../../../../../src/bootstrap-variables/light/success" with ($success:       $green !default);
+@use "bootstrap-sass-variables/cyan" as *;
+@forward "../../../../../src/bootstrap-variables/light/info" with ($info:          $cyan !default);
+@use "bootstrap-sass-variables/yellow" as *;
+@forward "../../../../../src/bootstrap-variables/light/warning" with ($warning:       $yellow !default);
+@use "bootstrap-sass-variables/red" as *;
+@forward "../../../../../src/bootstrap-variables/light/danger" with ($danger:        $red !default);
+@forward "../../../../../src/bootstrap-variables/light/light" with ($light:         color.adjust($gray-200, $lightness: 35%) !default);
+@forward "../../../../../src/bootstrap-variables/light/dark" with ($dark:          #20374c !default);
+
+// Body
+
+@forward "../../../../../src/bootstrap-variables/light/body-bg" with ($body-bg:                   #0f2537 !default);
+@forward "../../../../../src/bootstrap-variables/light/body-color" with ($body-color:                $gray-100 !default);
+
+// Components
+
+@forward "bootstrap-sass-variables/border-radius" with ($border-radius:               0 !default);
+@forward "bootstrap-sass-variables/border-radius-lg" with ($border-radius-lg:            0 !default);
+@forward "bootstrap-sass-variables/border-radius-sm" with ($border-radius-sm:            0 !default);
+
+// Fonts
+
+// stylelint-disable-next-line value-keyword-case
+@forward "../../../../../src/bootstrap-variables/font-family-sans-serif" with ($font-family-sans-serif:      #{Lato, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"} !default);
+
+@forward "bootstrap-sass-variables/text-muted" with ($text-muted:                  rgba(255, 255, 255, .4) !default);
+
+// Tables
+
+@use "bootstrap-sass-variables/white" as *;
+@forward "bootstrap-sass-variables/table-accent-bg" with ($table-accent-bg:             rgba($white, .05) !default);
+@forward "bootstrap-sass-variables/table-hover-bg" with ($table-hover-bg:              rgba($white, .075) !default);
+@use "bootstrap-sass-variables/black" as *;
+@forward "bootstrap-sass-variables/table-border-color" with ($table-border-color:          rgba($black, .15) !default);
+
+@forward "bootstrap-sass-variables/table-bg-scale" with ($table-bg-scale:              0 !default);
+
+// Forms
+
+@forward "bootstrap-sass-variables/input-bg" with ($input-bg:                          $white !default);
+@forward "bootstrap-sass-variables/input-disabled-bg" with ($input-disabled-bg:                 $gray-100 !default);
+
+@forward "bootstrap-sass-variables/input-color" with ($input-color:                       $gray-900 !default);
+@forward "bootstrap-sass-variables/input-border-color" with ($input-border-color:                transparent !default);
+@forward "bootstrap-sass-variables/input-border-width" with ($input-border-width:                0 !default);
+
+@forward "bootstrap-sass-variables/input-placeholder-color" with ($input-placeholder-color:               $gray-600 !default);
+
+@use "bootstrap-sass-variables/body-color" as *;
+@forward "bootstrap-sass-variables/input-group-addon-color" with ($input-group-addon-color:           $body-color !default);
+
+@forward "bootstrap-sass-variables/form-check-input-bg" with ($form-check-input-bg:                     $white !default);
+@forward "bootstrap-sass-variables/form-check-input-border" with ($form-check-input-border:                 none !default);
+
+@forward "bootstrap-sass-variables/form-file-button-color" with ($form-file-button-color:          $body-color !default);
+
+@forward "bootstrap-sass-variables/form-floating-label-opacity" with ($form-floating-label-opacity:     1 !default);
+
+// Dropdowns
+
+@forward "bootstrap-sass-variables/dropdown-bg" with ($dropdown-bg:                       $gray-200 !default);
+@forward "bootstrap-sass-variables/dropdown-divider-bg" with ($dropdown-divider-bg:               rgba($black, .15) !default);
+@forward "bootstrap-sass-variables/dropdown-link-color" with ($dropdown-link-color:               $body-color !default);
+@use "bootstrap-sass-variables/dropdown-link-color" as *;
+@forward "bootstrap-sass-variables/dropdown-link-hover-color" with ($dropdown-link-hover-color:         $dropdown-link-color !default);
+@use "bootstrap-sass-variables/table-hover-bg" as *;
+@forward "bootstrap-sass-variables/dropdown-link-hover-bg" with ($dropdown-link-hover-bg:            $table-hover-bg !default);
+
+// Navs
+
+@forward "bootstrap-sass-variables/nav-link-disabled-color" with ($nav-link-disabled-color:           rgba(255, 255, 255, .4) !default);
+@forward "bootstrap-sass-variables/nav-tabs-border-color" with ($nav-tabs-border-color:             $gray-200 !default);
+@forward "bootstrap-sass-variables/nav-tabs-link-active-color" with ($nav-tabs-link-active-color:        $body-color !default);
+@forward "bootstrap-sass-variables/nav-tabs-link-active-border-color" with ($nav-tabs-link-active-border-color: $gray-200 !default);
+
+// Navbar
+
+@forward "bootstrap-sass-variables/navbar-dark-color" with ($navbar-dark-color:                 rgba($white, .75) !default);
+@forward "bootstrap-sass-variables/navbar-dark-hover-color" with ($navbar-dark-hover-color:           $white !default);
+
+// Pagination
+
+@forward "bootstrap-sass-variables/pagination-color" with ($pagination-color:                  $white !default);
+@forward "bootstrap-sass-variables/pagination-bg" with ($pagination-bg:                     $gray-200 !default);
+@forward "bootstrap-sass-variables/pagination-border-color" with ($pagination-border-color:           transparent !default);
+@forward "bootstrap-sass-variables/pagination-hover-color" with ($pagination-hover-color:            $white !default);
+@use "bootstrap-sass-variables/nav-link-disabled-color" as *;
+@forward "bootstrap-sass-variables/pagination-hover-bg" with ($pagination-hover-bg:               $nav-link-disabled-color !default);
+@use "bootstrap-sass-variables/pagination-border-color" as *;
+@forward "bootstrap-sass-variables/pagination-hover-border-color" with ($pagination-hover-border-color:     $pagination-border-color !default);
+@forward "bootstrap-sass-variables/pagination-disabled-color" with ($pagination-disabled-color:         $nav-link-disabled-color !default);
+@use "bootstrap-sass-variables/pagination-bg" as *;
+@forward "bootstrap-sass-variables/pagination-disabled-bg" with ($pagination-disabled-bg:            $pagination-bg !default);
+@forward "bootstrap-sass-variables/pagination-disabled-border-color" with ($pagination-disabled-border-color:  $pagination-border-color !default);
+
+// Cards
+
+@forward "bootstrap-sass-variables/card-cap-bg" with ($card-cap-bg:                       $table-hover-bg !default);
+@forward "bootstrap-sass-variables/card-bg" with ($card-bg:                           $gray-200 !default);
+@forward "bootstrap-sass-variables/card-inner-border-radius" with ($card-inner-border-radius:          0 !default);
+
+// Popovers
+
+@forward "bootstrap-sass-variables/popover-bg" with ($popover-bg:                        $gray-200 !default);
+@forward "bootstrap-sass-variables/popover-header-bg" with ($popover-header-bg:                 $table-hover-bg !default);
+
+// Toasts
+
+@forward "bootstrap-sass-variables/toast-background-color" with ($toast-background-color:            $gray-200 !default);
+@forward "bootstrap-sass-variables/toast-border-color" with ($toast-border-color:                rgba(0, 0, 0, .2) !default);
+@forward "bootstrap-sass-variables/toast-header-color" with ($toast-header-color:                $body-color !default);
+@use "bootstrap-sass-variables/toast-background-color" as *;
+@forward "bootstrap-sass-variables/toast-header-background-color" with ($toast-header-background-color:     $toast-background-color !default);
+@use "bootstrap-sass-variables/toast-border-color" as *;
+@forward "bootstrap-sass-variables/toast-header-border-color" with ($toast-header-border-color:         $toast-border-color !default);
+
+// Modals
+
+@forward "bootstrap-sass-variables/modal-content-bg" with ($modal-content-bg:                  $gray-200 !default);
+@forward "bootstrap-sass-variables/modal-header-border-color" with ($modal-header-border-color:         rgba(0, 0, 0, .2) !default);
+
+// List group
+
+@forward "bootstrap-sass-variables/list-group-color" with ($list-group-color:                  $white !default);
+@forward "bootstrap-sass-variables/list-group-bg" with ($list-group-bg:                     $gray-200 !default);
+@forward "bootstrap-sass-variables/list-group-border-color" with ($list-group-border-color:           transparent !default);
+@forward "bootstrap-sass-variables/list-group-hover-bg" with ($list-group-hover-bg:               $nav-link-disabled-color !default);
+@forward "bootstrap-sass-variables/list-group-disabled-color" with ($list-group-disabled-color:         $nav-link-disabled-color !default);
+@forward "bootstrap-sass-variables/list-group-action-color" with ($list-group-action-color:           $white !default);
+@forward "bootstrap-sass-variables/list-group-action-hover-color" with ($list-group-action-hover-color:     $white !default);
+
+// Breadcrumbs
+
+@forward "bootstrap-sass-variables/breadcrumb-padding-y" with ($breadcrumb-padding-y:              .375rem !default);
+@forward "bootstrap-sass-variables/breadcrumb-padding-x" with ($breadcrumb-padding-x:              .75rem !default);
+@forward "bootstrap-sass-variables/breadcrumb-bg" with ($breadcrumb-bg:                     $gray-200 !default);
+@forward "bootstrap-sass-variables/breadcrumb-divider-color" with ($breadcrumb-divider-color:          $body-color !default);
+@forward "bootstrap-sass-variables/breadcrumb-active-color" with ($breadcrumb-active-color:           $body-color !default);
+
+// Close
+
+@forward "bootstrap-sass-variables/btn-close-color" with ($btn-close-color:            $white !default);
+@forward "bootstrap-sass-variables/btn-close-opacity" with ($btn-close-opacity:          .5 !default);
+@forward "bootstrap-sass-variables/btn-close-hover-opacity" with ($btn-close-hover-opacity:    1 !default);
+
+// Code
+
+@forward "bootstrap-sass-variables/pre-color" with ($pre-color:                         inherit !default);
+
+@forward "../../../../../src/themed-variables-light";

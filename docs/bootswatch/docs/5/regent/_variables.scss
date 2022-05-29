@@ -1,0 +1,155 @@
+// Regent 5.1.3
+// Bootswatch
+
+$theme: "regent" !default;
+
+//
+// Color system
+//
+
+@forward "../../../../../src/bootstrap-variables/blue" with ($blue:    #1d70b8 !default);
+@forward "../../../../../src/bootstrap-variables/indigo" with ($indigo:  #6610f2 !default);
+@forward "../../../../../src/bootstrap-variables/purple" with ($purple:  #4c2c92 !default);
+@forward "../../../../../src/bootstrap-variables/pink" with ($pink:    #d53880 !default);
+@forward "../../../../../src/bootstrap-variables/red" with ($red:     #d4351c !default);
+@forward "../../../../../src/bootstrap-variables/orange" with ($orange:  #f47738 !default);
+@forward "../../../../../src/bootstrap-variables/yellow" with ($yellow:  #fd0 !default);
+@forward "../../../../../src/bootstrap-variables/green" with ($green:   #00703c !default);
+@forward "../../../../../src/bootstrap-variables/teal" with ($teal:    #28a197 !default);
+@forward "../../../../../src/bootstrap-variables/cyan" with ($cyan:    #5694ca !default);
+
+@use "bootstrap-sass-variables/blue" as *;
+@forward "../../../../../src/bootstrap-variables/light/primary" with ($primary:       $blue !default);
+@use "../../../../../src/bootstrap-variables/grays" as *;
+@forward "../../../../../src/bootstrap-variables/light/secondary" with ($secondary:     $gray-100 !default);
+@use "bootstrap-sass-variables/green" as *;
+@forward "../../../../../src/bootstrap-variables/light/success" with ($success:       $green !default);
+@use "bootstrap-sass-variables/cyan" as *;
+@forward "../../../../../src/bootstrap-variables/light/info" with ($info:          $cyan !default);
+@use "bootstrap-sass-variables/yellow" as *;
+@forward "../../../../../src/bootstrap-variables/light/warning" with ($warning:       $yellow !default);
+@use "bootstrap-sass-variables/red" as *;
+@forward "../../../../../src/bootstrap-variables/light/danger" with ($danger:        $red !default);
+@forward "../../../../../src/bootstrap-variables/light/light" with ($light:         $gray-100 !default);
+@use "bootstrap-sass-variables/black" as *;
+@forward "../../../../../src/bootstrap-variables/light/dark" with ($dark:          $black !default);
+
+// Options
+
+@forward "bootstrap-sass-variables/enable-rounded" with ($enable-rounded:              false !default);
+@forward "bootstrap-sass-variables/enable-transitions" with ($enable-transitions:          false !default);
+
+// Body
+
+@forward "../../../../../src/bootstrap-variables/light/body-bg";
+@forward "../../../../../src/bootstrap-variables/light/body-color" with ($body-color:    $black !default);
+
+// Links
+
+@forward "bootstrap-sass-variables/link-hover-color" with ($link-hover-color:                        #003078 !default);
+
+// Components
+
+@forward "bootstrap-sass-variables/border-color" with ($border-color:                $gray-400 !default);
+
+// Typography
+
+@forward "bootstrap-sass-variables/font-size-base" with ($font-size-base:              1.1875rem !default);
+@forward "bootstrap-sass-variables/font-size-sm" with ($font-size-sm:                1rem !default);
+
+@forward "bootstrap-sass-variables/line-height-base" with ($line-height-base:            1.31579 !default);
+
+@forward "bootstrap-sass-variables/h1-font-size" with ($h1-font-size:                3rem !default);
+@forward "bootstrap-sass-variables/h2-font-size" with ($h2-font-size:                2.25rem !default);
+@forward "bootstrap-sass-variables/h3-font-size" with ($h3-font-size:                1.5rem !default);
+@forward "bootstrap-sass-variables/h4-font-size" with ($h4-font-size:                1.25rem !default);
+@use "bootstrap-sass-variables/font-size-base" as *;
+@forward "bootstrap-sass-variables/h5-font-size" with ($h5-font-size:                $font-size-base !default);
+@use "bootstrap-sass-variables/font-size-sm" as *;
+@forward "bootstrap-sass-variables/h6-font-size" with ($h6-font-size:                $font-size-sm !default);
+
+@forward "bootstrap-sass-variables/headings-font-weight" with ($headings-font-weight:        600 !default);
+
+@forward "bootstrap-sass-variables/blockquote-font-size" with ($blockquote-font-size:        $font-size-base !default);
+
+@use "bootstrap-sass-variables/h2-font-size" as *;
+@forward "bootstrap-sass-variables/legend-font-size" with ($legend-font-size:            $h2-font-size !default);
+@use "bootstrap-sass-variables/headings-font-weight" as *;
+@forward "bootstrap-sass-variables/legend-font-weight" with ($legend-font-weight:          $headings-font-weight !default);
+
+// Tables
+
+@forward "bootstrap-sass-variables/table-cell-padding-y" with ($table-cell-padding-y:        10px !default);
+@forward "bootstrap-sass-variables/table-cell-padding-x" with ($table-cell-padding-x:        20px !default);
+
+// Buttons + Forms
+
+@forward "bootstrap-sass-variables/input-btn-padding-y" with ($input-btn-padding-y:         8px !default);
+@forward "bootstrap-sass-variables/input-btn-padding-x" with ($input-btn-padding-x:         10px !default);
+
+@use "bootstrap-sass-variables/yellow" as *;
+@forward "../../../../../src/bootstrap-variables/input-btn-focus-width";
+@forward "../../../../../src/bootstrap-variables/input-btn-focus-color" with ($input-btn-focus-color:         $yellow !default);
+@forward "bootstrap-sass-variables/input-btn-focus-box-shadow" with ($input-btn-focus-box-shadow:    none !default);
+
+@use "bootstrap-sass-variables/black" as *;
+@forward "bootstrap-sass-variables/form-check-input-checked-color" with ($form-check-input-checked-color:          $black !default);
+@use "bootstrap-sass-variables/white" as *;
+@forward "bootstrap-sass-variables/form-check-input-checked-bg-color" with ($form-check-input-checked-bg-color:       $white !default);
+
+@forward "bootstrap-sass-variables/form-switch-color" with ($form-switch-color:               $gray-400 !default);
+@use "bootstrap-sass-variables/form-switch-color" as *;
+@forward "bootstrap-sass-variables/form-switch-bg-image" with ($form-switch-bg-image:            url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'><circle r='3' fill='#{$form-switch-color}'/></svg>") !default);
+
+@forward "bootstrap-sass-variables/form-switch-focus-color" with ($form-switch-focus-color:         $form-switch-color !default);
+@use "bootstrap-sass-variables/form-switch-bg-image" as *;
+@forward "bootstrap-sass-variables/form-switch-focus-bg-image" with ($form-switch-focus-bg-image:      $form-switch-bg-image !default);
+
+@forward "bootstrap-sass-variables/form-switch-checked-color" with ($form-switch-checked-color:       $black !default);
+
+// Buttons
+
+@forward "bootstrap-sass-variables/btn-focus-box-shadow" with ($btn-focus-box-shadow:        0 0 0 0 $yellow !default);
+
+// Forms
+
+@forward "bootstrap-sass-variables/input-border-color" with ($input-border-color:                    $black !default);
+@forward "bootstrap-sass-variables/input-border-width" with ($input-border-width:                    2px !default);
+
+@forward "bootstrap-sass-variables/input-group-addon-bg" with ($input-group-addon-bg:                  $gray-100 !default);
+
+// Navs
+
+@forward "bootstrap-sass-variables/nav-link-color" with ($nav-link-color:                    $black !default);
+@use "bootstrap-sass-variables/nav-link-color" as *;
+@forward "bootstrap-sass-variables/nav-link-hover-color" with ($nav-link-hover-color:              $nav-link-color !default);
+@forward "bootstrap-sass-variables/nav-tabs-link-active-color" with ($nav-tabs-link-active-color:        $nav-link-color !default);
+
+@use "bootstrap-sass-variables/border-color" as *;
+@forward "bootstrap-sass-variables/nav-tabs-border-color" with ($nav-tabs-border-color:             $border-color !default);
+@forward "bootstrap-sass-variables/nav-tabs-link-hover-border-color" with ($nav-tabs-link-hover-border-color:  transparent !default);
+@use "bootstrap-sass-variables/nav-tabs-border-color" as *;
+@forward "bootstrap-sass-variables/nav-tabs-link-active-border-color" with ($nav-tabs-link-active-border-color: $nav-tabs-border-color $nav-tabs-border-color transparent !default);
+
+// Navbar
+
+@forward "bootstrap-sass-variables/navbar-dark-color" with ($navbar-dark-color:                 $white !default);
+@forward "bootstrap-sass-variables/navbar-dark-hover-color" with ($navbar-dark-hover-color:           $white !default);
+@forward "bootstrap-sass-variables/navbar-dark-active-color" with ($navbar-dark-active-color:          $white !default);
+
+@forward "bootstrap-sass-variables/navbar-light-color" with ($navbar-light-color:                $black !default);
+@forward "bootstrap-sass-variables/navbar-light-hover-color" with ($navbar-light-hover-color:          $black !default);
+@forward "bootstrap-sass-variables/navbar-light-active-color" with ($navbar-light-active-color:         $black !default);
+
+// Dropdowns
+
+@forward "bootstrap-sass-variables/dropdown-border-color" with ($dropdown-border-color:             $border-color !default);
+
+// Breadcrumbs
+
+@forward "bootstrap-sass-variables/breadcrumb-font-size" with ($breadcrumb-font-size:              $font-size-sm !default);
+@forward "bootstrap-sass-variables/breadcrumb-divider" with ($breadcrumb-divider:                quote("") !default);
+@forward "bootstrap-sass-variables/breadcrumb-divider-color" with ($breadcrumb-divider-color:          $black !default);
+@forward "bootstrap-sass-variables/breadcrumb-active-color" with ($breadcrumb-active-color:           $black !default);
+
+@forward "../../../../../src/themed-variables-light";

@@ -1,0 +1,133 @@
+// Sketchy 5.1.3
+// Bootswatch
+
+$theme: "sketchy" !default;
+
+
+
+// Components
+
+@forward "bootstrap-sass-variables/border-width" with ($border-width:              2px !default);
+@forward "bootstrap-sass-variables/border-radius" with ($border-radius:             25px !default);
+@forward "bootstrap-sass-variables/border-radius-lg" with ($border-radius-lg:          35px !default);
+@forward "bootstrap-sass-variables/border-radius-sm" with ($border-radius-sm:          15px !default);
+
+// Fonts
+
+// stylelint-disable-next-line value-keyword-case
+@forward "../src/bootstrap-variables/font-family-sans-serif" with ($font-family-sans-serif: #{ Neucha, -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif} !default);
+@forward "bootstrap-sass-variables/font-weight-base" with ($font-weight-base: #{700} !default);
+@forward "bootstrap-sass-variables/headings-font-family" with ($headings-font-family: #{"Cabin Sketch", cursive} !default);
+
+@use "../../../../../src/bootstrap-variables/_grays.scss" as *;
+
+// Tables
+
+@use "bootstrap-sass-variables/white" as *;
+@forward "bootstrap-sass-variables/table-hover-bg" with ($table-hover-bg:              $white !default);
+@forward "bootstrap-sass-variables/table-border-width" with ($table-border-width:          2px !default);
+@forward "bootstrap-sass-variables/table-border-color" with ($table-border-color:          $gray-800 !default);
+
+// Forms
+
+@forward "bootstrap-sass-variables/input-border-color" with ($input-border-color:                $gray-800 !default);
+@use "bootstrap-sass-variables/input-border-color" as *;
+@forward "bootstrap-sass-variables/input-focus-border-color" with ($input-focus-border-color:          $input-border-color !default);
+
+
+// Dropdowns
+
+@forward "bootstrap-sass-variables/dropdown-border-color" with ($dropdown-border-color:             $gray-800 !default);
+@forward "bootstrap-sass-variables/dropdown-divider-bg" with ($dropdown-divider-bg:               $gray-800 !default);
+@forward "bootstrap-sass-variables/dropdown-link-hover-color" with ($dropdown-link-hover-color:         $white !default);
+@forward "bootstrap-sass-variables/dropdown-link-hover-bg" with ($dropdown-link-hover-bg:            $gray-800 !default);
+
+
+// Navs
+
+@forward "bootstrap-sass-variables/nav-tabs-border-color" with ($nav-tabs-border-color:             $gray-800 !default);
+@forward "bootstrap-sass-variables/nav-tabs-link-hover-border-color" with ($nav-tabs-link-hover-border-color:  $gray-800 !default);
+@forward "bootstrap-sass-variables/nav-tabs-link-active-color" with ($nav-tabs-link-active-color:        $gray-800 !default);
+
+
+// Navbar
+
+@forward "bootstrap-sass-variables/navbar-dark-color" with ($navbar-dark-color:                 $white !default);
+@forward "bootstrap-sass-variables/navbar-dark-hover-color" with ($navbar-dark-hover-color:           $white !default);
+@forward "bootstrap-sass-variables/navbar-dark-toggler-border-color" with ($navbar-dark-toggler-border-color:  $white !default);
+@forward "bootstrap-sass-variables/navbar-light-color" with ($navbar-light-color:                $gray-800 !default);
+@forward "bootstrap-sass-variables/navbar-light-hover-color" with ($navbar-light-hover-color:          $gray-800 !default);
+@forward "bootstrap-sass-variables/navbar-light-active-color" with ($navbar-light-active-color:         $gray-800 !default);
+@forward "bootstrap-sass-variables/navbar-light-toggler-border-color" with ($navbar-light-toggler-border-color: $gray-800 !default);
+
+
+// Pagination
+
+@forward "bootstrap-sass-variables/pagination-border-color" with ($pagination-border-color:           $gray-800 !default);
+@forward "bootstrap-sass-variables/pagination-hover-color" with ($pagination-hover-color:            $white !default);
+@forward "bootstrap-sass-variables/pagination-hover-bg" with ($pagination-hover-bg:               $gray-800 !default);
+@forward "bootstrap-sass-variables/pagination-hover-border-color" with ($pagination-hover-border-color:     $gray-800 !default);
+@forward "bootstrap-sass-variables/pagination-disabled-color" with ($pagination-disabled-color:         $gray-400 !default);
+@forward "bootstrap-sass-variables/pagination-disabled-border-color" with ($pagination-disabled-border-color:  $gray-800 !default);
+
+// Cards
+
+@forward "bootstrap-sass-variables/card-border-width" with ($card-border-width:                 2px !default);
+@forward "bootstrap-sass-variables/card-border-color" with ($card-border-color:                 $gray-800 !default);
+
+// Popovers
+
+@forward "bootstrap-sass-variables/popover-border-color" with ($popover-border-color:              $gray-800 !default);
+
+// Badges
+
+@forward "bootstrap-sass-variables/badge-padding-y" with ($badge-padding-y:                   .5em !default);
+@forward "bootstrap-sass-variables/badge-padding-x" with ($badge-padding-x:                   1.2em !default);
+
+// Toasts
+@forward "bootstrap-sass-variables/toast-border-width" with ($toast-border-width:                2px !default);
+@forward "bootstrap-sass-variables/toast-border-color" with ($toast-border-color:                $gray-800 !default);
+@forward "bootstrap-sass-variables/toast-header-color" with ($toast-header-color:                $gray-800 !default);
+
+// Modals
+
+@forward "bootstrap-sass-variables/modal-content-border-color" with ($modal-content-border-color:        $gray-800 !default);
+@forward "bootstrap-sass-variables/modal-header-border-color" with ($modal-header-border-color:         $gray-800 !default);
+
+// Progress bars
+
+@forward "bootstrap-sass-variables/progress-bg" with ($progress-bg:                       $white !default);
+@forward "bootstrap-sass-variables/progress-bar-bg" with ($progress-bar-bg:                   $gray-400 !default);
+
+// List group
+
+@forward "bootstrap-sass-variables/list-group-border-color" with ($list-group-border-color:           $gray-800 !default);
+@forward "bootstrap-sass-variables/list-group-hover-bg" with ($list-group-hover-bg:               $gray-300 !default);
+@forward "../../../../../src/bootstrap-variables/list-group-active-bg" with ($list-group-active-bg:              $gray-800 !default);
+@forward "bootstrap-sass-variables/list-group-action-color" with ($list-group-action-color:           $gray-800 !default);
+@use "bootstrap-sass-variables/white" as *;
+@use "../../../../../src/bootstrap-variables/light/body-color" as usedForDependencyPurposesOnly;
+@forward "../../../../../src/bootstrap-variables/list-group-active-color" with ($list-group-active-color:           $white !default);
+
+// Breadcrumbs
+
+@forward "bootstrap-sass-variables/breadcrumb-padding-y" with ($breadcrumb-padding-y:              .375rem !default);
+@forward "bootstrap-sass-variables/breadcrumb-padding-x" with ($breadcrumb-padding-x:              .75rem !default);
+@forward "bootstrap-sass-variables/breadcrumb-divider-color" with ($breadcrumb-divider-color:          $gray-800 !default);
+@forward "bootstrap-sass-variables/breadcrumb-active-color" with ($breadcrumb-active-color:           $gray-800 !default);
+@forward "bootstrap-sass-variables/breadcrumb-border-radius" with ($breadcrumb-border-radius:          .25rem !default);
+
+// Close
+
+@forward "bootstrap-sass-variables/btn-close-color" with ($btn-close-color:            inherit !default);
+@forward "bootstrap-sass-variables/btn-close-opacity" with ($btn-close-opacity:          1 !default);
+@forward "bootstrap-sass-variables/btn-close-hover-opacity" with ($btn-close-hover-opacity:    1 !default);
+
+
+@forward "../../../../../src/themed-variables-light";
+
+@use "bootstrap-sass-variables/toast-border-color" as *;
+@forward "bootstrap-sass-variables/toast-header-border-color" with ($toast-header-border-color:         $toast-border-color !default);
+@forward "bootstrap-sass-variables/nav-tabs-link-active-border-color" with ($nav-tabs-link-active-border-color: $gray-800 !default);
+@forward "bootstrap-sass-variables/btn-close-focus-shadow" with ($btn-close-focus-shadow:     none !default);
+

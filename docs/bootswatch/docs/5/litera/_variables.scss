@@ -1,0 +1,98 @@
+// Litera 5.1.3
+// Bootswatch
+
+$theme: "litera" !default;
+
+//
+// Color system
+//
+
+@forward "../../../../../src/bootstrap-variables/blue" with ($blue:    #4582ec !default);
+@forward "../../../../../src/bootstrap-variables/indigo" with ($indigo:  #6610f2 !default);
+@forward "../../../../../src/bootstrap-variables/purple" with ($purple:  #6f42c1 !default);
+@forward "../../../../../src/bootstrap-variables/pink" with ($pink:    #e83e8c !default);
+@forward "../../../../../src/bootstrap-variables/red" with ($red:     #d9534f !default);
+@forward "../../../../../src/bootstrap-variables/orange" with ($orange:  #fd7e14 !default);
+@forward "../../../../../src/bootstrap-variables/yellow" with ($yellow:  #f0ad4e !default);
+@forward "../../../../../src/bootstrap-variables/green" with ($green:   #02b875 !default);
+@forward "../../../../../src/bootstrap-variables/teal" with ($teal:    #20c997 !default);
+@forward "../../../../../src/bootstrap-variables/cyan" with ($cyan:    #17a2b8 !default);
+
+@use "bootstrap-sass-variables/blue" as *;
+@forward "../../../../../src/bootstrap-variables/light/primary" with ($primary:       $blue !default);
+@use "../../../../../src/bootstrap-variables/grays" as *;
+@forward "../../../../../src/bootstrap-variables/light/secondary" with ($secondary:     $gray-500 !default);
+@use "bootstrap-sass-variables/green" as *;
+@forward "../../../../../src/bootstrap-variables/light/success" with ($success:       $green !default);
+@use "bootstrap-sass-variables/cyan" as *;
+@forward "../../../../../src/bootstrap-variables/light/info" with ($info:          $cyan !default);
+@use "bootstrap-sass-variables/yellow" as *;
+@forward "../../../../../src/bootstrap-variables/light/warning" with ($warning:       $yellow !default);
+@use "bootstrap-sass-variables/red" as *;
+@forward "../../../../../src/bootstrap-variables/light/danger" with ($danger:        $red !default);
+@forward "../../../../../src/bootstrap-variables/light/light" with ($light:         $gray-100 !default);
+@forward "../../../../../src/bootstrap-variables/light/dark" with ($dark:          $gray-800 !default);
+
+// Body
+
+@forward "../../../../../src/bootstrap-variables/light/body-bg";
+@forward "../../../../../src/bootstrap-variables/light/body-color" with ($body-color:                $gray-800 !default);
+
+// Fonts
+
+// stylelint-disable value-keyword-case
+@forward "../../../../../src/bootstrap-variables/font-family-sans-serif" with ($font-family-sans-serif:      #{-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"} !default);
+$font-family-serif:           #{Georgia, Cambria, "Times New Roman", Times, serif} !default;
+// stylelint-enable
+
+@forward "bootstrap-sass-variables/font-size-base" with ($font-size-base:              1.1rem !default);
+@forward "bootstrap-sass-variables/headings-font-weight" with ($headings-font-weight:        700 !default);
+
+// Tables
+
+@forward "bootstrap-sass-variables/table-border-color" with ($table-border-color:          rgba(0, 0, 0, .1) !default);
+
+@forward "bootstrap-sass-variables/table-bg-scale" with ($table-bg-scale:              0 !default);
+
+// Buttons
+
+@forward "bootstrap-sass-variables/input-btn-padding-y" with ($input-btn-padding-y:         .5rem !default);
+@forward "bootstrap-sass-variables/input-btn-padding-x" with ($input-btn-padding-x:         1.1rem !default);
+@use "bootstrap-sass-variables/font-family-sans-serif" as *;
+@forward "bootstrap-sass-variables/btn-font-family" with ($btn-font-family:             $font-family-sans-serif !default);
+@forward "bootstrap-sass-variables/btn-font-size" with ($btn-font-size:               .875rem !default);
+@forward "bootstrap-sass-variables/btn-font-size-sm" with ($btn-font-size-sm:            .688rem !default);
+
+@forward "bootstrap-sass-variables/btn-border-radius" with ($btn-border-radius:           1.078em !default);
+@forward "bootstrap-sass-variables/btn-border-radius-lg" with ($btn-border-radius-lg:        2.688em !default);
+@forward "bootstrap-sass-variables/btn-border-radius-sm" with ($btn-border-radius-sm:        .844em !default);
+
+// Forms
+
+@forward "bootstrap-sass-variables/input-border-color" with ($input-border-color:                    rgba(0, 0, 0, .1) !default);
+@forward "bootstrap-sass-variables/input-group-addon-bg" with ($input-group-addon-bg:                  $gray-200 !default);
+
+// Navbar
+
+@use "bootstrap-sass-variables/white" as *;
+@forward "bootstrap-sass-variables/navbar-dark-color" with ($navbar-dark-color:                 rgba($white, .6) !default);
+@forward "bootstrap-sass-variables/navbar-dark-hover-color" with ($navbar-dark-hover-color:           $white !default);
+@use "bootstrap-sass-variables/body-color" as *;
+@forward "bootstrap-sass-variables/navbar-light-hover-color" with ($navbar-light-hover-color:          $body-color !default);
+@forward "bootstrap-sass-variables/navbar-light-active-color" with ($navbar-light-active-color:         $body-color !default);
+
+// Tooltips
+
+@forward "bootstrap-sass-variables/tooltip-font-size" with ($tooltip-font-size:                 11px !default);
+
+// Badges
+
+@forward "bootstrap-sass-variables/badge-font-weight" with ($badge-font-weight:                 400 !default);
+@forward "bootstrap-sass-variables/badge-padding-y" with ($badge-padding-y:                   .6em !default);
+@forward "bootstrap-sass-variables/badge-padding-x" with ($badge-padding-x:                   1.2em !default);
+
+// Alerts
+
+@forward "bootstrap-sass-variables/alert-border-width" with ($alert-border-width:                0 !default);
+
+@forward "../../../../../src/themed-variables-light";

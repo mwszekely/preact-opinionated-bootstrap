@@ -1,0 +1,126 @@
+// Yeti 5.1.3
+// Bootswatch
+
+$theme: "yeti" !default;
+
+//
+// Color system
+//
+
+@forward "../../../../../src/bootstrap-variables/blue" with ($blue:    #008cba !default);
+@forward "../../../../../src/bootstrap-variables/indigo" with ($indigo:  #6610f2 !default);
+@forward "../../../../../src/bootstrap-variables/purple" with ($purple:  #6f42c1 !default);
+@forward "../../../../../src/bootstrap-variables/pink" with ($pink:    #e83e8c !default);
+@forward "../../../../../src/bootstrap-variables/red" with ($red:     #f04124 !default);
+@forward "../../../../../src/bootstrap-variables/orange" with ($orange:  #fd7e14 !default);
+@forward "../../../../../src/bootstrap-variables/yellow" with ($yellow:  #e99002 !default);
+@forward "../../../../../src/bootstrap-variables/green" with ($green:   #43ac6a !default);
+@forward "../../../../../src/bootstrap-variables/teal" with ($teal:    #20c997 !default);
+@forward "../../../../../src/bootstrap-variables/cyan" with ($cyan:    #5bc0de !default);
+
+@use "bootstrap-sass-variables/blue" as *;
+@forward "../../../../../src/bootstrap-variables/light/primary" with ($primary:       $blue !default);
+@use "../../../../../src/bootstrap-variables/grays" as *;
+@forward "../../../../../src/bootstrap-variables/light/secondary" with ($secondary:     $gray-200 !default);
+@use "bootstrap-sass-variables/green" as *;
+@forward "../../../../../src/bootstrap-variables/light/success" with ($success:       $green !default);
+@use "bootstrap-sass-variables/cyan" as *;
+@forward "../../../../../src/bootstrap-variables/light/info" with ($info:          $cyan !default);
+@use "bootstrap-sass-variables/yellow" as *;
+@forward "../../../../../src/bootstrap-variables/light/warning" with ($warning:       $yellow !default);
+@use "bootstrap-sass-variables/red" as *;
+@forward "../../../../../src/bootstrap-variables/light/danger" with ($danger:        $red !default);
+@forward "../../../../../src/bootstrap-variables/light/light" with ($light:         $gray-200 !default);
+@forward "../../../../../src/bootstrap-variables/light/dark" with ($dark:          $gray-900 !default);
+
+@forward "../../../../../src/bootstrap-variables/light/body-color";
+@forward "../../../../../src/bootstrap-variables/light/body-bg";
+
+// Components
+
+@forward "bootstrap-sass-variables/border-radius" with ($border-radius:               0 !default);
+@forward "bootstrap-sass-variables/border-radius-lg" with ($border-radius-lg:            0 !default);
+@forward "bootstrap-sass-variables/border-radius-sm" with ($border-radius-sm:            0 !default);
+
+// Fonts
+
+// stylelint-disable-next-line value-keyword-case
+@forward "../../../../../src/bootstrap-variables/font-family-sans-serif" with ($font-family-sans-serif:      #{"Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"} !default);
+@forward "bootstrap-sass-variables/headings-font-weight" with ($headings-font-weight:        300 !default);
+
+// Tables
+
+@forward "bootstrap-sass-variables/table-bg-scale" with ($table-bg-scale:              0 !default);
+
+// Buttons
+
+@forward "bootstrap-sass-variables/input-btn-padding-x" with ($input-btn-padding-x:         .5rem !default);
+@forward "bootstrap-sass-variables/btn-font-weight" with ($btn-font-weight:             300 !default);
+
+// Dropdowns
+
+@use "bootstrap-sass-variables/black" as *;
+@forward "bootstrap-sass-variables/dropdown-border-color" with ($dropdown-border-color:             rgba($black, .1) !default);
+@forward "bootstrap-sass-variables/dropdown-divider-bg" with ($dropdown-divider-bg:               rgba($black, .1) !default);
+
+// Navs
+
+@forward "bootstrap-sass-variables/nav-link-disabled-color" with ($nav-link-disabled-color:           $gray-400 !default);
+@use "bootstrap-sass-variables/dropdown-border-color" as *;
+@forward "bootstrap-sass-variables/nav-tabs-border-color" with ($nav-tabs-border-color:             $dropdown-border-color !default);
+@use "bootstrap-sass-variables/nav-tabs-border-color" as *;
+@forward "bootstrap-sass-variables/nav-tabs-link-hover-border-color" with ($nav-tabs-link-hover-border-color:  $nav-tabs-border-color !default);
+@forward "bootstrap-sass-variables/nav-tabs-link-active-border-color" with ($nav-tabs-link-active-border-color: $nav-tabs-border-color !default);
+
+// Navbar
+
+@use "bootstrap-sass-variables/white" as *;
+@forward "bootstrap-sass-variables/navbar-dark-color" with ($navbar-dark-color:                 rgba($white, .7) !default);
+@forward "bootstrap-sass-variables/navbar-dark-hover-color" with ($navbar-dark-hover-color:           $white !default);
+
+// Pagination
+
+@forward "bootstrap-sass-variables/pagination-color" with ($pagination-color:                  $gray-600 !default);
+@forward "bootstrap-sass-variables/pagination-border-color" with ($pagination-border-color:           $nav-tabs-border-color !default);
+@use "bootstrap-sass-variables/primary" as *;
+@forward "bootstrap-sass-variables/pagination-active-border-color" with ($pagination-active-border-color:    darken($primary, 5%) !default);
+@forward "bootstrap-sass-variables/pagination-disabled-color" with ($pagination-disabled-color:         $gray-200 !default);
+
+// Cards
+
+@forward "bootstrap-sass-variables/card-inner-border-radius" with ($card-inner-border-radius:          0 !default);
+
+// Badges
+
+@forward "bootstrap-sass-variables/badge-font-weight" with ($badge-font-weight:                 300 !default);
+@forward "bootstrap-sass-variables/badge-padding-x" with ($badge-padding-x:                   1rem !default);
+
+// Alerts
+
+@forward "bootstrap-sass-variables/alert-link-font-weight" with ($alert-link-font-weight:            400 !default);
+
+@forward "bootstrap-sass-variables/alert-bg-scale" with ($alert-bg-scale:                    0 !default);
+
+// Progress bars
+
+@forward "bootstrap-sass-variables/progress-bg" with ($progress-bg:                       $gray-400 !default);
+@forward "bootstrap-sass-variables/progress-bar-color" with ($progress-bar-color:                $white !default);
+
+// List group
+
+@forward "bootstrap-sass-variables/list-group-disabled-bg" with ($list-group-disabled-bg:            $gray-200 !default);
+
+// Breadcrumbs
+
+@forward "bootstrap-sass-variables/breadcrumb-padding-y" with ($breadcrumb-padding-y:              .375rem !default);
+@forward "bootstrap-sass-variables/breadcrumb-padding-x" with ($breadcrumb-padding-x:              .75rem !default);
+@forward "bootstrap-sass-variables/breadcrumb-border-radius" with ($breadcrumb-border-radius:          3px !default);
+
+// Close
+
+@forward "bootstrap-sass-variables/btn-close-color" with ($btn-close-color:            $gray-600 !default);
+@forward "bootstrap-sass-variables/btn-close-opacity" with ($btn-close-opacity:          .6 !default);
+@forward "bootstrap-sass-variables/btn-close-hover-opacity" with ($btn-close-hover-opacity:    1 !default);
+
+
+@forward "../../../../../src/themed-variables-light" hide $form-range-track-bg;

@@ -5,7 +5,7 @@ import { ZoomFade } from "preact-transition";
 import { memo } from "preact/compat";
 import "preact/debug";
 import "preact/devtools";
-import { useCallback, useLayoutEffect, useMemo } from "preact/hooks";
+import { useCallback, useMemo } from "preact/hooks";
 import { Accordion, AccordionSection } from "../accordion";
 import { Button } from "../button";
 import { Dialog, DialogsProvider } from "../dialog";
@@ -13,7 +13,7 @@ import { Drawer } from "../drawer";
 import { FocusVisibilityManager } from "../focus";
 import { Checkbox, Input, InputGroup, Radio, RadioGroup } from "../input-group";
 import { GridResponsive } from "../layout";
-import { ListItemSingle, ListSingle } from "../list";
+import { ListItemSingle, ListItemStatic, ListSingle } from "../list";
 import { Menu, MenuItem } from "../menu";
 import { DebugUtilContext, LogRenderType } from "../props";
 import { Tab, TabPanel, Tabs } from "../tabs";
@@ -28,6 +28,8 @@ import { DemoLists } from "./demos/lists";
 import { DemoMenus } from "./demos/menus";
 import { DemoRanges } from "./demos/range";
 import { DemoTable } from "./demos/tables";
+import { useLayoutEffect } from "preact-prop-helpers";
+import capitalize from "lodash/capitalize";
 
 
 
@@ -260,21 +262,56 @@ const DemoInput = memo(() => {
     )
 });
 
-function changeThemes(toTheme: string) {
-    const fromTheme = (toTheme === "theme-dark" ? "theme-light" : "theme-dark");
+function changeThemes(fromTheme: string | undefined, toTheme: string) {
+    //const fromTheme = (toTheme === "theme-dark" ? "theme-light" : "theme-dark");
     (document.getElementById(toTheme) as HTMLLinkElement).media = "all";
-    (document.getElementById(fromTheme) as HTMLLinkElement).media = "screen and (max-width: 1px)";
+    if (fromTheme)
+        (document.getElementById(fromTheme) as HTMLLinkElement).media = "screen and (max-width: 1px)";
 }
+
+
+const AllThemes = [
+    "cerulean",
+    "cosmo",
+    "cyborg",
+    "darkly",
+    "flatly",
+    "journal",
+    "litera",
+    "lumen",
+    "lux",
+    "materia",
+    "minty",
+    "morph",
+    "pulse",
+    "quartz",
+    "regent",
+    "sandstone",
+    "simplex",
+    "sketchy",
+    "slate",
+    "solar",
+    "spacelab",
+    "superhero",
+    "united",
+    "vapor",
+    "yeti",
+    "zephyr",
+];
 
 const Component = () => {
     const [theme, setTheme] = useState("theme-dark");
+    const [themeName, setThemeName] = useState("Dark");
 
-    useLayoutEffect(() => changeThemes(theme), [theme])
+    useLayoutEffect((prevArgs) => changeThemes((prevArgs ?? [])[0], theme), [theme])
 
     return <>
-        <Button colorVariant={theme == "theme-dark" ? "light" : "dark"} style={{ position: "fixed", insetBlockStart: "0.5em", insetInlineEnd: "0.5em", zIndex: 9999999 }} spinnerTimeout={999999999} onPress={async () => {
-            setTheme(theme === "theme-dark" ? "theme-light" : "theme-dark");
-        }}>Switch theme to <strong>{theme === "theme-dark" ? "light" : "dark"}</strong></Button>
+        <Menu TransitionProps={{maxHeight: "70vh", overflow: "auto"}} anchor={<Button dropdownVariant="combined" style={{ position: "fixed", insetBlockStart: "0.5em", insetInlineEnd: "0.5em", zIndex: 9999999 }} spinnerTimeout={999999999}>Theme: {themeName}</Button>}>
+        <MenuItem index={0} onPress={async () => { setTheme(`theme-light`); setThemeName("Light"); }}>Light</MenuItem>
+        <MenuItem index={1} onPress={async () => { setTheme(`theme-dark`); setThemeName("Dark"); }}>Dark</MenuItem>
+            <ListItemStatic><a href="https://bootswatch.com/">Bootswatch themes</a><small>(Not thoroughly tested)</small></ListItemStatic>
+            {AllThemes.map((theme, index) => <MenuItem index={index + 2} onPress={async () => { setTheme(`theme-${theme}`); setThemeName(capitalize(theme)); }}>{capitalize(theme)}</MenuItem>)}
+        </Menu>
         <GridResponsive minWidth="35em">
             <DebugUtilContext.Provider value={useMemo(() => ({ logRender: new Set<LogRenderType>(["Table", "TableHead", "TableBody", "TableRow", "TableCell"]) }), [])}>
                 <ToastsProvider>

@@ -20,6 +20,8 @@ index-dark.css
 index-light.css
 index-dark.css.map
 index-light.css.map
+docs/index-*-unprefixed.css
+docs/index-*-unprefixed.css.map
 
 
 # Logs

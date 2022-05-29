@@ -1,0 +1,105 @@
+// Minty 5.1.3
+// Bootswatch
+
+$theme: "minty" !default;
+
+//
+// Color system
+//
+
+@forward "../../../../../src/bootstrap-variables/blue" with ($blue:    #007bff !default);
+@forward "../../../../../src/bootstrap-variables/indigo" with ($indigo:  #6610f2 !default);
+@forward "../../../../../src/bootstrap-variables/purple" with ($purple:  #6f42c1 !default);
+@forward "../../../../../src/bootstrap-variables/pink" with ($pink:    #e83e8c !default);
+@forward "../../../../../src/bootstrap-variables/red" with ($red:     #ff7851 !default);
+@forward "../../../../../src/bootstrap-variables/orange" with ($orange:  #fd7e14 !default);
+@forward "../../../../../src/bootstrap-variables/yellow" with ($yellow:  #ffce67 !default);
+@forward "../../../../../src/bootstrap-variables/green" with ($green:   #56cc9d !default);
+@forward "../../../../../src/bootstrap-variables/teal" with ($teal:    #20c997 !default);
+@forward "../../../../../src/bootstrap-variables/cyan" with ($cyan:    #6cc3d5 !default);
+
+@forward "../../../../../src/bootstrap-variables/light/primary" with ($primary:       #78c2ad !default);
+@use "../../../../../src/bootstrap-variables/grays" as *;
+@forward "../../../../../src/bootstrap-variables/light/secondary" with ($secondary:     #f3969a !default);
+@use "bootstrap-sass-variables/green" as *;
+@forward "../../../../../src/bootstrap-variables/light/success" with ($success:       $green !default);
+@use "bootstrap-sass-variables/cyan" as *;
+@forward "../../../../../src/bootstrap-variables/light/info" with ($info:          $cyan !default);
+@use "bootstrap-sass-variables/yellow" as *;
+@forward "../../../../../src/bootstrap-variables/light/warning" with ($warning:       $yellow !default);
+@use "bootstrap-sass-variables/red" as *;
+@forward "../../../../../src/bootstrap-variables/light/danger" with ($danger:        $red !default);
+@forward "../../../../../src/bootstrap-variables/light/light" with ($light:         $gray-100 !default);
+@forward "../../../../../src/bootstrap-variables/light/dark" with ($dark:          $gray-800 !default);
+
+// Body
+
+@forward "../../../../../src/bootstrap-variables/light/body-color" with ($body-color:                $gray-600 !default);
+
+// Components
+
+@forward "bootstrap-sass-variables/border-radius" with ($border-radius:               .4rem !default);
+@forward "bootstrap-sass-variables/border-radius-lg" with ($border-radius-lg:            .6rem !default);
+@forward "bootstrap-sass-variables/border-radius-sm" with ($border-radius-sm:            .3rem !default);
+
+// Fonts
+
+// stylelint-disable-next-line value-keyword-case
+@forward "bootstrap-sass-variables/headings-font-family" with ($headings-font-family:        #{Montserrat, -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif} !default);
+@forward "bootstrap-sass-variables/headings-color" with ($headings-color:              $gray-700 !default);
+
+// Tables
+
+@forward "bootstrap-sass-variables/table-border-color" with ($table-border-color:          rgba(0, 0, 0, .05) !default);
+
+@forward "bootstrap-sass-variables/table-bg-scale" with ($table-bg-scale:              0 !default);
+
+// Dropdowns
+
+@use "bootstrap-sass-variables/white" as *;
+@forward "bootstrap-sass-variables/dropdown-link-hover-color" with ($dropdown-link-hover-color:         $white !default);
+@use "bootstrap-sass-variables/secondary" as *;
+@forward "bootstrap-sass-variables/dropdown-link-hover-bg" with ($dropdown-link-hover-bg:            $secondary !default);
+
+// Navbar
+
+@forward "bootstrap-sass-variables/navbar-dark-color" with ($navbar-dark-color:                 rgba($white, .6) !default);
+@forward "bootstrap-sass-variables/navbar-dark-hover-color" with ($navbar-dark-hover-color:           $white !default);
+@use "bootstrap-sass-variables/black" as *;
+@forward "bootstrap-sass-variables/navbar-light-color" with ($navbar-light-color:                rgba($black, .3) !default);
+@forward "bootstrap-sass-variables/navbar-light-hover-color" with ($navbar-light-hover-color:          $gray-700 !default);
+@forward "bootstrap-sass-variables/navbar-light-active-color" with ($navbar-light-active-color:         $gray-700 !default);
+@forward "bootstrap-sass-variables/navbar-light-disabled-color" with ($navbar-light-disabled-color:       rgba($black, .1) !default);
+
+// Pagination
+
+@forward "bootstrap-sass-variables/pagination-color" with ($pagination-color:                  $white !default);
+@use "bootstrap-sass-variables/primary" as *;
+@forward "bootstrap-sass-variables/pagination-bg" with ($pagination-bg:                     $primary !default);
+@forward "bootstrap-sass-variables/pagination-border-color" with ($pagination-border-color:           $primary !default);
+@forward "bootstrap-sass-variables/pagination-hover-color" with ($pagination-hover-color:            $white !default);
+@forward "bootstrap-sass-variables/pagination-hover-bg" with ($pagination-hover-bg:               $secondary !default);
+@use "bootstrap-sass-variables/pagination-hover-bg" as *;
+@forward "bootstrap-sass-variables/pagination-hover-border-color" with ($pagination-hover-border-color:     $pagination-hover-bg !default);
+@forward "bootstrap-sass-variables/pagination-active-bg" with ($pagination-active-bg:              $secondary !default);
+@use "bootstrap-sass-variables/pagination-active-bg" as *;
+@forward "bootstrap-sass-variables/pagination-active-border-color" with ($pagination-active-border-color:    $pagination-active-bg !default);
+@forward "bootstrap-sass-variables/pagination-disabled-color" with ($pagination-disabled-color:         $white !default);
+@forward "bootstrap-sass-variables/pagination-disabled-bg" with ($pagination-disabled-bg:            #cce8e0 !default);
+@use "bootstrap-sass-variables/pagination-disabled-bg" as *;
+@forward "bootstrap-sass-variables/pagination-disabled-border-color" with ($pagination-disabled-border-color:  $pagination-disabled-bg !default);
+
+// Alerts
+
+@forward "bootstrap-sass-variables/alert-color-scale" with ($alert-color-scale:                 0% !default);
+@forward "bootstrap-sass-variables/alert-bg-scale" with ($alert-bg-scale:                    0 !default);
+
+// Breadcrumbs
+
+@forward "bootstrap-sass-variables/breadcrumb-padding-y" with ($breadcrumb-padding-y:              .375rem !default);
+@forward "bootstrap-sass-variables/breadcrumb-padding-x" with ($breadcrumb-padding-x:              .75rem !default);
+@forward "bootstrap-sass-variables/breadcrumb-bg" with ($breadcrumb-bg:                     $primary !default);
+@forward "bootstrap-sass-variables/breadcrumb-divider-color" with ($breadcrumb-divider-color:          $white !default);
+@use "bootstrap-sass-variables/breadcrumb-divider-color" as *;
+@forward "bootstrap-sass-variables/breadcrumb-active-color" with ($breadcrumb-active-color:           $breadcrumb-divider-color !default);
+@forward "bootstrap-sass-variables/breadcrumb-border-radius" with ($breadcrumb-border-radius:          .25rem !default);
