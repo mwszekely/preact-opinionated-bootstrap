@@ -4,6 +4,7 @@
 $theme: "sketchy" !default;
 
 
+@use "bootstrap-sass-variables/white" as *;
 
 // Components
 
@@ -15,7 +16,7 @@ $theme: "sketchy" !default;
 // Fonts
 
 // stylelint-disable-next-line value-keyword-case
-@forward "../src/bootstrap-variables/font-family-sans-serif" with ($font-family-sans-serif: #{ Neucha, -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif} !default);
+@forward "bootstrap-sass-variables/font-family-sans-serif" with ($font-family-sans-serif: #{ Neucha, -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif} !default);
 @forward "bootstrap-sass-variables/font-weight-base" with ($font-weight-base: #{700} !default);
 @forward "bootstrap-sass-variables/headings-font-family" with ($headings-font-family: #{"Cabin Sketch", cursive} !default);
 
@@ -23,7 +24,6 @@ $theme: "sketchy" !default;
 
 // Tables
 
-@use "bootstrap-sass-variables/white" as *;
 @forward "bootstrap-sass-variables/table-hover-bg" with ($table-hover-bg:              $white !default);
 @forward "bootstrap-sass-variables/table-border-width" with ($table-border-width:          2px !default);
 @forward "bootstrap-sass-variables/table-border-color" with ($table-border-color:          $gray-800 !default);
@@ -105,7 +105,6 @@ $theme: "sketchy" !default;
 @forward "bootstrap-sass-variables/list-group-hover-bg" with ($list-group-hover-bg:               $gray-300 !default);
 @forward "../../../../../src/bootstrap-variables/list-group-active-bg" with ($list-group-active-bg:              $gray-800 !default);
 @forward "bootstrap-sass-variables/list-group-action-color" with ($list-group-action-color:           $gray-800 !default);
-@use "bootstrap-sass-variables/white" as *;
 @use "../../../../../src/bootstrap-variables/light/body-color" as usedForDependencyPurposesOnly;
 @forward "../../../../../src/bootstrap-variables/list-group-active-color" with ($list-group-active-color:           $white !default);
 
@@ -131,3 +130,13 @@ $theme: "sketchy" !default;
 @forward "bootstrap-sass-variables/nav-tabs-link-active-border-color" with ($nav-tabs-link-active-border-color: $gray-800 !default);
 @forward "bootstrap-sass-variables/btn-close-focus-shadow" with ($btn-close-focus-shadow:     none !default);
 
+@forward "../../../../../src/themed-variables-light";
+@forward "bootstrap-sass-variables/gray-500";
+@forward "bootstrap-sass-variables/gray-800";
+@forward "bootstrap-sass-variables/white";
+@forward "bootstrap-sass-variables/light";
+@forward "bootstrap-sass-variables/dark";
+@forward "bootstrap-sass-variables/success";
+@forward "bootstrap-sass-variables/info";
+@forward "bootstrap-sass-variables/warning";
+@forward "bootstrap-sass-variables/danger";

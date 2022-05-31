@@ -2,10 +2,6 @@
 // Bootswatch
 
 @use "./variables" as *;
-@use "bootstrap-sass-variables/white" as *;
-@use "bootstrap-sass-variables/navbar-light-color" as *;
-@use "bootstrap-sass-variables/navbar-light-hover-color" as *;
-@use "bootstrap-sass-variables/font-size-sm" as *;
 
 @mixin box-shadow($shadow...) {
   @if $enable-shadows {

@@ -1,0 +1,22 @@
+
+@use "bootstrap-sass-variables/primary" as *;
+@use "bootstrap-sass-variables/secondary" as *;
+@use "bootstrap-sass-variables/success" as *;
+@use "bootstrap-sass-variables/info" as *;
+@use "bootstrap-sass-variables/warning" as *;
+@use "bootstrap-sass-variables/danger" as *;
+@use "bootstrap-sass-variables/light" as *;
+@use "bootstrap-sass-variables/dark" as *;
+
+@forward "bootstrap-sass-variables/theme-colors" with ($theme-colors: (
+    "primary": $primary,
+    "secondary": $secondary,
+    "success": $success,
+    "info": $info,
+    "warning": $warning,
+    "danger": $danger,
+    "light": $light,
+    "dark": $dark,
+    "contrast": $light,
+    "subtle": $dark,
+) !default);

@@ -3838,7 +3838,7 @@
     }
 
     /*!
-    * tabbable 5.3.2
+    * tabbable 5.3.3
     * @license MIT, https://github.com/focus-trap/tabbable/blob/master/LICENSE
     */
     var candidateSelectors = ['input', 'select', 'textarea', 'a[href]', 'button', '[tabindex]:not(slot)', 'audio[controls]', 'video[controls]', '[contenteditable]:not([contenteditable="false"])', 'details>summary:first-of-type', 'details'];
@@ -8729,10 +8729,11 @@
     }
 
     function W(n, t) {
-      return v$2(I$1, {
+      var e = v$2(I$1, {
         __v: n,
         i: t
       });
+      return e.containerInfo = t, e;
     }
 
     (M$1.prototype = new _$2()).__e = function (n) {
@@ -10071,7 +10072,7 @@
     }, preact.options = l$1;
 
     var n$1 = preact;
-    "undefined" != typeof window && window.__PREACT_DEVTOOLS__ && window.__PREACT_DEVTOOLS__.attachPreact("10.7.1", n$1.options, {
+    "undefined" != typeof window && window.__PREACT_DEVTOOLS__ && window.__PREACT_DEVTOOLS__.attachPreact("10.7.2", n$1.options, {
       Fragment: n$1.Fragment,
       Component: n$1.Component
     });
@@ -10316,7 +10317,7 @@
       };
     }();
 
-    "undefined" != typeof window && window.__PREACT_DEVTOOLS__ && window.__PREACT_DEVTOOLS__.attachPreact("10.7.1", l$3, {
+    "undefined" != typeof window && window.__PREACT_DEVTOOLS__ && window.__PREACT_DEVTOOLS__.attachPreact("10.7.2", l$3, {
       Fragment: d$2,
       Component: _$2
     });

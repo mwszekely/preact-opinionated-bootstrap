@@ -7,31 +7,31 @@ $theme: "morph" !default;
 // Color system
 //
 
-@forward "../../../../../src/bootstrap-variables/blue" with ($blue:    #378dfc !default);
-@forward "../../../../../src/bootstrap-variables/indigo" with ($indigo:  #6610f2 !default);
-@forward "../../../../../src/bootstrap-variables/purple" with ($purple:  #5b62f4 !default);
-@forward "../../../../../src/bootstrap-variables/pink" with ($pink:    #d63384 !default);
-@forward "../../../../../src/bootstrap-variables/red" with ($red:     #e52527 !default);
-@forward "../../../../../src/bootstrap-variables/orange" with ($orange:  #fd7e14 !default);
-@forward "../../../../../src/bootstrap-variables/yellow" with ($yellow:  #ffc107 !default);
-@forward "../../../../../src/bootstrap-variables/green" with ($green:   #43cc29 !default);
-@forward "../../../../../src/bootstrap-variables/teal" with ($teal:    #20c997 !default);
-@forward "../../../../../src/bootstrap-variables/cyan" with ($cyan:    #0dcaf0 !default);
+@forward "bootstrap-sass-variables/blue" with ($blue:    #378dfc !default);
+@forward "bootstrap-sass-variables/indigo" with ($indigo:  #6610f2 !default);
+@forward "bootstrap-sass-variables/purple" with ($purple:  #5b62f4 !default);
+@forward "bootstrap-sass-variables/pink" with ($pink:    #d63384 !default);
+@forward "bootstrap-sass-variables/red" with ($red:     #e52527 !default);
+@forward "bootstrap-sass-variables/orange" with ($orange:  #fd7e14 !default);
+@forward "bootstrap-sass-variables/yellow" with ($yellow:  #ffc107 !default);
+@forward "bootstrap-sass-variables/green" with ($green:   #43cc29 !default);
+@forward "bootstrap-sass-variables/teal" with ($teal:    #20c997 !default);
+@forward "bootstrap-sass-variables/cyan" with ($cyan:    #0dcaf0 !default);
 
 @use "bootstrap-sass-variables/blue" as *;
-@forward "../../../../../src/bootstrap-variables/light/primary" with ($primary:       $blue !default);
-@use "../../../../../src/bootstrap-variables/grays" as *;
-@forward "../../../../../src/bootstrap-variables/light/secondary" with ($secondary:     $gray-200 !default);
 @use "bootstrap-sass-variables/green" as *;
-@forward "../../../../../src/bootstrap-variables/light/success" with ($success:       $green !default);
 @use "bootstrap-sass-variables/purple" as *;
-@forward "../../../../../src/bootstrap-variables/light/info" with ($info:          $purple !default);
 @use "bootstrap-sass-variables/yellow" as *;
-@forward "../../../../../src/bootstrap-variables/light/warning" with ($warning:       $yellow !default);
 @use "bootstrap-sass-variables/red" as *;
-@forward "../../../../../src/bootstrap-variables/light/danger" with ($danger:        $red !default);
-@forward "../../../../../src/bootstrap-variables/light/light" with ($light:         $gray-100 !default);
-@forward "../../../../../src/bootstrap-variables/light/dark" with ($dark:          $gray-900 !default);
+@forward "bootstrap-sass-variables/primary" with ($primary:       $blue !default);
+@use "../../../../../src/bootstrap-variables/grays" as *;
+@forward "bootstrap-sass-variables/secondary" with ($secondary:     $gray-200 !default);
+@forward "bootstrap-sass-variables/success" with ($success:       $green !default);
+@forward "bootstrap-sass-variables/info" with ($info:          $purple !default);
+@forward "bootstrap-sass-variables/warning" with ($warning:       $yellow !default);
+@forward "bootstrap-sass-variables/danger" with ($danger:        $red !default);
+@forward "bootstrap-sass-variables/light" with ($light:         $gray-100 !default);
+@forward "bootstrap-sass-variables/dark" with ($dark:          $gray-900 !default);
 
 @forward "../../../../../src/bootstrap-variables/enable-shadows" with ($enable-shadows:              true !default);
 
@@ -57,12 +57,14 @@ $theme: "morph" !default;
 @forward "bootstrap-sass-variables/box-shadow" with ($box-shadow:                  #{5px 5px 10px rgba(darken($body-bg, 50%), .2), -5px -5px 10px rgba($white, .4)} !default);
 @forward "bootstrap-sass-variables/box-shadow-sm" with ($box-shadow-sm:               0 .125rem .25rem rgba(darken($body-bg, 50%), .2) !default);
 @forward "bootstrap-sass-variables/box-shadow-lg" with ($box-shadow-lg:               8px 8px 40px rgba(darken($body-bg, 90%), .15) !default);
-@forward "bootstrap-sass-variables/box-shadow-inset" with ($box-shadow-inset:            #{inset 2px 2px 8px rgba(darken($body-bg, 50%), .3), inset -3px -2px 5px rgba($white, .8)} !default);
+@forward "../../../../../src/bootstrap-variables/box-shadow-inset" with ($box-shadow-inset:            #{inset 2px 2px 8px rgba(darken($body-bg, 50%), .3), inset -3px -2px 5px rgba($white, .8)} !default);
+@forward "../../../../../src/bootstrap-variables/input-btn-focus-color";
+@forward "../../../../../src/bootstrap-variables/input-box-shadow";
 
 // Fonts
 
 // stylelint-disable-next-line value-keyword-case
-@forward "../../../../../src/bootstrap-variables/font-family-sans-serif" with ($font-family-sans-serif:      #{Nunito, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"} !default);
+@forward "bootstrap-sass-variables/font-family-sans-serif" with ($font-family-sans-serif:      #{Nunito, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"} !default);
 
 @use "bootstrap-sass-variables/link-color" as *;
 @forward "bootstrap-sass-variables/headings-color" with ($headings-color:              $link-color !default);
@@ -82,7 +84,7 @@ $theme: "morph" !default;
 @forward "bootstrap-sass-variables/btn-padding-x-lg" with ($btn-padding-x-lg:            2.25rem !default);
 
 @use "bootstrap-sass-variables/box-shadow" as *;
-@forward "../../../../../src/bootstrap-variables/light/btn-box-shadow" with ($btn-box-shadow:              $box-shadow !default);
+@forward "../../../../../src/bootstrap-variables/btn-box-shadow" with ($btn-box-shadow:              $box-shadow !default);
 
 @use "bootstrap-sass-variables/border-radius-pill" as *;
 @forward "bootstrap-sass-variables/btn-border-radius" with ($btn-border-radius:           $border-radius-pill !default);
@@ -244,3 +246,11 @@ $theme: "morph" !default;
 @forward "bootstrap-sass-variables/btn-close-color" with ($btn-close-color:            $headings-color !default);
 
 @forward "../../../../../src/themed-variables-light" hide $form-range-track-bg;
+@forward "bootstrap-sass-variables/black";
+@forward "bootstrap-sass-variables/white";
+@forward "bootstrap-sass-variables/gray-200";
+@forward "bootstrap-sass-variables/body-bg";
+@forward "bootstrap-sass-variables/border-radius";
+@forward "bootstrap-sass-variables/btn-border-radius";
+@forward "bootstrap-sass-variables/functions/tint-color";
+@forward "bootstrap-sass-variables/functions/shade-color";

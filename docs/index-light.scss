@@ -1,3 +1,18 @@
+@forward "bootstrap-sass-variables/blue" with ($blue: #2b35CA !default);
+@forward "bootstrap-sass-variables/cyan" with ($cyan: #00AED1 !default);
+@forward "bootstrap-sass-variables/green" with ($green: #0D5E21 !default);
+@forward "bootstrap-sass-variables/indigo" with ($indigo: #24066a !default);
+@forward "bootstrap-sass-variables/orange" with ($orange: #FD7E14 !default);
+@forward "bootstrap-sass-variables/pink" with ($pink: #AC0063 !default);
+@forward "bootstrap-sass-variables/purple" with ($purple: #4C2EA9 !default);
+@forward "bootstrap-sass-variables/red" with ($red: #9B1C29 !default);
+@forward "bootstrap-sass-variables/teal" with ($teal: #00BD6E !default);
+@forward "bootstrap-sass-variables/yellow" with ($yellow: #FFB300 !default);
+@use "bootstrap-sass-variables/blue-600" as *;
+@use "bootstrap-sass-variables/indigo" as *;
+@forward "bootstrap-sass-variables/primary" with ($primary: $blue-600 !default);
+@forward "../src/bootstrap-variables/grays";
+@forward "bootstrap-sass-variables/secondary" with ($secondary: $indigo !default);
 @forward "../src/themed-variables-light";
 @use "bootstrap-sass-variables/bootstrap";
 @forward "../src/components-basic";

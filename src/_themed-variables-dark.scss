@@ -7,27 +7,17 @@
 
 // Load the themed colors.
 // secondary depends on gray depends on primary, hence the weird order.
-@forward "./bootstrap-variables/dark/primary";
 @forward "./bootstrap-variables/grays";
-@forward "./bootstrap-variables/dark/secondary";
-@forward "./bootstrap-variables/dark/success";
-@forward "./bootstrap-variables/dark/warning";
-@forward "./bootstrap-variables/dark/info";
-@forward "./bootstrap-variables/dark/danger";
-@forward "./bootstrap-variables/dark/light";
-@forward "./bootstrap-variables/dark/dark";
 
-@forward "./bootstrap-variables/dark/btn-box-shadow";
-@forward "./bootstrap-variables/dark/btn-active-box-shadow";
 @forward "./bootstrap-variables/dark/body-bg";
 @forward "./bootstrap-variables/dark/body-color";
 @forward "./bootstrap-variables/dark/form-range-tick";
 @forward "./bootstrap-variables/dark/form-range-track-bg";
 @forward "./bootstrap-variables/dark/link-color";
+@forward "./bootstrap-variables/dark/theme-colors";
 
 @forward "bootstrap-sass-variables/dark/component-active-color";
 
 
 @forward "./themed-variables-shared";
 @use "bootstrap-sass-variables/theme-dark";
-//@use "bootstrap-sass-variables/bootstrap";

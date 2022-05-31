@@ -2,8 +2,6 @@
 // Bootswatch
 
 @use "./variables" as *;
-@use "bootstrap-sass-variables/white" as *;
-@use "bootstrap-sass-variables/black" as *;
 
 @mixin box-shadow($shadow...) {
   @if $enable-shadows {

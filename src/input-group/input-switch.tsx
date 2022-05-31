@@ -16,7 +16,7 @@ export interface SwitchProps extends Omit<GlobalAttributes<HTMLDivElement>, "ref
     disabled?: boolean;
     onCheck?(checked: boolean, event: h.JSX.TargetedEvent<HTMLInputElement>): void | Promise<void>;
     children?: ComponentChildren;
-    labelPosition?: "start" | "end" | "hidden" | "tooltip";
+    labelPosition?: "start" | "end" | "hidden" | "tooltip" | "button";
     inline?: boolean;
 }
 

@@ -7,32 +7,33 @@ $theme: "zephyr" !default;
 // Color system
 //
 
-@forward "../../../../../src/bootstrap-variables/blue" with ($blue:    #3459e6 !default);
-@forward "../../../../../src/bootstrap-variables/indigo" with ($indigo:  #6610f2 !default);
-@forward "../../../../../src/bootstrap-variables/purple" with ($purple:  #6f42c1 !default);
-@forward "../../../../../src/bootstrap-variables/pink" with ($pink:    #d63384 !default);
-@forward "../../../../../src/bootstrap-variables/red" with ($red:     #da292e !default);
-@forward "../../../../../src/bootstrap-variables/orange" with ($orange:  #f8765f !default);
-@forward "../../../../../src/bootstrap-variables/yellow" with ($yellow:  #f4bd61 !default);
-@forward "../../../../../src/bootstrap-variables/green" with ($green:   #2fb380 !default);
-@forward "../../../../../src/bootstrap-variables/teal" with ($teal:    #20c997 !default);
-@forward "../../../../../src/bootstrap-variables/cyan" with ($cyan:    #287bb5 !default);
+@forward "bootstrap-sass-variables/blue" with ($blue:    #3459e6 !default);
+@forward "bootstrap-sass-variables/indigo" with ($indigo:  #6610f2 !default);
+@forward "bootstrap-sass-variables/purple" with ($purple:  #6f42c1 !default);
+@forward "bootstrap-sass-variables/pink" with ($pink:    #d63384 !default);
+@forward "bootstrap-sass-variables/red" with ($red:     #da292e !default);
+@forward "bootstrap-sass-variables/orange" with ($orange:  #f8765f !default);
+@forward "bootstrap-sass-variables/yellow" with ($yellow:  #f4bd61 !default);
+@forward "bootstrap-sass-variables/green" with ($green:   #2fb380 !default);
+@forward "bootstrap-sass-variables/teal" with ($teal:    #20c997 !default);
+@forward "bootstrap-sass-variables/cyan" with ($cyan:    #287bb5 !default);
 
 @use "bootstrap-sass-variables/blue" as *;
-@forward "../../../../../src/bootstrap-variables/light/primary" with ($primary:       $blue !default);
+@forward "bootstrap-sass-variables/primary" with ($primary:       $blue !default);
 @use "../../../../../src/bootstrap-variables/grays" as *;
 @use "bootstrap-sass-variables/white" as *;
-@forward "../../../../../src/bootstrap-variables/light/secondary" with ($secondary:     $white !default);
 @use "bootstrap-sass-variables/green" as *;
-@forward "../../../../../src/bootstrap-variables/light/success" with ($success:       $green !default);
 @use "bootstrap-sass-variables/cyan" as *;
-@forward "../../../../../src/bootstrap-variables/light/info" with ($info:          $cyan !default);
 @use "bootstrap-sass-variables/yellow" as *;
-@forward "../../../../../src/bootstrap-variables/light/warning" with ($warning:       $yellow !default);
 @use "bootstrap-sass-variables/red" as *;
-@forward "../../../../../src/bootstrap-variables/light/danger" with ($danger:        $red !default);
-@forward "../../../../../src/bootstrap-variables/light/light" with ($light:         $gray-100 !default);
-@forward "../../../../../src/bootstrap-variables/light/dark" with ($dark:          $gray-900 !default);
+@use "bootstrap-sass-variables/black" as *;
+@forward "bootstrap-sass-variables/secondary" with ($secondary:     $white !default);
+@forward "bootstrap-sass-variables/success" with ($success:       $green !default);
+@forward "bootstrap-sass-variables/info" with ($info:          $cyan !default);
+@forward "bootstrap-sass-variables/warning" with ($warning:       $yellow !default);
+@forward "bootstrap-sass-variables/danger" with ($danger:        $red !default);
+@forward "bootstrap-sass-variables/light" with ($light:         $gray-100 !default);
+@forward "bootstrap-sass-variables/dark" with ($dark:          $gray-900 !default);
 
 @forward "../../../../../src/bootstrap-variables/enable-shadows" with ($enable-shadows:              true !default);
 
@@ -43,20 +44,25 @@ $theme: "zephyr" !default;
 
 @forward "bootstrap-sass-variables/headings-color" with ($headings-color:              $gray-900 !default);
 
+@use "bootstrap-sass-variables/headings-color" as *;
+@use "bootstrap-sass-variables/body-color" as *;
+@use "bootstrap-sass-variables/primary" as *;
+
 // Fonts
 
+
 // stylelint-disable-next-line value-keyword-case
-@forward "../../../../../src/bootstrap-variables/font-family-sans-serif" with ($font-family-sans-serif:     #{Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"} !default);
+@forward "bootstrap-sass-variables/font-family-sans-serif" with ($font-family-sans-serif:     #{Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"} !default);
 @forward "bootstrap-sass-variables/font-size-base" with ($font-size-base:              1rem !default); // Assumes the browser default, typically `16px`
 @use "bootstrap-sass-variables/font-size-base" as *;
 @forward "bootstrap-sass-variables/font-size-sm" with ($font-size-sm:                $font-size-base * .875 !default);
+@use "bootstrap-sass-variables/font-size-sm" as *;
 
 // Components
 
-@use "bootstrap-sass-variables/black" as *;
-@forward "../../../../../src/bootstrap-variables/input-btn-focus-color";
 @forward "bootstrap-sass-variables/box-shadow" with ($box-shadow:                  0 1px 2px rgba($black, .05) !default);
 @forward "bootstrap-sass-variables/box-shadow-lg" with ($box-shadow-lg:               #{0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px 0 rgba(0, 0, 0, .06)} !default);
+@use "bootstrap-sass-variables/box-shadow" as *;
 
 // Tables
 
@@ -70,18 +76,19 @@ $theme: "zephyr" !default;
 // Buttons + Forms
 @forward "bootstrap-sass-variables/input-btn-padding-y" with ($input-btn-padding-y:         .5rem !default);
 @forward "bootstrap-sass-variables/input-btn-padding-x" with ($input-btn-padding-x:         1rem !default);
-@use "bootstrap-sass-variables/font-size-sm" as *;
 @forward "bootstrap-sass-variables/input-btn-font-size" with ($input-btn-font-size:         $font-size-sm !default);
 
 // Buttons
 
 @forward "bootstrap-sass-variables/btn-font-weight" with ($btn-font-weight:             500 !default);
-@use "bootstrap-sass-variables/box-shadow" as *;
+@forward "../../../../../src/bootstrap-variables/btn-box-shadow" with ($btn-box-shadow:              $box-shadow !default);
+@forward "../../../../../src/bootstrap-variables/input-btn-focus-color";
 @forward "../../../../../src/bootstrap-variables/input-btn-focus-width";
-@forward "../../../../../src/bootstrap-variables/light/btn-box-shadow" with ($btn-box-shadow:              $box-shadow !default);
+@forward "../../../../../src/bootstrap-variables/input-btn-focus-box-shadow";
 @forward "bootstrap-sass-variables/btn-focus-box-shadow" with ($btn-focus-box-shadow:        $box-shadow !default);
-@forward "../../../../../src/bootstrap-variables/light/btn-active-box-shadow" with ($btn-active-box-shadow:       $box-shadow !default);
+@forward "../../../../../src/bootstrap-variables/btn-active-box-shadow" with ($btn-active-box-shadow:       $box-shadow !default);
 
+@forward "../../../../../src/bootstrap-variables/box-shadow-inset";
 // Forms
 
 @forward "bootstrap-sass-variables/form-label-font-weight" with ($form-label-font-weight:                500 !default);
@@ -92,12 +99,10 @@ $theme: "zephyr" !default;
 
 // Navs
 
-@use "bootstrap-sass-variables/body-color" as *;
 @forward "bootstrap-sass-variables/nav-link-color" with ($nav-link-color:                    $body-color !default);
 @forward "bootstrap-sass-variables/nav-link-hover-color" with ($nav-link-hover-color:              $body-color !default);
 
 @forward "bootstrap-sass-variables/nav-tabs-border-radius" with ($nav-tabs-border-radius:            0 !default);
-@use "bootstrap-sass-variables/primary" as *;
 @forward "bootstrap-sass-variables/nav-tabs-link-active-color" with ($nav-tabs-link-active-color:        $primary !default);
 
 // Navbar
@@ -146,7 +151,6 @@ $theme: "zephyr" !default;
 
 // Toasts
 
-@use "bootstrap-sass-variables/headings-color" as *;
 @forward "bootstrap-sass-variables/toast-header-color" with ($toast-header-color:                $headings-color !default);
 
 // Modals
@@ -166,3 +170,4 @@ $theme: "zephyr" !default;
 @forward "bootstrap-sass-variables/breadcrumb-divider" with ($breadcrumb-divider:                quote(">") !default);
 
 @forward "../../../../../src/themed-variables-light";
+@forward "bootstrap-sass-variables/border-radius";

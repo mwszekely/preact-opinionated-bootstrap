@@ -1,12 +1,5 @@
-
-
-@use "../../src/bootstrap-variables/light/primary" as *;
-@use "../../src/bootstrap-variables/grays" as *;
-
 @use ".././bootswatch/docs/5/sketchy/variables";
-
 @use "bootstrap-sass-variables/bootstrap";
 @forward "../../src/components-basic";
-//@forward "../../src/components-themed";
 @use "./../bootswatch/docs/5/sketchy/bootswatch";
 @import "./../index-shared.scss";

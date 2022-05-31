@@ -2,6 +2,9 @@
 @use "sass:map";
 @use "sass:string";
 @use "bootstrap-sass-variables/enable-button-pointers" as *;
+@use "bootstrap-sass-variables/enable-shadows" as *;
+@use "bootstrap-sass-variables/btn-active-box-shadow" as *;
+@use "bootstrap-sass-variables/btn-focus-box-shadow" as *;
 @use "./ensure-contrast.scss" as *;
 
 .btn-group {
@@ -13,9 +16,14 @@
 
 .btn {
 
+    @if $enable-shadows {
+        will-change: box-shadow;
+    }
+
     // Bootstrap also does this when $enable-button-pointers
     // but not for .pending
     @if $enable-button-pointers {
+
         &:not(.disabled):not(:disabled):not(.pending) {
             cursor: pointer;
         }
@@ -23,6 +31,15 @@
         &.pending {
             cursor: progress;
             pointer-events: all;
+        }
+    }
+
+    &.pending {
+        &.disabled, &:disabled {
+            box-shadow: $btn-active-box-shadow;
+            &:focus {
+                box-shadow: $btn-active-box-shadow, $btn-focus-box-shadow;
+            }
         }
     }
 
