@@ -5,6 +5,8 @@
 @use "bootstrap-sass-variables/enable-shadows" as *;
 @use "bootstrap-sass-variables/btn-active-box-shadow" as *;
 @use "bootstrap-sass-variables/btn-focus-box-shadow" as *;
+@use "bootstrap-sass-variables/theme-colors" as *;
+@use "bootstrap-sass-variables/body-bg" as *;
 @use "./ensure-contrast.scss" as *;
 
 .btn-group {
@@ -15,10 +17,44 @@
 }
 
 .btn {
+    touch-action: manipulation; // Improve responsiveness
+    appearance: none;           // Standardize styling
 
     @if $enable-shadows {
         will-change: box-shadow;
     }
+
+    // Adjust the colors of outlined buttons so that they always Just Work(tm) on body-bg.
+    @each $color-name, $color-value in $theme-colors {
+        &.btn-outline-#{$color-name} {
+            $original-color-value: $color-value;
+            // Change our current theme color to something that's always visible
+            $color-value: ensure-contrasting-color($body-bg, $color-value);
+
+            // When not focused or anything, we just use that color
+            --bs-btn-color: #{$color-value};
+            --bs-btn-border-color: #{$color-value};
+
+
+
+            // When hovering/active, tone down the styles a little bit.
+            // 
+            // TODO: The alpha value should depend on the contrast, probably
+            $color-value-hover-active-bg: color.change($original-color-value, $alpha: 0.125);
+            --bs-btn-hover-bg: #{$color-value-hover-active-bg};
+            --bs-btn-active-bg: #{$color-value-hover-active-bg};
+
+            // The color of the text and border when active or hovering
+            // is estimated based on the alpha mix above.
+            $color-value-text: ensure-contrasting-color(mix($original-color-value, $body-bg, 0.125), $original-color-value);
+            --bs-btn-active-color: #{$color-value-text};
+            --bs-btn-active-border: #{$color-value-text};
+            --bs-btn-hover-border-color: #{$color-value-text};
+            --bs-btn-hover-color: #{$color-value-text};
+            --bs-btn-disabled-color: #{$color-value-text};
+        }
+    }
+
 
     // Bootstrap also does this when $enable-button-pointers
     // but not for .pending

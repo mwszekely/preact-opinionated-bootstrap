@@ -8,6 +8,7 @@
 @forward "bootstrap-sass-variables/red" with ($red: #9B1C29 !default);
 @forward "bootstrap-sass-variables/teal" with ($teal: #00BD6E !default);
 @forward "bootstrap-sass-variables/yellow" with ($yellow: #FFB300 !default);
+@forward "bootstrap-sass-variables/font-family-sans-serif" with ($font-family-sans-serif: #{"Jost", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"} !default);
 @use "bootstrap-sass-variables/blue-600" as *;
 @use "bootstrap-sass-variables/indigo" as *;
 @forward "bootstrap-sass-variables/primary" with ($primary: $blue-600 !default);

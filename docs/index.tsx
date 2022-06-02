@@ -300,17 +300,18 @@ const AllThemes = [
 ];
 
 const Component = () => {
-    const [theme, setTheme] = useState("theme-dark");
-    const [themeName, setThemeName] = useState("Dark");
+    const [theme, setTheme] = useState("theme-default-bootstrap");
+    const [themeName, setThemeName] = useState("Bootstrap");
 
     useLayoutEffect((prevArgs) => changeThemes((prevArgs ?? [])[0], theme), [theme])
 
     return <>
-        <Menu TransitionProps={{maxHeight: "70vh", overflow: "auto"}} anchor={<Button dropdownVariant="combined" style={{ position: "fixed", insetBlockStart: "0.5em", insetInlineEnd: "0.5em", zIndex: 9999999 }} spinnerTimeout={999999999}>Theme: {themeName}</Button>}>
-        <MenuItem index={0} onPress={async () => { setTheme(`theme-light`); setThemeName("Light"); }}>Light</MenuItem>
-        <MenuItem index={1} onPress={async () => { setTheme(`theme-dark`); setThemeName("Dark"); }}>Dark</MenuItem>
+        <Menu TransitionProps={{ maxHeight: "70vh", overflow: "auto" }} anchor={<Button dropdownVariant="combined" style={{ position: "fixed", insetBlockStart: "0.5em", insetInlineEnd: "0.5em", zIndex: 9999999 }} spinnerTimeout={999999999}>Theme: {themeName}</Button>}>
+            <MenuItem index={0} onPress={async () => { setTheme(`theme-default-bootstrap`); setThemeName("Bootstrap"); }}>Bootstrap</MenuItem>
+            <MenuItem index={1} onPress={async () => { setTheme(`theme-light`); setThemeName("Light"); }}>Light</MenuItem>
+            <MenuItem index={2} onPress={async () => { setTheme(`theme-dark`); setThemeName("Dark"); }}>Dark</MenuItem>
             <ListItemStatic><a href="https://bootswatch.com/">Bootswatch themes</a><small>(Not thoroughly tested)</small></ListItemStatic>
-            {AllThemes.map((theme, index) => <MenuItem index={index + 2} onPress={async () => { setTheme(`theme-${theme}`); setThemeName(capitalize(theme)); }}>{capitalize(theme)}</MenuItem>)}
+            {AllThemes.map((theme, index) => <MenuItem index={index + 3} onPress={async () => { setTheme(`theme-${theme}`); setThemeName(capitalize(theme)); }}>{capitalize(theme)}</MenuItem>)}
         </Menu>
         <GridResponsive minWidth="35em">
             <DebugUtilContext.Provider value={useMemo(() => ({ logRender: new Set<LogRenderType>(["Table", "TableHead", "TableBody", "TableRow", "TableCell"]) }), [])}>

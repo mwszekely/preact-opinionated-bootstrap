@@ -1,0 +1,4 @@
+@use "../src/bootstrap-variables/light/theme-colors" as *;
+@use "bootstrap-sass-variables/bootstrap";
+@forward "../src/components-basic";
+@import "./index-shared.scss";
