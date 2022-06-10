@@ -40,11 +40,11 @@ export interface ListItemStaticProps extends GlobalAttributes<HTMLLIElement> {
 export const ListItemStatic = memo(forwardElementRef(function ListItemStatic(props: ListItemStaticProps, ref: Ref<HTMLLIElement>) {
     const { children, badge, iconStart, iconEnd, disabled, ...domProps } = { ...props, ref };
     return <li {...usePseudoActive(useMergedProps<HTMLLIElement>()({
-        children: <>
-            {iconStart && <span class="list-group-item-start-icon">{iconStart}</span>}
+        children: <span class={clsx("list-item-text-contents", !!badge && "with-badge", !!iconStart && "with-start", !!(badge || iconEnd) && "with-end")}>
+            {iconStart && <span class="list-item-text-contents-start-icon">{iconStart}</span>}
             {children}
-            {badge && <span class="list-group-item-badge">{badge}</span>}{iconEnd && <span className="list-group-item-end-icon">{iconEnd}</span>}
-        </>,
-        class: clsx("list-group-item list-group-item-multiline", disabled && "disabled text-muted", !!badge && "with-badge", !!iconStart && "with-start", !!(badge || iconEnd) && "with-end"),
+            {badge && <span class="list-item-text-contents-badge">{badge}</span>}{iconEnd && <span className="list-item-text-contents-end-icon">{iconEnd}</span>}
+        </span>,
+        class: clsx("list-group-item list-group-item-multiline", disabled && "disabled text-muted"),
     } as any, domProps))} />
 }))

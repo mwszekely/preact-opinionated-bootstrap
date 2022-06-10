@@ -70,7 +70,6 @@ $button-press-offset-y-shadow-adjust: 0.9;
     &.dropdown-toggle.dropdown::after {
         transition: transform 0.1s cubic-bezier(0, 1, 0.33, 1);
         transform: translate(0em, var(--bso-btn-text-contents-y-offset));
-        display: block;
         align-self: center;
     }
 

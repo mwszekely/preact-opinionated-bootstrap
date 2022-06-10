@@ -8,9 +8,10 @@
   .#{$name} {
     --start-icon-width: var(--start-icon-width, auto);
     --end-icon-width: var(--end-icon-width, auto);
-    background-color: var(--bs-body-bg);
-    color: $body-color;
-    border-color: $list-group-border-color;
+    
+    display: grid;
+    column-gap: 1em;
+    grid-auto-rows: auto;
 
     & > .circular-progress-container {
       position: absolute;
@@ -23,13 +24,7 @@
       align-items: center;
     }
 
-    &.#{$name}-multiline,
-    &.with-start,
-    &.with-end {
-      display: grid;
-      column-gap: 1em;
-      grid-auto-rows: auto;
-    }
+    
 
     &.with-start.with-end {
       grid-template-columns: var(--start-icon-width, auto) 1fr var(--end-icon-width, auto);

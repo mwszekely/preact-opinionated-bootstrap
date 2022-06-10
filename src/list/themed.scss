@@ -4,35 +4,32 @@
 @use "sass:string";
 @forward "../variables";
 
+$list-item-press-offset-y: 0.185em;
+$list-item-press-offset-y-shadow-adjust: 0.9;
+
+.list-group-item {
+  background-color: var(--bs-body-bg);
+  color: $body-color;
+  border-color: $list-group-border-color;
+}
+
 .list-group-item-action,
 .list-group-item[tabindex="0"] {
-  outline: none;
-  transition: $inset-press-transition;
 
-  &:not(.disabled):not(.pending) {
-    cursor: pointer;
-  }
-  &.disabled {
-    cursor: default;
-  }
-  &.pending {
-    cursor: progress;
+  --bso-list-item-box-shadow-y: 0;
+
+  --bso-list-item-text-contents-y-offset: 0; //calc(-1 * #{$list-item-press-offset-y});
+
+  &:active, &.active, &.pending {
+      --bso-list-item-text-contents-y-offset: #{$list-item-press-offset-y};
   }
 
-  &:active:not(.pending),
-  &.active:not(.pending),
-  &:not(:active):not(.active).pending {
-    color: $list-group-active-color;
-    background-color: $list-group-active-bg;
-    border-color: $list-group-active-border-color;
-  }
 
-  &:not(.active):not(:active):not(.pending),
-  &:active.pending,
-  &.active.pending {
-    background-color: var(--bs-body-bg);
-    border-color: $list-group-border-color;
-    color: $body-color;
+  &.disabled,
+  &:disabled {
+      &:not(.pending) {
+          --bso-list-item-text-contents-y-offset: 0;
+      }
   }
 
   // When we're active,
@@ -69,33 +66,39 @@
   // When we're active and also not pending to become inactive,
   // or when we're not active but pending to become active,
   // use the "depressed text" padding (depending on size).
-  &:active:not(.pending),
+  /*&:active:not(.pending),
   &.active:not(.pending),
   &:not(:active):not(.active).pending {
     padding-bottom: $list-group-item-padding-y * 0.5;
     padding-top: $list-group-item-padding-y + $list-group-item-padding-y * 0.5;
     background-position-y: $list-group-item-padding-y * 0.5;
-  }
+  }*/
   background-position-y: 0;
+
+
+
+  &>.list-item-text-contents,
+  &.dropdown-toggle.dropstart::before,
+  &.dropdown-toggle.dropend::after,
+  &.dropdown-toggle.dropup::after,
+  &.dropdown-toggle.dropdown::after {
+      transition: transform 0.1s cubic-bezier(0, 1, 0.33, 1);
+      transform: translate(0em, var(--bso-list-item-text-contents-y-offset));
+      align-self: center;
+  }
 }
 
 // Undo the above if the user prefers less motion
 @media (prefers-reduced-motion) {
-  .actionable.list-group-item,
+  .list-group-item-action,
   .list-group-item[tabindex="0"] {
-    &:active,
-    &.active,
-    &.pending {
-      padding-bottom: $list-group-item-padding-y;
-      padding-top: $list-group-item-padding-y;
-    }
+    --bso-list-item-text-contents-y-offset: 0 !important;
   }
   .nav-link {
     &:active,
     &.active,
     &.pending {
-      padding-bottom: $nav-link-padding-y;
-      padding-top: $nav-link-padding-y;
+      --bso-list-item-text-contents-y-offset: 0 !important;
     }
   }
 }

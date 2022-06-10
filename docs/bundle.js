@@ -15670,19 +15670,20 @@
         ref
       };
       return e$3("li", { ...usePseudoActive(useMergedProps()({
-          children: e$3(d$2, {
+          children: e$3("span", {
+            class: clsx("list-item-text-contents", !!badge && "with-badge", !!iconStart && "with-start", !!(badge || iconEnd) && "with-end"),
             children: [iconStart && e$3("span", {
-              class: "list-group-item-start-icon",
+              class: "list-item-text-contents-start-icon",
               children: iconStart
             }), children, badge && e$3("span", {
-              class: "list-group-item-badge",
+              class: "list-item-text-contents-badge",
               children: badge
             }), iconEnd && e$3("span", {
-              className: "list-group-item-end-icon",
+              className: "list-item-text-contents-end-icon",
               children: iconEnd
             })]
           }),
-          class: clsx("list-group-item list-group-item-multiline", disabled && "disabled text-muted", !!badge && "with-badge", !!iconStart && "with-start", !!(badge || iconEnd) && "with-end")
+          class: clsx("list-group-item list-group-item-multiline", disabled && "disabled text-muted")
         }, domProps))
       });
     }));
