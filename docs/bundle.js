@@ -4116,7 +4116,7 @@
 
           var InertRoot = function () {
             /**
-             * @param {!Element} rootElement The Element at the root of the inert subtree.
+             * @param {!HTMLElement} rootElement The HTMLElement at the root of the inert subtree.
              * @param {!InertManager} inertManager The global singleton InertManager object.
              */
             function InertRoot(rootElement, inertManager) {
@@ -4125,7 +4125,7 @@
 
 
               this._inertManager = inertManager;
-              /** @type {!Element} */
+              /** @type {!HTMLElement} */
 
               this._rootElement = rootElement;
               /**
@@ -4265,7 +4265,7 @@
                 }
 
                 var element =
-                /** @type {!Element} */
+                /** @type {!HTMLElement} */
                 node; // If a descendant inert root becomes un-inert, its descendants will still be inert because of
                 // this inert root, so all of its managed nodes need to be adopted by this InertRoot.
 
@@ -4319,7 +4319,7 @@
               }
               /**
                * If a descendant node is found with an `inert` attribute, adopt its managed nodes.
-               * @param {!Element} node
+               * @param {!HTMLElement} node
                */
 
             }, {
@@ -4350,7 +4350,7 @@
               value: function _onMutation(records, self) {
                 records.forEach(function (record) {
                   var target =
-                  /** @type {!Element} */
+                  /** @type {!HTMLElement} */
                   record.target;
 
                   if (record.type === 'childList') {
@@ -4468,7 +4468,7 @@
 
                 if (this._node && this._node.nodeType === Node.ELEMENT_NODE) {
                   var element =
-                  /** @type {!Element} */
+                  /** @type {!HTMLElement} */
                   this._node;
 
                   if (this._savedTabIndex !== null) {
@@ -4520,7 +4520,7 @@
                 }
 
                 var element =
-                /** @type {!Element} */
+                /** @type {!HTMLElement} */
                 this.node;
 
                 if (matches.call(element, _focusableElementsString)) {
@@ -4676,7 +4676,7 @@
             }
             /**
              * Set whether the given element should be an inert root or not.
-             * @param {!Element} root
+             * @param {!HTMLElement} root
              * @param {boolean} inert
              */
 
@@ -4842,7 +4842,7 @@
                       }
 
                       var target =
-                      /** @type {!Element} */
+                      /** @type {!HTMLElement} */
                       record.target;
                       var inert = target.hasAttribute('inert');
 
@@ -4859,7 +4859,7 @@
           /**
            * Recursively walk the composed tree from |node|.
            * @param {!Node} node
-           * @param {(function (!Element))=} callback Callback to be called for each element traversed,
+           * @param {(function (!HTMLElement))=} callback Callback to be called for each element traversed,
            *     before descending into child nodes.
            * @param {?ShadowRoot=} shadowRootAncestor The nearest ShadowRoot ancestor, if any.
            */
@@ -4868,7 +4868,7 @@
           function composedTreeWalk(node, callback, shadowRootAncestor) {
             if (node.nodeType == Node.ELEMENT_NODE) {
               var element =
-              /** @type {!Element} */
+              /** @type {!HTMLElement} */
               node;
 
               if (callback) {
@@ -4951,18 +4951,18 @@
             node.appendChild(style);
           }
 
-          if (!Element.prototype.hasOwnProperty('inert')) {
+          if (!HTMLElement.prototype.hasOwnProperty('inert')) {
             /** @type {!InertManager} */
             var inertManager = new InertManager(document);
-            Object.defineProperty(Element.prototype, 'inert', {
+            Object.defineProperty(HTMLElement.prototype, 'inert', {
               enumerable: true,
 
-              /** @this {!Element} */
+              /** @this {!HTMLElement} */
               get: function get() {
                 return this.hasAttribute('inert');
               },
 
-              /** @this {!Element} */
+              /** @this {!HTMLElement} */
               set: function set(inert) {
                 inertManager.setInert(this, inert);
               }
@@ -6294,8 +6294,8 @@
           let newProps = usePressEventHandlers(disabled || !handlesInput(tag, labelPosition, "label-element") ? undefined : stableOnInput, undefined)({});
 
           if (labelPosition == "wrapping") {
-            newProps.tabIndex = 0;
-            newProps.role = role;
+            if (p0.tabIndex == null) newProps.tabIndex = 0;
+            if (p0.role == null) newProps.role = role;
             newProps["aria-disabled"] = disabled.toString();
             newProps["aria-checked"] = checked.toString();
           } // Just make sure that label clicks can't affect the checkbox while it's disabled
@@ -7790,7 +7790,9 @@
       }); // Track whether the currently focused element is a child of the radio group parent element.
       // When it's not, we reset the tabbable index back to the currently selected element.
 
-      useActiveElement({
+      const {
+        useActiveElementProps
+      } = useActiveElement({
         onActiveElementChange: A$2(activeElement => {
           var _getRadioGroupParentE;
 
@@ -7804,8 +7806,8 @@
         let { ...props
         } = _ref2;
         props.role = "radiogroup";
-        return useListNavigationProps(useRefElementProps(props));
-      }, [useRefElementProps]);
+        return useListNavigationProps(useRefElementProps(useActiveElementProps(props)));
+      }, [useRefElementProps, useActiveElementProps]);
       let correctedIndex = selectedIndex == null || selectedIndex < 0 || selectedIndex >= managedChildren.length ? null : selectedIndex;
       useChildFlag({
         activatedIndex: correctedIndex,
@@ -7879,16 +7881,18 @@
             if (tag == "input") {
               props.name = name;
               props.checked = checked !== null && checked !== void 0 ? checked : false;
+              props.type = "radio";
             } else {
               props["aria-checked"] = (checked !== null && checked !== void 0 ? checked : false).toString();
             }
 
+            let propsIfInputHandlesFocus = useListNavigationChildProps(props);
             const {
               useCheckboxLikeInputElementProps
             } = useCheckboxLikeInputElement({
               tag
             });
-            return useMergedProps()(useListNavigationChildProps(useCheckboxLikeInputElementProps({})), props);
+            return useMergedProps()(useCheckboxLikeInputElementProps({}), labelPosition == "separate" ? propsIfInputHandlesFocus : props);
           };
 
           return {
@@ -7907,7 +7911,8 @@
             } = useCheckboxLikeLabelElement({
               tag
             });
-            return useCheckboxLikeLabelElementProps(useMergedProps()({}, props));
+            let propsIfLabelHandlesFocus = useListNavigationChildProps(props);
+            return useCheckboxLikeLabelElementProps(useMergedProps()({}, labelPosition == "wrapping" ? propsIfLabelHandlesFocus : props));
           };
 
           return {
@@ -7916,7 +7921,9 @@
         }, [useCheckboxLikeLabelElement]);
         return {
           useRadioInput,
-          useRadioLabel
+          useRadioLabel,
+          checked: checked !== null && checked !== void 0 ? checked : false,
+          tabbable: tabbable !== null && tabbable !== void 0 ? tabbable : false
         };
       }, [byName, useListNavigationChild]);
       return {
@@ -7927,7 +7934,8 @@
         tabbableIndex,
         focusRadio: focusCurrent,
         currentTypeahead,
-        invalidTypeahead
+        invalidTypeahead,
+        anyRadiosFocused
       };
     }
 
