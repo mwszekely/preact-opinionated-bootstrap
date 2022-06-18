@@ -44,7 +44,7 @@ export function DemoRanges() {
                         <ButtonGroupChild index={0} pressed={snap == "discrete"} onPressToggle={p => { p && setSnap("discrete")}}>Discrete</ButtonGroupChild>
                         <ButtonGroupChild index={1} pressed={snap == "continuous"} onPressToggle={p => { p && setSnap("continuous")}}>Continuous</ButtonGroupChild>
                     </ButtonGroup>
-                    <Input type="number" value={step} onValueChange={setStep} nonNullable>Step</Input>
+                    <Input type="number" min={1} value={step} onValueChange={setStep} nonNullable>Step</Input>
                     <Checkbox checked={vt} onCheck={setVt}>Use text label instead</Checkbox>
                 </CardElement>
             </Card>

@@ -23,26 +23,28 @@
     "preact": "^10.6.4"
   },
   "devDependencies": {
-    "@babel/preset-typescript": "^7.16.7",
     "@types/jsdom": "^16.2.14",
+    "@typescript-eslint/eslint-plugin": "^5.28.0",
+    "@typescript-eslint/parser": "^5.28.0",
     "enzyme": "^3.11.0",
-    "enzyme-adapter-preact-pure": "^3.3.0",
-    "jest": "^27.4.7",
+    "enzyme-adapter-preact-pure": "^4.0.1",
+    "eslint": "^8.18.0",
+    "jest": "^28.1.1",
     "jsdom": "^19.0.0",
     "npm-run-all": "^4.1.5",
-    "sass": "^1.48.0",
+    "sass": "^1.52.3",
     "serve": "^13.0.2",
-    "ts-jest": "^27.1.3",
-    "typescript": "^4.7.2"
+    "ts-jest": "^28.0.5",
+    "typescript": "^4.7.3"
   },
   "main": "index.js",
   "directories": {
     "test": "tests"
   },
   "dependencies": {
-    "@material/animation": "^13.0.0",
-    "@material/elevation": "^13.0.0",
-    "@popperjs/core": "^2.11.2",
+    "@material/animation": "^14.0.0",
+    "@material/elevation": "^14.0.0",
+    "@popperjs/core": "^2.11.5",
     "bootstrap": "^5.2.0-beta1",
     "bootstrap-icons": "^1.7.2",
     "bootstrap-sass-variables": "github:mwszekely/bootstrap-sass-variables",
