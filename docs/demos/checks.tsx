@@ -13,6 +13,8 @@ export function DemoChecks() {
     const [asyncTimeout, setAsyncTimeout] = useState<number | null>(3000);
     const [usesAsync, setUsesAsync] = useState(true);
 
+    const [tristate, setTristate] = useState(false);
+
     const [demoChecked, setDemoChecked] = useState(false);
     const [demoRadio, setDemoRadio] = useState(0);
     const [radioCount, setRadioCount] = useState<number | null>(3);
@@ -39,7 +41,7 @@ export function DemoChecks() {
         <div class="demo">
             <Card>
                 <CardElement type="title" tag="h2" >Checkboxes, switches, &amp; radios</CardElement>
-                <CardElement><Checkbox checked={demoChecked} onCheck={usesAsync ? asyncCheckboxInput : setDemoChecked}>I'm a checkbox</Checkbox></CardElement>
+                <CardElement><Checkbox checked={demoChecked} tristate={tristate} onCheck={usesAsync ? asyncCheckboxInput : setDemoChecked}>I'm a checkbox</Checkbox></CardElement>
 
                 <CardElement>
                     Several components related to on/off togglable form-like selection controls are provided:
@@ -49,7 +51,8 @@ export function DemoChecks() {
                         <li><code>RadioGroup</code></li>
                         <li><code>CheckboxGroup</code></li>
                     </ul>
-                    <code>Checkbox</code> and <code>Switch</code> work as you'd expect. <code>RadioGroup</code> is
+                    <code>Checkbox</code> and <code>Switch</code> work as you'd expect, though <code>Checkbox</code>
+                    comes with a <code>tristate</code> prop that no other toggle has. <code>RadioGroup</code> is
                     a parent around a set of <code>Radio</code> components that communicate with each other.
                     The children <code>Radio</code> components can be any descendant of the parent <code>RadioGroup</code> &ndash;
                     the DOM structure <em>does not</em> matter beyond requiring they be somewhere descendant. <code>CheckboxGroup</code> works
@@ -64,7 +67,7 @@ export function DemoChecks() {
                 </CardElement>
 
                 <CardElement type="subtitle" tag="h3">Checkbox</CardElement>
-                <CardElement><Checkbox disabled={disabled} checked={demoChecked} labelPosition={labelPosition} onCheck={usesAsync ? asyncCheckboxInput : setDemoChecked}>Checkbox</Checkbox></CardElement>
+                <CardElement><Checkbox disabled={disabled} checked={demoChecked} tristate={tristate} labelPosition={labelPosition} onCheck={usesAsync ? asyncCheckboxInput : setDemoChecked}>Checkbox</Checkbox></CardElement>
                 <CardElement>The <code>checked</code> prop can be <code>true</code>, <code>false</code>, or <code>mixed</code>.
                     The <code>onCheck</code> event fires when the user initiates a change.</CardElement>
 
@@ -91,6 +94,7 @@ export function DemoChecks() {
                         <InputGroup><Checkbox onCheck={setUsesAsync} checked={usesAsync} labelPosition="start">Async event handler</Checkbox></InputGroup>
                         <InputGroup><Checkbox onCheck={setAsyncFails} checked={asyncFails} labelPosition="start" disabled={!usesAsync}>Async handler rejects</Checkbox></InputGroup>
                         <InputGroup><Input disabled={!usesAsync} type="number" onValueChange={setAsyncTimeout} value={asyncTimeout}>Async timeout</Input></InputGroup>
+                        <InputGroup><Checkbox onCheck={setTristate} checked={tristate} labelPosition="start">Tri-state checkbox</Checkbox></InputGroup>
                         <InputGroup><Input type="number" onValueChange={setRadioCount} value={radioCount}># of radio buttons</Input></InputGroup>
                         <InputGroup><Checkbox onCheck={setDisabled} checked={disabled} labelPosition="start">Inputs disabled</Checkbox></InputGroup>
                         <RadioGroup<LabelPosition> name="radio-demo-6" selectedValue={labelPosition} onValueChange={setLabelPosition}>
@@ -104,7 +108,7 @@ export function DemoChecks() {
                 </CardElement>
                 <GridStatic columns={2}>
                     <CardElement>
-                        <Checkbox disabled={disabled} checked={demoChecked} labelPosition={labelPosition} onCheck={usesAsync ? asyncCheckboxInput : setDemoChecked}>Checkbox</Checkbox>
+                        <Checkbox disabled={disabled} checked={demoChecked} tristate={tristate} labelPosition={labelPosition} onCheck={usesAsync ? asyncCheckboxInput : setDemoChecked}>Checkbox</Checkbox>
                         <Switch disabled={disabled} checked={demoChecked} labelPosition={labelPosition} onCheck={usesAsync ? asyncCheckboxInput : setDemoChecked}>Switch</Switch>
                         <RadioGroup<number> name="radio-demo-1a" selectedValue={demoRadio} onValueChange={usesAsync ? asyncRadioInput : setDemoRadio}>
                             {Array.from(function* () {
@@ -116,7 +120,7 @@ export function DemoChecks() {
                     </CardElement>
                     <CardElement>
                         <InputGrid>
-                            <InputGroup><Checkbox disabled={disabled} labelPosition={labelPosition} checked={demoChecked} onCheck={usesAsync ? asyncCheckboxInput : setDemoChecked}>Checkbox</Checkbox></InputGroup>
+                            <InputGroup><Checkbox disabled={disabled} labelPosition={labelPosition} checked={demoChecked} tristate={tristate} onCheck={usesAsync ? asyncCheckboxInput : setDemoChecked}>Checkbox</Checkbox></InputGroup>
                             <InputGroup><Switch disabled={disabled} labelPosition={labelPosition} checked={demoChecked} onCheck={usesAsync ? asyncCheckboxInput : setDemoChecked}>Switch</Switch></InputGroup>
 
                             <RadioGroup<number> name="radio-demo-1b" selectedValue={demoRadio} onValueChange={usesAsync ? asyncRadioInput : setDemoRadio}>
@@ -134,9 +138,9 @@ export function DemoChecks() {
                 </GridStatic>
 
                 <CardElement type="paragraph">
-                    <code>{`<Checkbox checked={checked} onInput={setChecked}>Checkbox</Checkbox>
-<Switch checked={checked} onInput={onInput}>Switch</Switch>
-<RadioGroup name="radio-demo-1" selectedValue={value} onInput={setValue}>
+                    <code>{`<Checkbox checked={checked} tristate={tristate} onCheck={setChecked}>Checkbox</Checkbox>
+<Switch checked={checked} onCheck={onInput}>Switch</Switch>
+<RadioGroup name="radio-demo-1" selectedValue={value} onValueChange={setValue}>
 <Radio index={0} value="value1">Radio #1</Radio>
 <Radio index={1} value="value2">Radio #2</Radio>
 <Radio index={2} value="value3">Radio #3</Radio>

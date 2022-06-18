@@ -16,6 +16,7 @@ export interface CheckboxProps extends Omit<GlobalAttributes<HTMLDivElement>, "r
     onCheck?(checked: boolean, event: h.JSX.TargetedEvent<HTMLInputElement>): void | Promise<void>;
     labelPosition?: "start" | "end" | "hidden" | "tooltip" | "button";
     inline?: boolean;
+    tristate?: boolean;     // When true, clicking the checkbox cycles through all three states instead of just true/false.
 }
 
 function capture(e: h.JSX.TargetedEvent<HTMLInputElement>): boolean {
@@ -28,7 +29,7 @@ function capture(e: h.JSX.TargetedEvent<HTMLInputElement>): boolean {
  * Probably need separate `inputRef` & `labelRef` properties for that, 
  * but given there's also no easy way to forward props to just them a solution like that feels incomplete.
  */
-export const Checkbox = memo(forwardElementRef(function Checkbox({ checked, disabled, inline, onCheck: onCheckedAsync, labelPosition, children: label, tabIndex, ...props }: CheckboxProps, ref: Ref<HTMLInputElement>) {
+export const Checkbox = memo(forwardElementRef(function Checkbox({ checked, tristate, disabled, inline, onCheck: onCheckedAsync, labelPosition, children: label, tabIndex, ...props }: CheckboxProps, ref: Ref<HTMLInputElement>) {
 
 
     const inInputGroup = useContext(InInputGroupContext);
@@ -40,8 +41,26 @@ export const Checkbox = memo(forwardElementRef(function Checkbox({ checked, disa
     const asyncState = (hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null);
 
 
-    const onChecked = useSyncHandler(onCheckedAsync) as unknown as I;
-    const { useCheckboxInputElement, useCheckboxLabelElement } = useAriaCheckbox<HTMLInputElement, HTMLLabelElement | HTMLDivElement>({ checked: pending ? currentCapture! : ((checked as string) === "indeterminate" ? "mixed" : checked), disabled: disabled ?? false, onInput: onChecked, labelPosition: "separate" });
+    const onChecked = useSyncHandler((newCheckedValue, event) => {
+        if (tristate) {
+            if (checked == false)
+                return onCheckedAsync?.("mixed" as unknown as boolean, event);
+            else if (checked === "mixed")
+                return onCheckedAsync?.(true, event);
+            else
+                return onCheckedAsync?.(false, event);
+        }
+        else {
+            return onCheckedAsync?.(newCheckedValue, event);
+        }
+    }) as unknown as I;
+
+    const { useCheckboxInputElement, useCheckboxLabelElement } = useAriaCheckbox<HTMLInputElement, HTMLLabelElement | HTMLDivElement>({
+        checked: pending ? currentCapture! : ((checked as string) === "indeterminate" ? "mixed" : checked),
+        disabled: disabled ?? false,
+        onInput: onChecked,
+        labelPosition: "separate"
+    });
 
     const { useCheckboxInputElementProps } = useCheckboxInputElement({ tag: "input" });
     const { useCheckboxLabelElementProps } = useCheckboxLabelElement({ tag: "label" });
