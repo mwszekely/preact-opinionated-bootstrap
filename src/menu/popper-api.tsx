@@ -8,7 +8,7 @@ import { OnPassiveStateChange, PassiveStateUpdater } from "preact-prop-helpers/u
 
 function returnNull() { return null; }
 
-export function usePopperApi({ updating, align, side, useArrow, followMouse, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight, childSelector }: UsePopperParameters) {
+export function usePopperApi<S extends Element, P extends HTMLElement, A extends Element>({ updating, align, side, useArrow, followMouse, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight, childSelector }: UsePopperParameters) {
 
     const [popperInstance, setPopperInstance, getPopperInstance] = useState<Instance | null>(null);
     const [usedSide, setUsedSide] = useState<typeof side>(side);
@@ -41,7 +41,7 @@ export function usePopperApi({ updating, align, side, useArrow, followMouse, ski
     const [getMouseX, setMouseX] = usePassiveState<number | null>(useCallback(() => void (getPopperInstance()?.update()), []), returnNull);
     const [getMouseY, setMouseY] = usePassiveState<number | null>(useCallback(() => void (getPopperInstance()?.update()), []), returnNull);
 
-    const resetPopperInstance = useCallback((sourceElement: Element | null, popperElement: HTMLElement | null) => {
+    const resetPopperInstance = useCallback((sourceElement: S | null, popperElement: P | null) => {
         if (sourceElement && popperElement) {
             const onFirstUpdate: (arg0: Partial<State>) => void = () => { };
             const strategy: PositioningStrategy | undefined = "absolute";
@@ -79,7 +79,7 @@ export function usePopperApi({ updating, align, side, useArrow, followMouse, ski
 
                     let sourceElement = getSourceElement();
                     if (childSelector && sourceElement)
-                        sourceElement = childSelector(sourceElement);
+                        sourceElement = childSelector(sourceElement) as S | null;
 
                     let baseRect = focusedElement ? (focusedElement as Element).getBoundingClientRect?.() : sourceElement?.getBoundingClientRect();
                     let x = baseRect?.x ?? 0;
@@ -172,9 +172,9 @@ export function usePopperApi({ updating, align, side, useArrow, followMouse, ski
         }
     }, []), useCallback(() => ({ sourceElement: null, popperElement: null }), []));
 
-    const { getElement: getSourceElement, useRefElementProps: useSourceElementRefProps } = useRefElement<Element>({ onElementChange: useCallback((e: any) => setAllElements(elements => ({ ...elements, sourceElement: e } as I)), []) } as any);
-    const { getElement: getPopperElement, useRefElementProps: usePopperElementRefProps } = useRefElement<HTMLElement>({ onElementChange: useCallback((e: HTMLElement | null) => setAllElements(elements => ({ ...elements, popperElement: e } as I)), []) });
-    const { getElement: getArrowElement, useRefElementProps: useArrowElementRefProps } = useRefElement<Element>({});
+    const { getElement: getSourceElement, useRefElementProps: useSourceElementRefProps } = useRefElement<S>({ onElementChange: useCallback((e: S | null) => setAllElements(elements => ({ ...elements, sourceElement: e } as I)), []) } as any);
+    const { getElement: getPopperElement, useRefElementProps: usePopperElementRefProps } = useRefElement<P>({ onElementChange: useCallback((e: P | null) => setAllElements(elements => ({ ...elements, popperElement: e } as I)), []) });
+    const { getElement: getArrowElement, useRefElementProps: useArrowElementRefProps } = useRefElement<A>({});
 
     const [sourceStyle, setSourceStyle] = useState<Partial<Omit<CSSStyleDeclaration, typeof Symbol["iterator"]>> | null>(null);
     const [sourceAttributes, setSourceAttributes] = useState<{ [key: string]: string | boolean; }>({});
@@ -251,10 +251,10 @@ export function usePopperApi({ updating, align, side, useArrow, followMouse, ski
 
 
 
-    function usePopperSource<E extends Element>() {
-        function usePopperSourceProps<P extends h.JSX.HTMLAttributes<E>>(props: P) {
+    function usePopperSource() {
+        function usePopperSourceProps<P extends h.JSX.HTMLAttributes<S>>(props: P) {
             let style = { ...(sourceStyle as h.JSX.CSSProperties) };
-            return useSourceElementRefProps(useMergedProps<E>()(sourceAttributes as any, useMergedProps<E>()({
+            return useSourceElementRefProps(useMergedProps<S>()(sourceAttributes as any, useMergedProps<S>()({
                 style,
                 onMouseMove: !followMouse ? undefined : (e) => {
                     const { clientX, clientY } = e;
@@ -262,26 +262,26 @@ export function usePopperApi({ updating, align, side, useArrow, followMouse, ski
                     setMouseY(clientY);
                     setPositionPreference("mouse")
                 }
-            }, ((useLogicalDirectionProps(props) as any) as h.JSX.HTMLAttributes<E>))));
+            }, ((useLogicalDirectionProps(props) as any) as h.JSX.HTMLAttributes<S>))));
         }
 
         return { usePopperSourceProps };
 
     }
 
-    function usePopperPopup<E extends Element>({ open }: { open: boolean }) {
-        function usePopperPopupProps<P extends h.JSX.HTMLAttributes<E>>(props: P) {
+    function usePopperPopup({ open }: { open: boolean }) {
+        function usePopperPopupProps<P2 extends h.JSX.HTMLAttributes<P>>(props: P2) {
             let style = { ...(popperStyle as h.JSX.CSSProperties), pointerEvents: open ? undefined : "none" };
-            return usePopperElementRefProps(useMergedProps<E>()({ style }, props as any) as h.JSX.HTMLAttributes<E>);
+            return useMergedProps<P>()(usePopperElementRefProps({ style }), props as any);
         }
 
         return { usePopperPopupProps };
     }
 
-    function usePopperArrow<E extends Element>() {
-        function usePopperArrowProps<P extends h.JSX.HTMLAttributes<E>>(props: P) {
+    function usePopperArrow() {
+        function usePopperArrowProps<P extends h.JSX.HTMLAttributes<A>>(props: P) {
             let style = { ...(arrowStyle as h.JSX.CSSProperties) };
-            return useMergedProps<E>()(popperAttributes as any, useMergedProps<E>()({ style }, useArrowElementRefProps(props as any) as h.JSX.HTMLAttributes<E>));
+            return useMergedProps<A>()(popperAttributes as any, useMergedProps<A>()({ style }, useArrowElementRefProps(props as any) as h.JSX.HTMLAttributes<A>));
         }
 
         return { usePopperArrowProps };

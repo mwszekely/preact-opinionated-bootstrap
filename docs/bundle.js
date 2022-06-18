@@ -13999,9 +13999,9 @@
 	      let style = { ...popperStyle,
 	        pointerEvents: open ? undefined : "none"
 	      };
-	      return usePopperElementRefProps(useMergedProps()({
+	      return useMergedProps()(usePopperElementRefProps({
 	        style
-	      }, props));
+	      }), props);
 	    }
 
 	    return {
@@ -14755,6 +14755,7 @@
 	  } = useChildrenTextProps({ ...p,
 	    ref
 	  });
+	  checked || (checked = false);
 	  const randomId = generateRandomId("cbc-");
 	  (_id = id) !== null && _id !== void 0 ? _id : id = randomId;
 	  const useCheckboxGroupChild = T$2(UseCheckboxGroupChildContext);
@@ -14768,7 +14769,7 @@
 	    useCheckboxGroupChildProps
 	  } = useCheckboxGroupChild({
 	    index,
-	    checked,
+	    checked: checked,
 	    text: childrenText,
 	    id,
 	    setChecked
@@ -15699,14 +15700,16 @@
 	  });
 	}));
 	const ListItemMulti = g$1(forwardElementRef(function ListItemMulti(p, ref) {
+	  var _ref;
+
 	  const {
 	    childrenText,
 	    props: {
 	      index,
 	      selected,
 	      disabled,
-	      onSelect: onSelectAsync,
 	      children,
+	      onSelectChange: onSelectAsync,
 	      ...domProps
 	    }
 	  } = useChildrenTextProps({ ...p,
@@ -15732,7 +15735,7 @@
 	    index,
 	    text: childrenText,
 	    tag: "li",
-	    selected: currentCapture !== null && currentCapture !== void 0 ? currentCapture : selected,
+	    selected: (_ref = currentCapture !== null && currentCapture !== void 0 ? currentCapture : selected) !== null && _ref !== void 0 ? _ref : false,
 	    onSelect: onSelectSync,
 	    disabled
 	  });
@@ -15755,7 +15758,7 @@
 
 	  useLogRender("ListSingle", `Rendering ListSingle`);
 	  let {
-	    onSelect: onSelectAsync,
+	    onSelectChange: onSelectAsync,
 	    selectedIndex,
 	    selectionMode,
 	    collator,
@@ -15937,7 +15940,7 @@
 	}
 
 	function isSingleProps(props) {
-	  return props.select == "single" || props.onSelect != null;
+	  return props.select == "single" || props.onSelectChange != null;
 	}
 
 	function isMultiProps(props) {
@@ -15949,7 +15952,7 @@
 	}
 
 	function isMultiItemProps(props) {
-	  return props.onSelect != null;
+	  return props.onSelectChange != null;
 	}
 
 	function isActionableItemProps(props) {
@@ -16963,7 +16966,7 @@
 	                }
 	            })()) });
 	    }
-	    return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Lists" }), e$3(CardElement, { children: e$3(List, { label: "Demo list", selectedIndex: selectedIndex, onSelect: setSelectedIndex, children: makeListItems(index => e$3(ListItemSingle, { index: index, disabled: index == 3, children: makeListItemLines(index) })) }) }), e$3(CardElement, { children: ["A list is a way to provide a large number of selectable options in a way that's distinct from, say, a list of checkboxes or radio buttons. Lists can be ", e$3("strong", { children: "single-select" }), ", ", e$3("strong", { children: "multi-select" }), ", or ", e$3("strong", { children: "static" }), " (no selection, display only)."] }), e$3(CardElement, { children: ["All list types can have as many lines as needed; each e.g. ", e$3("code", { children: "<span>" }), " will create a new line. Format them however you like (i.e. making some larger or smaller, tinted different colors, etc.)", e$3(InputGroup, { children: e$3(Input, { type: "number", nonNullable: true, value: lines, onValueChange: setLines, children: "# of lines" }) })] }), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Single select" }), e$3(CardElement, { children: ["For single-select lists, you provide the parent ", e$3("code", { children: "<List>" }), " with ", e$3("code", { children: "selectedIndex" }), " and ", e$3("code", { children: "onSelect" }), " props that control which ", e$3("code", { children: "<ListItemSingle>" }), " is the selected one."] }), e$3(CardElement, { children: ["As with most components, the ", e$3("code", { children: "onSelect" }), " prop can be an async function."] }), e$3(CardElement, { children: e$3(List, { label: "Single-select list demo", selectedIndex: selectedIndex, onSelect: async (i) => { await sleep$3(2000); setSelectedIndex(i); }, children: makeListItems(index => e$3(ListItemSingle, { index: index, disabled: index == 3, children: makeListItemLines(index) })) }) }), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Multi select" }), e$3(CardElement, { children: ["Multi-select lists have a ", e$3("code", { children: "selected" }), " prop on each individual ", e$3("code", { children: "<ListItemMulti>" }), "."] }), e$3(CardElement, { children: ["As with most components, the ", e$3("code", { children: "onSelect" }), " prop can be an async function."] }), e$3(CardElement, { children: e$3(List, { label: "Multi-select list demo", select: "multi", children: makeListItems(index => e$3(ListItemMulti, { index: index, selected: selectedMulti.has(index), disabled: index == 3, onSelect: async (selected) => {
+	    return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Lists" }), e$3(CardElement, { children: e$3(List, { label: "Demo list", selectedIndex: selectedIndex, onSelectChange: setSelectedIndex, children: makeListItems(index => e$3(ListItemSingle, { index: index, disabled: index == 3, children: makeListItemLines(index) })) }) }), e$3(CardElement, { children: ["A list is a way to provide a large number of selectable options in a way that's distinct from, say, a list of checkboxes or radio buttons. Lists can be ", e$3("strong", { children: "single-select" }), ", ", e$3("strong", { children: "multi-select" }), ", or ", e$3("strong", { children: "static" }), " (no selection, display only)."] }), e$3(CardElement, { children: ["All list types can have as many lines as needed; each e.g. ", e$3("code", { children: "<span>" }), " will create a new line. Format them however you like (i.e. making some larger or smaller, tinted different colors, etc.)", e$3(InputGroup, { children: e$3(Input, { type: "number", nonNullable: true, value: lines, onValueChange: setLines, children: "# of lines" }) })] }), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Single select" }), e$3(CardElement, { children: ["For single-select lists, you provide the parent ", e$3("code", { children: "<List>" }), " with ", e$3("code", { children: "selectedIndex" }), " and ", e$3("code", { children: "onSelect" }), " props that control which ", e$3("code", { children: "<ListItemSingle>" }), " is the selected one."] }), e$3(CardElement, { children: ["As with most components, the ", e$3("code", { children: "onSelect" }), " prop can be an async function."] }), e$3(CardElement, { children: e$3(List, { label: "Single-select list demo", selectedIndex: selectedIndex, onSelectChange: async (i) => { await sleep$3(2000); setSelectedIndex(i); }, children: makeListItems(index => e$3(ListItemSingle, { index: index, disabled: index == 3, children: makeListItemLines(index) })) }) }), e$3(CardElement, { type: "subtitle", tag: "h3", children: "Multi select" }), e$3(CardElement, { children: ["Multi-select lists have a ", e$3("code", { children: "selected" }), " prop on each individual ", e$3("code", { children: "<ListItemMulti>" }), "."] }), e$3(CardElement, { children: ["As with most components, the ", e$3("code", { children: "onSelect" }), " prop can be an async function."] }), e$3(CardElement, { children: e$3(List, { label: "Multi-select list demo", select: "multi", children: makeListItems(index => e$3(ListItemMulti, { index: index, selected: selectedMulti.has(index), disabled: index == 3, onSelectChange: async (selected) => {
 	                                await sleep$3(2000);
 	                                setSelectedMulti(prev => {
 	                                    let ret = new Set(Array.from(prev));
@@ -17286,7 +17289,7 @@
 	    const [vt, setVt] = useState(false);
 	    const [value, setValue] = useState(0);
 	    const getValueText = F((n) => { return "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[Math.round(n)]; }, []);
-	    return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Ranges" }), e$3(CardElement, { children: e$3(Range, { label: "Test range", step: step, snap: snap, min: min, max: max, value: value, onValueChange: setValue, getValueText: vt ? getValueText : undefined }) }), e$3(CardElement, { children: "A range allows for selection of a number between some minimum and maximum values. Ranges can optionally have a step value that determines which numbers within the [min, max] range are acceptable, and this can be optional, allowing a continuous selection of values with only an initial snap to those preferred values." }), e$3(CardElement, { children: ["The ", e$3("code", { children: "snap" }), " prop can be set to either ", e$3("code", { children: "\"discrete\"" }), " (default) or ", e$3("code", { children: "\"continuous\"" }), ". The former allows selection ", e$3("em", { children: "only" }), " of values that match the ", e$3("code", { children: "step" }), " prop. The latter will ", e$3("em", { children: "prefer" }), " selection of those values, but will allow any number within the range."] }), e$3(CardElement, { children: ["The range is linear by default, but you can use the ", e$3("code", { children: "getValueText" }), " prop to show other number scales, such as logarithmic scales, text-based scales, etc. The ", e$3("code", { children: "getTooltipText" }), " prop is similar, defaulting to whatever", e$3("code", { children: "getValueText" }), " is, and is the value displayed by the tooltip itself (", e$3("code", { children: "getValueText" }), " is used by the tick markers and assistive technologies)."] }), e$3(CardElement, { children: [e$3(ButtonGroup, { children: [e$3(ButtonGroupChild, { index: 0, pressed: snap == "discrete", onPressToggle: p => { p && setSnap("discrete"); }, children: "Discrete" }), e$3(ButtonGroupChild, { index: 1, pressed: snap == "continuous", onPressToggle: p => { p && setSnap("continuous"); }, children: "Continuous" })] }), e$3(Input, { type: "number", value: step, onValueChange: setStep, nonNullable: true, children: "Step" }), e$3(Checkbox, { checked: vt, onCheck: setVt, children: "Use text label instead" })] })] }) }));
+	    return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Ranges" }), e$3(CardElement, { children: e$3(Range, { label: "Test range", step: step, snap: snap, min: min, max: max, value: value, onValueChange: setValue, getValueText: vt ? getValueText : undefined }) }), e$3(CardElement, { children: "A range allows for selection of a number between some minimum and maximum values. Ranges can optionally have a step value that determines which numbers within the [min, max] range are acceptable, and this can be optional, allowing a continuous selection of values with only an initial snap to those preferred values." }), e$3(CardElement, { children: ["The ", e$3("code", { children: "snap" }), " prop can be set to either ", e$3("code", { children: "\"discrete\"" }), " (default) or ", e$3("code", { children: "\"continuous\"" }), ". The former allows selection ", e$3("em", { children: "only" }), " of values that match the ", e$3("code", { children: "step" }), " prop. The latter will ", e$3("em", { children: "prefer" }), " selection of those values, but will allow any number within the range."] }), e$3(CardElement, { children: ["The range is linear by default, but you can use the ", e$3("code", { children: "getValueText" }), " prop to show other number scales, such as logarithmic scales, text-based scales, etc. The ", e$3("code", { children: "getTooltipText" }), " prop is similar, defaulting to whatever", e$3("code", { children: "getValueText" }), " is, and is the value displayed by the tooltip itself (", e$3("code", { children: "getValueText" }), " is used by the tick markers and assistive technologies)."] }), e$3(CardElement, { children: [e$3(ButtonGroup, { children: [e$3(ButtonGroupChild, { index: 0, pressed: snap == "discrete", onPressToggle: p => { p && setSnap("discrete"); }, children: "Discrete" }), e$3(ButtonGroupChild, { index: 1, pressed: snap == "continuous", onPressToggle: p => { p && setSnap("continuous"); }, children: "Continuous" })] }), e$3(Input, { type: "number", min: 1, value: step, onValueChange: setStep, nonNullable: true, children: "Step" }), e$3(Checkbox, { checked: vt, onCheck: setVt, children: "Use text label instead" })] })] }) }));
 	}
 
 	const TableHeadContext = D$1(null);
@@ -18297,7 +18300,7 @@
 	});
 	const DemoList = g$1(() => {
 	    const [index, setIndex] = useState(0);
-	    return (e$3("div", { class: "demo", children: ["Selected: ", index, e$3(ListSingle, { label: "Example list", select: "single", onSelect: setIndex, selectedIndex: index, selectionMode: "activate", tag: "ul", children: [e$3(ListItemSingle, { index: 0, children: "Primary" }), e$3(ListItemSingle, { index: 1, children: "Secondary" }), e$3(ListItemSingle, { index: 2, children: "Success" }), e$3(ListItemSingle, { index: 3, children: "Warning" }), e$3(ListItemSingle, { index: 4, children: "Danger" }), e$3(ListItemSingle, { index: 5, children: "Info" }), e$3(ListItemSingle, { index: 6, children: "Light" }), e$3(ListItemSingle, { index: 7, children: "Dark" }), e$3(ListItemSingle, { index: 8, children: "Link" })] })] }));
+	    return (e$3("div", { class: "demo", children: ["Selected: ", index, e$3(ListSingle, { label: "Example list", select: "single", onSelectChange: setIndex, selectedIndex: index, selectionMode: "activate", tag: "ul", children: [e$3(ListItemSingle, { index: 0, children: "Primary" }), e$3(ListItemSingle, { index: 1, children: "Secondary" }), e$3(ListItemSingle, { index: 2, children: "Success" }), e$3(ListItemSingle, { index: 3, children: "Warning" }), e$3(ListItemSingle, { index: 4, children: "Danger" }), e$3(ListItemSingle, { index: 5, children: "Info" }), e$3(ListItemSingle, { index: 6, children: "Light" }), e$3(ListItemSingle, { index: 7, children: "Dark" }), e$3(ListItemSingle, { index: 8, children: "Link" })] })] }));
 	});
 	const DemoInput = g$1(() => {
 	    const [text, setText] = useState("");

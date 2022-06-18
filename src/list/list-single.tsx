@@ -22,7 +22,7 @@ export interface ListSingleProps<E extends HTMLUListElement | HTMLOListElement> 
     select?: "single";
     selectionMode?: UseListboxSingleParameters["selectionMode"];
     children: ComponentChildren;
-    onSelect(index: number): void | Promise<void>;
+    onSelectChange(index: number): void | Promise<void>;
     labelPosition?: "start" | "end" | "hidden";
     label: h.JSX.Element | string;
 }
@@ -30,7 +30,7 @@ export interface ListSingleProps<E extends HTMLUListElement | HTMLOListElement> 
 export const UseListboxSingleItemContext = createContext<UseListboxSingleItem<HTMLLIElement, ListSingleItemInfo<HTMLLIElement>>>(null!);
 export const ListSingle = memo(forwardElementRef(function ListSingle<E extends HTMLUListElement | HTMLOListElement>(props: ListSingleProps<E>, ref: Ref<E>) {
     useLogRender("ListSingle", `Rendering ListSingle`);
-    let { onSelect: onSelectAsync, selectedIndex, selectionMode, collator, keyNavigation, noTypeahead, noWrap, typeaheadTimeout, tag, select, labelPosition, label, ...domProps } = props;
+    let { onSelectChange: onSelectAsync, selectedIndex, selectionMode, collator, keyNavigation, noTypeahead, noWrap, typeaheadTimeout, tag, select, labelPosition, label, ...domProps } = props;
     const { useSyncHandler, pending, currentCapture } = useAsyncHandler<E>()({ capture: (e: any) => e[EventDetail].selectedIndex as number });
     const onSelect = useSyncHandler(onSelectAsync);
     const { useListboxSingleItem, useListboxSingleLabel, useListboxSingleProps, managedChildren } = useAriaListboxSingle<E, HTMLLIElement, ListSingleItemInfo<HTMLLIElement>>({ onSelect, selectedIndex: selectedIndex, selectionMode: selectionMode ?? "activate", typeaheadTimeout, noWrap, noTypeahead, keyNavigation, collator });

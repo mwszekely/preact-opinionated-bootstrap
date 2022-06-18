@@ -34,7 +34,7 @@ export function useChildrenTextProps<P extends { children?: ComponentChildren; r
     }, [childrenNotStringable, childrenNotStringable ? null : children]);
 
 
-    return { childrenText: text, props: useMutationObserverProps(useRefElementProps(props)) };
+    return { childrenText: text, props: useMutationObserverProps(useRefElementProps(props)) as P };
 }
 
 function childrenToString(children: ComponentChildren): string {

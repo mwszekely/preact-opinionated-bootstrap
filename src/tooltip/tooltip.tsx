@@ -51,10 +51,10 @@ export const Tooltip = memo(forwardElementRef(function Tooltip<T extends <E exte
     const { useTooltipTriggerProps } = useTooltipTrigger();
     const { shouldUpdate, onInteraction } = useShouldUpdatePopper(isOpen);
     const { useElementSizeProps } = useElementSize<any>({ onSizeChange: useStableCallback(onInteraction ?? (() => { })) });
-    const { logicalDirection, usePopperArrow, usePopperPopup, usePopperSource, flipTransformProps } = usePopperApi({ updating: shouldUpdate, side, align, useArrow: true, followMouse: true, childSelector });
+    const { logicalDirection, usePopperArrow, usePopperPopup, usePopperSource, flipTransformProps } = usePopperApi<HTMLDivElement, HTMLDivElement, HTMLDivElement>({ updating: shouldUpdate, side, align, useArrow: true, followMouse: true, childSelector });
 
-    const { usePopperPopupProps } = usePopperPopup<HTMLDivElement>({ open: isOpen });
-    const { usePopperArrowProps } = usePopperArrow<HTMLDivElement>();
+    const { usePopperPopupProps } = usePopperPopup({ open: isOpen });
+    const { usePopperArrowProps } = usePopperArrow();
     const { usePopperSourceProps } = usePopperSource();
 
 

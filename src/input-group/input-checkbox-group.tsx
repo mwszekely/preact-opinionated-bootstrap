@@ -112,6 +112,7 @@ export type CheckboxGroupChildProps = CheckboxGroupChildProps1 | CheckboxGroupCh
 export const CheckboxGroupChild = memo(forwardElementRef(function CheckboxGroupChild(p: CheckboxGroupChildProps, ref?: Ref<any>) {
 
     let { childrenText, props: { index, checked, onCheck, id, ...props } } = useChildrenTextProps({ ...p, ref });
+    checked ||= false;
 
     const randomId = generateRandomId("cbc-");
     id ??= randomId;
@@ -124,11 +125,11 @@ export const CheckboxGroupChild = memo(forwardElementRef(function CheckboxGroupC
 
 
 
-    const { tabbable, useCheckboxGroupChildProps } = useCheckboxGroupChild({ index, checked, text: childrenText, id, setChecked });
+    const { tabbable, useCheckboxGroupChildProps } = useCheckboxGroupChild({ index, checked: checked, text: childrenText, id, setChecked });
 
 
     return (
-        <Checkbox {...useCheckboxGroupChildProps({ id, ...props })} onCheck={onCheck} checked={checked} />
+        <Checkbox {...useCheckboxGroupChildProps({ id, ...(props as any) })} onCheck={onCheck} checked={checked} />
     )
 }));
 

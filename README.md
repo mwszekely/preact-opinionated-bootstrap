@@ -1,20 +1,18 @@
 # Preact Onionated Bootstrap
 \*Opionionated
 
+```tsx
+// Button will start showing a spinner after 1 second of waiting
+<Button onClick={sleep10Sec}>Click me</Button>
+
+// ...somewhere else
+async function sleep10Sec() { return await new Promise(resolve => setTimeout(resolve, 10000)); }
+```
+
 Preact widgets like buttons, menus, form fields, etc. Priorities on ARIA compliance (including user-friendly keyboard & assistive technology navigation), looking pleasant, and having an simple (one might say opinionated) API that removes the most common boilerplate (e.g. allowing inputs such as checkboxes to take an async `onInput` handler and adapt accordingly).
 
 
-
-```tsx
-
-// Function to wait 5 seconds. Most components wait 1 second to show a spinner.
-const sleep = () => new Promise(resolve => setTimeout(resolve, 5000));
-
-// Button will start showing a spinner after 1 second of waiting
-<Button onClick={sleep}>Click me</Button>
-```
-
-**This library is Unlicenced into the public domain.** Just take anything interesting you like from it&mdash;it's mostly a personal project.
+**This library is Unlicenced into the public domain.** Just take anything interesting you like from it&mdash;it's really just a personal project.
 
 [See a demo of various components together on a page here.](https://mwszekely.github.io/preact-opinionated-bootstrap/)
 

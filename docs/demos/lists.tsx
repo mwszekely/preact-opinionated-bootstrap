@@ -70,7 +70,7 @@ export function DemoLists() {
         <div class="demo">
             <Card>
                 <CardElement type="title" tag="h2">Lists</CardElement>
-                <CardElement><List label="Demo list" selectedIndex={selectedIndex} onSelect={setSelectedIndex}>{makeListItems(index => <ListItemSingle index={index} disabled={index == 3}>{makeListItemLines(index)}</ListItemSingle>)}</List></CardElement>
+                <CardElement><List label="Demo list" selectedIndex={selectedIndex} onSelectChange={setSelectedIndex}>{makeListItems(index => <ListItemSingle index={index} disabled={index == 3}>{makeListItemLines(index)}</ListItemSingle>)}</List></CardElement>
 
                 <CardElement>
                     A list is a way to provide a large number of selectable options in a way that's distinct from, say, a list of checkboxes or radio buttons. Lists can be <strong>single-select</strong>, <strong>multi-select</strong>, or <strong>static</strong> (no selection, display only).
@@ -86,7 +86,7 @@ export function DemoLists() {
                     For single-select lists, you provide the parent <code>&lt;List&gt;</code> with <code>selectedIndex</code> and <code>onSelect</code> props that control which <code>&lt;ListItemSingle&gt;</code> is the selected one.
                 </CardElement>
                 <CardElement>As with most components, the <code>onSelect</code> prop can be an async function.</CardElement>
-                <CardElement><List label="Single-select list demo" selectedIndex={selectedIndex} onSelect={async (i) => { await sleep(2000); setSelectedIndex(i) }}>{makeListItems(index => <ListItemSingle index={index}  disabled={index == 3}>{makeListItemLines(index)}</ListItemSingle>)}</List></CardElement>
+                <CardElement><List label="Single-select list demo" selectedIndex={selectedIndex} onSelectChange={async (i) => { await sleep(2000); setSelectedIndex(i) }}>{makeListItems(index => <ListItemSingle index={index}  disabled={index == 3}>{makeListItemLines(index)}</ListItemSingle>)}</List></CardElement>
 
 
                 <CardElement type="subtitle" tag="h3">Multi select</CardElement>
@@ -94,7 +94,7 @@ export function DemoLists() {
                     Multi-select lists have a <code>selected</code> prop on each individual <code>&lt;ListItemMulti&gt;</code>.
                 </CardElement>
                 <CardElement>As with most components, the <code>onSelect</code> prop can be an async function.</CardElement>
-                <CardElement><List label="Multi-select list demo" select="multi">{makeListItems(index => <ListItemMulti index={index} selected={selectedMulti.has(index)}  disabled={index == 3} onSelect={async (selected) => {
+                <CardElement><List label="Multi-select list demo" select="multi">{makeListItems(index => <ListItemMulti index={index} selected={selectedMulti.has(index)}  disabled={index == 3} onSelectChange={async (selected) => {
                     await sleep(2000); setSelectedMulti(prev => {
                         let ret = new Set(Array.from(prev));
                         if (selected)

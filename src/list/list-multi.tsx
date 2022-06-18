@@ -2,9 +2,9 @@ import clsx from "clsx";
 import { cloneElement, ComponentChildren, createContext, h, Ref, VNode } from "preact";
 import { EventDetail, useAriaListboxMulti, UseListboxMultiItem, UseListboxMultiParameters } from "preact-aria-widgets";
 import { ListboxMultiSelectEvent, UseListboxMultiItemInfo, UseListboxMultiItemParameters } from "preact-aria-widgets/use-listbox-multi";
-import { useAsyncHandler, useMergedProps, useMutationObserver, useRefElement, useState } from "preact-prop-helpers";
+import { useAsyncHandler, useMergedProps } from "preact-prop-helpers";
 import { memo } from "preact/compat";
-import { useCallback, useContext } from "preact/hooks";
+import { useContext } from "preact/hooks";
 import { ProgressCircular } from "../progress";
 import { forwardElementRef, OmitStrong, OptionalTagSensitiveProps, useLogRender, usePseudoActive } from "../props";
 import { ListItemStatic, ListItemStaticProps, ListStatic, ListStaticProps } from "./list-static";
@@ -48,11 +48,11 @@ export const ListMulti = memo(forwardElementRef(function ListMulti<E extends HTM
 }));
 
 export interface ListItemMultiProps extends Omit<ListMultiItemParameters<HTMLLIElement>, "onSelect">, ListItemStaticProps {
-    onSelect(selected: boolean): void | Promise<void>;
+    onSelectChange(selected: boolean): void | Promise<void>;
 };
 
 export const ListItemMulti = memo(forwardElementRef(function ListItemMulti(p: ListItemMultiProps, ref?: Ref<HTMLLIElement>) {
-    const { childrenText, props: { index, selected, disabled, onSelect: onSelectAsync, children, ...domProps } } = useChildrenTextProps({ ...p, ref });
+    const { childrenText, props: { index, selected, disabled, children, onSelectChange: onSelectAsync, ...domProps } } = useChildrenTextProps({ ...p, ref });
 
     useLogRender("ListMulti", `Rendering ListMultiItem #${index}`);
 
@@ -62,7 +62,7 @@ export const ListItemMulti = memo(forwardElementRef(function ListItemMulti(p: Li
     const { useSyncHandler, pending, currentCapture, hasError, resolveCount } = useAsyncHandler<HTMLLIElement>()({ capture: (e: any) => (e as ListboxMultiSelectEvent<HTMLLIElement>)[EventDetail].selected });
     const onSelectSync = useSyncHandler(disabled ? null : onSelectAsync);
 
-    const { tabbable, useListboxMultiItemProps } = useListItemMulti({ index, text: childrenText, tag: "li", selected: currentCapture ?? selected, onSelect: onSelectSync, disabled });
+    const { tabbable, useListboxMultiItemProps } = useListItemMulti({ index, text: childrenText, tag: "li", selected: currentCapture ?? selected ?? false, onSelect: onSelectSync, disabled });
     return (
         <ProgressCircular childrenPosition="child" mode={pending ? "pending" : hasError ? "failed" : resolveCount ? "succeeded" : null} colorVariant="info">
             <ListItemStatic {...usePseudoActive(useMergedProps<HTMLLIElement>()({ disabled, class: clsx("list-group-item-action", selected && "active", pending && "pending") } as any, useListboxMultiItemProps(domProps)))}>

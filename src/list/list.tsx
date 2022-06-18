@@ -10,7 +10,7 @@ export type ListProps<E extends HTMLUListElement | HTMLOListElement> = ListSingl
 export type ListItemProps = ListItemSingleProps | ListItemMultiProps | ListItemActionableProps;
 
 function isSingleProps<E extends HTMLUListElement | HTMLOListElement>(props: ListProps<E>): props is ListSingleProps<E> {
-    return (props as ListSingleProps<E>).select == "single" || (props as ListSingleProps<E>).onSelect != null;
+    return (props as ListSingleProps<E>).select == "single" || (props as ListSingleProps<E>).onSelectChange != null;
 }
 
 function isMultiProps<E extends HTMLUListElement | HTMLOListElement>(props: ListProps<E>): props is ListMultiProps<E> {
@@ -22,7 +22,7 @@ function isSingleItemProps(props: ListItemProps): props is ListItemSingleProps {
 }
 
 function isMultiItemProps(props: ListItemProps): props is ListItemMultiProps {
-    return (props as ListItemMultiProps).onSelect != null;
+    return (props as ListItemMultiProps).onSelectChange != null;
 }
 
 function isActionableItemProps(props: ListItemProps): props is ListItemActionableProps {

@@ -217,7 +217,7 @@ const DemoList = memo(() => {
 
             Selected: {index}
 
-            <ListSingle label="Example list" select="single" onSelect={setIndex} selectedIndex={index} selectionMode="activate" tag="ul">
+            <ListSingle label="Example list" select="single" onSelectChange={setIndex} selectedIndex={index} selectionMode="activate" tag="ul">
                 <ListItemSingle index={0}>Primary</ListItemSingle>
                 <ListItemSingle index={1}>Secondary</ListItemSingle>
                 <ListItemSingle index={2}>Success</ListItemSingle>

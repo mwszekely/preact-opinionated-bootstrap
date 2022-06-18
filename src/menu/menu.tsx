@@ -57,12 +57,12 @@ function MenuU<E extends Element, T extends <E extends HTMLElement>(...args: any
     const { useElementSizeProps } = useElementSize<any>({ onSizeChange: useStableCallback(onInteraction ?? (() => { })) });
 
     const { useHasFocusProps, getFocusedInner: getMenuHasFocusInner } = useHasFocus<HTMLDivElement>({});
-    const { usePopperArrow, usePopperPopup, usePopperSource, logicalDirection, flipTransformProps } = usePopperApi({ align, side, updating: updatingForABit });
+    const { usePopperArrow, usePopperPopup, usePopperSource, logicalDirection, flipTransformProps } = usePopperApi<any, HTMLDivElement, HTMLDivElement>({ align, side, updating: updatingForABit });
     let { useMenuButton, useMenuItem, useMenuProps, focusMenu, useMenuSentinel, currentTypeahead, invalidTypeahead } = useAriaMenu<HTMLDivElement, HTMLButtonElement, UseMenuItemDefaultInfo<HTMLButtonElement>>({ shouldFocusOnChange: getMenuHasFocusInner, open, onClose, onOpen });
     const { useMenuButtonProps } = useMenuButton<Element>({ tag: anchorTag ?? "button" });
-    const { usePopperSourceProps } = usePopperSource<any>();
-    const { usePopperPopupProps } = usePopperPopup<HTMLDivElement>({ open });
-    const { usePopperArrowProps } = usePopperArrow<HTMLDivElement>();
+    const { usePopperSourceProps } = usePopperSource();
+    const { usePopperPopupProps } = usePopperPopup({ open });
+    const { usePopperArrowProps } = usePopperArrow();
     const { useMenuSentinelProps: useFirstMenuSentinelProps } = useMenuSentinel<HTMLButtonElement>();
     const { useMenuSentinelProps: useSecondMenuSentinelProps } = useMenuSentinel<HTMLButtonElement>();
 
