@@ -12,6 +12,8 @@
   }
   .btn {
     touch-action: manipulation;
+    content-visibility: auto;
+    contain: style paint;
     appearance: none;
     will-change: box-shadow;
     display: inline-grid;
@@ -10315,6 +10317,11 @@ select {
   }
   .list-group {
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    contain: layout;
+  }
+  .list-group-item {
+    content-visibility: auto;
+    contain: style paint;
   }
   .list-group-item-action,
 .list-group-item[tabindex="0"] {
@@ -12824,6 +12831,8 @@ body.themed-scrollbars {
   }
   .btn {
     touch-action: manipulation;
+    content-visibility: auto;
+    contain: style paint;
     appearance: none;
     will-change: box-shadow;
     display: inline-grid;
@@ -25330,6 +25339,13 @@ select {
 @media all and (prefers-color-scheme: light) {
   .list-group {
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    contain: layout;
+  }
+}
+@media all and (prefers-color-scheme: light) {
+  .list-group-item {
+    content-visibility: auto;
+    contain: style paint;
   }
 }
 @media all and (prefers-color-scheme: light) {
@@ -29013,6 +29029,8 @@ body.themed-scrollbars {
 
 .set-theme.theme-light .btn {
   touch-action: manipulation;
+  content-visibility: auto;
+  contain: style paint;
   appearance: none;
   will-change: box-shadow;
   display: inline-grid;
@@ -40366,6 +40384,12 @@ body.themed-scrollbars {
 }
 .set-theme.theme-light .list-group {
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  contain: layout;
+}
+
+.set-theme.theme-light .list-group-item {
+  content-visibility: auto;
+  contain: style paint;
 }
 
 .set-theme.theme-light .list-group-item-action,
@@ -43478,6 +43502,8 @@ body.themed-scrollbars {
 
 .set-theme.theme-dark .btn {
   touch-action: manipulation;
+  content-visibility: auto;
+  contain: style paint;
   appearance: none;
   will-change: box-shadow;
   display: inline-grid;
@@ -54831,6 +54857,12 @@ body.themed-scrollbars {
 }
 .set-theme.theme-dark .list-group {
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  contain: layout;
+}
+
+.set-theme.theme-dark .list-group-item {
+  content-visibility: auto;
+  contain: style paint;
 }
 
 .set-theme.theme-dark .list-group-item-action,

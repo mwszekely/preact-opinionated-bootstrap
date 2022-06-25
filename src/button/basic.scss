@@ -18,6 +18,8 @@
 
 .btn {
     touch-action: manipulation; // Improve responsiveness
+    content-visibility: auto;   // \ Improve performance
+    contain: style paint;       // /
     appearance: none;           // Standardize styling
 
     @if $enable-shadows {

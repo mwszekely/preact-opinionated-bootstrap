@@ -32,8 +32,8 @@ const UseTabPanelContext = createContext<UseTabPanel<HTMLDivElement>>(null!);
 export const Tabs = memo(forwardElementRef(function Tabs<E extends HTMLUListElement | HTMLOListElement>({ onSelect: onSelectAsync, orientation, selectedIndex, selectionMode, children, visualVariant, ...props }: TabsProps<E>, ref?: Ref<HTMLDivElement>) {
     const capture = (e: TabsChangeEvent<E>) => { return e[EventDetail].selectedIndex };
     orientation ??= "inline";
-    const { useSyncHandler } = useAsyncHandler<E>()({ capture: capture as any as () => number });
-    const onSelect = useSyncHandler(onSelectAsync) as any as h.JSX.EventHandler<any>;
+    const { syncHandler } = useAsyncHandler(onSelectAsync, { capture: capture as any as () => number });
+    const onSelect = syncHandler as any as h.JSX.EventHandler<any>;
     const { useTab, useTabPanel, useTabsLabel, useTabsList } = useAriaTabs<E, HTMLButtonElement, HTMLDivElement>({ onSelect, selectedIndex, selectionMode, orientation });
 
     const { useTabListProps } = useTabsList();

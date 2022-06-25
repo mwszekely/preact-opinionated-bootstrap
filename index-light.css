@@ -6,6 +6,8 @@
 
 .btn {
   touch-action: manipulation;
+  content-visibility: auto;
+  contain: style paint;
   appearance: none;
   will-change: box-shadow;
   display: inline-grid;
@@ -11069,6 +11071,12 @@ textarea.form-control-lg {
 }
 .list-group {
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  contain: layout;
+}
+
+.list-group-item {
+  content-visibility: auto;
+  contain: style paint;
 }
 
 .list-group-item-action,

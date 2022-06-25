@@ -38,7 +38,7 @@ function UnlabelledInputR(p: UnlabelledInputProps, ref?: Ref<any>): h.JSX.Elemen
         }, [])
     });
 
-    const { useSyncHandler, currentCapture, pending, hasError, settleCount, flushDebouncedPromise, currentType, ...asyncInfo } = useAsyncHandler<HTMLInputElement>()({
+    const { syncHandler, currentCapture, pending, hasError, settleCount, flushDebouncedPromise, currentType, ...asyncInfo } = useAsyncHandler<h.JSX.TargetedEvent<HTMLInputElement, Event>, string | number | null>(onInputAsync as any ?? null, {
         capture: useStableCallback((e: h.JSX.TargetedEvent<HTMLInputElement, Event>) => {
             const ret = capture(e);
             if (ret == null) {
@@ -55,7 +55,7 @@ function UnlabelledInputR(p: UnlabelledInputProps, ref?: Ref<any>): h.JSX.Elemen
     });
     if (!focusedInner && pending)
         disabled = true;
-    const onInputIfValid = useSyncHandler(disabled ? null : onInputAsync as any);
+    const onInputIfValid = (disabled ? null : syncHandler as any);
     const onInput = (e: h.JSX.TargetedEvent<HTMLInputElement>) => {
         const target = (e.currentTarget as HTMLInputElement | undefined);
         return onInputIfValid?.bind(target as never)(e);
@@ -270,7 +270,7 @@ export const Input = memo(forwardElementRef(function Input({ children, value, wi
     let inputJsx = <IC
         {...useInputLabelInputProps(useMergedProps<any>()({
             children: IC === InputGroupText ? value : undefined,
-            value: IC === InputGroupText ? undefined : (value ?? undefined),
+            value: undefined, //IC === InputGroupText ? undefined : (value ?? undefined),
             placeholder: IC === InputGroupText ? undefined : placeholder,
             disabled: (IC === InputGroupText ? undefined : disabled),
             disabledVariant: (IC === InputGroupText ? undefined : disabledVariant),

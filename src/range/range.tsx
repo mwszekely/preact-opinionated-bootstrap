@@ -123,8 +123,8 @@ const RangeTicks = memo(function RangeTicks({ step, min, max, id, hideTickValues
 
 export const RangeThumb = memo(forwardElementRef(function RangeThumb({ index, value, max, min, onValueChange: onValueChangeAsync, disabled }: RangeThumbProps, ref: Ref<HTMLInputElement>) {
     const debounceSetting = useContext(DebounceContext);
-    const { useSyncHandler, pending, hasError, currentCapture } = useAsyncHandler()({ capture, debounce: debounceSetting == true ? 1500 : debounceSetting != false ? debounceSetting : undefined });
-    const onValueChangeSync = useSyncHandler(onValueChangeAsync) as UseAriaSliderThumbArguments<HTMLInputElement>["onValueChange"];
+    const { syncHandler, pending, hasError, currentCapture } = useAsyncHandler(onValueChangeAsync ?? null, { capture, debounce: debounceSetting == true ? 1500 : debounceSetting != false ? debounceSetting : undefined });
+    const onValueChangeSync = syncHandler;// as UseAriaSliderThumbArguments<HTMLInputElement>["onValueChange"];
     value = (currentCapture ?? value);
     const getValueText = useContext(GetValueTextContext);
     const valueText = useMemo(() => { return ((getValueText?.(value)) ?? (value == null ? "" : `${value}`)); }, [value, getValueText]);
@@ -173,7 +173,7 @@ export const RangeThumb = memo(forwardElementRef(function RangeThumb({ index, va
 
         }
 
-        return onValueChangeSync?.(e);
+        return onValueChangeSync?.(e as any as h.JSX.TargetedEvent<HTMLInputElement, Event>);
     }
 
     const { getElement, useAriaSliderThumbProps, min: usedMin, max: usedMax } = useContext(RangeThumbContext)<HTMLInputElement>({

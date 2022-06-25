@@ -145,10 +145,10 @@ function MenuItemU(p: MenuItemProps, ref?: Ref<any>) {
     const onClose = useContext(OnCloseContext);
 
 
-    const { useSyncHandler, pending, settleCount, hasError } = useAsyncHandler<HTMLButtonElement>()({ capture: useCallback(() => { return undefined!; }, []) });
+    const { syncHandler, pending, settleCount, hasError } = useAsyncHandler(onPressAsync? (() => onPressAsync?.()?.then(() => onClose?.())): null, { capture: useCallback(() => { return undefined!; }, []) });
     disabled ||= pending;
 
-    const onPress = useSyncHandler((disabled || !onPressAsync) ? null : () => onPressAsync?.()?.then(() => onClose?.()));
+    const onPress = ((disabled || !onPressAsync) ? null : syncHandler);
 
     const newProps = useMenuItemProps(useMergedProps<HTMLButtonElement>()(rest, { ref, class: clsx(onPressAsync ? "dropdown-item" : "dropdown-item-text", "dropdown-multiline", !!badge && "with-badge", !!iconStart && "with-start", !!(badge || iconEnd) && "with-end", disabled && "disabled", pending && "pending"), "aria-disabled": disabled ? "true" : undefined }));
     const buttonProps = usePseudoActive(usePressEventHandlers<HTMLButtonElement>(disabled ? null : onPress, hasTypeahead ? { space: "exclude" } : undefined)(newProps));

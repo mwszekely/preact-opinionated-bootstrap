@@ -101,6 +101,8 @@
 }
 .set-theme.theme-light .btn {
   touch-action: manipulation;
+  content-visibility: auto;
+  contain: style paint;
   appearance: none;
   will-change: box-shadow;
   display: inline-grid;
@@ -10370,6 +10372,11 @@
 }
 .set-theme.theme-light .list-group {
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  contain: layout;
+}
+.set-theme.theme-light .list-group-item {
+  content-visibility: auto;
+  contain: style paint;
 }
 .set-theme.theme-light .list-group-item-action,
 .set-theme.theme-light .list-group-item[tabindex="0"] {
@@ -12915,6 +12922,8 @@
 }
 .set-theme.theme-dark .btn {
   touch-action: manipulation;
+  content-visibility: auto;
+  contain: style paint;
   appearance: none;
   will-change: box-shadow;
   display: inline-grid;
@@ -23184,6 +23193,11 @@
 }
 .set-theme.theme-dark .list-group {
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  contain: layout;
+}
+.set-theme.theme-dark .list-group-item {
+  content-visibility: auto;
+  contain: style paint;
 }
 .set-theme.theme-dark .list-group-item-action,
 .set-theme.theme-dark .list-group-item[tabindex="0"] {

@@ -8,8 +8,13 @@
 
 .list-group {
     font-family: $font-family-sans-serif;
+    contain: layout;
 }
 
+.list-group-item {
+  content-visibility: auto;
+  contain: style paint;
+}
 
 .list-group-item-action,
 .list-group-item[tabindex="0"] {

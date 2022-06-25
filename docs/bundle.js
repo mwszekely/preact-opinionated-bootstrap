@@ -58,7 +58,7 @@
 	  return n.children;
 	}
 
-	function _$1(n, l) {
+	function _$2(n, l) {
 	  this.props = n, this.context = l;
 	}
 
@@ -92,7 +92,7 @@
 	    return n.__v.__b - l.__v.__b;
 	  }), t$3 = [], n.some(function (n) {
 	    var l, u, i, t, o, r;
-	    n.__d && (o = (t = (l = n).__v).__e, (r = l.__P) && (u = [], (i = a$3({}, t)).__v = t.__v + 1, j$3(r, t, i, l.__n, void 0 !== r.ownerSVGElement, null != t.__h ? [o] : null, u, null == o ? k$2(t) : o, t.__h), z$3(u, t), t.__e != o && b$2(t)));
+	    n.__d && (o = (t = (l = n).__v).__e, (r = l.__P) && (u = [], (i = a$3({}, t)).__v = t.__v + 1, j$3(r, t, i, l.__n, void 0 !== r.ownerSVGElement, null != t.__h ? [o] : null, u, null == o ? k$2(t) : o, t.__h), z$2(u, t), t.__e != o && b$2(t)));
 	  });
 	}
 
@@ -132,9 +132,9 @@
 	  return l;
 	}
 
-	function A$3(n, l) {
+	function A$2(n, l) {
 	  return l = l || [], null == n || "boolean" == typeof n || (Array.isArray(n) ? n.some(function (n) {
-	    A$3(n, l);
+	    A$2(n, l);
 	  }) : l.push(n)), l;
 	}
 
@@ -156,7 +156,7 @@
 	  for (o in l) t && "function" != typeof l[o] || "children" === o || "key" === o || "value" === o || "checked" === o || u[o] === l[o] || H$2(n, o, l[o], u[o], i);
 	}
 
-	function $$1(n, l, u) {
+	function $$2(n, l, u) {
 	  "-" === l[0] ? n.setProperty(l, u) : n[l] = null == u ? "" : "number" != typeof u || s$3.test(l) ? u : u + "px";
 	}
 
@@ -165,8 +165,8 @@
 
 	  n: if ("style" === l) {
 	    if ("string" == typeof u) n.style.cssText = u;else {
-	      if ("string" == typeof i && (n.style.cssText = i = ""), i) for (l in i) u && l in u || $$1(n.style, l, "");
-	      if (u) for (l in u) i && u[l] === i[l] || $$1(n.style, l, u[l]);
+	      if ("string" == typeof i && (n.style.cssText = i = ""), i) for (l in i) u && l in u || $$2(n.style, l, "");
+	      if (u) for (l in u) i && u[l] === i[l] || $$2(n.style, l, u[l]);
 	    }
 	  } else if ("o" === l[0] && "n" === l[1]) o = l !== (l = l.replace(/Capture$/, "")), l = l.toLowerCase() in n ? l.toLowerCase().slice(2) : l.slice(2), n.l || (n.l = {}), n.l[l + o] = u, u ? i || n.addEventListener(l, o ? T$3 : I$2, o) : n.removeEventListener(l, o ? T$3 : I$2, o);else if ("dangerouslySetInnerHTML" !== l) {
 	    if (t) l = l.replace(/xlink(H|:h)/, "h").replace(/sName$/, "s");else if ("href" !== l && "list" !== l && "form" !== l && "tabIndex" !== l && "download" !== l && l in n) try {
@@ -205,7 +205,7 @@
 
 	  try {
 	    n: if ("function" == typeof $) {
-	      if (m = u.props, g = (s = $.contextType) && t[s.__c], x = s ? g ? g.props.value : s.__ : t, i.__c ? b = (h = u.__c = i.__c).__ = h.__E : ("prototype" in $ && $.prototype.render ? u.__c = h = new $(m, x) : (u.__c = h = new _$1(m, x), h.constructor = $, h.render = O$1), g && g.sub(h), h.props = m, h.state || (h.state = {}), h.context = x, h.__n = t, v = h.__d = !0, h.__h = []), null == h.__s && (h.__s = h.state), null != $.getDerivedStateFromProps && (h.__s == h.state && (h.__s = a$3({}, h.__s)), a$3(h.__s, $.getDerivedStateFromProps(m, h.__s))), y = h.props, p = h.state, v) null == $.getDerivedStateFromProps && null != h.componentWillMount && h.componentWillMount(), null != h.componentDidMount && h.__h.push(h.componentDidMount);else {
+	      if (m = u.props, g = (s = $.contextType) && t[s.__c], x = s ? g ? g.props.value : s.__ : t, i.__c ? b = (h = u.__c = i.__c).__ = h.__E : ("prototype" in $ && $.prototype.render ? u.__c = h = new $(m, x) : (u.__c = h = new _$2(m, x), h.constructor = $, h.render = O$1), g && g.sub(h), h.props = m, h.state || (h.state = {}), h.context = x, h.__n = t, v = h.__d = !0, h.__h = []), null == h.__s && (h.__s = h.state), null != $.getDerivedStateFromProps && (h.__s == h.state && (h.__s = a$3({}, h.__s)), a$3(h.__s, $.getDerivedStateFromProps(m, h.__s))), y = h.props, p = h.state, v) null == $.getDerivedStateFromProps && null != h.componentWillMount && h.componentWillMount(), null != h.componentDidMount && h.__h.push(h.componentDidMount);else {
 	        if (null == $.getDerivedStateFromProps && m !== y && null != h.componentWillReceiveProps && h.componentWillReceiveProps(m, x), !h.__e && null != h.shouldComponentUpdate && !1 === h.shouldComponentUpdate(m, h.__s, x) || u.__v === i.__v) {
 	          h.props = m, h.state = h.__s, u.__v !== i.__v && (h.__d = !1), h.__v = u, u.__e = i.__e, u.__k = i.__k, u.__k.forEach(function (n) {
 	            n && (n.__ = u);
@@ -229,7 +229,7 @@
 	  }
 	}
 
-	function z$3(n, u) {
+	function z$2(n, u) {
 	  l$3.__c && l$3.__c(u, n), n.some(function (u) {
 	    try {
 	      n = u.__h, u.__h = [], n.some(function (n) {
@@ -301,7 +301,7 @@
 
 	function S$1(u, i, t) {
 	  var o, r, f;
-	  l$3.__ && l$3.__(u, i), r = (o = "function" == typeof t) ? null : t && t.__k || i.__k, f = [], j$3(i, u = (!o && t || i).__k = v$2(d$2, null, [u]), r || e$4, e$4, void 0 !== i.ownerSVGElement, !o && t ? [t] : r ? null : i.firstChild ? n$3.call(i.childNodes) : null, f, !o && t ? t : r ? r.__e : i.firstChild, o), z$3(f, u);
+	  l$3.__ && l$3.__(u, i), r = (o = "function" == typeof t) ? null : t && t.__k || i.__k, f = [], j$3(i, u = (!o && t || i).__k = v$2(d$2, null, [u]), r || e$4, e$4, void 0 !== i.ownerSVGElement, !o && t ? [t] : r ? null : i.firstChild ? n$3.call(i.childNodes) : null, f, !o && t ? t : r ? r.__e : i.firstChild, o), z$2(f, u);
 	}
 
 	function B(l, u, i) {
@@ -351,12 +351,12 @@
 
 	    throw n;
 	  }
-	}, u$3 = 0, _$1.prototype.setState = function (n, l) {
+	}, u$3 = 0, _$2.prototype.setState = function (n, l) {
 	  var u;
 	  u = null != this.__s && this.__s !== this.state ? this.__s : this.__s = a$3({}, this.state), "function" == typeof n && (n = n(a$3({}, u), this.props)), n && a$3(u, n), null != n && this.__v && (l && this.__h.push(l), m$2(this));
-	}, _$1.prototype.forceUpdate = function (n) {
+	}, _$2.prototype.forceUpdate = function (n) {
 	  this.__v && (this.__e = !0, n && this.__h.push(n), m$2(this));
-	}, _$1.prototype.render = d$2, t$3 = [], o$4 = "function" == typeof Promise ? Promise.prototype.then.bind(Promise.resolve()) : setTimeout, g$3.__r = 0, f$3 = 0;
+	}, _$2.prototype.render = d$2, t$3 = [], o$4 = "function" == typeof Promise ? Promise.prototype.then.bind(Promise.resolve()) : setTimeout, g$3.__r = 0, f$3 = 0;
 
 	var o$3 = 0;
 
@@ -394,65 +394,68 @@
 	    o$2,
 	    i$2 = 0,
 	    c$2 = [],
-	    f$2 = l$3.__b,
-	    e$2 = l$3.__r,
-	    a$2 = l$3.diffed,
-	    v$1 = l$3.__c,
-	    l$2 = l$3.unmount;
+	    f$2 = [],
+	    e$2 = l$3.__b,
+	    a$2 = l$3.__r,
+	    v$1 = l$3.diffed,
+	    l$2 = l$3.__c,
+	    m$1 = l$3.unmount;
 
-	function m$1(t, r) {
+	function p$2(t, r) {
 	  l$3.__h && l$3.__h(u$2, t, i$2 || r), i$2 = 0;
 	  var o = u$2.__H || (u$2.__H = {
 	    __: [],
 	    __h: []
 	  });
-	  return t >= o.__.length && o.__.push({}), o.__[t];
+	  return t >= o.__.length && o.__.push({
+	    __V: f$2
+	  }), o.__[t];
 	}
 
-	function d$1(n) {
-	  return i$2 = 1, p$2(z$2, n);
+	function y$1(n) {
+	  return i$2 = 1, d$1(z$1, n);
 	}
 
-	function p$2(n, r, o) {
-	  var i = m$1(t$2++, 2);
-	  return i.t = n, i.__c || (i.__ = [o ? o(r) : z$2(void 0, r), function (n) {
+	function d$1(n, r, o) {
+	  var i = p$2(t$2++, 2);
+	  return i.t = n, i.__c || (i.__ = [o ? o(r) : z$1(void 0, r), function (n) {
 	    var t = i.t(i.__[0], n);
 	    i.__[0] !== t && (i.__ = [t, i.__[1]], i.__c.setState({}));
 	  }], i.__c = u$2), i.__;
 	}
 
-	function y$1(r, o) {
-	  var i = m$1(t$2++, 3);
+	function _$1(r, o) {
+	  var i = p$2(t$2++, 3);
 	  !l$3.__s && w$2(i.__H, o) && (i.__ = r, i.u = o, u$2.__H.__h.push(i));
 	}
 
 	function h$1(r, o) {
-	  var i = m$1(t$2++, 4);
+	  var i = p$2(t$2++, 4);
 	  !l$3.__s && w$2(i.__H, o) && (i.__ = r, i.u = o, u$2.__h.push(i));
 	}
 
 	function s$2(n) {
-	  return i$2 = 5, A$2(function () {
+	  return i$2 = 5, F(function () {
 	    return {
 	      current: n
 	    };
 	  }, []);
 	}
 
-	function A$2(n, u) {
-	  var r = m$1(t$2++, 7);
-	  return w$2(r.__H, u) ? (r.o = n(), r.u = u, r.__h = n, r.o) : r.__;
+	function F(n, u) {
+	  var r = p$2(t$2++, 7);
+	  return w$2(r.__H, u) ? (r.__V = n(), r.u = u, r.__h = n, r.__V) : r.__;
 	}
 
-	function F(n, t) {
-	  return i$2 = 8, A$2(function () {
+	function T$2(n, t) {
+	  return i$2 = 8, F(function () {
 	    return n;
 	  }, t);
 	}
 
-	function T$2(n) {
+	function q$1(n) {
 	  var r = u$2.context[n.__c],
-	      o = m$1(t$2++, 9);
+	      o = p$2(t$2++, 9);
 	  return o.c = n, r ? (null == o.__ && (o.__ = !0, r.sub(u$2)), r.props.value) : n.__;
 	}
 
@@ -465,19 +468,17 @@
 	}
 
 	l$3.__b = function (n) {
-	  u$2 = null, f$2 && f$2(n);
+	  u$2 = null, e$2 && e$2(n);
 	}, l$3.__r = function (n) {
-	  e$2 && e$2(n), t$2 = 0;
+	  a$2 && a$2(n), t$2 = 0;
 	  var o = (u$2 = n.__c).__H;
 	  o && (r$2 === u$2 ? (o.__h = [], u$2.__h = [], o.__.forEach(function (n) {
-	    n.o = n.u = void 0;
-	  })) : (o.__.forEach(function (n) {
-	    n.u && (n.__H = n.u), n.o && (n.__ = n.o), n.o = n.u = void 0;
-	  }), o.__h.forEach(j$2), o.__h.forEach(k$1), o.__h = [])), r$2 = u$2;
+	    n.__V = f$2, n.u = void 0;
+	  })) : (o.__h.forEach(j$2), o.__h.forEach(k$1), o.__h = [])), r$2 = u$2;
 	}, l$3.diffed = function (t) {
-	  a$2 && a$2(t);
+	  v$1 && v$1(t);
 	  var i = t.__c;
-	  i && i.__H && i.__H.__h.length && (1 !== c$2.push(i) && o$2 === l$3.requestAnimationFrame || ((o$2 = l$3.requestAnimationFrame) || function (n) {
+	  i && i.__H && (i.__H.__h.length && (1 !== c$2.push(i) && o$2 === l$3.requestAnimationFrame || ((o$2 = l$3.requestAnimationFrame) || function (n) {
 	    var t,
 	        u = function () {
 	      clearTimeout(r), g$2 && cancelAnimationFrame(t), setTimeout(n);
@@ -485,13 +486,13 @@
 	        r = setTimeout(u, 100);
 
 	    g$2 && (t = requestAnimationFrame(u));
-	  })(b$1)), u$2 = null, r$2 = null;
+	  })(b$1)), i.__H.__.forEach(function (n) {
+	    n.u && (n.__H = n.u), n.__V !== f$2 && (n.__ = n.__V), n.u = void 0, n.__V = f$2;
+	  })), r$2 = u$2 = null;
 	}, l$3.__c = function (t, u) {
 	  u.some(function (t) {
 	    try {
-	      t.__H && t.__H.__.forEach(function (n) {
-	        n.u && (n.__H = n.u), n.o && (n.__ = n.o), n.o = n.u = void 0;
-	      }), t.__h.forEach(j$2), t.__h = t.__h.filter(function (n) {
+	      t.__h.forEach(j$2), t.__h = t.__h.filter(function (n) {
 	        return !n.__ || k$1(n);
 	      });
 	    } catch (r) {
@@ -499,9 +500,9 @@
 	        n.__h && (n.__h = []);
 	      }), u = [], l$3.__e(r, t.__v);
 	    }
-	  }), v$1 && v$1(t, u);
+	  }), l$2 && l$2(t, u);
 	}, l$3.unmount = function (t) {
-	  l$2 && l$2(t);
+	  m$1 && m$1(t);
 	  var u,
 	      r = t.__c;
 	  r && r.__H && (r.__H.__.forEach(function (n) {
@@ -531,7 +532,7 @@
 	  });
 	}
 
-	function z$2(n, t) {
+	function z$1(n, t) {
 	  return "function" == typeof t ? t(n) : t;
 	}
 
@@ -647,7 +648,7 @@
 
 	  useEnsureStability("usePassiveState", onChange, getInitialValue); // Shared between "dependency changed" and "component unmounted".
 
-	  const onShouldCleanUp = F(() => {
+	  const onShouldCleanUp = T$2(() => {
 	    const cleanupCallback = cleanupCallbackRef.current;
 	    if (cleanupCallback) cleanupCallback();
 	  }, []); // There are a couple places where we'd like to use our initial
@@ -655,7 +656,7 @@
 	  // This is the shared code for that, used on mount and whenever
 	  // getValue is called.
 
-	  const tryEnsureValue = F(() => {
+	  const tryEnsureValue = T$2(() => {
 	    if (valueRef.current === Unset$1 && getInitialValue != undefined) {
 	      try {
 	        var _onChange;
@@ -669,7 +670,7 @@
 	  }, [
 	    /* getInitialValue and onChange intentionally omitted */
 	  ]);
-	  const getValue = F(() => {
+	  const getValue = T$2(() => {
 	    if (warningRef.current) console.warn("During onChange, prefer using the (value, prevValue) arguments instead of getValue -- it's ambiguous as to if you're asking for the old or new value at this point in time for this component."); // The first time we call getValue, if we haven't been given a value yet,
 	    // (and we were given an initial value to use)
 	    // return the initial value instead of nothing.
@@ -683,7 +684,7 @@
 	    tryEnsureValue();
 	  }, []); // The actual code the user calls to (possibly) run a new effect.
 
-	  const setValue = F(arg => {
+	  const setValue = T$2(arg => {
 	    const prevDep = valueRef.current === Unset$1 ? undefined : getValue();
 	    const dep = arg instanceof Function ? arg(prevDep) : arg;
 
@@ -784,7 +785,7 @@
 	  return function (lhsProps, rhsProps) {
 	    const lhs = lhsProps === null || lhsProps === void 0 ? void 0 : lhsProps.ref;
 	    const rhs = rhsProps === null || rhsProps === void 0 ? void 0 : rhsProps.ref;
-	    const combined = F(current => {
+	    const combined = T$2(current => {
 	      processRef(current, lhs);
 	      processRef(current, rhs);
 	    }, [lhs, rhs]);
@@ -1137,7 +1138,7 @@
 	  } = args !== null && args !== void 0 ? args : {};
 	  useEnsureStability("useRefElement", onElementChange, onMount, onUnmount); // Called (indirectly) by the ref that the element receives.
 
-	  const handler = F((e, prevValue) => {
+	  const handler = T$2((e, prevValue) => {
 	    onElementChange === null || onElementChange === void 0 ? void 0 : onElementChange(e, prevValue);
 	    if (prevValue) onUnmount === null || onUnmount === void 0 ? void 0 : onUnmount(prevValue);
 	    if (e) onMount === null || onMount === void 0 ? void 0 : onMount(e);
@@ -1146,10 +1147,10 @@
 	  const [getElement, setElement] = usePassiveState(handler, returnNull$2); // Create a RefCallback that's fired when mounted 
 	  // and that notifies us of our element when we have it
 
-	  const myRef = F(e => {
+	  const myRef = T$2(e => {
 	    if (e) setElement(() => e);
 	  }, []);
-	  const useRefElementProps = F(props => useMergedProps()({
+	  const useRefElementProps = T$2(props => useMergedProps()({
 	    ref: myRef
 	  }, props), []); // Return both the element and the hook that modifies 
 	  // the props and allows us to actually find the element
@@ -1168,7 +1169,7 @@
 	  useEnsureStability("useElementSize", getObserveBox, onSizeChange);
 	  const [getSize, setSize] = usePassiveState(onSizeChange, returnNull$3);
 	  const currentObserveBox = s$2(undefined);
-	  const needANewObserver = F((element, observeBox) => {
+	  const needANewObserver = T$2((element, observeBox) => {
 	    if (element) {
 	      const document = getDocument(element);
 	      const window = document.defaultView;
@@ -1226,9 +1227,9 @@
 	    getElement,
 	    useRefElementProps
 	  } = useRefElement({
-	    onElementChange: F(e => needANewObserver(e, getObserveBox === null || getObserveBox === void 0 ? void 0 : getObserveBox()), [])
+	    onElementChange: T$2(e => needANewObserver(e, getObserveBox === null || getObserveBox === void 0 ? void 0 : getObserveBox()), [])
 	  });
-	  y$1(() => {
+	  _$1(() => {
 	    if (getObserveBox) {
 	      if (currentObserveBox.current !== getObserveBox()) needANewObserver(getElement(), getObserveBox());
 	    }
@@ -1271,7 +1272,7 @@
 	    getElement,
 	    useRefElementProps
 	  } = useRefElement({
-	    onElementChange: F(element => {
+	    onElementChange: T$2(element => {
 	      if (element) {
 	        setComputedStyles(window.getComputedStyle(element));
 	      }
@@ -1290,9 +1291,9 @@
 	  const {
 	    useElementSizeProps
 	  } = useElementSize({
-	    onSizeChange: F(_ => onLogicalDirectionChange === null || onLogicalDirectionChange === void 0 ? void 0 : onLogicalDirectionChange(getLogicalDirectionInfo()), [])
+	    onSizeChange: T$2(_ => onLogicalDirectionChange === null || onLogicalDirectionChange === void 0 ? void 0 : onLogicalDirectionChange(getLogicalDirectionInfo()), [])
 	  });
-	  const getLogicalDirectionInfo = F(() => {
+	  const getLogicalDirectionInfo = T$2(() => {
 	    const computedStyles = getComputedStyles();
 
 	    if (computedStyles) {
@@ -1307,14 +1308,14 @@
 	    return null;
 	  }, []); //const [getLogicalDirectionInfo, setLogicalDirectionInfo] = usePassiveState<LogicalDirectionInfo>(onLogicalDirectionChange);
 
-	  const convertToLogicalOrientation = F((elementOrientation, direction) => {
+	  const convertToLogicalOrientation = T$2((elementOrientation, direction) => {
 	    var _direction, _direction2;
 
 	    (_direction = direction) !== null && _direction !== void 0 ? _direction : direction = getLogicalDirectionInfo();
 	    if (((_direction2 = direction) === null || _direction2 === void 0 ? void 0 : _direction2.inlineOrientation) === elementOrientation) return "inline";
 	    return "block";
 	  }, []);
-	  const convertToPhysicalSide = F((side, direction) => {
+	  const convertToPhysicalSide = T$2((side, direction) => {
 	    var _direction3, _direction$blockDirec, _direction4, _direction$blockDirec2, _direction5, _direction$inlineDire, _direction6, _direction$inlineDire2, _direction7;
 
 	    (_direction3 = direction) !== null && _direction3 !== void 0 ? _direction3 : direction = getLogicalDirectionInfo();
@@ -1333,7 +1334,7 @@
 	        return M$2[((_direction$inlineDire2 = (_direction7 = direction) === null || _direction7 === void 0 ? void 0 : _direction7.inlineDirection) !== null && _direction$inlineDire2 !== void 0 ? _direction$inlineDire2 : "ltr")[2]];
 	    }
 	  }, []);
-	  const convertToLogicalSide = F((side, direction) => {
+	  const convertToLogicalSide = T$2((side, direction) => {
 	    var _direction8, _direction9, _direction10;
 
 	    (_direction8 = direction) !== null && _direction8 !== void 0 ? _direction8 : direction = getLogicalDirectionInfo();
@@ -1374,7 +1375,7 @@
 	    console.assert(false);
 	    return "inline-start";
 	  }, []);
-	  const convertToPhysicalOrientation = F((elementOrientation, direction) => {
+	  const convertToPhysicalOrientation = T$2((elementOrientation, direction) => {
 	    var _direction11;
 
 	    (_direction11 = direction) !== null && _direction11 !== void 0 ? _direction11 : direction = getLogicalDirectionInfo();
@@ -1391,7 +1392,7 @@
 	      return "horizontal";
 	    }
 	  }, []);
-	  const convertElementSize = F((elementSize, direction) => {
+	  const convertElementSize = T$2((elementSize, direction) => {
 	    var _direction14;
 
 	    (_direction14 = direction) !== null && _direction14 !== void 0 ? _direction14 : direction = getLogicalDirectionInfo();
@@ -1439,7 +1440,7 @@
 	    return null;
 	  }, []);
 	  return {
-	    useLogicalDirectionProps: F(props => useRefElementProps(useElementSizeProps(props)), []),
+	    useLogicalDirectionProps: T$2(props => useRefElementProps(useElementSizeProps(props)), []),
 	    getElement,
 	    getLogicalDirectionInfo,
 	    convertToLogicalSize: convertElementSize,
@@ -1551,11 +1552,11 @@
 
 	function useState(initialState) {
 	  // We keep both, but overrride the `setState` functionality
-	  const [state, setStateP] = d$1(initialState);
+	  const [state, setStateP] = y$1(initialState);
 	  const ref = s$2(state); // Hijack the normal setter function 
 	  // to also set our ref to the new value
 
-	  const setState = F(value => {
+	  const setState = T$2(value => {
 	    if (typeof value === "function") {
 	      const callback = value;
 	      setStateP(prevValue => {
@@ -1628,7 +1629,7 @@
 	  // Is this okay?
 
 	  const [usedId, setUsedId, getUsedId] = useState(undefined);
-	  const useReferencedIdProps = F(function useReferencedIdProps(idPropName) {
+	  const useReferencedIdProps = T$2(function useReferencedIdProps(idPropName) {
 	    const ret = function (_ref) {
 	      var _ref2, _ref3;
 
@@ -1645,7 +1646,7 @@
 
 	    return ret;
 	  }, [usedId, randomId]);
-	  const useRandomIdProps = F(function useRandomIdProps(p) {
+	  const useRandomIdProps = T$2(function useRandomIdProps(p) {
 	    return useReferencedIdProps("id")(p);
 	  }, [useReferencedIdProps]);
 	  return {
@@ -1719,13 +1720,13 @@
 	          cleanup.current = effect();
 	      }
 	  })();*/
-	  const [id] = d$1(() => generateRandomId());
+	  const [id] = y$1(() => generateRandomId());
 	  toRun.set(id, {
 	    effect,
 	    inputs,
 	    cleanup: null
 	  });
-	  y$1(() => {
+	  _$1(() => {
 	    return () => {
 	      toRun.delete(id);
 	      previousInputs.delete(id);
@@ -1754,7 +1755,7 @@
 	  useBeforeLayoutEffect(() => {
 	    ref.current = value;
 	  }, [value]);
-	  return F(() => {
+	  return T$2(() => {
 	    if (ref.current === Unset) {
 	      throw new Error('Value retrieved from useStableGetter() cannot be called during render.');
 	    }
@@ -1772,9 +1773,844 @@
 
 	function useStableCallback(fn) {
 	  const currentCallbackGetter = useStableGetter(fn);
-	  return F(function () {
+	  return T$2(function () {
 	    return currentCallbackGetter()(...arguments);
 	  }, []);
+	}
+
+	/**
+	 * Checks if `value` is the
+	 * [language type](http://www.ecma-international.org/ecma-262/7.0/#sec-ecmascript-language-types)
+	 * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 0.1.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is an object, else `false`.
+	 * @example
+	 *
+	 * _.isObject({});
+	 * // => true
+	 *
+	 * _.isObject([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isObject(_.noop);
+	 * // => true
+	 *
+	 * _.isObject(null);
+	 * // => false
+	 */
+	function isObject(value) {
+	  var type = typeof value;
+	  return value != null && (type == 'object' || type == 'function');
+	}
+
+	/** Detect free variable `global` from Node.js. */
+	var freeGlobal$2 = typeof global == 'object' && global && global.Object === Object && global;
+
+	/** Detect free variable `self`. */
+
+	var freeSelf$1 = typeof self == 'object' && self && self.Object === Object && self;
+	/** Used as a reference to the global object. */
+
+	var root$2 = freeGlobal$2 || freeSelf$1 || Function('return this')();
+
+	/**
+	 * Gets the timestamp of the number of milliseconds that have elapsed since
+	 * the Unix epoch (1 January 1970 00:00:00 UTC).
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 2.4.0
+	 * @category Date
+	 * @returns {number} Returns the timestamp.
+	 * @example
+	 *
+	 * _.defer(function(stamp) {
+	 *   console.log(_.now() - stamp);
+	 * }, _.now());
+	 * // => Logs the number of milliseconds it took for the deferred invocation.
+	 */
+
+	var now = function () {
+	  return root$2.Date.now();
+	};
+
+	/** Used to match a single whitespace character. */
+	var reWhitespace = /\s/;
+	/**
+	 * Used by `_.trim` and `_.trimEnd` to get the index of the last non-whitespace
+	 * character of `string`.
+	 *
+	 * @private
+	 * @param {string} string The string to inspect.
+	 * @returns {number} Returns the index of the last non-whitespace character.
+	 */
+
+	function trimmedEndIndex(string) {
+	  var index = string.length;
+
+	  while (index-- && reWhitespace.test(string.charAt(index))) {}
+
+	  return index;
+	}
+
+	/** Used to match leading whitespace. */
+
+	var reTrimStart = /^\s+/;
+	/**
+	 * The base implementation of `_.trim`.
+	 *
+	 * @private
+	 * @param {string} string The string to trim.
+	 * @returns {string} Returns the trimmed string.
+	 */
+
+	function baseTrim(string) {
+	  return string ? string.slice(0, trimmedEndIndex(string) + 1).replace(reTrimStart, '') : string;
+	}
+
+	/** Built-in value references. */
+
+	var Symbol$5 = root$2.Symbol;
+
+	/** Used for built-in method references. */
+
+	var objectProto$3 = Object.prototype;
+	/** Used to check objects for own properties. */
+
+	var hasOwnProperty$1 = objectProto$3.hasOwnProperty;
+	/**
+	 * Used to resolve the
+	 * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+	 * of values.
+	 */
+
+	var nativeObjectToString$3 = objectProto$3.toString;
+	/** Built-in value references. */
+
+	var symToStringTag$3 = Symbol$5 ? Symbol$5.toStringTag : undefined;
+	/**
+	 * A specialized version of `baseGetTag` which ignores `Symbol.toStringTag` values.
+	 *
+	 * @private
+	 * @param {*} value The value to query.
+	 * @returns {string} Returns the raw `toStringTag`.
+	 */
+
+	function getRawTag$2(value) {
+	  var isOwn = hasOwnProperty$1.call(value, symToStringTag$3),
+	      tag = value[symToStringTag$3];
+
+	  try {
+	    value[symToStringTag$3] = undefined;
+	    var unmasked = true;
+	  } catch (e) {}
+
+	  var result = nativeObjectToString$3.call(value);
+
+	  if (unmasked) {
+	    if (isOwn) {
+	      value[symToStringTag$3] = tag;
+	    } else {
+	      delete value[symToStringTag$3];
+	    }
+	  }
+
+	  return result;
+	}
+
+	/** Used for built-in method references. */
+	var objectProto$2 = Object.prototype;
+	/**
+	 * Used to resolve the
+	 * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+	 * of values.
+	 */
+
+	var nativeObjectToString$2 = objectProto$2.toString;
+	/**
+	 * Converts `value` to a string using `Object.prototype.toString`.
+	 *
+	 * @private
+	 * @param {*} value The value to convert.
+	 * @returns {string} Returns the converted string.
+	 */
+
+	function objectToString$2(value) {
+	  return nativeObjectToString$2.call(value);
+	}
+
+	/** `Object#toString` result references. */
+
+	var nullTag$1 = '[object Null]',
+	    undefinedTag$1 = '[object Undefined]';
+	/** Built-in value references. */
+
+	var symToStringTag$2 = Symbol$5 ? Symbol$5.toStringTag : undefined;
+	/**
+	 * The base implementation of `getTag` without fallbacks for buggy environments.
+	 *
+	 * @private
+	 * @param {*} value The value to query.
+	 * @returns {string} Returns the `toStringTag`.
+	 */
+
+	function baseGetTag$2(value) {
+	  if (value == null) {
+	    return value === undefined ? undefinedTag$1 : nullTag$1;
+	  }
+
+	  return symToStringTag$2 && symToStringTag$2 in Object(value) ? getRawTag$2(value) : objectToString$2(value);
+	}
+
+	/**
+	 * Checks if `value` is object-like. A value is object-like if it's not `null`
+	 * and has a `typeof` result of "object".
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 4.0.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+	 * @example
+	 *
+	 * _.isObjectLike({});
+	 * // => true
+	 *
+	 * _.isObjectLike([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isObjectLike(_.noop);
+	 * // => false
+	 *
+	 * _.isObjectLike(null);
+	 * // => false
+	 */
+	function isObjectLike$2(value) {
+	  return value != null && typeof value == 'object';
+	}
+
+	/** `Object#toString` result references. */
+
+	var symbolTag$1 = '[object Symbol]';
+	/**
+	 * Checks if `value` is classified as a `Symbol` primitive or object.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 4.0.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is a symbol, else `false`.
+	 * @example
+	 *
+	 * _.isSymbol(Symbol.iterator);
+	 * // => true
+	 *
+	 * _.isSymbol('abc');
+	 * // => false
+	 */
+
+	function isSymbol$2(value) {
+	  return typeof value == 'symbol' || isObjectLike$2(value) && baseGetTag$2(value) == symbolTag$1;
+	}
+
+	/** Used as references for various `Number` constants. */
+
+	var NAN = 0 / 0;
+	/** Used to detect bad signed hexadecimal string values. */
+
+	var reIsBadHex = /^[-+]0x[0-9a-f]+$/i;
+	/** Used to detect binary string values. */
+
+	var reIsBinary = /^0b[01]+$/i;
+	/** Used to detect octal string values. */
+
+	var reIsOctal = /^0o[0-7]+$/i;
+	/** Built-in method references without a dependency on `root`. */
+
+	var freeParseInt = parseInt;
+	/**
+	 * Converts `value` to a number.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 4.0.0
+	 * @category Lang
+	 * @param {*} value The value to process.
+	 * @returns {number} Returns the number.
+	 * @example
+	 *
+	 * _.toNumber(3.2);
+	 * // => 3.2
+	 *
+	 * _.toNumber(Number.MIN_VALUE);
+	 * // => 5e-324
+	 *
+	 * _.toNumber(Infinity);
+	 * // => Infinity
+	 *
+	 * _.toNumber('3.2');
+	 * // => 3.2
+	 */
+
+	function toNumber(value) {
+	  if (typeof value == 'number') {
+	    return value;
+	  }
+
+	  if (isSymbol$2(value)) {
+	    return NAN;
+	  }
+
+	  if (isObject(value)) {
+	    var other = typeof value.valueOf == 'function' ? value.valueOf() : value;
+	    value = isObject(other) ? other + '' : other;
+	  }
+
+	  if (typeof value != 'string') {
+	    return value === 0 ? value : +value;
+	  }
+
+	  value = baseTrim(value);
+	  var isBinary = reIsBinary.test(value);
+	  return isBinary || reIsOctal.test(value) ? freeParseInt(value.slice(2), isBinary ? 2 : 8) : reIsBadHex.test(value) ? NAN : +value;
+	}
+
+	/** Error message constants. */
+
+	var FUNC_ERROR_TEXT$1 = 'Expected a function';
+	/* Built-in method references for those with the same name as other `lodash` methods. */
+
+	var nativeMax = Math.max,
+	    nativeMin = Math.min;
+	/**
+	 * Creates a debounced function that delays invoking `func` until after `wait`
+	 * milliseconds have elapsed since the last time the debounced function was
+	 * invoked. The debounced function comes with a `cancel` method to cancel
+	 * delayed `func` invocations and a `flush` method to immediately invoke them.
+	 * Provide `options` to indicate whether `func` should be invoked on the
+	 * leading and/or trailing edge of the `wait` timeout. The `func` is invoked
+	 * with the last arguments provided to the debounced function. Subsequent
+	 * calls to the debounced function return the result of the last `func`
+	 * invocation.
+	 *
+	 * **Note:** If `leading` and `trailing` options are `true`, `func` is
+	 * invoked on the trailing edge of the timeout only if the debounced function
+	 * is invoked more than once during the `wait` timeout.
+	 *
+	 * If `wait` is `0` and `leading` is `false`, `func` invocation is deferred
+	 * until to the next tick, similar to `setTimeout` with a timeout of `0`.
+	 *
+	 * See [David Corbacho's article](https://css-tricks.com/debouncing-throttling-explained-examples/)
+	 * for details over the differences between `_.debounce` and `_.throttle`.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 0.1.0
+	 * @category Function
+	 * @param {Function} func The function to debounce.
+	 * @param {number} [wait=0] The number of milliseconds to delay.
+	 * @param {Object} [options={}] The options object.
+	 * @param {boolean} [options.leading=false]
+	 *  Specify invoking on the leading edge of the timeout.
+	 * @param {number} [options.maxWait]
+	 *  The maximum time `func` is allowed to be delayed before it's invoked.
+	 * @param {boolean} [options.trailing=true]
+	 *  Specify invoking on the trailing edge of the timeout.
+	 * @returns {Function} Returns the new debounced function.
+	 * @example
+	 *
+	 * // Avoid costly calculations while the window size is in flux.
+	 * jQuery(window).on('resize', _.debounce(calculateLayout, 150));
+	 *
+	 * // Invoke `sendMail` when clicked, debouncing subsequent calls.
+	 * jQuery(element).on('click', _.debounce(sendMail, 300, {
+	 *   'leading': true,
+	 *   'trailing': false
+	 * }));
+	 *
+	 * // Ensure `batchLog` is invoked once after 1 second of debounced calls.
+	 * var debounced = _.debounce(batchLog, 250, { 'maxWait': 1000 });
+	 * var source = new EventSource('/stream');
+	 * jQuery(source).on('message', debounced);
+	 *
+	 * // Cancel the trailing debounced invocation.
+	 * jQuery(window).on('popstate', debounced.cancel);
+	 */
+
+	function debounce$1(func, wait, options) {
+	  var lastArgs,
+	      lastThis,
+	      maxWait,
+	      result,
+	      timerId,
+	      lastCallTime,
+	      lastInvokeTime = 0,
+	      leading = false,
+	      maxing = false,
+	      trailing = true;
+
+	  if (typeof func != 'function') {
+	    throw new TypeError(FUNC_ERROR_TEXT$1);
+	  }
+
+	  wait = toNumber(wait) || 0;
+
+	  if (isObject(options)) {
+	    leading = !!options.leading;
+	    maxing = 'maxWait' in options;
+	    maxWait = maxing ? nativeMax(toNumber(options.maxWait) || 0, wait) : maxWait;
+	    trailing = 'trailing' in options ? !!options.trailing : trailing;
+	  }
+
+	  function invokeFunc(time) {
+	    var args = lastArgs,
+	        thisArg = lastThis;
+	    lastArgs = lastThis = undefined;
+	    lastInvokeTime = time;
+	    result = func.apply(thisArg, args);
+	    return result;
+	  }
+
+	  function leadingEdge(time) {
+	    // Reset any `maxWait` timer.
+	    lastInvokeTime = time; // Start the timer for the trailing edge.
+
+	    timerId = setTimeout(timerExpired, wait); // Invoke the leading edge.
+
+	    return leading ? invokeFunc(time) : result;
+	  }
+
+	  function remainingWait(time) {
+	    var timeSinceLastCall = time - lastCallTime,
+	        timeSinceLastInvoke = time - lastInvokeTime,
+	        timeWaiting = wait - timeSinceLastCall;
+	    return maxing ? nativeMin(timeWaiting, maxWait - timeSinceLastInvoke) : timeWaiting;
+	  }
+
+	  function shouldInvoke(time) {
+	    var timeSinceLastCall = time - lastCallTime,
+	        timeSinceLastInvoke = time - lastInvokeTime; // Either this is the first call, activity has stopped and we're at the
+	    // trailing edge, the system time has gone backwards and we're treating
+	    // it as the trailing edge, or we've hit the `maxWait` limit.
+
+	    return lastCallTime === undefined || timeSinceLastCall >= wait || timeSinceLastCall < 0 || maxing && timeSinceLastInvoke >= maxWait;
+	  }
+
+	  function timerExpired() {
+	    var time = now();
+
+	    if (shouldInvoke(time)) {
+	      return trailingEdge(time);
+	    } // Restart the timer.
+
+
+	    timerId = setTimeout(timerExpired, remainingWait(time));
+	  }
+
+	  function trailingEdge(time) {
+	    timerId = undefined; // Only invoke if we have `lastArgs` which means `func` has been
+	    // debounced at least once.
+
+	    if (trailing && lastArgs) {
+	      return invokeFunc(time);
+	    }
+
+	    lastArgs = lastThis = undefined;
+	    return result;
+	  }
+
+	  function cancel() {
+	    if (timerId !== undefined) {
+	      clearTimeout(timerId);
+	    }
+
+	    lastInvokeTime = 0;
+	    lastArgs = lastCallTime = lastThis = timerId = undefined;
+	  }
+
+	  function flush() {
+	    return timerId === undefined ? result : trailingEdge(now());
+	  }
+
+	  function debounced() {
+	    var time = now(),
+	        isInvoking = shouldInvoke(time);
+	    lastArgs = arguments;
+	    lastThis = this;
+	    lastCallTime = time;
+
+	    if (isInvoking) {
+	      if (timerId === undefined) {
+	        return leadingEdge(lastCallTime);
+	      }
+
+	      if (maxing) {
+	        // Handle invocations in a tight loop.
+	        clearTimeout(timerId);
+	        timerId = setTimeout(timerExpired, wait);
+	        return invokeFunc(lastCallTime);
+	      }
+	    }
+
+	    if (timerId === undefined) {
+	      timerId = setTimeout(timerExpired, wait);
+	    }
+
+	    return result;
+	  }
+
+	  debounced.cancel = cancel;
+	  debounced.flush = flush;
+	  return debounced;
+	}
+
+	/** Error message constants. */
+
+	var FUNC_ERROR_TEXT = 'Expected a function';
+	/**
+	 * Creates a throttled function that only invokes `func` at most once per
+	 * every `wait` milliseconds. The throttled function comes with a `cancel`
+	 * method to cancel delayed `func` invocations and a `flush` method to
+	 * immediately invoke them. Provide `options` to indicate whether `func`
+	 * should be invoked on the leading and/or trailing edge of the `wait`
+	 * timeout. The `func` is invoked with the last arguments provided to the
+	 * throttled function. Subsequent calls to the throttled function return the
+	 * result of the last `func` invocation.
+	 *
+	 * **Note:** If `leading` and `trailing` options are `true`, `func` is
+	 * invoked on the trailing edge of the timeout only if the throttled function
+	 * is invoked more than once during the `wait` timeout.
+	 *
+	 * If `wait` is `0` and `leading` is `false`, `func` invocation is deferred
+	 * until to the next tick, similar to `setTimeout` with a timeout of `0`.
+	 *
+	 * See [David Corbacho's article](https://css-tricks.com/debouncing-throttling-explained-examples/)
+	 * for details over the differences between `_.throttle` and `_.debounce`.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 0.1.0
+	 * @category Function
+	 * @param {Function} func The function to throttle.
+	 * @param {number} [wait=0] The number of milliseconds to throttle invocations to.
+	 * @param {Object} [options={}] The options object.
+	 * @param {boolean} [options.leading=true]
+	 *  Specify invoking on the leading edge of the timeout.
+	 * @param {boolean} [options.trailing=true]
+	 *  Specify invoking on the trailing edge of the timeout.
+	 * @returns {Function} Returns the new throttled function.
+	 * @example
+	 *
+	 * // Avoid excessively updating the position while scrolling.
+	 * jQuery(window).on('scroll', _.throttle(updatePosition, 100));
+	 *
+	 * // Invoke `renewToken` when the click event is fired, but not more than once every 5 minutes.
+	 * var throttled = _.throttle(renewToken, 300000, { 'trailing': false });
+	 * jQuery(element).on('click', throttled);
+	 *
+	 * // Cancel the trailing throttled invocation.
+	 * jQuery(window).on('popstate', throttled.cancel);
+	 */
+
+	function throttle(func, wait, options) {
+	  var leading = true,
+	      trailing = true;
+
+	  if (typeof func != 'function') {
+	    throw new TypeError(FUNC_ERROR_TEXT);
+	  }
+
+	  if (isObject(options)) {
+	    leading = 'leading' in options ? !!options.leading : leading;
+	    trailing = 'trailing' in options ? !!options.trailing : trailing;
+	  }
+
+	  return debounce$1(func, wait, {
+	    'leading': leading,
+	    'maxWait': wait,
+	    'trailing': trailing
+	  });
+	}
+
+	function identity$2() {
+	  for (var _len = arguments.length, t = new Array(_len), _key = 0; _key < _len; _key++) {
+	    t[_key] = arguments[_key];
+	  }
+
+	  return t;
+	}
+
+	function useThrottled(callback, wait, options) {
+	  const throttled = F(() => {
+	    return callback ? throttle(callback, wait, options) : null;
+	  }, [callback, wait, options === null || options === void 0 ? void 0 : options.leading, options === null || options === void 0 ? void 0 : options.trailing]);
+	  _$1(() => {
+	    return () => throttled === null || throttled === void 0 ? void 0 : throttled.cancel();
+	  }, [throttled]);
+	  return throttled;
+	}
+	function useDebounced(callback, wait, options) {
+	  const debounced = F(() => {
+	    return callback ? debounce$1(callback, wait, options) : null;
+	  }, [callback, wait, options === null || options === void 0 ? void 0 : options.leading, options === null || options === void 0 ? void 0 : options.maxWait, options === null || options === void 0 ? void 0 : options.trailing]);
+	  _$1(() => {
+	    return () => debounced === null || debounced === void 0 ? void 0 : debounced.cancel();
+	  }, [debounced]);
+	  return debounced;
+	}
+	/**
+	 * Given an async function, returns a function that's suitable for non-async APIs,
+	 * along with other information about the current run's status.
+	 *
+	 * See also `useAsyncHandler` for a version that's specialized for DOM event handlers.
+	 *
+	 * When called multiple times in quick succession, (i.e. before the handler has finished),
+	 * this works like Lodash's `throttle` function with the `wait` option always
+	 * set to however long the handler takes to complete. A second call to the sync function will be
+	 * throttled until the first call has finished. The return value of the function is the result
+	 * of the previous invocation, or `undefined` on the first call.
+	 *
+	 * The handler is only ever delayed if one is currently running, so, e.g. for iOS touch events the
+	 * first call happens in the same event handler (which means things like calls to `element.focus()`
+	 * will work as intended, since that fails when the event is "split up")
+	 *
+	 * Finally, because the sync handler may be invoked on a delay, any property references on the arguments
+	 * provided might be stale by the time it's actually invoked (e.g. accessing `event.currentTarget.checked`
+	 * is not stable across time because it's a "live" value -- you almost always want the value that it
+	 * had at the original time the handler was called). The `capture` option allows you to save that kind of
+	 * dynamic data at the time it runs; the `AP` and `SP` type parameters likewise control
+	 * the parameters the async handler and sync handler expect respectively.
+	 *
+	 */
+
+	function useAsync(asyncHandler, options) {
+	  var _capture, _ref;
+
+	  /* eslint-disable prefer-const */
+	  let {
+	    throttle,
+	    debounce,
+	    capture
+	  } = options !== null && options !== void 0 ? options : {};
+	  (_capture = capture) !== null && _capture !== void 0 ? _capture : capture = identity$2; // We keep, like, a lot of render-state, but it only ever triggers a re-render
+	  // when we start/stop an async action.
+	  // Keep track of this for the caller's sake -- we don't really care.
+
+	  const [currentType, setCurrentType] = useState(null);
+	  const [runCount, setRunCount] = useState(0);
+	  const [settleCount, setSettleCount] = useState(0);
+	  const [resolveCount, setResolveCount] = useState(0);
+	  const [rejectCount, setRejectCount] = useState(0); // Things related to current execution
+	  // Because we can both return and throw undefined, 
+	  // we need separate state to track their existance too.
+
+	  const [pending, setPending, getPending] = useState(false);
+	  const [result, setResult, getResult] = useState(undefined);
+	  const [error, setError, _getError] = useState(undefined);
+	  const [hasError, setHasError, _getHasError] = useState(false);
+	  const [hasResult, setHasResult, _getHasResult] = useState(false); // We implement our own throttling behavior in regards to waiting until the async handler finishes.
+	  // These two passive state variables keep track of that, automatically queueing/dequeuing the next handler.
+
+	  const [getQueued, setQueued] = usePassiveState(null, returnNull$3); // The actual sync handler.
+	  // Capture/transform the given parameters if applicable,
+	  // then run further logic that's debounced/throttled
+
+	  const captureArgsAndExecuteDebouncedHandler = useStableCallback(function onNewExecuteRequest() {
+	    console.log("captureArgsAndExecuteDebouncedHandler"); // Capture the arguments we were given.
+	    // We might use them immediately, or we might store them to `queued`,
+	    // but in either case we do need the captured value.
+
+	    const captured = capture(...arguments); // This is all logic that deals with the captured value instead of the raw arguments.
+	    // It's called in two separate circumstances,
+	    // and has the debounce/throttle logic already applied
+
+	    return executeHandlerWithDebounce(getPending(), ...captured);
+	  }); // This is the logic that runs when the handler is *just* about to start.
+	  // This function itself is further transformed to be throttled/debounced if requested,
+	  // so this might not be called immediately after 
+
+	  const executeHandlerWithoutDebounce = useStableCallback(function onNewExecuteRequest2(enqueue) {
+	    const onThen = value => {
+	      console.log("executeHandlerWithoutDebounce.onThen");
+	      setResult(value);
+	      setHasResult(true);
+	      setHasError(false);
+	      setResolveCount(r => ++r);
+	    };
+
+	    const onCatch = ex => {
+	      console.log("executeHandlerWithoutDebounce.onCatch");
+	      setError(ex);
+	      setHasError(true);
+	      setHasResult(false);
+	      setRejectCount(r => ++r);
+	    };
+
+	    const onFinally = () => {
+	      const queued = getQueued();
+	      setSettleCount(s => ++s);
+
+	      if (queued) {
+	        console.log("executeHandlerWithoutDebounce.onFinally (queued)");
+	        setQueued(null);
+	        executeHandlerWithDebounce(false, ...queued);
+	      } else {
+	        console.log("executeHandlerWithoutDebounce.onFinally (empty)");
+	        setPending(false);
+	      }
+	    };
+
+	    for (var _len2 = arguments.length, newArgs = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+	      newArgs[_key2 - 1] = arguments[_key2];
+	    }
+
+	    if (!enqueue) {
+	      console.log("executeHandlerWithoutDebounce (immediate)"); // Nothing is pending at the moment, so we can run our function immediately.
+
+	      setRunCount(r => ++r);
+	      setPending(true);
+	      const result = asyncHandler === null || asyncHandler === void 0 ? void 0 : asyncHandler(...newArgs);
+	      const isPromise = result != null && typeof result == "object" && "then" in result;
+
+	      if (result == null || !isPromise) {
+	        // It's synchronous and returned successfully.
+	        // Bail out early.
+	        onThen(result);
+	        onFinally();
+	        setCurrentType("sync");
+	      } else {
+	        result.then(onThen).catch(onCatch).finally(onFinally);
+	        setCurrentType("async");
+	      }
+	    } else {
+	      console.log("executeHandlerWithoutDebounce (pending)"); // When we're still running a previous handler,
+	      // just set ourselves as the next one to run and quit early.
+	      // Nothing more to do.
+
+	      setQueued(newArgs);
+	    }
+
+	    return getResult();
+	  });
+	  const executeHandlerWithT = useThrottled(!throttle ? null : executeHandlerWithoutDebounce, throttle !== null && throttle !== void 0 ? throttle : 0);
+	  const executeHandlerWithD = useDebounced(!debounce ? null : executeHandlerWithT !== null && executeHandlerWithT !== void 0 ? executeHandlerWithT : executeHandlerWithoutDebounce, debounce !== null && debounce !== void 0 ? debounce : 0);
+	  const executeHandlerWithDebounce = (_ref = executeHandlerWithD !== null && executeHandlerWithD !== void 0 ? executeHandlerWithD : executeHandlerWithT) !== null && _ref !== void 0 ? _ref : executeHandlerWithoutDebounce;
+	  const flushDebouncedPromise = useStableCallback(() => {
+	    if (executeHandlerWithDebounce && "flush" in executeHandlerWithDebounce) executeHandlerWithDebounce.flush();
+	  });
+	  return {
+	    syncHandler: captureArgsAndExecuteDebouncedHandler,
+	    currentType,
+	    pending,
+	    result,
+	    error,
+	    hasError,
+	    hasResult,
+	    resolveCount,
+	    rejectCount,
+	    settleCount,
+	    callCount: runCount,
+	    flushDebouncedPromise
+	  };
+	}
+
+	/**
+	 * Given an asyncronous event handler, returns a syncronous one that works on the DOM,
+	 * along with some other information related to the current state.
+	 * Does not modify any props.
+	 *
+	 * Note that because the handler you provide may be called with a delay, and
+	 * because the value of, e.g., an `<input>` element will likely be stale by the
+	 * time the delay is over, a `capture` function is necessary in order to
+	 * capture the relevant information from the DOM. Any other simple event data,
+	 * like `mouseX` or `shiftKey` can stay on the event itself and don't
+	 * need to be captured &ndash; it's never stale.
+	 *
+	 * ```tsx
+	 * const asyncOnInput = async (value: number, e: Event) => {
+	 *     [...] // Ex. send to a server and setState when done
+	 * };
+	 * const {
+	 *     // A sync version of asyncOnInput
+	 *     syncHandler,
+	 *     // True while the handler is running
+	 *     pending,
+	 *     // The error thrown, if any
+	 *     error,
+	 *     // Show this value while the operation's pending
+	 *     currentCapture,
+	 *     // And others, see `UseAsyncHandlerReturnType`
+	 *     ...rest
+	 * } = useAsyncHandler<HTMLInputElement>()(asyncOnInput, {
+	 *     // Pass in the capture function that saves event data
+	 *     // from being stale.
+	 *     capture: e => {
+	 *         // `capture` can have side-effects because
+	 *         // it's called exactly once per invocation
+	 *         e.preventDefault();
+	 *
+	 *         // Save this value so that it's never stale
+	 *         return e.currentTarget.valueAsNumber;
+	 *     }
+	 * });
+	 *
+	 * const onInput = pending? null : syncHandler;
+	 * ```
+	 *
+	 * The handler is automatically throttled to only run one at a time.
+	 * If the handler is called, and then before it finishes, is called again,
+	 * it will be put on hold until the current one finishes, at which point
+	 * the second one will run.  If the handler is called a third time before
+	 * the first has finished, it will *replace* the second, so only the most
+	 * recently called iteration of the handler will run.
+	 *
+	 *
+	 * You may optionally *also* specify debounce and throttle parameters that wait until the
+	 * syncronous handler has not been called for the specified number of
+	 * milliseconds, at which point we *actually* run the asyncronous handler
+	 * according to the logic in the previous paragraph. This is in
+	 * *addition* to throttling the handler, and does not replace that behavior.
+	 *
+	 * @see useAsync A more general version of this hook that can work with any type of handler, not just DOM event handlers.
+	 */
+
+	function useAsyncHandler(asyncHandler, _ref) {
+	  let {
+	    capture: originalCapture,
+	    ...restAsyncOptions
+	  } = _ref;
+	  // We need to differentiate between "nothing captured yet" and "`undefined` was captured"
+	  const [currentCapture, setCurrentCapture, getCurrentCapture] = useState(undefined);
+	  const [hasCapture, setHasCapture] = useState(false); // Wrap around the normal `useAsync` `capture` function to also
+	  // keep track of the last value the user actually input.
+	  // 
+	  // Without this there's no way to re-render the control with
+	  // it being both controlled and also having the "correct" value,
+	  // and at any rate also protects against sudden exceptions reverting
+	  // your change out from under you.
+
+	  const capture = useStableCallback(e => {
+	    const captured = originalCapture(e);
+	    setCurrentCapture(captured);
+	    setHasCapture(true);
+	    return [captured, e];
+	  });
+	  return {
+	    getCurrentCapture,
+	    currentCapture,
+	    hasCapture,
+	    ...useAsync(asyncHandler, {
+	      capture,
+	      ...restAsyncOptions
+	    })
+	  };
 	}
 
 	/**
@@ -1789,7 +2625,7 @@
 	 */
 
 	function useEffect(effect, inputs) {
-	  let impl = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : y$1;
+	  let impl = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : _$1;
 	  const prevInputs = s$2(undefined);
 
 	  const effect2 = () => {
@@ -1843,7 +2679,7 @@
 	  // restart the timeout.  The timeout does NOT reset
 	  // when the duration or callback changes, only triggerIndex.
 
-	  y$1(() => {
+	  _$1(() => {
 	    if (!timeoutIsNull) {
 	      const timeout = getTimeout();
 	      console.assert(timeoutIsNull == (timeout == null));
@@ -1855,299 +2691,18 @@
 	      }
 	    }
 	  }, [triggerIndex, timeoutIsNull]);
-	  const getElapsedTime = F(() => {
+	  const getElapsedTime = T$2(() => {
 	    var _startTimeRef$current;
 
 	    return +new Date() - +((_startTimeRef$current = startTimeRef.current) !== null && _startTimeRef$current !== void 0 ? _startTimeRef$current : new Date());
 	  }, []);
-	  const getRemainingTime = F(() => {
+	  const getRemainingTime = T$2(() => {
 	    const timeout = getTimeout();
 	    return timeout == null ? null : Math.max(0, timeout - getElapsedTime());
 	  }, []);
 	  return {
 	    getElapsedTime,
 	    getRemainingTime
-	  };
-	}
-
-	function useAsync(_ref) {
-	  let {
-	    debounce
-	  } = _ref;
-	  // Always represents whatever promise is currently being waited on, or null if none.
-	  const [promise, setPromise, getPromise] = useState(null); // Keep track of how many times we've actually called the async handler
-
-	  const [runCount, setRunCount] = useState(0);
-	  const [resolveCount, setResolveCount] = useState(0);
-	  const [rejectCount, setRejectCount] = useState(0); // Keep track of whether we're acting on a sync or async handler, just in case that's important.
-	  // This can change if the handler switches between being sync or async, technically, and will be
-	  // null until the first time the handler is called.
-
-	  const [currentType, setCurrentType] = useState(null); // If we're set to use a debounce, then when the timeout finishes,
-	  // the promise from this state object is transferred over to either 
-	  // the current promise or the pending promise.
-
-	  const [debouncedPromiseStarter, setDebouncedPromiseStarter, getDebouncedPromiseStarter] = useState(null); // When we want to start a new promise, we won't allow it to start if one is still running.
-	  // In that case, we store the promise (or rather, a way to start the promise) in state.
-
-	  const [pendingPromiseStarter, setPendingPromiseStarter, _getPendingPromiseStarter] = useState(null); // We need to differentiate between `undefined` and "no error has been thrown",
-	  // so we have two separate error state variables.
-
-	  const [error, setError, _getError] = useState(undefined);
-	  const [hasError, setHasError, _getHasError] = useState(false); // When the debounce timer is up (or the user manually requests the debounce to end)
-	  // run the normal "please consider running this promise" routine that we would
-	  // have just run immediately if we weren't debouncing our promises.
-
-	  const onDebounceTimeUp = F(() => {
-	    const debouncedPromiseStarter = getDebouncedPromiseStarter();
-	    if (debouncedPromiseStarter) wantToStartANewPromise(debouncedPromiseStarter);
-	    setDebouncedPromiseStarter(null);
-	  }, [wantToStartANewPromise, setDebouncedPromiseStarter]); // Handle the debounce. Logically this happens before the main step as a sort of step 0.
-	  // Resets the timeout any time the handler was requested to be called again
-	  // and when it finishes, actually call the handler (or set it as the pending promise)
-
-	  useTimeout({
-	    timeout: debounce !== null && debounce !== void 0 ? debounce : null,
-	    callback: onDebounceTimeUp,
-	    triggerIndex: debouncedPromiseStarter
-	  }); // See if we should set our current promise to be whatever the pending promise is
-	  // (usually because the current promise finished and became null).
-
-	  useLayoutEffect(() => {
-	    // Our current promise just finished and there's one waiting?
-	    if (promise == null && pendingPromiseStarter != null) {
-	      wantToStartANewPromise(pendingPromiseStarter);
-	      setPendingPromiseStarter(null);
-	    }
-	  }, [promise, pendingPromiseStarter]);
-	  const ret = {
-	    useSyncHandler,
-	    callCount: runCount,
-	    pending: promise != null,
-	    hasError,
-	    error,
-	    resolveCount,
-	    rejectCount,
-	    flushDebouncedPromise: onDebounceTimeUp,
-	    promise,
-	    currentType,
-	    settleCount: rejectCount + resolveCount
-	  };
-	  return ret; // Called any time the async handler is about to be called for whatever reason,
-	  // except for debounce, which comes first, as a sort of "step 0".
-	  // Handles all the necessary boilerplate related to choosing whether to
-	  // run or set as pending, resetting state variables, etc.
-
-	  function wantToStartANewPromise(startPromise) {
-	    const alreadyRunningPromise = getPromise() != null; // Boilerplate wrapper around the given promise starter
-
-	    const startPromiseWithBoilerplate = () => {
-	      // When it starts, notify the caller
-	      setRunCount(r => ++r); // When it completes, notify the caller
-	      // When it fails, save the error and notify the caller
-	      // When it settles, reset our state so we can run a pending promise if it exists
-
-	      const onThen = value => {
-	        setResolveCount(c => ++c);
-	        return value;
-	      };
-
-	      const onCatch = ex => {
-	        setError(ex);
-	        setHasError(true);
-	        setRejectCount(c => ++c);
-	      };
-
-	      const onFinally = () => {
-	        setPromise(null);
-	      }; // Handle the special case where the handler is synchronous
-
-
-	      let result;
-
-	      try {
-	        result = startPromise();
-	        const isPromise = result != null && typeof result == "object" && "then" in result;
-
-	        if (result == null || !isPromise) {
-	          var _result;
-
-	          // It's synchronous and returned successfully.
-	          // Bail out early.
-	          onThen((_result = result) !== null && _result !== void 0 ? _result : undefined);
-	          onFinally();
-	          setCurrentType("sync");
-	        } else {
-	          result.then(onThen).catch(onCatch).finally(onFinally);
-	          setCurrentType("async");
-	        }
-
-	        return result; //console.assert("then" in (result as Promise<any>));
-	      } catch (ex) {
-	        // It's synchronous (or asynchronous but didn't await anything yet) and threw an error.
-	        // Bail out early.
-	        onCatch(ex);
-	        onFinally();
-	        setCurrentType("sync");
-	        return;
-	      } // The handler is asynchronous
-	      //setCurrentType("async");
-	      //return (async () => { await result; })().then(onThen).catch(onCatch).finally(onFinally);
-
-	    };
-
-	    if (!alreadyRunningPromise) {
-	      // Start the promise immediately, because there wasn't one running already.
-	      const nextPromise = startPromiseWithBoilerplate();
-	      const isPromise = nextPromise != null && typeof nextPromise == "object" && "then" in nextPromise;
-
-	      if (nextPromise == null || !isPromise) ; else {
-	        setError(undefined);
-	        setHasError(false);
-	        setPromise(nextPromise);
-	      }
-	    } else {
-	      // Don't start the promise yet, 
-	      // and allow it to start in the future instead.
-	      setPendingPromiseStarter(_ => startPromiseWithBoilerplate);
-	    }
-	  }
-
-	  function useSyncHandler(asyncHandler) {
-	    const syncHandler = useStableCallback(function syncHandler() {
-	      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-	        args[_key] = arguments[_key];
-	      }
-
-	      if (asyncHandler == null) return;
-
-	      const startPromise = () => asyncHandler(...args);
-
-	      if (debounce == null) {
-	        wantToStartANewPromise(startPromise);
-	      } else {
-	        setDebouncedPromiseStarter(_ => startPromise);
-	      }
-	    });
-	    return syncHandler;
-	  }
-	}
-
-	/**
-	 * Given an asyncronous event handler, returns a syncronous one that works on the DOM,
-	 * along with some other information related to the current state.
-	 * Does not modify any props.
-	 *
-	 * Note that because the handler you provide may be called with a delay, and
-	 * because the value of, e.g., an `<input>` element will likely be stale by the
-	 * time the delay is over, a `capture` function is necessary in order to
-	 * capture the relevant information from the DOM. Any other simple event data,
-	 * like `mouseX` or `shiftKey` can stay on the event itself and don't
-	 * need to be captured &ndash; it's never stale.
-	 *
-	 * ```tsx
-	 * const syncOnInput = async (value: number, e: Event) => {
-	 *     [...] // Ex. send to a server and setState when done
-	 * };
-	 * const {
-	 *     // When called, returns the synchronous event handler
-	 *     useSyncHandler,
-	 *     // True while the handler is running
-	 *     pending,
-	 *     // The error thrown, if any
-	 *     error,
-	 *     // Show this value while the operation's pending
-	 *     currentCapture,
-	 *     // And others, see `UseAsyncHandlerReturnType`
-	 *     ...rest
-	 * } = useAsyncHandler<HTMLInputElement>()({
-	 *     // Pass in the capture function that saves event data
-	 *     // from being stale.  Note that the async event handler
-	 *     // isn't passed here, it's passed to `useSyncHandler` above.
-	 *     capture: e => {
-	 *         e.preventDefault();
-	 *
-	 *         // Save this value so that it's never stale
-	 *         return e.currentTarget.valueAsNumber;
-	 *     }
-	 * });
-	 *
-	 * const onInput = useSyncHandler(someAsyncFunction);
-	 * // OR the following, if you want the input entirely disabled while pending:
-	 * const onInput = useSyncHandler(pending? null : someAsyncFunction);
-	 * ```
-	 *
-	 * The handler is automatically throttled to only run one at a time.
-	 * If the handler is called, and then before it finishes, is called again,
-	 * it will be put on hold until the current one finishes, at which point
-	 * the second one will run.  If the handler is called a third time before
-	 * the first has finished, it will *replace* the second, so only the most
-	 * recently called iteration of the handler will run.
-	 *
-	 *
-	 * You may optionally *also* specify a debounce parameter that waits until the
-	 * syncronous handler has not been called for the specified number of
-	 * milliseconds, at which point we *actually* run the asyncronous handler
-	 * according to the logic in the previous paragraph. This is in
-	 * *addition* to throttling the handler, and does not replace that behavior.
-	 */
-
-	function useAsyncHandler() {
-	  return function (_ref) {
-	    let {
-	      capture,
-	      debounce
-	    } = _ref;
-	    const {
-	      callCount,
-	      currentType,
-	      error,
-	      flushDebouncedPromise,
-	      useSyncHandler,
-	      hasError,
-	      pending,
-	      rejectCount,
-	      resolveCount,
-	      settleCount,
-	      promise
-	    } = useAsync({
-	      debounce
-	    }); // We need to differentiate between "nothing captured yet" and "`undefined` was captured"
-
-	    const [currentCapture, setCurrentCapture, getCurrentCapture] = useState(undefined);
-	    const [hasCapture, setHasCapture] = useState(false);
-	    const ret = {
-	      useSyncHandler: useSyncHandlerWithCapture,
-	      getCurrentCapture,
-	      callCount,
-	      currentCapture,
-	      hasCapture,
-	      pending,
-	      hasError,
-	      error,
-	      promise,
-	      currentType,
-	      flushDebouncedPromise,
-	      resolveCount,
-	      rejectCount,
-	      settleCount
-	    };
-	    return ret;
-
-	    function useSyncHandlerWithCapture(asyncHandler) {
-	      const syncHandlerWrapper = useSyncHandler(asyncHandler);
-	      const syncHandler = useStableCallback(function syncHandler(e) {
-	        // Get the most significant information from the event at this time,
-	        // which is necessary since the promise could actually be called much later
-	        // when the element's value (etc.) has changed.
-	        const captured = capture(e);
-	        if (syncHandlerWrapper == null) return;
-	        setCurrentCapture(captured);
-	        setHasCapture(true);
-	        syncHandlerWrapper(captured, e);
-	      });
-	      return syncHandler;
-	    }
 	  };
 	}
 
@@ -2297,7 +2852,7 @@
 	  };
 
 	  return {
-	    useLinearNavigationProps: F(props => {
+	    useLinearNavigationProps: T$2(props => {
 	      return useLogicalDirectionProps(useMergedProps()({
 	        onKeyDown
 	      }, props));
@@ -2373,7 +2928,7 @@
 
 	    return lhs - rhs;
 	  });
-	  const useTypeaheadNavigationProps = F(function (_ref3) {
+	  const useTypeaheadNavigationProps = T$2(function (_ref3) {
 	    let { ...props
 	    } = _ref3;
 
@@ -2427,7 +2982,7 @@
 	    }, props);
 	  }, []); // Handle changes in typeahead that cause changes to the tabbable index
 
-	  y$1(() => {
+	  _$1(() => {
 	    if (currentTypeahead && sortedTypeaheadInfo.current.length) {
 	      const sortedTypeaheadIndex = binarySearch(sortedTypeaheadInfo.current, currentTypeahead, typeaheadComparator);
 
@@ -2498,18 +3053,21 @@
 	      }
 	    }
 	  }, [currentTypeahead]);
-	  const useTypeaheadNavigationChild = F(_ref4 => {
+	  const useTypeaheadNavigationChild = T$2(_ref4 => {
 	    let {
 	      text,
 	      ...i
 	    } = _ref4;
-	    y$1(() => {
+	    _$1(() => {
 	      if (text) {
 	        // Find where to insert this item.
 	        // Because all index values should be unique, the returned sortedIndex
 	        // should always refer to a new location (i.e. be negative)                
 	        const sortedIndex = binarySearch(sortedTypeaheadInfo.current, text, insertingComparator);
-	        console.assert(sortedIndex < 0 || sortedTypeaheadInfo.current[sortedIndex].text == text);
+	        console.assert(sortedIndex < 0 || insertingComparator(sortedTypeaheadInfo.current[sortedIndex].text, {
+	          unsortedIndex: i.index,
+	          text
+	        }) == 0);
 
 	        if (sortedIndex < 0) {
 	          sortedTypeaheadInfo.current.splice(-sortedIndex - 1, 0, {
@@ -2527,7 +3085,10 @@
 	          // When unmounting, find where we were and remove ourselves.
 	          // Again, we should always find ourselves because there should be no duplicate values if each index is unique.
 	          const sortedIndex = binarySearch(sortedTypeaheadInfo.current, text, insertingComparator);
-	          console.assert(sortedIndex < 0 || sortedTypeaheadInfo.current[sortedIndex].text == text);
+	          console.assert(sortedIndex < 0 || insertingComparator(sortedTypeaheadInfo.current[sortedIndex].text, {
+	            unsortedIndex: i.index,
+	            text
+	          }) == 0);
 
 	          if (sortedIndex >= 0) {
 	            sortedTypeaheadInfo.current.splice(sortedIndex, 1);
@@ -2615,15 +3176,15 @@
 	  // Probably not because of setChildUpdateIndex
 
 	  const overmountCount = s$2(new Map());
-	  const getMountIndex = F(index => {
+	  const getMountIndex = T$2(index => {
 	    return mountOrder.current.get(index);
 	  }, []);
-	  const useManagedChild = F(info => {
+	  const useManagedChild = T$2(info => {
 	    const {
 	      getElement,
 	      useRefElementProps
 	    } = useRefElement({
-	      onElementChange: F(element => {
+	      onElementChange: T$2(element => {
 	        if (element) {
 	          indicesByElement.current.set(element, info.index);
 	          deletedIndices.current.delete(info.index);
@@ -2800,7 +3361,7 @@
 	 */
 
 	function useForceUpdate() {
-	  const [, set] = d$1(0);
+	  const [, set] = y$1(0);
 	  return s$2(() => set(i => ++i)).current;
 	}
 
@@ -2867,15 +3428,15 @@
 	      return (_managedChildren$inde2 = (_managedChildren$inde3 = managedChildren[index]) === null || _managedChildren$inde3 === void 0 ? void 0 : _managedChildren$inde3.getTabbable()) !== null && _managedChildren$inde2 !== void 0 ? _managedChildren$inde2 : null;
 	    }
 	  });
-	  const useRovingTabIndexChild = F(info => {
+	  const useRovingTabIndexChild = T$2(info => {
 	    const [rrafIndex, setRrafIndex] = useState(1);
-	    const rerenderAndFocus = F(() => {
+	    const rerenderAndFocus = T$2(() => {
 	      setRrafIndex(i => ++i);
 	    }, []);
 	    const [tabbable, setTabbable, getTabbable] = useState(null);
 	    const newInfo = { ...info,
 	      rerenderAndFocus,
-	      setTabbable: F(tabbable => {
+	      setTabbable: T$2(tabbable => {
 	        setTabbable(tabbable);
 	      }, []),
 	      getTabbable
@@ -2884,7 +3445,7 @@
 	      getElement,
 	      useManagedChildProps
 	    } = useManagedChild(newInfo);
-	    y$1(() => {
+	    _$1(() => {
 	      const element = getElement();
 
 	      if (tabbable) {
@@ -2941,7 +3502,7 @@
 	    childCount,
 	    managedChildren,
 	    indicesByElement,
-	    focusCurrent: F(() => {
+	    focusCurrent: T$2(() => {
 	      var _getTabbableIndex;
 
 	      if (managedChildren[(_getTabbableIndex = getTabbableIndex()) !== null && _getTabbableIndex !== void 0 ? _getTabbableIndex : 0].getTabbable()) {
@@ -3039,36 +3600,36 @@
 	  const navigateToNext = useCallback(() => { setTabbableIndex(i => indexMangler!(indexDemangler!(i ?? 0) + 1)) }, [indexDemangler, indexMangler]);
 	  */
 
-	  const navigateToIndex = F(i => {
+	  const navigateToIndex = T$2(i => {
 	    var _indexMangler2, _indexDemangler2;
 
 	    setTabbableIndex(i == null ? null : tryNavigateToIndex(managedChildren, 0, i, 1, (_indexMangler2 = indexMangler) !== null && _indexMangler2 !== void 0 ? _indexMangler2 : identity$1, (_indexDemangler2 = indexDemangler) !== null && _indexDemangler2 !== void 0 ? _indexDemangler2 : identity$1));
 	  }, []);
-	  const navigateToFirst = F(() => {
+	  const navigateToFirst = T$2(() => {
 	    var _indexMangler3, _indexDemangler3;
 
 	    setTabbableIndex(tryNavigateToIndex(managedChildren, 0, 0, 1, (_indexMangler3 = indexMangler) !== null && _indexMangler3 !== void 0 ? _indexMangler3 : identity$1, (_indexDemangler3 = indexDemangler) !== null && _indexDemangler3 !== void 0 ? _indexDemangler3 : identity$1));
 	  }, []);
-	  const navigateToLast = F(() => {
+	  const navigateToLast = T$2(() => {
 	    var _indexMangler4, _indexDemangler4;
 
 	    setTabbableIndex(tryNavigateToIndex(managedChildren, managedChildren.length, managedChildren.length, -1, (_indexMangler4 = indexMangler) !== null && _indexMangler4 !== void 0 ? _indexMangler4 : identity$1, (_indexDemangler4 = indexDemangler) !== null && _indexDemangler4 !== void 0 ? _indexDemangler4 : identity$1));
 	  }, []);
-	  const navigateToPrev = F(() => {
+	  const navigateToPrev = T$2(() => {
 	    setTabbableIndex(c => {
 	      var _indexMangler5, _indexDemangler5;
 
 	      return tryNavigateToIndex(managedChildren, c !== null && c !== void 0 ? c : 0, (c !== null && c !== void 0 ? c : 0) - 1, -1, (_indexMangler5 = indexMangler) !== null && _indexMangler5 !== void 0 ? _indexMangler5 : identity$1, (_indexDemangler5 = indexDemangler) !== null && _indexDemangler5 !== void 0 ? _indexDemangler5 : identity$1);
 	    });
 	  }, []);
-	  const navigateToNext = F(() => {
+	  const navigateToNext = T$2(() => {
 	    setTabbableIndex(c => {
 	      var _indexMangler6, _indexDemangler6;
 
 	      return tryNavigateToIndex(managedChildren, c !== null && c !== void 0 ? c : 0, (c !== null && c !== void 0 ? c : 0) + 1, 1, (_indexMangler6 = indexMangler) !== null && _indexMangler6 !== void 0 ? _indexMangler6 : identity$1, (_indexDemangler6 = indexDemangler) !== null && _indexDemangler6 !== void 0 ? _indexDemangler6 : identity$1);
 	    });
 	  }, []);
-	  const setIndex = F(index => {
+	  const setIndex = T$2(index => {
 	    setTabbableIndex(index);
 	  }, []);
 	  const {
@@ -3093,10 +3654,10 @@
 	    navigateToFirst,
 	    navigateToLast
 	  });
-	  const useListNavigationProps = F(props => {
+	  const useListNavigationProps = T$2(props => {
 	    return useLinearNavigationProps(useTypeaheadNavigationProps(props));
 	  }, [useLinearNavigationProps, useTypeaheadNavigationProps]);
-	  const useListNavigationChild = F(info => {
+	  const useListNavigationChild = T$2(info => {
 	    useTypeaheadNavigationChild(info); //const { useLinearNavigationChildProps } = useLinearNavigationChild(info as I);
 
 
@@ -3115,7 +3676,7 @@
 	      }), props);
 	    };
 
-	    const roveToSelf = F(() => {
+	    const roveToSelf = T$2(() => {
 	      navigateToIndex(info.index);
 	    }, []);
 	    return {
@@ -3193,18 +3754,18 @@
 	  // Otherwise, it is tabbable, with the tabbable cell being currentColumn.
 	  // This happens automatically when these functions are called.
 
-	  const navigateToFirstRow = F(() => {
+	  const navigateToFirstRow = T$2(() => {
 	    setCurrentRow2(c => tryNavigateToIndex(managedRows, c !== null && c !== void 0 ? c : 0, 0, 1, indexMangler, indexDemangler));
 	  }, [indexMangler, indexDemangler]);
-	  const navigateToLastRow = F(() => {
+	  const navigateToLastRow = T$2(() => {
 	    setCurrentRow2(c => tryNavigateToIndex(managedRows, c !== null && c !== void 0 ? c : 0, managedRows.length - 1, -1, indexMangler, indexDemangler));
 	  }, [indexMangler, indexDemangler]);
-	  const navigateToPrevRow = F(() => {
+	  const navigateToPrevRow = T$2(() => {
 	    setCurrentRow2(c => {
 	      return tryNavigateToIndex(managedRows, c !== null && c !== void 0 ? c : 0, indexMangler(Math.max(0, indexDemangler(c !== null && c !== void 0 ? c : 0) - 1)), -1, indexMangler, indexDemangler);
 	    });
 	  }, [indexMangler, indexDemangler]);
-	  const navigateToNextRow = F(() => {
+	  const navigateToNextRow = T$2(() => {
 	    setCurrentRow2(c => {
 	      return tryNavigateToIndex(managedRows, c !== null && c !== void 0 ? c : 0, indexMangler(Math.min(managedRows.length - 1, indexDemangler(c !== null && c !== void 0 ? c : 0) + 1)), 1, indexMangler, indexDemangler);
 	    });
@@ -3247,7 +3808,7 @@
 	   * Optional, but provides typeahead for each column in the table.
 	   */
 
-	  const useGridNavigationColumn = F(() => {
+	  const useGridNavigationColumn = T$2(() => {
 	    const {
 	      currentTypeahead,
 	      invalidTypeahead,
@@ -3256,7 +3817,7 @@
 	      getIndex: getCurrentRow,
 	      setIndex: setCurrentRow2
 	    });
-	    const useGridNavigationColumnChild = F(_ref2 => {
+	    const useGridNavigationColumnChild = T$2(_ref2 => {
 	      let {
 	        index: rowIndex,
 	        text,
@@ -3274,7 +3835,7 @@
 	    };
 	  }, []); // Last thing before we return -- here's the hook for individual rows and their cells.
 
-	  const useGridNavigationRow = F(_ref3 => {
+	  const useGridNavigationRow = T$2(_ref3 => {
 	    let {
 	      index: rowIndex,
 	      hidden,
@@ -3310,27 +3871,27 @@
 	      useRovingTabIndexChild: useRovingTabIndexCell,
 	      childCount: cellCount
 	    } = useRovingTabIndex({
-	      shouldFocusOnChange: F(() => {
+	      shouldFocusOnChange: T$2(() => {
 	        return !!getFocusCellOnRowChange() && !!getIsTabbableRow();
 	      }, []),
 	      tabbableIndex: currentColumn
 	    }); // More navigation stuff
 
-	    const navigateToFirstColumn = F(() => {
+	    const navigateToFirstColumn = T$2(() => {
 	      setCurrentColumn2(tryNavigateToIndex(managedCells, 0, 0, 1, identity, identity));
 	      forceUpdate();
 	    }, []);
-	    const navigateToLastColumn = F(() => {
+	    const navigateToLastColumn = T$2(() => {
 	      setCurrentColumn2(tryNavigateToIndex(managedCells, managedCells.length, managedCells.length, -1, identity, identity));
 	      forceUpdate();
 	    }, []);
-	    const navigateToPrevColumn = F(() => {
+	    const navigateToPrevColumn = T$2(() => {
 	      setCurrentColumn2(c => {
 	        return tryNavigateToIndex(managedCells, c, c - 1, -1, identity, identity);
 	      });
 	      forceUpdate();
 	    }, []);
-	    const navigateToNextColumn = F(() => {
+	    const navigateToNextColumn = T$2(() => {
 	      setCurrentColumn2(c => {
 	        return tryNavigateToIndex(managedCells, c, c + 1, 1, identity, identity);
 	      });
@@ -3400,12 +3961,12 @@
 	      ...info
 	    }); //const { useLinearNavigationChildProps: useLinearNavigationChildRowProps } = useLinearNavigationChildRow(info as IR)
 
-	    const useGridNavigationRowProps = F(props => useManagedRowProps(useLinearNavigationCellProps(useMergedProps()({
+	    const useGridNavigationRowProps = T$2(props => useManagedRowProps(useLinearNavigationCellProps(useMergedProps()({
 	      hidden: !!hidden,
 	      "data-index": rowIndex
 	    }, props))), [useManagedRowProps, !!hidden]);
 	    const getRowIndex = useStableGetter(rowIndex);
-	    const useGridNavigationCell = F(info => {
+	    const useGridNavigationCell = T$2(info => {
 	      const getTabbable = useStableCallback(() => tabbable);
 	      const {
 	        tabbable,
@@ -3420,11 +3981,11 @@
 	      // TODO: Mouseup/down might be preferable,
 	      // but it doesn't fire on label elements here?????
 
-	      const onClick = F(() => {
+	      const onClick = T$2(() => {
 	        setCurrentRow2(getRowIndex());
 	        setCurrentColumn2(info.index);
 	      }, [info.index]);
-	      const useGridNavigationCellProps = F(props => useRovingTabIndexChildProps(useMergedProps()({
+	      const useGridNavigationCellProps = T$2(props => useRovingTabIndexChildProps(useMergedProps()({
 	        onClick
 	      }, props)), [useRovingTabIndexChildProps]);
 	      return {
@@ -3478,7 +4039,7 @@
 	  // Again, no matter what combination of sub- or sub-sub-functions used.
 	  let stableHandler = useStableCallback(handler !== null && handler !== void 0 ? handler : () => {});
 	  if (handler == null) stableHandler = null;
-	  y$1(() => {
+	  _$1(() => {
 	    if (stableHandler) {
 	      target.addEventListener(type, stableHandler, options);
 	      return () => target.removeEventListener(type, stableHandler, options);
@@ -3557,7 +4118,7 @@
 	  } = useRefElement({
 	    onMount,
 	    onUnmount,
-	    onElementChange: F((element, prevValue) => {
+	    onElementChange: T$2((element, prevValue) => {
 	      onMountChange === null || onMountChange === void 0 ? void 0 : onMountChange(element, prevValue);
 
 	      if (element) {
@@ -3641,7 +4202,7 @@
 	    useActiveElementProps,
 	    getElement
 	  } = useActiveElement({
-	    onActiveElementChange: F((activeElement, prevActiveElement) => {
+	    onActiveElementChange: T$2((activeElement, prevActiveElement) => {
 	      const selfElement = getElement();
 	      const focused = selfElement != null && selfElement == activeElement;
 	      const focusedInner = !!(selfElement !== null && selfElement !== void 0 && selfElement.contains(activeElement));
@@ -3649,7 +4210,7 @@
 	      setFocusedInner(focusedInner);
 	      onActiveElementChange === null || onActiveElementChange === void 0 ? void 0 : onActiveElementChange(activeElement, prevActiveElement);
 	    }, []),
-	    onLastActiveElementChange: F((lastActiveElement, prevLastActiveElement) => {
+	    onLastActiveElementChange: T$2((lastActiveElement, prevLastActiveElement) => {
 	      const selfElement = getElement();
 	      const focused = selfElement != null && selfElement == lastActiveElement;
 	      const focusedInner = !!(selfElement !== null && selfElement !== void 0 && selfElement.contains(lastActiveElement));
@@ -3659,7 +4220,7 @@
 	    }, []),
 	    onWindowFocusedChange
 	  });
-	  const useHasFocusProps = F(props => {
+	  const useHasFocusProps = T$2(props => {
 	    return useActiveElementProps(props);
 	  }, [useActiveElementProps]);
 	  return {
@@ -3730,12 +4291,12 @@
 
 	  const mangleMap = s$2(new Map());
 	  const demangleMap = s$2(new Map());
-	  const indexMangler = F(n => {
+	  const indexMangler = T$2(n => {
 	    var _mangleMap$current$ge;
 
 	    return (_mangleMap$current$ge = mangleMap.current.get(n)) !== null && _mangleMap$current$ge !== void 0 ? _mangleMap$current$ge : n;
 	  }, []);
-	  const indexDemangler = F(n => {
+	  const indexDemangler = T$2(n => {
 	    var _demangleMap$current$;
 
 	    return (_demangleMap$current$ = demangleMap.current.get(n)) !== null && _demangleMap$current$ !== void 0 ? _demangleMap$current$ : n;
@@ -3746,7 +4307,7 @@
 
 	  const [getForceUpdate, setForceUpdate] = usePassiveState(null, returnNull$1); // The actual sort function.
 
-	  const sort = F(function (managedRows, direction) {
+	  const sort = T$2(function (managedRows, direction) {
 	    var _getForceUpdate;
 
 	    for (var _len = arguments.length, args = new Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
@@ -3773,7 +4334,7 @@
 	  }, [
 	    /* Must remain stable */
 	  ]);
-	  const useSortableProps = F(_ref2 => {
+	  const useSortableProps = T$2(_ref2 => {
 	    let {
 	      children,
 	      ...props
@@ -5449,7 +6010,7 @@
 	  let {
 	    trapActive
 	  } = _ref;
-	  const handleActiveChange = F((trapActive, element) => {
+	  const handleActiveChange = T$2((trapActive, element) => {
 	    if (trapActive && element) {
 	      let rafHandle = requestAnimationFrame(() => {
 	        // TODO: This extra queueMicrotask is needed for
@@ -5577,7 +6138,7 @@
 	      return () => observer.disconnect();
 	    }
 	  }), returnNull$3);
-	  const onNeedMutationObserverReset = F(element => {
+	  const onNeedMutationObserverReset = T$2(element => {
 	    if (element) {
 	      queueMicrotask(() => {
 	        setMo(new MutationObserver(a => {
@@ -5600,7 +6161,7 @@
 	      });
 	    }
 	  }, []);
-	  y$1(() => {
+	  _$1(() => {
 	    onNeedMutationObserverReset(getElement());
 	  }, [attributeKey, attributeOldValue, characterDataOldValue, subtree]);
 	  const {
@@ -5877,16 +6438,16 @@
 	    managedChildren: managedAccordionSections,
 	    useManagedChild: useManagedChildSection
 	  } = useChildManager();
-	  const navigateToFirst = F(() => {
+	  const navigateToFirst = T$2(() => {
 	    setLastFocusedIndex(0);
 	  }, []);
-	  const navigateToLast = F(() => {
+	  const navigateToLast = T$2(() => {
 	    setLastFocusedIndex(managedAccordionSections.length - 1);
 	  }, []);
-	  const navigateToPrev = F(() => {
+	  const navigateToPrev = T$2(() => {
 	    setLastFocusedIndex(i => (i !== null && i !== void 0 ? i : 0) - 1);
 	  }, []);
-	  const navigateToNext = F(() => {
+	  const navigateToNext = T$2(() => {
 	    setLastFocusedIndex(i => (i !== null && i !== void 0 ? i : 0) + 1);
 	  }, []);
 	  const {
@@ -5920,7 +6481,7 @@
 	    setChildFlag: (i, open) => open && managedAccordionSections[i].focus(),
 	    getChildFlag: _ => false
 	  });
-	  const useAriaAccordionSection = F(args => {
+	  const useAriaAccordionSection = T$2(args => {
 	    var _ref2, _args$open;
 
 	    const index = args.index;
@@ -5940,16 +6501,16 @@
 	    const open = (_ref2 = (_args$open = args.open) !== null && _args$open !== void 0 ? _args$open : openFromParent) !== null && _ref2 !== void 0 ? _ref2 : null; // TODO: Convert to use useManagedChild so that this hook 
 	    // is stable without (directly) depending on the open state.
 
-	    const useAriaAccordionSectionHeader = F(function useAriaAccordionSectionHeader(_ref3) {
+	    const useAriaAccordionSectionHeader = T$2(function useAriaAccordionSectionHeader(_ref3) {
 	      const {
 	        getElement,
 	        useHasFocusProps
 	      } = useHasFocus({
-	        onFocusedChanged: F(focused => {
+	        onFocusedChanged: T$2(focused => {
 	          if (focused) setCurrentFocusedIndex(index);else setCurrentFocusedIndex(oldIndex => oldIndex === index ? null : index);
 	        }, [])
 	      });
-	      const focus = F(() => {
+	      const focus = T$2(() => {
 	        var _getElement;
 
 	        if (getCurrentFocusedIndex() != null) (_getElement = getElement()) === null || _getElement === void 0 ? void 0 : _getElement.focus();
@@ -5996,7 +6557,7 @@
 	        useAriaAccordionSectionHeaderProps
 	      };
 	    }, [useLinearNavigationProps, index, open]);
-	    const useAriaAccordionSectionBody = F(function useAriaAccordionSectionBody() {
+	    const useAriaAccordionSectionBody = T$2(function useAriaAccordionSectionBody() {
 	      function useAriaAccordionSectionBodyProps(_ref5) {
 	        let {
 	          role,
@@ -6043,8 +6604,8 @@
 	    labelPrefix: "label-",
 	    inputPrefix: "input-"
 	  };
-	  const [labelElement, setLabelElement] = d$1(null);
-	  const [inputElement, setInputElement] = d$1(null);
+	  const [labelElement, setLabelElement] = y$1(null);
+	  const [inputElement, setInputElement] = y$1(null);
 	  const {
 	    getElement: getLabelElement,
 	    useRefElementProps: useLabelRefElementProps
@@ -6072,14 +6633,14 @@
 	    prefix: inputPrefix
 	  });
 	  const labelHasMounted = !!labelElement;
-	  const useGenericLabelLabel = F(function useGenericLabelLabel() {
+	  const useGenericLabelLabel = T$2(function useGenericLabelLabel() {
 	    return {
 	      useGenericLabelLabelProps: props => {
 	        return useLabelRandomIdProps(useLabelRefElementProps(props));
 	      }
 	    };
 	  }, []);
-	  const useGenericLabelInput = F(function useGenericLabelInput() {
+	  const useGenericLabelInput = T$2(function useGenericLabelInput() {
 	    return {
 	      useGenericLabelInputProps: _ref => {
 	        var _ref2;
@@ -6139,7 +6700,7 @@
 	    labelPrefix,
 	    inputPrefix
 	  });
-	  const useInputLabelLabel = F(function useInputLabelLabel(_ref3) {
+	  const useInputLabelLabel = T$2(function useInputLabelLabel(_ref3) {
 	    let {
 	      tag
 	    } = _ref3;
@@ -6155,7 +6716,7 @@
 
 	    };
 	  }, [useGenericLabelInput]);
-	  const useInputLabelInput = F(function useInputLabelInput() {
+	  const useInputLabelInput = T$2(function useInputLabelInput() {
 	    const {
 	      useGenericLabelInputProps
 	    } = useGenericLabelInput();
@@ -6214,7 +6775,7 @@
 	    labelPrefix: "aria-checkbox-label-",
 	    inputPrefix: "aria-checkbox-input-"
 	  });
-	  const useCheckboxLikeInputElement = F(function useCheckboxInputElement(_ref5) {
+	  const useCheckboxLikeInputElement = T$2(function useCheckboxInputElement(_ref5) {
 	    let {
 	      tag
 	    } = _ref5;
@@ -6230,7 +6791,7 @@
 	    // See https://github.com/preactjs/preact/issues/2745,
 	    // and https://github.com/preactjs/preact/issues/1899#issuecomment-525690194
 
-	    y$1(() => {
+	    _$1(() => {
 	      const element = getElement();
 
 	      if (element && tag == "input") {
@@ -6279,7 +6840,7 @@
 	      return useMergedProps()(p0, props);
 	    }
 	  }, [useILInput, role, labelPosition, disabled, checked]);
-	  const useCheckboxLikeLabelElement = F(function useCheckboxLabelElement(_ref7) {
+	  const useCheckboxLikeLabelElement = T$2(function useCheckboxLabelElement(_ref7) {
 	    let {
 	      tag
 	    } = _ref7;
@@ -6342,7 +6903,7 @@
 	    disabled,
 	    onInput: onInputEnhanced
 	  });
-	  const useCheckboxInputElement = F(function useCheckboxInputElement(_ref2) {
+	  const useCheckboxInputElement = T$2(function useCheckboxInputElement(_ref2) {
 	    let {
 	      tag
 	    } = _ref2;
@@ -6353,7 +6914,7 @@
 	      tag
 	    });
 	    const isMixed = checked == "mixed";
-	    y$1(() => {
+	    _$1(() => {
 	      const inputElement = getInputElement();
 
 	      if (inputElement && tag === "input") {
@@ -6375,7 +6936,7 @@
 	      return props;
 	    }
 	  }, [useCheckboxLikeInputElement, checked, labelPosition, disabled]);
-	  const useCheckboxLabelElement = F(function useCheckboxLabelElement(_ref4) {
+	  const useCheckboxLabelElement = T$2(function useCheckboxLabelElement(_ref4) {
 	    let {
 	      tag
 	    } = _ref4;
@@ -6424,7 +6985,7 @@
 	  const stableOnClose = useStableCallback(onClose);
 	  const stableGetElements = useStableCallback(getElements);
 	  const getOpen = useStableGetter(open);
-	  const onBackdropClick = F(function onBackdropClick(e) {
+	  const onBackdropClick = T$2(function onBackdropClick(e) {
 	    var _getElement;
 
 	    const document = (_getElement = getElement()) === null || _getElement === void 0 ? void 0 : _getElement.ownerDocument; // Basically, "was this event fired on the root-most element, or at least an element not contained by the modal?"
@@ -6454,7 +7015,7 @@
 	    useActiveElementProps,
 	    getElement
 	  } = useActiveElement({
-	    onLastActiveElementChange: F(newElement => {
+	    onLastActiveElementChange: T$2(newElement => {
 	      let validFocusableElements = stableGetElements();
 
 	      if (validFocusableElements) {
@@ -6471,7 +7032,7 @@
 	  const {
 	    useRefElementProps
 	  } = useRefElement({
-	    onElementChange: F(e => {
+	    onElementChange: T$2(e => {
 	      const document = e === null || e === void 0 ? void 0 : e.ownerDocument;
 	      const window = document === null || document === void 0 ? void 0 : document.defaultView; // Since everything else is inert, we listen for captured clicks on the window
 	      // (we don't use onClick since that doesn't fire when clicked on empty/inert areas)
@@ -6508,7 +7069,7 @@
 	    }, [])
 	  });
 	  return {
-	    useSoftDismissProps: F(props => useActiveElementProps(useRefElementProps(props)), [useActiveElementProps, useRefElementProps])
+	    useSoftDismissProps: T$2(props => useActiveElementProps(useRefElementProps(props)), [useActiveElementProps, useRefElementProps])
 	  };
 	}
 	/**
@@ -6553,7 +7114,7 @@
 	    onClose: stableOnClose,
 	    getElements: getModalElement
 	  });
-	  const useModalBackdrop = F(function useModalBackdrop() {
+	  const useModalBackdrop = T$2(function useModalBackdrop() {
 	    function useModalBackdropProps(props) {
 	      return useMergedProps()({
 	        onPointerUp: () => stableOnClose("backdrop")
@@ -6585,7 +7146,7 @@
 	    }), modalDescribedByBody ? pFinal : p2)));
 	  };
 
-	  const useModalTitle = F(function useModalTitle() {
+	  const useModalTitle = T$2(function useModalTitle() {
 	    const useModalTitleProps = function (props) {
 	      return useTitleIdProps(props);
 	    };
@@ -6594,7 +7155,7 @@
 	      useModalTitleProps
 	    };
 	  }, []);
-	  const useModalBody = F(function useModalBody(_ref4) {
+	  const useModalBody = T$2(function useModalBody(_ref4) {
 	    let {
 	      descriptive
 	    } = _ref4;
@@ -6625,7 +7186,7 @@
 	function useHideScroll(hideScroll) {
 	  const [getScrollbarWidth, setScrollbarWidth] = usePassiveState(null);
 	  const [getScrollbarHeight, setScrollbarHeight] = usePassiveState(null);
-	  y$1(() => {
+	  _$1(() => {
 	    if (hideScroll) {
 	      // When scrolling is resumed, we'll need to restore the original scroll positions
 	      // so we need to keep this information around
@@ -6702,7 +7263,7 @@
 	    open,
 	    onClose
 	  });
-	  const useDialogBackdrop = F(() => {
+	  const useDialogBackdrop = T$2(() => {
 	    const {
 	      useModalBackdropProps
 	    } = useModalBackdrop();
@@ -6710,7 +7271,7 @@
 	      useDialogBackdropProps: useModalBackdropProps
 	    };
 	  }, [useModalBackdrop]);
-	  const useDialogBody = F(_ref2 => {
+	  const useDialogBody = T$2(_ref2 => {
 	    let {
 	      descriptive
 	    } = _ref2;
@@ -6724,7 +7285,7 @@
 	    };
 	  }, [useModalBackdrop]);
 	  const useDialogProps = useModalProps;
-	  const useDialogTitle = F(() => {
+	  const useDialogTitle = T$2(() => {
 	    const {
 	      useModalTitleProps
 	    } = useModalTitle();
@@ -6755,7 +7316,7 @@
 	    open,
 	    onClose
 	  });
-	  const useDrawerBackdrop = F(() => {
+	  const useDrawerBackdrop = T$2(() => {
 	    const {
 	      useModalBackdropProps
 	    } = useModalBackdrop();
@@ -6763,7 +7324,7 @@
 	      useDrawerBackdropProps: useModalBackdropProps
 	    };
 	  }, [useModalBackdrop]);
-	  const useDrawerBody = F(_ref2 => {
+	  const useDrawerBody = T$2(_ref2 => {
 	    let {
 	      descriptive
 	    } = _ref2;
@@ -6777,7 +7338,7 @@
 	    };
 	  }, [useModalBackdrop]);
 	  const useDrawerProps = useModalProps;
-	  const useDrawerTitle = F(() => {
+	  const useDrawerTitle = T$2(() => {
 	    const {
 	      useModalTitleProps
 	    } = useModalTitle();
@@ -6830,13 +7391,13 @@
 	  const {
 	    useActiveElementProps
 	  } = useActiveElement({
-	    onActiveElementChange: F(activeElement => {
+	    onActiveElementChange: T$2(activeElement => {
 	      var _getInputElement;
 
 	      return setAnyItemsFocused(!!((_getInputElement = getInputElement()) !== null && _getInputElement !== void 0 && _getInputElement.contains(activeElement)));
 	    }, [])
 	  });
-	  y$1(() => {
+	  _$1(() => {
 	    if (!anyItemsFocused) navigateToIndex(selectedIndex);
 	  }, [anyItemsFocused, selectedIndex, navigateToIndex]);
 	  useChildFlag({
@@ -6857,7 +7418,7 @@
 	    navigateToIndex(selectedIndex);
 	  }, [selectedIndex, managedChildren.length]);
 	  const childCount = managedChildren.length;
-	  const useListboxSingleItem = F(info => {
+	  const useListboxSingleItem = T$2(info => {
 	    const [selected, setSelected, getSelected] = useState(null);
 	    const {
 	      tabbable,
@@ -6872,7 +7433,7 @@
 	      useRefElementProps
 	    } = useRefElement({});
 	    const index = info.index;
-	    y$1(() => {
+	    _$1(() => {
 	      const element = getElement();
 
 	      if (element && tabbable && selectionMode == "focus") {
@@ -6913,7 +7474,7 @@
 	      return useListNavigationChildProps(useMergedProps()(newProps, useRefElementProps(props)));
 	    }
 	  }, [useListNavigationChild, selectionMode, childCount]);
-	  const useListboxSingleLabel = F(function useListboxSingleLabel() {
+	  const useListboxSingleLabel = T$2(function useListboxSingleLabel() {
 	    function useListboxSingleLabelProps(props) {
 	      const {
 	        useGenericLabelLabelProps
@@ -6974,12 +7535,12 @@
 	  const childCount = managedChildren.length;
 	  const [, setShiftHeld, getShiftHeld] = useState(false);
 	  const typeaheadInProgress = !!currentTypeahead;
-	  y$1(() => {
+	  _$1(() => {
 	    for (let i = 0; i < childCount; ++i) {
 	      managedChildren[i].setTypeaheadInProgress(typeaheadInProgress);
 	    }
 	  }, [typeaheadInProgress, childCount]);
-	  const useListboxMultiItem = F(info => {
+	  const useListboxMultiItem = T$2(info => {
 	    var _info$onSelect;
 
 	    const selected = info.selected;
@@ -7034,7 +7595,7 @@
 	      return useRefElementProps(useListNavigationChildProps(useMergedProps()(newProps, props)));
 	    }
 	  }, [useListNavigationChild, childCount, typeaheadInProgress]);
-	  const useListboxMultiLabel = F(function useListboxMultiLabel() {
+	  const useListboxMultiLabel = T$2(function useListboxMultiLabel() {
 	    function useListboxMultiLabelProps(props) {
 	      const {
 	        useGenericLabelLabelProps
@@ -7144,10 +7705,10 @@
 	    onClose: stableOnClose,
 	    getElements: () => [getButtonElement(), getMenuElement()]
 	  });
-	  y$1(() => {
+	  _$1(() => {
 	    setFocusTrapActive(open);
 	  }, [open]);
-	  const useMenuBaseProps = F(props => {
+	  const useMenuBaseProps = T$2(props => {
 	    function onKeyDown(e) {
 	      if (e.key == "Escape" && getOpen()) {
 	        stableOnClose();
@@ -7161,10 +7722,10 @@
 	      onKeyDown
 	    }, props)))));
 	  }, [useSoftDismissProps, useMenuBaseHasFocusProps, useMenuBaseRefElementProps, useMenuBaseIdProps]);
-	  const useMenuBaseButtonProps = F(props => {
+	  const useMenuBaseButtonProps = T$2(props => {
 	    return useButtonRefElementProps(useButtonHasFocusProps(useMenuBaseIdReferencingProps("aria-controls")(props)));
 	  }, [useButtonHasFocusProps, useButtonRefElementProps, useMenuBaseIdReferencingProps]);
-	  y$1(() => {
+	  _$1(() => {
 	    const sendFocusWithinMenu = getSendFocusWithinMenu();
 
 	    if (focusTrapActive) {
@@ -7178,7 +7739,7 @@
 	    } else ;
 	  }, [focusTrapActive]);
 	  return {
-	    useMenuSentinel: F(() => {
+	    useMenuSentinel: T$2(() => {
 	      const {
 	        useSentinelProps: useMenuSentinelProps,
 	        ...rest
@@ -7267,7 +7828,7 @@
 	    noTypeahead,
 	    noWrap,
 	    typeaheadTimeout,
-	    shouldFocusOnChange: F(() => getMenuBaseLastFocusedInner() || getMenuBaseButtonLastFocusedInner(), [])
+	    shouldFocusOnChange: T$2(() => getMenuBaseLastFocusedInner() || getMenuBaseButtonLastFocusedInner(), [])
 	  });
 	  const {
 	    useMenuSentinel,
@@ -7281,7 +7842,7 @@
 	  } = useMenuBase({ ...args,
 	    sendFocusWithinMenu: focusMenu !== null && focusMenu !== void 0 ? focusMenu : () => {}
 	  });
-	  const useMenuButton = F(_ref4 => {
+	  const useMenuButton = T$2(_ref4 => {
 	    return {
 	      useMenuButtonProps: function (p) {
 	        const props = useMenuBaseButtonProps(p);
@@ -7291,7 +7852,7 @@
 	      }
 	    };
 	  }, [open, onClose, onOpen, useMenuBaseButtonProps]);
-	  const useMenuItem = F(args => {
+	  const useMenuItem = T$2(args => {
 	    const {
 	      useListNavigationChildProps
 	    } = useListNavigationChild(args);
@@ -7346,7 +7907,7 @@
 	    convertToPhysicalOrientation,
 	    useLogicalDirectionProps
 	  } = useLogicalDirection({
-	    onLogicalDirectionChange: F(logicalDirectionInfo => setPhysicalOrientation(convertToPhysicalOrientation(logicalOrientation, logicalDirectionInfo)), [])
+	    onLogicalDirectionChange: T$2(logicalDirectionInfo => setPhysicalOrientation(convertToPhysicalOrientation(logicalOrientation, logicalDirectionInfo)), [])
 	  }); //const { useRandomIdProps: useTabListIdProps, useReferencedIdProps: useReferencedTabListId } = useRandomId({ prefix: "aria-tab-list-" });
 
 	  const {
@@ -7418,7 +7979,7 @@
 	      });
 	    }
 	  }, [childCount, selectedIndex, selectionMode]);
-	  const useTab = F(function useTab(info) {
+	  const useTab = T$2(function useTab(info) {
 	    const [selectionModeL, setSelectionModeL] = useState(selectionMode);
 	    const {
 	      useRefElementProps,
@@ -7444,7 +8005,7 @@
 	      ...info
 	    });
 	    const getIndex = useStableGetter(info.index);
-	    y$1(() => {
+	    _$1(() => {
 	      const element = getElement();
 
 	      if (tabbable && selectionModeL == "focus") {
@@ -7457,7 +8018,7 @@
 	        });
 	      }
 	    }, [tabbable, selectionMode]);
-	    y$1(() => {
+	    _$1(() => {
 	      var _managedPanels$info$i;
 
 	      (_managedPanels$info$i = managedPanels[info.index]) === null || _managedPanels$info$i === void 0 ? void 0 : _managedPanels$info$i.setTabId(tabId);
@@ -7484,7 +8045,7 @@
 	      selected
 	    };
 	  }, []);
-	  const useTabPanel = F(function usePanel(info) {
+	  const useTabPanel = T$2(function usePanel(info) {
 	    //const [shouldFocus, setShouldFocus] = useState(false);
 	    const [, setTabId] = useState(undefined);
 	    const [visible, setVisible, getVisible] = useState(null);
@@ -7515,7 +8076,7 @@
 	      }
 	    }
 
-	    y$1(() => {
+	    _$1(() => {
 	      var _managedTabs$info$ind;
 
 	      (_managedTabs$info$ind = managedTabs[info.index]) === null || _managedTabs$info$ind === void 0 ? void 0 : _managedTabs$info$ind.setTabPanelId(tabPanelId);
@@ -7538,7 +8099,7 @@
 	      visible
 	    };
 	  }, []);
-	  const useTabsList = F(function useTabList() {
+	  const useTabsList = T$2(function useTabList() {
 	    function useTabListProps(_ref4) {
 	      let { ...props
 	      } = _ref4;
@@ -7551,7 +8112,7 @@
 	      useTabListProps
 	    };
 	  }, [useListNavigationProps, physicalOrientation]);
-	  const useTabsLabel = F(function useTabsLabel() {
+	  const useTabsLabel = T$2(function useTabsLabel() {
 	    function useTabsLabelProps(_ref5) {
 	      let { ...props
 	      } = _ref5;
@@ -7653,10 +8214,10 @@
 	  const [triggerHoverDelayCorrected, setTriggerHoverDelayCorrected] = useState(false);
 	  const [tooltipFocusedDelayCorrected, setTooltipFocusedDelayCorrected] = useState(false);
 	  const [tooltipHoverDelayCorrected, setTooltipHoverDelayCorrected] = useState(false);
-	  y$1(() => {
+	  _$1(() => {
 	    setOpen(triggerFocusedDelayCorrected || triggerHoverDelayCorrected || tooltipFocusedDelayCorrected || tooltipHoverDelayCorrected);
 	  }, [triggerFocusedDelayCorrected || triggerHoverDelayCorrected || tooltipFocusedDelayCorrected || tooltipHoverDelayCorrected]);
-	  const useTooltipTrigger = F(function useTooltipTrigger() {
+	  const useTooltipTrigger = T$2(function useTooltipTrigger() {
 	    useGlobalHandler(document, "pointermove", e => {
 	      var _getElement;
 
@@ -7695,7 +8256,7 @@
 	      useTooltipTriggerProps
 	    };
 	  }, [useTooltipIdReferencingProps]);
-	  const useTooltip = F(function useTooltip() {
+	  const useTooltip = T$2(function useTooltip() {
 	    const {
 	      useHasFocusProps,
 	      getElement
@@ -7761,16 +8322,16 @@
 	  const {
 	    useActiveElementProps
 	  } = useActiveElement({
-	    onActiveElementChange: F(activeElement => {
+	    onActiveElementChange: T$2(activeElement => {
 	      var _getRadioGroupParentE;
 
 	      return setAnyRadiosFocused(!!((_getRadioGroupParentE = getRadioGroupParentElement()) !== null && _getRadioGroupParentE !== void 0 && _getRadioGroupParentE.contains(activeElement)));
 	    }, [])
 	  });
-	  y$1(() => {
+	  _$1(() => {
 	    if (!anyRadiosFocused) navigateToIndex(selectedIndex !== null && selectedIndex !== void 0 ? selectedIndex : 0);
 	  }, [anyRadiosFocused, selectedIndex, navigateToIndex]);
-	  const useRadioGroupProps = F(_ref2 => {
+	  const useRadioGroupProps = T$2(_ref2 => {
 	    let { ...props
 	    } = _ref2;
 	    props.role = "radiogroup";
@@ -7791,11 +8352,11 @@
 	      return (_managedChildren$i$ge = (_managedChildren$i2 = managedChildren[i]) === null || _managedChildren$i2 === void 0 ? void 0 : _managedChildren$i2.getChecked()) !== null && _managedChildren$i$ge !== void 0 ? _managedChildren$i$ge : false;
 	    }
 	  });
-	  y$1(() => {
+	  _$1(() => {
 	    const selectedIndex = byName.current.get(selectedValue);
 	    setSelectedIndex(selectedIndex !== null && selectedIndex !== void 0 ? selectedIndex : null);
 	  }, [byName, selectedValue]);
-	  const useRadio = F(function useAriaRadio(_ref3) {
+	  const useRadio = T$2(function useAriaRadio(_ref3) {
 	    let {
 	      value,
 	      index,
@@ -7805,7 +8366,7 @@
 	      ...rest
 	    } = _ref3;
 	    const [checked, setChecked, getChecked] = useState(null);
-	    const onInput = F(e => {
+	    const onInput = T$2(e => {
 	      stableOnInput(enhanceEvent(e, {
 	        selectedValue: value
 	      }));
@@ -7865,7 +8426,7 @@
 	      };
 	    };
 
-	    const useRadioLabel = F(_ref5 => {
+	    const useRadioLabel = T$2(_ref5 => {
 	      let {
 	        tag
 	      } = _ref5;
@@ -7912,7 +8473,7 @@
 	  const {
 	    useManagedChild
 	  } = useChildManager();
-	  const useAriaSliderThumb = F(function useAriaSliderThumb(_ref2) {
+	  const useAriaSliderThumb = T$2(function useAriaSliderThumb(_ref2) {
 	    let {
 	      index,
 	      onValueChange,
@@ -7923,8 +8484,8 @@
 	      max: maxOverride,
 	      ..._
 	    } = _ref2;
-	    const [minParentCopy, setMinParentCopy] = d$1(minParent);
-	    const [maxParentCopy, setMaxParentCopy] = d$1(maxParent);
+	    const [minParentCopy, setMinParentCopy] = y$1(minParent);
+	    const [maxParentCopy, setMaxParentCopy] = y$1(maxParent);
 	    const {
 	      getElement,
 	      useManagedChildProps
@@ -8001,7 +8562,7 @@
 	  } = useChildManager(); // Any time a new toast mounts, update our bottommostToastIndex to point to it if necessary
 	  // ("necessary" just meaning if it's the first toast ever or all prior toasts have been dismissed)
 
-	  const onAnyToastMounted = F(_index => {
+	  const onAnyToastMounted = T$2(_index => {
 	    let bottom = getActiveToastIndex();
 
 	    while (bottom < toastQueue.length && (bottom < 0 || (_toastQueue$bottom = toastQueue[bottom]) !== null && _toastQueue$bottom !== void 0 && _toastQueue$bottom.dismissed)) {
@@ -8013,7 +8574,7 @@
 	    setActiveToastIndex(bottom);
 	  }, [setActiveToastIndex]); // Any time a toast is dismissed, update our bottommostToastIndex to point to the next toast in the queue, if one exists.
 
-	  const onAnyToastDismissed = F(index => {
+	  const onAnyToastDismissed = T$2(index => {
 	    var _getElement, _toastQueue$bottom3;
 
 	    let bottom = getActiveToastIndex();
@@ -8044,14 +8605,14 @@
 	      return ((_toastQueue$i2 = toastQueue[i]) === null || _toastQueue$i2 === void 0 ? void 0 : _toastQueue$i2.getStatus()) === "active";
 	    }
 	  });
-	  const useToast = F(_ref2 => {
+	  const useToast = T$2(_ref2 => {
 	    let {
 	      politeness,
 	      timeout
 	    } = _ref2;
 	    const [status, setStatus, getStatus] = useState("pending");
 	    const dismissed = status === "dismissed";
-	    const dismiss = F(() => {
+	    const dismiss = T$2(() => {
 	      setStatus("dismissed");
 	    }, []);
 	    const [mouseOver, setMouseOver] = useState(false);
@@ -8066,7 +8627,7 @@
 	    h$1(() => {
 	      setPoliteness(politeness !== null && politeness !== void 0 ? politeness : "polite");
 	    }, [politeness]);
-	    const focus = F(() => {
+	    const focus = T$2(() => {
 	      const element = getElement();
 
 	      if (element) {
@@ -8086,13 +8647,13 @@
 	    });
 	    const isActive = status === "active";
 	    const [triggerIndex, setTriggerIndex] = useState(1);
-	    const resetDismissTimer = F(() => {
+	    const resetDismissTimer = T$2(() => {
 	      setTriggerIndex(i => ++i);
 	    }, []);
-	    y$1(() => {
+	    _$1(() => {
 	      onAnyToastMounted(getMountIndex(toastId));
 	    }, []);
-	    y$1(() => {
+	    _$1(() => {
 	      if (dismissed) onAnyToastDismissed(getMountIndex(toastId));
 	    }, [dismissed]);
 	    useTimeout({
@@ -8152,12 +8713,12 @@
 	    sort: originalSort,
 	    useSortableProps
 	  } = useSortableChildren({
-	    getValue: F((row, column) => {
+	    getValue: T$2((row, column) => {
 	      var _row$getManagedCells, _row$getManagedCells$;
 
 	      return (_row$getManagedCells = row.getManagedCells()) === null || _row$getManagedCells === void 0 ? void 0 : (_row$getManagedCells$ = _row$getManagedCells[column]) === null || _row$getManagedCells$ === void 0 ? void 0 : _row$getManagedCells$.value;
 	    }, []),
-	    getIndex: F(row => {
+	    getIndex: T$2(row => {
 	      return row.index;
 	    }, [])
 	  }); // This is the index of the currently sorted column('s header cell that was clicked to sort it).
@@ -8182,14 +8743,14 @@
 	  } = useHasFocus({}); // Wrap the "useSortable" sort function to also set some internal state
 	  // regarding which column is sorted and in what direction.
 
-	  const sort = F((column, direction) => {
+	  const sort = T$2((column, direction) => {
 	    setSortedColumn(column);
 	    setSortedDirection(direction);
 	    originalSort(getBodyRows(), direction, column);
 	  }, [
 	    /* Must remain stable */
 	  ]);
-	  const useTableSection = F(_ref2 => {
+	  const useTableSection = T$2(_ref2 => {
 	    let {
 	      location
 	    } = _ref2;
@@ -8208,7 +8769,7 @@
 	      indexMangler,
 	      indexDemangler
 	    });
-	    const useTableSectionProps = F(props => {
+	    const useTableSectionProps = T$2(props => {
 	      return useGridNavigationProps(useManagedChildProps(useMergedProps()({
 	        role: "rowgroup"
 	      }, props)));
@@ -8227,7 +8788,7 @@
 	     *
 	     */
 
-	    const useTableRow = F(_ref3 => {
+	    const useTableRow = T$2(_ref3 => {
 	      let {
 	        index: rowIndexAsUnsorted,
 	        location,
@@ -8252,7 +8813,7 @@
 	        location
 	      }); // Not public -- just the shared code between header cells and body cells
 
-	      const useTableCellShared = F(_ref4 => {
+	      const useTableCellShared = T$2(_ref4 => {
 	        let {
 	          index,
 	          value
@@ -8312,7 +8873,7 @@
 	          useTableCellDelegateProps
 	        };
 	      }, []);
-	      const useTableHeadCell = F(_ref6 => {
+	      const useTableHeadCell = T$2(_ref6 => {
 	        let {
 	          index: columnIndex,
 	          unsortable
@@ -8333,14 +8894,14 @@
 	          useManagedChildProps
 	        } = useManagedHeaderCellChild({
 	          index: random.current,
-	          setSortedColumn: F(c => {
+	          setSortedColumn: T$2(c => {
 	            setIsTheSortedColumn(c === columnIndex);
 	          }, [columnIndex])
 	        });
-	        y$1(() => {
+	        _$1(() => {
 	          if (!isTheSortedColumn) setSortDirection(null);
 	        }, [isTheSortedColumn]);
-	        const onSortClick = F(() => {
+	        const onSortClick = T$2(() => {
 	          let nextSortDirection = getSortDirection();
 	          if (nextSortDirection === "ascending") nextSortDirection = "descending";else nextSortDirection = "ascending";
 	          setSortDirection(nextSortDirection);
@@ -8360,7 +8921,7 @@
 	          sortDirection
 	        };
 	      }, []);
-	      const useTableCell = F(_ref7 => {
+	      const useTableCell = T$2(_ref7 => {
 	        let {
 	          index,
 	          value
@@ -8402,14 +8963,14 @@
 	      managedRows
 	    };
 	  }, []);
-	  const useTableHead = F(() => {
+	  const useTableHead = T$2(() => {
 	    // Used to track if we tried to render any rows before they've been
 	    // given their "true" index to display (their sorted index).
 	    // This is true for all rows initially on mount, but especially true
 	    // when the table has been pre-sorted and then a new row is
 	    // added on top of that afterwards. 
 	    const [hasUnsortedRows, setHasUnsortedRows] = useState(false);
-	    y$1(() => {
+	    _$1(() => {
 	      if (hasUnsortedRows) {
 	        var _getSortedColumn, _getSortedDirection;
 
@@ -8428,7 +8989,7 @@
 	      useTableHeadProps: useTableSectionProps
 	    };
 	  }, [useTableSection]);
-	  const useTableBody = F(() => {
+	  const useTableBody = T$2(() => {
 	    const {
 	      useTableSectionRow: useTableBodyRow,
 	      useTableSectionProps,
@@ -8436,7 +8997,7 @@
 	    } = useTableSection({
 	      location: "body"
 	    });
-	    const useTableBodyProps = F(_ref9 => {
+	    const useTableBodyProps = T$2(_ref9 => {
 	      let {
 	        children,
 	        ...props
@@ -8446,7 +9007,7 @@
 	        children: children
 	      }, props)));
 	    }, [useTableSectionProps]);
-	    y$1(() => {
+	    _$1(() => {
 	      setBodyRows(_prev => managedRows);
 	    }, [managedRows]);
 	    return {
@@ -8454,7 +9015,7 @@
 	      useTableBodyProps
 	    };
 	  }, []);
-	  const useTableFoot = F(() => {
+	  const useTableFoot = T$2(() => {
 	    const {
 	      useTableSectionRow: useTableFootRow,
 	      useTableSectionProps
@@ -8469,7 +9030,7 @@
 	  // as the "sortedColumn" column.  We then, as the parent table, let all the other
 	  // header rows know who is the "sortedColumn" column so that they can un-style themselves.
 
-	  y$1(() => {
+	  _$1(() => {
 	    if (sortedColumn != null) {
 	      Object.entries(managedHeaderCells).forEach(_ref10 => {
 	        let [_index, cell] = _ref10;
@@ -8531,7 +9092,7 @@
 	  return r.displayName = "Memo(" + (n.displayName || n.name) + ")", r.prototype.isReactComponent = !0, r.__f = !0, r;
 	}
 
-	(E.prototype = new _$1()).isPureReactComponent = !0, E.prototype.shouldComponentUpdate = function (n, t) {
+	(E.prototype = new _$2()).isPureReactComponent = !0, E.prototype.shouldComponentUpdate = function (n, t) {
 	  return S(this.props, n) || S(this.state, t);
 	};
 	var w$1 = l$3.__b;
@@ -8576,7 +9137,7 @@
 	l$3.unmount = function (n) {
 	  var t = n.__c;
 	  t && t.__R && t.__R(), t && !0 === n.__h && (n.type = null), O && O(n);
-	}, (L$1.prototype = new _$1()).__c = function (n, t) {
+	}, (L$1.prototype = new _$2()).__c = function (n, t) {
 	  var e = t.__c,
 	      r = this;
 	  null == r.t && (r.t = []), r.t.push(e);
@@ -8683,7 +9244,7 @@
 	  return e.containerInfo = t, e;
 	}
 
-	(M$1.prototype = new _$1()).__e = function (n) {
+	(M$1.prototype = new _$2()).__e = function (n) {
 	  var t = this,
 	      e = U(t.__v),
 	      r = t.o.get(n);
@@ -8696,7 +9257,7 @@
 	  };
 	}, M$1.prototype.render = function (n) {
 	  this.u = null, this.o = new Map();
-	  var t = A$3(n.children);
+	  var t = A$2(n.children);
 	  n.revealOrder && "b" === n.revealOrder[0] && t.reverse();
 
 	  for (var e = t.length; e--;) this.o.set(t[e], this.u = [1, 0, this.u]);
@@ -8710,14 +9271,14 @@
 	};
 
 	var P$1 = "undefined" != typeof Symbol && Symbol.for && Symbol.for("react.element") || 60103,
-	    V = /^(?:accent|alignment|arabic|baseline|cap|clip(?!PathU)|color|dominant|fill|flood|font|glyph(?!R)|horiz|marker(?!H|W|U)|overline|paint|stop|strikethrough|stroke|text(?!L)|underline|unicode|units|v|vector|vert|word|writing|x(?!C))[A-Z]/,
-	    j$1 = "undefined" != typeof document,
-	    z$1 = function (n) {
+	    V = /^(?:accent|alignment|arabic|baseline|cap|clip(?!PathU)|color|dominant|fill|flood|font|glyph(?!R)|horiz|marker(?!H|W|U)|overline|paint|shape|stop|strikethrough|stroke|text(?!L)|underline|unicode|units|v|vector|vert|word|writing|x(?!C))[A-Z]/,
+	    $$1 = "undefined" != typeof document,
+	    j$1 = function (n) {
 	  return ("undefined" != typeof Symbol && "symbol" == typeof Symbol() ? /fil|che|rad/i : /fil|che|ra/i).test(n);
 	};
 
-	_$1.prototype.isReactComponent = {}, ["componentWillMount", "componentWillReceiveProps", "componentWillUpdate"].forEach(function (n) {
-	  Object.defineProperty(_$1.prototype, n, {
+	_$2.prototype.isReactComponent = {}, ["componentWillMount", "componentWillReceiveProps", "componentWillUpdate"].forEach(function (n) {
+	  Object.defineProperty(_$2.prototype, n, {
 	    configurable: !0,
 	    get: function () {
 	      return this["UNSAFE_" + n];
@@ -8765,12 +9326,12 @@
 
 	    for (var o in r = {}, e) {
 	      var i = e[o];
-	      j$1 && "children" === o && "noscript" === t || "value" === o && "defaultValue" in e && null == i || ("defaultValue" === o && "value" in e && null == e.value ? o = "value" : "download" === o && !0 === i ? i = "" : /ondoubleclick/i.test(o) ? o = "ondblclick" : /^onchange(textarea|input)/i.test(o + t) && !z$1(e.type) ? o = "oninput" : /^onfocus$/i.test(o) ? o = "onfocusin" : /^onblur$/i.test(o) ? o = "onfocusout" : /^on(Ani|Tra|Tou|BeforeInp|Compo)/.test(o) ? o = o.toLowerCase() : u && V.test(o) ? o = o.replace(/[A-Z0-9]/, "-$&").toLowerCase() : null === i && (i = void 0), /^oninput/i.test(o) && (o = o.toLowerCase(), r[o] && (o = "oninputCapture")), r[o] = i);
+	      $$1 && "children" === o && "noscript" === t || "value" === o && "defaultValue" in e && null == i || ("defaultValue" === o && "value" in e && null == e.value ? o = "value" : "download" === o && !0 === i ? i = "" : /ondoubleclick/i.test(o) ? o = "ondblclick" : /^onchange(textarea|input)/i.test(o + t) && !j$1(e.type) ? o = "oninput" : /^onfocus$/i.test(o) ? o = "onfocusin" : /^onblur$/i.test(o) ? o = "onfocusout" : /^on(Ani|Tra|Tou|BeforeInp|Compo)/.test(o) ? o = o.toLowerCase() : u && V.test(o) ? o = o.replace(/[A-Z0-9]/, "-$&").toLowerCase() : null === i && (i = void 0), /^oninput$/i.test(o) && (o = o.toLowerCase(), r[o] && (o = "oninputCapture")), r[o] = i);
 	    }
 
-	    "select" == t && r.multiple && Array.isArray(r.value) && (r.value = A$3(e.children).forEach(function (n) {
+	    "select" == t && r.multiple && Array.isArray(r.value) && (r.value = A$2(e.children).forEach(function (n) {
 	      n.props.selected = -1 != r.value.indexOf(n.props.value);
-	    })), "select" == t && null != r.defaultValue && (r.value = A$3(e.children).forEach(function (n) {
+	    })), "select" == t && null != r.defaultValue && (r.value = A$2(e.children).forEach(function (n) {
 	      n.props.selected = r.multiple ? -1 != r.defaultValue.indexOf(n.props.value) : r.defaultValue == n.props.value;
 	    })), n.props = r, e.class != e.className && (J.enumerable = "className" in e, null != e.className && (r.class = e.className), Object.defineProperty(r, "className", J));
 	  }
@@ -8831,17 +9392,17 @@
 	    getElement,
 	    useRefElementProps
 	  } = useRefElement({});
-	  const [phase, setPhase] = d$1(animateOnMount ? "init" : null);
-	  const [direction, setDirection] = d$1(show == null ? null : show ? "enter" : "exit");
-	  const [surfaceWidth, setSurfaceWidth] = d$1(null);
-	  const [surfaceHeight, setSurfaceHeight] = d$1(null);
-	  const [surfaceX, setSurfaceX] = d$1(null);
-	  const [surfaceY, setSurfaceY] = d$1(null);
-	  const [transitioningWidth, setTransitioningWidth] = d$1(null);
-	  const [transitioningHeight, setTransitioningHeight] = d$1(null);
-	  const [transitioningX, setTransitioningX] = d$1(null);
-	  const [transitioningY, setTransitioningY] = d$1(null);
-	  const [logicalDirectionInfo, setLogicalDirectionInfo] = d$1(null);
+	  const [phase, setPhase] = y$1(animateOnMount ? "init" : null);
+	  const [direction, setDirection] = y$1(show == null ? null : show ? "enter" : "exit");
+	  const [surfaceWidth, setSurfaceWidth] = y$1(null);
+	  const [surfaceHeight, setSurfaceHeight] = y$1(null);
+	  const [surfaceX, setSurfaceX] = y$1(null);
+	  const [surfaceY, setSurfaceY] = y$1(null);
+	  const [transitioningWidth, setTransitioningWidth] = y$1(null);
+	  const [transitioningHeight, setTransitioningHeight] = y$1(null);
+	  const [transitioningX, setTransitioningX] = y$1(null);
+	  const [transitioningY, setTransitioningY] = y$1(null);
+	  const [logicalDirectionInfo, setLogicalDirectionInfo] = y$1(null);
 	  const {
 	    getLogicalDirectionInfo,
 	    useLogicalDirectionProps
@@ -8855,7 +9416,7 @@
 	  const tooEarlyTimeoutRef = s$2(null);
 	  const tooEarlyValueRef = s$2(true);
 	  const tooLateTimeoutRef = s$2(null);
-	  const onTransitionEnd = F(e => {
+	  const onTransitionEnd = T$2(e => {
 	    if (e.target === getElement() && tooEarlyValueRef.current == false) {
 	      setPhase("finalize");
 	    }
@@ -9046,9 +9607,9 @@
 	    childMountBehavior,
 	    ...props
 	  } = _ref3;
-	  const [hasShownOnce, setHasShownOnce] = d$1(false);
+	  const [hasShownOnce, setHasShownOnce] = y$1(false);
 	  const shouldSetHasShownOnce = hasShownOnce === false && childMountBehavior === "mount-on-show" && show === true;
-	  y$1(() => {
+	  _$1(() => {
 	    if (shouldSetHasShownOnce) setHasShownOnce(true);
 	  }, [shouldSetHasShownOnce]);
 	  if (childMountBehavior === "mount-when-showing" && !show) child = v$2("div", null);
@@ -9311,10 +9872,10 @@
 	  (_classBase = classBase) !== null && _classBase !== void 0 ? _classBase : classBase = "transition";
 	  const lastValidTargetInline = s$2((_slideTargetInline = slideTargetInline) !== null && _slideTargetInline !== void 0 ? _slideTargetInline : 1);
 	  const lastValidTargetBlock = s$2((_slideTargetBlock = slideTargetBlock) !== null && _slideTargetBlock !== void 0 ? _slideTargetBlock : 0);
-	  y$1(() => {
+	  _$1(() => {
 	    if (slideTargetInline) lastValidTargetInline.current = slideTargetInline;
 	  }, [slideTargetInline]);
-	  y$1(() => {
+	  _$1(() => {
 	    if (slideTargetBlock) lastValidTargetBlock.current = slideTargetBlock;
 	  }, [slideTargetBlock]);
 	  if (slideTargetInline == 0) slideTargetInline = lastValidTargetInline.current;
@@ -9558,10 +10119,10 @@
 	  (_classBase = classBase) !== null && _classBase !== void 0 ? _classBase : classBase = "transition";
 	  const lastValidTargetInline = s$2((_flipAngleInline = flipAngleInline) !== null && _flipAngleInline !== void 0 ? _flipAngleInline : 180);
 	  const lastValidTargetBlock = s$2((_flipAngleBlock = flipAngleBlock) !== null && _flipAngleBlock !== void 0 ? _flipAngleBlock : 0);
-	  y$1(() => {
+	  _$1(() => {
 	    if (flipAngleInline) lastValidTargetInline.current = flipAngleInline;
 	  }, [flipAngleInline]);
-	  y$1(() => {
+	  _$1(() => {
 	    if (flipAngleBlock) lastValidTargetBlock.current = flipAngleBlock;
 	  }, [flipAngleBlock]);
 	  if (flipAngleInline == 0) flipAngleInline = lastValidTargetInline.current;
@@ -10024,7 +10585,7 @@
 	}, preact.options = l$1;
 
 	var n$1 = preact;
-	"undefined" != typeof window && window.__PREACT_DEVTOOLS__ && window.__PREACT_DEVTOOLS__.attachPreact("10.8.1", n$1.options, {
+	"undefined" != typeof window && window.__PREACT_DEVTOOLS__ && window.__PREACT_DEVTOOLS__.attachPreact("10.8.2", n$1.options, {
 	  Fragment: n$1.Fragment,
 	  Component: n$1.Component
 	});
@@ -10045,11 +10606,11 @@
 
 	var i = !1;
 
-	function s(e) {
+	function c(e) {
 	  return "function" == typeof e.type && e.type != n.Fragment;
 	}
 
-	function c(n) {
+	function s(n) {
 	  for (var e = [n], o = n; null != o.__o;) e.push(o.__o), o = o.__o;
 
 	  return e.reduce(function (n, e) {
@@ -10059,11 +10620,11 @@
 	  }, "");
 	}
 
-	var l = "function" == typeof WeakMap,
-	    u = n.Component.prototype.setState;
+	var u = "function" == typeof WeakMap,
+	    l = n.Component.prototype.setState;
 
 	n.Component.prototype.setState = function (n, e) {
-	  return null == this.__v ? null == this.state && console.warn('Calling "this.setState" inside the constructor of a component is a no-op and might be a bug in your application. Instead, set "this.state = {}" directly.\n\n' + c(a())) : null == this.__P && console.warn('Can\'t call "this.setState" on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in the componentWillUnmount method.\n\n' + c(this.__v)), u.call(this, n, e);
+	  return null == this.__v && null == this.state && console.warn('Calling "this.setState" inside the constructor of a component is a no-op and might be a bug in your application. Instead, set "this.state = {}" directly.\n\n' + s(a())), l.call(this, n, e);
 	};
 
 	var f = n.Component.prototype.forceUpdate;
@@ -10078,39 +10639,39 @@
 	    "function" == typeof i && (i = "function " + (i.displayName || i.name) + "() {}"), i = Object(i) !== i || i.toString ? i + "" : Object.prototype.toString.call(i), r += " " + a + "=" + JSON.stringify(i);
 	  }
 
-	  var s = e.children;
-	  return "<" + o + r + (s && s.length ? ">..</" + o + ">" : " />");
+	  var c = e.children;
+	  return "<" + o + r + (c && c.length ? ">..</" + o + ">" : " />");
 	}
 
 	n.Component.prototype.forceUpdate = function (n) {
-	  return null == this.__v ? console.warn('Calling "this.forceUpdate" inside the constructor of a component is a no-op and might be a bug in your application.\n\n' + c(a())) : null == this.__P && console.warn('Can\'t call "this.forceUpdate" on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in the componentWillUnmount method.\n\n' + c(this.__v)), f.call(this, n);
+	  return null == this.__v ? console.warn('Calling "this.forceUpdate" inside the constructor of a component is a no-op and might be a bug in your application.\n\n' + s(a())) : null == this.__P && console.warn('Can\'t call "this.forceUpdate" on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in the componentWillUnmount method.\n\n' + s(this.__v)), f.call(this, n);
 	}, function () {
 	  !function () {
 	    var e = n.options.__b,
 	        t = n.options.diffed,
 	        a = n.options.__,
 	        i = n.options.vnode,
-	        c = n.options.__r;
+	        s = n.options.__r;
 	    n.options.diffed = function (n) {
-	      s(n) && r.pop(), o.pop(), t && t(n);
+	      c(n) && r.pop(), o.pop(), t && t(n);
 	    }, n.options.__b = function (n) {
-	      s(n) && o.push(n), e && e(n);
+	      c(n) && o.push(n), e && e(n);
 	    }, n.options.__ = function (n, e) {
 	      r = [], a && a(n, e);
 	    }, n.options.vnode = function (n) {
 	      n.__o = r.length > 0 ? r[r.length - 1] : null, i && i(n);
 	    }, n.options.__r = function (n) {
-	      s(n) && r.push(n), c && c(n);
+	      c(n) && r.push(n), s && s(n);
 	    };
 	  }();
 	  var a = !1,
 	      i = n.options.__b,
-	      u = n.options.diffed,
+	      l = n.options.diffed,
 	      f = n.options.vnode,
 	      d = n.options.__e,
 	      h = n.options.__,
-	      y = n.options.__h,
-	      v = l ? {
+	      v = n.options.__h,
+	      y = u ? {
 	    useEffect: new WeakMap(),
 	    useLayoutEffect: new WeakMap(),
 	    lazyPropTypes: new WeakMap()
@@ -10130,7 +10691,7 @@
 	    }
 
 	    try {
-	      (r = r || {}).componentStack = c(e), d(n, e, o, r), "function" != typeof n.then && setTimeout(function () {
+	      (r = r || {}).componentStack = s(e), d(n, e, o, r), "function" != typeof n.then && setTimeout(function () {
 	        throw n;
 	      });
 	    } catch (n) {
@@ -10163,25 +10724,25 @@
 	      return e ? "function" == typeof e.type ? n(e.__) : e : {};
 	    }(n.__);
 
-	    if (a = !0, void 0 === o) throw new Error("Undefined component passed to createElement()\n\nYou likely forgot to export your component or might have mixed up default and named imports" + p(n) + "\n\n" + c(n));
+	    if (a = !0, void 0 === o) throw new Error("Undefined component passed to createElement()\n\nYou likely forgot to export your component or might have mixed up default and named imports" + p(n) + "\n\n" + s(n));
 
 	    if (null != o && "object" == typeof o) {
-	      if (void 0 !== o.__k && void 0 !== o.__e) throw new Error("Invalid type passed to createElement(): " + o + "\n\nDid you accidentally pass a JSX literal as JSX twice?\n\n  let My" + t(n) + " = " + p(o) + ";\n  let vnode = <My" + t(n) + " />;\n\nThis usually happens when you export a JSX literal and not the component.\n\n" + c(n));
+	      if (void 0 !== o.__k && void 0 !== o.__e) throw new Error("Invalid type passed to createElement(): " + o + "\n\nDid you accidentally pass a JSX literal as JSX twice?\n\n  let My" + t(n) + " = " + p(o) + ";\n  let vnode = <My" + t(n) + " />;\n\nThis usually happens when you export a JSX literal and not the component.\n\n" + s(n));
 	      throw new Error("Invalid type passed to createElement(): " + (Array.isArray(o) ? "array" : o));
 	    }
 
-	    if ("thead" !== o && "tfoot" !== o && "tbody" !== o || "table" === r.type ? "tr" === o && "thead" !== r.type && "tfoot" !== r.type && "tbody" !== r.type && "table" !== r.type ? console.error("Improper nesting of table. Your <tr> should have a <thead/tbody/tfoot/table> parent." + p(n) + "\n\n" + c(n)) : "td" === o && "tr" !== r.type ? console.error("Improper nesting of table. Your <td> should have a <tr> parent." + p(n) + "\n\n" + c(n)) : "th" === o && "tr" !== r.type && console.error("Improper nesting of table. Your <th> should have a <tr>." + p(n) + "\n\n" + c(n)) : console.error("Improper nesting of table. Your <thead/tbody/tfoot> should have a <table> parent." + p(n) + "\n\n" + c(n)), void 0 !== n.ref && "function" != typeof n.ref && "object" != typeof n.ref && !("$$typeof" in n)) throw new Error('Component\'s "ref" property should be a function, or an object created by createRef(), but got [' + typeof n.ref + "] instead\n" + p(n) + "\n\n" + c(n));
-	    if ("string" == typeof n.type) for (var s in n.props) if ("o" === s[0] && "n" === s[1] && "function" != typeof n.props[s] && null != n.props[s]) throw new Error("Component's \"" + s + '" property should be a function, but got [' + typeof n.props[s] + "] instead\n" + p(n) + "\n\n" + c(n));
+	    if ("thead" !== o && "tfoot" !== o && "tbody" !== o || "table" === r.type ? "tr" === o && "thead" !== r.type && "tfoot" !== r.type && "tbody" !== r.type && "table" !== r.type ? console.error("Improper nesting of table. Your <tr> should have a <thead/tbody/tfoot/table> parent." + p(n) + "\n\n" + s(n)) : "td" === o && "tr" !== r.type ? console.error("Improper nesting of table. Your <td> should have a <tr> parent." + p(n) + "\n\n" + s(n)) : "th" === o && "tr" !== r.type && console.error("Improper nesting of table. Your <th> should have a <tr>." + p(n) + "\n\n" + s(n)) : console.error("Improper nesting of table. Your <thead/tbody/tfoot> should have a <table> parent." + p(n) + "\n\n" + s(n)), void 0 !== n.ref && "function" != typeof n.ref && "object" != typeof n.ref && !("$$typeof" in n)) throw new Error('Component\'s "ref" property should be a function, or an object created by createRef(), but got [' + typeof n.ref + "] instead\n" + p(n) + "\n\n" + s(n));
+	    if ("string" == typeof n.type) for (var c in n.props) if ("o" === c[0] && "n" === c[1] && "function" != typeof n.props[c] && null != n.props[c]) throw new Error("Component's \"" + c + '" property should be a function, but got [' + typeof n.props[c] + "] instead\n" + p(n) + "\n\n" + s(n));
 
 	    if ("function" == typeof n.type && n.type.propTypes) {
-	      if ("Lazy" === n.type.displayName && v && !v.lazyPropTypes.has(n.type)) {
-	        var l = "PropTypes are not supported on lazy(). Use propTypes on the wrapped component itself. ";
+	      if ("Lazy" === n.type.displayName && y && !y.lazyPropTypes.has(n.type)) {
+	        var u = "PropTypes are not supported on lazy(). Use propTypes on the wrapped component itself. ";
 
 	        try {
-	          var u = n.type();
-	          v.lazyPropTypes.set(n.type, !0), console.warn(l + "Component wrapped in lazy() is " + t(u));
+	          var l = n.type();
+	          y.lazyPropTypes.set(n.type, !0), console.warn(u + "Component wrapped in lazy() is " + t(l));
 	        } catch (n) {
-	          console.warn(l + "We will log the wrapped component's name once it is loaded.");
+	          console.warn(u + "We will log the wrapped component's name once it is loaded.");
 	        }
 	      }
 
@@ -10203,14 +10764,14 @@
 	          !i || i.message in e || (e[i.message] = !0, console.error("Failed prop type: " + i.message + (a && "\n" + a() || "")));
 	        });
 	      }(n.type.propTypes, f, 0, t(n), function () {
-	        return c(n);
+	        return s(n);
 	      });
 	    }
 
 	    i && i(n);
 	  }, n.options.__h = function (n, e, t) {
 	    if (!n || !a) throw new Error("Hook can only be invoked from render methods.");
-	    y && y(n, e, t);
+	    v && v(n, e, t);
 	  };
 
 	  var b = function (n, e) {
@@ -10250,16 +10811,16 @@
 	      if (e && void 0 === e.type) {
 	        delete e.__, delete e.__b;
 	        var t = Object.keys(e).join(",");
-	        throw new Error("Objects are not valid as a child. Encountered an object with the keys {" + t + "}.\n\n" + c(n));
+	        throw new Error("Objects are not valid as a child. Encountered an object with the keys {" + t + "}.\n\n" + s(n));
 	      }
-	    }), a = !1, u && u(n), null != n.__k) for (var e = [], t = 0; t < n.__k.length; t++) {
+	    }), a = !1, l && l(n), null != n.__k) for (var e = [], t = 0; t < n.__k.length; t++) {
 	      var o = n.__k[t];
 
 	      if (o && null != o.key) {
 	        var r = o.key;
 
 	        if (-1 !== e.indexOf(r)) {
-	          console.error('Following component has two or more children with the same key attribute: "' + r + '". This may cause glitches and misbehavior in rendering process. Component: \n\n' + p(n) + "\n\n" + c(n));
+	          console.error('Following component has two or more children with the same key attribute: "' + r + '". This may cause glitches and misbehavior in rendering process. Component: \n\n' + p(n) + "\n\n" + s(n));
 	          break;
 	        }
 
@@ -10269,9 +10830,9 @@
 	  };
 	}();
 
-	"undefined" != typeof window && window.__PREACT_DEVTOOLS__ && window.__PREACT_DEVTOOLS__.attachPreact("10.8.1", l$3, {
+	"undefined" != typeof window && window.__PREACT_DEVTOOLS__ && window.__PREACT_DEVTOOLS__.attachPreact("10.8.2", l$3, {
 	  Fragment: d$2,
-	  Component: _$1
+	  Component: _$2
 	});
 
 	function forwardElementRef(component) {
@@ -10291,12 +10852,12 @@
 	  var _ref3;
 
 	  const [showSpinner, setShowSpinner] = useState(false);
-	  y$1(() => {
+	  _$1(() => {
 	    if (!pending) {
 	      setShowSpinner(false);
 	    }
 	  }, [pending]);
-	  const defaultDelay = T$2(SpinnerDelayContext);
+	  const defaultDelay = q$1(SpinnerDelayContext);
 	  useTimeout({
 	    timeout: (_ref3 = timeout !== null && timeout !== void 0 ? timeout : defaultDelay) !== null && _ref3 !== void 0 ? _ref3 : 1000,
 	    callback: () => {
@@ -10310,7 +10871,7 @@
 	function useLogRender(type) {
 	  var _useContext;
 
-	  if ((_useContext = T$2(DebugUtilContext)) !== null && _useContext !== void 0 && _useContext.logRender.has(type)) {
+	  if ((_useContext = q$1(DebugUtilContext)) !== null && _useContext !== void 0 && _useContext.logRender.has(type)) {
 	    for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
 	      args[_key - 1] = arguments[_key];
 	    }
@@ -10357,7 +10918,7 @@
 	    ...props
 	  } = _ref2;
 	  useLogRender("AccordionSection", `Rendering AccordionSection #${index}`);
-	  const useAriaAccordionSection = T$2(UseAriaAccordionSectionContext);
+	  const useAriaAccordionSection = q$1(UseAriaAccordionSectionContext);
 	  const {
 	    expanded,
 	    useAriaAccordionSectionHeader,
@@ -10474,7 +11035,7 @@
 	    return useRandomIdProps(useMergedProps()(extraProps, p));
 	  }
 
-	  const useReferencedElement = F(function useReferencedElement() {
+	  const useReferencedElement = T$2(function useReferencedElement() {
 	    function useReferencedProps(props) {
 	      return useReferencedIdProps("aria-controls")(props);
 	    }
@@ -10511,13 +11072,13 @@
 	    variant,
 	    ...rest
 	  } = _ref3;
-	  let value = T$2(ProgressValueContext);
-	  let max = T$2(ProgressMaxContext);
-	  let valueText = T$2(ProgressValueTextContext);
+	  let value = q$1(ProgressValueContext);
+	  let max = q$1(ProgressMaxContext);
+	  let valueText = q$1(ProgressValueTextContext);
 	  if (value === undefined) value = valueProp;
 	  if (max === undefined) max = maxProp;
 	  if (valueText === undefined) valueText = valueTextProp;
-	  const provideParentWithHook = T$2(ProgressAsChildContext);
+	  const provideParentWithHook = q$1(ProgressAsChildContext);
 	  const {
 	    useProgressProps,
 	    useReferencedElement
@@ -10586,7 +11147,7 @@
 	  const showSpinner = useSpinnerDelay(mode === "pending", spinnerTimeout); //const [spinnerShowCount, setSpinnerShowCount] = useState(0);
 	  //useEffect(() => { setSpinnerShowCount(s => ++s) }, [showSpinner]);
 
-	  y$1(() => {
+	  _$1(() => {
 	    setShownStatusLongEnough(false);
 	  }, [mode]);
 	  const [shownStatusLongEnough, setShownStatusLongEnough] = useState(false);
@@ -10601,7 +11162,7 @@
 
 	  const [previousSettledMode, setPreviousSettledMode, getPreviousSettledMode] = useState("pending");
 	  const [succeededAfterFailure, setSucceededAfterFailure, getSucceededAfterFailure] = useState(false);
-	  y$1(() => {
+	  _$1(() => {
 	    if (getSucceededAfterFailure()) setSucceededAfterFailure(false);
 
 	    if (mode == "succeeded") {
@@ -10737,23 +11298,23 @@
 	  });
 	});
 	function useButtonFillVariant(providedValue) {
-	  const defaultFill = T$2(DefaultFillStyleContext);
+	  const defaultFill = q$1(DefaultFillStyleContext);
 	  return providedValue !== null && providedValue !== void 0 ? providedValue : defaultFill;
 	}
 	function useButtonColorVariant(providedValue) {
-	  const defaultColor = T$2(DefaultColorStyleContext);
+	  const defaultColor = q$1(DefaultColorStyleContext);
 	  return providedValue !== null && providedValue !== void 0 ? providedValue : defaultColor;
 	}
 	function useButtonSize(providedValue) {
-	  const defaultSize = T$2(DefaultSizeContext);
+	  const defaultSize = q$1(DefaultSizeContext);
 	  return providedValue !== null && providedValue !== void 0 ? providedValue : defaultSize;
 	}
 	function useButtonDisabled(providedValue) {
-	  const defaultDisabled = T$2(DefaultDisabledContext);
+	  const defaultDisabled = q$1(DefaultDisabledContext);
 	  return providedValue !== null && providedValue !== void 0 ? providedValue : defaultDisabled;
 	}
 	function useButtonDropdownDirection(providedValue) {
-	  const defaultDirection = T$2(DefaultDropdownDirectionContext);
+	  const defaultDirection = q$1(DefaultDropdownDirectionContext);
 	  return providedValue !== null && providedValue !== void 0 ? providedValue : defaultDirection;
 	}
 	function useButtonStyles(p, tag) {
@@ -10855,18 +11416,18 @@
 	  }
 
 	  const {
-	    useSyncHandler,
+	    syncHandler,
 	    pending,
 	    settleCount,
 	    hasError
-	  } = useAsyncHandler()({
+	  } = useAsyncHandler(onPressAsync !== null && onPressAsync !== void 0 ? onPressAsync : null, {
 	    debounce,
-	    capture: F(() => {
+	    capture: T$2(() => {
 	      return undefined;
 	    }, [])
 	  });
 	  disabled || (disabled = pending);
-	  const onPress = useSyncHandler(pending ? null : onPressAsync);
+	  const onPress = pending ? undefined : syncHandler;
 	  const {
 	    useAriaButtonProps
 	  } = useAriaButton({
@@ -10916,25 +11477,25 @@
 	    showAsyncSuccess,
 	    ...props
 	  } = p;
-	  !!T$2(UseButtonGroupChild);
+	  !!q$1(UseButtonGroupChild);
 	  const getPressed = useStableGetter(pressed);
 	  const {
-	    useSyncHandler,
+	    syncHandler,
 	    pending,
 	    hasError,
 	    settleCount,
 	    hasCapture,
 	    currentCapture
-	  } = useAsyncHandler()({
+	  } = useAsyncHandler(onPressAsync !== null && onPressAsync !== void 0 ? onPressAsync : null, {
 	    debounce,
-	    capture: F(() => {
+	    capture: T$2(() => {
 	      return !getPressed();
 	    }, [])
 	  });
 	  if (hasCapture && pending) pressed = !!currentCapture;
 	  disabled || (disabled = pending);
 	  const fillVariant = pressed ? "fill" : "outline";
-	  const onPress = useSyncHandler(pending ? null : onPressAsync);
+	  const onPress = pending ? undefined : syncHandler;
 	  const {
 	    useAriaButtonProps
 	  } = useAriaButton({
@@ -11004,9 +11565,9 @@
 	    convertToPhysicalOrientation,
 	    useLogicalDirectionProps
 	  } = useLogicalDirection({
-	    onLogicalDirectionChange: F(logicalDirectionInfo => setPhysicalOrientation(convertToPhysicalOrientation(logicalOrientation, logicalDirectionInfo)), [])
+	    onLogicalDirectionChange: T$2(logicalDirectionInfo => setPhysicalOrientation(convertToPhysicalOrientation(logicalOrientation, logicalDirectionInfo)), [])
 	  });
-	  y$1(() => {
+	  _$1(() => {
 	    if (selectedIndex != null) navigateToIndex(selectedIndex);
 	  }, [selectedIndex]); // Build new DOM props to merge based off the styling props
 
@@ -11057,7 +11618,7 @@
 	  // It would be really nice to find a way to make that implicit based on DOM location,
 	  // specifically for small things like button groups...
 
-	  const useButtonGroupChild = T$2(UseButtonGroupChild);
+	  const useButtonGroupChild = q$1(UseButtonGroupChild);
 	  const {
 	    tabbable,
 	    useListNavigationChildProps,
@@ -11095,7 +11656,7 @@
 	});
 
 	function useBodyPortalRoot() {
-	  const valueFromContext = T$2(BodyPortalRootContext);
+	  const valueFromContext = q$1(BodyPortalRootContext);
 	  let container = null; // Prefer using a container provided via context, if one's available.
 
 	  if (valueFromContext) container = valueFromContext(); // If not, try to use the default body portal
@@ -11123,7 +11684,7 @@
 	    onElementChange: setElement
 	  });
 	  return e$3(BodyPortalRootContext.Provider, {
-	    value: F(() => {
+	    value: T$2(() => {
 	      var _getElement$parentEle, _getElement;
 
 	      return (_getElement$parentEle = (_getElement = getElement()) === null || _getElement === void 0 ? void 0 : _getElement.parentElement) !== null && _getElement$parentEle !== void 0 ? _getElement$parentEle : null;
@@ -11140,9 +11701,9 @@
 	  } = _ref3;
 	  const id = s$2(null);
 	  const [portalElement, setPortalElement] = useState(null);
-	  const bodyPortalClass = T$2(BodyPortalClassContext);
+	  const bodyPortalClass = q$1(BodyPortalClassContext);
 	  const container = useBodyPortalRoot();
-	  y$1(() => {
+	  _$1(() => {
 	    if (id.current == null) {
 	      id.current = generateRandomId();
 	    }
@@ -11273,7 +11834,7 @@
 	    ...props
 	  } = _ref2;
 	  const [state, setState, getState] = useState(null);
-	  const show = F(async () => {
+	  const show = T$2(async () => {
 	    const state = getState();
 
 	    if (!state) {
@@ -11295,7 +11856,7 @@
 	      return Promise.reject("This dialog is already being shown");
 	    }
 	  }, []);
-	  const onClose = F(reason => {
+	  const onClose = T$2(reason => {
 	    var _getState2;
 
 	    if (reason) {
@@ -11310,7 +11871,7 @@
 
 	    (_getState2 = getState()) === null || _getState2 === void 0 ? void 0 : _getState2.resolve();
 	  }, [modal]);
-	  y$1(() => provideShow === null || provideShow === void 0 ? void 0 : provideShow(prev => show), [provideShow, show]);
+	  _$1(() => provideShow === null || provideShow === void 0 ? void 0 : provideShow(prev => show), [provideShow, show]);
 	  return e$3(DialogControlled, { ...props,
 	    open: !!state,
 	    onClose: onClose
@@ -11368,7 +11929,7 @@
 	 */
 
 	function usePushDialog() {
-	  const pushDialog = T$2(PushDialogContext);
+	  const pushDialog = q$1(PushDialogContext);
 	  return pushDialog;
 	}
 	/**
@@ -11378,7 +11939,7 @@
 	 */
 
 	function useCloseDialog() {
-	  const closeDialog = T$2(CloseDialogContext);
+	  const closeDialog = q$1(CloseDialogContext);
 	  return closeDialog;
 	}
 	/**
@@ -11401,7 +11962,7 @@
 	    setUpdateDialog
 	  } = _ref4;
 	  const [children, setChildren, getChildren] = useState(new Map());
-	  const pushDialog = F(dialog => {
+	  const pushDialog = T$2(dialog => {
 	    const randomKey = generateRandomId();
 	    let resolve;
 	    let reject;
@@ -11435,7 +11996,7 @@
 	    });
 	    return promise;
 	  }, []);
-	  const updateDialog = F((index, dialog) => {
+	  const updateDialog = T$2((index, dialog) => {
 	    const info = getChildren().get(index);
 	    console.assert(!!info);
 
@@ -11469,7 +12030,7 @@
 	const DialogsContainerChildrenContext = D$1(new Map());
 
 	function DialogsContainer(props) {
-	  const children = T$2(DialogsContainerChildrenContext);
+	  const children = q$1(DialogsContainerChildrenContext);
 	  return e$3("div", { ...useMergedProps()({}, props),
 	    children: Array.from(children).map(_ref5 => {
 	      let [key, {
@@ -11584,7 +12145,7 @@
 
 
 	function useInputCaptures(type, min2, max2) {
-	  const capture = F(event => {
+	  const capture = T$2(event => {
 	    let ret;
 
 	    switch (type) {
@@ -11605,7 +12166,7 @@
 
 	    return ret;
 	  }, [type]);
-	  const uncapture = F(value => {
+	  const uncapture = T$2(value => {
 	    switch (type) {
 	      case "text":
 	      case "textarea":
@@ -11637,7 +12198,7 @@
 	    } : {},
 	    ref
 	  }, props), e$3(InInputGridContext.Provider, {
-	    value: T$2(InInputGridContext) + 1,
+	    value: q$1(InInputGridContext) + 1,
 	    children: children
 	  }));
 	}));
@@ -11697,7 +12258,7 @@
 	 */
 
 	function useFocusMode() {
-	  return T$2(FocusModeContext);
+	  return q$1(FocusModeContext);
 	}
 
 	var _globalThis$process, _globalThis$process2, _globalThis$process2$, _globalThis$process$e, _globalThis$process$e2;
@@ -13700,13 +14261,13 @@
 	  } = useLogicalDirection({
 	    onLogicalDirectionChange: setLogicalDirection
 	  });
-	  y$1(() => {
+	  _$1(() => {
 	    resetPopperInstance(getSourceElement(), getPopperElement());
 	  }, [side, align, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight, logicalDirection]);
 	  (_useArrow = useArrow) !== null && _useArrow !== void 0 ? _useArrow : useArrow = false;
 	  const [getFocusedElement, setFocusedElement] = usePassiveState(null, returnNull);
 	  useActiveElement({
-	    onLastActiveElementChange: F(activeElement => {
+	    onLastActiveElementChange: T$2(activeElement => {
 	      var _getSourceElement;
 
 	      if ((_getSourceElement = getSourceElement()) !== null && _getSourceElement !== void 0 && _getSourceElement.contains(activeElement)) {
@@ -13719,19 +14280,19 @@
 	      }
 	    }, [])
 	  });
-	  const [getPositionPreference, setPositionPreference] = usePassiveState(null, F(() => "element", [])); //const [getHasMouseover, setHasMouseover] = usePassiveState(null, () => false);
+	  const [getPositionPreference, setPositionPreference] = usePassiveState(null, T$2(() => "element", [])); //const [getHasMouseover, setHasMouseover] = usePassiveState(null, () => false);
 
-	  const [getMouseX, setMouseX] = usePassiveState(F(() => {
+	  const [getMouseX, setMouseX] = usePassiveState(T$2(() => {
 	    var _getPopperInstance;
 
 	    return void ((_getPopperInstance = getPopperInstance()) === null || _getPopperInstance === void 0 ? void 0 : _getPopperInstance.update());
 	  }, []), returnNull);
-	  const [getMouseY, setMouseY] = usePassiveState(F(() => {
+	  const [getMouseY, setMouseY] = usePassiveState(T$2(() => {
 	    var _getPopperInstance2;
 
 	    return void ((_getPopperInstance2 = getPopperInstance()) === null || _getPopperInstance2 === void 0 ? void 0 : _getPopperInstance2.update());
 	  }, []), returnNull);
-	  const resetPopperInstance = F((sourceElement, popperElement) => {
+	  const resetPopperInstance = T$2((sourceElement, popperElement) => {
 	    if (sourceElement && popperElement) {
 	      const onFirstUpdate = () => {};
 
@@ -13875,10 +14436,10 @@
 	    }
 	  }, [followMouse, useArrow, side, align, skidding, distance, paddingTop, paddingBottom, paddingLeft, paddingRight, logicalDirection, childSelector]);
 	  const [hasAllElements, setHasAllElements] = useState(false);
-	  y$1(() => {
+	  _$1(() => {
 	    if (hasAllElements) resetPopperInstance(getSourceElement(), getPopperElement());
 	  }, [hasAllElements]);
-	  const [getAllElements, setAllElements] = usePassiveState(F(_ref2 => {
+	  const [getAllElements, setAllElements] = usePassiveState(T$2(_ref2 => {
 	    let {
 	      sourceElement,
 	      popperElement
@@ -13887,7 +14448,7 @@
 	    if (sourceElement && popperElement) {
 	      setHasAllElements(true);
 	    }
-	  }, []), F(() => ({
+	  }, []), T$2(() => ({
 	    sourceElement: null,
 	    popperElement: null
 	  }), []));
@@ -13895,7 +14456,7 @@
 	    getElement: getSourceElement,
 	    useRefElementProps: useSourceElementRefProps
 	  } = useRefElement({
-	    onElementChange: F(e => setAllElements(elements => ({ ...elements,
+	    onElementChange: T$2(e => setAllElements(elements => ({ ...elements,
 	      sourceElement: e
 	    })), [])
 	  });
@@ -13903,7 +14464,7 @@
 	    getElement: getPopperElement,
 	    useRefElementProps: usePopperElementRefProps
 	  } = useRefElement({
-	    onElementChange: F(e => setAllElements(elements => ({ ...elements,
+	    onElementChange: T$2(e => setAllElements(elements => ({ ...elements,
 	      popperElement: e
 	    })), [])
 	  });
@@ -13917,7 +14478,7 @@
 	  const [popperAttributes, setPopperAttributes] = useState({});
 	  const [arrowStyle, setArrowStyle] = useState(null);
 	  const [arrowAttributes, setArrowAttributes] = useState({});
-	  y$1(() => {
+	  _$1(() => {
 	    if (updating) {
 	      let rafHandle = 0;
 
@@ -13940,7 +14501,7 @@
 	      };
 	    }
 	  }, [updating]);
-	  const updateStateModifier = A$2(() => {
+	  const updateStateModifier = F(() => {
 	    let modifier = {
 	      name: "updateState",
 	      enabled: true,
@@ -14161,7 +14722,7 @@
 	    timeout: 100,
 	    triggerIndex: updatingForABit
 	  });
-	  let onInteraction = F(() => {
+	  let onInteraction = T$2(() => {
 	    setUpdatingForABit(u => ++u);
 	  }, [closed]);
 	  if (!open) onInteraction = null;
@@ -14362,8 +14923,8 @@
 	    inline
 	  } = _ref;
 	  (_labelPosition = labelPosition) !== null && _labelPosition !== void 0 ? _labelPosition : labelPosition = "end";
-	  const inInputGroup = !!T$2(InInputGroupContext);
-	  !!T$2(InInputGridContext);
+	  const inInputGroup = !!q$1(InInputGroupContext);
+	  !!q$1(InInputGridContext);
 	  let stringLabel = `${label}`;
 
 	  if (label != null && labelPosition === "hidden" && !["string", "number", "boolean"].includes(typeof label)) {
@@ -14572,27 +15133,27 @@
 	    tabIndex,
 	    ...props
 	  } = _ref;
-	  const inInputGroup = T$2(InInputGroupContext);
+	  const inInputGroup = q$1(InInputGroupContext);
 	  const {
-	    useSyncHandler,
+	    syncHandler,
 	    pending,
 	    hasError,
 	    settleCount,
 	    hasCapture,
 	    currentCapture,
 	    currentType
-	  } = useAsyncHandler()({
-	    capture: capture$2
-	  });
-	  disabled || (disabled = pending);
-	  const asyncState = hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null;
-	  const onChecked = useSyncHandler((newCheckedValue, event) => {
+	  } = useAsyncHandler((newCheckedValue, event) => {
 	    if (tristate) {
 	      if (checked == false) return onCheckedAsync === null || onCheckedAsync === void 0 ? void 0 : onCheckedAsync("mixed", event);else if (checked === "mixed") return onCheckedAsync === null || onCheckedAsync === void 0 ? void 0 : onCheckedAsync(true, event);else return onCheckedAsync === null || onCheckedAsync === void 0 ? void 0 : onCheckedAsync(false, event);
 	    } else {
 	      return onCheckedAsync === null || onCheckedAsync === void 0 ? void 0 : onCheckedAsync(newCheckedValue, event);
 	    }
+	  }, {
+	    capture: capture$2
 	  });
+	  disabled || (disabled = pending);
+	  const asyncState = hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null;
+	  const onChecked = syncHandler;
 	  const {
 	    useCheckboxInputElement,
 	    useCheckboxLabelElement
@@ -14642,8 +15203,8 @@
 	    isTooltip,
 	    ...props
 	  } = _ref2;
-	  const inInputGroup = T$2(InInputGroupContext);
-	  const inInputGrid = !!T$2(InInputGridContext);
+	  const inInputGroup = q$1(InInputGroupContext);
+	  const inInputGrid = !!q$1(InInputGridContext);
 	  props = { ...props,
 	    ref
 	  };
@@ -14684,7 +15245,7 @@
 	  const children = props.children;
 	  const childrenNotStringable = !childrenIsStringable(children);
 	  const [text, setText] = useState(() => childrenNotStringable ? null : childrenToString(children));
-	  const onElementUpdate = F(element => {
+	  const onElementUpdate = T$2(element => {
 	    if (childrenNotStringable) {
 	      var _element$textContent;
 
@@ -14703,7 +15264,7 @@
 	    subtree: true,
 	    onCharacterData: info => onElementUpdate(getElement())
 	  } : null);
-	  y$1(() => {
+	  _$1(() => {
 	    if (!childrenNotStringable) {
 	      setText(childrenToString(children));
 	    }
@@ -14765,7 +15326,7 @@
 	  checked || (checked = false);
 	  const randomId = generateRandomId("cbc-");
 	  (_id = id) !== null && _id !== void 0 ? _id : id = randomId;
-	  const useCheckboxGroupChild = T$2(UseCheckboxGroupChildContext);
+	  const useCheckboxGroupChild = q$1(UseCheckboxGroupChildContext);
 
 	  let setChecked = checked => {
 	    return onCheck(checked, null);
@@ -14805,16 +15366,16 @@
 	    onValueChange: onInputAsync
 	  } = _ref;
 	  const {
-	    useSyncHandler,
+	    syncHandler,
 	    pending,
 	    hasError,
 	    settleCount,
 	    currentCapture,
 	    currentType
-	  } = useAsyncHandler()({
+	  } = useAsyncHandler(onInputAsync, {
 	    capture: e => e[EventDetail].selectedValue
 	  });
-	  const onInput = useSyncHandler(onInputAsync);
+	  const onInput = syncHandler;
 	  const {
 	    randomId: backupName
 	  } = useRandomId({
@@ -14916,10 +15477,10 @@
 	    labelPosition,
 	    ...rest
 	  } = _ref2;
-	  const currentHandlerType = T$2(CurrentHandlerTypeContext);
+	  const currentHandlerType = q$1(CurrentHandlerTypeContext);
 	  const [asyncState, setAsyncState] = useState(null);
 	  disabled || (disabled = asyncState === "pending");
-	  const useAriaRadio = T$2(RadioGroupContext);
+	  const useAriaRadio = q$1(RadioGroupContext);
 	  const {
 	    useRadioInput,
 	    useRadioLabel
@@ -14987,19 +15548,19 @@
 	    ...rest
 	  } = _ref;
 	  const {
-	    useSyncHandler,
+	    syncHandler,
 	    pending,
 	    hasError,
 	    settleCount,
 	    hasCapture,
 	    currentCapture,
 	    currentType
-	  } = useAsyncHandler()({
+	  } = useAsyncHandler(onInputAsync !== null && onInputAsync !== void 0 ? onInputAsync : null, {
 	    capture: capture$1
 	  });
 	  disabled || (disabled = pending);
 	  const asyncState = hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null;
-	  const onChecked = useSyncHandler(onInputAsync);
+	  const onChecked = syncHandler;
 	  const {
 	    useCheckboxInputElement: useSwitchInputElement,
 	    useCheckboxLabelElement: useSwitchLabelElement
@@ -15051,8 +15612,8 @@
 	    children,
 	    ...props
 	  } = _ref3;
-	  const inInputGroup = T$2(InInputGroupContext);
-	  const inInputGrid = T$2(InInputGridContext);
+	  const inInputGroup = q$1(InInputGroupContext);
+	  const inInputGrid = q$1(InInputGridContext);
 	  props = { ...props,
 	    ref
 	  };
@@ -15108,12 +15669,12 @@
 	    useHasFocusProps
 	  } = useHasFocus({
 	    onFocusedInnerChanged: setFocusedInner,
-	    onFocusedChanged: F(focused => {
+	    onFocusedChanged: T$2(focused => {
 	      if (!focused) setLRImpatience(0);
 	    }, [])
 	  });
 	  const {
-	    useSyncHandler,
+	    syncHandler,
 	    currentCapture,
 	    pending,
 	    hasError,
@@ -15121,7 +15682,7 @@
 	    flushDebouncedPromise,
 	    currentType,
 	    ...asyncInfo
-	  } = useAsyncHandler()({
+	  } = useAsyncHandler(onInputAsync !== null && onInputAsync !== void 0 ? onInputAsync : null, {
 	    capture: useStableCallback(e => {
 	      const ret = capture(e);
 
@@ -15134,7 +15695,7 @@
 	    debounce: debounce !== null && debounce !== void 0 ? debounce : type === "text" ? 1500 : undefined
 	  });
 	  if (!focusedInner && pending) disabled = true;
-	  const onInputIfValid = useSyncHandler(disabled ? null : onInputAsync);
+	  const onInputIfValid = disabled ? null : syncHandler;
 
 	  const onInput = e => {
 	    const target = e.currentTarget;
@@ -15223,7 +15784,7 @@
 
 	  const asyncState = hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null;
 	  const onBlur = flushDebouncedPromise;
-	  T$2(InInputGridContext);
+	  q$1(InInputGridContext);
 	  const extraProps = type === "numeric" ? {
 	    inputMode: "numeric",
 	    pattern: "[0-9]*"
@@ -15258,7 +15819,7 @@
 	    getElement,
 	    useRefElementProps
 	  } = useRefElement({});
-	  y$1(() => {
+	  _$1(() => {
 	    const element = getElement();
 
 	    if (element) {
@@ -15341,7 +15902,7 @@
 	    ...props
 	  } = _ref2;
 	  (_labelPosition = labelPosition) !== null && _labelPosition !== void 0 ? _labelPosition : labelPosition = "start";
-	  let parentSize = T$2(DefaultInputSize);
+	  let parentSize = q$1(DefaultInputSize);
 	  (_size = size) !== null && _size !== void 0 ? _size : size = parentSize !== null && parentSize !== void 0 ? parentSize : "md";
 	  const {
 	    inputId,
@@ -15360,8 +15921,8 @@
 	  } = useInputLabelLabel({
 	    tag: "label"
 	  });
-	  const isInInputGroup = T$2(InInputGroupContext);
-	  T$2(InInputGridContext);
+	  const isInInputGroup = q$1(InInputGroupContext);
+	  q$1(InInputGridContext);
 	  let stringLabel = `${children}`;
 
 	  if (children != null && (labelPosition === "hidden" || labelPosition === "placeholder")) {
@@ -15383,7 +15944,7 @@
 
 	  let inputJsx = e$3(IC, { ...useInputLabelInputProps(useMergedProps()({
 	      children: IC === InputGroupText ? value : undefined,
-	      value: IC === InputGroupText ? undefined : value !== null && value !== void 0 ? value : undefined,
+	      value: undefined,
 	      placeholder: IC === InputGroupText ? undefined : placeholder,
 	      disabled: IC === InputGroupText ? undefined : disabled,
 	      disabledVariant: IC === InputGroupText ? undefined : disabledVariant,
@@ -15664,10 +16225,8 @@
 	    label,
 	    labelPosition,
 	    ...domProps
-	  } = props;
-	  useAsyncHandler()({
-	    capture: e => e[EventDetail].selectedIndex
-	  });
+	  } = props; //const { useSyncHandler } = useAsyncHandler({ capture: (e: any) => e[EventDetail].selectedIndex as number });
+
 	  const {
 	    useListboxMultiItem,
 	    useListboxMultiLabel,
@@ -15723,18 +16282,18 @@
 	    ref
 	  });
 	  useLogRender("ListMulti", `Rendering ListMultiItem #${index}`);
-	  const useListItemMulti = T$2(UseListboxMultiItemContext);
+	  const useListItemMulti = q$1(UseListboxMultiItemContext);
 	  console.assert(!!useListItemMulti, "ListItemMulti is being used outside of a multi-select list. Did you mean to use a different kind of list, or a different kind of list item?");
 	  const {
-	    useSyncHandler,
+	    syncHandler,
 	    pending,
 	    currentCapture,
 	    hasError,
 	    resolveCount
-	  } = useAsyncHandler()({
+	  } = useAsyncHandler(onSelectAsync, {
 	    capture: e => e[EventDetail].selected
 	  });
-	  const onSelectSync = useSyncHandler(disabled ? null : onSelectAsync);
+	  const onSelectSync = disabled ? null : syncHandler;
 	  const {
 	    tabbable,
 	    useListboxMultiItemProps
@@ -15743,7 +16302,7 @@
 	    text: childrenText,
 	    tag: "li",
 	    selected: (_ref = currentCapture !== null && currentCapture !== void 0 ? currentCapture : selected) !== null && _ref !== void 0 ? _ref : false,
-	    onSelect: onSelectSync,
+	    onSelect: onSelectSync !== null && onSelectSync !== void 0 ? onSelectSync : undefined,
 	    disabled
 	  });
 	  return e$3(ProgressCircular, {
@@ -15780,13 +16339,13 @@
 	    ...domProps
 	  } = props;
 	  const {
-	    useSyncHandler,
+	    syncHandler,
 	    pending,
 	    currentCapture
-	  } = useAsyncHandler()({
+	  } = useAsyncHandler(onSelectAsync, {
 	    capture: e => e[EventDetail].selectedIndex
 	  });
-	  const onSelect = useSyncHandler(onSelectAsync);
+	  const onSelect = syncHandler;
 	  const {
 	    useListboxSingleItem,
 	    useListboxSingleLabel,
@@ -15808,8 +16367,8 @@
 	  useChildFlag({
 	    activatedIndex: pending ? currentCapture : null,
 	    managedChildren,
-	    getChildFlag: F(i => managedChildren[i].getPending(), []),
-	    setChildFlag: F((i, set) => managedChildren[i].setPending(set), [])
+	    getChildFlag: T$2(i => managedChildren[i].getPending(), []),
+	    setChildFlag: T$2((i, set) => managedChildren[i].setPending(set), [])
 	  });
 	  (_labelPosition = labelPosition) !== null && _labelPosition !== void 0 ? _labelPosition : labelPosition = "start";
 	  let labelProps = typeof label == "string" ? {} : label.props;
@@ -15846,7 +16405,7 @@
 	  });
 	  useLogRender("ListSingle", `Rendering ListSingleItem #${index}`);
 	  const [pending, setPending, getPending] = useState(false);
-	  const useListItemSingle = T$2(UseListboxSingleItemContext);
+	  const useListItemSingle = q$1(UseListboxSingleItemContext);
 	  console.assert(!!useListItemSingle, "ListItemSingle is being used outside of a single-select list. Did you mean to use a different kind of list, or a different kind of list item?");
 	  const {
 	    getSelected,
@@ -15905,7 +16464,7 @@
 	  const {
 	    childrenText,
 	    props: {
-	      onPress,
+	      onPress: onPressAsync,
 	      index,
 	      hidden,
 	      children,
@@ -15914,7 +16473,7 @@
 	  } = useChildrenTextProps({ ...props,
 	    ref
 	  });
-	  const useListNavigationChild = T$2(ListActionableChildContext);
+	  const useListNavigationChild = q$1(ListActionableChildContext);
 	  const {
 	    useListNavigationChildProps
 	  } = useListNavigationChild({
@@ -15925,13 +16484,13 @@
 	  const {
 	    pending,
 	    hasError,
-	    useSyncHandler
-	  } = useAsyncHandler()({
+	    syncHandler
+	  } = useAsyncHandler(onPressAsync, {
 	    capture: returnVoid
 	  });
 	  const domProps = useMergedProps()({
 	    className: clsx("list-group-item-action", pending && "pending")
-	  }, useListNavigationChildProps(usePressEventHandlers(useSyncHandler(props.disabled || pending ? undefined : onPress), undefined)(domPropsWithoutPress)));
+	  }, useListNavigationChildProps(usePressEventHandlers(props.disabled || pending ? undefined : syncHandler, undefined)(domPropsWithoutPress)));
 	  return e$3(ProgressCircular, {
 	    childrenPosition: "child",
 	    mode: pending ? "pending" : null,
@@ -16018,7 +16577,7 @@
 	  (_align = align) !== null && _align !== void 0 ? _align : align = "start";
 	  let [open, setOpen] = useState(!!forceOpen);
 	  open || (open = !!forceOpen);
-	  const onClose = F(() => setOpen(false), []);
+	  const onClose = T$2(() => setOpen(false), []);
 
 	  const onOpen = () => setOpen(true);
 
@@ -16181,8 +16740,8 @@
 	    ref
 	  });
 	  useLogRender("MenuItem", `Rendering MenuItem`);
-	  const useMenuItem = T$2(UseMenuItemContext);
-	  const hasTypeahead = T$2(HasTypeaheadContext);
+	  const useMenuItem = q$1(UseMenuItemContext);
+	  const hasTypeahead = q$1(HasTypeaheadContext);
 	  const isInteractive = onPressAsync != null;
 	  const {
 	    useMenuItemProps
@@ -16190,23 +16749,23 @@
 	    index,
 	    text: childrenText
 	  });
-	  const onClose = T$2(OnCloseContext);
+	  const onClose = q$1(OnCloseContext);
 	  const {
-	    useSyncHandler,
+	    syncHandler,
 	    pending,
 	    settleCount,
 	    hasError
-	  } = useAsyncHandler()({
-	    capture: F(() => {
+	  } = useAsyncHandler(onPressAsync ? () => {
+	    var _onPressAsync;
+
+	    return onPressAsync === null || onPressAsync === void 0 ? void 0 : (_onPressAsync = onPressAsync()) === null || _onPressAsync === void 0 ? void 0 : _onPressAsync.then(() => onClose === null || onClose === void 0 ? void 0 : onClose());
+	  } : null, {
+	    capture: T$2(() => {
 	      return undefined;
 	    }, [])
 	  });
 	  disabled || (disabled = pending);
-	  const onPress = useSyncHandler(disabled || !onPressAsync ? null : () => {
-	    var _onPressAsync;
-
-	    return onPressAsync === null || onPressAsync === void 0 ? void 0 : (_onPressAsync = onPressAsync()) === null || _onPressAsync === void 0 ? void 0 : _onPressAsync.then(() => onClose === null || onClose === void 0 ? void 0 : onClose());
-	  });
+	  const onPress = disabled || !onPressAsync ? null : syncHandler;
 	  const newProps = useMenuItemProps(useMergedProps()(rest, {
 	    ref,
 	    class: clsx(onPressAsync ? "dropdown-item" : "dropdown-item-text", "dropdown-multiline", !!badge && "with-badge", !!iconStart && "with-start", !!(badge || iconEnd) && "with-end", disabled && "disabled", pending && "pending"),
@@ -16272,11 +16831,11 @@
 
 	  (_orientation = orientation) !== null && _orientation !== void 0 ? _orientation : orientation = "inline";
 	  const {
-	    useSyncHandler
-	  } = useAsyncHandler()({
+	    syncHandler
+	  } = useAsyncHandler(onSelectAsync, {
 	    capture: capture
 	  });
-	  const onSelect = useSyncHandler(onSelectAsync);
+	  const onSelect = syncHandler;
 	  const {
 	    useTab,
 	    useTabPanel,
@@ -16318,7 +16877,7 @@
 	    children,
 	    ...props
 	  } = _ref2;
-	  const useTabContext = T$2(UseTabContext);
+	  const useTabContext = q$1(UseTabContext);
 	  const {
 	    useTabProps,
 	    selected
@@ -16348,7 +16907,7 @@
 	    TransitionProps,
 	    ...rest
 	  } = _ref3;
-	  const useTabPanel = T$2(UseTabPanelContext);
+	  const useTabPanel = q$1(UseTabPanelContext);
 	  const {
 	    useTabPanelProps,
 	    visible
@@ -16406,7 +16965,7 @@
 	  });
 	}
 	function usePushToast() {
-	  const pushToast = T$2(PushToastContext);
+	  const pushToast = q$1(PushToastContext);
 	  return pushToast;
 	}
 
@@ -16416,7 +16975,7 @@
 	    setUpdateToast
 	  } = _ref2;
 	  const [children, setChildren, getChildren] = useState([]);
-	  const pushToast = F(toast => {
+	  const pushToast = T$2(toast => {
 	    const randomKey = generateRandomId();
 	    let index = getChildren().length;
 	    setChildren(prev => [...prev, B(toast, {
@@ -16424,7 +16983,7 @@
 	    })]);
 	    return index;
 	  }, []);
-	  const updateToast = F((index, toast) => {
+	  const updateToast = T$2((index, toast) => {
 	    var _getChildren$index;
 
 	    const key = (_getChildren$index = getChildren()[index]) === null || _getChildren$index === void 0 ? void 0 : _getChildren$index.key;
@@ -16459,13 +17018,13 @@
 	const UseToastContext = D$1(null);
 
 	function ToastsContainer(props) {
-	  const children = T$2(ToastsContainerChildrenContext);
+	  const children = q$1(ToastsContainerChildrenContext);
 	  const {
 	    useToast,
 	    useToastContainerProps
 	  } = useToasts();
 	  const [theme, setTheme] = useState(oppositeTheme());
-	  y$1(() => {
+	  _$1(() => {
 	    const mo = new MutationObserver(info => {
 	      for (let i of info) {
 	        if (i.attributeName === "class") {
@@ -16500,8 +17059,8 @@
 	    colorVariant,
 	    children
 	  } = _ref3;
-	  const useToast = T$2(UseToastContext);
-	  const defaultTimeout = T$2(DefaultToastTimeout);
+	  const useToast = q$1(UseToastContext);
+	  const defaultTimeout = q$1(DefaultToastTimeout);
 	  const {
 	    useToastProps,
 	    dismiss,
@@ -16760,13 +17319,13 @@
 	    const [radioCount, setRadioCount] = useState(3);
 	    const [disabled, setDisabled] = useState(false);
 	    const [labelPosition, setLabelPosition] = useState("end");
-	    const asyncCheckboxInput = F(async (checked) => {
+	    const asyncCheckboxInput = T$2(async (checked) => {
 	        await sleep$5(asyncTimeout ?? 0);
 	        if (asyncFails)
 	            throw new Error("Attempt to change checkbox & radio failed");
 	        setDemoChecked(checked);
 	    }, [asyncTimeout, asyncFails]);
-	    const asyncRadioInput = F(async (value) => {
+	    const asyncRadioInput = T$2(async (value) => {
 	        await sleep$5(asyncTimeout ?? 0);
 	        if (asyncFails)
 	            throw new Error("Attempt to change radio failed");
@@ -16885,13 +17444,13 @@
 	    const [text, setText] = useState("");
 	    const [number, setNumber] = useState(0);
 	    const [size, setSize] = useState("md");
-	    const asyncTextInput = F(async (text) => {
+	    const asyncTextInput = T$2(async (text) => {
 	        await sleep$4(asyncTimeout ?? 0);
 	        if (asyncFails)
 	            throw new Error("Attempt to change text failed");
 	        setText(text);
 	    }, [asyncTimeout, asyncFails]);
-	    const asyncNumberInput = F(async (value) => {
+	    const asyncNumberInput = T$2(async (value) => {
 	        await sleep$4(asyncTimeout ?? 0);
 	        if (asyncFails)
 	            throw new Error("Attempt to change number failed");
@@ -17056,7 +17615,7 @@
 	    min,
 	    max
 	  });
-	  let id = A$2(generateRandomId, []);
+	  let id = F(generateRandomId, []);
 	  (_id = id) !== null && _id !== void 0 ? _id : id = "";
 	  (_step = step) !== null && _step !== void 0 ? _step : step = "any";
 	  let tickCount = step == "any" ? Infinity : Math.ceil(1 + (max - min) / step);
@@ -17130,7 +17689,7 @@
 	  } = _ref3;
 	  if (step == "any") return null;
 	  (_hideTickValues = hideTickValues) !== null && _hideTickValues !== void 0 ? _hideTickValues : hideTickValues = "auto";
-	  const getValueText = T$2(GetValueTextContext);
+	  const getValueText = q$1(GetValueTextContext);
 	  let children = [];
 
 	  for (let i = min; i <= max; i += step) {
@@ -17164,38 +17723,39 @@
 	    onValueChange: onValueChangeAsync,
 	    disabled
 	  } = _ref4;
-	  const debounceSetting = T$2(DebounceContext);
+	  const debounceSetting = q$1(DebounceContext);
 	  const {
-	    useSyncHandler,
+	    syncHandler,
 	    pending,
 	    hasError,
 	    currentCapture
-	  } = useAsyncHandler()({
+	  } = useAsyncHandler(onValueChangeAsync !== null && onValueChangeAsync !== void 0 ? onValueChangeAsync : null, {
 	    capture,
 	    debounce: debounceSetting == true ? 1500 : debounceSetting != false ? debounceSetting : undefined
 	  });
-	  const onValueChangeSync = useSyncHandler(onValueChangeAsync);
+	  const onValueChangeSync = syncHandler; // as UseAriaSliderThumbArguments<HTMLInputElement>["onValueChange"];
+
 	  value = currentCapture !== null && currentCapture !== void 0 ? currentCapture : value;
-	  const getValueText = T$2(GetValueTextContext);
-	  const valueText = A$2(() => {
+	  const getValueText = q$1(GetValueTextContext);
+	  const valueText = F(() => {
 	    var _getValueText;
 
 	    return (_getValueText = getValueText === null || getValueText === void 0 ? void 0 : getValueText(value)) !== null && _getValueText !== void 0 ? _getValueText : value == null ? "" : `${value}`;
 	  }, [value, getValueText]);
-	  const orientation = T$2(OrientationContext);
-	  let parentDisabled = T$2(DisabledContext);
+	  const orientation = q$1(OrientationContext);
+	  let parentDisabled = q$1(DisabledContext);
 	  disabled || (disabled = parentDisabled);
-	  const [inputHasFocus, setInputHasFocus] = d$1(false);
+	  const [inputHasFocus, setInputHasFocus] = y$1(false);
 	  const {
 	    useHasFocusProps
 	  } = useHasFocus({
 	    onFocusedChanged: setInputHasFocus
 	  });
-	  let usedStep = (_useContext = T$2(StepContext)) !== null && _useContext !== void 0 ? _useContext : 1;
+	  let usedStep = (_useContext = q$1(StepContext)) !== null && _useContext !== void 0 ? _useContext : 1;
 	  let userStep = usedStep;
-	  const [lastSnappedValue, setLastSnappedValue] = d$1(null);
-	  const [forceSnap, setForceSnap] = d$1(false);
-	  const snap = T$2(SnapContext); //const [snap, setSnap] = useState<boolean | null>(null);
+	  const [lastSnappedValue, setLastSnappedValue] = y$1(null);
+	  const [forceSnap, setForceSnap] = y$1(false);
+	  const snap = q$1(SnapContext); //const [snap, setSnap] = useState<boolean | null>(null);
 
 	  if (snap == "continuous" && !forceSnap) usedStep = "any";
 	  /*if (snap === false)
@@ -17237,7 +17797,7 @@
 	    useAriaSliderThumbProps,
 	    min: usedMin,
 	    max: usedMax
-	  } = T$2(RangeThumbContext)({
+	  } = q$1(RangeThumbContext)({
 	    tag: "input",
 	    value: value,
 	    valueText,
@@ -17253,7 +17813,7 @@
 	      side: orientation == "inline" ? "block-end" : "inline-end",
 	      forceOpen: inputHasFocus,
 	      tooltip: `${valueText}`,
-	      childSelector: F(function (e) {
+	      childSelector: T$2(function (e) {
 	        return e.nextElementSibling.firstElementChild;
 	      }, []),
 	      children: e$3("input", { ...useAriaSliderThumbProps(useHasFocusProps({
@@ -17265,7 +17825,7 @@
 	          disabled,
 	          tabIndex: 0,
 	          step: usedStep,
-	          list: T$2(GetListContext)
+	          list: q$1(GetListContext)
 	        }))
 	      })
 	    }), e$3("div", {
@@ -17296,7 +17856,7 @@
 	    const [snap, setSnap] = useState("discrete");
 	    const [vt, setVt] = useState(false);
 	    const [value, setValue] = useState(0);
-	    const getValueText = F((n) => { return "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[Math.round(n)]; }, []);
+	    const getValueText = T$2((n) => { return "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[Math.round(n)]; }, []);
 	    return (e$3("div", { class: "demo", children: e$3(Card, { children: [e$3(CardElement, { type: "title", tag: "h2", children: "Ranges" }), e$3(CardElement, { children: e$3(Range, { label: "Test range", step: step, snap: snap, min: min, max: max, value: value, onValueChange: setValue, getValueText: vt ? getValueText : undefined }) }), e$3(CardElement, { children: "A range allows for selection of a number between some minimum and maximum values. Ranges can optionally have a step value that determines which numbers within the [min, max] range are acceptable, and this can be optional, allowing a continuous selection of values with only an initial snap to those preferred values." }), e$3(CardElement, { children: ["The ", e$3("code", { children: "snap" }), " prop can be set to either ", e$3("code", { children: "\"discrete\"" }), " (default) or ", e$3("code", { children: "\"continuous\"" }), ". The former allows selection ", e$3("em", { children: "only" }), " of values that match the ", e$3("code", { children: "step" }), " prop. The latter will ", e$3("em", { children: "prefer" }), " selection of those values, but will allow any number within the range."] }), e$3(CardElement, { children: ["The range is linear by default, but you can use the ", e$3("code", { children: "getValueText" }), " prop to show other number scales, such as logarithmic scales, text-based scales, etc. The ", e$3("code", { children: "getTooltipText" }), " prop is similar, defaulting to whatever", e$3("code", { children: "getValueText" }), " is, and is the value displayed by the tooltip itself (", e$3("code", { children: "getValueText" }), " is used by the tick markers and assistive technologies)."] }), e$3(CardElement, { children: [e$3(ButtonGroup, { children: [e$3(ButtonGroupChild, { index: 0, pressed: snap == "discrete", onPressToggle: p => { p && setSnap("discrete"); }, children: "Discrete" }), e$3(ButtonGroupChild, { index: 1, pressed: snap == "continuous", onPressToggle: p => { p && setSnap("continuous"); }, children: "Continuous" })] }), e$3(Input, { type: "number", min: 1, value: step, onValueChange: setStep, nonNullable: true, children: "Step" }), e$3(Checkbox, { checked: vt, onCheck: setVt, children: "Use text label instead" })] })] }) }));
 	}
 
@@ -17373,7 +17933,7 @@
 	  const {
 	    useTableHeadProps,
 	    useTableHeadRow
-	  } = T$2(TableHeadContext)();
+	  } = q$1(TableHeadContext)();
 	  const {
 	    getElement,
 	    useRefElementProps
@@ -17410,7 +17970,7 @@
 	  const {
 	    useTableBodyProps,
 	    useTableBodyRow
-	  } = T$2(TableBodyContext)();
+	  } = q$1(TableBodyContext)();
 	  return e$3(CellLocationContext.Provider, {
 	    value: "body",
 	    children: e$3(TableRowContext.Provider, {
@@ -17436,7 +17996,7 @@
 	  const {
 	    useTableFootProps,
 	    useTableFootRow
-	  } = T$2(TableFootContext)();
+	  } = q$1(TableFootContext)();
 	  return e$3(CellLocationContext.Provider, {
 	    value: "foot",
 	    children: e$3(TableRowContext.Provider, {
@@ -17463,8 +18023,8 @@
 	    ...props
 	  } = _ref6;
 	  useLogRender("TableRow", `Rendering TableRow #${indexAsUnsorted}, ${hiddenAsUnsorted}`);
-	  const location = T$2(CellLocationContext);
-	  const useTableRow = T$2(TableRowContext);
+	  const location = q$1(CellLocationContext);
+	  const useTableRow = q$1(TableRowContext);
 	  const {
 	    useTableCell,
 	    useTableHeadCell,
@@ -17509,7 +18069,7 @@
 	    }
 	  }
 
-	  const useTableCell = T$2(TableCellContext);
+	  const useTableCell = q$1(TableCellContext);
 	  const {
 	    useTableCellDelegateProps,
 	    useTableCellProps
@@ -17547,7 +18107,7 @@
 	    unsortable,
 	    ...props
 	  } = _ref8;
-	  const useTableHeadCell = T$2(TableHeadCellContext);
+	  const useTableHeadCell = q$1(TableHeadCellContext);
 	  const {
 	    useTableHeadCellDelegateProps,
 	    useTableHeadCellProps,
@@ -17608,10 +18168,10 @@
 
 	function useIsHovering() {
 	  const [hovering, setHovering] = useState(false);
-	  const onMouseEnter = F(() => {
+	  const onMouseEnter = T$2(() => {
 	    setHovering(true);
 	  }, []);
-	  const onMouseLeave = F(() => {
+	  const onMouseLeave = T$2(() => {
 	    setHovering(false);
 	  }, []);
 	  useGlobalHandler(window, "blur", onMouseLeave);
@@ -17639,7 +18199,7 @@
 	    const [n, setN] = useState((i + 0) ** 2);
 	    const d = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + (n ?? 0) * 7);
 	    const [checked, setChecked] = useState(false);
-	    const onInput = F(async (checked) => {
+	    const onInput = T$2(async (checked) => {
 	        await sleep$1(2000);
 	        setChecked(checked);
 	    }, []);
@@ -18313,11 +18873,11 @@
 	const DemoInput = g$1(() => {
 	    const [text, setText] = useState("");
 	    const [radioValue, setRadioValue] = useState("");
-	    const onInput1 = F(async (value) => {
+	    const onInput1 = T$2(async (value) => {
 	        await sleep(5000);
 	        setText(value);
 	    }, [setRadioValue]);
-	    const onInput2 = F(async (value) => {
+	    const onInput2 = T$2(async (value) => {
 	        await sleep(5000);
 	        setRadioValue(value);
 	    }, [setRadioValue]);
@@ -18361,7 +18921,7 @@
 	    const [theme, setTheme] = useState("theme-default-bootstrap");
 	    const [themeName, setThemeName] = useState("Bootstrap");
 	    useLayoutEffect((prevArgs) => changeThemes((prevArgs ?? [])[0], theme), [theme]);
-	    return e$3(d$2, { children: [e$3(Menu, { TransitionProps: { maxHeight: "70vh", overflow: "auto" }, anchor: e$3(Button, { dropdownVariant: "combined", style: { position: "fixed", insetBlockStart: "0.5em", insetInlineEnd: "0.5em", zIndex: 9999999 }, spinnerTimeout: 999999999, children: ["Theme: ", themeName] }), children: [e$3(MenuItem, { index: 0, onPress: async () => { setTheme(`theme-default-bootstrap`); setThemeName("Bootstrap"); }, children: "Bootstrap" }), e$3(MenuItem, { index: 1, onPress: async () => { setTheme(`theme-light`); setThemeName("Light"); }, children: "Light" }), e$3(MenuItem, { index: 2, onPress: async () => { setTheme(`theme-dark`); setThemeName("Dark"); }, children: "Dark" }), e$3(ListItemStatic, { children: [e$3("a", { href: "https://bootswatch.com/", children: "Bootswatch themes" }), e$3("small", { children: "(Not thoroughly tested)" })] }), AllThemes.map((theme, index) => e$3(MenuItem, { index: index + 3, onPress: async () => { setTheme(`theme-${theme}`); setThemeName(capitalize_1(theme)); }, children: capitalize_1(theme) }))] }), e$3(GridResponsive, { minWidth: "35em", children: e$3(DebugUtilContext.Provider, { value: A$2(() => ({ logRender: new Set(["Table", "TableHead", "TableBody", "TableRow", "TableCell"]) }), []), children: e$3(ToastsProvider, { children: e$3(DialogsProvider, { children: [e$3(DemoRanges, {}), e$3(DemoTable, {}), e$3(DemoLists, {}), e$3(DemoMenus, {}), e$3(DemoDialogs, {}), e$3(DemoButtons, {}), e$3(DemoChecks, {}), e$3(DemoInputs, {}), e$3(DemoLayout, {}), e$3(DemoAccordion, {}), e$3(DemoDialog, {}), e$3(DemoDrawer, {}), e$3(DemoInput, {}), e$3(DemoList, {}), e$3(DemoTabs, {}), e$3(DemoMenu, {})] }) }) }) })] });
+	    return e$3(d$2, { children: [e$3(Menu, { TransitionProps: { maxHeight: "70vh", overflow: "auto" }, anchor: e$3(Button, { dropdownVariant: "combined", style: { position: "fixed", insetBlockStart: "0.5em", insetInlineEnd: "0.5em", zIndex: 9999999 }, spinnerTimeout: 999999999, children: ["Theme: ", themeName] }), children: [e$3(MenuItem, { index: 0, onPress: async () => { setTheme(`theme-default-bootstrap`); setThemeName("Bootstrap"); }, children: "Bootstrap" }), e$3(MenuItem, { index: 1, onPress: async () => { setTheme(`theme-light`); setThemeName("Light"); }, children: "Light" }), e$3(MenuItem, { index: 2, onPress: async () => { setTheme(`theme-dark`); setThemeName("Dark"); }, children: "Dark" }), e$3(ListItemStatic, { children: [e$3("a", { href: "https://bootswatch.com/", children: "Bootswatch themes" }), e$3("small", { children: "(Not thoroughly tested)" })] }), AllThemes.map((theme, index) => e$3(MenuItem, { index: index + 3, onPress: async () => { setTheme(`theme-${theme}`); setThemeName(capitalize_1(theme)); }, children: capitalize_1(theme) }))] }), e$3(GridResponsive, { minWidth: "35em", children: e$3(DebugUtilContext.Provider, { value: F(() => ({ logRender: new Set(["Table", "TableHead", "TableBody", "TableRow", "TableCell"]) }), []), children: e$3(ToastsProvider, { children: e$3(DialogsProvider, { children: [e$3(DemoRanges, {}), e$3(DemoTable, {}), e$3(DemoLists, {}), e$3(DemoMenus, {}), e$3(DemoDialogs, {}), e$3(DemoButtons, {}), e$3(DemoChecks, {}), e$3(DemoInputs, {}), e$3(DemoLayout, {}), e$3(DemoAccordion, {}), e$3(DemoDialog, {}), e$3(DemoDrawer, {}), e$3(DemoInput, {}), e$3(DemoList, {}), e$3(DemoTabs, {}), e$3(DemoMenu, {})] }) }) }) })] });
 	};
 	requestAnimationFrame(() => {
 	    S$1(e$3(Component, {}), document.getElementById("root"));

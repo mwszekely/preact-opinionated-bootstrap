@@ -34,9 +34,9 @@ export function CheckboxGroup({ children }: CheckboxGroupProps) {
         return;
     };
 
-    const { callCount, pending, rejectCount, settleCount, resolveCount, currentType, currentCapture, useSyncHandler } = useAsyncHandler<HTMLInputElement>()<CheckboxGroupChangeEvent<h.JSX.TargetedEvent<HTMLInputElement>>, boolean | Map<number, boolean | "mixed">>({ capture: e => { return e[EventDetail].childrenChecked } });
+    const { callCount, pending, rejectCount, settleCount, resolveCount, currentType, currentCapture, syncHandler } = useAsyncHandler<CheckboxGroupChangeEvent<h.JSX.TargetedEvent<HTMLInputElement>>, boolean | Map<number, boolean | "mixed">>(onUpdateChildrenAsync, { capture: e => { return e[EventDetail].childrenChecked } });
 
-    const onUpdateChildrenSync = useSyncHandler(pending ? () => { } : onUpdateChildrenAsync);
+    const onUpdateChildrenSync = (pending ? () => { } : syncHandler);
 
     const { managedCheckboxes, currentTypeahead, focus, invalidTypeahead, onCheckboxGroupParentInput, tabbableIndex, useCheckboxGroupChild, useCheckboxGroupParentProps, parentIsChecked, parentPercentChecked } = useCheckboxGroup<HTMLInputElement, CheckboxGroupChildInfo>({ shouldFocusOnChange: returnFalse, onUpdateChildren: onUpdateChildrenSync! })
 

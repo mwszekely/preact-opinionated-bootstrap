@@ -34,8 +34,8 @@ const CurrentHandlerTypeContext = createContext<"sync" | "async">("sync");
 const RadioGroupContext = createContext<UseRadio<string | number, HTMLInputElement, HTMLLabelElement, RadioInfo>>(null!);
 
 export const RadioGroup = memo(forwardElementRef(function RadioGroup<V extends string | number>({ children, name, selectedValue, label, labelPosition, onValueChange: onInputAsync }: RadioGroupProps<V>, ref?: Ref<HTMLDivElement>) {
-    const { useSyncHandler, pending, hasError, settleCount, currentCapture, currentType } = useAsyncHandler<HTMLInputElement | HTMLLabelElement>()({ capture: (e) => (e as RadioChangeEvent<any>)[EventDetail].selectedValue as V });
-    const onInput = useSyncHandler(onInputAsync);
+    const { syncHandler, pending, hasError, settleCount, currentCapture, currentType } = useAsyncHandler(onInputAsync, { capture: (e) => (e as RadioChangeEvent<any>)[EventDetail].selectedValue as V });
+    const onInput = syncHandler;
 
     const { randomId: backupName } = useRandomId({ prefix: "radio-" });
     name ??= backupName;

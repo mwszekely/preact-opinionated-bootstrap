@@ -38,16 +38,16 @@ export interface ListItemActionableProps extends GlobalAttributes<HTMLLIElement>
 
 export const ListItemActionable = memo(forwardElementRef(function ListItemActionable(props: ListItemActionableProps, ref: Ref<HTMLLIElement>) {
 
-    const { childrenText, props: { onPress, index, hidden, children, ...domPropsWithoutPress } } = useChildrenTextProps({ ...props, ref });
+    const { childrenText, props: { onPress: onPressAsync, index, hidden, children, ...domPropsWithoutPress } } = useChildrenTextProps({ ...props, ref });
 
     const useListNavigationChild = useContext(ListActionableChildContext);
     const { useListNavigationChildProps } = useListNavigationChild({ index, text: childrenText, hidden })
 
-    const { pending, hasError, useSyncHandler } = useAsyncHandler<HTMLLIElement>()({ capture: returnVoid });
+    const { pending, hasError, syncHandler } = useAsyncHandler(onPressAsync, { capture: returnVoid });
 
     const domProps = useMergedProps<HTMLLIElement>()(
         { className: clsx("list-group-item-action", pending && "pending") },
-        useListNavigationChildProps(usePressEventHandlers<HTMLLIElement>(useSyncHandler((props.disabled || pending) ? undefined : onPress), undefined)(domPropsWithoutPress))) as ListItemStaticProps;
+        useListNavigationChildProps(usePressEventHandlers<HTMLLIElement>((props.disabled || pending) ? undefined : syncHandler, undefined)(domPropsWithoutPress))) as ListItemStaticProps;
     return (
         <ProgressCircular childrenPosition="child" mode={pending ? "pending" : null} colorVariant="info">
             <ListItemStatic {...domProps}>

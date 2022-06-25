@@ -37,7 +37,7 @@ type LinkTypes =
 //"prerender" |
 //"stylesheet" |;
 
-export interface ToggleButtonProps extends Omit<ButtonPropsBase<HTMLButtonElement>, "onPress" | "fillVariant" | "children">, Omit<UseAsyncHandlerParameters<HTMLButtonElement, h.JSX.TargetedEvent<HTMLButtonElement>, boolean>, "capture"> {
+export interface ToggleButtonProps extends Omit<ButtonPropsBase<HTMLButtonElement>, "onPress" | "fillVariant" | "children">, Omit<UseAsyncHandlerParameters<h.JSX.TargetedEvent<HTMLButtonElement>, boolean>, "capture"> {
     pressed: boolean;
 
     onPressToggle?(pressed: boolean, event: h.JSX.TargetedEvent<HTMLButtonElement>): void | Promise<void>;
@@ -46,7 +46,7 @@ export interface ToggleButtonProps extends Omit<ButtonPropsBase<HTMLButtonElemen
 }
 
 
-export interface ButtonButtonProps extends ButtonPropsBase<HTMLButtonElement>, Omit<UseAsyncHandlerParameters<HTMLButtonElement, h.JSX.TargetedEvent<HTMLButtonElement>, never>, "capture"> {
+export interface ButtonButtonProps extends ButtonPropsBase<HTMLButtonElement>, Omit<UseAsyncHandlerParameters<h.JSX.TargetedEvent<HTMLButtonElement>, never>, "capture"> {
     tag?: "button";
     onPress?: (never: never, event: h.JSX.TargetedEvent<HTMLButtonElement>) => (void | Promise<void>);
     dropdownVariant?: null | undefined | ButtonDropdownVariant;
@@ -104,10 +104,10 @@ const ButtonButton = forwardElementRef(function ButtonButton(p: Omit<ButtonButto
             dropdownVariant = "separate";
     }
 
-    const { useSyncHandler, pending, settleCount, hasError } = useAsyncHandler<HTMLButtonElement>()({ debounce, capture: useCallback(() => { return undefined!; }, []) });
+    const { syncHandler, pending, settleCount, hasError } = useAsyncHandler(onPressAsync ?? null, { debounce, capture: useCallback(() => { return undefined!; }, []) });
     disabled ||= pending;
 
-    const onPress = useSyncHandler(pending ? null : onPressAsync);
+    const onPress = pending ? undefined : syncHandler;
     const { useAriaButtonProps } = useAriaButton<HTMLButtonElement>({ tag: "button", onPress });
 
     const buttonStyleInfo = useButtonStyles<HTMLButtonElement>({ colorVariant, size, fillVariant, disabled }, "button");
@@ -147,14 +147,14 @@ export const ToggleButton = forwardElementRef(function ToggleButton(p: ToggleBut
     let { colorVariant, size, disabled, pressed, debounce, onPressToggle: onPressAsync, showAsyncSuccess, ...props } = p;
     const inButtonGroup = !!useContext(UseButtonGroupChild);
     const getPressed = useStableGetter(pressed);
-    const { useSyncHandler, pending, hasError, settleCount, hasCapture, currentCapture } = useAsyncHandler<HTMLButtonElement>()({ debounce, capture: useCallback(() => { return !getPressed(); }, []) });
+    const { syncHandler, pending, hasError, settleCount, hasCapture, currentCapture } = useAsyncHandler(onPressAsync ?? null, { debounce, capture: useCallback(() => { return !getPressed(); }, []) });
     if (hasCapture && pending)
         pressed = !!currentCapture;
     disabled ||= pending;
 
     const fillVariant = pressed ? "fill" : "outline";
 
-    const onPress = useSyncHandler(pending ? null : onPressAsync);
+    const onPress = (pending ? undefined : syncHandler);
     const { useAriaButtonProps } = useAriaButton<HTMLButtonElement>({ tag: "button", pressed, onPress });
 
     const buttonStyleInfo = useButtonStyles<HTMLButtonElement>({ colorVariant, size, fillVariant, disabled }, "button");

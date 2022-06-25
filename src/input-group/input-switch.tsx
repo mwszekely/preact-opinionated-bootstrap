@@ -33,12 +33,12 @@ export const Switch = memo(forwardElementRef(function Switch({ checked, disabled
 
     type I = { (event: CheckboxChangeEvent<h.JSX.TargetedEvent<HTMLInputElement, Event>>): void; (event: CheckboxChangeEvent<h.JSX.TargetedEvent<HTMLLabelElement, Event>>): void; };
 
-    const { useSyncHandler, pending, hasError, settleCount, hasCapture, currentCapture, currentType } = useAsyncHandler()({ capture });
+    const { syncHandler, pending, hasError, settleCount, hasCapture, currentCapture, currentType } = useAsyncHandler(onInputAsync ?? null, { capture });
     disabled ||= pending;
     const asyncState = (hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null);
 
 
-    const onChecked = useSyncHandler(onInputAsync) as unknown as I;
+    const onChecked = syncHandler as unknown as I;
     const { useCheckboxInputElement: useSwitchInputElement, useCheckboxLabelElement: useSwitchLabelElement } = useAriaCheckbox<HTMLInputElement, HTMLLabelElement | HTMLDivElement>({ checked: (pending ? currentCapture : checked) ?? false, disabled: disabled ?? false, onInput: onChecked, labelPosition: "separate" });
 
     const { useCheckboxInputElementProps: useSwitchInputElementProps } = useSwitchInputElement({ tag: "input" });

@@ -36,12 +36,7 @@ export const Checkbox = memo(forwardElementRef(function Checkbox({ checked, tris
 
     type I = { (event: CheckboxChangeEvent<h.JSX.TargetedEvent<HTMLInputElement, Event>>): void; (event: CheckboxChangeEvent<h.JSX.TargetedEvent<HTMLLabelElement, Event>>): void; };
 
-    const { useSyncHandler, pending, hasError, settleCount, hasCapture, currentCapture, currentType } = useAsyncHandler()({ capture });
-    disabled ||= pending;
-    const asyncState = (hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null);
-
-
-    const onChecked = useSyncHandler((newCheckedValue, event) => {
+    const { syncHandler, pending, hasError, settleCount, hasCapture, currentCapture, currentType } = useAsyncHandler((newCheckedValue, event: any) => {
         if (tristate) {
             if (checked == false)
                 return onCheckedAsync?.("mixed" as unknown as boolean, event);
@@ -53,7 +48,12 @@ export const Checkbox = memo(forwardElementRef(function Checkbox({ checked, tris
         else {
             return onCheckedAsync?.(newCheckedValue, event);
         }
-    }) as unknown as I;
+    }, { capture });
+    disabled ||= pending;
+    const asyncState = (hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null);
+
+
+    const onChecked = syncHandler;
 
     const { useCheckboxInputElement, useCheckboxLabelElement } = useAriaCheckbox<HTMLInputElement, HTMLLabelElement | HTMLDivElement>({
         checked: pending ? currentCapture! : ((checked as string) === "indeterminate" ? "mixed" : checked),
