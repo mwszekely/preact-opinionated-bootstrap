@@ -45,7 +45,7 @@ export const ListItemActionable = memo(forwardElementRef(function ListItemAction
 
     const { pending, hasError, syncHandler } = useAsyncHandler(onPressAsync, { capture: returnVoid });
 
-    const domProps = useMergedProps<HTMLLIElement>()(
+    const domProps = useMergedProps<HTMLLIElement>(
         { className: clsx("list-group-item-action", pending && "pending") },
         useListNavigationChildProps(usePressEventHandlers<HTMLLIElement>((props.disabled || pending) ? undefined : syncHandler, undefined)(domPropsWithoutPress))) as ListItemStaticProps;
     return (

@@ -252,9 +252,9 @@ export function usePopperApi<S extends Element, P extends HTMLElement, A extends
 
 
     function usePopperSource() {
-        function usePopperSourceProps<P extends h.JSX.HTMLAttributes<S>>(props: P): P {
+        function usePopperSourceProps(props: h.JSX.HTMLAttributes<S>) {
             let style = { ...(sourceStyle as h.JSX.CSSProperties) };
-            return useSourceElementRefProps(useMergedProps<S>()(sourceAttributes as any, useMergedProps<S>()({
+            return useSourceElementRefProps(useMergedProps<S>(sourceAttributes as any, useMergedProps<S>({
                 style,
                 onMouseMove: !followMouse ? undefined : (e) => {
                     const { clientX, clientY } = e;
@@ -270,18 +270,18 @@ export function usePopperApi<S extends Element, P extends HTMLElement, A extends
     }
 
     function usePopperPopup({ open }: { open: boolean }) {
-        function usePopperPopupProps<P2 extends h.JSX.HTMLAttributes<P>>(props: P2) {
+        function usePopperPopupProps(props: h.JSX.HTMLAttributes<P>) {
             let style = { ...(popperStyle as h.JSX.CSSProperties), pointerEvents: open ? undefined : "none" };
-            return useMergedProps<P>()(usePopperElementRefProps({ style }), props as any);
+            return useMergedProps<P>(usePopperElementRefProps({ style }), props as any);
         }
 
         return { usePopperPopupProps };
     }
 
     function usePopperArrow() {
-        function usePopperArrowProps<P extends h.JSX.HTMLAttributes<A>>(props: P) {
+        function usePopperArrowProps(props: h.JSX.HTMLAttributes<A>) {
             let style = { ...(arrowStyle as h.JSX.CSSProperties) };
-            return useMergedProps<A>()(popperAttributes as any, useMergedProps<A>()({ style }, useArrowElementRefProps(props as any) as h.JSX.HTMLAttributes<A>));
+            return useMergedProps<A>(popperAttributes as any, useMergedProps<A>({ style }, useArrowElementRefProps(props as any) as h.JSX.HTMLAttributes<A>));
         }
 
         return { usePopperArrowProps };

@@ -117,7 +117,7 @@ function ToastsContainer(props: ToastsContainerProps) {
 
     return (
         <UseToastContext.Provider value={useToast}>
-            <div {...useToastContainerProps(useMergedProps<HTMLDivElement>()({ className: `set-theme ${theme}` }, props))}>
+            <div {...useToastContainerProps(useMergedProps<HTMLDivElement>({ className: `set-theme ${theme}` }, props))}>
                 {children}
             </div>
         </UseToastContext.Provider>

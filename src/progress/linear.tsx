@@ -53,17 +53,17 @@ export interface CircularProgressProps extends GlobalAttributes<HTMLSpanElement>
 // Assuming that's the case, it's easier to just take care of the element count on page load.
 let gimmickCount = 8;
 (() => {
-    let lastSet = (getFromLocalStorage<Persistence>()("circular-progress-gimmick-last-set", str => new Date(str)) ?? new Date(1970, 0, 1));
+    let lastSet = (getFromLocalStorage("circular-progress-gimmick-last-set", str => new Date(str)) ?? new Date(1970, 0, 1));
 
     const daysSinceLastGimmickSet = Math.floor((+(new Date()) - +lastSet) / 1000 / 60 / 60 / (24 - 5));
     if (daysSinceLastGimmickSet > 0) {
         let newCount = 4 + Math.round(Math.random() * 2 + Math.random() * 2);
         gimmickCount = newCount;
-        storeToLocalStorage<Persistence>()("circular-progress-gimmick-last-set", new Date(), d => d.toISOString());
-        storeToLocalStorage<Persistence>()("circular-progress-gimmick-count", gimmickCount, JSON.stringify);
+        storeToLocalStorage("circular-progress-gimmick-last-set", new Date(), d => d.toISOString());
+        storeToLocalStorage("circular-progress-gimmick-count", gimmickCount, JSON.stringify);
     }
     else {
-        gimmickCount = (getFromLocalStorage<Persistence>()("circular-progress-gimmick-count", JSON.parse) ?? 8)
+        gimmickCount = (getFromLocalStorage("circular-progress-gimmick-count", JSON.parse) ?? 8)
     }
 
 })();
@@ -92,7 +92,7 @@ export function useAriaProgressBar<ProgressElement extends Element>({ tag, max, 
                 role: "progressbar"
             };
 
-        return useRandomIdProps(useMergedProps<ProgressElement>()(extraProps, p));
+        return useRandomIdProps(useMergedProps<ProgressElement>(extraProps, p));
     }
 
     const useReferencedElement = useCallback(function useReferencedElement<ReferencedElement extends Element>() {
@@ -110,10 +110,6 @@ export function useAriaProgressBar<ProgressElement extends Element>({ tag, max, 
 // TODO: What's with this weird typing? It fails when ReferencedElement is used
 type T = <ReferencedElement extends Element>() => {
     useReferencedProps: <P extends h.JSX.HTMLAttributes<Element>>(props: P) => P;
-}
-
-interface ProgressBarInfo extends ManagedChildInfo<"progressbar"> {
-    setHook(hook: T): void;
 }
 
 export const ProgressAsChildContext = createContext<((hook: T) => void) | undefined>(undefined);
@@ -150,7 +146,7 @@ export const ProgressLinear = memo(forwardElementRef(function ProgressLinear({ c
     useLayoutEffect(() => { provideParentWithHook?.(useReferencedElement) }, [useReferencedElement, provideParentWithHook])
 
     return (
-        <div {...useMergedProps<HTMLDivElement>()({ ref, className: clsx("progress", `bg-${colorVariant ?? "primary"}`) }, rest)}>
+        <div {...useMergedProps<HTMLDivElement>({ ref, className: clsx("progress", `bg-${colorVariant ?? "primary"}`) }, rest)}>
             <progress {...useProgressProps({ className: "progress-bar" })} />
         </div>
     )
@@ -179,9 +175,11 @@ function safeParseInt(str: string) {
     return ret;
 }
 
-interface Persistence {
-    "circular-progress-gimmick-last-set": Date;
-    "circular-progress-gimmick-count": number;
+declare module 'preact-prop-helpers' {
+    interface PersistentStates {
+        "circular-progress-gimmick-last-set": Date;
+        "circular-progress-gimmick-count": number;
+    }
 }
 
 export const ProgressCircular = forwardElementRef(function ({ loadingLabel, spinnerTimeout, mode, colorFill, childrenPosition, children, colorVariant, ...p }: CircularProgressProps, ref: Ref<HTMLSpanElement>) {
@@ -231,9 +229,9 @@ export const ProgressCircular = forwardElementRef(function ({ loadingLabel, spin
         children = <span>{children}</span>;
 
 
-    let progressProps = useMergedProps<HTMLSpanElement>()({ ref, className: clsx("circular-progress-container") }, useProgressProps(useMergedProps<HTMLSpanElement>()({ "aria-hidden": `${mode != "pending"}` } as h.JSX.HTMLAttributes<HTMLSpanElement>, p)));
+    let progressProps = useMergedProps<HTMLSpanElement>({ ref, className: clsx("circular-progress-container") }, useProgressProps(useMergedProps<HTMLSpanElement>({ "aria-hidden": `${mode != "pending"}` } as h.JSX.HTMLAttributes<HTMLSpanElement>, p)));
 
-    progressProps = useMergedProps<HTMLSpanElement>()(progressProps, childrenPosition === "merged" ? { ...children?.props, ref: children?.ref } : {});
+    progressProps = useMergedProps<HTMLSpanElement>(progressProps, childrenPosition === "merged" ? { ...children?.props, ref: children?.ref } : {});
 
     let progressVnodeType = childrenPosition === "merged" ? (children?.type ?? "span") : "span";
 
@@ -260,7 +258,7 @@ export const ProgressCircular = forwardElementRef(function ({ loadingLabel, spin
     return (
         <>
             {childrenPosition == "before" && progressElement}
-            {children && createElement(children.type as any, useMergedProps<any>()({ children: childrenPosition === "child" ? progressElement : undefined, ref: children.ref as any }, useReferencedProps(children.props)))}
+            {children && createElement(children.type as any, useMergedProps<any>({ children: childrenPosition === "child" ? progressElement : undefined, ref: children.ref as any }, useReferencedProps(children.props)))}
             {childrenPosition == "after" && progressElement}
         </>
     )

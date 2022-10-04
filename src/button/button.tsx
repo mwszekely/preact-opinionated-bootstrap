@@ -5,7 +5,7 @@ import { useAsyncHandler, UseAsyncHandlerParameters, useMergedProps, useStableGe
 import { useCallback, useContext } from "preact/hooks";
 import { ProgressCircular } from "../progress";
 import { forwardElementRef, usePseudoActive } from "../props";
-import { useButtonDropdownDirection, UseButtonGroupChild, useButtonStyles } from "./defaults";
+import { useButtonDropdownDirection, useButtonStyles } from "./defaults";
 import { ButtonPropsBase, ButtonDropdownDirection, ButtonDropdownVariant } from "./types";
 import { useDocument, useWindow } from "../props"
 
@@ -40,7 +40,6 @@ type LinkTypes =
 
 export interface ToggleButtonProps extends Omit<ButtonPropsBase<HTMLButtonElement>, "onPress" | "fillVariant" | "children">, Omit<UseAsyncHandlerParameters<h.JSX.TargetedEvent<HTMLButtonElement>, boolean>, "capture"> {
     pressed: boolean;
-
     onPressToggle?(pressed: boolean, event: h.JSX.TargetedEvent<HTMLButtonElement>): void | Promise<void>;
     children?: ComponentChild;
     showAsyncSuccess?: boolean;
@@ -66,24 +65,8 @@ export interface AnchorButtonProps extends ButtonPropsBase<HTMLAnchorElement> {
 
 
 
-export type ButtonProps = (AnchorButtonProps | ButtonButtonProps | ToggleButtonProps);
 
-
-function ButtonR(p: ToggleButtonProps, ref?: Ref<HTMLButtonElement>): h.JSX.Element;
-function ButtonR(p: ButtonButtonProps, ref?: Ref<HTMLButtonElement>): h.JSX.Element;
-function ButtonR(p: AnchorButtonProps, ref?: Ref<HTMLAnchorElement>): h.JSX.Element;
-function ButtonR(p: ButtonProps, ref?: Ref<HTMLButtonElement> | Ref<HTMLAnchorElement>): h.JSX.Element;
-function ButtonR(p: ButtonProps, ref?: Ref<HTMLButtonElement> | Ref<HTMLAnchorElement>): h.JSX.Element {
-    if ((p as AnchorButtonProps | ButtonButtonProps).tag?.toLowerCase() === "a" || !!(p as AnchorButtonProps).href)
-        return <AnchorButton ref={ref as Ref<HTMLAnchorElement>} {...(p as AnchorButtonProps)} />;
-    else if ((p as ToggleButtonProps).pressed != null)
-        return <ToggleButton ref={ref as Ref<HTMLButtonElement>} {...(p as ToggleButtonProps)} />
-    else
-        return <ButtonButton ref={ref as Ref<HTMLButtonElement>} {...(p as ButtonButtonProps)} />;
-
-}
-
-const AnchorButton = forwardElementRef(function AnchorButton(p: Omit<AnchorButtonProps, "tag">, ref?: Ref<HTMLAnchorElement>) {
+export const AnchorButton = forwardElementRef(function AnchorButton(p: Omit<AnchorButtonProps, "tag">, ref?: Ref<HTMLAnchorElement>) {
     let { colorVariant, size, fillVariant, disabled, ...props } = p;
     const buttonStyleInfo = useButtonStyles<HTMLAnchorElement>({ colorVariant, size, fillVariant, disabled }, "a");
     disabled = buttonStyleInfo.disabled;
@@ -95,9 +78,22 @@ const AnchorButton = forwardElementRef(function AnchorButton(p: Omit<AnchorButto
     return <a {...(usePseudoActive(useButtonStylesProps({ ...props, ref })))} />
 });
 
-const ButtonButton = forwardElementRef(function ButtonButton(p: Omit<ButtonButtonProps, "tag">, ref?: Ref<HTMLButtonElement>) {
-    let { dropdownVariant, dropdownDirection, colorVariant, size, fillVariant, disabled, debounce, spinnerTimeout, onPress: onPressAsync, children, ...props } = p;
+const ButtonButton = forwardElementRef(function ButtonButton({
+    dropdownVariant,
+    dropdownDirection,
+    colorVariant,
+    size,
+    fillVariant,
+    disabled,
+    debounce,
+    spinnerTimeout,
+    onPress: onPressAsync,
+    children,
+    ...props
+}: Omit<ButtonButtonProps, "tag">, ref?: Ref<HTMLButtonElement>) {
+
     dropdownDirection = useButtonDropdownDirection(dropdownDirection);
+
     if (dropdownDirection) {
         if (children)
             dropdownVariant ??= "combined";
@@ -109,7 +105,6 @@ const ButtonButton = forwardElementRef(function ButtonButton(p: Omit<ButtonButto
     disabled ||= pending;
 
     const onPress = pending ? undefined : syncHandler;
-    //const { useAriaButtonProps } = useAriaButton<HTMLButtonElement>({ tag: "button", onPress });
 
     const buttonStyleInfo = useButtonStyles<HTMLButtonElement>({ colorVariant, size, fillVariant, disabled }, "button");
     disabled = buttonStyleInfo.disabled;
@@ -130,19 +125,21 @@ const ButtonButton = forwardElementRef(function ButtonButton(p: Omit<ButtonButto
                 getWindow={useWindow()}
                 onPress={onPress}
                 disabled={disabled}
-                render={defaultRenderButton("button", () => useButtonStylesProps({
-                    type: "button",
-                    className: clsx(
-                        pending && "pending active",
-                        disabled && "disabled",
-                        dropdownVariant && `dropdown-toggle`,
-                        dropdownDirection == "inline-start" && "dropstart",
-                        dropdownDirection == "inline-end" && "dropend",
-                        dropdownDirection == "block-start" && "dropup", // TODO, don't really want to add logical direction testing for *every* button :/
-                        dropdownDirection == "block-end" && "dropdown",
-                        dropdownVariant === "separate" && `dropdown-toggle-split`
-                    )
-                }))} />
+                render={defaultRenderButton("button", () => useMergedProps(
+                    { ...props, ref },
+                    useButtonStylesProps({
+                        type: "button",
+                        className: clsx(
+                            pending && "pending active",
+                            disabled && "disabled",
+                            dropdownVariant && `dropdown-toggle`,
+                            dropdownDirection == "inline-start" && "dropstart",
+                            dropdownDirection == "inline-end" && "dropend",
+                            dropdownDirection == "block-start" && "dropup", // TODO, don't really want to add logical direction testing for *every* button :/
+                            dropdownDirection == "block-end" && "dropdown",
+                            dropdownVariant === "separate" && `dropdown-toggle-split`
+                        )
+                    })))} />
         </ProgressCircular>
     )
 });
@@ -151,7 +148,6 @@ const ButtonButton = forwardElementRef(function ButtonButton(p: Omit<ButtonButto
 
 export const ToggleButton = forwardElementRef(function ToggleButton(p: ToggleButtonProps, ref: Ref<HTMLButtonElement>) {
     let { colorVariant, size, disabled, pressed, debounce, onPressToggle: onPressAsync, showAsyncSuccess, ...props } = p;
-    const inButtonGroup = !!useContext(UseButtonGroupChild);
     const getPressed = useStableGetter(pressed);
     const { syncHandler, pending, hasError, settleCount, hasCapture, currentCapture } = useAsyncHandler(onPressAsync ?? null, { debounce, capture: useCallback(() => { return !getPressed(); }, []) });
     if (hasCapture && pending)
@@ -195,5 +191,5 @@ export const ToggleButton = forwardElementRef(function ToggleButton(p: ToggleBut
 })
 
 
-export const Button = forwardElementRef(ButtonR);
+export const Button = forwardElementRef(ButtonButton);
 

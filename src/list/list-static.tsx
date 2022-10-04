@@ -24,7 +24,7 @@ export const ListStatic = memo(forwardElementRef(function ListStatic<E extends H
     return (
         <>
             {labelPosition === "start" && labelVnode}
-            {createElement(tag ?? "ul", useMergedProps<E>()({ class: clsx("list-group", flush && "list-group-flush", inline && UtilityClasses.display.inline), ref, "aria-hidden": labelPosition === "hidden" ? label as string : undefined } as any, (domProps) as any) as any)}
+            {createElement(tag ?? "ul", useMergedProps<E>({ class: clsx("list-group", flush && "list-group-flush", inline && UtilityClasses.display.inline), ref, "aria-hidden": labelPosition === "hidden" ? label as string : undefined } as any, (domProps) as any) as any)}
             {labelPosition === "end" && labelVnode}
         </>
     );
@@ -39,7 +39,7 @@ export interface ListItemStaticProps extends GlobalAttributes<HTMLLIElement> {
 
 export const ListItemStatic = memo(forwardElementRef(function ListItemStatic(props: ListItemStaticProps, ref: Ref<HTMLLIElement>) {
     const { children, badge, iconStart, iconEnd, disabled, ...domProps } = { ...props, ref };
-    return <li {...usePseudoActive(useMergedProps<HTMLLIElement>()({
+    return <li {...usePseudoActive(useMergedProps<HTMLLIElement>({
         children: <span class={clsx("list-item-text-contents", !!badge && "with-badge", !!iconStart && "with-start", !!(badge || iconEnd) && "with-end")}>
             {iconStart && <span class="list-item-text-contents-start-icon">{iconStart}</span>}
             {children}

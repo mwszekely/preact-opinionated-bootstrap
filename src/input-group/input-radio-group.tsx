@@ -136,7 +136,7 @@ export const Radio = memo(forwardElementRef(function Radio<V extends string | nu
         labelPosition={labelPosition}
         inputProps={useRadioInputProps({ ref, type: "radio", className: clsx() })}
         labelProps={useRadioLabelProps({ class: clsx() })}
-        wrapperProps={useMergedProps<HTMLDivElement>()({ class: "" }, rest)}
+        wrapperProps={useMergedProps({ class: "" }, rest)}
         inline={inline ?? false}
         label={label}
     />);

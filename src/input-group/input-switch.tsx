@@ -54,7 +54,7 @@ export const Switch = memo(forwardElementRef(function Switch({ checked, disabled
         labelPosition={labelPosition}
         inputProps={useSwitchInputElementProps({ ref: ref as any, class: clsx(), tabIndex: tabIndex ?? 0 })}
         labelProps={useSwitchLabelElementProps({ class: clsx() })}
-        wrapperProps={useMergedProps<HTMLDivElement>()({ class: "form-switch" }, rest)}
+        wrapperProps={useMergedProps<HTMLDivElement>({ class: "form-switch" }, rest)}
         inline={inline ?? false}
         label={label}
     />);
@@ -72,10 +72,10 @@ const OptionallyInputGroup = forwardElementRef(function OptionallyInputGroup<E e
         return createElement(tag ?? Fragment as any, props, children);
 
     if (inInputGrid && isInput)
-        children = <div {...useMergedProps<HTMLDivElement>()(props as any, { children, className: clsx(isInput && inInputGrid && "form-switch", "input-group-text") })} />
+        children = <div {...useMergedProps<HTMLDivElement>(props as any, { children, className: clsx(isInput && inInputGrid && "form-switch", "input-group-text") })} />
 
     return (
-        <InputGroupText tag={tag ?? "div" as any} {...useMergedProps<any>()({ children, className: clsx("input-group-text", isInput && !inInputGrid && "form-switch", isInput && inInputGrid && "faux-input-group-text") }, props) as any} />
+        <InputGroupText tag={tag ?? "div" as any} {...useMergedProps<any>({ children, className: clsx("input-group-text", isInput && !inInputGrid && "form-switch", isInput && inInputGrid && "faux-input-group-text") }, props) as any} />
     );
 })
 

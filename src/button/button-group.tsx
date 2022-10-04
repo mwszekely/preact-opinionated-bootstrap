@@ -1,11 +1,12 @@
 import clsx from "clsx";
-import { ComponentChild, h, Ref } from "preact";
-import { LogicalDirectionInfo, useHasFocus, useListNavigation, UseListNavigationChildInfo, useLogicalDirection, useMergedProps, useState } from "preact-prop-helpers";
+import { ComponentChild, createContext, h, Ref } from "preact";
+import { LogicalDirectionInfo, useHasFocus, useListNavigation, useLogicalDirection, useMergedProps, useState } from "preact-prop-helpers";
 import { memo } from "preact/compat";
 import { useCallback, useContext, useEffect } from "preact/hooks";
+import { Toolbar, useWithinToolbar } from "toolbar/toolbar";
 import { forwardElementRef, GlobalAttributes, useLogRender } from "../props";
 import { AnchorButtonProps, Button, ButtonButtonProps, ToggleButtonProps } from "./button";
-import { ProvideDefaultButtonColor, ProvideDefaultButtonDisabled, ProvideDefaultButtonFill, ProvideDefaultButtonSize, useButtonColorVariant, useButtonDisabled, useButtonFillVariant, UseButtonGroupChild, useButtonSize } from "./defaults";
+import { ProvideDefaultButtonColor, ProvideDefaultButtonDisabled, ProvideDefaultButtonFill, ProvideDefaultButtonSize, useButtonColorVariant, useButtonDisabled, useButtonFillVariant, useButtonSize } from "./defaults";
 import { ButtonColorVariant, ButtonFillVariant, ButtonSize } from "./types";
 
 export interface ButtonGroupStyleProps {
@@ -13,111 +14,62 @@ export interface ButtonGroupStyleProps {
     fillVariant?: ButtonFillVariant;
     size?: ButtonSize;
     disabled?: boolean;
-    selectedIndex?: number;
     wrap?: boolean;
 }
 
 export interface ButtonGroupProps extends ButtonGroupStyleProps, GlobalAttributes<HTMLDivElement> {
     children?: ComponentChild;
-    orientation?: "inline" | "block" | undefined;
+    orientation?: "horizontal" | "vertical" | undefined;
+    label: string;
 }
 
-export const ButtonGroup = memo(forwardElementRef(function ButtonGroup(p: ButtonGroupProps, ref: Ref<HTMLDivElement>) {
+const ButtonGroupContext = createContext(false);
+export function useWithinButtonGroup() {
+    return useContext(ButtonGroupContext);
+}
+
+/**
+ * A ButtonGroup is a specialization of a Toolbar.
+ * 
+ * All children must be a ToolbarChild, or a single ref/prop-accepting component contained within a ToolbarChild
+ */
+export const ButtonGroup = memo(forwardElementRef(function ButtonGroup({ colorVariant, fillVariant, size, disabled, wrap, orientation, children, label, ...p3 }: ButtonGroupProps, ref: Ref<HTMLDivElement>) {
     useLogRender("ButtonGroup", `Rendering ButtonGroup`);
 
-    // Styling props
-    let { colorVariant, fillVariant, size, disabled, selectedIndex, wrap, orientation: logicalOrientation, children, ...p3 } = p;
-
-    logicalOrientation ??= "inline";
-
-    const { useHasFocusProps, getFocusedInner  } = useHasFocus<HTMLDivElement>({  });
-    const { indicesByElement, managedChildren, useListNavigationProps, useListNavigationChild, navigateToIndex, childCount } = useListNavigation<HTMLButtonElement, UseListNavigationChildInfo>({ shouldFocusOnChange: getFocusedInner, keyNavigation: logicalOrientation });
-
-    const [physicalOrientation, setPhysicalOrientation] = useState<"horizontal" | "vertical">("horizontal");
-    const { getLogicalDirectionInfo, convertToPhysicalOrientation, useLogicalDirectionProps } = useLogicalDirection<HTMLDivElement>({ onLogicalDirectionChange: useCallback((logicalDirectionInfo: LogicalDirectionInfo) => setPhysicalOrientation(convertToPhysicalOrientation(logicalOrientation!, logicalDirectionInfo)),[]) });
-
-
-    useEffect(() => {
-        if (selectedIndex != null)
-            navigateToIndex(selectedIndex);
-    }, [selectedIndex]);
+    const inToolbar = useWithinToolbar();
+    orientation ??= "horizontal";
 
     // Build new DOM props to merge based off the styling props
     colorVariant = useButtonColorVariant(colorVariant);
     size = useButtonSize(size);
     fillVariant = useButtonFillVariant(fillVariant);
     disabled = useButtonDisabled(disabled);
-    const outerDomProps: h.JSX.HTMLAttributes<any> = useListNavigationProps(useLogicalDirectionProps(useHasFocusProps(useMergedProps<any>()({ ref, class: "btn-group-aria-gridrow" }, p3))));
-    const innerDomProps: h.JSX.HTMLAttributes<any> = { role: "toolbar", disabled, className: clsx("btn-group", wrap && "wrap", physicalOrientation == "vertical" && "btn-group-vertical") };
-
-    // Remaining props, forwarded onto the DOM
-    //const domProps =newDomProps, p3));
-    (outerDomProps as any)["data-child-count"] = `${childCount}`;
+    
+    const innerDomProps: h.JSX.HTMLAttributes<any> = useMergedProps(p3, { ref, disabled, className: clsx("btn-group", wrap && "wrap", orientation == "vertical" && "btn-group-vertical") });
+    let outerDom = inToolbar ?
+        // This is a group within a pre-existing toolbar
+        <div {...useMergedProps({ role: "group" }, innerDomProps)}>
+            {children}
+        </div>
+        :
+        // This button group is just a singular toolbar itself, with no grouping
+        <Toolbar orientation={orientation} label={label}>
+            <div {...innerDomProps}>
+                {children}
+            </div>
+        </Toolbar>
 
     return (
-        <UseButtonGroupChild.Provider value={useListNavigationChild}>
+        <ButtonGroupContext.Provider value={true}>
             <ProvideDefaultButtonColor value={colorVariant}>
                 <ProvideDefaultButtonFill value={fillVariant}>
                     <ProvideDefaultButtonSize value={size}>
                         <ProvideDefaultButtonDisabled value={disabled}>
-                            <div {...outerDomProps}>
-                                <div {...innerDomProps}>{children}</div>
-                            </div>
+                            {outerDom}
                         </ProvideDefaultButtonDisabled>
                     </ProvideDefaultButtonSize>
                 </ProvideDefaultButtonFill>
             </ProvideDefaultButtonColor>
-        </UseButtonGroupChild.Provider>
+        </ButtonGroupContext.Provider>
     );
 }));
-
-interface ButtonGroupChildBaseProps {
-    index: number;
-}
-
-export interface ButtonGroupChildToggleButtonProps extends ToggleButtonProps, ButtonGroupChildBaseProps { }
-export interface ButtonGroupChildButtonButtonProps extends ButtonButtonProps, ButtonGroupChildBaseProps { }
-export interface ButtonGroupChildAnchorButtonProps extends AnchorButtonProps, ButtonGroupChildBaseProps { }
-
-
-export type ButtonGroupChildProps = (ButtonGroupChildAnchorButtonProps | ButtonGroupChildButtonButtonProps | ButtonGroupChildToggleButtonProps);
-
-
-export const ButtonGroupChild = memo(forwardElementRef(function ButtonGroupChild1({ index, tabIndex, ...buttonProps }: ButtonGroupChildProps, ref?: Ref<HTMLButtonElement> | Ref<HTMLAnchorElement>): h.JSX.Element {
-    useLogRender("ButtonGroupChild", `Rendering ButtonGroupChild #${index}`);
-
-    // This is more-or-less forced to be a separate component because of the index prop.
-    // It would be really nice to find a way to make that implicit based on DOM location,
-    // specifically for small things like button groups...
-
-    const useButtonGroupChild = useContext(UseButtonGroupChild);
-    const { tabbable, useListNavigationChildProps, useListNavigationSiblingProps } = useButtonGroupChild!({ index, text: null });
-
-    const p = useListNavigationChildProps(useMergedProps<any>()({ ref }, { ...buttonProps as any }));
-    if (tabIndex != null)
-        (p as any).tabIndex = p;
-
-    return <Button {...p as any}  />
-}));
-
-() => {
-    <ButtonGroupChild index={0} pressed={true} onPressToggle={b => { }} />;
-    <ButtonGroupChild index={0} tag="a" href=" " />;
-    <ButtonGroupChild index={0} onPress={(n, e) => { }} />;
-
-
-    <ButtonGroupChild tag="button" index={0} />;
-    /// @ts-expect-error
-    <ButtonGroupChild tag="button" />;
-
-    /// @ts-expect-error
-    <ButtonGroupChild tag="button" index={0} pressed={true} onPress={b => { }} />;
-    /// @ts-expect-error
-    <ButtonGroupChild tag="a" index={0} pressed={true} onPress={b => { }} />;
-    /// @ts-expect-error
-    <ButtonGroupChild tag="a" index={0} onPress={b => { }} />;
-
-}
-
-<Button pressed={true} onPress={p => console.log(p)}></Button>
-

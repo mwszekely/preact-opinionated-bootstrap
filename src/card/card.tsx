@@ -20,7 +20,7 @@ export const Card = memo(forwardElementRef(function Card(p: CardProps, ref: Ref<
     let { children, ...props } = p;
 
     return (
-        <div {...useMergedProps<HTMLDivElement>()({ ref, className: "card elevation-raised-1 elevation-body-surface" }, props)}>{children}</div>
+        <div {...useMergedProps<HTMLDivElement>({ ref, className: "card elevation-raised-1 elevation-body-surface" }, props)}>{children}</div>
     )
 }));
 
@@ -77,11 +77,11 @@ function CardElement2<E extends Element>({ children, ...p }: CardElementProps<E>
         }
         case "subtitle": {
             const { type, tag, ...props } = p;
-            return <CardSubtitle tag={tag} {...useMergedProps<any>()({ className: "card-body" }, props)} ref={ref as any}>{children}</CardSubtitle>;
+            return <CardSubtitle tag={tag} {...useMergedProps<any>({ className: "card-body" }, props)} ref={ref as any}>{children}</CardSubtitle>;
         }
         case "title": {
             const { type, tag, ...props } = p;
-            return <CardTitle tag={tag} {...useMergedProps<any>()({ className: "card-body" }, props)} ref={ref as any}>{children}</CardTitle>;
+            return <CardTitle tag={tag} {...useMergedProps<any>({ className: "card-body" }, props)} ref={ref as any}>{children}</CardTitle>;
         }
         case "image": {
             const { type, src, ...props } = p;
@@ -99,41 +99,41 @@ export const CardElement = memo(forwardElementRef(CardElement2));
 const CardImage = memo(forwardElementRef(function CardImage(p: CardImageProps, ref: Ref<HTMLImageElement>) {
     const { position, ...props } = p;
     return (
-        <img {...useMergedProps<HTMLImageElement>()(props, { ref, className: `card-img${position == "both" ? "" : `-${position}`}` })} />
+        <img {...useMergedProps<HTMLImageElement>(props, { ref, className: `card-img${position == "both" ? "" : `-${position}`}` })} />
     )
 }));
 
 const CardBody = memo(forwardElementRef(function CardBody(props: CardBodyProps, ref: Ref<HTMLDivElement>) {
     return (
-        <div {...useMergedProps<HTMLDivElement>()(props, { ref, className: "card-body" })} />
+        <div {...useMergedProps<HTMLDivElement>(props, { ref, className: "card-body" })} />
     )
 }));
 
 const CardFooter = memo(forwardElementRef(function CardHeader(props: CardFooterProps, ref: Ref<HTMLDivElement>) {
     return (
-        <div {...useMergedProps<HTMLDivElement>()(props, { ref, className: "card" })} />
+        <div {...useMergedProps<HTMLDivElement>(props, { ref, className: "card" })} />
     )
 }));
 
 const CardTitle = memo(forwardElementRef(function CardTitle<E extends Element>(p: CardTitleProps<E>, ref: Ref<E>) {
     const { tag, ...props } = p;
-    return h(tag ?? "h5", useMergedProps<E>()(props, { ref, className: "card-title" }) as any);
+    return h(tag ?? "h5", useMergedProps<E>(props, { ref, className: "card-title" }) as any);
 }));
 
 const CardSubtitle = memo(forwardElementRef(function CardSubtitle<E extends Element>(p: CardSubtitleProps<E>, ref: Ref<E>) {
     const { tag, ...props } = p;
-    return h(tag ?? "h5", useMergedProps<E>()(props, { ref, className: clsx("card-subtitle", "mb-2", "text-muted") }) as any);
+    return h(tag ?? "h5", useMergedProps<E>(props, { ref, className: clsx("card-subtitle", "mb-2", "text-muted") }) as any);
 }));
 
 
 const CardText = memo(forwardElementRef(function CardText(props: CardTextProps, ref: Ref<HTMLDivElement>) {
     return (
-        <div {...useMergedProps<HTMLDivElement>()(props, { ref, className: "card-text" })} />
+        <div {...useMergedProps<HTMLDivElement>(props, { ref, className: "card-text" })} />
     )
 }));
 
 const CardHeader = memo(forwardElementRef(function CardHeader(props: CardHeaderProps, ref: Ref<HTMLDivElement>) {
     return (
-        <div {...useMergedProps<HTMLDivElement>()(props, { ref, className: "card-header" })} />
+        <div {...useMergedProps<HTMLDivElement>(props, { ref, className: "card-header" })} />
     )
 }));

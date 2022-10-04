@@ -46,7 +46,7 @@ export const Tabs = memo(forwardElementRef(function Tabs<E extends HTMLUListElem
             </UseTabContext.Provider>
             <UseTabPanelContext.Provider value={useTabPanel}>
                 <Swappable>
-                    <div {...useMergedProps<HTMLDivElement>()({ className: "tab-content elevation-depressed-3 elevation-body-surface" }, { ...props, ref })}>
+                    <div {...useMergedProps<HTMLDivElement>({ className: "tab-content elevation-depressed-3 elevation-body-surface" }, { ...props, ref })}>
                         {...children.slice(1)}
                     </div>
                 </Swappable>
@@ -58,7 +58,7 @@ export const Tabs = memo(forwardElementRef(function Tabs<E extends HTMLUListElem
 export const Tab = memo(forwardElementRef(function Tab({ index, children, ...props }: TabProps, ref?: Ref<HTMLButtonElement>) {
     const useTabContext = useContext(UseTabContext);
     const { useTabProps, selected } = useTabContext({ index, text: null, tag: "button" })
-    return <li className="nav-item" role="presentation"><button {...useTabProps(useMergedProps<HTMLButtonElement>()({ ref, class: clsx(`nav-link`, selected && `active`) }, props))}>{children}</button></li>
+    return <li className="nav-item" role="presentation"><button {...useTabProps(useMergedProps<HTMLButtonElement>({ ref, class: clsx(`nav-link`, selected && `active`) }, props))}>{children}</button></li>
 }))
 
 
@@ -74,5 +74,5 @@ export const TabPanel = memo(forwardElementRef(function TabPanel<T extends <E ex
         (TransitionProps as any).zoomMin = 0.85;
     }
 
-    return h(Transition, useMergedProps<any>()(TransitionProps, useTabPanelProps({ ref, show: visible, children, ...(rest as any) })));
+    return h(Transition, useMergedProps<any>(TransitionProps, useTabPanelProps({ ref, show: visible, children, ...(rest as any) })));
 }));

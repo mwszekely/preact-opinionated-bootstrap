@@ -78,9 +78,9 @@ export const Tooltip = memo(forwardElementRef(function Tooltip<T extends <E exte
 
     let anchorProps = cloneable.props as any;
     anchorProps = useTooltipTriggerProps(useElementSizeProps(usePopperSourceProps(anchorProps)));
-    anchorProps = useMergedProps<any>()(anchorProps, { ref: cloneable.ref!, class: "tooltip-anchor" });
-    anchorProps = useMergedProps<any>()(anchorProps, { ref });
-    anchorProps = useMergedProps<any>()(anchorProps, restAnchorProps);
+    anchorProps = useMergedProps<any>(anchorProps, { ref: cloneable.ref!, class: "tooltip-anchor" });
+    anchorProps = useMergedProps<any>(anchorProps, { ref });
+    anchorProps = useMergedProps<any>(anchorProps, restAnchorProps);
 
     // TODO: It's required for this to be exitVisibility="hidden" for transforms to work?
     // Probably an issue in the Transition element itself because it's not browser-specific but it's a little weird
@@ -89,7 +89,7 @@ export const Tooltip = memo(forwardElementRef(function Tooltip<T extends <E exte
         <BodyPortal>
             <div {...usePopperPopupProps({ class: "tooltip-wrapper" })} >
                 <Transition {...TransitionProps as any} show={isOpen} onTransitionUpdate={onInteraction} exitVisibility="hidden">
-                    <div {...(useTooltipProps(useMergedProps<HTMLDivElement>()({ class: "tooltip show", role: "tooltip" }, {})) as any)}>
+                    <div {...(useTooltipProps(useMergedProps<HTMLDivElement>({ class: "tooltip show", role: "tooltip" }, {})) as any)}>
                         <div {...usePopperArrowProps({ class: "popper-arrow" })}></div>
                         <div class="tooltip-inner">{tooltip || lastUsedTooltipRef.current}</div>
                     </div>

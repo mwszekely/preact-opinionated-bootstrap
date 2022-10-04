@@ -26,7 +26,7 @@ export interface InputGroupTextProps<E extends Element> extends Partial<TagSensi
 }
 
 export const InputGrid = memo(forwardElementRef(function InputGrid<E extends Element>({ tag, children, columns, ...props }: InputGridProps<E>, ref: Ref<E>) {
-    return createElement(tag ?? "div" as any, useMergedProps<E>()({ class: "input-grid", style: columns ? { "--input-grid-columns": columns } as {} : {}, ref }, props),
+    return createElement(tag ?? "div" as any, useMergedProps<E>({ class: "input-grid", style: columns ? { "--input-grid-columns": columns } as {} : {}, ref }, props),
         <InInputGridContext.Provider value={useContext(InInputGridContext) + 1}>{children}</InInputGridContext.Provider>
     );
 }));
@@ -38,7 +38,7 @@ export const InputGrid = memo(forwardElementRef(function InputGrid<E extends Ele
  */
 export const InputGroup = memo(forwardElementRef(function InputGroup<E extends Element>({ children, size, colSpan, tag, ...props }: InputGroupProps<E>, ref: Ref<E>) {
     return (
-        createElement(tag ?? "div" as any, useMergedProps<E>()({ class: clsx("input-group", size && size != "md" && `input-group-${size}`, colSpan && `input-grid-span-${colSpan}`), ref }, props),
+        createElement(tag ?? "div" as any, useMergedProps<E>({ class: clsx("input-group", size && size != "md" && `input-group-${size}`, colSpan && `input-grid-span-${colSpan}`), ref }, props),
             <InInputGroupContext.Provider value={true}>
                 <DefaultInputSize.Provider value={size}>
                     {children}
@@ -54,5 +54,5 @@ export const InputGroup = memo(forwardElementRef(function InputGroup<E extends E
  * That being said, if you just need a static block of text not hooked up to any input element, this is your component.
  */
 export const InputGroupText = forwardElementRef(function InputGroupText<E extends Element>({ tag, children, disabled, ...props }: InputGroupTextProps<E>, ref: Ref<E>) {
-    return createElement(tag ?? "div" as any, useMergedProps<E>()({ class: clsx(disabled && "disabled", "input-group-text"), ref }, props), children);
+    return createElement(tag ?? "div" as any, useMergedProps<E>({ class: clsx(disabled && "disabled", "input-group-text"), ref }, props), children);
 })

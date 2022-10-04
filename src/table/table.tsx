@@ -74,7 +74,7 @@ export const Table = memo(forwardElementRef(function Table({ children, small, st
     const { useTableProps, useTableHead, useTableBody, useTableFoot, managedTableSections } = useTable<HTMLTableElement, HTMLTableSectionElement, HTMLTableRowElement, HTMLTableCellElement>({});
 
     return (
-        <table {...useTableProps(useMergedProps<HTMLTableElement>()({
+        <table {...useTableProps(useMergedProps<HTMLTableElement>({
             ref,
             className: clsx(
                 "table",
@@ -127,7 +127,7 @@ export const TableHead = memo(forwardElementRef(function TableHead({ variant, ..
     return (
         <CellLocationContext.Provider value={"head"}>
             <TableRowContext.Provider value={useTableHeadRow}>
-                <TableSectionImpl tag="thead" {...useRefElementProps(useMergedProps<HTMLTableSectionElement>()(useTableHeadProps({ ref, className: clsx("elevation-body-surface", showShadow && "floating", variant && `table-${variant}`) }), props))} />
+                <TableSectionImpl tag="thead" {...useRefElementProps(useMergedProps<HTMLTableSectionElement>(useTableHeadProps({ ref, className: clsx("elevation-body-surface", showShadow && "floating", variant && `table-${variant}`) }), props))} />
             </TableRowContext.Provider>
         </CellLocationContext.Provider>
     )
@@ -141,7 +141,7 @@ export const TableBody = memo(forwardElementRef(function TableBody({ children, v
     return (
         <CellLocationContext.Provider value={"body"}>
             <TableRowContext.Provider value={useTableBodyRow}>
-                <TableSectionImpl tag="tbody" {...useMergedProps<HTMLTableSectionElement>()(useTableBodyProps({ ref, children, className: clsx(variant && `table-${variant}`) }), props)} />
+                <TableSectionImpl tag="tbody" {...useMergedProps<HTMLTableSectionElement>(useTableBodyProps({ ref, children, className: clsx(variant && `table-${variant}`) }), props)} />
             </TableRowContext.Provider>
         </CellLocationContext.Provider>
     )
@@ -153,7 +153,7 @@ export const TableFoot = memo(forwardElementRef(function TableFoot({ children, v
     return (
         <CellLocationContext.Provider value={"foot"}>
             <TableRowContext.Provider value={useTableFootRow}>
-                <TableSectionImpl tag="tfoot" {...useMergedProps<HTMLTableSectionElement>()(useTableFootProps({ ref, children: Array.isArray(children) ? children : [children], className: clsx(variant && `table-${variant}`) }), props)} />
+                <TableSectionImpl tag="tfoot" {...useMergedProps<HTMLTableSectionElement>(useTableFootProps({ ref, children: Array.isArray(children) ? children : [children], className: clsx(variant && `table-${variant}`) }), props)} />
             </TableRowContext.Provider>
         </CellLocationContext.Provider>
     )
@@ -171,7 +171,7 @@ export const TableRow = memo(forwardElementRef(function TableRow({ children, ind
 
 
     const rowProps = useTableRowProps({
-        ...(useMergedProps<HTMLTableRowElement>()({
+        ...(useMergedProps<HTMLTableRowElement>({
             children,
             ref,
             className: clsx(variant && `table-${variant}`),
@@ -219,15 +219,15 @@ export const TableCell = memo(forwardElementRef(function TableCell({ value: valu
 
 
     if (childrenReceiveFocus) {
-        const p1 = useMergedProps<any>()(useTableCellDelegateProps({}), props);
+        const p1 = useMergedProps<any>(useTableCellDelegateProps({}), props);
         return (
             <td {...cellProps}>
-                {cloneElement(children! as any, useMergedProps<any>()(p1, children.props), children.props.children)}
+                {cloneElement(children! as any, useMergedProps<any>(p1, children.props), children.props.children)}
             </td>
         )
     }
     else {
-        const p2 = useMergedProps<any>()(useTableCellDelegateProps(cellProps), props);
+        const p2 = useMergedProps<any>(useTableCellDelegateProps(cellProps), props);
         return (
             <td {...p2}>
                 {stringify(displayValue)}
@@ -251,7 +251,7 @@ export const TableHeaderCell = memo(forwardElementRef(function TableHeaderCell({
     const { hovering, useIsHoveringProps } = useIsHovering<HTMLTableCellElement>();
 
     const cellProps = useTableHeadCellProps(useIsHoveringProps((
-        (useMergedProps<HTMLTableCellElement>()({
+        (useMergedProps<HTMLTableCellElement>({
             ref,
             role: "columnheader",
             className: clsx(variant && `table-${variant}`, unsortable && "unsortable")
@@ -269,15 +269,15 @@ export const TableHeaderCell = memo(forwardElementRef(function TableHeaderCell({
 
 
     if (childrenReceiveFocus) {
-        const p1 = useMergedProps<any>()(useTableHeadCellDelegateProps({}), props);
+        const p1 = useMergedProps<any>(useTableHeadCellDelegateProps({}), props);
         return (
             <th {...cellProps}>
-                <div class="th-spacing">{cloneElement(children! as any, useMergedProps<any>()(p1, children.props), children.props.children)}{sortIcon}</div>
+                <div class="th-spacing">{cloneElement(children! as any, useMergedProps<any>(p1, children.props), children.props.children)}{sortIcon}</div>
             </th>
         )
     }
     else {
-        const p2 = useMergedProps<any>()(useTableHeadCellDelegateProps(cellProps), props);
+        const p2 = useMergedProps<any>(useTableHeadCellDelegateProps(cellProps), props);
         return (
             <th {...p2}>
                 <div class="th-spacing">{children}{sortIcon}</div>
@@ -294,7 +294,7 @@ function useIsHovering<E extends Element>() {
     useGlobalHandler(window, "blur", onMouseLeave);
 
 
-    return { hovering, useIsHoveringProps: <P extends h.JSX.HTMLAttributes<E>>(props: P) => useMergedProps<E>()({ onMouseEnter, onMouseLeave }, props) }
+    return { hovering, useIsHoveringProps: <P extends h.JSX.HTMLAttributes<E>>(props: P) => useMergedProps<E>({ onMouseEnter, onMouseLeave }, props) }
 }
 
 

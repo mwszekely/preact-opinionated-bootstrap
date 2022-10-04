@@ -25,14 +25,14 @@ export interface IconProps<E extends Element> extends Omit<h.JSX.HTMLAttributes<
 
 export const Icon = memo(forwardElementRef(function Icon<E extends Element>({ label, tooltip, role, "aria-label": ariaLabel, children, ref: ref3, ...props }: IconProps<E>, ref2: Ref<HTMLElement>) {
 
-    const iconProps = useMergedProps<any>()(props, {
+    const iconProps = useMergedProps<any>(props, {
         class: "icon",
         [children.type === "img" ? "alt" : "aria-label"]: (ariaLabel || (label ?? undefined)),
         role: (role || (label ? "img" : "presentation")),
-        ref: useMergedRefs<any>()({ ref: ref2 }, { ref: ref3 })
+        ref: useMergedRefs<any>({ ref: ref2 }, { ref: ref3 })
     })
 
-    const iconElement = cloneElement(children, useMergedProps<any>()(children.props, iconProps)); //<i {...props} role={label? "img" : "presentation"} aria-label={ariaLabel || (label ?? undefined)} ref={ref} />;
+    const iconElement = cloneElement(children, useMergedProps<any>(children.props, iconProps)); //<i {...props} role={label? "img" : "presentation"} aria-label={ariaLabel || (label ?? undefined)} ref={ref} />;
 
     if (tooltip)
         return <Tooltip tooltip={tooltip}>{iconElement}</Tooltip>;

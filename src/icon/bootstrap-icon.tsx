@@ -14,7 +14,7 @@ export interface BootstrapIconProps extends Pick<FontIconProps, "label" | "toolt
 export const BootstrapIcon = memo(forwardElementRef(function BootstrapIcon({ icon, label, tooltip, ...props }: BootstrapIconProps, ref: Ref<HTMLElement>) {
 
     // Merge our custom CSS class with any additional classes that were passed in to this component
-    const mergedProps = useMergedProps<HTMLElement>()({ class: `bi bi-${icon}` }, props);
+    const mergedProps = useMergedProps<HTMLElement>({ class: `bi bi-${icon}` }, props);
 
     // Render the actual FontIcon
     return <FontIcon {...mergedProps} label={label} tooltip={tooltip} ref={ref} />;

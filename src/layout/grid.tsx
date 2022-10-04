@@ -1,4 +1,4 @@
-import { cloneElement, h, Ref, RenderableProps, VNode } from "preact";
+import { cloneElement, h, Ref, VNode } from "preact";
 import { TagSensitiveProps } from "preact-aria-widgets";
 import { useMergedProps } from "preact-prop-helpers";
 import { memo } from "preact/compat";
@@ -14,8 +14,8 @@ import { forwardElementRef, GlobalAttributes } from "../props";
  * Easy one-liners all around here!
  */
 export const GridResponsive = memo(forwardElementRef(function ResponsiveGrid<E extends Element>({ tag, minWidth, leftover, children, ...props }: { leftover?: "fill" | "shrink", minWidth: `${string}em`, tag?: "passthrough" } & Partial<TagSensitiveProps<E>> & GlobalAttributes<E>, ref: Ref<E>) {
-    const mergedProps = useMergedProps<E>()({ className: "responsive-grid", style: minWidth ? { "--grid-min-width": `${minWidth}`, "--grid-auto-behavior": leftover ? `auto-${leftover == "shrink" ? "fit" : leftover}` : "" } : {}, ref }, props);
-    const passthroughProps = useMergedProps<E>()(mergedProps, (children as VNode<any>)?.props?.children ?? {});
+    const mergedProps = useMergedProps<E>({ className: "responsive-grid", style: minWidth ? { "--grid-min-width": `${minWidth}`, "--grid-auto-behavior": leftover ? `auto-${leftover == "shrink" ? "fit" : leftover}` : "" } : {}, ref }, props);
+    const passthroughProps = useMergedProps<E>(mergedProps, (children as VNode<any>)?.props?.children ?? {});
 
     if (tag === "passthrough")
         return cloneElement(children as VNode<any>, passthroughProps);
@@ -29,8 +29,8 @@ export const GridResponsive = memo(forwardElementRef(function ResponsiveGrid<E e
  */
 export const GridStatic = memo(forwardElementRef(function ResponsiveGrid<E extends Element>({ tag, columns, children, ...props }: { columns: number | string, tag?: "passthrough" } & Partial<TagSensitiveProps<E>> & GlobalAttributes<E>, ref: Ref<E>) {
 
-    const mergedProps = useMergedProps<E>()({ className: "static-grid", style: typeof columns === "string" ? { "--static-grid-columns": columns } : { "--grid-column-count": columns }, ref }, props);
-    const passthroughProps = useMergedProps<E>()(mergedProps, (children as VNode<any>)?.props?.children ?? {});
+    const mergedProps = useMergedProps<E>({ className: "static-grid", style: typeof columns === "string" ? { "--static-grid-columns": columns } : { "--grid-column-count": columns }, ref }, props);
+    const passthroughProps = useMergedProps<E>(mergedProps, (children as VNode<any>)?.props?.children ?? {});
 
     if (tag === "passthrough")
         return cloneElement(children as VNode<any>, passthroughProps);

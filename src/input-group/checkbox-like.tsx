@@ -52,16 +52,16 @@ function ButtonCheckboxLike({ inputProps, labelProps, label, asyncState, current
 
     return (
         <>
-            <input {...useMergedProps<HTMLInputElement>()({ class: clsx("btn-check", disabled && "disabled") }, inputProps)} />
+            <input {...useMergedProps<HTMLInputElement>({ class: clsx("btn-check", disabled && "disabled") }, inputProps)} />
             <ProgressCircular childrenPosition="child" colorFill="foreground-only" mode={(currentHandlerType === "async" ? asyncState : null) ?? null} colorVariant="info">
-                <label {...useMergedProps<HTMLLabelElement>()({ class: clsx("btn", `btn-${buttonColor}`, disabled && disabled, inputProps.checked && "active"), children: <span class="btn-text-contents">{label}</span> }, labelProps)} />
+                <label {...useMergedProps<HTMLLabelElement>({ class: clsx("btn", `btn-${buttonColor}`, disabled && disabled, inputProps.checked && "active"), children: <span class="btn-text-contents">{label}</span> }, labelProps)} />
             </ProgressCircular>
         </>
     );
 }
 
 function CheckboxLikeOnly({ label, inputProps, asyncState, currentHandlerType, disabled, labelPosition }: { disabled: boolean, currentHandlerType: "sync" | "async" | null | undefined, asyncState: null | undefined | "pending" | "succeeded" | "failed", inputProps: any, label: ComponentChildren, labelPosition: LabelPosition }) {
-    let inputElement = <input {...useMergedProps<HTMLInputElement>()({ class: clsx("form-check-input", disabled && "disabled") }, inputProps)} />;
+    let inputElement = <input {...useMergedProps<HTMLInputElement>({ class: clsx("form-check-input", disabled && "disabled") }, inputProps)} />;
 
     inputElement = <Tooltip tooltip={labelPosition == "tooltip" ? label : null}>{inputElement}</Tooltip>;
     inputElement = <ProgressCircular childrenPosition="after" colorFill="foreground-only" mode={(currentHandlerType === "async" ? asyncState : null) ?? null} colorVariant="info">{inputElement}</ProgressCircular>
@@ -70,7 +70,7 @@ function CheckboxLikeOnly({ label, inputProps, asyncState, currentHandlerType, d
 }
 
 function InputGroupCheckboxLike({ inputProps, labelProps, label, asyncState, currentHandlerType, disabled, labelPosition, type }: { type: CheckboxLikeType, disabled: boolean, currentHandlerType: "sync" | "async" | null | undefined, asyncState: null | undefined | "pending" | "succeeded" | "failed", label: ComponentChildren, labelProps: any, inputProps: any, labelPosition: LabelPosition }) {
-    let labelElement = <InputGroupText tag="label" {...useMergedProps<HTMLLabelElement>()({ class: clsx("input-group-text", disabled && "disabled"), children: label }, labelProps)} />;
+    let labelElement = <InputGroupText tag="label" {...useMergedProps<HTMLLabelElement>({ class: clsx("input-group-text", disabled && "disabled"), children: label }, labelProps)} />;
     labelElement = (label != null && (labelPosition == "start" || labelPosition == "end") && labelElement) || null!;
     return (
         <>
@@ -85,10 +85,10 @@ function InputGroupCheckboxLike({ inputProps, labelProps, label, asyncState, cur
 
 function NormalCheckboxLike({ inputProps, labelProps, wrapperProps, label, asyncState, currentHandlerType, disabled, labelPosition, inline }: { disabled: boolean, currentHandlerType: "sync" | "async" | null | undefined, asyncState: null | undefined | "pending" | "succeeded" | "failed", label: ComponentChildren, wrapperProps: any, labelProps: any, inputProps: any, labelPosition: LabelPosition, inline: boolean }) {
 
-    const labelElement = ((labelPosition == "start" || labelPosition == "end") && <label {...useMergedProps<HTMLLabelElement>()({ class: clsx("form-check-label", disabled && "disabled"), children: label }, labelProps)} />);
+    const labelElement = ((labelPosition == "start" || labelPosition == "end") && <label {...useMergedProps<HTMLLabelElement>({ class: clsx("form-check-label", disabled && "disabled"), children: label }, labelProps)} />);
 
     return (
-        <div {...useMergedProps<HTMLDivElement>()({ class: clsx("form-check", disabled && "disabled", inline && "form-check-inline") }, wrapperProps)}>
+        <div {...useMergedProps<HTMLDivElement>({ class: clsx("form-check", disabled && "disabled", inline && "form-check-inline") }, wrapperProps)}>
             {labelPosition == "start" && labelElement}
             <CheckboxLikeOnly disabled={disabled} inputProps={inputProps} labelPosition={labelPosition} label={label} asyncState={asyncState} currentHandlerType={currentHandlerType} />
             {labelPosition == "end" && labelElement}

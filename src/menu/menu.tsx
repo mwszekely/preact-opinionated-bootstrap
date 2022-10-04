@@ -92,10 +92,10 @@ function MenuU<E extends Element, T extends <E extends HTMLElement>(...args: any
 
     let anchorProps = anchor.props as any;
     anchorProps = useMenuButtonProps(useElementSizeProps(usePopperSourceProps(anchorProps)));
-    anchorProps = useMergedProps<any>()(anchorProps, { ref: anchor.ref! });
-    anchorProps = useMergedProps<any>()(anchorProps, { ref });
-    anchorProps = useMergedProps<any>()(anchorProps, { [anchorEventName ?? "onPress"]: onAnchorClick, ref: anchor.ref as Ref<Element>, class: `${open ? "active" : ""}` });
-    anchorProps = useMergedProps<any>()(anchorProps, restAnchorProps);
+    anchorProps = useMergedProps<any>(anchorProps, { ref: anchor.ref! });
+    anchorProps = useMergedProps<any>(anchorProps, { ref });
+    anchorProps = useMergedProps<any>(anchorProps, { [anchorEventName ?? "onPress"]: onAnchorClick, ref: anchor.ref as Ref<Element>, class: `${open ? "active" : ""}` });
+    anchorProps = useMergedProps<any>(anchorProps, restAnchorProps);
 
     return (
         <>
@@ -150,7 +150,7 @@ function MenuItemU(p: MenuItemProps, ref?: Ref<any>) {
 
     const onPress = ((disabled || !onPressAsync) ? null : syncHandler);
 
-    const newProps = useMenuItemProps(useMergedProps<HTMLButtonElement>()(rest, { ref, class: clsx(onPressAsync ? "dropdown-item" : "dropdown-item-text", "dropdown-multiline", !!badge && "with-badge", !!iconStart && "with-start", !!(badge || iconEnd) && "with-end", disabled && "disabled", pending && "pending"), "aria-disabled": disabled ? "true" : undefined }));
+    const newProps = useMenuItemProps(useMergedProps<HTMLButtonElement>(rest, { ref, class: clsx(onPressAsync ? "dropdown-item" : "dropdown-item-text", "dropdown-multiline", !!badge && "with-badge", !!iconStart && "with-start", !!(badge || iconEnd) && "with-end", disabled && "disabled", pending && "pending"), "aria-disabled": disabled ? "true" : undefined }));
     const buttonProps = usePseudoActive(usePressEventHandlers<HTMLButtonElement>(disabled ? null : onPress, hasTypeahead ? { space: "exclude" } : undefined)(newProps));
 
     const childrenWithIcons = <>{iconStart && <span class="dropdown-item-start-icon">{iconStart}</span>}{children}{badge && <span class="dropdown-item-badge">{badge}</span>}{iconEnd && <span className="dropdown-item-end-icon">{iconEnd}</span>}</>

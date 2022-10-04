@@ -21,14 +21,6 @@ export type AccordionSectionProps<T extends <E extends HTMLElement>(...args: any
     index: number;
     open?: boolean;
 
-    /**
-     * If 1 - 6, uses h1 - h6 as the element.
-     * If higher, uses a div with aria-level.
-     * 
-     * Default is 2.
-     */
-    headerLevel?: number;
-
     children: ComponentChildren;
 }
 
@@ -43,13 +35,13 @@ export const Accordion = memo(forwardElementRef(function Accordion({ expandedInd
 }));
 
 
-export const AccordionSection = memo(forwardElementRef(function AccordionSection<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element>({ index, open, header, headerLevel, children, disabled, Transition, ...props }: AccordionSectionProps<T>, ref: Ref<HTMLDivElement>) {
+export const AccordionSection = memo(forwardElementRef(function AccordionSection<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element>({ index, open, header, children, disabled, Transition, ...props }: AccordionSectionProps<T>, ref: Ref<HTMLDivElement>) {
     useLogRender("AccordionSection", `Rendering AccordionSection #${index}`);
 
 
     Transition ??= Collapse as T;
 
-    headerLevel ??= 2;
+    //headerLevel ??= 2;
 
 
     return (
@@ -82,15 +74,4 @@ export const AccordionSection = memo(forwardElementRef(function AccordionSection
             />
         </div>
     );
-    /*
-        const headerButtonProps = useAriaAccordionSectionHeaderProps({ type: "button", class: clsx("accordion-button", !expanded ? " collapsed" : "") });
-        const headerProps = ({ class: "accordion-header", children: <button {...headerButtonProps}>{header}</button> });
-        const headerJsx = headerLevel >= 1 && headerLevel <= 6 ? h(`h${headerLevel}`, headerProps as any) : h("div", as any);
-        return (
-            <div {...{ ref, class: "accordion-item" }}>
-                {headerJsx}
-                <Transition show={expanded} {...useAriaAccordionSectionBodyProps(useMergedProps<any>()(props, { class: "" })) as any}><div><div class={clsx("accordion-body", expanded && "elevation-depressed-2", "elevation-body-surface")}>{children}</div></div></Transition>
-            </div>
-        );
-        */
 }))

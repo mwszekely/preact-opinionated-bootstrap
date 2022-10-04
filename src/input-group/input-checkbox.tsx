@@ -79,7 +79,7 @@ export const Checkbox = memo(forwardElementRef(function Checkbox({ checked, tris
         inputProps={useCheckboxInputElementProps(baseInputProps)}
         labelProps={useCheckboxLabelElementProps(baseLabelProps)}
         inline={inline ?? false}
-        wrapperProps={useMergedProps<HTMLDivElement>()({}, props)}
+        wrapperProps={useMergedProps<HTMLDivElement>({}, props)}
         label={label}
     />);
 
@@ -90,7 +90,7 @@ export const OptionallyInputGroup = forwardElementRef(function OptionallyInputGr
     const inInputGrid = !!useContext(InInputGridContext);
     props = { ...props, ref };
 
-    props = useMergedProps<any>()(props, (!inInputGroup || isTooltip) && !tag ? (children as VNode<any>).props : {});
+    props = useMergedProps<any>(props, (!inInputGroup || isTooltip) && !tag ? (children as VNode<any>).props : {});
 
     if (!inInputGroup || isTooltip) {
         if (tag)
@@ -103,9 +103,9 @@ export const OptionallyInputGroup = forwardElementRef(function OptionallyInputGr
     // new child that's, CSS-wise, the "true" input.
     // The other one is used for its border styles and relative positioning.
     if (inInputGrid && isInput)
-        children = <div {...useMergedProps<HTMLDivElement>()(props as any, { className: "input-group-text" })}>{children}</div>
+        children = <div {...useMergedProps<HTMLDivElement>(props as any, { className: "input-group-text" })}>{children}</div>
 
-    return <InputGroupText tag={tag ?? "div" as any} {...useMergedProps<E>()({ className: clsx(isInput && inInputGrid && "faux-input-group-text") }, props)}>{children}</InputGroupText>;
+    return <InputGroupText tag={tag ?? "div" as any} {...useMergedProps<E>({ className: clsx(isInput && inInputGrid && "faux-input-group-text") }, props)}>{children}</InputGroupText>;
 })
 
 

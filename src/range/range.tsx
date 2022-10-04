@@ -79,7 +79,7 @@ export const Range = memo(forwardElementRef(function Range({ max, min, debounce,
                             <SnapContext.Provider value={snap ?? "discrete"}>
                                 <DisabledContext.Provider value={disabled ?? false}>
                                     <OrientationContext.Provider value={orientation ?? "inline"}>
-                                        {createElement((label ? "label" : "div") as any, (useMergedProps<HTMLDivElement>()({ class: clsx("form-range-container", orientation == "block" && "form-range-vertical"), ref, style: isFinite(tickCount) ? { "--form-range-tick-count": tickCount } : undefined }, rest)),
+                                        {createElement((label ? "label" : "div") as any, (useMergedProps<HTMLDivElement>({ class: clsx("form-range-container", orientation == "block" && "form-range-vertical"), ref, style: isFinite(tickCount) ? { "--form-range-tick-count": tickCount } : undefined }, rest)),
                                             label && <div class="form-range-label">{label}</div>,
                                             children ?? <RangeThumb index={0} min={min} max={max} value={value ?? 0} onValueChange={onValueChange} label={label ?? ""} />,
                                             <div class="form-range-track-background" />,

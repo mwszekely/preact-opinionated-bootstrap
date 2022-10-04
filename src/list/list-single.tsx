@@ -51,7 +51,7 @@ export const ListSingle = memo(forwardElementRef(function ListSingle<E extends H
 
     return (
         <UseListboxSingleItemContext.Provider value={useListboxSingleItem}>
-            <ListStatic tag={tag} labelPosition={labelPosition} label={clonedLabel} {...(useMergedProps<E>()({ class: "list-group", ref, "aria-hidden": labelPosition === "hidden" ? label as string : undefined } as any, useListboxSingleProps(domProps) as any) as any)} />
+            <ListStatic tag={tag} labelPosition={labelPosition} label={clonedLabel} {...(useMergedProps<E>({ class: "list-group", ref, "aria-hidden": labelPosition === "hidden" ? label as string : undefined } as any, useListboxSingleProps(domProps) as any) as any)} />
         </UseListboxSingleItemContext.Provider>
     );
 }));
@@ -74,7 +74,7 @@ export const ListItemSingle = memo(forwardElementRef(function ListItemSingle(p: 
     const { getSelected, tabbable, selected, useListboxSingleItemProps } = useListItemSingle({ index, text: childrenText, tag: "li", setPending, getPending, hidden, disabled });
     return (
         <ProgressCircular childrenPosition="child" mode={pending ? "pending" : null} colorVariant="info">
-            <ListItemStatic {...usePseudoActive(useMergedProps<HTMLLIElement>()({ disabled, class: clsx("list-group-item-action", selected && "active", pending && "pending") } as any, useListboxSingleItemProps(domProps)))}>
+            <ListItemStatic {...usePseudoActive(useMergedProps<HTMLLIElement>({ disabled, class: clsx("list-group-item-action", selected && "active", pending && "pending") } as any, useListboxSingleItemProps(domProps)))}>
                 {children as VNode}
             </ListItemStatic>
         </ProgressCircular>

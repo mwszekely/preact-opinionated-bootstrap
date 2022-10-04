@@ -1,13 +1,12 @@
 import clsx from "clsx";
 import { createContext, Fragment, h, RenderableProps } from "preact";
 import { ElementToTag } from "preact-aria-widgets/props";
-import { UseListNavigationChild, UseListNavigationChildInfo, useMergedProps } from "preact-prop-helpers";
+import { useMergedProps } from "preact-prop-helpers";
 import { memo } from "preact/compat";
 import { useContext } from "preact/hooks";
 import { ButtonColorVariant, ButtonFillVariant, ButtonPropsBase, ButtonSize, ButtonDropdownDirection, ButtonDropdownVariant } from "./types";
 
 
-export const UseButtonGroupChild = createContext<UseListNavigationChild<HTMLButtonElement, UseListNavigationChildInfo> | null>(null);
 
 const DefaultFillStyleContext = createContext<ButtonFillVariant>("fill");
 const DefaultColorStyleContext = createContext<ButtonColorVariant>("primary");
@@ -55,7 +54,7 @@ export function useButtonStyles<E extends Element>(p: Pick<ButtonPropsBase<E>, "
     fillVariant = useButtonFillVariant(fillVariant);
     disabled = useButtonDisabled(disabled);
 
-    const useButtonStylesProps = <P extends h.JSX.HTMLAttributes<E>>({ children, ...props }: P) => useMergedProps<E>()({ 
+    const useButtonStylesProps = <P extends h.JSX.HTMLAttributes<E>>({ children, ...props }: P) => useMergedProps<E>({ 
         type: tag === "button"? "button" : undefined, 
         "aria-disabled": disabled? "true" : undefined, 
         className: clsx(disabled && "disabled", "btn", `btn-${fillVariant == "outline" ? `outline-` : ``}${colorVariant}`, `btn-${size}`, disabled && "disabled"),

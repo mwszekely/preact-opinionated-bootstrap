@@ -41,7 +41,7 @@ export const ListMulti = memo(forwardElementRef(function ListMulti<E extends HTM
 
     return (
         <UseListboxMultiItemContext.Provider value={useListboxMultiItem}>
-            <ListStatic tag={tag} labelPosition={labelPosition} label={clonedLabel} {...(useMergedProps<E>()({ class: "list-group", ref, "aria-hidden": labelPosition === "hidden" ? label as string : undefined } as any, useListboxMultiProps(domProps) as any) as any)} />
+            <ListStatic tag={tag} labelPosition={labelPosition} label={clonedLabel} {...(useMergedProps<E>({ class: "list-group", ref, "aria-hidden": labelPosition === "hidden" ? label as string : undefined } as any, useListboxMultiProps(domProps) as any) as any)} />
 
         </UseListboxMultiItemContext.Provider>
     );
@@ -65,7 +65,7 @@ export const ListItemMulti = memo(forwardElementRef(function ListItemMulti(p: Li
     const { tabbable, useListboxMultiItemProps } = useListItemMulti({ index, text: childrenText, tag: "li", selected: currentCapture ?? selected ?? false, onSelect: onSelectSync ?? undefined, disabled });
     return (
         <ProgressCircular childrenPosition="child" mode={pending ? "pending" : hasError ? "failed" : resolveCount ? "succeeded" : null} colorVariant="info">
-            <ListItemStatic {...usePseudoActive(useMergedProps<HTMLLIElement>()({ disabled, class: clsx("list-group-item-action", selected && "active", pending && "pending") } as any, useListboxMultiItemProps(domProps)))}>
+            <ListItemStatic {...usePseudoActive(useMergedProps<HTMLLIElement>({ disabled, class: clsx("list-group-item-action", selected && "active", pending && "pending") } as any, useListboxMultiItemProps(domProps)))}>
                 {children as VNode}
             </ListItemStatic>
         </ProgressCircular>

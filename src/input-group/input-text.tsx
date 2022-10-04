@@ -203,7 +203,7 @@ function UnlabelledInputR(p: UnlabelledInputProps, ref?: Ref<any>): h.JSX.Elemen
         measure = v || <>&nbsp;</>;
     }
 
-    const inputProps = useRefElementProps(useHasFocusProps(useMergedProps<HTMLInputElement>()(props, {
+    const inputProps = useRefElementProps(useHasFocusProps(useMergedProps<HTMLInputElement>(props, {
         "aria-disabled": disabled ? "true" : undefined,
         onKeyDown,
         ref,
@@ -268,7 +268,7 @@ export const Input = memo(forwardElementRef(function Input({ children, value, wi
 
     const sizeClass = (size != "md" && `form-control-${size}`);
     let inputJsx = <IC
-        {...useInputLabelInputProps(useMergedProps<any>()({
+        {...useInputLabelInputProps(useMergedProps<any>({
             children: IC === InputGroupText ? value : undefined,
             value: undefined, //IC === InputGroupText ? undefined : (value ?? undefined),
             placeholder: IC === InputGroupText ? undefined : placeholder,
