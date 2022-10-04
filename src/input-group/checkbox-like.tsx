@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { ComponentChildren } from "preact";
+import { ComponentChildren, h } from "preact";
 import { useMergedProps } from "preact-prop-helpers";
 import { useContext } from "preact/hooks";
 import { useButtonColorVariant } from "../button/defaults";
@@ -32,7 +32,7 @@ export function CheckboxLike({ labelPosition, currentHandlerType, asyncState, in
     //if (labelPosition == "hidden" || labelPosition == "tooltip")
     //    label = null;
 
-    let temp: any = useMergedProps<HTMLInputElement>()({ "aria-label": stringLabel }, inputProps);
+    let temp: any = useMergedProps<HTMLInputElement>({ "aria-label": stringLabel } as h.JSX.HTMLAttributes<HTMLInputElement>, inputProps);
     if (inInputGroup)
         inputProps = temp;
 

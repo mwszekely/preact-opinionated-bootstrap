@@ -1,12 +1,13 @@
 import clsx from "clsx";
 import { ComponentChild, Fragment, h, Ref } from "preact";
-import { useAriaButton } from "preact-aria-widgets";
+import { Button as BaseButton, defaultRenderButton } from "preact-aria-widgets";
 import { useAsyncHandler, UseAsyncHandlerParameters, useMergedProps, useStableGetter } from "preact-prop-helpers";
 import { useCallback, useContext } from "preact/hooks";
 import { ProgressCircular } from "../progress";
 import { forwardElementRef, usePseudoActive } from "../props";
 import { useButtonDropdownDirection, UseButtonGroupChild, useButtonStyles } from "./defaults";
 import { ButtonPropsBase, ButtonDropdownDirection, ButtonDropdownVariant } from "./types";
+import { useDocument, useWindow } from "../props"
 
 export type LiteralUnion<T extends U, U = string> = T | (U & Record<never, never>);
 
@@ -108,7 +109,7 @@ const ButtonButton = forwardElementRef(function ButtonButton(p: Omit<ButtonButto
     disabled ||= pending;
 
     const onPress = pending ? undefined : syncHandler;
-    const { useAriaButtonProps } = useAriaButton<HTMLButtonElement>({ tag: "button", onPress });
+    //const { useAriaButtonProps } = useAriaButton<HTMLButtonElement>({ tag: "button", onPress });
 
     const buttonStyleInfo = useButtonStyles<HTMLButtonElement>({ colorVariant, size, fillVariant, disabled }, "button");
     disabled = buttonStyleInfo.disabled;
@@ -123,23 +124,28 @@ const ButtonButton = forwardElementRef(function ButtonButton(p: Omit<ButtonButto
 
     return (
         <ProgressCircular spinnerTimeout={spinnerTimeout} mode={hasError ? "failed" : pending ? "pending" : (settleCount) ? "succeeded" : null} childrenPosition="child" colorFill={fillVariant == "fill" ? "foreground" : "background"}>
-            <button {...usePseudoActive(useButtonStylesProps(useMergedProps<HTMLButtonElement>()({
-                type: "button",
-                className: clsx(
-                    pending && "pending active",
-                    disabled && "disabled",
-                    dropdownVariant && `dropdown-toggle`,
-                    dropdownDirection == "inline-start" && "dropstart",
-                    dropdownDirection == "inline-end" && "dropend",
-                    dropdownDirection == "block-start" && "dropup", // TODO, don't really want to add logical direction testing for *every* button :/
-                    dropdownDirection == "block-end" && "dropdown",
-                    dropdownVariant === "separate" && `dropdown-toggle-split`
-                )
-            }, useAriaButtonProps({ ...props, children, onPress, ref }))))} />
+            <BaseButton
+                tagButton="button"
+                getDocument={useDocument()}
+                getWindow={useWindow()}
+                onPress={onPress}
+                disabled={disabled}
+                render={defaultRenderButton("button", () => useButtonStylesProps({
+                    type: "button",
+                    className: clsx(
+                        pending && "pending active",
+                        disabled && "disabled",
+                        dropdownVariant && `dropdown-toggle`,
+                        dropdownDirection == "inline-start" && "dropstart",
+                        dropdownDirection == "inline-end" && "dropend",
+                        dropdownDirection == "block-start" && "dropup", // TODO, don't really want to add logical direction testing for *every* button :/
+                        dropdownDirection == "block-end" && "dropdown",
+                        dropdownVariant === "separate" && `dropdown-toggle-split`
+                    )
+                }))} />
         </ProgressCircular>
     )
 });
-
 
 
 
@@ -155,7 +161,6 @@ export const ToggleButton = forwardElementRef(function ToggleButton(p: ToggleBut
     const fillVariant = pressed ? "fill" : "outline";
 
     const onPress = (pending ? undefined : syncHandler);
-    const { useAriaButtonProps } = useAriaButton<HTMLButtonElement>({ tag: "button", pressed, onPress });
 
     const buttonStyleInfo = useButtonStyles<HTMLButtonElement>({ colorVariant, size, fillVariant, disabled }, "button");
     disabled = buttonStyleInfo.disabled;
@@ -166,8 +171,15 @@ export const ToggleButton = forwardElementRef(function ToggleButton(p: ToggleBut
 
     return (
         <ProgressCircular mode={hasError ? "failed" : pending ? "pending" : (settleCount && showAsyncSuccess) ? "succeeded" : null} childrenPosition="child" colorFill={fillVariant == "fill" ? "foreground" : "background"}>
-            <button {...usePseudoActive(useAriaButtonProps(useButtonStylesProps({
-                ...useMergedProps<HTMLButtonElement>()({
+            <BaseButton
+                tagButton="button"
+                getDocument={useDocument()}
+                getWindow={useWindow()}
+                pressed={pressed}
+                onPress={onPress}
+                disabled={disabled}
+
+                render={defaultRenderButton("button", () => usePseudoActive(useButtonStylesProps(useMergedProps<HTMLButtonElement>({
                     className: clsx(
                         "toggle-button",
                         disabled && "disabled",
@@ -175,8 +187,9 @@ export const ToggleButton = forwardElementRef(function ToggleButton(p: ToggleBut
                         pending && "pending"
                     ),
                     ref
-                }, props)
-            })))} />
+                }, props))))}
+
+            />
         </ProgressCircular>
     );
 })

@@ -252,7 +252,7 @@ export function usePopperApi<S extends Element, P extends HTMLElement, A extends
 
 
     function usePopperSource() {
-        function usePopperSourceProps<P extends h.JSX.HTMLAttributes<S>>(props: P) {
+        function usePopperSourceProps<P extends h.JSX.HTMLAttributes<S>>(props: P): P {
             let style = { ...(sourceStyle as h.JSX.CSSProperties) };
             return useSourceElementRefProps(useMergedProps<S>()(sourceAttributes as any, useMergedProps<S>()({
                 style,
@@ -353,14 +353,14 @@ export function usePopperApi<S extends Element, P extends HTMLElement, A extends
     };
 
     return {
-        usePopperSource,
-        usePopperPopup,
-        usePopperArrow,
-        flipTransformProps,
-        usedSide,
-        usedAxis,
-        usedAxisPosition,
-        logicalDirection
+        usePopperSource: usePopperSource as any,
+        usePopperPopup: usePopperPopup as any,
+        usePopperArrow: usePopperArrow as any,
+        flipTransformProps: flipTransformProps,
+        usedSide: usedSide,
+        usedAxis: usedAxis,
+        usedAxisPosition: usedAxisPosition ,
+        logicalDirection: logicalDirection
     };
 
 }

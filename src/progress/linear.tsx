@@ -97,7 +97,7 @@ export function useAriaProgressBar<ProgressElement extends Element>({ tag, max, 
 
     const useReferencedElement = useCallback(function useReferencedElement<ReferencedElement extends Element>() {
         function useReferencedProps<P extends h.JSX.HTMLAttributes<ReferencedElement>>(props: P) {
-            return useReferencedIdProps("aria-controls")(props);
+            return useReferencedIdProps("aria-controls" as any)(props);
         }
 
         return { useReferencedProps };
@@ -109,7 +109,7 @@ export function useAriaProgressBar<ProgressElement extends Element>({ tag, max, 
 
 // TODO: What's with this weird typing? It fails when ReferencedElement is used
 type T = <ReferencedElement extends Element>() => {
-    useReferencedProps: <P extends h.JSX.HTMLAttributes<Element>>(props: P) => UseReferencedIdPropsReturnType<P, "aria-controls">;
+    useReferencedProps: <P extends h.JSX.HTMLAttributes<Element>>(props: P) => P;
 }
 
 interface ProgressBarInfo extends ManagedChildInfo<"progressbar"> {
@@ -231,7 +231,7 @@ export const ProgressCircular = forwardElementRef(function ({ loadingLabel, spin
         children = <span>{children}</span>;
 
 
-    let progressProps = useMergedProps<HTMLSpanElement>()({ ref, className: clsx("circular-progress-container") }, useProgressProps(useMergedProps<HTMLSpanElement>()({ "aria-hidden": `${mode != "pending"}` }, p)));
+    let progressProps = useMergedProps<HTMLSpanElement>()({ ref, className: clsx("circular-progress-container") }, useProgressProps(useMergedProps<HTMLSpanElement>()({ "aria-hidden": `${mode != "pending"}` } as h.JSX.HTMLAttributes<HTMLSpanElement>, p)));
 
     progressProps = useMergedProps<HTMLSpanElement>()(progressProps, childrenPosition === "merged" ? { ...children?.props, ref: children?.ref } : {});
 

@@ -24,19 +24,19 @@
     "preact": "^10.6.4"
   },
   "devDependencies": {
-    "@types/jsdom": "^16.2.14",
-    "@typescript-eslint/eslint-plugin": "^5.29.0",
-    "@typescript-eslint/parser": "^5.29.0",
+    "@types/jsdom": "^20.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.39.0",
+    "@typescript-eslint/parser": "^5.39.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-preact-pure": "^4.0.1",
-    "eslint": "^8.18.0",
-    "jest": "^28.1.1",
-    "jsdom": "^20.0.0",
+    "eslint": "^8.24.0",
+    "jest": "^29.1.2",
+    "jsdom": "^20.0.1",
     "npm-run-all": "^4.1.5",
-    "sass": "^1.53.0",
-    "serve": "^13.0.2",
-    "ts-jest": "^28.0.5",
-    "typescript": "^4.7.4"
+    "sass": "^1.55.0",
+    "serve": "^14.0.1",
+    "ts-jest": "^29.0.3",
+    "typescript": "^4.8.4"
   },
   "main": "index.js",
   "directories": {
@@ -45,13 +45,13 @@
   "dependencies": {
     "@material/animation": "^14.0.0",
     "@material/elevation": "^14.0.0",
-    "@popperjs/core": "^2.11.5",
-    "bootstrap": "^5.2.0-beta1",
-    "bootstrap-icons": "^1.8.3",
+    "@popperjs/core": "^2.11.6",
+    "bootstrap": "^5.2.2",
+    "bootstrap-icons": "^1.9.1",
     "bootstrap-sass-variables": "github:mwszekely/bootstrap-sass-variables",
-    "clsx": "^1.1.1",
-    "preact-aria-widgets": "github:mwszekely/preact-aria-widgets",
-    "preact-prop-helpers": "github:mwszekely/preact-prop-helpers",
-    "preact-transition": "github:mwszekely/preact-transition"
+    "clsx": "^1.2.1",
+    "preact-aria-widgets": "github:mwszekely/preact-aria-widgets#children-change",
+    "preact-prop-helpers": "github:mwszekely/preact-prop-helpers#children-changes",
+    "preact-transition": "github:mwszekely/preact-transition#children-changes"
   }
 }

@@ -1,6 +1,6 @@
 import "wicg-inert";
 import { cloneElement, ComponentChildren, createContext, h, Ref, RenderableProps, Fragment } from "preact";
-import { useAriaDialog } from "preact-aria-widgets";
+import { useDialog } from "preact-aria-widgets";
 import { Clip, Fade } from "preact-transition";
 import { memo } from "preact/compat";
 import { useCallback, useContext, useEffect, useLayoutEffect } from "preact/hooks";
@@ -9,6 +9,7 @@ import { forwardElementRef, GlobalAttributes, OptionalTransitionComponent } from
 import { useStableCallback, generateRandomId, useMergedProps, useState } from "preact-prop-helpers";
 import { Button, ButtonButtonProps } from "../button";
 import clsx from "clsx";
+import { useDocument, useWindow } from "../props";
 
 interface DialogSharedProps<T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element> extends OptionalTransitionComponent<T> {
     descriptive: boolean;
@@ -51,10 +52,10 @@ const DialogControlled = memo(forwardElementRef(function DialogControlled<T exte
 
     onClose = (onClose ?? (() => { }));
 
-    const { useDialogBackdrop, useDialogBody, useDialogProps, useDialogTitle } = useAriaDialog<HTMLDivElement>({ open: open ?? false, onClose });
-    const { useDialogBackdropProps } = useDialogBackdrop<HTMLDivElement>();
-    const { useDialogBodyProps, } = useDialogBody<HTMLDivElement>({ descriptive });
-    const { useDialogTitleProps } = useDialogTitle<HTMLDivElement>();
+    const { useDialogBackdrop, useDialogBody, useDialogProps, useDialogTitle, useDialogFocusContainerProps } = useDialog<HTMLDivElement, HTMLDivElement, HTMLDivElement, HTMLDivElement, HTMLDivElement>({ modal: { bodyIsOnlySemantic: descriptive }, softDismiss: { open: open ?? false }, dialog: { onClose }, activeElement: { getDocument: useDocument(), getWindow: useWindow(), } });
+    const { useDialogBackdropProps } = useDialogBackdrop();
+    const { useDialogBodyProps, } = useDialogBody();
+    const { useDialogTitleProps } = useDialogTitle();
 
     if (!Transition) {
         Transition = (Clip! as NonNullable<typeof Transition>);
@@ -66,7 +67,7 @@ const DialogControlled = memo(forwardElementRef(function DialogControlled<T exte
     return (
         <BodyPortal>
             <CloseDialogContext.Provider value={useStableCallback(() => onClose?.(undefined))}>
-                <div class="modal-portal-container">
+                <div {...useDialogFocusContainerProps({ class: "modal-portal-container" })}>
 
                     <div {...useDialogProps({ class: clsx("modal"), style: { display: "block" } })}>
                         <Transition {...{ ref, show: open, ...rest } as any}>
@@ -217,7 +218,7 @@ export function useCloseDialog() {
  * This is most useful for uncontrolled dialogs, but can be used anywhere.
  */
 export const CloseDialogButton = memo(forwardElementRef(function CloseDialogButton(props: ButtonButtonProps, ref?: Ref<any>) {
-    return <Button {...(useMergedProps<any>()(props as any, { ref, onPress: useCloseDialog() }) as any)} />
+    return <Button {...(useMergedProps<any>(props as any, { ref, onPress: useCloseDialog() } as {}) as any)} />
 }))
 
 // Extracted to a separate component to avoid rerendering all non-dialog children
@@ -293,7 +294,7 @@ function DialogsContainer(props: DialogsContainerProps) {
     const children = useContext(DialogsContainerChildrenContext);
 
     return (
-        <div {...(useMergedProps<HTMLDivElement>()({}, props))}>
+        <div {...(useMergedProps<HTMLDivElement>({}, props))}>
             {Array.from(children).map(([key, { children }]) => { return children; })}
         </div>
     )

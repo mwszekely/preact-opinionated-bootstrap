@@ -1,8 +1,9 @@
 import clsx from "clsx";
 import { FlippablePropInfo } from "menu/popper-api";
-import { ComponentChildren, createContext, h, Ref, VNode } from "preact";
+import { ComponentChildren, createContext, h, Ref, RenderableProps, VNode } from "preact";
 import { useMergedProps, useState, useTimeout } from "preact-prop-helpers";
-import { forwardRef, useContext, useEffect } from "preact/compat";
+import { forwardRef } from "preact/compat";
+import { useCallback, useEffect, useContext } from "preact/hooks"
 
 export type RefFromTag<T extends keyof h.JSX.IntrinsicElements> = NonNullable<h.JSX.IntrinsicElements[T]["ref"]>;
 export type ElementFromRef<R extends Ref<any>> = R extends Ref<infer E> ? E : EventTarget;
@@ -70,9 +71,46 @@ export interface FlippableTransitionComponent<T extends <E extends HTMLElement>(
     TransitionPropFlips?: FlippablePropInfo<T>[];
 };
 
+export const GetDocumentContext = createContext<null | (() => Document)>(null);
+export const GetWindowContext = createContext<null | (() => Window)>(null);
+
+export function ProvideWindow({ getWindow, ...rest }: RenderableProps<{ getWindow: () => Window, children: ComponentChildren }>) { return <GetWindowContext.Provider value={getWindow} {...rest} /> }
+export function ProvideDocument({ getDocument, ...rest }: RenderableProps<{ getDocument: () => Document, children: ComponentChildren }>) { return <GetDocumentContext.Provider value={getDocument} {...rest} /> }
+
+export function useDocument(): () => Document {
+    const getDocument = useContext(GetDocumentContext);
+    const getWindow = useContext(GetWindowContext);
+    return useCallback((): Document => {
+        let retDocument: Document | null = null;
+        if (getDocument) {
+            retDocument = getDocument();
+        }
+        if (!retDocument) {
+            const w = (getWindow?.() ?? window);
+            retDocument = w.document;
+        }
+        return retDocument ?? document;
+    }, [getDocument, getWindow]);
+}
+
+export function useWindow(): () => Window {
+    const getDocument = useContext(GetDocumentContext);
+    const getWindow = useContext(GetWindowContext);
+    return useCallback((): Window => {
+        let retWindow: Window | null = null;
+        if (getWindow) {
+            retWindow = getWindow();
+        }
+        if (!retWindow) {
+            const d = (getDocument?.() ?? document);
+            retWindow = d.defaultView;
+        }
+        return retWindow ?? window;
+    }, [getDocument, getWindow]);
+}
 
 export function usePseudoActive<P extends { "data-pseudo-active"?: any } & h.JSX.HTMLAttributes<any>>({ "data-pseudo-active": active, ...props }: P) {
-    return useMergedProps<any>()({ className: clsx((active == true || active == "true") && "active") }, props) as Omit<P, "data-pseudo-active">;
+    return useMergedProps<any>({ className: clsx((active == true || active == "true") && "active") }, props) as Omit<P, "data-pseudo-active">;
 }
 
 const SpinnerDelayContext = createContext(1000);
