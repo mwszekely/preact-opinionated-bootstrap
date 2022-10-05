@@ -1,9 +1,9 @@
 import clsx from "clsx";
 import { cloneElement, ComponentChildren, createContext, h, Ref, VNode } from "preact";
-import { useAriaListboxSingle } from "preact-aria-widgets";
+import { useListboxSingle } from "preact-aria-widgets";
 import { EventDetail } from "preact-aria-widgets";
-import { UseListboxSingleItem, UseListboxSingleItemInfo, UseListboxSingleItemParameters, UseListboxSingleParameters } from "preact-aria-widgets";
-import { useAsyncHandler, useChildFlag, useMergedProps, useRefElement, useStableGetter, useState } from "preact-prop-helpers";
+import { UseListboxSingleItem, UseListboxSingleItemParameters, UseListboxSingleParameters } from "preact-aria-widgets";
+import { useAsyncHandler, useMergedProps, useRefElement, useStableGetter, useState } from "preact-prop-helpers";
 import { Children, memo } from "preact/compat";
 import { useCallback, useContext, useEffect, useLayoutEffect } from "preact/hooks";
 import { GlobalAttributes, useLogRender, usePseudoActive, forwardElementRef, OmitStrong, OptionalTagSensitiveProps } from "../props";
@@ -27,13 +27,15 @@ export interface ListSingleProps<E extends HTMLUListElement | HTMLOListElement> 
     label: h.JSX.Element | string;
 }
 
-export const UseListboxSingleItemContext = createContext<UseListboxSingleItem<HTMLLIElement, ListSingleItemInfo<HTMLLIElement>>>(null!);
+//export const UseListboxSingleItemContext = createContext<UseListboxSingleItem<HTMLLIElement, ListSingleItemInfo<HTMLLIElement>>>(null!);
 export const ListSingle = memo(forwardElementRef(function ListSingle<E extends HTMLUListElement | HTMLOListElement>(props: ListSingleProps<E>, ref: Ref<E>) {
     useLogRender("ListSingle", `Rendering ListSingle`);
     let { onSelectChange: onSelectAsync, selectedIndex, selectionMode, collator, keyNavigation, noTypeahead, noWrap, typeaheadTimeout, tag, select, labelPosition, label, ...domProps } = props;
     const { syncHandler, pending, currentCapture } = useAsyncHandler(onSelectAsync, { capture: (e: any) => e[EventDetail].selectedIndex as number });
     const onSelect = syncHandler;
-    const { useListboxSingleItem, useListboxSingleLabel, useListboxSingleProps, managedChildren } = useAriaListboxSingle<E, HTMLLIElement, ListSingleItemInfo<HTMLLIElement>>({ onSelect, selectedIndex: selectedIndex, selectionMode: selectionMode ?? "activate", typeaheadTimeout, noWrap, noTypeahead, keyNavigation, collator });
+    const { useListboxSingleItem, useListboxSingleLabel, useListboxSingleProps, managedChildren } = useListboxSingle<E, HTMLLIElement, ListSingleItemInfo<HTMLLIElement>>({ 
+        onSelect, selectedIndex: selectedIndex, selectionMode: selectionMode ?? "activate", typeaheadTimeout, noWrap, noTypeahead, keyNavigation, collator 
+    });
     const { useListboxSingleLabelProps } = useListboxSingleLabel<any>()
 
     useChildFlag({

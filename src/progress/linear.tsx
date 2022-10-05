@@ -72,8 +72,8 @@ let gimmickCount = 8;
 export function useAriaProgressBar<ProgressElement extends Element>({ tag, max, value, valueText }: UseAriaProgressBarParameters<ProgressElement>) {
 
     //const { inputId, labelId, useGenericLabelInput, useGenericLabelLabel, useReferencedInputIdProps, useReferencedLabelIdProps } = useGenericLabel({ inputPrefix: "progressbar-", labelPrefix: "progressbar-reference-" });
-    const { id: progressBarId, getId, useRandomIdProps, useReferencedIdProps } = useRandomId({ prefix: "progressbar-" })
-
+    const { useRandomIdReferencerElement, useRandomIdSourceElement } = useRandomId<ProgressElement>({ randomId: { prefix: "progressbar-" }, managedChildren: {} })
+    const { useRandomIdSourceElementProps } = useRandomIdSourceElement();
 
     function useProgressProps<P extends h.JSX.HTMLAttributes<ProgressElement>>({ "aria-valuemax": ariaValueMax, "aria-valuenow": ariaValueNow, "aria-valuetext": ariaValueText, role, ...p }: P) {
         const extraProps: h.JSX.HTMLAttributes<ProgressElement> = tag === "progress" ?
@@ -92,27 +92,21 @@ export function useAriaProgressBar<ProgressElement extends Element>({ tag, max, 
                 role: "progressbar"
             };
 
-        return useRandomIdProps(useMergedProps<ProgressElement>(extraProps, p));
+        return useRandomIdSourceElementProps(useMergedProps<ProgressElement>(extraProps, p));
     }
 
     const useReferencedElement = useCallback(function useReferencedElement<ReferencedElement extends Element>() {
-        function useReferencedProps<P extends h.JSX.HTMLAttributes<ReferencedElement>>(props: P) {
-            return useReferencedIdProps("aria-controls" as any)(props);
-        }
+        const { useRandomIdReferencerElementProps } = useRandomIdReferencerElement<any>("aria-controls");
 
-        return { useReferencedProps };
-    }, [useReferencedIdProps])
+        return { useReferencedProps: useRandomIdReferencerElementProps };
+    }, [])
 
 
     return { useProgressProps, useReferencedElement };
 }
 
-// TODO: What's with this weird typing? It fails when ReferencedElement is used
-type T = <ReferencedElement extends Element>() => {
-    useReferencedProps: <P extends h.JSX.HTMLAttributes<Element>>(props: P) => P;
-}
 
-export const ProgressAsChildContext = createContext<((hook: T) => void) | undefined>(undefined);
+export const ProgressAsChildContext = createContext<((hook: (<ReferencedElement extends Element>() => { useReferencedProps: (props: h.JSX.HTMLAttributes<ReferencedElement>) => h.JSX.HTMLAttributes<ReferencedElement>})) => void) | undefined>(undefined);
 const ProgressMaxContext = createContext<undefined | number>(undefined);
 const ProgressValueContext = createContext<undefined | null | number>(undefined);
 const ProgressValueTextContext = createContext<undefined | string>(undefined);
