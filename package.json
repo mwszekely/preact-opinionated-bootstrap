@@ -21,7 +21,7 @@
   "author": "",
   "license": "ISC",
   "peerDependencies": {
-    "preact": "^10.6.4"
+    "preact": "^10.11.1"
   },
   "devDependencies": {
     "@types/jsdom": "^20.0.0",

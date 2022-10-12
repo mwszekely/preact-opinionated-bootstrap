@@ -125,21 +125,24 @@ const ButtonButton = forwardElementRef(function ButtonButton({
                 getWindow={useWindow()}
                 onPress={onPress}
                 disabled={disabled}
-                render={defaultRenderButton("button", () => useMergedProps(
-                    { ...props, ref },
-                    useButtonStylesProps({
-                        type: "button",
-                        className: clsx(
-                            pending && "pending active",
-                            disabled && "disabled",
-                            dropdownVariant && `dropdown-toggle`,
-                            dropdownDirection == "inline-start" && "dropstart",
-                            dropdownDirection == "inline-end" && "dropend",
-                            dropdownDirection == "block-start" && "dropup", // TODO, don't really want to add logical direction testing for *every* button :/
-                            dropdownDirection == "block-end" && "dropdown",
-                            dropdownVariant === "separate" && `dropdown-toggle-split`
-                        )
-                    })))} />
+                render={defaultRenderButton({
+                    tagButton: "button",
+                    makePropsButton: () => useMergedProps(
+                        { ...props, ref },
+                        useButtonStylesProps({
+                            type: "button",
+                            className: clsx(
+                                pending && "pending active",
+                                disabled && "disabled",
+                                dropdownVariant && `dropdown-toggle`,
+                                dropdownDirection == "inline-start" && "dropstart",
+                                dropdownDirection == "inline-end" && "dropend",
+                                dropdownDirection == "block-start" && "dropup", // TODO, don't really want to add logical direction testing for *every* button :/
+                                dropdownDirection == "block-end" && "dropdown",
+                                dropdownVariant === "separate" && `dropdown-toggle-split`
+                            )
+                        }))
+                })} />
         </ProgressCircular>
     )
 });
@@ -175,15 +178,18 @@ export const ToggleButton = forwardElementRef(function ToggleButton(p: ToggleBut
                 onPress={onPress}
                 disabled={disabled}
 
-                render={defaultRenderButton("button", () => usePseudoActive(useButtonStylesProps(useMergedProps<HTMLButtonElement>({
-                    className: clsx(
-                        "toggle-button",
-                        disabled && "disabled",
-                        (pressed) && "active",
-                        pending && "pending"
-                    ),
-                    ref
-                }, props))))}
+                render={defaultRenderButton({
+                    tagButton: "button",
+                    makePropsButton: () => usePseudoActive(useButtonStylesProps(useMergedProps<HTMLButtonElement>({
+                        className: clsx(
+                            "toggle-button",
+                            disabled && "disabled",
+                            (pressed) && "active",
+                            pending && "pending"
+                        ),
+                        ref
+                    }, props)))
+                })}
 
             />
         </ProgressCircular>

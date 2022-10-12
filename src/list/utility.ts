@@ -26,7 +26,7 @@ export function useChildrenTextProps<P extends { children?: ComponentChildren; r
     }, [childrenNotStringable])
 
     const { useRefElementProps, getElement } = useRefElement<E>({ onElementChange: onElementUpdate });
-    const { useMutationObserverProps } = useMutationObserver(childrenNotStringable ? { subtree: true, onCharacterData: (info) => onElementUpdate(getElement()) } : null);
+    const { useMutationObserverProps } = useMutationObserver<E>(childrenNotStringable ? { subtree: true, onCharacterData: (info) => onElementUpdate(getElement()) } : null);
     useEffect(() => {
         if (!childrenNotStringable) {
             setText(childrenToString(children as any));

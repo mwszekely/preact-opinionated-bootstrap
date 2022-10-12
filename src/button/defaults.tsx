@@ -12,12 +12,12 @@ const DefaultFillStyleContext = createContext<ButtonFillVariant>("fill");
 const DefaultColorStyleContext = createContext<ButtonColorVariant>("primary");
 const DefaultDropdownDirectionContext = createContext<ButtonDropdownDirection>(null);
 const DefaultSizeContext = createContext<ButtonSize>("md");
-const DefaultDisabledContext = createContext(false);
+const DefaultDisabledContext = createContext<boolean | "soft" | "hard">(false);
 
 export const ProvideDefaultButtonFill = memo(function ProvideDefaultButtonFill({ value, children }: RenderableProps<{ value: ButtonFillVariant }>) { return <DefaultFillStyleContext.Provider value={value}>{children}</DefaultFillStyleContext.Provider>; });
 export const ProvideDefaultButtonColor = memo(function ProvideDefaultButtonColor({ value, children }: RenderableProps<{ value: ButtonColorVariant }>) { return <DefaultColorStyleContext.Provider value={value}>{children}</DefaultColorStyleContext.Provider>; });
 export const ProvideDefaultButtonSize = memo(function ProvideDefaultButtonSize({ value, children }: RenderableProps<{ value: ButtonSize }>) { return <DefaultSizeContext.Provider value={value}>{children}</DefaultSizeContext.Provider>; });
-export const ProvideDefaultButtonDisabled = memo(function ProvideDefaultButtonDisabled({ value, children }: RenderableProps<{ value: boolean }>) { return <DefaultDisabledContext.Provider value={value}>{children}</DefaultDisabledContext.Provider>; });
+export const ProvideDefaultButtonDisabled = memo(function ProvideDefaultButtonDisabled({ value, children }: RenderableProps<{ value: boolean | "soft" | "hard" }>) { return <DefaultDisabledContext.Provider value={value}>{children}</DefaultDisabledContext.Provider>; });
 export const ProvideDefaultButtonDropdownDirection = memo(function ProvideDefaultButtonDropdownDirection({value, children}: RenderableProps<{ value: ButtonDropdownDirection }>) { return <DefaultDropdownDirectionContext.Provider value={value}>{children}</DefaultDropdownDirectionContext.Provider> })
 
 export function useButtonFillVariant(providedValue?: ButtonFillVariant) {
@@ -35,7 +35,7 @@ export function useButtonSize(providedValue?: ButtonSize) {
     return providedValue ?? defaultSize;
 }
 
-export function useButtonDisabled(providedValue?: boolean) {
+export function useButtonDisabled(providedValue?: boolean | "soft" | "hard") {
     const defaultDisabled = useContext(DefaultDisabledContext);
     return providedValue ?? defaultDisabled;
 }

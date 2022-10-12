@@ -13,7 +13,7 @@ export interface ButtonGroupStyleProps {
     colorVariant?: ButtonColorVariant;
     fillVariant?: ButtonFillVariant;
     size?: ButtonSize;
-    disabled?: boolean;
+    disabled?: boolean | "soft" | "hard";
     wrap?: boolean;
 }
 
@@ -45,7 +45,7 @@ export const ButtonGroup = memo(forwardElementRef(function ButtonGroup({ colorVa
     fillVariant = useButtonFillVariant(fillVariant);
     disabled = useButtonDisabled(disabled);
     
-    const innerDomProps: h.JSX.HTMLAttributes<any> = useMergedProps(p3, { ref, disabled, className: clsx("btn-group", wrap && "wrap", orientation == "vertical" && "btn-group-vertical") });
+    const innerDomProps: h.JSX.HTMLAttributes<any> = useMergedProps(p3, { ref, className: clsx("btn-group", wrap && "wrap", orientation == "vertical" && "btn-group-vertical") });
     let outerDom = inToolbar ?
         // This is a group within a pre-existing toolbar
         <div {...useMergedProps({ role: "group" }, innerDomProps)}>
@@ -53,7 +53,7 @@ export const ButtonGroup = memo(forwardElementRef(function ButtonGroup({ colorVa
         </div>
         :
         // This button group is just a singular toolbar itself, with no grouping
-        <Toolbar orientation={orientation} label={label}>
+        <Toolbar orientation={orientation} label={label} role="toolbar">
             <div {...innerDomProps}>
                 {children}
             </div>
