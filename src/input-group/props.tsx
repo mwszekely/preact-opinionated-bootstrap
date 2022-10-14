@@ -1,5 +1,5 @@
 import { ComponentChildren, createContext, h } from "preact";
-import { UseCheckboxGroupChild, UseCheckboxGroupChildInfo } from "preact-aria-widgets";
+import { UseCheckboxGroupChild } from "preact-aria-widgets";
 import { useCallback } from "preact/hooks";
 
 
@@ -17,7 +17,7 @@ interface BaseUnlabelledInputProps<T> {
 }
 
 
-export const UseCheckboxGroupChildContext = createContext<UseCheckboxGroupChild<HTMLInputElement, CheckboxGroupChildInfo> | null>(null);
+export const UseCheckboxGroupChildContext = createContext<UseCheckboxGroupChild<HTMLInputElement, HTMLLabelElement, CheckboxGroupChildInfo, never> | null>(null);
 
 export interface UnlabelledInputTextProps extends BaseUnlabelledInputProps<string> { type: "text"; maxLength?: number; }
 export interface UnlabelledInputTextareaProps extends Omit<UnlabelledInputTextProps, "type"> { type: "textarea"; rows: number | null; cols?: number | null; }
@@ -42,7 +42,7 @@ export const InInputGridContext = createContext(0);
 export const DefaultInputSize = createContext<"sm" | "md" | "lg" | null | undefined>(null);
 
 
-export interface CheckboxGroupChildInfo extends UseCheckboxGroupChildInfo {
+export interface CheckboxGroupChildInfo {
     setChecked(checked: boolean | "mixed"): (void | Promise<void>)
 }
 

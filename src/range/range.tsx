@@ -1,21 +1,23 @@
 import { ComponentChildren, createContext, createElement, h, Ref } from "preact";
-import { EventDetail, UseAriaSliderArguments, UseAriaSliderThumbArguments, UseAriaSliderThumb, useAriaSlider, RangeChangeEvent, useInputLabel } from "preact-aria-widgets";
-import { generateRandomId, ManagedChildInfo, MergedProps, useAsyncHandler, useChildManager, useHasFocus, useMergedProps, useRandomId } from "preact-prop-helpers";
+import { EventDetail, UseSliderArguments, UseSliderThumbArguments, UseSliderThumb, useSlider, RangeChangeEvent } from "preact-aria-widgets";
+import { generateRandomId, ManagedChildInfo, useAsyncHandler, useHasFocus, useMergedProps, useRandomId } from "preact-prop-helpers";
 import { memo } from "preact/compat";
 import { StateUpdater, useCallback, useContext, useMemo, useRef, useState } from "preact/hooks";
 import { Tooltip } from "../tooltip";
-import { forwardElementRef, GlobalAttributes, TagSensitiveProps } from "../props";
+import { forwardElementRef, GlobalAttributes, TagSensitiveProps, useDocument } from "../props";
 import clsx from "clsx";
 
 
 
 
-interface RangeBaseProps extends UseAriaSliderArguments, GlobalAttributes<HTMLDivElement> {
+interface RangeBaseProps extends GlobalAttributes<HTMLDivElement> {
     debounce?: number | boolean;
     hideTicks?: boolean;
     hideTickValues?: boolean | "auto";
     orientation?: "inline" | "block";
     disabled?: boolean;
+    min: UseSliderArguments["slider"]["min"];
+    max: UseSliderArguments["slider"]["max"];
     /**
      * Allows you to override how the numeric value this Range uses is displayed/read as a string
      */
@@ -48,13 +50,18 @@ interface RangeMultiProps extends RangeBaseProps {
 
 export type RangeProps = RangeSingleProps | RangeMultiProps;
 
-export interface RangeThumbProps extends Omit<UseAriaSliderThumbArguments<HTMLInputElement>, "tag" | "onValueChange" | "valueText"> {
+export interface RangeThumbProps {
     onValueChange?: (value: number) => (void | Promise<void>);
     label: string;
     disabled?: boolean;
+    index: UseSliderThumbArguments<HTMLInputElement, undefined, never>["managedChild"]["index"];
+    value: UseSliderThumbArguments<HTMLInputElement, undefined, never>["sliderThumb"]["value"];
+    valueText?: UseSliderThumbArguments<HTMLInputElement, undefined, never>["sliderThumb"]["valueText"];
+    max?: UseSliderThumbArguments<HTMLInputElement, undefined, never>["sliderThumb"]["max"];
+    min?: UseSliderThumbArguments<HTMLInputElement, undefined, never>["sliderThumb"]["min"];
 }
 
-const RangeThumbContext = createContext<UseAriaSliderThumb>(null!);
+const RangeThumbContext = createContext<UseSliderThumb<any, any, any>>(null!);
 const DebounceContext = createContext<number | boolean>(false);
 const GetValueTextContext = createContext<(n: number) => string>(null!);
 const GetListContext = createContext("");
@@ -64,14 +71,14 @@ const DisabledContext = createContext(false);
 const OrientationContext = createContext<"block" | "inline">("inline");
 
 export const Range = memo(forwardElementRef(function Range({ max, min, debounce, hideTicks, hideTickValues, orientation, children, getValueText, getTooltipText, value, onValueChange, step, snap, label, disabled, ...rest }: RangeProps, ref: Ref<HTMLDivElement>) {
-    const { useAriaSliderThumb } = useAriaSlider({ min, max });
+    const { useSliderThumb } = useSlider<HTMLInputElement, undefined, never>({ managedChildren: {}, slider: { min, max } });
     let id = useMemo(generateRandomId, []);
     id ??= "";
     step ??= "any";
     let tickCount = (step == "any" ? Infinity : Math.ceil(1 + (max - min) / step));
 
     return (
-        <RangeThumbContext.Provider value={useAriaSliderThumb}>
+        <RangeThumbContext.Provider value={useSliderThumb}>
             <DebounceContext.Provider value={debounce ?? false}>
                 <GetValueTextContext.Provider value={getTooltipText ?? getValueText ?? defaultGetValueText}>
                     <GetListContext.Provider value={id}>
@@ -121,10 +128,10 @@ const RangeTicks = memo(function RangeTicks({ step, min, max, id, hideTickValues
     );
 });
 
-export const RangeThumb = memo(forwardElementRef(function RangeThumb({ index, value, max, min, onValueChange: onValueChangeAsync, disabled }: RangeThumbProps, ref: Ref<HTMLInputElement>) {
+export const RangeThumb = memo(forwardElementRef(function RangeThumb({ index, value, max, min, onValueChange: onValueChangeAsync, disabled, label }: RangeThumbProps, ref: Ref<HTMLInputElement>) {
     const debounceSetting = useContext(DebounceContext);
     const { syncHandler, pending, hasError, currentCapture } = useAsyncHandler(onValueChangeAsync ?? null, { capture, debounce: debounceSetting == true ? 1500 : debounceSetting != false ? debounceSetting : undefined });
-    const onValueChangeSync = syncHandler;// as UseAriaSliderThumbArguments<HTMLInputElement>["onValueChange"];
+    const onValueChangeSync = syncHandler;// as UseSliderThumbArguments<HTMLInputElement>["onValueChange"];
     value = (currentCapture ?? value);
     const getValueText = useContext(GetValueTextContext);
     const valueText = useMemo(() => { return ((getValueText?.(value)) ?? (value == null ? "" : `${value}`)); }, [value, getValueText]);
@@ -133,7 +140,7 @@ export const RangeThumb = memo(forwardElementRef(function RangeThumb({ index, va
     disabled ||= parentDisabled;
 
     const [inputHasFocus, setInputHasFocus] = useState(false);
-    const { useHasFocusProps } = useHasFocus<HTMLInputElement>({ onFocusedChanged: setInputHasFocus });
+    const { useHasFocusProps } = useHasFocus<HTMLInputElement>({ onFocusedChanged: setInputHasFocus, getDocument: useDocument() });
     let usedStep = (useContext(StepContext) ?? 1);
     let userStep = usedStep;
 
@@ -176,14 +183,20 @@ export const RangeThumb = memo(forwardElementRef(function RangeThumb({ index, va
         return onValueChangeSync?.(e as any as h.JSX.TargetedEvent<HTMLInputElement, Event>);
     }
 
-    const { getElement, useAriaSliderThumbProps, min: usedMin, max: usedMax } = useContext(RangeThumbContext)<HTMLInputElement>({
-        tag: "input",
-        value: value,
-        valueText,
-        index,
-        max,
-        min,
-        onValueChange
+    const { useSliderThumbProps, sliderThumb: { min: usedMin, max: usedMax } } = (useContext(RangeThumbContext) as UseSliderThumb<HTMLInputElement, undefined, never>)({
+        managedChild: {
+            index,
+        },
+        sliderThumb: {
+            tag: "input",
+            value: value,
+            valueText,
+            max,
+            min,
+            onValueChange,
+            label
+        },
+        subInfo: undefined
     });
     const valuePercent = (value - usedMin) / (usedMax - usedMin);
     const clampedValuePercent = Math.max(0, Math.min(1, valuePercent));
@@ -191,7 +204,7 @@ export const RangeThumb = memo(forwardElementRef(function RangeThumb({ index, va
     return (
         <>
             <Tooltip side={orientation == "inline" ? "block-end" : "inline-end"} forceOpen={inputHasFocus} tooltip={`${valueText}`} childSelector={useCallback(function (e: Element) { return e.nextElementSibling!.firstElementChild!; }, [])}>
-                <input {...useAriaSliderThumbProps(useHasFocusProps({
+                <input {...useSliderThumbProps(useHasFocusProps({
                     ref,
                     ...({ orient: orientation == "block" ? "vertical" : undefined } as {}),
                     class: clsx("form-range", orientation == "block" && "form-range-vertical"),

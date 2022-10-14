@@ -1,10 +1,10 @@
 import clsx from "clsx";
 import { ComponentChildren, createElement, Fragment, h, Ref } from "preact";
-import { CheckboxChangeEvent, EventDetail, useAriaCheckbox } from "preact-aria-widgets";
+import { CheckboxChangeEvent, EventDetail, useCheckbox } from "preact-aria-widgets";
 import { useAsyncHandler, useMergedProps } from "preact-prop-helpers";
 import { memo } from "preact/compat";
 import { useContext } from "preact/hooks";
-import { forwardElementRef, GlobalAttributes } from "../props";
+import { forwardElementRef, GlobalAttributes, useDocument } from "../props";
 import { CheckboxLike } from "./checkbox-like";
 import { InputGroupText, InputGroupTextProps } from "./grouping";
 import { InInputGridContext, InInputGroupContext } from "./props";
@@ -31,18 +31,33 @@ function capture(e: h.JSX.TargetedEvent<HTMLInputElement>): boolean {
  */
 export const Switch = memo(forwardElementRef(function Switch({ checked, disabled, inline, onCheck: onInputAsync, children: label, labelPosition, tabIndex, ...rest }: SwitchProps, ref: Ref<HTMLInputElement>) {
 
-    type I = { (event: CheckboxChangeEvent<h.JSX.TargetedEvent<HTMLInputElement, Event>>): void; (event: CheckboxChangeEvent<h.JSX.TargetedEvent<HTMLLabelElement, Event>>): void; };
+    //type I = (event: CheckboxChangeEvent<HTMLInputElement>) => void;
 
-    const { syncHandler, pending, hasError, settleCount, hasCapture, currentCapture, currentType } = useAsyncHandler(onInputAsync ?? null, { capture });
+    const { syncHandler, pending, hasError, settleCount, hasCapture, currentCapture, currentType } = useAsyncHandler<CheckboxChangeEvent<HTMLInputElement>, boolean>(onInputAsync ?? null, { capture });
     disabled ||= pending;
     const asyncState = (hasError ? "failed" : pending ? "pending" : settleCount ? "succeeded" : null);
 
 
-    const onChecked = syncHandler as unknown as I;
-    const { useCheckboxInputElement: useSwitchInputElement, useCheckboxLabelElement: useSwitchLabelElement } = useAriaCheckbox<HTMLInputElement, HTMLLabelElement | HTMLDivElement>({ checked: (pending ? currentCapture : checked) ?? false, disabled: disabled ?? false, onInput: onChecked, labelPosition: "separate" });
+    const getDocument = useDocument();
+    const onChecked = syncHandler;
 
-    const { useCheckboxInputElementProps: useSwitchInputElementProps } = useSwitchInputElement({ tag: "input" });
-    const { useCheckboxLabelElementProps: useSwitchLabelElementProps } = useSwitchLabelElement({ tag: "label" });
+    const { useCheckboxInputElement: useSwitchInputElement, useCheckboxLabelElement: useSwitchLabelElement } = useCheckbox<HTMLInputElement, HTMLLabelElement | HTMLDivElement>({
+        checkbox: {
+            onCheckedChange: onChecked
+        },
+        checkboxLike: {
+
+            checked: (pending ? currentCapture : checked) ?? false,
+            disabled: disabled ?? false,
+            labelPosition: "separate",
+        },
+        hasFocusInput: { getDocument },
+        hasFocusLabel: { getDocument },
+        label: { tagInput: "input", tagLabel: "label" }
+    });
+
+    const { useCheckboxInputElementProps: useSwitchInputElementProps } = useSwitchInputElement();
+    const { useCheckboxLabelElementProps: useSwitchLabelElementProps } = useSwitchLabelElement();
     //const { useCheckboxLabelElementProps: useWrapperLabelProps } = useCheckboxLabelElement({ tag: "div" });
 
 

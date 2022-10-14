@@ -9,6 +9,10 @@
     "declarationMap": true,                   /* Generates a sourcemap for each corresponding '.d.ts' file. */
     "sourceMap": true,                        /* Generates corresponding '.map' file. */
     "baseUrl": "./src",
+    "paths": {
+      "react": ["./node_modules/preact/compat/"],
+      "react-dom": ["./node_modules/preact/compat/"]
+    },
     "outDir": "./",
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "exactOptionalPropertyTypes": false,

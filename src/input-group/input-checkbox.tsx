@@ -1,10 +1,10 @@
 import clsx from "clsx";
 import { cloneElement, createElement, h, Ref, VNode } from "preact";
-import { CheckboxChangeEvent, EventDetail, useAriaCheckbox } from "preact-aria-widgets";
+import { CheckboxChangeEvent, EventDetail, useCheckbox } from "preact-aria-widgets";
 import { useAsyncHandler, useMergedProps } from "preact-prop-helpers";
 import { memo } from "preact/compat";
 import { useContext } from "preact/hooks";
-import { forwardElementRef, GlobalAttributes, OmitStrong } from "../props";
+import { forwardElementRef, GlobalAttributes, OmitStrong, useDocument } from "../props";
 import { CheckboxLike } from "./checkbox-like";
 import { InputGroupText, InputGroupTextProps } from "./grouping";
 import { InInputGridContext, InInputGroupContext } from "./props";
@@ -34,9 +34,9 @@ export const Checkbox = memo(forwardElementRef(function Checkbox({ checked, tris
 
     const inInputGroup = useContext(InInputGroupContext);
 
-    type I = { (event: CheckboxChangeEvent<h.JSX.TargetedEvent<HTMLInputElement, Event>>): void; (event: CheckboxChangeEvent<h.JSX.TargetedEvent<HTMLLabelElement, Event>>): void; };
+//    type I = { (event: CheckboxChangeEvent<HTMLInputElement>): void; (event: CheckboxChangeEvent<HTMLLabelElement>): void; };
 
-    const { syncHandler, pending, hasError, settleCount, hasCapture, currentCapture, currentType } = useAsyncHandler((newCheckedValue, event: any) => {
+    const { syncHandler, pending, hasError, settleCount, hasCapture, currentCapture, currentType } = useAsyncHandler<CheckboxChangeEvent<HTMLInputElement>, boolean>((newCheckedValue, event) => {
         if (tristate) {
             if (checked == false)
                 return onCheckedAsync?.("mixed" as unknown as boolean, event);
@@ -55,15 +55,26 @@ export const Checkbox = memo(forwardElementRef(function Checkbox({ checked, tris
 
     const onChecked = syncHandler;
 
-    const { useCheckboxInputElement, useCheckboxLabelElement } = useAriaCheckbox<HTMLInputElement, HTMLLabelElement | HTMLDivElement>({
-        checked: pending ? currentCapture! : ((checked as string) === "indeterminate" ? "mixed" : checked),
-        disabled: disabled ?? false,
-        onInput: onChecked,
-        labelPosition: "separate"
+
+    const getDocument = useDocument();
+
+    const { useCheckboxInputElement, useCheckboxLabelElement } = useCheckbox<HTMLInputElement, HTMLLabelElement | HTMLDivElement>({
+        checkbox: {
+            onCheckedChange: onChecked,
+        },
+        checkboxLike: {
+
+            checked: pending ? currentCapture! : ((checked as string) === "indeterminate" ? "mixed" : checked),
+            disabled: disabled ?? false,
+            labelPosition: "separate",
+        },
+        hasFocusInput: { getDocument },
+        hasFocusLabel: { getDocument },
+        label: { tagInput: "input", tagLabel: "label" }
     });
 
-    const { useCheckboxInputElementProps } = useCheckboxInputElement({ tag: "input" });
-    const { useCheckboxLabelElementProps } = useCheckboxLabelElement({ tag: "label" });
+    const { useCheckboxInputElementProps } = useCheckboxInputElement();
+    const { useCheckboxLabelElementProps } = useCheckboxLabelElement();
     //const { useCheckboxLabelElementProps: useWrapperLabelProps } = useCheckboxLabelElement({ tag: "div" });
 
     let baseInputProps = { ref: ref as any, className: clsx(pending && "pending", inInputGroup && "mt-0"), tabIndex: tabIndex ?? 0 };

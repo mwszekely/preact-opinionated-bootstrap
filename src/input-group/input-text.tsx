@@ -1,15 +1,15 @@
 import clsx from "clsx";
 import { createElement, Fragment, h, Ref } from "preact";
-import { useInputLabel } from "preact-aria-widgets";
 import { storeToLocalStorage, useAsyncHandler, useHasFocus, useMergedProps, usePassiveState, useRefElement, useStableCallback, useStableGetter, useState } from "preact-prop-helpers";
 import { memo } from "preact/compat";
 import { useCallback, useContext, useEffect } from "preact/hooks";
-import { forwardElementRef } from "../props";
+import { forwardElementRef, useDocument } from "../props";
 import { ProgressCircular } from "../progress";
 import { DefaultInputSize, InInputGridContext, InInputGroupContext, InputProps, UnlabelledInputNumberNonNullableProps, UnlabelledInputNumberNullableProps, UnlabelledInputProps, UnlabelledInputTextareaProps, UnlabelledInputTextProps, useInputCaptures } from "./props";
 import { InputGroupText } from "./grouping";
 import { Tooltip } from "../tooltip";
 import { ProvideDefaultButtonSize } from "../button";
+import { useLabel } from "preact-aria-widgets";
 
 
 function return0() { return 0; }
@@ -31,6 +31,7 @@ function UnlabelledInputR(p: UnlabelledInputProps, ref?: Ref<any>): h.JSX.Elemen
     const [focusedInner, setFocusedInner, getFocusedInner] = useState(false);
     const { capture, uncapture } = useInputCaptures(type, (props as UnlabelledInputNumberNonNullableProps).min, (props as UnlabelledInputNumberNonNullableProps).max!);
     const { useHasFocusProps } = useHasFocus<HTMLInputElement>({
+        getDocument: useDocument(),
         onFocusedInnerChanged: setFocusedInner,
         onFocusedChanged: useCallback((focused: boolean) => {
             if (!focused)
@@ -211,7 +212,7 @@ function UnlabelledInputR(p: UnlabelledInputProps, ref?: Ref<any>): h.JSX.Elemen
         disabled: (disabled && disabledVariant === "hard"),
         onBlur,
         class: clsx("form-control", "faux-form-control-inner", disabled && "disabled", "form-control", sizeClass),
-        type: type == "textarea"? undefined : type,
+        type: type == "textarea" ? undefined : type,
         onInput,
         ...extraProps,
     })));
@@ -225,7 +226,7 @@ function UnlabelledInputR(p: UnlabelledInputProps, ref?: Ref<any>): h.JSX.Elemen
             </span>
             <label class={clsx("form-control form-control-input-container", sizeClass)}>
                 <ProgressCircular spinnerTimeout={spinnerTimeout ?? 10} mode={currentType === "async" ? asyncState : null} childrenPosition="after" colorVariant="info">
-                   {createElement(type == "textarea"? "textarea" : "input", inputProps as any)}
+                    {createElement(type == "textarea" ? "textarea" : "input", inputProps as any)}
                 </ProgressCircular>
             </label>
 
@@ -244,9 +245,9 @@ export const Input = memo(forwardElementRef(function Input({ children, value, wi
     size ??= (parentSize ?? "md");
 
 
-    const { inputId, labelId, useInputLabelInput, useInputLabelLabel } = useInputLabel({ inputPrefix: "input-", labelPrefix: "input-label-" });
-    const { useInputLabelInputProps } = useInputLabelInput();
-    const { useInputLabelLabelProps } = useInputLabelLabel<HTMLLabelElement>({ tag: "label" });
+    const { useLabelInput, useLabelLabel } = useLabel<HTMLInputElement, HTMLLabelElement>({ label: { prefixInput: "input-", prefixLabel: "input-label-", tagInput: "input", tagLabel: "label" } });
+    const { useLabelInputProps } = useLabelInput();
+    const { useLabelLabelProps } = useLabelLabel();
 
     const isInInputGroup = useContext(InInputGroupContext);
     const isInInputGrid = useContext(InInputGridContext);
@@ -264,18 +265,19 @@ export const Input = memo(forwardElementRef(function Input({ children, value, wi
 
     const IC = (disabled && disabledVariant === "text" ? InputGroupText : UnlabelledInput);
 
-    const labelJsx = <label {...useInputLabelLabelProps({ class: clsx(disabledVariant !== "text" && disabled && "disabled", isInInputGroup ? "input-group-text" : labelPosition != "floating" ? "form-label" : "") })}>{children}</label>
+    const labelJsx = <label {...useLabelLabelProps({ class: clsx(disabledVariant !== "text" && disabled && "disabled", isInInputGroup ? "input-group-text" : labelPosition != "floating" ? "form-label" : "") })}>{children}</label>
 
     const sizeClass = (size != "md" && `form-control-${size}`);
     let inputJsx = <IC
-        {...useInputLabelInputProps(useMergedProps<any>({
+        disabledVariant={(IC === InputGroupText ? undefined : disabledVariant)}
+        debounce={(IC === InputGroupText ? undefined : debounce)}
+
+        {...useLabelInputProps(useMergedProps<any>({
             children: IC === InputGroupText ? value : undefined,
             value: undefined, //IC === InputGroupText ? undefined : (value ?? undefined),
             placeholder: IC === InputGroupText ? undefined : placeholder,
             disabled: (IC === InputGroupText ? undefined : disabled),
-            disabledVariant: (IC === InputGroupText ? undefined : disabledVariant),
             readOnly: (IC === InputGroupText ? undefined : readOnly),
-            debounce: (IC === InputGroupText ? undefined : debounce),
 
             className: clsx(IC === InputGroupText ? "form-control" : undefined, sizeClass),
         }, props as any)) as any as UnlabelledInputTextProps}

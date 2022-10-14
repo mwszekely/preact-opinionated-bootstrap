@@ -22,7 +22,7 @@ export interface InputGridProps<E extends Element> extends Partial<TagSensitiveP
 
 export interface InputGroupTextProps<E extends Element> extends Partial<TagSensitiveProps<E>>, Omit<h.JSX.HTMLAttributes<E>, "children"> {
     children?: ComponentChildren;
-    disabled?: boolean;
+    disabled?: h.JSX.HTMLAttributes<E>["disabled"];
 }
 
 export const InputGrid = memo(forwardElementRef(function InputGrid<E extends Element>({ tag, children, columns, ...props }: InputGridProps<E>, ref: Ref<E>) {

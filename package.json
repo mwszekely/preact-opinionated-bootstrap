@@ -20,9 +20,6 @@
   },
   "author": "",
   "license": "ISC",
-  "peerDependencies": {
-    "preact": "^10.6.4"
-  },
   "devDependencies": {
     "@types/jsdom": "^20.0.0",
     "@typescript-eslint/eslint-plugin": "^5.39.0",
@@ -50,6 +47,7 @@
     "bootstrap-icons": "^1.9.1",
     "bootstrap-sass-variables": "github:mwszekely/bootstrap-sass-variables",
     "clsx": "^1.2.1",
+    "preact": "github:mwszekely/preact",
     "preact-aria-widgets": "github:mwszekely/preact-aria-widgets#children-change",
     "preact-prop-helpers": "github:mwszekely/preact-prop-helpers#children-changes",
     "preact-transition": "github:mwszekely/preact-transition#children-changes"
