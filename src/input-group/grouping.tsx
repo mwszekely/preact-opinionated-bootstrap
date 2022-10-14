@@ -56,3 +56,16 @@ export const InputGroup = memo(forwardElementRef(function InputGroup<E extends E
 export const InputGroupText = forwardElementRef(function InputGroupText<E extends Element>({ tag, children, disabled, ...props }: InputGroupTextProps<E>, ref: Ref<E>) {
     return createElement(tag ?? "div" as any, useMergedProps<E>({ class: clsx(disabled && "disabled", "input-group-text"), ref }, props), children);
 })
+
+function Foo2(props: h.JSX.HTMLAttributes<HTMLInputElement>) {
+    return createElement("input", props);
+}
+
+function foo() {
+    <input {...({} as h.JSX.HTMLAttributes<HTMLInputElement>)} />
+    
+    h("input", useMergedProps<HTMLInputElement>({ class: clsx("form-check-input", false && "disabled") }, {} as any));
+    createElement(InputGroupText, ({} as h.JSX.HTMLAttributes<any>));
+    createElement("div", ({} as h.JSX.HTMLAttributes<HTMLDivElement>));
+    <div {...({} as h.JSX.HTMLAttributes<HTMLDivElement>)} />
+}

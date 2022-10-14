@@ -47,6 +47,7 @@ export const AccordionSection = memo(forwardElementRef(function AccordionSection
     return (
         <div class="accordion-item">
             <BaseAccordionSection
+            subInfo={undefined}
                 getDocument={useDocument()}
                 getWindow={useWindow()}
                 index={index}
