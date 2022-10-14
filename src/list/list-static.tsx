@@ -60,7 +60,7 @@ export const ListStatic = memo(forwardElementRef(function ListStatic<E extends H
 
 export interface ListItemStaticProps extends GlobalAttributes<HTMLLIElement> {
     badge?: ComponentChildren;
-    disabled?: boolean;
+    disabled?: h.JSX.HTMLAttributes<HTMLLIElement>["disabled"];
     iconStart?: ComponentChildren;
     iconEnd?: ComponentChildren;
 }
