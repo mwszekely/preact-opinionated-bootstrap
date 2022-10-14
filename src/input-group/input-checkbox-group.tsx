@@ -1,17 +1,94 @@
 
-import { ComponentChildren, createContext, h, Ref } from "preact";
-import { CheckboxGroupChangeEvent, EventDetail, useCheckboxGroup, UseCheckboxGroupParentProps } from "preact-aria-widgets";
-import { generateRandomId, useAsyncHandler } from "preact-prop-helpers";
-import { memo } from "preact/compat";
-import { useContext } from "preact/hooks";
-import { useChildrenTextProps } from "../list/utility";
-import { forwardElementRef, OmitStrong } from "../props";
+import { useChildrenTextProps } from "list/utility";
+import { cloneElement, h, RenderableProps, VNode } from "preact";
+import { CheckboxCheckedType, CheckboxGroup as BaseCheckboxGroup, CheckboxGroupChild as BaseCheckboxGroupChild, CheckboxGroupParent as BaseCheckboxGroupParent, defaultRenderCheckboxGroupChild, EventDetail } from "preact-aria-widgets";
+import { returnUndefined, usePassiveState, useStableCallback } from "preact-prop-helpers";
+import { useContext, useEffect, useRef } from "preact/hooks";
+import { OmitStrong, useDocument } from "../props";
 import { Checkbox, CheckboxProps } from "./input-checkbox";
-import { CheckboxGroupChildInfo, UseCheckboxGroupChildContext } from "./props";
+
+export function CheckboxGroup({ children, ...rest }: RenderableProps<{}>) {
+    return (
+        <BaseCheckboxGroup
+            render={(info, modifyChildContainerProps) => {
+                return (<div {...modifyChildContainerProps({ ...rest })}>{children}</div>);
+            }}
+
+        />
+    )
+}
+
+export interface CheckboxGroupParentProps extends Omit<CheckboxProps, "checked"> {
+    // In most cases, this is 0, as the parent checkbox comes first.
+    // If it comes at the end, then you'd use e.g. 10 (if there are 10 children) instead.
+    index: number;
+}
+
+/**
+ * This is the parent checkbox that both reflects the state
+ * of all the child checkboxes, but can also update them all
+ * at once by interacting with it.
+ * 
+ * @returns 
+ */
+export function CheckboxGroupParent({ index, onCheck, ...rest }: CheckboxGroupParentProps) {
+    const { childrenText, props } = useChildrenTextProps(rest);
+    return (
+        <BaseCheckboxGroupParent<HTMLInputElement, HTMLLabelElement>
+            index={index}
+            subInfo={undefined}
+            text={childrenText ?? ""}
+            render={({ checkboxGroupParent: { checked, getPercent, onParentCheckedChange } }, modifyControlProps) => {
+                return (
+                    <Checkbox
+                        checked={checked}
+                        onCheck={async (checked, e) => { await onParentCheckedChange(e); }}
+                        {...modifyControlProps(props)}
+                    />
+                )
+            }}
+        />
+    )
+}
+
+export interface CheckboxGroupChildProps extends CheckboxProps {
+    /**
+     * This should generally start at 1, assuming that the parent is index 0.
+     */
+    index: number;
+}
+
+export function CheckboxGroupChild({ onCheck, checked, index, disabled, ...rest }: CheckboxGroupChildProps) {
+    const { childrenText, props } = useChildrenTextProps(rest);
+    const inputElement = useRef<HTMLInputElement>(null);
+    return (
+        <BaseCheckboxGroupChild<HTMLInputElement, HTMLLabelElement>
+            checked={checked}
+            index={index}
+            text={childrenText ?? ""}
+            subInfo={undefined}
+            onChangeFromParent={async (checked, e) => { await onCheck?.(checked as boolean, e as h.JSX.TargetedEvent<HTMLInputElement, Event>); }}
+            focus={useStableCallback(() => inputElement.current?.focus())}
+            render={({ checkboxGroupChild: { onControlIdChanged, onChildCheckedChange } }, modifyControlProps) => {
+
+                const [_getControlId, setControlId] = usePassiveState<string | undefined>(onControlIdChanged, returnUndefined);
+                // TODO: Effect running once every render is pretty lame, but how else do we get the ID?
+                useEffect(() => { setControlId(inputElement.current?.id); return () => setControlId(undefined); });
+                
+                return (
+                    <Checkbox
+                        checked={checked}
+                        disabled={false}
+                        onCheck={(checked, event) => { onChildCheckedChange(checked); onCheck?.(checked, event);}}
+                        {...modifyControlProps(props)}
+                    />)
+            }}
+        />
+    )
+}
 
 
-
-
+/*
 const CheckboxGroupParentOnInputContext = createContext<(e: h.JSX.TargetedEvent<HTMLInputElement, Event>) => void>(null!);
 const CheckboxGroupParentCheckedContext = createContext<boolean | "mixed">(false);
 const UseCheckboxGroupParentPropsContext = createContext<UseCheckboxGroupParentProps<HTMLInputElement>>(null!);
@@ -55,28 +132,6 @@ export function CheckboxGroup({ children }: CheckboxGroupProps) {
 
 }
 
-/**
- * This is the parent checkbox that both reflects the state
- * of all the child checkboxes, but can also update them all
- * at once by interacting with it.
- * 
- * @param props 
- * @returns 
- */
-export function CheckboxGroupParent(props: OmitStrong<CheckboxProps, "checked" | "onCheck">) {
-    const checked = useContext(CheckboxGroupParentCheckedContext);
-
-    // All this does is notify the parent CheckboxGroup component
-    // to switch states and then tell all checkboxes to update themselves
-    // accordingly.
-    const onInput = useContext(CheckboxGroupParentOnInputContext);
-
-    return (
-        <Checkbox checked={checked} onCheck={(_, e) => onInput(e)} {...props} />
-    )
-}
-
-
 
 
 interface CheckboxGroupChildProps1 extends OmitStrong<CheckboxProps, "onCheck"> {
@@ -90,7 +145,7 @@ interface CheckboxGroupChildProps1 extends OmitStrong<CheckboxProps, "onCheck"> 
 
 interface CheckboxGroupChildProps2 extends OmitStrong<CheckboxProps, "onCheck"> {
     index: number;
-    
+
     onCheck(checked: boolean, event: null | h.JSX.TargetedEvent<HTMLInputElement>): (void | Promise<void>);
 }
 
@@ -108,7 +163,7 @@ export type CheckboxGroupChildProps = CheckboxGroupChildProps1 | CheckboxGroupCh
  * 
  * @param param0 
  * @returns 
- */
+ *\/
 export const CheckboxGroupChild = memo(forwardElementRef(function CheckboxGroupChild(p: CheckboxGroupChildProps, ref?: Ref<any>) {
 
     let { childrenText, props: { index, checked, onCheck, id, ...props } } = useChildrenTextProps({ ...p, ref });
@@ -133,4 +188,4 @@ export const CheckboxGroupChild = memo(forwardElementRef(function CheckboxGroupC
     )
 }));
 
-
+*/

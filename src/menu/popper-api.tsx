@@ -5,6 +5,7 @@ import { LogicalDirectionInfo, useActiveElement, useGlobalHandler, useLogicalDir
 import { useCallback, useEffect, useMemo } from "preact/hooks";
 import { ZoomFade, Clip, ClipFade, Collapse, Zoom, SlideZoom, Fade, SlideFade, CollapseFade, SlideZoomFade, Flip, Slide } from "preact-transition";
 import { OnPassiveStateChange, PassiveStateUpdater } from "preact-prop-helpers/use-passive-state";
+import { useDocument, useWindow } from "props";
 
 function returnNull() { return null; }
 
@@ -22,6 +23,8 @@ export function usePopperApi<S extends Element, P extends HTMLElement, A extends
 
     const [getFocusedElement, setFocusedElement] = usePassiveState<Node | null>(null, returnNull);
     const { } = useActiveElement({
+        getDocument: useDocument(),
+        getWindow: useWindow(),
         onLastActiveElementChange: useCallback((activeElement: Node | null) => {
             if (getSourceElement()?.contains(activeElement)) {
                 setFocusedElement(activeElement);

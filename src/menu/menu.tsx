@@ -1,16 +1,15 @@
 import clsx from "clsx";
 import { useChildrenTextProps } from "../list/utility";
 import { cloneElement, ComponentChildren, createContext, Fragment, h, Ref, VNode } from "preact";
-import { useAriaMenu, UseMenuItem, usePressEventHandlers } from "preact-aria-widgets";
-import { UseMenuItemDefaultInfo } from "preact-aria-widgets/use-menu";
-import { useAsyncHandler, useElementSize, useHasFocus, useMergedProps, useMutationObserver, useRefElement, useStableCallback, useState } from "preact-prop-helpers";
+import { Menu as BaseMenu, MenuItem as BaseMenuItem, useMenu, UseMenuItem } from "preact-aria-widgets";
+import { useAsyncHandler, useElementSize, useHasFocus, useMergedProps, useMutationObserver, usePress, useRefElement, useStableCallback, useState } from "preact-prop-helpers";
 import { ZoomFade, ZoomFadeProps } from "preact-transition";
 import { memo } from "preact/compat";
 import { useCallback, useContext } from "preact/hooks";
 import { ProvideDefaultButtonDropdownDirection } from "../button/defaults";
 import { BodyPortal } from "../portal";
 import { ProgressCircular } from "../progress";
-import { FlippableTransitionComponent, forwardElementRef, GlobalAttributes, TagSensitiveProps, useLogRender, usePseudoActive } from "../props";
+import { FlippableTransitionComponent, forwardElementRef, GlobalAttributes, TagSensitiveProps, useDocument, useLogRender, usePseudoActive } from "../props";
 import { Tooltip } from "../tooltip/tooltip";
 import { getDefaultFlips, usePopperApi, useShouldUpdatePopper } from "./popper-api";
 
@@ -40,7 +39,7 @@ export interface MenuItemProps extends GlobalAttributes<HTMLButtonElement> {
 const HasTypeaheadContext = createContext(false);
 
 const OnCloseContext = createContext<(() => void) | undefined>(undefined);
-const UseMenuItemContext = createContext<UseMenuItem<HTMLButtonElement, UseMenuItemDefaultInfo<HTMLButtonElement>>>(null!);
+const UseMenuItemContext = createContext<UseMenuItem<any, any, any>>(null!);
 function MenuU<E extends Element, T extends <E extends HTMLElement>(...args: any[]) => h.JSX.Element>({ anchor, anchorEventName, anchorTag, children, tag, side, align, Transition, TransitionProps, TransitionPropFlips, forceOpen, ...restAnchorProps }: MenuProps<E, T>, ref?: Ref<any>) {
     useLogRender("Menu", `Rendering Menu`);
     side ??= "block-end";
@@ -50,16 +49,30 @@ function MenuU<E extends Element, T extends <E extends HTMLElement>(...args: any
     let [open, setOpen] = useState(!!forceOpen);
     open ||= !!forceOpen;
 
+    const getDocument = useDocument();
     const onClose = useCallback(() => setOpen(false), []);
     const onOpen = () => setOpen(true);
     const { shouldUpdate: updatingForABit, onInteraction } = useShouldUpdatePopper(open);
 
     const { useElementSizeProps } = useElementSize<any>({ onSizeChange: useStableCallback(onInteraction ?? (() => { })) });
 
-    const { useHasFocusProps, getFocusedInner: getMenuHasFocusInner } = useHasFocus<HTMLDivElement>({});
+    //const { useHasFocusProps, getFocusedInner: getMenuHasFocusInner } = useHasFocus<HTMLDivElement>({});
     const { usePopperArrow, usePopperPopup, usePopperSource, logicalDirection, flipTransformProps } = usePopperApi<any, HTMLDivElement, HTMLDivElement>({ align, side, updating: updatingForABit });
-    let { useMenuButton, useMenuItem, useMenuProps, focusMenu, useMenuSentinel, currentTypeahead, invalidTypeahead } = useAriaMenu<HTMLDivElement, HTMLButtonElement, UseMenuItemDefaultInfo<HTMLButtonElement>>({ shouldFocusOnChange: getMenuHasFocusInner, open, onClose, onOpen });
-    const { useMenuButtonProps } = useMenuButton<Element>({ tag: anchorTag ?? "button" });
+    let { useMenuButtonProps, useMenuItem, useMenuProps, useMenuSentinel, useMenuSurfaceProps, ...menuInfo } = useMenu<HTMLDivElement, HTMLUListElement, HTMLLIElement, HTMLButtonElement, undefined, never>({
+        activeElement: { getDocument },
+        menu: { onOpen, openDirection: "down" },
+        menuButtonHasFocus: { getDocument },
+        menuSurface: {},
+        linearNavigation: {},
+        listNavigation: {},
+        managedChildren: {},
+        rovingTabIndex: {},
+        softDismiss: { onClose, open },
+        typeaheadNavigation: {}
+    });
+
+    let { typeaheadNavigation: { currentTypeahead, invalidTypeahead } } = menuInfo;
+    //const { useMenuButtonProps } = useMenuButton<Element>({ tag: anchorTag ?? "button" });
     const { usePopperSourceProps } = usePopperSource();
     const { usePopperPopupProps } = usePopperPopup({ open });
     const { usePopperArrowProps } = usePopperArrow();
@@ -109,7 +122,7 @@ function MenuU<E extends Element, T extends <E extends HTMLElement>(...args: any
                             <div {...usePopperPopupProps({ class: "dropdown-menu-popper" })}>
                                 <Tooltip tooltip={currentTypeahead || null} side="inline-end" align="center">
                                     <Transition {...(useMenuProps(flipTransformProps<T>(TransitionProps ?? ({} as never), TransitionPropFlips)) as any)} show={open} onTransitionUpdate={onInteraction} exitVisibility="hidden">
-                                        <div {...useHasFocusProps({ className: clsx("typeahead-tooltip", invalidTypeahead ? "text-danger" : undefined) })}>
+                                        <div {...({ className: clsx("typeahead-tooltip", invalidTypeahead ? "text-danger" : undefined) })}>
 
                                             <button {...useFirstMenuSentinelProps({ className: "visually-hidden" })}>Close menu</button>
                                             {h(tag ?? "ul", { children, className: "dropdown-menu elevation-raised-4 elevation-body-surface" })}
@@ -135,23 +148,28 @@ function MenuU<E extends Element, T extends <E extends HTMLElement>(...args: any
 function MenuItemU(p: MenuItemProps, ref?: Ref<any>) {
     let { childrenText, props: { children, disabled, onPress: onPressAsync, index, iconStart, iconEnd, badge, ...rest } } = useChildrenTextProps({ ...p, ref });
     useLogRender("MenuItem", `Rendering MenuItem`);
-    const useMenuItem = useContext(UseMenuItemContext);
+    const useMenuItem = useContext(UseMenuItemContext) as UseMenuItem<HTMLButtonElement, undefined, never>;
     const hasTypeahead = useContext(HasTypeaheadContext);
 
     const isInteractive = (onPressAsync != null);
 
-    const { useMenuItemProps } = useMenuItem({ index, text: childrenText });
+    const { useMenuItemProps } = useMenuItem({
+        listNavigation: { text: childrenText ?? "" },
+        managedChild: { index, },
+        rovingTabIndex: {},
+        subInfo: undefined
+    });
 
     const onClose = useContext(OnCloseContext);
 
 
-    const { syncHandler, pending, settleCount, hasError } = useAsyncHandler(onPressAsync? (() => onPressAsync?.()?.then(() => onClose?.())): null, { capture: useCallback(() => { return undefined!; }, []) });
+    const { syncHandler, pending, settleCount, hasError } = useAsyncHandler(onPressAsync ? (() => onPressAsync?.()?.then(() => onClose?.())) : null, { capture: useCallback(() => { return undefined!; }, []) });
     disabled ||= pending;
 
     const onPress = ((disabled || !onPressAsync) ? null : syncHandler);
 
     const newProps = useMenuItemProps(useMergedProps<HTMLButtonElement>(rest, { ref, class: clsx(onPressAsync ? "dropdown-item" : "dropdown-item-text", "dropdown-multiline", !!badge && "with-badge", !!iconStart && "with-start", !!(badge || iconEnd) && "with-end", disabled && "disabled", pending && "pending"), "aria-disabled": disabled ? "true" : undefined }));
-    const buttonProps = usePseudoActive(usePressEventHandlers<HTMLButtonElement>(disabled ? null : onPress, hasTypeahead ? { space: "exclude" } : undefined)(newProps));
+    const buttonProps = usePseudoActive((disabled ? null : onPress, hasTypeahead ? { space: "exclude" } : undefined)(newProps));
 
     const childrenWithIcons = <>{iconStart && <span class="dropdown-item-start-icon">{iconStart}</span>}{children}{badge && <span class="dropdown-item-badge">{badge}</span>}{iconEnd && <span className="dropdown-item-end-icon">{iconEnd}</span>}</>
 
